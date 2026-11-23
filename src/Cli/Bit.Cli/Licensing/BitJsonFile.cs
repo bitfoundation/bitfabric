@@ -89,10 +89,17 @@ public sealed class BitJsonFile
             return id;
 
         id = Guid.NewGuid();
-        Set(ProjectIdProperty, id.ToString("D"), after: "name");
-        Save();
+        SetProjectId(id);
 
         return id;
+    }
+
+    /// <summary>Gives the project <paramref name="id"/>, without a license, which names an id of its own.</summary>
+    public void SetProjectId(Guid id)
+    {
+        Set(ProjectIdProperty, id.ToString("D"), after: "name");
+        root.Remove(LicenseProperty);
+        Save();
     }
 
     public void SetLicense(string license)

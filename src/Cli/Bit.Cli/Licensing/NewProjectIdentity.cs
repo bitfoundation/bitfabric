@@ -12,13 +12,14 @@ public static partial class NewProjectIdentity
 {
     private static readonly string[] settingsExtensions = [".json", ".jsonc", ".toml", ".yaml", ".yml"];
 
-    /// <summary>The new project's id; null when it has no bit.json.</summary>
+    /// <summary>The new project's id, new even when the template's bit.json had one; null when it has no bit.json.</summary>
     public static Guid? Assign(string projectDirectory)
     {
         if (BitJsonFile.Read(Path.Combine(projectDirectory, ProjectBit.FileName)) is not { } bitJson)
             return null;
 
-        var id = bitJson.EnsureProjectId();
+        var id = Guid.NewGuid();
+        bitJson.SetProjectId(id);
 
         NameInDocsMcp(projectDirectory, id);
 

@@ -431,7 +431,7 @@ bit license bfl1.ey...  # saves a license in bit.json, once bit has checked that
 - A license says when it is 30 days from its end, with the link to renew it, and once it has ended bit keeps working for 14 more days, saying so with each command.
 - A license that was changed, belongs to another project, names a first commit that isn't in this repository's history (a `bit.json` copied into another project), or is dated in the future counts as none, and the commands stop with the link that gets this project its own. `git replace` and the old grafts file don't count when bit looks for the commit.
 - In a shallow clone without the first commit, such as most CI checkouts, bit says once per command that `git fetch --unshallow` lets it check, and goes on.
-- A command that stops for the license exits with 1. Commands that don't work on a project never check: `bit new`, `bit update`, `bit license`, `bit about`, `bit telemetry`, `bit trust`, `bit decode`, `bit remove`, `--help` and `--version`. A folder without a `bit.json` has nothing to check.
+- A command that stops for the license exits with 1. Commands that don't work on a project never check: `bit new`, `bit update`, `bit license`, `bit about`, `bit telemetry`, `bit trust`, `bit decode`, `bit remove`, `--help` and `--version`. A folder without a `bit.json`, or whose `bit.json` has no `projectId`, such as bit Boilerplate's own folder or a project made before licenses, has nothing to check; `bit license` gives such a project an id and the link.
 
 ## The parts of a project
 

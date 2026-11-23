@@ -339,6 +339,26 @@ public class LicenseTests
         Assert.DoesNotContain("license", project.Host.Output);
     }
 
+    /// <summary>bit Boilerplate's own folder, and a project made before licenses: a bit.json without an id.</summary>
+    [TestMethod]
+    public async Task ABitJsonWithoutAnId_Should_HaveNothingToCheck_UntilBitLicenseGivesItOne()
+    {
+        if (await GitIdentity.GitAvailableAsync() is false)
+            return;
+
+        using var project = await LicensedProject.CreateAsync();
+        File.WriteAllText(project.BitJsonPath, """{ "template": "bit-bp", "name": "Contoso" }""");
+
+        Assert.AreEqual(CommandRan, await project.Host.RunAsync(aCommand), project.Host.Output);
+        Assert.DoesNotContain("license", project.Host.Output);
+        Assert.AreEqual("""{ "template": "bit-bp", "name": "Contoso" }""", File.ReadAllText(project.BitJsonPath), "Nothing is written into it.");
+
+        await project.Host.RunAsync("license");
+
+        var id = Guid.Parse(project.ReadBitJson()["projectId"]!.GetValue<string>());
+        StringAssert.Contains(project.Host.Output, $"Get one, free: https://bitfabric.co/license?project=Contoso&id={id:D}&commit=");
+    }
+
     [TestMethod]
     public void ARelease_Should_AcceptBitFabricsProductionKeyAlone()
     {
@@ -369,6 +389,7 @@ public class LicenseTests
                     "template": "bit-bp",
                     "version": "11.0.0",
                     "name": "Contoso",
+                    "projectId": "11111111-1111-1111-1111-111111111111",
                     "options": {
                         "database": "Sqlite"
                     }
@@ -395,6 +416,7 @@ public class LicenseTests
         var id = Guid.Parse(bitJson["projectId"]!.GetValue<string>());
 
         StringAssert.Contains(committedBitJson, $"\"projectId\": \"{id:D}\"", "The first commit has the project's id.");
+        Assert.AreNotEqual(Guid.Parse("11111111-1111-1111-1111-111111111111"), id, "Each project gets an id of its own, whatever the template's bit.json says.");
         Assert.AreEqual("11.0.0", bitJson["version"]!.GetValue<string>(), "The rest of bit.json is as it was.");
 
         using var trial = JsonDocument.Parse(host.BitFabric.Requests.Single());

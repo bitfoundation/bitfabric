@@ -41,13 +41,15 @@ public sealed class LicenseCheck(CliServices cli)
     /// <summary>Whether bit can wait for the license here: someone is at the terminal, and it isn't CI.</summary>
     public bool CanWait => cli.IsInteractive && cli.Environment.IsCI is false;
 
-    /// <summary>Before a command that works on the project in <paramref name="folder"/>: true when the command goes on.</summary>
+    /// <summary>
+    /// Before a command that works on the project in <paramref name="folder"/>: true when the command goes on. Only a
+    /// project with an id in its bit.json, which <c>bit new</c> writes, has a license to check; bit Boilerplate's own folder
+    /// and a project made before licenses have none, and <c>bit license</c> gives one an id.
+    /// </summary>
     public async Task<bool> BeforeCommandAsync(string folder, CancellationToken cancellationToken)
     {
-        if (Options.ChecksCommands is false || BitJsonFile.Find(folder) is not { } bitJson)
+        if (Options.ChecksCommands is false || BitJsonFile.Find(folder) is not { ProjectId: not null } bitJson)
             return true;
-
-        bitJson.EnsureProjectId();
 
         var status = await EvaluateAsync(bitJson, bitJson.License, cancellationToken);
 
