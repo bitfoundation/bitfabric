@@ -120,6 +120,7 @@ public static class AppCliGuide
         new("bit aot-profile", l[nameof(AppStrings.CliRefAotProfile)]),
         new("bit telemetry", l[nameof(AppStrings.CliRefTelemetry)]),
         new("bit update", l[nameof(AppStrings.CliRefUpdate)]),
+        new("bit license", l[nameof(AppStrings.CliRefLicense)]),
         new("bit about", l[nameof(AppStrings.CliRefAbout)])
     ];
 

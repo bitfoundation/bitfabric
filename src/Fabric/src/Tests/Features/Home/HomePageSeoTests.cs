@@ -336,7 +336,7 @@ public partial class HomePageSeoTests
         {
             var text = WebUtility.HtmlDecode(await GetPage(server, Googlebot, path));
 
-            foreach (var line in new[] { AppStrings.NewProjectSafeTitle, AppStrings.NewProjectSafeInstaller, AppStrings.NewProjectSafeSigned, "gh attestation verify <bit.dll> --repo bitfoundation/bitplatform" })
+            foreach (var line in new[] { AppStrings.NewProjectSafeTitle, AppStrings.NewProjectSafeInstaller, AppStrings.NewProjectSafeSigned, "gh attestation verify <bit.dll> --repo bitfoundation/bitfabric" })
             {
                 Assert.Contains(line, text, $"{path} prerenders \"{line}\".");
             }

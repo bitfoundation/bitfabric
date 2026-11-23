@@ -11288,6 +11288,9 @@
   <data name="CliRefUpdate" xml:space="preserve">
     <value>bit CLI را به تازه‌ترین نسخه به‌روز می‌کند. ⁦bit new⁩ و فرمان‌های هر پروژه خودشان این کار را می‌کنند.</value>
   </data>
+  <data name="CliRefLicense" xml:space="preserve">
+    <value>license پروژه را نشان می‌دهد، و لینکی را که برایش یک license رایگان می‌گیرد.</value>
+  </data>
   <data name="CliRefAbout" xml:space="preserve">
     <value>نشان می‌دهد این build از bit CLI از کجا آمده و چطور درستی‌اش را بسنجید.</value>
   </data>

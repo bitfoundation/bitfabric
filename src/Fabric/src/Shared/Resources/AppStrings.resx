@@ -11288,6 +11288,9 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="CliRefUpdate" xml:space="preserve">
     <value>Updates bit CLI to the newest version. bit new and a project's commands do it by themselves.</value>
   </data>
+  <data name="CliRefLicense" xml:space="preserve">
+    <value>Shows the project's license, and the link that gets it one, free.</value>
+  </data>
   <data name="CliRefAbout" xml:space="preserve">
     <value>Shows where this build of bit CLI comes from, and how to verify it.</value>
   </data>
