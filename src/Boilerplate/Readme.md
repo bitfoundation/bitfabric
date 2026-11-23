@@ -7,9 +7,9 @@ Source-available, full-stack, cross-platform, cloud-ready, and battle-tested pro
 
 ###  Modern Web Apps
 - **Public facing Web Apps** Pre-render enabled, Ultra-fast, SEO-Friendly Websites using Blazor WebAssembly! [Demo](https://bitplatform.dev)
-- **AdminPanels** Realtime Dashboard, DataGrid etc. [Demo](https://adminpanel.bitplatform.dev)
-- **Offline-capable PWA** with client-side database and sync feature. [Demo](https://todo-offline.bitplatform.cc/offline-todo)
-- **Blazor WebAssembly standalone** For Azure Static Pages, GitHub Pages, Cloudflare Pages etc. [Demo](https://adminpanel.bitplatform.cc)
+- **AdminPanels** Realtime Dashboard, DataGrid etc. [Demo](https://adminpanel.bitfabric.co)
+- **Offline-capable PWA** with client-side database and sync feature. [Demo](https://todo-offline.bitfabric.co/offline-todo)
+- **Blazor WebAssembly standalone** For Azure Static Pages, GitHub Pages, Cloudflare Pages etc. [Demo](https://adminpanel-standalone.bitfabric.co)
 
 ### Cross-Platform Native Apps
 Generate production-ready **Android**, **iOS**, **Windows**, and **macOS** applications from a single codebase using .NET MAUI Blazor Hybrid.

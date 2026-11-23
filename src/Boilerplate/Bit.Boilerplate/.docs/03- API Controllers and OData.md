@@ -404,7 +404,7 @@ No matter what OData parameters the client sends, they can only see their own to
 
 Visit the live admin panel to see OData in action:
 
-🔗 **[https://adminpanel.bitplatform.dev/categories](https://adminpanel.bitplatform.dev/categories)**
+🔗 **[https://adminpanel.bitfabric.co/categories](https://adminpanel.bitfabric.co/categories)**
 
 This demo shows:
 - Real-time filtering by category name
@@ -416,7 +416,7 @@ This demo shows:
 
 You can also call the API directly to see OData query strings:
 
-🔗 **[https://sales.bitplatform.dev/api/ProductView/Get?$top=10&$skip=10&$orderby=Name](https://sales.bitplatform.dev/api/ProductView/Get?$top=10&$skip=10&$orderby=Name)**
+🔗 **[https://sales.bitfabric.co/api/ProductView/Get?$top=10&$skip=10&$orderby=Name](https://sales.bitfabric.co/api/ProductView/Get?$top=10&$skip=10&$orderby=Name)**
 
 This URL:
 - Returns the second page of products (`$skip=10`)

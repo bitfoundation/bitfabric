@@ -21,12 +21,12 @@ public static class RetailSite
         Logo = typeof(RetailLogo),
         Strings = typeof(RetailStrings),
         AppleAppId = "6450611349",
-        WebAppUrl = "https://adminpanel.bitplatform.dev/",
+        WebAppUrl = "https://adminpanel.bitfabric.co/",
         Platforms =
         [
             new(LandingPlatform.iOS, LandingPlatformStatus.Live, "https://apps.apple.com/app/bit-adminpanel/id6450611349"),
             new(LandingPlatform.Android, LandingPlatformStatus.Live, "https://play.google.com/store/apps/details?id=com.bitplatform.AdminPanel.Template"),
-            new(LandingPlatform.Web, LandingPlatformStatus.Live, "https://adminpanel.bitplatform.dev/")
+            new(LandingPlatform.Web, LandingPlatformStatus.Live, "https://adminpanel.bitfabric.co/")
         ],
         Company = new()
         {

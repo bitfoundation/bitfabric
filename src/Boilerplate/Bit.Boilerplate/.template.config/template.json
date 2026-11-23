@@ -824,7 +824,7 @@
                         "**/*.nuspec",
                         "src/Server/**/Data/Migrations/**",
                         "src/**/App_Data/**",
-                        // E2E tests against the deployed demo apps (adminpanel/todo/sales.bitplatform.dev and friends),
+                        // E2E tests against the deployed demo apps (adminpanel/todo/sales.bitfabric.co and friends),
                         // which only exist for this repository - a generated project has no such deployments.
                         "src/Internal/**",
                         // Needs ProductController (Admin module) and ProductViewController + the product page (Sales

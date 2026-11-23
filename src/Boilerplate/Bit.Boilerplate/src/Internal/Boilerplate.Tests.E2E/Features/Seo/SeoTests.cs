@@ -168,7 +168,7 @@ public partial class SeoTests
         return match.Success ? WebUtility.HtmlDecode(match.Groups["href"].Value) : null;
     }
 
-    /// <summary>"- [/terms](https://sales.bitplatform.dev/terms): Legal terms, ..." (See UseSiteMap's llms.txt).</summary>
+    /// <summary>"- [/terms](https://sales.bitfabric.co/terms): Legal terms, ..." (See UseSiteMap's llms.txt).</summary>
     [GeneratedRegex(@"^- \[(?<path>[^\]]+)\]\((?<url>[^)]+)\): (?<description>.*)$", RegexOptions.Multiline)]
     private static partial Regex PageLine();
 }

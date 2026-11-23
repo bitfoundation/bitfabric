@@ -460,7 +460,7 @@ let it validate normally. The private key never leaves the API.
 The app is also an OAuth 2.1 authorization server, so other apps can act on a user's behalf. What they may reach is
 [`OAuthResources`](/src/Server/Boilerplate.Server.Api/Features/Identity/OAuth/Services/OAuthResources.cs) - one row
 per resource with its path, its scopes and the policies its endpoint requires - and you add your own there. Try it:
-on grok.com add `https://sales.bitplatform.dev/mcp` as an MCP server, then ask what pages the Sales app has. This is
+on grok.com add `https://sales.bitfabric.co/mcp` as an MCP server, then ask what pages the Sales app has. This is
 for delegating access to other apps, not a full identity server - no OIDC, no `id_token`, no third-party sign-in.
 
 ---
