@@ -16,7 +16,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261123220445_AddLibraryDocsToAssistantPrompt";
+    public override string LastMigrationId => "20261123221718_AddProjectLicenses";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -744,6 +744,113 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.HasIndex("ClientId");
 
                 b.ToTable("OAuthGrants");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.IssuedLicense", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<string>("ClaimCodeHash")
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<DateTimeOffset?>("ClaimExpiresOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("ClaimedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Document")
+                    .IsRequired()
+                    .HasMaxLength(2000)
+                    .HasColumnType("character varying(2000)");
+
+                b.Property<DateTimeOffset>("ExpiresOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("FirstCommit")
+                    .IsRequired()
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<DateTimeOffset>("IssuedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Plan")
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .HasColumnType("character varying(20)");
+
+                b.Property<Guid>("ProjectId")
+                    .HasColumnType("uuid");
+
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
+
+                b.Property<uint>("Version")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
+
+                b.HasKey("Id");
+
+                b.HasIndex("ClaimCodeHash")
+                    .HasFilter("\"ClaimedOn\" IS NULL");
+
+                b.HasIndex("UserId");
+
+                b.HasIndex("ProjectId", "ExpiresOn");
+
+                b.ToTable("IssuedLicenses");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
+            {
+                b.Property<Guid>("Id")
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<DateTimeOffset>("CreatedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("FirstCommit")
+                    .IsRequired()
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
+
+                b.Property<DateTimeOffset?>("TrialExpiresOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("TrialIssuedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("TrialLicense")
+                    .HasMaxLength(2000)
+                    .HasColumnType("character varying(2000)");
+
+                b.Property<Guid?>("UserId")
+                    .HasColumnType("uuid");
+
+                b.Property<uint>("Version")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
+
+                b.HasKey("Id");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("LicensedProjects");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>
@@ -2308,6 +2415,35 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("UserSession");
             });
 
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.IssuedLicense", b =>
+            {
+                b.HasOne("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", "Project")
+                    .WithMany("Licenses")
+                    .HasForeignKey("ProjectId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Project");
+
+                b.Navigation("User");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
+            {
+                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                b.Navigation("User");
+            });
+
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>
             {
                 b.HasOne("Bit.Fabric.Server.Api.Features.Tenants.Tenant", "Tenant")
@@ -3075,6 +3211,11 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("OAuthGrant");
 
                 b.Navigation("PushNotificationSubscription");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
+            {
+                b.Navigation("Licenses");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>

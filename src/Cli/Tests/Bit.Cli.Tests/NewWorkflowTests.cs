@@ -644,7 +644,7 @@ public class NewWorkflowTests
         public void Dispose() => undo();
     }
 
-    private static string FakeTemplatePackage(TestHost host)
+    internal static string FakeTemplatePackage(TestHost host)
     {
         var path = Path.Combine(host.Root, "Bit.Boilerplate.0.0.0.nupkg");
 
@@ -689,7 +689,7 @@ public class NewWorkflowTests
         });
     }
 
-    private static void WriteProject(string directory, string name)
+    internal static void WriteProject(string directory, string name)
     {
         string[] web = [$"src/Client/{name}.Client.Core/{name}.Client.Core.csproj", $"src/Client/{name}.Client.Web/{name}.Client.Web.csproj", $"src/Server/{name}.Server.Api/{name}.Server.Api.csproj", $"src/Server/{name}.Server.Web/{name}.Server.Web.csproj", $"src/Tests/{name}.Tests.csproj", Platforms.WorkbenchProject(name), $"src/LandingPage/{name}.LandingPage.Client/{name}.LandingPage.Client.csproj", Platforms.LandingPageProject(name)];
         string[] solution = [.. web, Platforms.MauiProject(name), Platforms.WindowsProject(name)];

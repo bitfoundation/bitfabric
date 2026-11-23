@@ -25,7 +25,7 @@ public static class DocsMcpHttp
         services.AddHostedService<DocsMcpCodeIndexer>();
 
         // Scoped, so the license check that replaces it can read the database.
-        services.AddScoped<IDocsMcpAccess, DocsMcpOpenAccess>();
+        services.AddScoped<IDocsMcpAccess, DocsMcpLicenseAccess>();
 
         // No timeout and no resilience handler of the client's own: an MCP session holds a response stream open for as long
         // as it lives, and a tool call is retried by the proxy itself, once, on a new session. Each use bounds its own wait.

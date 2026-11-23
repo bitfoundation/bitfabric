@@ -363,6 +363,9 @@ public partial class DocsMcpTests
             // Last in the pipeline but the socket: everything /docs-mcp reaches is answered by the fake.
             services.AddHttpClient(DocsMcpHttp.ClientName).AddHttpMessageHandler(() => new FakeBitPlatform.Handler(platform));
 
+            // These tests are about the documentation, not the license: every project gets it, unless a test says otherwise.
+            services.Replace(ServiceDescriptor.Scoped<IDocsMcpAccess, OpenAccess>());
+
             if (sender is not null)
             {
                 services.Replace(ServiceDescriptor.Singleton<ISender>(sender));
@@ -424,6 +427,11 @@ public partial class DocsMcpTests
     }
 
     /// <summary>Answers every project but one, and remembers which it was asked about.</summary>
+    private sealed class OpenAccess : IDocsMcpAccess
+    {
+        public ValueTask<DocsMcpAccessDecision> Decide(string? projectId, CancellationToken cancellationToken) => ValueTask.FromResult(DocsMcpAccessDecision.Allowed);
+    }
+
     private sealed class RecordingAccess : IDocsMcpAccess
     {
         public const string UnlicensedProject = "unlicensed-project";

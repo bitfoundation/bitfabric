@@ -36,6 +36,8 @@ public sealed class CliServices : IDisposable
 
     public SelfUpdate SelfUpdate { get; set; }
 
+    public Licensing.LicenseOptions License { get; } = new();
+
     public IReadOnlyList<string> Arguments { get; set; } = [];
 
     public Tools.AdministratorSession? Administrator { get; set; }

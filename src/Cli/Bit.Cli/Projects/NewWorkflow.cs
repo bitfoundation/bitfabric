@@ -139,6 +139,7 @@ public sealed partial class NewWorkflow(CliServices cli)
                 if (request.NoGit is false)
                 {
                     await RunProjectStepAsync(steps, context, "git", "Initializing git", projectSteps.GitAsync, cancellationToken);
+                    await RunProjectStepAsync(steps, context, "trial-license", "Getting a trial license", projectSteps.TrialLicenseAsync, cancellationToken);
                 }
 
                 var sdkReady = await RunSetupStepsAsync(cli, steps, context, projectSteps, request.NoWorkloads, request.NoRestore, request.NoBuild, request.NoBrowsers, runMode, cancellationToken);
@@ -535,6 +536,11 @@ public sealed partial class NewWorkflow(CliServices cli)
                 File.Delete(legacySolution);
             }
 
+            if (result.Succeeded && context.Exists)
+            {
+                Licensing.NewProjectIdentity.Assign(context.Directory);
+            }
+
             var files = context.Exists ? Directory.EnumerateFiles(context.Directory, "*", SearchOption.AllDirectories).Count() : 0;
             return StepResult.FromProcess(result, $"Created {context.Name}", $"Couldn't create {context.Name}", null, $"bit Boilerplate{(package.Version is TemplateSource.FolderVersion ? "" : $" {package.Version}")}, {files} files");
         }, cancellationToken);
@@ -577,6 +583,7 @@ public sealed partial class NewWorkflow(CliServices cli)
         var stepsList = new List<string> { "create" };
         if (request.NoCertificate is false) stepsList.Add("unique app certificate and web push keys");
         if (request.NoGit is false) stepsList.Add("git with main");
+        if (request.NoGit is false) stepsList.Add("trial license");
         stepsList.Add(".NET SDK check");
         if (selection.Aspire && cli.Environment.IsCI is false) stepsList.Add("container runtime for Aspire");
         if (request.NoBuild is false) stepsList.Add(runMode is ProjectRunMode.UntilClosed ? "build and open the Workbench" : "build the Workbench");
