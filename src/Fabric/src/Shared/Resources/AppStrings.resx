@@ -11090,4 +11090,286 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="CostLessLink" xml:space="preserve">
     <value>See the bill, line by line</value>
   </data>
+  <data name="CliPageTitle" xml:space="preserve">
+    <value>bit CLI, the command line of every bit Fabric project</value>
+  </data>
+  <data name="CliPageDescription" xml:space="preserve">
+    <value>bit CLI creates your bit Fabric project, readies it on any computer, makes its keys and secrets, and keeps it current. Your AI agent usually runs it for you.</value>
+  </data>
+  <data name="CliTitle" xml:space="preserve">
+    <value>The tool that sets up and looks after your project. Your AI runs it for you.</value>
+  </data>
+  <data name="CliLead" xml:space="preserve">
+    <value>bit CLI creates your bit Fabric project, gets it running on any computer, makes its keys and secrets for going live, and checks that a change won't break the app your users already have. Your project's skills tell your AI agent when to run each command, so you rarely type one yourself.</value>
+  </data>
+  <data name="CliInstall" xml:space="preserve">
+    <value>Install bit CLI</value>
+  </data>
+  <data name="CliYourAgent" xml:space="preserve">
+    <value>Your AI agent</value>
+  </data>
+  <data name="CliChatSetupAsk" xml:space="preserve">
+    <value>Set up our project on this computer.</value>
+  </data>
+  <data name="CliChatSetupReply" xml:space="preserve">
+    <value>Done. Your app is running, and open in your browser.</value>
+  </data>
+  <data name="CliChatRatingAsk" xml:space="preserve">
+    <value>Products need a rating, from 1 to 5.</value>
+  </data>
+  <data name="CliChatRatingReply" xml:space="preserve">
+    <value>Added: the rating, its database change and its tests.</value>
+  </data>
+  <data name="CliWhatTitle" xml:space="preserve">
+    <value>What it does for you</value>
+  </data>
+  <data name="CliWhatIntro" xml:space="preserve">
+    <value>Each command does one job for your project, from creating it to keeping it current.</value>
+  </data>
+  <data name="CliStageStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="CliStageStartText" xml:space="preserve">
+    <value>Your project, on any computer, running.</value>
+  </data>
+  <data name="CliStageLive" xml:space="preserve">
+    <value>Go live</value>
+  </data>
+  <data name="CliStageLiveText" xml:space="preserve">
+    <value>Ready for your server and the app stores.</value>
+  </data>
+  <data name="CliStageGrow" xml:space="preserve">
+    <value>Keep building</value>
+  </data>
+  <data name="CliStageGrowText" xml:space="preserve">
+    <value>Your app grows, and stays current.</value>
+  </data>
+  <data name="CliNewTitle" xml:space="preserve">
+    <value>Creates your project</value>
+  </data>
+  <data name="CliNewText" xml:space="preserve">
+    <value>Makes your project on your computer with all it needs: the developer tools, the first build, git, and your app running, open in your browser.</value>
+  </data>
+  <data name="CliSetupTitle" xml:space="preserve">
+    <value>Gets it ready on any computer</value>
+  </data>
+  <data name="CliSetupText" xml:space="preserve">
+    <value>Readies a project that already exists, a teammate's or yours on another computer. Given its repository's address, it clones it first.</value>
+  </data>
+  <data name="CliRunTitle" xml:space="preserve">
+    <value>Starts your app</value>
+  </data>
+  <data name="CliRunText" xml:space="preserve">
+    <value>Starts the website and its server, or the Android, iOS, macOS or Windows app, with an Android emulator made ready when no phone is connected.</value>
+  </data>
+  <data name="CliKeysTitle" xml:space="preserve">
+    <value>Makes your keys</value>
+  </data>
+  <data name="CliKeysText" xml:space="preserve">
+    <value>Creates the keys and certificates your app signs and encrypts with, the Android app's signing key, and the iOS app's signing without a Mac.</value>
+  </data>
+  <data name="CliPipelineTitle" xml:space="preserve">
+    <value>Fills in your pipeline's secrets</value>
+  </data>
+  <data name="CliPipelineText" xml:space="preserve">
+    <value>Reads what your GitHub Actions workflows need, makes the keys it can, asks you for the rest and stores them as GitHub secrets. It also locks the repository down.</value>
+  </data>
+  <data name="CliApiTitle" xml:space="preserve">
+    <value>Keeps installed apps working</value>
+  </data>
+  <data name="CliApiText" xml:space="preserve">
+    <value>Tells you whether a change to your server breaks an app version your users still have installed, before it goes live.</value>
+  </data>
+  <data name="CliMigrationTitle" xml:space="preserve">
+    <value>Changes your database safely</value>
+  </data>
+  <data name="CliMigrationText" xml:space="preserve">
+    <value>Adds a migration when your app's data changes, so the database on your server follows when the new version goes live.</value>
+  </data>
+  <data name="CliTranslateTitle" xml:space="preserve">
+    <value>Translates your app</value>
+  </data>
+  <data name="CliTranslateText" xml:space="preserve">
+    <value>Fills in the missing translations of your app's texts with the AI model you choose, and keeps the ones you have.</value>
+  </data>
+  <data name="CliDiffTitle" xml:space="preserve">
+    <value>Brings in what's new</value>
+  </data>
+  <data name="CliDiffText" xml:space="preserve">
+    <value>Shows what changed in the starting point your project was made from, so your AI brings each improvement in and keeps your own changes.</value>
+  </data>
+  <data name="CliYourAITitle" xml:space="preserve">
+    <value>You ask in your words. Your AI runs the command.</value>
+  </data>
+  <data name="CliYourAIIntro" xml:space="preserve">
+    <value>You'll rarely type any of these yourself. Your AI agent runs them while it builds, the way a developer on your team would.</value>
+  </data>
+  <data name="CliKnowsWhen" xml:space="preserve">
+    <value>Your AI knows when</value>
+  </data>
+  <data name="CliKnowsWhenText" xml:space="preserve">
+    <value>Your project's instructions and skills tell your AI agent which command a task needs. You ask in your own words, and it runs the right one.</value>
+  </data>
+  <data name="CliStuckStep" xml:space="preserve">
+    <value>A stuck step says what's next</value>
+  </data>
+  <data name="CliStuckStepText" xml:space="preserve">
+    <value>When a step fails, bit CLI says what it was doing and the exact command that finishes it, and the steps after it still run. Your AI picks up from there.</value>
+  </data>
+  <data name="CliRightVersion" xml:space="preserve">
+    <value>Always the right version</value>
+  </data>
+  <data name="CliRightVersionText" xml:space="preserve">
+    <value>In your project, bit CLI runs the version that fits it and keeps itself up to date, so neither you nor your AI has to.</value>
+  </data>
+  <data name="CliCommandsTitle" xml:space="preserve">
+    <value>Every command</value>
+  </data>
+  <data name="CliCommandsIntro" xml:space="preserve">
+    <value>One line each, in the order {0} lists them. {1} shows a command's options.</value>
+  </data>
+  <data name="CliCommandColumn" xml:space="preserve">
+    <value>Command</value>
+  </data>
+  <data name="CliGuideLink" xml:space="preserve">
+    <value>Every option, in bit CLI's own guide</value>
+  </data>
+  <data name="CliRefNew" xml:space="preserve">
+    <value>Creates a project and gets it ready to run: the tools it needs, the build, git, its database and your editor.</value>
+  </data>
+  <data name="CliRefSetup" xml:space="preserve">
+    <value>Gets a project that exists ready on this computer, cloning it first when given its repository's address. It also adds an app later, such as Android.</value>
+  </data>
+  <data name="CliRefRun" xml:space="preserve">
+    <value>Builds and starts the project: the website and its server, or the Android, iOS, macOS or Windows app.</value>
+  </data>
+  <data name="CliRefDiff" xml:space="preserve">
+    <value>Shows what changed in the project's starting point between two versions, as one commit your AI brings into your project.</value>
+  </data>
+  <data name="CliRefDoctor" xml:space="preserve">
+    <value>Checks this computer for the tools a project needs, and installs what's missing with --fix.</value>
+  </data>
+  <data name="CliRefTrust" xml:space="preserve">
+    <value>Marks a project's folder as trusted for VS Code, Claude Code, Copilot CLI, Codex and Gemini CLI.</value>
+  </data>
+  <data name="CliRefClean" xml:space="preserve">
+    <value>Deletes the project's build outputs and downloaded packages, so the next build starts fresh.</value>
+  </data>
+  <data name="CliRefRename" xml:space="preserve">
+    <value>Renames the project everywhere its name appears: files, folders, code, the database and the app's id.</value>
+  </data>
+  <data name="CliRefRemove" xml:space="preserve">
+    <value>Deletes a folder for good, after stopping the apps that keep its files in use.</value>
+  </data>
+  <data name="CliRefMigration" xml:space="preserve">
+    <value>Adds and removes the database's migrations, and bundles them for the database on your server.</value>
+  </data>
+  <data name="CliRefApi" xml:space="preserve">
+    <value>Checks that the server's api still works for the app versions your users run, and keeps each release's api.</value>
+  </data>
+  <data name="CliRefTranslate" xml:space="preserve">
+    <value>Fills in the missing translations of the app's texts with an AI model, and checks that none is missing.</value>
+  </data>
+  <data name="CliRefDecode" xml:space="preserve">
+    <value>Reads an error report of a minified app back into the names its code has.</value>
+  </data>
+  <data name="CliRefKeys" xml:space="preserve">
+    <value>Creates the keys and certificates the project signs and encrypts with: web push, the server's certificate, and the Android and iOS apps' signing.</value>
+  </data>
+  <data name="CliRefPipeline" xml:space="preserve">
+    <value>Fills in the secrets the GitHub Actions workflows use, and locks the repository down.</value>
+  </data>
+  <data name="CliRefAotProfile" xml:space="preserve">
+    <value>Writes the profile that makes the web app fast while its download stays small.</value>
+  </data>
+  <data name="CliRefTelemetry" xml:space="preserve">
+    <value>Shows what bit CLI reports to the bit platform team, and changes it.</value>
+  </data>
+  <data name="CliRefUpdate" xml:space="preserve">
+    <value>Updates bit CLI to the newest version. bit new and a project's commands do it by themselves.</value>
+  </data>
+  <data name="CliRefAbout" xml:space="preserve">
+    <value>Shows where this build of bit CLI comes from, and how to verify it.</value>
+  </data>
+  <data name="CliInstallTitle" xml:space="preserve">
+    <value>Install it</value>
+  </data>
+  <data name="CliInstallIntro" xml:space="preserve">
+    <value>You rarely need to: the one line Get started gives you installs bit CLI along with everything else. To install it on its own:</value>
+  </data>
+  <data name="CliInstallWindowsText" xml:space="preserve">
+    <value>Paste it into PowerShell or Command Prompt. It installs Microsoft's free developer tools and bit CLI for your user, without administrator rights.</value>
+  </data>
+  <data name="CliInstallUnix" xml:space="preserve">
+    <value>macOS and Linux</value>
+  </data>
+  <data name="CliInstallUnixText" xml:space="preserve">
+    <value>Paste it into a terminal. It installs the same for your user, without sudo.</value>
+  </data>
+  <data name="CliInstallSdk" xml:space="preserve">
+    <value>With the .NET SDK already there</value>
+  </data>
+  <data name="CliInstallSdkText" xml:space="preserve">
+    <value>Version 10 or later. bit CLI installs from nuget.org as a tool for your user.</value>
+  </data>
+  <data name="CliInstallThen" xml:space="preserve">
+    <value>Then open a new terminal: {0} lists every command.</value>
+  </data>
+  <data name="CliPackageLink" xml:space="preserve">
+    <value>Bit.Cli on nuget.org</value>
+  </data>
+  <data name="CliSourceLink" xml:space="preserve">
+    <value>Its source on GitHub</value>
+  </data>
+  <data name="CliCheckTitle" xml:space="preserve">
+    <value>Check what you run</value>
+  </data>
+  <data name="CliCheckIntro" xml:space="preserve">
+    <value>Don't take our word for it: the source, the build and what it reports are all open to check.</value>
+  </data>
+  <data name="CliCheckSource" xml:space="preserve">
+    <value>The source is public</value>
+  </data>
+  <data name="CliCheckSourceText" xml:space="preserve">
+    <value>bit CLI's source is on GitHub, in bit Fabric's own repository, under the {0} license. Read what a command does before you run it.</value>
+  </data>
+  <data name="CliCheckBuild" xml:space="preserve">
+    <value>Built, signed and attested</value>
+  </data>
+  <data name="CliCheckBuildText" xml:space="preserve">
+    <value>GitHub Actions builds every release from that source, signs it and records an attestation on GitHub. bit about shows the build you run and the line that verifies it:</value>
+  </data>
+  <data name="CliCheckReports" xml:space="preserve">
+    <value>What it reports, and what never</value>
+  </data>
+  <data name="CliCheckReportsText" xml:space="preserve">
+    <value>Whether each step worked, how long it took and its errors, so failed runs get fixed. Never your project's names, paths, files, prompts or keys. This turns it off:</value>
+  </data>
+  <data name="CliQuestionLearn" xml:space="preserve">
+    <value>Do I need to learn these commands?</value>
+  </data>
+  <data name="CliAnswerLearn" xml:space="preserve">
+    <value>No. Your AI agent runs them while it works, guided by your project's instructions and skills, and tells you what it did. This page is for when you're curious, or want to run one yourself.</value>
+  </data>
+  <data name="CliQuestionComputers" xml:space="preserve">
+    <value>Which computers does it run on?</value>
+  </data>
+  <data name="CliAnswerComputers" xml:space="preserve">
+    <value>Windows, macOS and Linux. What you can run while you build depends on the computer: Windows runs the web, Android and Windows apps, macOS the web, Android, iOS and macOS apps, and Linux the web and Android apps. Your project's pipeline builds every app for release, whichever you use.</value>
+  </data>
+  <data name="CliQuestionChanges" xml:space="preserve">
+    <value>What does it change on my computer?</value>
+  </data>
+  <data name="CliAnswerChanges" xml:space="preserve">
+    <value>What your project needs and you agree to: it lists the tools it would install, and installs the ones you tick. It keeps its own files in a .bitplatform folder in your user's folder. Where a step needs administrator rights, your computer asks you once.</value>
+  </data>
+  <data name="CliQuestionBitPlatform" xml:space="preserve">
+    <value>Is this the bit CLI from bit platform?</value>
+  </data>
+  <data name="CliAnswerBitPlatform" xml:space="preserve">
+    <value>Yes. Its source moved from the bit platform repository to bit Fabric's own, bitfoundation/bitfabric on GitHub. The package is still Bit.Cli on nuget.org, and the command is still bit.</value>
+  </data>
+  <data name="AppHomeSeeCli" xml:space="preserve">
+    <value>What bit CLI does</value>
+  </data>
 </root>

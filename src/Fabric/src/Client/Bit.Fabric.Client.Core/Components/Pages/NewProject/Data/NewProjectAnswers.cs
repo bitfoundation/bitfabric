@@ -186,8 +186,11 @@ public sealed record NewProjectAnswers
         ? $"powershell -c \"irm {InstallerHost}/install.ps1 | iex; bit {bitArguments}\""
         : $"curl -fsSL {InstallerHost}/install.sh | bash -s -- {bitArguments}";
 
+    /// <summary>bit CLI from nuget.org, on a computer that has the SDK already: the newest one, a preview as well as a release, as the installers take.</summary>
+    public const string ManualInstallLine = "dotnet tool install --global Bit.Cli --prerelease";
+
     /// <summary>The two lines for a computer the one-line installer isn't signed for yet: bit CLI from nuget.org, then bit.</summary>
-    public static string ManualLinesFor(string bitArguments) => $"dotnet tool install --global Bit.Cli --prerelease{Environment.NewLine}bit {bitArguments}";
+    public static string ManualLinesFor(string bitArguments) => $"{ManualInstallLine}{Environment.NewLine}bit {bitArguments}";
 
     /// <summary>A link that opens the wizard with these answers on another device, so a phone visitor can send it to their computer.</summary>
     public string ShareLink
