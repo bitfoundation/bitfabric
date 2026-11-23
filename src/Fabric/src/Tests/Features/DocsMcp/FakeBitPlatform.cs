@@ -165,7 +165,15 @@ public sealed class FakeBitPlatform : IAsyncDisposable
 
     public static readonly byte[] CliExecutable = Encoding.UTF8.GetBytes("a stand-in for codebase-memory");
 
-    private static byte[] CliArchive(string fileName, bool tampered)
+    /// <summary>
+    /// Each archive is built once: an archive's headers carry the time it was written (a tar's to a fraction of a second),
+    /// so the one served has to be the very one checksums.txt was computed from.
+    /// </summary>
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<(string FileName, bool Tampered), byte[]> cliArchives = new();
+
+    private static byte[] CliArchive(string fileName, bool tampered) => cliArchives.GetOrAdd((fileName, tampered), key => BuildCliArchive(key.FileName, key.Tampered));
+
+    private static byte[] BuildCliArchive(string fileName, bool tampered)
     {
         var executable = tampered ? Encoding.UTF8.GetBytes("something else") : CliExecutable;
 
