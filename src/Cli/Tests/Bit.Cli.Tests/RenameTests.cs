@@ -258,8 +258,8 @@ public class RenameTests
 
         var test = new ProjectRenamer("Test", "Contoso");
 
-        Assert.AreEqual("[TestMethod] Microsoft.NET.Test.Sdk dotnet test test@bitplatform.dev /iPad/.test(agent) contoso-e2e Projects.Contoso_Server_Api",
-            test.Replace("[TestMethod] Microsoft.NET.Test.Sdk dotnet test test@bitplatform.dev /iPad/.test(agent) test-e2e Projects.Test_Server_Api"));
+        Assert.AreEqual("[TestMethod] Microsoft.NET.Test.Sdk dotnet test test@bitfabric.co /iPad/.test(agent) contoso-e2e Projects.Contoso_Server_Api",
+            test.Replace("[TestMethod] Microsoft.NET.Test.Sdk dotnet test test@bitfabric.co /iPad/.test(agent) test-e2e Projects.Test_Server_Api"));
 
         var lowercase = new ProjectRenamer("shop", "Contoso");
 

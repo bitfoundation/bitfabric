@@ -646,7 +646,7 @@ public sealed partial class NewWorkflow(CliServices cli)
             }
 
             cli.Console.Out.MarkupLine($"  [bold]Run it[/]     cd {Markup.Escape(ProcessSpec.Quote(relative))}  [grey]then[/]  {Markup.Escape(run)}");
-            cli.Console.Out.MarkupLine($"  [bold]Sign in[/]    test@bitplatform.dev / {Markup.Escape(context.SeedPassword ?? "123456")}  [grey]seeded accounts, remove them before you deploy[/]");
+            cli.Console.Out.MarkupLine($"  [bold]Sign in[/]    test@bitfabric.co / {Markup.Escape(context.SeedPassword ?? "123456")}  [grey]seeded accounts, remove them before you deploy[/]");
             cli.Console.Out.MarkupLine("  [bold]Docs[/]       https://bitfabric.co");
         }
 

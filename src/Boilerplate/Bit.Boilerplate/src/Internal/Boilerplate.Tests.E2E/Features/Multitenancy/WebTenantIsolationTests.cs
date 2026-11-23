@@ -30,7 +30,7 @@ public partial class WebTenantIsolationTests : AppTestBase
         await using var dbContext = await globalApiClient.DbContextFactory!.CreateDbContextAsync(TestContext.CancellationToken);
 
         var marker = Guid.NewGuid().ToString("N")[..10];
-        var email = $"e2e-{marker}@bitplatform.dev";
+        var email = $"e2e-{marker}@bitfabric.co";
         var productName = $"BYD Seal {marker}";
 
         // A few of the main store's cars, which the new store's member must not be shown.

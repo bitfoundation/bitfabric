@@ -1147,7 +1147,7 @@
                     ]
                 },
                 {
-                    // All sign in as store-admin@bitplatform.dev, which UserConfiguration only seeds under `multitenant`.
+                    // All sign in as store-admin@bitfabric.co, which UserConfiguration only seeds under `multitenant`.
                     // The `(module != Admin)` rule above removes them too; this one adds the other half of what they need.
                     "condition": "(advancedTests != true || module != Admin || multitenant != true)",
                     "exclude": [

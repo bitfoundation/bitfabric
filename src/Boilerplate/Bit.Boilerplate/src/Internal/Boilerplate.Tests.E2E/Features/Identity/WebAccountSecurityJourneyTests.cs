@@ -543,7 +543,7 @@ public partial class WebAccountSecurityJourneyTests : AppTestBase
     /// </summary>
     private static string TwoFactorCode(string base32SharedKey) => new Totp(Base32Encoding.ToBytes(base32SharedKey)).ComputeTotp();
 
-    private static string NewTestEmail() => $"e2e-{Guid.NewGuid():N}@bitplatform.dev";
+    private static string NewTestEmail() => $"e2e-{Guid.NewGuid():N}@bitfabric.co";
 
     private static string AccountSectionUrl => $"{PageUrls.Settings}/{PageUrls.SettingsSections.Account}";
 

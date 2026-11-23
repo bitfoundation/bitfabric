@@ -196,7 +196,7 @@ public class SignInPanelCredentialStateTests
         var identityController = client.GetController<IIdentityController>();
 
         // A per-run account, not the shared seeded one. SendOtp stamps OtpRequestedOn on whoever it is called for and
-        // that state outlives the run, so issuing a code for test@bitplatform.dev here would leave a live magic link
+        // that state outlives the run, so issuing a code for test@bitfabric.co here would leave a live magic link
         // on the account the sibling test above needs to have none - and MSTest runs two test methods at a time, so
         // the two would race even within a single run. It also re-arms SendOtp's own resend throttle. See
         // TestAccountUtils. CreateAndSignIn leaves the account e-mail confirmed, which is what makes the call below

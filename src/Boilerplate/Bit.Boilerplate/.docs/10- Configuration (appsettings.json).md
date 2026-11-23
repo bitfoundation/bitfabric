@@ -233,7 +233,7 @@ In [`src/Server/Boilerplate.Server.Api/appsettings.json`](/src/Server/Boilerplat
         "RefreshTokenExpiration": "14.00:00:00"
     },
     "Email": {
-        "DefaultFromEmail": "DoNotReply@bitplatform.dev"
+        "DefaultFromEmail": "DoNotReply@bitfabric.co"
     },
     "GoogleRecaptchaSecretKey": "6LdMKr4pAAAAANvngWNam_nlHzEDJ2t6SfV6L_DS"
 }

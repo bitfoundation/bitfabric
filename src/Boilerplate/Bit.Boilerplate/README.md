@@ -16,10 +16,10 @@ pre-confirmed accounts whose password is **`12345678`**:
 
 | E-mail | Password | Role |
 |---|---|---|
-| `test@bitplatform.dev` | `12345678` | `g-admin` - global administrator |
+| `test@bitfabric.co` | `12345678` | `g-admin` - global administrator |
 <!--#if (multitenant == true)-->
-| `store-admin@bitplatform.dev` | `12345678` | `t-admin` of the seeded `store` tenant |
-| `store-user@bitplatform.dev` | `12345678` | `demo` member of the seeded `store` tenant |
+| `store-admin@bitfabric.co` | `12345678` | `t-admin` of the seeded `store` tenant |
+| `store-user@bitfabric.co` | `12345678` | `demo` member of the seeded `store` tenant |
 <!--#endif-->
 
 These passwords are for development and are not for Production: the first deployment still creates the accounts, so

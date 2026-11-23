@@ -31,7 +31,7 @@ public partial class WebFeatureGatingTests : AppTestBase
         await using var dbContext = await globalApiClient.DbContextFactory!.CreateDbContextAsync(TestContext.CancellationToken);
 
         var marker = Guid.NewGuid().ToString("N")[..12];
-        var email = $"e2e-{marker}@bitplatform.dev";
+        var email = $"e2e-{marker}@bitfabric.co";
 
         var tenant = new Tenant { Id = Guid.NewGuid(), Name = $"e2e-{marker}", Title = $"E2E {marker}" };
         var user = new User

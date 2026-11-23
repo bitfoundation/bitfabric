@@ -13,7 +13,7 @@ namespace Boilerplate.Tests.Features.Identity;
 public static class MagicLinkSignInUtils
 {
     /// <summary>A brand-new, unique e-mail address; its local part is a Guid that isolates this account's captured e-mails.</summary>
-    public static string NewTestEmail() => $"{Guid.NewGuid()}@bitplatform.dev";
+    public static string NewTestEmail() => $"{Guid.NewGuid()}@bitfabric.co";
 
     /// <summary>
     /// Requests a magic link / OTP for <paramref name="email"/> through the Sign in page. A brand-new e-mail makes the

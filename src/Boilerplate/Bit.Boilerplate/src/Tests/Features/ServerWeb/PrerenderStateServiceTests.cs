@@ -24,7 +24,7 @@ public partial class PrerenderStateServiceTests
         {
             Id = Guid.NewGuid(),
             UserName = "prerender",
-            Email = "prerender@bitplatform.dev",
+            Email = "prerender@bitfabric.co",
             FullName = "Prerender Test",
             Gender = Gender.Other,
             BirthDate = new DateTimeOffset(1990, 5, 17, 0, 0, 0, TimeSpan.FromHours(3.5)),

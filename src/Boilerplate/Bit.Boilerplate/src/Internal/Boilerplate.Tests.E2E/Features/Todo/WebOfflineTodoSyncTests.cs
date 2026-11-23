@@ -30,7 +30,7 @@ public partial class WebOfflineTodoSyncTests : AppTestBase
         await using var dbContext = await globalApiClient.DbContextFactory!.CreateDbContextAsync(TestContext.CancellationToken);
 
         var marker = Guid.NewGuid().ToString("N")[..10];
-        var email = $"e2e-{marker}@bitplatform.dev";
+        var email = $"e2e-{marker}@bitfabric.co";
         var offlineTitle = $"added offline {marker}";
         var onlineTitle = $"added online {marker}";
 

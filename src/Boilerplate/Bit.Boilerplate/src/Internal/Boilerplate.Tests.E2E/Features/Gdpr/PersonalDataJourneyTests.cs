@@ -45,7 +45,7 @@ public partial class PersonalDataJourneyTests
 
         var cancellationToken = TestContext.CancellationToken;
         var marker = Guid.NewGuid().ToString("N")[..10];
-        var email = $"e2e-{marker}@bitplatform.dev";
+        var email = $"e2e-{marker}@bitfabric.co";
         var fullName = $"E2E Subject {marker}";
         var birthDate = new DateTimeOffset(1991, 2, 3, 0, 0, 0, TimeSpan.Zero);
         var authenticatorKey = Base32Encoding.ToString(RandomNumberGenerator.GetBytes(20));

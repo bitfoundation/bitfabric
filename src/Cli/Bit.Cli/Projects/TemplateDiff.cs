@@ -119,7 +119,7 @@ public sealed class TemplateDiff(CliServices cli)
         {
             var init = await Git(output, ["init", "-q", "-b", "bit-boilerplate"], ct);
 
-            foreach (var (key, value) in new[] { ("user.name", "bit diff"), ("user.email", "diff@bitplatform.dev"), ("core.autocrlf", "false"), ("core.safecrlf", "false"), ("commit.gpgsign", "false") })
+            foreach (var (key, value) in new[] { ("user.name", "bit diff"), ("user.email", "diff@bitfabric.co"), ("core.autocrlf", "false"), ("core.safecrlf", "false"), ("commit.gpgsign", "false") })
             {
                 await Git(output, ["config", key, value], ct);
             }

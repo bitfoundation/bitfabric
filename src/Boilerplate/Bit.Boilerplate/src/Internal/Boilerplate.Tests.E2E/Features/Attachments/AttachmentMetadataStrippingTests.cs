@@ -45,7 +45,7 @@ public class AttachmentMetadataStrippingTests
                 "The fixture carries no EXIF, so this test would pass without the deployment having stripped anything.");
         }
 
-        var email = $"e2e-{Guid.NewGuid():N}"[..14] + "@bitplatform.dev";
+        var email = $"e2e-{Guid.NewGuid():N}"[..14] + "@bitfabric.co";
         var userId = await CreateUser(email);
 
         // Registered before the upload: the picture lives in blob storage, not only in the database.

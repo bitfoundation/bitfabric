@@ -97,7 +97,7 @@ public class OneTimeTokenTests
         await using var client = server.CreateAppClient();
         var identityController = client.GetController<IIdentityController>();
 
-        var email = $"Mixed.Case.{Guid.NewGuid()}@BitPlatform.dev";
+        var email = $"Mixed.Case.{Guid.NewGuid()}@BitFabric.co";
 
         await Assert.ThrowsExactlyAsync<BadRequestException>(
             () => identityController.SendOtp(new() { Email = email }, null, TestContext.CancellationToken));

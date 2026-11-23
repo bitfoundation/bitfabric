@@ -45,7 +45,7 @@ public partial class AntiforgeryTests
     {
         await SkipWithoutGlobalAdminCredentials();
 
-        var email = $"e2e-{Guid.NewGuid():N}"[..14] + "@bitplatform.dev";
+        var email = $"e2e-{Guid.NewGuid():N}"[..14] + "@bitfabric.co";
         var userId = await CreateUser(email);
 
         try
