@@ -11,7 +11,7 @@ public partial class LicensingPersonalDataSource : IPersonalDataSource
 
     public string Key => "licenses";
 
-    public string Purpose => "The free licenses you got for your projects, which bit CLI checks in each project's bit.json, and which name you as their holder.";
+    public string Purpose => "The free licenses you got for your projects, which bit CLI checks in each project's bit.json, and which name you by your full name when your account has one, never by your email address.";
 
     public string Retention => "For as long as your account exists. Deleting your account deletes the licenses issued to it; its projects stay, without an account, so you can license them again.";
 

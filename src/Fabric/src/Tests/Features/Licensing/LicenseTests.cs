@@ -95,7 +95,7 @@ public class LicenseTests
     }
 
     [TestMethod]
-    public async Task AFreeLicense_Should_NameTheAccount_AndGoToTheWaitingBitOnce()
+    public async Task AFreeLicense_Should_GoToTheWaitingBitOnce()
     {
         await using var server = await StartServer();
         var email = await TestUsers.SignUp(server, TestContext.CancellationToken);
@@ -112,10 +112,10 @@ public class LicenseTests
 
         var payload = Verify(server, issued.License);
         Assert.AreEqual("free", payload.GetProperty("plan").GetString());
-        Assert.AreEqual(email, payload.GetProperty("holder").GetString(), "A new account has no name, so its email names it.");
+        Assert.AreEqual("", payload.GetProperty("holder").GetString(), "A new account has no name, and its email is never written into a license.");
         Assert.AreEqual(commit, payload.GetProperty("commit").GetString());
         Assert.AreEqual(TimeSpan.FromDays(365), payload.GetProperty("expires").GetDateTimeOffset() - payload.GetProperty("issued").GetDateTimeOffset());
-        Assert.AreEqual(email, issued.Holder);
+        Assert.AreEqual("", issued.Holder);
 
         // bit CLI reads it anonymously, once.
         await using var cli = server.CreateAppClient();
@@ -160,18 +160,50 @@ public class LicenseTests
         Assert.AreEqual(newCommit, row.FirstCommit);
     }
 
+    /// <summary>
+    /// A public repository shows its project's id and first commit to anyone, so the account that asked first can't keep
+    /// the others from a license while every license is free.
+    /// </summary>
     [TestMethod]
-    public async Task AnotherAccount_Should_NotTakeAProjectThatIsntItsOwn()
+    public async Task AnotherAccount_Should_GetItsOwnLicense_ForAProjectAnotherHas()
     {
         await using var server = await StartServer();
-        await using var owner = await SignIn(server, await TestUsers.SignUp(server, TestContext.CancellationToken));
+        var ownerEmail = await TestUsers.SignUp(server, TestContext.CancellationToken);
+        await using var owner = await SignIn(server, ownerEmail);
         await using var someoneElse = await SignIn(server, await TestUsers.SignUp(server, TestContext.CancellationToken));
         var project = Guid.NewGuid();
         var commit = NewCommit();
 
-        await owner.GetController<ILicenseController>().Issue(new() { Project = project, Name = "Contoso", Commit = commit }, TestContext.CancellationToken);
+        var first = await owner.GetController<ILicenseController>().Issue(new() { Project = project, Name = "Contoso", Commit = commit }, TestContext.CancellationToken);
+        var second = await someoneElse.GetController<ILicenseController>().Issue(new() { Project = project, Name = "Contoso", Commit = commit }, TestContext.CancellationToken);
 
-        await Assert.ThrowsExactlyAsync<ConflictException>(() => someoneElse.GetController<ILicenseController>().Issue(new() { Project = project, Name = "Contoso", Commit = commit }, TestContext.CancellationToken));
+        Assert.AreNotEqual(first.License, second.License);
+        Assert.AreEqual(project.ToString("D"), Verify(server, second.License).GetProperty("project").GetString());
+        Assert.AreEqual(commit, Verify(server, second.License).GetProperty("commit").GetString());
+
+        await using var scope = server.ApiApp.Services.CreateAsyncScope();
+        var row = await scope.ServiceProvider.GetRequiredService<AppDbContext>().LicensedProjects.SingleAsync(row => row.Id == project, TestContext.CancellationToken);
+        Assert.AreEqual(await UserIdOf(server, ownerEmail), row.UserId, "The first account stays recorded with the project.");
+    }
+
+    /// <summary>The license goes into the project's bit.json and its git history, often public: a full name or no one.</summary>
+    [TestMethod]
+    public async Task TheLicense_Should_NameTheAccountByItsFullName_AndNeverByItsEmail()
+    {
+        await using var server = await StartServer();
+        var email = await TestUsers.SignUp(server, TestContext.CancellationToken);
+        await using var client = await SignIn(server, email);
+        var licenses = client.GetController<ILicenseController>();
+
+        async Task<string?> HolderAsync() => Verify(server, (await licenses.Issue(new() { Project = Guid.NewGuid(), Name = "Contoso", Commit = NewCommit() }, TestContext.CancellationToken)).License).GetProperty("holder").GetString();
+
+        Assert.AreEqual("", await HolderAsync(), "A new account has an email and no name.");
+
+        await TestUsers.SetFullName(server, email, "Jane Doe");
+        Assert.AreEqual("Jane Doe", await HolderAsync());
+
+        await TestUsers.SetFullName(server, email, email);
+        Assert.AreEqual("", await HolderAsync(), "A full name that is an email address is one too.");
     }
 
     /// <summary>What the docs MCP server asks of a project's id: a trial or a license in force, the weeks of grace included.</summary>

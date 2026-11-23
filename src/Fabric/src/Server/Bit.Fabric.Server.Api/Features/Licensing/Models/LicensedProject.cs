@@ -2,8 +2,8 @@ namespace Bit.Fabric.Server.Api.Features.Licensing.Models;
 
 /// <summary>
 /// A project bit CLI made or licensed, by the id <c>bit new</c> writes into its bit.json. It starts with its trial and no
-/// person attached; signing in on the license page makes it that account's. Global, not per tenant: a project is a
-/// person's, whichever team they are in.
+/// person attached; the first account that gets a license for it on the license page is recorded with it. Global, not per
+/// tenant: a project is a person's, whichever team they are in.
 /// </summary>
 public partial class LicensedProject
 {
@@ -28,7 +28,9 @@ public partial class LicensedProject
     [MaxLength(2000)]
     public string? TrialLicense { get; set; }
 
-    /// <summary>The account the project belongs to, from its first free license on; null before.</summary>
+    /// <summary>
+    /// The account that got the project's first free license; null before. It keeps no other account from getting one.
+    /// </summary>
     public Guid? UserId { get; set; }
 
     public User? User { get; set; }

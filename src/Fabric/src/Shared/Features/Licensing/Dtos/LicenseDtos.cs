@@ -63,7 +63,7 @@ public partial class IssuedLicenseDto
     /// <summary><c>free</c>.</summary>
     public string? Plan { get; set; }
 
-    /// <summary>Whom the license names: the account's name, or its email when it has none.</summary>
+    /// <summary>Whom the license names: the account's full name, or empty. Never an email address, since the license goes into git.</summary>
     public string? Holder { get; set; }
 
     public DateTimeOffset IssuedOn { get; set; }

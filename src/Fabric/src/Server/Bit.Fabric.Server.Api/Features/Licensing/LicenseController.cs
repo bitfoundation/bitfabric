@@ -79,20 +79,22 @@ public partial class LicenseController : AppControllerBase, ILicenseController
             project = new LicensedProject { Id = request.Project, Name = name, FirstCommit = commit, CreatedOn = now, UserId = userId };
             await DbContext.LicensedProjects.AddAsync(project, cancellationToken);
         }
-        else if (project.UserId is { } owner && owner != userId)
-        {
-            throw new ConflictException(Localizer["This project already belongs to another account. Sign in with that account to get its license."]);
-        }
         else
         {
-            // The first license makes the project the account's. The same account asking for another first commit has
-            // made a new repository from the project's files, which takes the license on to it.
-            project.UserId = userId;
-            project.Name = name;
-            project.FirstCommit = commit;
+            // The account that first got a license is recorded as the project's, which keeps no one else from getting one:
+            // a public repository shows its id and first commit to anyone.
+            project.UserId ??= userId;
+
+            // That account asking for another first commit has made a new repository from the project's files, which takes
+            // the license on to it.
+            if (project.UserId == userId)
+            {
+                project.Name = name;
+                project.FirstCommit = commit;
+            }
         }
 
-        var holder = string.IsNullOrWhiteSpace(user.FullName) ? user.Email ?? user.UserName ?? "" : user.FullName.Trim();
+        var holder = HolderOf(user);
         var expires = now.AddDays(AppSettings.Licensing.FreeDays);
 
         var license = new IssuedLicense
@@ -173,6 +175,12 @@ public partial class LicenseController : AppControllerBase, ILicenseController
 
         return (name!.Trim(), commit);
     }
+
+    /// <summary>
+    /// Whom the license names: the account's full name, or no one. Never an email address, since the license goes into the
+    /// project's bit.json and its git history, often public.
+    /// </summary>
+    public static string HolderOf(User user) => user.FullName?.Trim() is { Length: > 0 } fullName && fullName.Contains('@') is false ? fullName : "";
 
     private static string Hash(string code) => Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(code)));
 

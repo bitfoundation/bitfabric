@@ -50,7 +50,9 @@
         <div class="license-intro">
             <BitText Typography="BitTypography.H4" Element="h1" Class="license-title">@Localizer["{0} has its license", issued.ProjectName!]</BitText>
             <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
-                @Localizer["Free, for {0}, until {1}.", issued.Holder!, issued.ExpiresOn.ToString("D", CultureInfo.CurrentUICulture)]
+                @(string.IsNullOrEmpty(issued.Holder)
+                    ? Localizer["Free, until {0}.", issued.ExpiresOn.ToString("D", CultureInfo.CurrentUICulture)]
+                    : Localizer["Free, for {0}, until {1}.", issued.Holder, issued.ExpiresOn.ToString("D", CultureInfo.CurrentUICulture)])
             </BitText>
         </div>
 

@@ -16,8 +16,9 @@ public interface ILicenseController : IAppController
     Task<LicenseResponseDto> Trial(TrialLicenseRequestDto request, CancellationToken cancellationToken);
 
     /// <summary>
-    /// A free license for the signed-in account. The project becomes the account's; one that is already another account's
-    /// isn't taken over. Asked again, for the same project in a new repository, it issues one for the new first commit.
+    /// A free license for the signed-in account, which any account gets for any project while every license is free: the
+    /// first one to ask is recorded as the project's, and keeps no one else from it. Asked again, for the same project in a
+    /// new repository, it issues one for the new first commit.
     /// </summary>
     [HttpPost, AuthorizedApi]
     Task<IssuedLicenseDto> Issue(IssueLicenseRequestDto request, CancellationToken cancellationToken);
