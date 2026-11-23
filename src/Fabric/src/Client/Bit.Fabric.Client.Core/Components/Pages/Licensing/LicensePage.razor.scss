@@ -1,0 +1,91 @@
+@import '../../../Styles/abstracts/_media-queries.scss';
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+// One narrow column: what the project is, the button, then the license and the line that saves it
+.license-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    width: 100%;
+    max-width: 680px;
+    margin-inline: auto;
+    padding: 24px 16px 48px;
+    line-height: $bit-typography-body1-line-height;
+
+    @include lt-sm {
+        gap: 20px;
+        padding-top: 16px;
+    }
+}
+
+.license-intro,
+.license-step {
+    display: grid;
+    gap: 8px;
+}
+
+::deep .license-title {
+    margin: 0;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.license-facts {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px 16px;
+    margin: 0;
+    padding: 12px 16px;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-secondary;
+
+    dt {
+        color: $bit-color-foreground-secondary;
+    }
+
+    dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+    }
+}
+
+.license-mono {
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-xs;
+}
+
+.license-box {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: start;
+    padding: 12px 12px 12px 16px;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-secondary;
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.license-text {
+    min-width: 0;
+    max-height: 9rem;
+    overflow-y: auto;
+    padding-top: 4px;
+    color: $bit-color-foreground-primary;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-xs;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+::deep .license-copy {
+    min-width: 92px;
+
+    @include lt-sm {
+        width: 100%;
+    }
+}

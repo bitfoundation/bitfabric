@@ -1,0 +1,87 @@
+@attribute [Route(PageUrls.License)]
+@attribute [Route("{culture?}" + PageUrls.License)]
+@inherits AppPageBase
+
+@* Not [Authorize], which lands on NotAuthorizedPage: the link bit CLI prints arrives signed out, so this page goes to
+   /sign-in with itself as the return url, query string and all. *@
+
+<AppPageData Title="@Localizer["Your project's license"]" />
+
+<section class="license-page">
+    @if (isLoading || redirectToSignIn)
+    {
+        <BitProgress Indeterminate Label="@Localizer["Checking your sign-in"]" />
+    }
+    else if (missing is not null)
+    {
+        <BitMessage Color="BitColor.Warning" Variant="BitVariant.Outline" Tinted Multiline>@missing</BitMessage>
+    }
+    else if (issued is null)
+    {
+        <div class="license-intro">
+            <BitText Typography="BitTypography.H4" Element="h1" Class="license-title">@Localizer["A free license for {0}", ProjectName!]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
+                @Localizer["A project is one system with its own data: a till and its back office on one server are one project."]
+            </BitText>
+        </div>
+
+        <dl class="license-facts">
+            <dt>@Localizer["Project"]</dt>
+            <dd>@ProjectName</dd>
+            <dt>@Localizer["Project id"]</dt>
+            <dd class="license-mono">@Id</dd>
+            <dt>@Localizer["First commit"]</dt>
+            <dd class="license-mono">@Commit</dd>
+        </dl>
+
+        @if (error is not null)
+        {
+            <BitMessage Color="BitColor.Error" Variant="BitVariant.Outline" Tinted Multiline>@error</BitMessage>
+        }
+
+        <div>
+            <BitButton IconName="@BitIconName.Certificate" Loading="isIssuing" OnClick="WrapHandled(Issue)">
+                @Localizer["Get the free license"]
+            </BitButton>
+        </div>
+    }
+    else
+    {
+        <div class="license-intro">
+            <BitText Typography="BitTypography.H4" Element="h1" Class="license-title">@Localizer["{0} has its license", issued.ProjectName!]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
+                @Localizer["Free, for {0}, until {1}.", issued.Holder!, issued.ExpiresOn.ToString("D", CultureInfo.CurrentUICulture)]
+            </BitText>
+        </div>
+
+        @if (string.IsNullOrEmpty(Code) is false)
+        {
+            <BitMessage Color="BitColor.Success" Variant="BitVariant.Outline" Tinted Multiline>
+                @Localizer["If bit is waiting in your terminal, it picks the license up by itself and carries on."]
+            </BitMessage>
+        }
+
+        <div class="license-step">
+            <BitText Typography="BitTypography.Subtitle1" Element="h2">@Localizer["Otherwise, run this in the project's folder"]</BitText>
+            <div class="license-box">
+                <code class="license-text">@Command</code>
+                <BitButton Size="BitSize.Small" IconName="@(copied == Command ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(Command))" Class="license-copy">
+                    @(copied == Command ? Localizer["Copied"] : Localizer["Copy"])
+                </BitButton>
+            </div>
+        </div>
+
+        <div class="license-step">
+            <BitText Typography="BitTypography.Subtitle1" Element="h2">@Localizer["The license"]</BitText>
+            <div class="license-box">
+                <code class="license-text">@issued.License</code>
+                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@(copied == issued.License ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(issued.License!))" Class="license-copy">
+                    @(copied == issued.License ? Localizer["Copied"] : Localizer["Copy"])
+                </BitButton>
+            </div>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                @Localizer["bit keeps it in the project's bit.json, and checks it there without asking anyone."]
+            </BitText>
+        </div>
+    }
+</section>

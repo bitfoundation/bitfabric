@@ -180,6 +180,13 @@ public static partial class PageUrls
     public const string AddProjectCallback = "/projects/add/callback";
 
     /// <summary>
+    /// A free license for the project the link bit CLI prints names: <c>?project=&amp;id=&amp;commit=&amp;code=</c>. No
+    /// [Description] because only that link reaches it.
+    /// </summary>
+    [NoIndex]
+    public const string License = "/license";
+
+    /// <summary>
     /// Where <c>/oauth/authorize</c> sends the browser; no [Description] because only that redirect reaches it. An app
     /// link on both platforms: whoever installed the app is usually signed in there, and even a cold hybrid start beats
     /// booting Blazor WebAssembly in an Android browser (ConsentPage.LeaveFor gets back out). Deliberately not under
