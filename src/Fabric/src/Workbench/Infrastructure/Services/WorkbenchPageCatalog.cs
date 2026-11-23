@@ -162,6 +162,15 @@ public static class WorkbenchPageCatalog
             nameof(WorkbenchStrings.CategoryBitFabric),
             ["BitButton", "BitAccordion", "BitIcon", "BitLink"],
             "Judge the cost of your project"),
+        // bit CLI, the tool every project is made and kept with, the app's own page; bitplatform.dev's bit CLI page leads to it
+        new(SitePageHost.CliKey,
+            "bit CLI",
+            "The app's /cli page, bitfabric.co's: what bit CLI does for you, stage by stage, that your AI runs it for you, every command in one line, how to install it and how to check the build you run",
+            BitIconName.CommandPrompt,
+            typeof(CliHost),
+            nameof(WorkbenchStrings.CategoryBitFabric),
+            ["BitButton", "BitAccordion", "BitIcon", "BitLink"],
+            "Your AI runs it for you"),
         // Competing directions for bitfabric.co's home page, to compare with the app's own (app-home) and with each other (2026-11-19)
         new(Bit.Fabric.Workbench.Components.Pages.HomeDirections.HomeDirectionsPage.Key,
             "Home page directions",

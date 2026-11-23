@@ -48,6 +48,9 @@ public abstract partial class AppHomePageBase : AppPageBase
     /// <summary>Why a real app costs less, in the page's language.</summary>
     protected static string CostUrl => CultureInfoManager.GetCurrentCultureUrl(PageUrls.Cost);
 
+    /// <summary>bit CLI, the tool the one line installs, in the page's language.</summary>
+    protected static string CliUrl => CultureInfoManager.GetCurrentCultureUrl(PageUrls.Cli);
+
     /// <summary>The feature whose film is playing in the dialog, if any.</summary>
     protected AppHomeFeature? playing;
 

@@ -1,0 +1,389 @@
+@import '_app-home-page.scss';
+
+// A command, small and set apart, kept whole
+.cli-chip {
+    display: inline-block;
+    max-width: 100%;
+}
+
+.cli-code {
+    display: inline-block;
+    max-width: 100%;
+    padding: .125rem .5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-sm;
+    background: $bit-color-background-primary;
+    color: $bit-color-foreground-primary;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-sm;
+    overflow-wrap: anywhere;
+}
+
+// --- The hero's conversation: the visitor asks in their words, and their AI runs bit CLI ---
+
+.cli-chat {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 38rem;
+    margin: 1.5rem 0 0;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+    box-shadow: $bit-box-shadow-card;
+    text-align: start;
+    overflow: hidden;
+}
+
+.cli-chat-head {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem 1.25rem;
+    border-bottom: 1px solid $bit-color-border-secondary;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-medium;
+}
+
+.cli-chat-turns {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 1.25rem;
+    list-style: none;
+
+    @include lt-sm {
+        padding: 1rem;
+    }
+}
+
+.cli-turn {
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+}
+
+// What the visitor asks, on the side a chat puts their own words
+.cli-ask {
+    align-self: flex-end;
+    max-width: 85%;
+    margin: 0;
+    padding: .625rem 1rem;
+    border-radius: $bit-shape-radius-surface $bit-shape-radius-surface $bit-shape-radius-sm $bit-shape-radius-surface;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: $bit-typography-fs-sm;
+
+    &:dir(rtl) {
+        border-radius: $bit-shape-radius-surface $bit-shape-radius-surface $bit-shape-radius-surface $bit-shape-radius-sm;
+    }
+}
+
+// The command the AI runs, as its chat shows a tool it ran
+.cli-run {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+    max-width: 100%;
+    padding: .5rem .75rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-primary;
+}
+
+::deep .cli-run-icon,
+::deep .cli-run-done {
+    flex-shrink: 0;
+    margin-top: .125rem;
+}
+
+.cli-run-command {
+    flex: 1;
+    min-width: 0;
+    color: $bit-color-foreground-primary;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-sm;
+    text-align: start;
+    overflow-wrap: anywhere;
+}
+
+.cli-reply {
+    margin: 0;
+    color: $bit-color-foreground-primary;
+    font-size: $bit-typography-fs-sm;
+}
+
+// --- What it does for you: a card a stage, side by side where the band is wide; where it is narrower, the cards one under
+// the other with their commands side by side; on a phone, all one under the other. By the band's width, which the
+// navigation panel takes from as well as the screen ---
+
+.cli-what {
+    container-type: inline-size;
+}
+
+.cli-stages {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+}
+
+@container (min-width: 56rem) {
+    .cli-stages {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.cli-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+    --bit-Icon-size: 1.25rem;
+    --bit-Icon-padding: .6rem;
+
+    @include lt-sm {
+        padding: 1.25rem;
+    }
+}
+
+.cli-stage-head {
+    display: flex;
+    align-items: flex-start;
+    gap: .875rem;
+}
+
+::deep .cli-stage-icon {
+    flex-shrink: 0;
+}
+
+.cli-stage-words {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    min-width: 0;
+}
+
+.cli-stage-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cli-job {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .375rem;
+    padding-block: 1rem;
+    border-top: 1px solid $bit-color-border-secondary;
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+}
+
+::deep .cli-job-title {
+    font-weight: $bit-typography-fw-semibold;
+}
+
+// After the rules above, which it overrides where the band has room for the commands side by side
+@container (min-width: 36rem) and (max-width: 55.99rem) {
+    .cli-stage-list {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.25rem;
+    }
+
+    .cli-job {
+        justify-content: flex-start;
+        padding-bottom: 0;
+    }
+}
+
+// --- Every command: a command a row; on a phone each row is a card, the command above its line ---
+
+.cli-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: $bit-typography-fs-sm;
+
+    th,
+    td {
+        padding: .75rem 1rem;
+        border-bottom: 1px solid $bit-color-border-secondary;
+        text-align: start;
+        vertical-align: top;
+    }
+
+    thead th {
+        color: $bit-color-foreground-secondary;
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    tbody th {
+        width: 12rem;
+        font-weight: $bit-typography-fw-regular;
+    }
+
+    td {
+        color: $bit-color-foreground-secondary;
+    }
+
+    @include lt-sm {
+        thead {
+            display: none;
+        }
+
+        tbody,
+        tr,
+        th,
+        td {
+            display: block;
+        }
+
+        tr {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            padding-block: .875rem;
+            border-bottom: 1px solid $bit-color-border-secondary;
+        }
+
+        tbody th,
+        td {
+            width: auto;
+            padding: 0;
+            border: none;
+        }
+    }
+}
+
+// --- Install it: a way a row, what it is beside its line to paste; one under the other on a phone ---
+
+.cli-installs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cli-install {
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+}
+
+.cli-install-words {
+    display: flex;
+    flex-direction: column;
+    gap: .375rem;
+}
+
+.cli-install-head {
+    display: flex;
+    align-items: center;
+    gap: .625rem;
+}
+
+::deep .cli-install-icon {
+    color: $bit-color-primary;
+    font-size: 1.25rem;
+}
+
+// The line and its copy button; on a phone the button goes under the line, so the line has the width
+.cli-paste {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .75rem;
+    padding: .625rem .625rem .625rem 1rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-secondary;
+
+    // The line reads left to right in every language, so its own padding stays on its left
+    &:dir(rtl) {
+        padding: .625rem 1rem .625rem .625rem;
+    }
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .5rem;
+    }
+}
+
+// Smaller on a phone, so the installer's address fits on a line of its own
+.cli-paste-text {
+    min-width: 0;
+    color: $bit-color-foreground-primary;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-sm;
+    line-height: 1.6;
+    text-align: left;
+
+    @include lt-sm {
+        font-size: $bit-typography-fs-xs;
+    }
+}
+
+// A word of the line, kept whole, in the line's own font rather than the one the app gives a span
+.cli-word {
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+::deep .cli-paste-copy {
+    min-width: 5.5rem;
+
+    @include lt-sm {
+        justify-self: end;
+    }
+}
+
+// --- Check what you run ---
+
+.cli-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+}
+
+.cli-verify {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+}
+
+.cli-command {
+    display: block;
+    max-width: 100%;
+    padding: .5rem .75rem;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-primary;
+    color: $bit-color-foreground-primary;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-xs;
+    text-align: left;
+    // Between words first, so an option such as --repo stays whole
+    overflow-wrap: break-word;
+}

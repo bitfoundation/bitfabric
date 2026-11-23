@@ -111,6 +111,9 @@
             <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.TrustCheckIntro)]</BitText>
         </header>
         <AppHomeTiles Tiles="Check(installers, verify)" HeadingElement="@cardHeading" MinWidth="18rem" />
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@CliUrl" IconName="@BitIconName.CommandPrompt">@Localizer[nameof(AppStrings.AppHomeSeeCli)]</BitButton>
+        </div>
     </section>
 
     @* 6. The contact security.txt names *@

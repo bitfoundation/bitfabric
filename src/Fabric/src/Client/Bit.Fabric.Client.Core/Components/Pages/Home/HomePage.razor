@@ -158,8 +158,11 @@
                 @Localizer[nameof(AppStrings.AppHomeHowSigned)]
             </BitText>
         </div>
-        @* How the third step goes in each agent *@
-        <BitButton Variant="BitVariant.Outline" Href="@ForUrl" IconName="@BitIconName.Robot" Class="ah-band-link">@Localizer[nameof(AppStrings.ForSeeEveryAgent)]</BitButton>
+        @* How the third step goes in each agent, and the tool the line installs *@
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@ForUrl" IconName="@BitIconName.Robot">@Localizer[nameof(AppStrings.ForSeeEveryAgent)]</BitButton>
+            <BitButton Variant="BitVariant.Outline" Href="@CliUrl" IconName="@BitIconName.CommandPrompt">@Localizer[nameof(AppStrings.AppHomeSeeCli)]</BitButton>
+        </div>
     </section>
 
     @* 7. What a visitor who doubts it asks before starting. Closed, the answers stay in the page for search engines and find-in-page *@

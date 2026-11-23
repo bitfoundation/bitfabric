@@ -40,6 +40,14 @@ public static partial class PageUrls
     public const string Cost = "/cost";
 
     /// <summary>
+    /// bit CLI, the tool every project is made and kept with: what each command does for the visitor, how their AI agent runs
+    /// them, how to install it and how to check the build they run. bitplatform.dev's own bit CLI page leads here.
+    /// <c>/cli.md</c> is the same as Markdown.
+    /// </summary>
+    [Description("bit CLI, the tool every bit Fabric project is made and kept with: what each command does for you, how your AI agent runs them for you, every command in one line, how to install it, and how to check the build you run.")]
+    public const string Cli = "/cli";
+
+    /// <summary>
     /// bit Fabric side by side with hosted AI builders, an AI agent on an empty project and starter kits, then a page for each
     /// (bitfabric-internal/specs/home-page.md, "The comparison pages", 2026-11-19). Each page is a literal route of
     /// <c>ComparePage</c>, so each is in the sitemap and an unknown subject answers 404.
