@@ -103,7 +103,8 @@ public partial class HomePage
     {
         try
         {
-            nugetStats = await statisticsController.GetNugetStats(packageId: "Bit.BlazorUI", CurrentCancellationToken);
+            // The template's own package, in two parts so that bit new, which renames the template's name everywhere, leaves it alone.
+            nugetStats = await statisticsController.GetNugetStats(packageId: "Bit.Boiler" + "plate", CurrentCancellationToken);
         }
         finally
         {

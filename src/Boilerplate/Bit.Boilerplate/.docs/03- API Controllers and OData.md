@@ -822,7 +822,7 @@ You can also call external APIs using this pattern:
 public interface IStatisticsController : IAppController
 {
     // Call GitHub API directly
-    [HttpGet, Route("https://api.github.com/repos/bitfoundation/bitplatform"), ExternalApi]
+    [HttpGet, Route("https://api.github.com/repos/bitfoundation/bitfabric"), ExternalApi]
     Task<GitHubStats> GetGitHubStats(CancellationToken cancellationToken) => default!;
 }
 ```

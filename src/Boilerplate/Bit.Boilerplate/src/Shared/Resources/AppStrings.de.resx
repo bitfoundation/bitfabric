@@ -563,20 +563,8 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>mit dem, was Sie bereits kennen und lieben</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>Video ansehen</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Mehr erfahren</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>Eine voll ausgestattete App auf jeder Plattform - ab Tag eins</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>Ein Satz performanter, leicht anpassbarer und schöner Blazor-Komponenten</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>Der Ausgangspunkt hinter dieser App: alles fertig verdrahtet, und der Quellcode gehört ganz Ihnen.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Das Boilerplate ist mit ASP.NET Core, Identity, Web API, EF Core und Blazor aufgebaut.</value>

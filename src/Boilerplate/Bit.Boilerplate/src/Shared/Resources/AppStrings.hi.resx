@@ -563,20 +563,8 @@
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>उस चीज़ का उपयोग करके जो आप पहले से जानते और पसंद करते हैं</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>वीडियो देखें</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>और जानें</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>हर प्लेटफ़ॉर्म पर पूरी तरह तैयार ऐप, पहले ही दिन से</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>प्रदर्शनकारी, आसानी से अनुकूलित करने योग्य और सुंदर Blazor घटकों का सेट</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>इस ऐप के पीछे की शुरुआत: सब कुछ पहले से जुड़ा हुआ, और सोर्स कोड पूरी तरह आपका।</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>बॉयलरप्लेट ASP.NET Core, Identity, Web API, EF Core और Blazor के साथ बनाया गया है।</value>

@@ -566,20 +566,8 @@
     <data name="HomePanelSubtitle" xml:space="preserve">
     <value>با استفاده چیزی که میدانید و دوستش دارید</value>
   </data>
-    <data name="WatchVideo" xml:space="preserve">
-    <value>مشاهده ویدئو</value>
-  </data>
     <data name="LearnMore" xml:space="preserve">
     <value>بیشتر بدانید</value>
-  </data>
-    <data name="BitPlatformMessage" xml:space="preserve">
-    <value>یک اپ کامل روی هر پلتفرمی، از همان روز اول</value>
-  </data>
-    <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>مجموعه ای از کمپوننتهای کارا، ساده و زیبای بلیزری</value>
-  </data>
-    <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>نقطه‌ی شروع همین اپ: همه‌چیز از قبل به هم وصل شده و سورس‌کد کاملاً مال خودتان است.</value>
   </data>
     <data name="NewPassword" xml:space="preserve">
     <value>رمز عبور جدید</value>
