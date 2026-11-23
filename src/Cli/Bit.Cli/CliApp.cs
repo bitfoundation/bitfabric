@@ -40,6 +40,7 @@ public static class CliApp
             AotProfileCommand.Create(services),
             TelemetryCommand.Create(services),
             UpdateCommand.Create(services),
+            LicenseCommand.Create(services),
             AboutCommand.Create(services),
             AdminHelperCommand.Create(services)
         };
@@ -55,7 +56,23 @@ public static class CliApp
             && await services.SelfUpdate.HandOffToProjectBitAsync(folder, args, CancellationToken.None, CommandPath(parseResult.CommandResult, root).FirstOrDefault()) is { } exitCode)
             return exitCode;
 
+        if (LicensedFolder(root, parseResult, services, args) is { } licensed
+            && await new Licensing.LicenseCheck(services).BeforeCommandAsync(licensed, CancellationToken.None) is false)
+        {
+            services.Telemetry.SetTag(TelemetryFields.UsageError, "no-license");
+            return ExitFailed;
+        }
+
         return await parseResult.InvokeAsync(configuration);
+    }
+
+    /// <summary>The project folder whose license is checked before the command; null for a command that works on no project.</summary>
+    private static string? LicensedFolder(RootCommand root, ParseResult parseResult, CliServices services, string[] args)
+    {
+        if (parseResult.Errors.Count > 0 || CommandPath(parseResult.CommandResult, root).FirstOrDefault() is not { } command || Licensing.LicenseCheck.CommandsWithoutACheck.Contains(command))
+            return null;
+
+        return ProjectFolder(root, parseResult, services, args);
     }
 
     private static string? ProjectFolder(RootCommand root, ParseResult parseResult, CliServices services, string[] args)
