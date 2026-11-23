@@ -1,0 +1,139 @@
+@inherits AppComponentBase
+
+<div class="incidents">
+    @if (incidents is null)
+    {
+        <BitShimmer Height="8rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingTheIncidents)]" />
+    }
+    else if (incidents.Length is 0)
+    {
+        <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.5rem" Padding="3rem 1rem">
+            <BitIcon IconName="@BitIconName.CompletedSolid" Size="BitSize.Large" Color="BitColor.Success" />
+            <BitText Typography="BitTypography.Subtitle1" Element="h3">@Localizer[nameof(AppStrings.MonitoringNothingToReport)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNoIncidentsHelp)]</BitText>
+        </BitStack>
+    }
+    else
+    {
+        <ul class="incident-list">
+            @foreach (var incident in incidents)
+            {
+                var isOpen = openId == incident.Id;
+                var isOngoing = incident.EndedAt is null;
+
+                <li @key="incident.Id" class="@($"incident {ToneOf(incident)} {(isOpen ? "is-open" : null)}")">
+                    <button type="button" class="incident-head" aria-expanded="@(isOpen ? "true" : "false")" @onclick="() => openId = isOpen ? null : incident.Id">
+                        <span class="kind-icon" aria-hidden="true"><BitIcon IconName="@(incident.Impact is ProjectHealth.Down ? BitIconName.StatusErrorFull : BitIconName.WarningSolid)" /></span>
+                        <span class="incident-title">
+                            <BitText Typography="BitTypography.Subtitle2" Element="span">@incident.Title</BitText>
+                            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="span">
+                                @LocalTime(incident.StartedAt, "g") · @Duration((incident.EndedAt ?? DateTimeOffset.UtcNow) - incident.StartedAt)
+                                @if (incident.CheckTitles.Length > 0)
+                                {
+                                    <text> · @string.Join(", ", incident.CheckTitles)</text>
+                                }
+                            </BitText>
+                        </span>
+                        <span class="incident-tags">
+                            @if (incident.DuringMaintenance)
+                            {
+                                <BitTag Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.ConstructionCone" Text="@Localizer[nameof(AppStrings.MonitoringDuringMaintenance)]" />
+                            }
+                            <BitTag Size="BitSize.Small"
+                                    Variant="@(isOngoing ? BitVariant.Fill : BitVariant.Outline)"
+                                    Color="@(isOngoing ? (incident.Impact is ProjectHealth.Down ? BitColor.Error : BitColor.Warning) : BitColor.Success)"
+                                    Text="@(isOngoing ? (incident.AcknowledgedBy is { } by ? Localizer[nameof(AppStrings.MonitoringIsOnIt), by] : Localizer[nameof(AppStrings.MonitoringOngoing)]) : Localizer[nameof(AppStrings.MonitoringResolved)])" />
+                            <BitIcon IconName="@(isOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)" Size="BitSize.Small" />
+                        </span>
+                    </button>
+
+                    @if (isOpen)
+                    {
+                        <div class="incident-body">
+                            @if (incident.AfterDeployAt is { } deployedAt)
+                            {
+                                <div class="after-deploy">
+                                    <BitIcon IconName="@BitIconName.Deploy" Size="BitSize.Small" />
+                                    <BitText Typography="BitTypography.Body2" Element="span">@Localizer[nameof(AppStrings.MonitoringBeganAfterDeploymentAt), Duration(incident.StartedAt - deployedAt), LocalTime(deployedAt, "t")]</BitText>
+                                </div>
+                            }
+
+                            @if (isOngoing && incident.AcknowledgedAt is null && incident.DuringMaintenance is false)
+                            {
+                                <div class="ack">
+                                    <BitButton IconName="@BitIconName.Headset" Loading="isSaving" OnClick="WrapHandled(() => Acknowledge(incident))">@Localizer[nameof(AppStrings.AppHomeIMOnIt)]</BitButton>
+                                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringIMOnItHelp)]</BitText>
+                                </div>
+                            }
+
+                            <BitTimeline TItem="BitTimelineOption" Class="updates">
+                                @foreach (var update in incident.Updates)
+                                {
+                                    <BitTimelineOption PrimaryText="@LocalTime(update.At, "g")" Color="@PhaseColor(update.Phase)" IconName="@PhaseIcon(update.Phase)">
+                                        <SecondaryContent>
+                                            <div class="update">
+                                                <BitText Typography="BitTypography.Subtitle2">@PhaseText(update.Phase)</BitText>
+                                                @* A teammate may write in another language than the page's. *@
+                                                <BitText Typography="BitTypography.Body2" Dir="BitDir.Auto">@update.Text</BitText>
+                                                <BitText Typography="BitTypography.Caption2" Foreground="BitColorKind.Secondary">
+                                                    @(update.Author is null ? Localizer[nameof(AppStrings.MonitoringByBitFabricInEveryLanguage)] : Localizer[nameof(AppStrings.MonitoringBy), update.Author])
+                                                </BitText>
+                                            </div>
+                                        </SecondaryContent>
+                                    </BitTimelineOption>
+                                }
+                            </BitTimeline>
+
+                            @if (isOngoing)
+                            {
+                                <EditForm Model="update" OnValidSubmit="WrapHandled(() => PostUpdate(incident))" class="post-update">
+                                    <AppDataAnnotationsValidator />
+                                    <BitTextField @bind-Value="update.Text" Multiline Rows="2" Label="@Localizer[nameof(AppStrings.MonitoringAddAnUpdate)]" Placeholder="@Localizer[nameof(AppStrings.MonitoringAddAnUpdatePlaceholder)]" />
+                                    <div class="post-actions">
+                                        <BitChoiceGroup @bind-Value="update.Phase" Horizontal TItem="BitChoiceGroupOption<ProjectIncidentPhase>" TValue="ProjectIncidentPhase" AriaLabel="@Localizer[nameof(AppStrings.MonitoringWhereYouAre)]">
+                                            <BitChoiceGroupOption Text="@PhaseText(ProjectIncidentPhase.Investigating)" Value="ProjectIncidentPhase.Investigating" />
+                                            <BitChoiceGroupOption Text="@PhaseText(ProjectIncidentPhase.Identified)" Value="ProjectIncidentPhase.Identified" />
+                                            <BitChoiceGroupOption Text="@PhaseText(ProjectIncidentPhase.Monitoring)" Value="ProjectIncidentPhase.Monitoring" />
+                                        </BitChoiceGroup>
+                                        <BitButton ButtonType="BitButtonType.Submit" IconName="@BitIconName.Send" Loading="isSaving">@Localizer[nameof(AppStrings.MonitoringPost)]</BitButton>
+                                    </div>
+                                </EditForm>
+                            }
+
+                            @if (incident.AgentPrompt is { } prompt)
+                            {
+                                <div class="prompt">
+                                    <BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" />
+                                    <span class="prompt-text">@prompt</span>
+                                    <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@(copiedId == incident.Id ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(incident.Id, prompt))">@Localizer[nameof(AppStrings.Copy)]</BitButton>
+                                </div>
+                            }
+
+                            @if (incident.Alerts.Length > 0)
+                            {
+                                <section class="alerts" aria-label="@Localizer[nameof(AppStrings.MonitoringWhoWasTold)]">
+                                    <BitText Typography="BitTypography.Subtitle2" Element="h3">@Localizer[nameof(AppStrings.MonitoringWhoWasTold)]</BitText>
+                                    <ul>
+                                        @foreach (var alert in incident.Alerts)
+                                        {
+                                            <li>
+                                                <BitIcon IconName="@ChannelIcon(alert.Channel)" Size="BitSize.Small" Color="@(alert.Succeeded ? BitColor.Success : BitColor.Error)" />
+                                                <BitText Typography="BitTypography.Caption1" Element="span">
+                                                    @LocalTime(alert.SentAt, "t") · @ChannelText(alert.Channel) · <span class="ltr">@alert.Target</span>
+                                                    @if (ProblemText(alert) is { } problem)
+                                                    {
+                                                        <text> · @problem</text>
+                                                    }
+                                                </BitText>
+                                            </li>
+                                        }
+                                    </ul>
+                                </section>
+                            }
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+    }
+</div>

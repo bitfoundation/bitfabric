@@ -1,0 +1,9 @@
+<EmailLayout Title="@EmailLocalizer[nameof(EmailStrings.TeamInvitationSubject), Model.InviterDisplayName, Model.TenantTitle]"
+             Preheader="@EmailLocalizer[nameof(EmailStrings.TeamInvitationPreheader)]"
+             Heading="@EmailLocalizer[nameof(EmailStrings.TeamInvitationHeading), Model.TenantTitle]"
+             WebAppUrl="@HttpContext.Request.GetWebAppUrl()"
+             Why="@EmailLocalizer[nameof(EmailStrings.TeamInvitationWhy), Model.InviterDisplayName]">
+    <EmailGreeting Name="@Model.DisplayName" />
+    <EmailParagraph>@EmailLocalizer[nameof(EmailStrings.TeamInvitationBody), Model.InviterDisplayName, Model.TenantTitle]</EmailParagraph>
+    <EmailButton Href="@Model.Link" Text="@EmailLocalizer[nameof(EmailStrings.TeamInvitationButton)]" />
+</EmailLayout>

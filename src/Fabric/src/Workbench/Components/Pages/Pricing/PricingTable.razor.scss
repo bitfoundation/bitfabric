@@ -1,0 +1,64 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.alternative-wrap {
+    max-width: 48rem;
+
+    ::deep .alternative {
+        --bit-Card-padding: 1.5rem;
+        --bit-Card-background: #{$bit-color-background-secondary};
+    }
+}
+
+.alternative-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.alternative-head {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.alternative-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $bit-typography-fs-md;
+
+    th,
+    td {
+        padding: .625rem .5rem;
+        border-bottom: $bit-shape-border-width solid $bit-color-border-secondary;
+        text-align: start;
+        vertical-align: top;
+    }
+
+    thead th {
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-sm;
+        font-weight: $bit-typography-fw-medium;
+    }
+
+    tbody th {
+        font-weight: $bit-typography-fw-medium;
+    }
+
+    td {
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    tbody tr:last-child > * {
+        border-bottom: none;
+    }
+
+    th:first-child,
+    td:first-child {
+        padding-inline-start: 0;
+    }
+
+    @include lt-sm {
+        font-size: $bit-typography-fs-sm;
+    }
+}

@@ -1,0 +1,108 @@
+// The home page's tables, read row by row: the comparison (AppHomeComparison) and what bit Fabric sees and never sees on /trust
+// A page or a part imports it into its own scoped styles and gives its table the class ah-compare.
+@import '../../../../Styles/abstracts/_media-queries.scss';
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+// The two edges and bit Fabric, side by side. On a phone the column headers go, and each row is a card with its three
+// answers under it, each named by its column.
+.ah-compare {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: $bit-typography-fs-sm;
+
+    th,
+    td {
+        padding: .875rem 1rem;
+        border-bottom: 1px solid $bit-color-border-secondary;
+        text-align: start;
+        vertical-align: top;
+    }
+
+    thead th {
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    tbody th {
+        width: 11rem;
+        font-weight: $bit-typography-fw-medium;
+    }
+
+    td {
+        color: $bit-color-foreground-secondary;
+    }
+
+    thead th:last-child,
+    .is-ours {
+        background: $bit-color-background-secondary;
+        color: $bit-color-foreground-primary;
+    }
+
+    thead th:last-child {
+        border-start-start-radius: $bit-shape-radius-surface;
+        border-start-end-radius: $bit-shape-radius-surface;
+    }
+
+    tbody tr:last-child .is-ours {
+        border-end-start-radius: $bit-shape-radius-surface;
+        border-end-end-radius: $bit-shape-radius-surface;
+    }
+
+    @include lt-md {
+        thead {
+            display: none;
+        }
+
+        tbody,
+        tr,
+        th,
+        td {
+            display: block;
+        }
+
+        tr {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            padding-block: 1rem;
+            border-bottom: 1px solid $bit-color-border-secondary;
+        }
+
+        tbody th,
+        td {
+            width: auto;
+            padding: 0;
+            border: none;
+        }
+
+        tbody th {
+            font-size: $bit-typography-fs-md;
+            font-weight: $bit-typography-fw-semibold;
+        }
+
+        td::before {
+            content: attr(data-label);
+            display: block;
+            margin-bottom: .125rem;
+            color: $bit-color-foreground-primary;
+            font-weight: $bit-typography-fw-medium;
+        }
+
+        .is-ours,
+        tbody tr:last-child .is-ours {
+            padding: .5rem .75rem;
+            border-radius: $bit-shape-radius-surface;
+        }
+    }
+}
+
+.ah-compare-cell {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+
+    ::deep .ah-compare-mark {
+        flex-shrink: 0;
+        margin-top: .125rem;
+    }
+}

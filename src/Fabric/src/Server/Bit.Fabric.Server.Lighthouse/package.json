@@ -1,0 +1,21 @@
+{
+    "name": "bit-fabric-lighthouse",
+    "private": true,
+    "description": "bit Fabric's performance and accessibility scanners: Lighthouse in a container of its own, one run at a time, behind a guard that keeps Chrome on the public internet.",
+    "type": "module",
+    "engines": {
+        "node": ">=26"
+    },
+    "scripts": {
+        "start": "node src/server.ts",
+        "typecheck": "tsc --noEmit",
+        "test": "node --test src/*.test.ts"
+    },
+    "dependencies": {
+        "lighthouse": "13.6.0"
+    },
+    "devDependencies": {
+        "@types/node": "26.6.6",
+        "typescript": "7.0.2"
+    }
+}

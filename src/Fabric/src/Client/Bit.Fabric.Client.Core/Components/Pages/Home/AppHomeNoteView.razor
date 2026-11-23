@@ -1,0 +1,29 @@
+@inherits AppComponentBase
+
+<section class="ah-note-view">
+    <div class="ah-note-head">
+        <BitText Typography="BitTypography.H6" Element="h2">@Title</BitText>
+        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.ChromeClose"
+                   Title="@Localizer[nameof(AppStrings.Close)]" AriaLabel="@Localizer[nameof(AppStrings.Close)]" OnClick="OnClose" />
+    </div>
+
+    <BitText Typography="BitTypography.Body1">@Note.Lead</BitText>
+
+    @if (Note.Facts.Length > 0)
+    {
+        <dl class="ah-note-facts">
+            @foreach (var fact in Note.Facts)
+            {
+                <div class="ah-note-fact">
+                    <dt>@fact.Term</dt>
+                    <dd>@fact.Detail</dd>
+                </div>
+            }
+        </dl>
+    }
+
+    @if (Note.After is not null)
+    {
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Note.After</BitText>
+    }
+</section>

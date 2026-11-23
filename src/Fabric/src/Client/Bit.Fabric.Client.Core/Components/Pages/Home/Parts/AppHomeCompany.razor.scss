@@ -1,0 +1,70 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+// The company's card beside the team's, one under the other on a phone
+.ahco {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    align-items: start;
+    gap: 1rem;
+}
+
+.ahco-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+// Each fact parted from the next by a line, its term small above it
+.ahco-facts {
+    margin: 0;
+}
+
+.ahco-fact {
+    padding-block: .75rem;
+    border-top: 1px solid $bit-color-border-secondary;
+
+    &:first-child {
+        padding-top: 0;
+        border-top: none;
+    }
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+
+    dt {
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-xs;
+        font-weight: $bit-typography-fw-semibold;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+
+    dd {
+        margin: .25rem 0 0;
+        font-weight: $bit-typography-fw-medium;
+        overflow-wrap: anywhere;
+    }
+}
+
+// The home page's numbers, one under the other
+.ahco-numbers {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: $bit-color-foreground-secondary;
+
+    strong {
+        margin-inline-end: .375rem;
+        color: $bit-color-foreground-primary;
+        font-size: $bit-typography-fs-xl;
+        font-weight: $bit-typography-fw-semibold;
+        letter-spacing: -.02em;
+    }
+}

@@ -1,0 +1,256 @@
+@import '../_app-home-page.scss';
+
+// The way back to the hub, small, above the hero
+.for-crumbs {
+    margin-bottom: -2.5rem;
+    font-size: $bit-typography-fs-sm;
+}
+
+// The arrows point the way the text reads, in either direction
+::deep .for-back-icon,
+::deep .for-forward-icon {
+    vertical-align: -.125em;
+
+    &:dir(rtl) {
+        transform: scaleX(-1);
+    }
+}
+
+::deep .for-back-icon {
+    margin-inline-end: .375rem;
+}
+
+::deep .for-forward-icon {
+    margin-inline-start: .25rem;
+}
+
+// A path, a command or a skill's call
+.for-code {
+    padding: .125rem .5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-sm;
+    background: $bit-color-background-secondary;
+    color: $bit-color-foreground-primary;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-sm;
+    white-space: nowrap;
+}
+
+// What the agent does well, one calm line under the lead
+.for-good {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+    max-width: 40rem;
+    margin: 0;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+    text-align: start;
+    text-wrap: pretty;
+}
+
+::deep .for-good-icon {
+    flex-shrink: 0;
+    margin-top: .2rem;
+}
+
+// What the agent finds, drawn as a project's panel: one file a row, its icon, its path, what it gives and the command to type
+.for-lines {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: .5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+    list-style: none;
+}
+
+.for-line {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: $bit-shape-radius-md;
+
+    & + .for-line {
+        border-top: 1px solid $bit-color-border-secondary;
+    }
+
+    @include lt-md {
+        grid-template-columns: auto 1fr;
+        gap: .75rem;
+        padding: .875rem .75rem;
+    }
+}
+
+::deep .for-line-icon {
+    color: $bit-color-primary;
+    font-size: 1.25rem;
+}
+
+.for-line-words {
+    display: flex;
+    flex-direction: column;
+    gap: .375rem;
+    min-width: 0;
+}
+
+.for-line-label {
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.for-line-code {
+    @include lt-md {
+        grid-column: 2;
+    }
+}
+
+// Where the agent takes its tools when the project doesn't ship them for it
+.for-note {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+    max-width: 48rem;
+}
+
+::deep .for-note-icon {
+    flex-shrink: 0;
+    margin-top: .2rem;
+}
+
+// Who makes a model, under its line
+::deep .for-maker {
+    display: block;
+    margin-top: .375rem;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-medium;
+}
+
+// How to start, numbered
+.for-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: for-step;
+}
+
+.for-step {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+    padding: 1.25rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    counter-increment: for-step;
+
+    &::before {
+        content: counter(for-step);
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: $bit-shape-radius-full;
+        background: $bit-color-primary;
+        color: $bit-color-primary-text;
+        font-weight: $bit-typography-fw-semibold;
+    }
+}
+
+.for-step-code {
+    margin-top: .25rem;
+}
+
+// The hub's table: an agent a row, what it reads in each column. On a phone each row is a card, each cell named by its column.
+.for-matrix {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: $bit-typography-fs-sm;
+
+    th,
+    td {
+        padding: .875rem 1rem;
+        border-bottom: 1px solid $bit-color-border-secondary;
+        text-align: start;
+        vertical-align: top;
+    }
+
+    thead th {
+        color: $bit-color-foreground-secondary;
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    tbody th {
+        width: 10rem;
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    @include lt-md {
+        thead {
+            display: none;
+        }
+
+        tbody,
+        tr,
+        th,
+        td {
+            display: block;
+        }
+
+        tr {
+            display: flex;
+            flex-direction: column;
+            gap: .625rem;
+            padding-block: 1rem;
+            border-bottom: 1px solid $bit-color-border-secondary;
+        }
+
+        tbody th,
+        td {
+            width: auto;
+            padding: 0;
+            border: none;
+        }
+
+        tbody th {
+            font-size: $bit-typography-fs-md;
+        }
+
+        td::before {
+            content: attr(data-label);
+            display: block;
+            margin-bottom: .25rem;
+            color: $bit-color-foreground-secondary;
+            font-size: $bit-typography-fs-xs;
+            font-weight: $bit-typography-fw-semibold;
+        }
+    }
+}
+
+::deep .for-matrix-agent {
+    font-weight: $bit-typography-fw-semibold;
+}
+
+// A cell's files side by side, the numbers of its sources right after the last of them
+.for-cell > span {
+    display: inline-block;
+    margin-block-end: .375rem;
+    margin-inline-end: .375rem;
+}
+
+::deep .for-source-line {
+    max-width: 48rem;
+    text-wrap: pretty;
+}
+
+::deep .for-card-link {
+    margin-top: .25rem;
+    font-weight: $bit-typography-fw-medium;
+}

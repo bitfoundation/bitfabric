@@ -1,0 +1,45 @@
+#if Development
+using Bit.Fabric.Server.Web.Infrastructure.Services;
+#endif
+
+namespace Bit.Fabric.Workbench;
+
+/// <summary>
+/// Starts the Workbench: a Blazor Server app that runs the app's pages on sample data inside device frames.
+/// </summary>
+public static partial class Program
+{
+    public static async Task Main(string[] args)
+    {
+        // Keeps culture support on, as Server.Web does, so the views can switch between every supported culture.
+        Environment.SetEnvironmentVariable("DOTNET_SYSTEM_GLOBALIZATION_INVARIANT", "false");
+
+        var builder = WebApplication.CreateBuilder(options: new()
+        {
+            Args = args,
+            // The build output, not the working directory, which changes with how the app is launched.
+            ContentRootPath = AppContext.BaseDirectory
+        });
+
+        AppEnvironment.Set(builder.Environment.EnvironmentName);
+
+        // On another port than its launch settings', it keeps a review of its own (WorkbenchFolders.Reviews).
+        WorkbenchFolders.Port = WorkbenchFolders.PortOf(builder.Configuration["urls"]);
+
+        // The appsettings embedded in Shared, Client.Core and this project, read the way the app's clients read them.
+        builder.Configuration.AddClientConfigurations(clientEntryAssemblyName: "Bit.Fabric.Workbench");
+
+        builder.AddWorkbenchProjectServices();
+
+        var app = builder.Build();
+
+        app.ConfigureMiddlewares();
+
+#if Development
+        // Rebuilds the outputs of scss, ts and resx files as they change.
+        await FileWatcherService.StartAsync(app);
+#endif
+
+        await app.RunAsync();
+    }
+}

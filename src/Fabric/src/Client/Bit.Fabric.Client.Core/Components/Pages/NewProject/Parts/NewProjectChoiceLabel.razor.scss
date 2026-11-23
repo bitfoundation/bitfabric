@@ -1,0 +1,53 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.np-choice {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    padding-block: 2px;
+    text-align: start;
+}
+
+.np-choice-icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-secondary;
+    color: $bit-color-foreground-primary;
+    font-size: $bit-typography-fs-md;
+}
+
+.np-choice-text {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.np-choice-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+    color: $bit-color-foreground-primary;
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.np-choice-badge {
+    padding: 1px 8px;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-background-tertiary;
+    font-size: $bit-typography-fs-2xs;
+    font-weight: $bit-typography-fw-semibold;
+    white-space: nowrap;
+}
+
+.np-choice-description {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-regular;
+    line-height: 1.5;
+}

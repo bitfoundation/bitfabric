@@ -1,0 +1,18 @@
+@* [mirror] app chrome - nav panel, header, account menu and bottom bar - keep in sync with: *@
+@* - src/Workbench/Components/Chrome/ChromeShell.razor *@
+@inherits AppComponentBase;
+
+<section>
+    <BitNavBar FullWidth TItem="BitNavBarOption">
+
+        @* Each links to the page under the current culture, and knows the page's other addresses (See MainLayout.AddCultureUrls).
+           On a phone, what a visitor looks for next: what it costs, how it compares and who is behind it. Home, Terms
+           and About stay in the menu. *@
+        <BitNavBarOption Text="@Localizer[nameof(AppStrings.Pricing)]" IconName="@BitIconName.Savings" Url="@CultureInfoManager.GetCurrentCultureUrl(PageUrls.Pricing)" AdditionalUrls="@AddressesOf(PageUrls.Pricing)" />
+
+        <BitNavBarOption Text="@Localizer[nameof(AppStrings.Compare)]" IconName="@BitIconName.Table" Url="@CultureInfoManager.GetCurrentCultureUrl(PageUrls.Compare)" AdditionalUrls="@AddressesOf(PageUrls.Compare, PageUrls.CompareLovable, PageUrls.CompareBolt, PageUrls.CompareBase44, PageUrls.CompareReplit, PageUrls.CompareV0, PageUrls.CompareEmptyProject, PageUrls.CompareStarterKits)" />
+
+        <BitNavBarOption Text="@Localizer[nameof(AppStrings.Trust)]" IconName="@BitIconName.Shield" Url="@CultureInfoManager.GetCurrentCultureUrl(PageUrls.Trust)" AdditionalUrls="@AddressesOf(PageUrls.Trust)" />
+
+    </BitNavBar>
+</section>

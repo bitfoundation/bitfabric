@@ -1,0 +1,92 @@
+// What the home page's films share: their player row and the tap a drawn finger makes. Imported by AppHomeFilm's and AppHomeFilmParts' scoped
+// stylesheet, as a scoped stylesheet reaches only its own component.
+@import '../../Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+@mixin ah-player {
+    .ah-player {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+    }
+
+    .ah-dots {
+        display: flex;
+        gap: .375rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        button {
+            width: .5rem;
+            height: .5rem;
+            padding: 0;
+            border: none;
+            border-radius: $bit-shape-radius-full;
+            background: $bit-color-border-primary;
+            cursor: pointer;
+
+            &.is-current {
+                width: 1.25rem;
+                background: $bit-color-foreground-primary;
+            }
+
+            &:focus-visible {
+                outline: 2px solid $bit-color-primary-focus;
+                outline-offset: 2px;
+            }
+        }
+    }
+}
+
+// A finger's tap: a ring that grows and fades over what is pressed, once, after --tap-at
+@mixin ah-tap {
+    .ah-tap {
+        position: absolute;
+        inset-inline-end: 18%;
+        top: 50%;
+        width: 1.6em;
+        height: 1.6em;
+        margin-top: -.8em;
+        border-radius: 50%;
+        background: color-mix(in srgb, #{$bit-color-foreground-primary} 25%, transparent);
+        opacity: 0;
+        transform: scale(.4);
+        animation: ah-tap .7s var(--tap-at, 1.2s) ease-out forwards;
+        pointer-events: none;
+    }
+
+    @keyframes ah-tap {
+        30% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        100% {
+            opacity: 0;
+            transform: scale(1.6);
+        }
+    }
+}
+
+// Without motion, nothing slides, grows or loops, but each part still appears at its moment, so a film keeps its story: the
+// error comes after Save, not with the scene. The device's setting and the Workbench's own Reduce motion both turn it on.
+@mixin ah-reduced-motion {
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: .01ms !important;
+        }
+    }
+
+    [data-wb-motion="reduce"] *,
+    [data-wb-motion="reduce"] *::before,
+    [data-wb-motion="reduce"] *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}

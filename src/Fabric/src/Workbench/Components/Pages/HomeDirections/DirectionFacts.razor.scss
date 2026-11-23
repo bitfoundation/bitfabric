@@ -1,0 +1,79 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.dfx {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dfx-list {
+    margin: 0;
+}
+
+dt {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-semibold;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+dd {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .375rem;
+    margin: .25rem 0 0;
+    color: $bit-color-foreground-primary;
+    text-wrap: pretty;
+}
+
+// A framed box, one fact under the other, each parted from the next by a line
+.dfx-box {
+    padding: 1.5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-card;
+    text-align: start;
+
+    .dfx-item {
+        padding-block: .875rem;
+        border-top: 1px solid $bit-color-border-secondary;
+
+        &:first-child {
+            padding-top: 0;
+            border-top: none;
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    dd {
+        font-size: $bit-typography-fs-md;
+        font-weight: $bit-typography-fw-medium;
+    }
+}
+
+// A grid of terms, as a glossary
+.dfx-grid {
+    .dfx-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+        gap: 1.5rem 2rem;
+    }
+
+    dt {
+        color: $bit-color-foreground-primary;
+        font-size: $bit-typography-fs-md;
+        letter-spacing: normal;
+        text-transform: none;
+    }
+
+    dd {
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-sm;
+    }
+}

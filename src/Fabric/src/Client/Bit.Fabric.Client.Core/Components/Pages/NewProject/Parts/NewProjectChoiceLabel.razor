@@ -1,0 +1,19 @@
+<span class="np-choice">
+    @if (IconName is not null)
+    {
+        <span class="np-choice-icon" aria-hidden="true"><BitIcon IconName="@IconName" /></span>
+    }
+    <span class="np-choice-text">
+        <span class="np-choice-title">
+            @Text
+            @if (Badge is not null)
+            {
+                <span class="np-choice-badge">@Badge</span>
+            }
+        </span>
+        @if (Description is not null)
+        {
+            <span class="np-choice-description">@Description</span>
+        }
+    </span>
+</span>

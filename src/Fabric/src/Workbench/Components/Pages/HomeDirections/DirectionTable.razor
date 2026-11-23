@@ -1,0 +1,61 @@
+@inherits WorkbenchComponentBase
+@* A table, so a screen reader and an answer engine read each cell with its row and its column. On a phone the column headers
+   go and each row is a card, each answer named by its column. The column bit Fabric is in sits on the second background. *@
+
+<table class="dtb @(Columns.Length == 1 ? "dtb-single" : null) @(IsLarge ? "dtb-large" : null)" aria-labelledby="@LabelledBy" role="table" style="--dtb-topic:@TopicWidth">
+    <thead role="rowgroup">
+        <tr role="row">
+            @if (TopicHeader is null)
+            {
+                <td></td>
+            }
+            else
+            {
+                <th scope="col" role="columnheader">@TopicHeader</th>
+            }
+            @for (var i = 0; i < Columns.Length; i++)
+            {
+                <th scope="col" role="columnheader" class="@(i == Highlight ? "is-ours" : null)">
+                    @Columns[i]
+                    @if (ColumnNotes?.ElementAtOrDefault(i) is { Length: > 0 } note)
+                    {
+                        <span class="dtb-column-note">@note</span>
+                    }
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody role="rowgroup">
+        @foreach (var row in Rows)
+        {
+            <tr role="row">
+                <th scope="row" role="rowheader">@row.Topic</th>
+                @for (var i = 0; i < row.Cells.Length; i++)
+                {
+                    var cell = row.Cells[i];
+                    <td role="cell" data-label="@Columns.ElementAtOrDefault(i)" class="@(i == Highlight ? "is-ours" : null)">
+                        <div class="dtb-cell">
+                            @if (cell.Mark is not DirectionMark.None)
+                            {
+                                <BitIcon IconName="@IconOf(cell.Mark)" Color="@ColorOf(cell.Mark)" Class="dtb-mark" />
+                            }
+                            <span>
+                                @cell.Text
+                                @if (cell.Refs is { Length: > 0 } refs)
+                                {
+                                    @* The sources it rests on, each a number that leads to its entry in the page's list *@
+                                    <sup class="dtb-refs">
+                                        @foreach (var source in refs)
+                                        {
+                                            <BitLink Href="@InPage(source.Anchor)" AriaLabel="@Localizer["Source {0}", source.Number]">@source.Number</BitLink>
+                                        }
+                                    </sup>
+                                }
+                            </span>
+                        </div>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

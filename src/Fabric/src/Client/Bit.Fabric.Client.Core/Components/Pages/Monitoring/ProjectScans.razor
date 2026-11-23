@@ -1,0 +1,308 @@
+@inherits AppComponentBase
+
+@* A plain element first, so the scoped styles below reach the cards inside (::deep). *@
+<div class="scans">
+    @if (scans is null)
+    {
+        <BitShimmer Height="18rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringScansLoading)]" />
+    }
+    else
+    {
+        var now = DateTimeOffset.UtcNow;
+        var findings = AllFindings().ToArray();
+
+        <div class="toolbar">
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="reads-only">@Localizer[nameof(AppStrings.MonitoringScanReadsOnly)]</BitText>
+            <div class="run">
+                <BitButton IconName="@BitIconName.Play" Loading="isStarting" Disabled="@(RunAgainInMinutes is not null || scans.Pending.Length > 0)" OnClick="WrapHandled(RunNow)">@Localizer[nameof(AppStrings.MonitoringScansRunNow)]</BitButton>
+                @if (scans.Pending.Length > 0)
+                {
+                    @* Running already, the first ones right after connecting included: their results come first. *@
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringScansRunningNow)]</BitText>
+                }
+                else if (RunAgainInMinutes is { } minutes)
+                {
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringScansRunAgainIn), minutes]</BitText>
+                }
+            </div>
+        </div>
+
+        <section class="kinds" aria-label="@Localizer[nameof(AppStrings.MonitoringScans)]">
+            @foreach (var kind in ScanFindings.AvailableKinds)
+            {
+                var scan = LatestOf(kind);
+                var pending = PendingOf(kind);
+                var value = scan is null ? null : ProjectScanWords.Value(Localizer, scan, now);
+
+                <BitCard @key="kind" NoShadow FullWidth Class="@($"kind {ProjectScanWords.Tone(scan?.Outcome, scan?.Verdict)} {(kind is ProjectScanKind.Performance ? "wide" : "")}")">
+                    <BitStack Gap="0.625rem">
+                        <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.625rem">
+                            <span class="kind-icon" aria-hidden="true"><BitIcon IconName="@ProjectScanWords.KindIcon(kind)" /></span>
+                            <BitText Typography="BitTypography.Subtitle1" Element="h3" Class="kind-name">@ProjectScanWords.KindName(Localizer, kind)</BitText>
+                            @if (pending is not null)
+                            {
+                                <BitTag Size="BitSize.Small" Variant="BitVariant.Outline" Color="BitColor.Info" IconName="@BitIconName.Sync"
+                                        Text="@(pending.StartedAt is null ? Localizer[nameof(AppStrings.MonitoringScanQueued)] : Localizer[nameof(AppStrings.MonitoringScanRunning)])" />
+                            }
+                        </BitStack>
+
+                        @if (scan is null)
+                        {
+                            <BitText Typography="BitTypography.H3" Element="span" Foreground="BitColorKind.Secondary">—</BitText>
+                            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringScanNotRunYet)]</BitText>
+                        }
+                        else if (scan.Outcome is ProjectScanOutcome.Unreachable)
+                        {
+                            <BitText Typography="BitTypography.Body2" Weight="BitFontWeight.Semibold">@Localizer[nameof(AppStrings.MonitoringScanCouldNotReach)]</BitText>
+                            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringScanCouldNotReachHelp)]</BitText>
+                        }
+                        else if (scan.Outcome is ProjectScanOutcome.Failed)
+                        {
+                            <BitText Typography="BitTypography.Body2">@Localizer[nameof(AppStrings.MonitoringScanDidNotFinish)]</BitText>
+                        }
+                        else
+                        {
+                            <BitStack Horizontal Wrap VerticalAlign="BitAlignment.End" Gap="0.5rem">
+                                <BitText Typography="BitTypography.H3" Element="span" Numeric Class="kind-value">@value</BitText>
+                                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="value-help">@ValueHelp(kind)</BitText>
+                            </BitStack>
+                            <BitStack Horizontal Wrap Gap="0.375rem">
+                                @foreach (var (severity, count) in Counts(scan))
+                                {
+                                    <BitTag Size="BitSize.Small" Variant="BitVariant.Outline" Color="@ProjectScanWords.SeverityColor(severity)" IconName="@ProjectScanWords.SeverityIcon(severity)"
+                                            Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), ProjectScanWords.SeverityName(Localizer, severity), count]" />
+                                }
+                            </BitStack>
+
+                            @if (kind is ProjectScanKind.Performance && scan.Pages.Length > 0)
+                            {
+                                @* The Core Web Vitals of each page and device, tinted as the Overview and SLA tabs tint theirs, by Google's thresholds. *@
+                                <section class="vitals" aria-labelledby="vitals-title">
+                                    <BitText Typography="BitTypography.Subtitle2" Element="h4" Id="vitals-title">@Localizer[nameof(AppStrings.MonitoringScanWebVitals)]</BitText>
+                                    <div class="vitals-table" role="table" aria-labelledby="vitals-title">
+                                        <div class="vitals-row head" role="row">
+                                            <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringScanColumnPage)]</span>
+                                            <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringScanColumnScore)]</span>
+                                            @foreach (var vital in vitals)
+                                            {
+                                                <span role="columnheader" title="@vital.FullName"><abbr>@vital.Abbreviation</abbr><small>@Localizer[vital.NameKey]</small></span>
+                                            }
+                                        </div>
+                                        @foreach (var measured in scan.Pages)
+                                        {
+                                            <div @key="@($"{measured.Path}|{measured.Device}")" class="vitals-row" role="row">
+                                                <span role="rowheader" class="vitals-page">
+                                                    <BitIcon IconName="@(measured.Device is ProjectScanDevice.Phone ? BitIconName.CellPhone : BitIconName.ThisPC)" Size="BitSize.Small" Class="device-icon" />
+                                                    <span class="device">@DeviceName(measured.Device)</span>
+                                                    <span class="path" dir="ltr">@measured.Path</span>
+                                                </span>
+                                                <span role="cell" class="@($"vital {ScoreTone(measured.Score)}")" data-label="@Localizer[nameof(AppStrings.MonitoringScanColumnScore)]">@(measured.Score?.ToString(CultureInfo.CurrentCulture) ?? "—")</span>
+                                                @foreach (var vital in vitals)
+                                                {
+                                                    var value = vital.Of(measured);
+                                                    var verdict = VitalVerdict(value, vital);
+                                                    <span role="cell" class="@($"vital {VitalTone(value, vital)}")" data-label="@vital.Abbreviation" title="@verdict">
+                                                        @(value is { } number ? vital.Format(this, number) : "—")
+                                                        @if (verdict is not null)
+                                                        {
+                                                            <span class="verdict">@verdict</span>
+                                                        }
+                                                    </span>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringScanVitalsHelp)]</BitText>
+                                </section>
+                            }
+                        }
+
+                        @if (scan?.FinishedAt is { } finishedAt)
+                        {
+                            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Title="@LocalTime(finishedAt, "F")">
+                                @Localizer[nameof(AppStrings.MonitoringScanWhenAndWhy), LocalTime(finishedAt, "g"), ProjectScanWords.Trigger(Localizer, scan)]
+                            </BitText>
+                        }
+
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="kind-about">@ProjectScanWords.KindAbout(Localizer, kind)</BitText>
+                    </BitStack>
+                </BitCard>
+            }
+        </section>
+
+        <section class="panel" aria-labelledby="findings-title">
+            <BitStack Horizontal Wrap VerticalAlign="BitAlignment.Center" HorizontalAlign="BitAlignment.SpaceBetween" Gap="0.5rem">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="findings-title">@Localizer[nameof(AppStrings.MonitoringScanFindings)]</BitText>
+                @if (findings.Length > 0)
+                {
+                    <BitStack Horizontal Wrap FitWidth Gap="0.375rem">
+                        <BitTag Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="BitColor.Primary"
+                                Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), Localizer[nameof(AppStrings.MonitoringScanAll)], findings.Length]"
+                                Selected="@(kindFilter is null)" SelectedChanged="@(_ => kindFilter = null)" />
+                        @foreach (var kind in ScanFindings.AvailableKinds)
+                        {
+                            var count = findings.Count(item => item.Kind == kind);
+                            <BitTag Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="BitColor.Primary" IconName="@ProjectScanWords.KindIcon(kind)"
+                                    Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), ProjectScanWords.KindName(Localizer, kind), count]" Disabled="@(count is 0)"
+                                    Selected="@(kindFilter == kind)" SelectedChanged="@(_ => kindFilter = kind)" />
+                        }
+                    </BitStack>
+                }
+            </BitStack>
+
+            @if (findings.Length is 0)
+            {
+                <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.5rem" Padding="1rem 0">
+                    <BitIcon IconName="@(scans.Latest.Length > 0 ? BitIconName.CompletedSolid : BitIconName.Info)" Color="@(scans.Latest.Length > 0 ? BitColor.Success : BitColor.SecondaryForeground)" />
+                    <BitText Typography="BitTypography.Body2">@(scans.Latest.Length > 0 ? Localizer[nameof(AppStrings.MonitoringScanNoFindings)] : Localizer[nameof(AppStrings.MonitoringScanNoFindingsYet)])</BitText>
+                </BitStack>
+            }
+            else
+            {
+                <div class="fix-everything">
+                    <BitIcon IconName="@BitIconName.Robot" Color="BitColor.Primary" />
+                    <BitStack Gap="0.125rem" Class="fix-everything-text">
+                        <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringScanFixEverything)]</BitText>
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringScanFixEverythingHelp)]</BitText>
+                    </BitStack>
+                    <BitButton Size="BitSize.Small" IconName="@(copied == FixEverythingKey ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(CopyFixEverything)">@Localizer[nameof(AppStrings.MonitoringScanCopyPrompt)]</BitButton>
+                </div>
+
+                <div class="finding-list">
+                    @foreach (var (kind, finding) in findings.Where(item => kindFilter is null || item.Kind == kindFilter))
+                    {
+                        var texts = ScanFindings.Localize(Localizer, finding);
+                        <BitAccordion @key="finding.Id" Class="@($"finding severity-{finding.Severity.ToString().ToLowerInvariant()}")" Description="@ProjectScanWords.KindName(Localizer, kind)" NoContentRegion>
+                            <TitleTemplate>
+                                <span class="finding-title">
+                                    <BitTag Size="BitSize.Small" Variant="BitVariant.Fill" Color="@ProjectScanWords.SeverityColor(finding.Severity)" IconName="@ProjectScanWords.SeverityIcon(finding.Severity)"
+                                            Text="@ProjectScanWords.SeverityName(Localizer, finding.Severity)" Class="severity-tag" />
+                                    <span>@(texts?.Title ?? finding.Key)</span>
+                                </span>
+                            </TitleTemplate>
+                            <ChildContent>
+                                <BitStack Gap="0.875rem">
+                                    @if (texts is { } known)
+                                    {
+                                        <BitStack Gap="0.25rem">
+                                            <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringScanWhyItMatters)]</BitText>
+                                            <BitText Typography="BitTypography.Body2">@known.Why</BitText>
+                                        </BitStack>
+                                        <BitStack Gap="0.25rem">
+                                            <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringScanTheFix)]</BitText>
+                                            <BitText Typography="BitTypography.Body2">@known.Fix</BitText>
+                                        </BitStack>
+                                    }
+                                    @if (finding.Where.Length > 0)
+                                    {
+                                        <BitStack Gap="0.25rem">
+                                            <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringScanSeenAt)]</BitText>
+                                            <ul class="where">
+                                                @foreach (var where in finding.Where)
+                                                {
+                                                    <li dir="ltr">@where</li>
+                                                }
+                                            </ul>
+                                        </BitStack>
+                                    }
+                                    <BitStack Horizontal Wrap VerticalAlign="BitAlignment.Center" Gap="0.5rem">
+                                        <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@(copied == finding.Id.ToString() ? BitIconName.CheckMark : BitIconName.Robot)"
+                                                   OnClick="WrapHandled(() => CopyPrompt(kind, finding))">@Localizer[nameof(AppStrings.MonitoringScanCopyPrompt)]</BitButton>
+                                        @if (finding.IsReportedWrong)
+                                        {
+                                            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringScanReportedWrong)]</BitText>
+                                        }
+                                        else
+                                        {
+                                            <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.Feedback" AutoLoading
+                                                       OnClick="WrapHandled(() => ReportWrong(finding))">@Localizer[nameof(AppStrings.MonitoringScanThisIsWrong)]</BitButton>
+                                        }
+                                    </BitStack>
+                                </BitStack>
+                            </ChildContent>
+                        </BitAccordion>
+                    }
+                </div>
+            }
+        </section>
+
+        <div class="split">
+            <section class="panel" aria-labelledby="runs-title">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="runs-title">@Localizer[nameof(AppStrings.MonitoringScanPastRuns)]</BitText>
+                @if (history is null)
+                {
+                    <BitShimmer Height="6rem" Radius="0.5rem" />
+                }
+                else if (history.Length is 0)
+                {
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringScanNoPastRuns)]</BitText>
+                }
+                else
+                {
+                    <div class="runs" role="table" aria-labelledby="runs-title">
+                        <div class="run-row head" role="row">
+                            <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringScanColumnScan)]</span>
+                            <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringScanColumnWhen)]</span>
+                            <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringScanColumnWhy)]</span>
+                            <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringScanColumnResult)]</span>
+                        </div>
+                        @foreach (var run in history)
+                        {
+                            var isOpen = openedRun?.Id == run.Id;
+                            var total = run.UrgentCount + run.ImportantCount + run.ImprovementCount;
+                            <div @key="run.Id" class="@($"run-row {ProjectScanWords.Tone(run.Outcome, run.Verdict)}")" role="row">
+                                <span role="cell" class="run-kind">
+                                    <BitIcon IconName="@ProjectScanWords.KindIcon(run.Kind)" Size="BitSize.Small" Class="run-icon" />
+                                    @ProjectScanWords.KindName(Localizer, run.Kind)
+                                </span>
+                                <span role="cell" title="@LocalTime(run.FinishedAt ?? run.RequestedAt, "F")">@LocalTime(run.FinishedAt ?? run.RequestedAt, "g")</span>
+                                <span role="cell">@ProjectScanWords.Trigger(Localizer, run)</span>
+                                <span role="cell" class="run-result">
+                                    @if (run.Outcome is ProjectScanOutcome.Completed)
+                                    {
+                                        <strong>@ProjectScanWords.Value(Localizer, run, now)</strong>
+                                        if (total > 0)
+                                        {
+                                            <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@(isOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
+                                                       AriaLabel="@(isOpen ? Localizer[nameof(AppStrings.MonitoringScanHideFindings)] : Localizer[nameof(AppStrings.MonitoringScanShowFindings)])"
+                                                       OnClick="WrapHandled(() => ToggleRun(run))">@Localizer[nameof(AppStrings.MonitoringScanFindingsCount), total]</BitButton>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <text>@(run.Outcome is ProjectScanOutcome.Unreachable ? Localizer[nameof(AppStrings.MonitoringScanCouldNotReach)] : Localizer[nameof(AppStrings.MonitoringScanDidNotFinish)])</text>
+                                    }
+                                </span>
+                            </div>
+                            @if (isOpen && openedRun is { } opened)
+                            {
+                                <ul class="run-findings">
+                                    @foreach (var finding in opened.Findings)
+                                    {
+                                        <li @key="finding.Id">
+                                            <BitIcon IconName="@ProjectScanWords.SeverityIcon(finding.Severity)" Color="@ProjectScanWords.SeverityColor(finding.Severity)" Size="BitSize.Small" />
+                                            <span>@ProjectScanWords.Title(Localizer, finding)</span>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+                    </div>
+                }
+            </section>
+
+            <section class="panel" aria-labelledby="scan-settings-title">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="scan-settings-title">@Localizer[nameof(AppStrings.MonitoringScanSettings)]</BitText>
+                <BitToggle Value="scans.Settings.ScanAfterDeployments" ValueChanged="WrapHandled<bool>(value => SaveSettings(settings => settings.ScanAfterDeployments = value))"
+                           Label="@Localizer[nameof(AppStrings.MonitoringScanAfterDeployments)]" Description="@Localizer[nameof(AppStrings.MonitoringScanAfterDeploymentsHelp)]"
+                           Loading="isSavingSettings" FullWidth />
+                <BitToggle Value="scans.Settings.WeeklyScans" ValueChanged="WrapHandled<bool>(value => SaveSettings(settings => settings.WeeklyScans = value))"
+                           Label="@Localizer[nameof(AppStrings.MonitoringScanWeekly)]" Description="@Localizer[nameof(AppStrings.MonitoringScanWeeklyHelp)]"
+                           Loading="isSavingSettings" FullWidth />
+                <BitToggle Value="scans.Settings.WeeklyEmail" ValueChanged="WrapHandled<bool>(value => SaveSettings(settings => settings.WeeklyEmail = value))"
+                           Label="@Localizer[nameof(AppStrings.MonitoringScanWeeklyEmail)]" Description="@Localizer[nameof(AppStrings.MonitoringScanWeeklyEmailHelp)]"
+                           Loading="isSavingSettings" FullWidth />
+            </section>
+        </div>
+    }
+</div>

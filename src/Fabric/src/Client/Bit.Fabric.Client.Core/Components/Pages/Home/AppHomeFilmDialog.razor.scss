@@ -1,0 +1,6 @@
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+// The film the onboarding plays, at the bottom of the screen: clear of a phone's home indicator
+.ah-film-sheet {
+    padding-bottom: $bit-env-inset-bottom;
+}

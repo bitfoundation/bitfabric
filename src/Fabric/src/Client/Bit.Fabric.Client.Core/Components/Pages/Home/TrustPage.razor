@@ -1,0 +1,144 @@
+@attribute [Route(PageUrls.Trust)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.Trust)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppPageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+
+@* Who makes bit Fabric and what it can see, from the Workbench's "Trust first" design, each band
+   short. Its title is its one h1, as on the home page: the header shows no title for a page that gives it none. *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+
+    RenderFragment installers = @<span class="tr-links">
+        @foreach (var (name, url) in Installers)
+        {
+            <BitLink @key="name" Href="@url" Target="_blank" IconName="@BitIconName.OpenInNewWindow"><bdi dir="ltr">@name</bdi></BitLink>
+        }
+    </span>;
+
+    RenderFragment verify = @<code class="tr-command" dir="ltr">@AttestationLine</code>;
+}
+
+<AppPageData PageTitle="@Localizer[nameof(AppStrings.TrustPageTitle)]"
+             Description="@Localizer[nameof(AppStrings.TrustPageDescription)]">
+    <Head>
+        <script type="application/ld+json">@((MarkupString)BuildJsonLd())</script>
+    </Head>
+</AppPageData>
+
+<div class="ah-page">
+    <section class="ah-hero">
+        <span class="ah-eyebrow">@Localizer[nameof(AppStrings.TrustEyebrow)]</span>
+        <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">@Localizer[nameof(AppStrings.TrustPageTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">@Localizer[nameof(AppStrings.TrustLead)]</BitText>
+    </section>
+
+    @* 1. The company, as FabricSite holds it, and the team behind bit platform with the home page's numbers *@
+    <section class="ah-band" id="ah-who" aria-labelledby="ah-who-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="who" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.TrustWhoTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.TrustWhoIntro), FabricSite.LegalName]</BitText>
+        </header>
+        <AppHomeCompany HeadingElement="@cardHeading" />
+    </section>
+
+    @* 2. The Trust and privacy of bitfabric-internal/specs/product.md, row by row, as a table a crawler and a screen reader read with its column *@
+    <section class="ah-band" id="ah-what-we-see" aria-labelledby="ah-what-we-see-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="what-we-see" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.TrustSeesTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.TrustSeesIntro)]</BitText>
+        </header>
+        @{
+            var column = Localizer[nameof(AppStrings.TrustSeesColumn)].Value;
+        }
+        <table class="ah-compare tr-sees" aria-labelledby="ah-what-we-see-title" role="table">
+            <thead role="rowgroup">
+                <tr role="row">
+                    <th scope="col" role="columnheader">@Localizer[nameof(AppStrings.TrustSeesOfYours)]</th>
+                    <th scope="col" role="columnheader">@column</th>
+                </tr>
+            </thead>
+            <tbody role="rowgroup">
+                @foreach (var row in Sees)
+                {
+                    <tr @key="row.Topic" role="row" class="@(row.Never ? "tr-never" : "tr-only")">
+                        <th scope="row" role="rowheader">@row.Topic</th>
+                        @* The label shows only on a phone, where the column headers are gone *@
+                        <td role="cell" data-label="@column" class="is-ours">
+                            <div class="ah-compare-cell">
+                                <BitIcon IconName="@(row.Never ? BitIconName.CheckMark : BitIconName.View)" Color="@(row.Never ? BitColor.Success : null)" Class="ah-compare-mark" />
+                                <span>@row.Text</span>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <BitText Typography="BitTypography.H5" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.AppHomeComparePromise)]</BitText>
+    </section>
+
+    @* 3. Where each piece lives, the home page's four and the server, with what Cloudflare sees said plainly *@
+    <section class="ah-band" id="ah-where" aria-labelledby="ah-where-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="where" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.TrustWhereTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.TrustWhereIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="Where" HeadingElement="@cardHeading" MinWidth="11rem" />
+        <div class="ah-band-note">
+            <BitIcon IconName="@BitIconName.Info" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.TrustWhereCloudflare)]</BitText>
+        </div>
+    </section>
+
+    @* 4. The home page's band, the same title, cards and note *@
+    <section class="ah-band" id="ah-if-we-stop" aria-labelledby="ah-if-we-stop-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="if-we-stop" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeIfWeStopTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeIfWeStopIntro)]</BitText>
+        </header>
+        <AppHomeIfWeStop HeadingElement="@cardHeading" />
+        <div class="ah-band-note">
+            <BitIcon IconName="@BitIconName.Sync" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeUpgradesAreYours), AppHomeNumbers.ImprovementsAMonth]</BitText>
+        </div>
+    </section>
+
+    @* 5. What the wizard's green shield says, its own texts *@
+    <section class="ah-band" id="ah-check" aria-labelledby="ah-check-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="check" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.TrustCheckTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.TrustCheckIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="Check(installers, verify)" HeadingElement="@cardHeading" MinWidth="18rem" />
+    </section>
+
+    @* 6. The contact security.txt names *@
+    <section class="ah-band" id="ah-security" aria-labelledby="ah-security-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="security" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.TrustSecurityTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.TrustSecurityText)]</BitText>
+        </header>
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@($"mailto:{FabricSite.Email}")" IconName="@BitIconName.Mail"><bdi>@FabricSite.Email</bdi></BitButton>
+            <BitButton Variant="BitVariant.Text" Href="@SecurityTxtUrl" Target="_blank" IconName="@BitIconName.OpenInNewWindow"><bdi dir="ltr">security.txt</bdi></BitButton>
+        </div>
+    </section>
+
+    @* 7. What bitfabric.co itself holds is the privacy notice's to say, not this page's *@
+    <section class="ah-band" id="ah-privacy" aria-labelledby="ah-privacy-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="privacy" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.TrustLegalTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.TrustLegalText)]</BitText>
+        </header>
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@TermsUrl" IconName="@BitIconName.EntityExtraction">@Localizer[nameof(AppStrings.TrustLegalLink)]</BitButton>
+        </div>
+    </section>
+
+    <section class="ah-final">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeFinalTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeFinalText)]</BitText>
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+</div>

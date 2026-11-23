@@ -1,0 +1,84 @@
+@inherits NewProjectPartBase
+
+@{
+    var answers = Answers;
+    var (from, to) = answers.Minutes;
+}
+
+<div class="np-summary">
+    @if (ShowsList)
+    {
+        <ul class="np-summary-list">
+            <li>
+                <BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" />
+                <span>@(answers.IsTry ? Localizer[nameof(AppStrings.NewProjectSummaryTry), answers.DisplayName] : Localizer[nameof(AppStrings.NewProjectSummaryReal), answers.DisplayName])</span>
+            </li>
+            <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@Localizer[nameof(AppStrings.NewProjectSummaryIdentity)]</span></li>
+            @if (answers.IsMultiTenant)
+            {
+                <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@Localizer[nameof(AppStrings.NewProjectSummaryTenants)]</span></li>
+            }
+            @if (answers.Start is NewProjectStart.Admin)
+            {
+                <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@(answers.HasLiveDashboard ? Localizer[nameof(AppStrings.NewProjectSummaryLiveDashboard)] : Localizer[nameof(AppStrings.NewProjectStartAdmin)])</span></li>
+            }
+            else if (answers.Start is NewProjectStart.Store)
+            {
+                <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@Localizer[nameof(AppStrings.NewProjectStartStore)]</span></li>
+            }
+            @if (answers.HasAssistant)
+            {
+                <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@Localizer[nameof(AppStrings.NewProjectSummaryAssistant)]</span></li>
+            }
+            @if (answers.HasPush)
+            {
+                <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@Localizer[nameof(AppStrings.NewProjectPush)]</span></li>
+            }
+            @if (answers.IsOffline)
+            {
+                <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@Localizer[nameof(AppStrings.NewProjectSummaryOffline)]</span></li>
+            }
+            <li>
+                <BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" />
+                <span>
+                    @switch (answers.Errors)
+                    {
+                        case NewProjectErrors.Sentry:
+                            @Localizer[nameof(AppStrings.NewProjectSummarySentry)]
+                            break;
+                        case NewProjectErrors.AppInsights:
+                            @Localizer[nameof(AppStrings.NewProjectSummaryAppInsights)]
+                            break;
+                        default:
+                            @Localizer[nameof(AppStrings.NewProjectSummaryOwnServer)]
+                            break;
+                    }
+                </span>
+            </li>
+            <li>
+                <BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" />
+                <span>
+                    @if (answers.Devices.Count == 0)
+                    {
+                        @Localizer[nameof(AppStrings.NewProjectSummaryWebOnly)]
+                    }
+                    else
+                    {
+                        @Localizer[nameof(AppStrings.NewProjectSummaryWebAndDevices), ListOf(answers.Devices.Select(DeviceName))]
+                    }
+                </span>
+            </li>
+            <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@Localizer[nameof(AppStrings.NewProjectSummaryLanding)]</span></li>
+            @if (answers.HasGitHubRepo)
+            {
+                <li><BitIcon IconName="@BitIconName.CheckMark" Class="np-summary-icon" /><span>@Localizer[nameof(AppStrings.NewProjectSummaryGitHub)]</span></li>
+            }
+        </ul>
+    }
+
+    <ul class="np-estimate" aria-label="@Localizer[nameof(AppStrings.NewProjectEstimate)]">
+        <li><BitIcon IconName="@BitIconName.Download" Class="np-estimate-icon" /><span>@Localizer[nameof(AppStrings.NewProjectEstimateDownload), Gb(answers.DownloadGb)]</span></li>
+        <li><BitIcon IconName="@BitIconName.Clock" Class="np-estimate-icon" /><span>@Localizer[nameof(AppStrings.NewProjectEstimateMinutes), from, to]</span></li>
+        <li><BitIcon IconName="@BitIconName.HardDrive" Class="np-estimate-icon" /><span>@Localizer[nameof(AppStrings.NewProjectEstimateDisk), answers.DiskGb]</span></li>
+    </ul>
+</div>

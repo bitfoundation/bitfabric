@@ -1,0 +1,25 @@
+@inherits WorkbenchComponentBase
+@* Two or three cards side by side, each a short list whose lines share a mark: what keeps running and what stops, who it is for
+   and who it isn't, what bit Fabric sees and what it never sees *@
+
+<div class="dl @(IsLarge ? "dl-large" : null)" style="--dl-min:@MinWidth">
+    @foreach (var list in Lists)
+    {
+        <div class="dl-card">
+            <BitText Typography="@(IsLarge ? BitTypography.H5 : BitTypography.H6)" Element="h3">@list.Title</BitText>
+            <ul class="dl-lines">
+                @foreach (var item in list.Items)
+                {
+                    <li>
+                        <BitIcon IconName="@IconOf(list.Mark)" Color="@ColorOf(list.Mark)" Class="dl-mark" />
+                        <span>@item</span>
+                    </li>
+                }
+            </ul>
+            @if (list.After is not null)
+            {
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@list.After</BitText>
+            }
+        </div>
+    }
+</div>

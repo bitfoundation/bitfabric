@@ -1,0 +1,12 @@
+@* The app's own add page (src/Client/Bit.Fabric.Client.Core/Components/Pages/Monitoring/AddProjectPage.razor) on the sample world. *@
+@attribute [Authorize(Policy = AuthPolicies.TENANT_SELECTED)]
+@inherits MonitoringHost
+
+@if (IsReady is false)
+{
+    <AppPagePlaceholder />
+}
+else
+{
+    <AddProjectPage />
+}

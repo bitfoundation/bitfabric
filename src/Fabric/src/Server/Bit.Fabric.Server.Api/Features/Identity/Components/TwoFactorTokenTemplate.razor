@@ -1,0 +1,9 @@
+<EmailLayout Title="@EmailLocalizer[nameof(EmailStrings.TwoFactorCodeSubject), Model.Token]"
+             Preheader="@EmailLocalizer[nameof(EmailStrings.TwoFactorPreheader)]"
+             Heading="@EmailLocalizer[nameof(EmailStrings.TwoFactorHeading)]"
+             WebAppUrl="@HttpContext.Request.GetWebAppUrl()"
+             Why="@EmailLocalizer[nameof(EmailStrings.TwoFactorWhy)]">
+    <EmailGreeting Name="@Model.DisplayName" />
+    <EmailParagraph>@EmailLocalizer[nameof(EmailStrings.TwoFactorCodeIntro)]</EmailParagraph>
+    <EmailCode Code="@Model.Token" ValidFor="@Model.ValidFor" />
+</EmailLayout>

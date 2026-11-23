@@ -1,0 +1,109 @@
+@inherits NewProjectPartBase
+
+@{
+    var answers = Answers;
+}
+
+<figure class="np-preview">
+    <div class="np-preview-stage" aria-hidden="true">
+        <div class="np-browser">
+            <div class="np-browser-bar">
+                <span class="np-dot"></span><span class="np-dot"></span><span class="np-dot"></span>
+                <span class="np-browser-address"></span>
+            </div>
+            <div class="np-app">
+                <div class="np-app-top">
+                    <span class="np-app-logo">@Initial(answers)</span>
+                    <span class="np-app-name">@answers.DisplayName</span>
+                    @if (answers.IsMultiTenant)
+                    {
+                        <span class="np-app-tenant">@Localizer[nameof(AppStrings.NewProjectSampleCompany)] <BitIcon IconName="@BitIconName.ChevronDown" Size="BitSize.Small" /></span>
+                    }
+                    <span class="np-app-gap"></span>
+                    @if (answers.HasPush)
+                    {
+                        <span class="np-app-bell"><BitIcon IconName="@BitIconName.Ringer" Size="BitSize.Small" /></span>
+                    }
+                    <span class="np-app-avatar">SA</span>
+                </div>
+                <div class="np-app-body">
+                    @switch (answers.Start)
+                    {
+                        case NewProjectStart.Admin:
+                            <div class="np-tiles">
+                                <div class="np-tile"><span>@Localizer[nameof(AppStrings.NewProjectSampleRevenue)]</span><b>€12,480</b></div>
+                                <div class="np-tile"><span>@Localizer[nameof(AppStrings.NewProjectSampleOrders)]</span><b>318</b></div>
+                                <div class="np-tile"><span>@Localizer[nameof(AppStrings.NewProjectSampleCustomers)]</span><b>1,204</b></div>
+                            </div>
+                            <div class="np-chart">
+                                @foreach (var height in barHeights)
+                                {
+                                    <span style="--bar:@(height)%"></span>
+                                }
+                                @if (answers.HasLiveDashboard)
+                                {
+                                    <span class="np-live"><span class="np-live-dot"></span>@Localizer[nameof(AppStrings.NewProjectSampleLive)]</span>
+                                }
+                            </div>
+                            break;
+                        case NewProjectStart.Store:
+                            <div class="np-products">
+                                @for (var i = 0; i < 6; i++)
+                                {
+                                    <div class="np-product"><span class="np-product-photo"></span><span class="np-line"></span><span class="np-line is-short"></span></div>
+                                }
+                            </div>
+                            break;
+                        default:
+                            <div class="np-welcome">
+                                <b>@Localizer[nameof(AppStrings.NewProjectSampleWelcome)]</b>
+                                <span class="np-row"><BitIcon IconName="@BitIconName.Contact" Size="BitSize.Small" />@Localizer[nameof(AppStrings.NewProjectSampleProfile)]</span>
+                                <span class="np-row"><BitIcon IconName="@BitIconName.Lock" Size="BitSize.Small" />@Localizer[nameof(AppStrings.NewProjectSamplePasskeys)]</span>
+                                <span class="np-row"><BitIcon IconName="@BitIconName.Globe" Size="BitSize.Small" />@Localizer[nameof(AppStrings.NewProjectSampleLanguages)]</span>
+                            </div>
+                            break;
+                    }
+                    @if (answers.IsTry)
+                    {
+                        <span class="np-sample">@Localizer[nameof(AppStrings.NewProjectSampleTodo)]</span>
+                    }
+                </div>
+                @if (answers.HasAssistant)
+                {
+                    <span class="np-chat"><BitIcon IconName="@BitIconName.ChatBot" Size="BitSize.Small" />@Localizer[nameof(AppStrings.NewProjectSampleAsk)]</span>
+                }
+            </div>
+        </div>
+
+        <div class="np-phone">
+            <span class="np-phone-notch"></span>
+            <div class="np-app-top is-phone">
+                <span class="np-app-logo">@Initial(answers)</span>
+                <span class="np-app-name">@answers.DisplayName</span>
+            </div>
+            <div class="np-phone-body">
+                @if (answers.Start is NewProjectStart.Admin)
+                {
+                    <div class="np-tile"><span>@Localizer[nameof(AppStrings.NewProjectSampleRevenue)]</span><b>€12,480</b></div>
+                    <div class="np-chart is-phone">
+                        @foreach (var height in barHeights.Take(5))
+                        {
+                            <span style="--bar:@(height)%"></span>
+                        }
+                    </div>
+                }
+                else if (answers.Start is NewProjectStart.Store)
+                {
+                    <div class="np-product"><span class="np-product-photo"></span><span class="np-line"></span></div>
+                    <div class="np-product"><span class="np-product-photo"></span><span class="np-line"></span></div>
+                }
+                else
+                {
+                    <b class="np-phone-hello">@Localizer[nameof(AppStrings.NewProjectSampleWelcome)]</b>
+                    <span class="np-line"></span>
+                    <span class="np-line is-short"></span>
+                }
+            </div>
+        </div>
+    </div>
+</figure>

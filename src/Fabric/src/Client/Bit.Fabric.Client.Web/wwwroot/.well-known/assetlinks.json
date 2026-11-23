@@ -1,0 +1,39 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.bitplatform.AdminPanel.Template",
+            "sha256_cert_fingerprints": [
+                "7E:F0:3C:AE:55:06:1D:9F:A1:0C:96:86:C0:C3:64:84:23:C0:9F:AE:17:45:FF:0E:76:34:99:5C:8E:74:40:65"
+            ]
+        }
+    },
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.bitplatform.Todo.Template",
+            "sha256_cert_fingerprints": [
+                "7E:F0:3C:AE:55:06:1D:9F:A1:0C:96:86:C0:C3:64:84:23:C0:9F:AE:17:45:FF:0E:76:34:99:5C:8E:74:40:65"
+            ]
+        }
+    },
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.companyname.bit.fabric",
+            "sha256_cert_fingerprints": [
+                "88:C1:93:64:47:A0:6B:A5:0B:15:8D:66:E6:27:7C:15:0B:4F:0F:A2:6C:A8:B3:4B:30:5B:9E:2A:10:12:87:9C",
+                "6D:A6:58:77:41:D9:A1:E3:F1:CA:B8:04:B0:3D:CD:F2:9B:67:DC:89:0B:E2:70:13:F9:89:0D:33:39:D0:D6:3C"
+            ]
+        }
+    }
+]

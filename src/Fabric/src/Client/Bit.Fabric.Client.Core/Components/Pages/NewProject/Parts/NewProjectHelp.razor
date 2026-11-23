@@ -1,0 +1,74 @@
+@inherits NewProjectPartBase
+
+@{
+    var content = Content(Store.HelpTopic);
+}
+
+<BitPanel IsOpen="@(content is not null)"
+          IsOpenChanged="(bool isOpen) => Close(isOpen)"
+          Placement="BitPlacement.End" Size="440"
+          ModeFull ShowCloseButton
+          CloseButtonTitle="@Localizer[nameof(AppStrings.Close)]"
+          HeaderText="@content?.Title">
+    @if (content is not null)
+    {
+        <div class="np-help">
+            @if (content.Lead is not null)
+            {
+                <p class="np-help-lead">@content.Lead</p>
+            }
+
+            @if (content.Advice is not null)
+            {
+                <div class="np-help-card">
+                    <BitIcon IconName="@BitIconName.Lightbulb" Class="np-help-card-icon" />
+                    <div>
+                        <b>@Localizer[nameof(AppStrings.NewProjectHelpAdvice)]</b>
+                        <span>@content.Advice</span>
+                    </div>
+                </div>
+            }
+
+            @if (content.Later is not null)
+            {
+                <div class="np-help-card">
+                    <BitIcon IconName="@BitIconName.History" Class="np-help-card-icon" />
+                    <div>
+                        <b>@Localizer[nameof(AppStrings.NewProjectHelpLater)]</b>
+                        <span>@Localizer[nameof(AppStrings.NewProjectHelpLaterText)]</span>
+                        <q class="np-help-prompt">@content.Later</q>
+                    </div>
+                </div>
+            }
+
+            @if (content.Demos.Count > 0)
+            {
+                <div class="np-help-demos">
+                    @foreach (var (text, url) in content.Demos)
+                    {
+                        <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.OpenInNewWindow" Href="@url" Target="_blank">@text</BitButton>
+                    }
+                </div>
+            }
+
+            @if (content.Faq.Count > 0)
+            {
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Class="np-help-faq-title">@Localizer[nameof(AppStrings.NewProjectHelpFaq)]</BitText>
+                <BitAccordionList TItem="BitAccordionListOption" HeadingLevel="4" Size="BitSize.Small" Joined
+                                   Classes="@(new() { ItemTitle = "np-help-faq-question" })">
+                    @for (var i = 0; i < content.Faq.Count; i++)
+                    {
+                        var (question, answer) = content.Faq[i];
+                        <BitAccordionListOption Key="@($"{Store.HelpTopic}-{i}")" Title="@question">
+                            <p class="np-help-answer">@answer</p>
+                        </BitAccordionListOption>
+                    }
+                </BitAccordionList>
+            }
+
+            <p class="np-help-contact">
+                @Localizer[nameof(AppStrings.NewProjectHelpStillNotSure)] <BitLink Href="mailto:info@bitplatform.dev">@Localizer[nameof(AppStrings.NewProjectHelpWriteToUs)]</BitLink>@Localizer[nameof(AppStrings.NewProjectHelpPersonAnswers)]
+            </p>
+        </div>
+    }
+</BitPanel>

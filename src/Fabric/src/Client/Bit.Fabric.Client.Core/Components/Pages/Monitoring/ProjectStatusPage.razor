@@ -1,0 +1,160 @@
+@inherits AppComponentBase
+
+<div class="status-tab">
+    @if (statusPage is null)
+    {
+        <BitShimmer Height="10rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingTheStatusPage)]" />
+    }
+    else
+    {
+        <section class="panel" aria-labelledby="post-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="post-title">@Localizer[nameof(AppStrings.MonitoringPostOnThePage)]</BitText>
+
+            <div class="row">
+                <BitDropdown TItem="BitDropdownItem<string>" TValue="string" Label="@Localizer[nameof(AppStrings.MonitoringWhat)]" FitWidth
+                             Value="@(updatingIncidentId?.ToString() ?? (postKind is ProjectIncidentKind.Announcement ? "announcement" : "incident"))"
+                             ValueChanged="@((string? value) => { if (value is "incident" or "announcement") { postKind = value is "announcement" ? ProjectIncidentKind.Announcement : ProjectIncidentKind.Incident; StartUpdate(null); } else StartUpdate(Guid.Parse(value!)); })"
+                             Items="@([new() { Text = Localizer[nameof(AppStrings.MonitoringANewIncident)], Value = "incident" },
+                                       new() { Text = Localizer[nameof(AppStrings.MonitoringAnAnnouncement)], Value = "announcement" },
+                                       .. openIncidents.Select(incident => new BitDropdownItem<string> { Text = Localizer[nameof(AppStrings.MonitoringAnUpdateTo), incident.Title ?? ""], Value = incident.Id.ToString() })])" />
+
+                @if (updatingIncidentId is null && postKind is ProjectIncidentKind.Incident)
+                {
+                    <BitDropdown TItem="BitDropdownItem<ProjectHealth>" TValue="ProjectHealth" @bind-Value="postImpact" Label="@Localizer[nameof(AppStrings.MonitoringImpact)]" FitWidth
+                                 Items="@([new() { Text = Localizer[nameof(AppStrings.MonitoringDegraded)], Value = ProjectHealth.Degraded }, new() { Text = Localizer[nameof(AppStrings.MonitoringOutage)], Value = ProjectHealth.Down }])" />
+                }
+
+                @if (updatingIncidentId is null)
+                {
+                    <BitDropdown TItem="BitDropdownItem<Guid>" TValue="Guid" MultiSelect Values="@(postComponents)" ValuesChanged="@((IEnumerable<Guid> values) => postComponents = values)"
+                                 Label="@Localizer[nameof(AppStrings.MonitoringWhichParts)]" Placeholder="@Localizer[nameof(AppStrings.MonitoringNoneInParticular)]" FitWidth
+                                 Items="@([.. statusPage.Components.Where(component => component.Id != Guid.Empty).Select(component => new BitDropdownItem<Guid> { Text = component.Name.GetValueOrDefault(MainLanguage) ?? "", Value = component.Id })])" />
+                }
+
+                @if (postKind is ProjectIncidentKind.Incident || updatingIncidentId is not null)
+                {
+                    <BitDropdown TItem="BitDropdownItem<ProjectIncidentPhase>" TValue="ProjectIncidentPhase" @bind-Value="postPhase" Label="@Localizer[nameof(AppStrings.MonitoringWhereYouAre)]" FitWidth
+                                 Items="@([.. Enum.GetValues<ProjectIncidentPhase>().Select(phase => new BitDropdownItem<ProjectIncidentPhase> { Text = PhaseText(phase), Value = phase })])" />
+                }
+            </div>
+
+            <BitPivot SelectedKey="@editingLanguage" SelectedKeyChanged="@((string? key) => editingLanguage = key)" OverflowBehavior="BitPivotOverflowBehavior.Scroll">
+                @foreach (var language in statusPage.Languages)
+                {
+                    <BitPivotItem Key="@language" HeaderText="@(language == MainLanguage ? Localizer[nameof(AppStrings.MonitoringMainLanguageName), LanguageName(language)] : LanguageName(language))">
+                        <div class="post-fields" lang="@language">
+                            @if (updatingIncidentId is null)
+                            {
+                                <BitTextField Value="@postTitle.GetValueOrDefault(language)" ValueChanged="@((string? value) => postTitle[language] = value ?? "")" Label="@Localizer[nameof(AppStrings.Title)]" MaxLength="200" />
+                            }
+                            <BitTextField Value="@postText.GetValueOrDefault(language)" ValueChanged="@((string? value) => postText[language] = value ?? "")" Multiline Rows="3" Label="@Localizer[nameof(AppStrings.MonitoringWhatYouTellTheAppsUsers)]" MaxLength="2000" />
+                        </div>
+                    </BitPivotItem>
+                }
+            </BitPivot>
+
+            <div class="actions">
+                @if (statusPage.Languages.Length > 1)
+                {
+                    <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Robot" Loading="isDrafting" OnClick="WrapHandled(DraftMissing)">@Localizer[nameof(AppStrings.MonitoringDraftOtherLanguagesWithAI)]</BitButton>
+                }
+                <BitCheckbox @bind-Value="notifiesFollowers" Label="@Localizer[nameof(AppStrings.MonitoringTellThePagesFollowers), statusPage.FollowerCount]" />
+                <BitButton IconName="@BitIconName.Send" Loading="isPosting" Disabled="@(CanPost is false)" OnClick="WrapHandled(Post)">@Localizer[nameof(AppStrings.MonitoringPost)]</BitButton>
+            </div>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringReviewADraftHelp)]</BitText>
+        </section>
+
+        <section class="panel" aria-labelledby="page-title">
+            <div class="panel-head">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="page-title">@Localizer[nameof(AppStrings.MonitoringThePage)]</BitText>
+                @if (statusPage.PublicUrl is { } url)
+                {
+                    <BitLink Href="@url" Target="_blank"><span class="ltr">@url</span></BitLink>
+                }
+            </div>
+            <div class="fields">
+                <BitToggle @bind-Value="statusPage.IsPublished" Label="@Localizer[nameof(AppStrings.MonitoringPublished)]" OnText="@Localizer[nameof(AppStrings.MonitoringVisitorsSeeIt)]" OffText="@Localizer[nameof(AppStrings.MonitoringOnlyYourTeamSeesIt)]" />
+                <BitTextField @bind-Value="statusPage.Slug" Label="@Localizer[nameof(AppStrings.MonitoringItsAddressOnBitFabric)]" Prefix="/status/" Dir="BitDir.Ltr" MaxLength="60" />
+                <BitDropdown TItem="BitDropdownItem<string>" TValue="string" Value="@MainLanguage" ValueChanged="@((string? culture) => SetMainLanguage(culture))" Label="@Localizer[nameof(AppStrings.MonitoringMainLanguage)]" FitWidth
+                             Items="@([.. cultures.Select(culture => new BitDropdownItem<string> { Text = culture.DisplayName, Value = culture.Name })])" />
+                <BitDropdown TItem="BitDropdownItem<string>" TValue="string" MultiSelect Values="@(statusPage.Languages.Skip(1))" ValuesChanged="@((IEnumerable<string> values) => SetOtherLanguages(values))"
+                             Label="@Localizer[nameof(AppStrings.MonitoringAlsoWrittenIn)]" Placeholder="@Localizer[nameof(AppStrings.MonitoringNoOtherLanguage)]" FitWidth
+                             Items="@([.. cultures.Where(culture => culture.Name != MainLanguage).Select(culture => new BitDropdownItem<string> { Text = culture.DisplayName, Value = culture.Name })])" />
+                <BitToggle @bind-Value="statusPage.ShowsResponseTime" Label="@Localizer[nameof(AppStrings.MonitoringShowTypicalResponseTime)]" />
+                <BitTextField @bind-Value="statusPage.SupportAddress" Label="@Localizer[nameof(AppStrings.MonitoringWhereVisitorsReachSupport)]" Placeholder="support@yourapp.com" Dir="BitDir.Ltr" MaxLength="200" />
+            </div>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringStatusPageWordsHelp)]</BitText>
+        </section>
+
+        <section class="panel" aria-labelledby="components-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="components-title">@Localizer[nameof(AppStrings.MonitoringPartsAsYourUsersKnowThem)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringPartsAsYourUsersKnowThemHelp)]</BitText>
+            <ul class="components">
+                @foreach (var component in statusPage.Components)
+                {
+                    <li>
+                        <div class="component-fields">
+                            @foreach (var language in statusPage.Languages)
+                            {
+                                <BitTextField Value="@NameIn(component, language)" ValueChanged="@((string? name) => SetName(component, language, name))"
+                                              Label="@(statusPage.Languages.Length > 1 ? Localizer[nameof(AppStrings.MonitoringNameIn), LanguageName(language)] : Localizer[nameof(AppStrings.MonitoringComponentName)])" MaxLength="100" lang="@language" />
+                            }
+                            @* As wide as its cell, never wider, so a long list of checks doesn't run over the toggle beside it. *@
+                            <BitDropdown TItem="BitDropdownItem<string>" TValue="string" MultiSelect Values="@component.CheckKeys" ValuesChanged="@((IEnumerable<string> keys) => component.CheckKeys = [.. keys])"
+                                         Label="@Localizer[nameof(AppStrings.MonitoringMadeOf)]" Placeholder="@Localizer[nameof(AppStrings.MonitoringNoCheck)]"
+                                         Items="@([.. statusPage.Checks.Select(check => new BitDropdownItem<string> { Text = check.Title ?? check.Key ?? "", Value = check.Key })])" />
+                            <BitToggle @bind-Value="component.IsShown" Label="@Localizer[nameof(AppStrings.MonitoringShown)]" />
+                        </div>
+                        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Delete" AriaLabel="@Localizer[nameof(AppStrings.Delete)]"
+                                   Title="@Localizer[nameof(AppStrings.Delete)]" OnClick="WrapHandled(() => RemoveComponent(component))" />
+                    </li>
+                }
+            </ul>
+            <div class="actions">
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Add" OnClick="WrapHandled(AddComponent)">@Localizer[nameof(AppStrings.MonitoringAddAPart)]</BitButton>
+                <BitButton IconName="@BitIconName.Save" Loading="isSaving" OnClick="WrapHandled(Save)">@Localizer[nameof(AppStrings.Save)]</BitButton>
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="domain-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="domain-title">@Localizer[nameof(AppStrings.MonitoringOnYourOwnAddress)]</BitText>
+            @if (statusPage.CnameTarget is null)
+            {
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringOwnAddressNotSetUp)]</BitText>
+            }
+            else
+            {
+                <div class="row">
+                    <BitTextField @bind-Value="hostname" Immediate Label="@Localizer[nameof(AppStrings.MonitoringHostName)]" Placeholder="status.yourapp.com" Dir="BitDir.Ltr" MaxLength="253" Class="hostname" />
+                    <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Globe" Loading="isConnecting" Disabled="@string.IsNullOrWhiteSpace(hostname)" OnClick="WrapHandled(Connect)">@Localizer[nameof(AppStrings.MonitoringConnect)]</BitButton>
+                </div>
+                @if (statusPage.CustomHostname is { } connected)
+                {
+                    <BitText Typography="BitTypography.Body2">
+                        @Localizer[nameof(AppStrings.MonitoringAddACnameRecord), connected, statusPage.CnameTarget]
+                    </BitText>
+                    <div class="row">
+                        <BitTag Variant="BitVariant.Outline" Color="@(statusPage.CustomHostnameState is "active" ? BitColor.Success : BitColor.Warning)" Text="@(statusPage.CustomHostnameState is "active" ? Localizer[nameof(AppStrings.MonitoringHostnameActive)] : Localizer[nameof(AppStrings.MonitoringWaitingState), statusPage.CustomHostnameState ?? ""])" />
+                        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Refresh" OnClick="WrapHandled(Refresh)">@Localizer[nameof(AppStrings.MonitoringCheckAgain)]</BitButton>
+                        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" Color="BitColor.Error" OnClick="WrapHandled(Disconnect)">@Localizer[nameof(AppStrings.MonitoringDisconnect)]</BitButton>
+                    </div>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringFollowersBelongToAddress)]</BitText>
+                }
+            }
+        </section>
+
+        <section class="panel" aria-labelledby="share-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="share-title">@Localizer[nameof(AppStrings.MonitoringInYourAppAndElsewhere)]</BitText>
+            @foreach (var (label, snippet) in new[] { (Localizer[nameof(AppStrings.MonitoringEmbedLabel)].Value, EmbedSnippet), (Localizer[nameof(AppStrings.MonitoringBadgeLabel)].Value, BadgeSnippet) })
+            {
+                <div class="snippet">
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@label</BitText>
+                    <div class="snippet-row">
+                        <code class="ltr">@snippet</code>
+                        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@(copied == snippet ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(snippet))">@Localizer[nameof(AppStrings.Copy)]</BitButton>
+                    </div>
+                </div>
+            }
+        </section>
+    }
+</div>

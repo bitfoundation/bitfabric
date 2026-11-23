@@ -1,0 +1,10 @@
+<EmailLayout Title="@EmailLocalizer[nameof(EmailStrings.ConfirmEmailSubject), Model.Token!]"
+             Preheader="@EmailLocalizer[nameof(EmailStrings.ConfirmEmailPreheader)]"
+             Heading="@EmailLocalizer[nameof(EmailStrings.ConfirmEmailHeading)]"
+             WebAppUrl="@HttpContext.Request.GetWebAppUrl()"
+             Why="@EmailLocalizer[nameof(EmailStrings.ConfirmEmailWhy), Model.Email!]">
+    <EmailParagraph>@EmailLocalizer[nameof(EmailStrings.ConfirmEmailCodeIntro), Model.Email!]</EmailParagraph>
+    <EmailCode Code="@(Model.Token!)" ValidFor="@Model.ValidFor" />
+    <EmailParagraph>@EmailLocalizer[nameof(EmailStrings.ConfirmEmailButtonIntro)]</EmailParagraph>
+    <EmailButton Href="@(Model.Link!)" Text="@EmailLocalizer[nameof(EmailStrings.ConfirmEmailButton)]" />
+</EmailLayout>

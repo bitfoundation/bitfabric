@@ -1,0 +1,70 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--dl-min, 18rem), 100%), 1fr));
+    gap: 1rem;
+}
+
+// Lists that carry the page's main point: more room inside, and lines in a larger type
+.dl-large {
+    .dl-card {
+        gap: 1rem;
+        padding: 1.75rem;
+    }
+
+    .dl-lines {
+        gap: .875rem;
+        font-size: $bit-typography-fs-lg;
+        line-height: 1.45;
+    }
+
+    ::deep .dl-mark {
+        margin-top: .35rem;
+    }
+
+    // A phone keeps the larger type a size down, so a line holds more than three words
+    @include lt-sm {
+        .dl-card {
+            padding: 1.25rem;
+        }
+
+        .dl-lines {
+            font-size: $bit-typography-fs-md;
+        }
+
+        ::deep .dl-mark {
+            margin-top: .2rem;
+        }
+    }
+}
+
+.dl-card {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding: 1.5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+.dl-lines {
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: .5rem;
+    }
+
+    ::deep .dl-mark {
+        flex-shrink: 0;
+        margin-top: .2rem;
+    }
+}

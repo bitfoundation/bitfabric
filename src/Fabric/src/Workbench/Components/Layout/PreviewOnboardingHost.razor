@@ -1,0 +1,8 @@
+@* The home page's onboarding, once the home page has loaded it: in the layout, as the tour goes to the wizard and back,
+   the way the app's AppOnboardingHost holds it (src/Client/Bit.Fabric.Client.Core/Components/Layout/AppOnboardingHost.razor) *@
+@inherits WorkbenchComponentBase
+
+@if (hostType is not null)
+{
+    <DynamicComponent Type="hostType" Parameters="parameters" />
+}

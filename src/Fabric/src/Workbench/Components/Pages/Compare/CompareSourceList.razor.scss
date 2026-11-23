@@ -1,0 +1,52 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// Two columns of sources on a wide screen, one on a phone, each with its number in a small circle
+.csl {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+    gap: 1.25rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.csl-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    min-width: 0;
+    scroll-margin-top: 1rem;
+}
+
+.csl-number {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.csl-words {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .2rem;
+    min-width: 0;
+}
+
+.csl-name {
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-medium;
+}
+
+// A long address wraps anywhere rather than widening the page
+::deep .csl-url {
+    max-width: 100%;
+    font-size: $bit-typography-fs-xs;
+    overflow-wrap: anywhere;
+}

@@ -1,0 +1,74 @@
+@* One of the home page's pictures: boxes and lines drawn by bit Blow, with nothing to drag or zoom, and brought in by bit Bmotion *@
+<BitMediaQuery ScreenQuery="BitScreenQuery.LtMd" OnChange="ScreenChanged" NoWrapper />
+
+@* Inside a BmotionConfig, Bmotion follows the device's request for less motion *@
+<BmotionConfig>
+    <div class="ahp" style="height:@(height)px" role="img" aria-label="@Picture.AriaLabel">
+        @if (isAnswered)
+        {
+            <BlowCanvas @key="layoutKey"
+                        @ref="canvas"
+                        Nodes="nodes"
+                        Edges="edges"
+                        FitViewOnInit
+                        FitViewOptions="fitOptions"
+                        OnPaneResize="FitToPane"
+                        MinZoom="0.3"
+                        MaxZoom="1"
+                        NodesDraggable="false"
+                        NodesConnectable="false"
+                        NodesFocusable="false"
+                        EdgesFocusable="false"
+                        EdgesReconnectable="false"
+                        ElementsSelectable="false"
+                        PanOnDrag="false"
+                        ZoomOnScroll="false"
+                        ZoomOnPinch="false"
+                        ZoomOnDoubleClick="false"
+                        PreventScrolling="false"
+                        HideAttribution
+                        AriaLabel="@Picture.AriaLabel"
+                        Style="@CanvasStyle">
+                <NodeTemplate Context="node">
+                    @if (node.Data is AppHomePictureBox box)
+                    {
+                        @foreach (var (id, position) in Sides)
+                        {
+                            <BlowHandle Id="@($"t-{id}")" Type="BlowHandleType.Target" Position="position" IsConnectable="false" Style="opacity:0;pointer-events:none" />
+                            <BlowHandle Id="@($"s-{id}")" Type="BlowHandleType.Source" Position="position" IsConnectable="false" Style="opacity:0;pointer-events:none" />
+                        }
+
+                        <Bmotion Initial="Bm.To(opacity: 0, y: 12)" WhileInView="Bm.To(opacity: 1, y: 0)" Once="true" Transition="EnterOf(box)">
+                            <div class="ahp-box ahp-@box.Kind.ToString().ToLowerInvariant() ahp-@box.Tone.ToString().ToLowerInvariant()" dir="@TextDir">
+                                @if (box.Step is { } step)
+                                {
+                                    <Bmotion Animate="Bm.To(opacity: Light)" Transition="LightOf(step)">
+                                        <span class="ahp-light" aria-hidden="true"></span>
+                                    </Bmotion>
+                                }
+                                @if (box.Icon is not null)
+                                {
+                                    <BitIcon IconName="@box.Icon" Color="ColorOf(box.Tone)" Class="ahp-icon" />
+                                }
+                                @if (box.Kind is not AppHomePictureKind.Wall)
+                                {
+                                    <span class="ahp-words">
+                                        <strong>@box.Title</strong>
+                                        @if (box.Text is not null)
+                                        {
+                                            <span>@box.Text</span>
+                                        }
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="ahp-wall-name">@box.Title</span>
+                                }
+                            </div>
+                        </Bmotion>
+                    }
+                </NodeTemplate>
+            </BlowCanvas>
+        }
+    </div>
+</BmotionConfig>

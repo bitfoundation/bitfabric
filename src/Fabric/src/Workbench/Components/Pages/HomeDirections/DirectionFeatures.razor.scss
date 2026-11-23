@@ -1,0 +1,15 @@
+.dfe {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.dfe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+    gap: 1rem;
+}
+
+::deep .dfe-link {
+    align-self: flex-start;
+}

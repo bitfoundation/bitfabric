@@ -1,0 +1,11 @@
+@* The app's own public status page (src/Client/Bit.Fabric.Client.Core/Components/Pages/Status/StatusPublicPage.razor) on the sample world. *@
+@inherits MonitoringHost
+
+@if (IsReady is false)
+{
+    <AppPagePlaceholder />
+}
+else
+{
+    <StatusPublicPage @key="Slug" Slug="@Slug" />
+}

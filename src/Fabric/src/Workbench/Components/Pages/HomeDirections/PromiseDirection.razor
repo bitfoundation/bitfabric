@@ -1,0 +1,85 @@
+@inherits DirectionComponentBase
+@* Nothing to promise: Concept 3 of bitfabric-internal/specs/changes/2026-11-18-home-page-concepts.md. Privacy that comes from
+   how it's built rather than from a policy, and a local AI, claimed only as far as it's verified: a model on the visitor's
+   own computer while they build. *@
+
+<DirectionHero Eyebrow="bit Fabric"
+               Layout="DirectionHeroLayout.Split"
+               TitleLines="TitleLines"
+               Lead="@Localizer["Your AI builds your app on your computer, and the app runs on your own server, in the country you choose. Pick a model on that computer, and your prompts and code reach no AI provider at all."]"
+               SecondaryText="@Localizer["See who sees what"]"
+               SecondaryHref="@InPage("who-sees-what")"
+               SecondaryIcon="@BitIconName.View"
+               Fine="@Localizer["No account needed · Starting is free · Answer a few questions, then paste one line"]">
+    <Aside>
+        @* The concept's boundary: your computer and your server inside it, bit Fabric outside, joined only by the health check *@
+        <figure class="pr-map" aria-label="@Localizer["Where everything lives"]">
+            <div class="pr-yours">
+                <span class="pr-yours-label">@Localizer["Yours"]</span>
+                @foreach (var (icon, title, text) in Inside)
+                {
+                    <div class="pr-place">
+                        <BitIcon IconName="@icon" Variant="BitVariant.Fill" Circular="true" Class="pr-place-icon" />
+                        <div class="pr-place-words">
+                            <strong>@title</strong>
+                            <span>@text</span>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="pr-link">
+                <span class="pr-link-line"></span>
+                <span class="pr-link-label">@Localizer["Reads only the health report and what any visitor sees"]</span>
+            </div>
+            <div class="pr-outside">
+                <BitIcon IconName="@BitIconName.Health" Class="pr-place-icon" />
+                <div class="pr-place-words">
+                    <strong>bit Fabric</strong>
+                    <span>@Localizer["Outside, and never sees your code, data or prompts"]</span>
+                </div>
+            </div>
+        </figure>
+    </Aside>
+</DirectionHero>
+
+<DirectionNumbers />
+
+<DirectionBand Anchor="who-sees-what" Title="@Localizer["Who sees what"]"
+               Intro="@Localizer["Not a policy to trust: a map you can check against how it works."]"
+               Line="@AppLocalizer[nameof(AppStrings.AppHomeComparePromise)]"
+               Note="@Localizer["Some individual AI plans train on your sessions unless you turn that off, and business plans don't. The guide shows where to turn it off."]">
+    <DirectionTable LabelledBy="ah-who-sees-what-title" Columns="WhoColumns" Rows="Who" />
+</DirectionBand>
+
+<DirectionBand Anchor="any-ai" Title="@Localizer["Use any AI, including one on your own computer"]"
+               Intro="@Localizer["The project carries its own instructions and skills, so it doesn't depend on which one you pick."]">
+    <DirectionChips Items="Agents" Label="@Localizer["AI agents"]" />
+    <DirectionTiles Items="AnyAi" OnExplain="OnExplain" />
+</DirectionBand>
+
+<DirectionBand Anchor="your-users" Title="@Localizer["Your users' data stays in your database"]"
+               Intro="@Localizer["What your own business customers will ask about, answered by where things are."]">
+    <DirectionTiles Items="YourUsers" Look="DirectionTileLook.Outlined" MinWidth="12rem" OnExplain="OnExplain" />
+</DirectionBand>
+
+<DirectionBand Anchor="your-server" Title="@Localizer["On your server, in your country, or on your own premises"]"
+               Note="@Localizer["By default, a free Cloudflare Tunnel puts your app online with no open port on your server, so Cloudflare sits in front of it. If you want no third party in front, serve it with Caddy on your own server instead."]">
+    <DirectionTiles Items="YourServer" OnExplain="OnExplain" />
+</DirectionBand>
+
+<DirectionBand Anchor="watched" Title="@Localizer["Watched from the outside, never from the inside"]"
+               Intro="@Localizer["The one part bit Fabric runs for you reads only what anyone could."]">
+    <DirectionTiles Items="Watched" Look="DirectionTileLook.Outlined" OnExplain="OnExplain" />
+</DirectionBand>
+
+<DirectionBand Anchor="day-one" Title="@Localizer["Private doesn't mean starting from nothing"]"
+               Intro="@Localizer["Keeping everything private usually means starting from an empty project. Here, what every app needs is built and tested before your first prompt."]">
+    <DirectionFeatures OnExplain="OnExplain" />
+</DirectionBand>
+
+<DirectionBand Anchor="questions" Title="@Localizer["Before you start"]">
+    <DirectionQuestions Items="Questions" />
+</DirectionBand>
+
+<DirectionFinal Title="@Localizer["Start without telling us who you are"]"
+                Text="@Localizer["No account is needed to start. Answer a few questions and paste one line, and everything is created on your computer."]" />

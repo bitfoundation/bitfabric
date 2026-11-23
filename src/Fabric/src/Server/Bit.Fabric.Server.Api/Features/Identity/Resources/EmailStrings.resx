@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- +:cnd:noEmit -->
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppName" xml:space="preserve">
+    <value>bit Fabric</value>
+  </data>
+  <data name="DefaultFromName" xml:space="preserve">
+    <value>bit Fabric</value>
+  </data>
+  <data name="EmailGreeting" xml:space="preserve">
+    <value>Hi {0},</value>
+  </data>
+  <data name="EmailGreetingNoName" xml:space="preserve">
+    <value>Hi,</value>
+  </data>
+  <data name="EmailFooterCompany" xml:space="preserve">
+    <value>BitPlatform, Leeuwarden, the Netherlands</value>
+  </data>
+  <data name="EmailButtonFallbackLead" xml:space="preserve">
+    <value>Button not working?</value>
+  </data>
+  <data name="EmailButtonFallbackLink" xml:space="preserve">
+    <value>Open this link</value>
+  </data>
+  <data name="EmailCodeValidOneMinute" xml:space="preserve">
+    <value>The code works for one minute.</value>
+  </data>
+  <data name="EmailCodeValidMinutes" xml:space="preserve">
+    <value>The code works for {0} minutes.</value>
+  </data>
+  <data name="EmailCodeValidHours" xml:space="preserve">
+    <value>The code works for {0} hours.</value>
+  </data>
+  <data name="SignInButton" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="ConfirmEmailSubject" xml:space="preserve">
+    <value>{0} is your bit Fabric confirmation code</value>
+  </data>
+  <data name="ConfirmEmailHeading" xml:space="preserve">
+    <value>Confirm your email address</value>
+  </data>
+  <data name="ConfirmEmailPreheader" xml:space="preserve">
+    <value>Enter the code in bit Fabric, or confirm with one click.</value>
+  </data>
+  <data name="ConfirmEmailCodeIntro" xml:space="preserve">
+    <value>Enter this code in bit Fabric to confirm {0}:</value>
+  </data>
+  <data name="ConfirmEmailButtonIntro" xml:space="preserve">
+    <value>Or confirm it with one click:</value>
+  </data>
+  <data name="ConfirmEmailButton" xml:space="preserve">
+    <value>Confirm email address</value>
+  </data>
+  <data name="ConfirmEmailWhy" xml:space="preserve">
+    <value>You got this email because {0} was just added to a bit Fabric account. If that wasn't you, you can ignore it.</value>
+  </data>
+  <data name="ResetPasswordCodeSubject" xml:space="preserve">
+    <value>{0} is your bit Fabric password reset code</value>
+  </data>
+  <data name="ResetPasswordHeading" xml:space="preserve">
+    <value>Reset your password</value>
+  </data>
+  <data name="ResetPasswordPreheader" xml:space="preserve">
+    <value>Enter the code on the reset page, or reset it with one click.</value>
+  </data>
+  <data name="ResetPasswordCodeIntro" xml:space="preserve">
+    <value>We got a request to reset your password. Enter this code on the reset page:</value>
+  </data>
+  <data name="ResetPasswordButtonIntro" xml:space="preserve">
+    <value>Or reset it with one click:</value>
+  </data>
+  <data name="ResetPasswordButton" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="ResetPasswordWhy" xml:space="preserve">
+    <value>If you didn't ask for this, you can ignore this email. Your password stays as it is.</value>
+  </data>
+  <data name="OtpCodeSubject" xml:space="preserve">
+    <value>{0} is your bit Fabric sign-in code</value>
+  </data>
+  <data name="OtpHeading" xml:space="preserve">
+    <value>Your sign-in code</value>
+  </data>
+  <data name="OtpPreheader" xml:space="preserve">
+    <value>Enter the code on the sign-in page, or sign in with one click.</value>
+  </data>
+  <data name="OtpCodeIntro" xml:space="preserve">
+    <value>Enter this code on the sign-in page:</value>
+  </data>
+  <data name="OtpButtonIntro" xml:space="preserve">
+    <value>Or sign in with one click:</value>
+  </data>
+  <data name="OtpWhy" xml:space="preserve">
+    <value>Someone asked to sign in to bit Fabric with this email address. If it wasn't you, you can ignore this email.</value>
+  </data>
+  <data name="TwoFactorCodeSubject" xml:space="preserve">
+    <value>{0} is your bit Fabric 2FA code</value>
+  </data>
+  <data name="TwoFactorHeading" xml:space="preserve">
+    <value>Finish signing in</value>
+  </data>
+  <data name="TwoFactorPreheader" xml:space="preserve">
+    <value>Enter this code to finish signing in.</value>
+  </data>
+  <data name="TwoFactorCodeIntro" xml:space="preserve">
+    <value>Enter this code to finish signing in:</value>
+  </data>
+  <data name="TwoFactorWhy" xml:space="preserve">
+    <value>If you aren't signing in right now, someone may have your sign-in details. Change your password in your account's settings.</value>
+  </data>
+  <data name="ElevatedAccessCodeSubject" xml:space="preserve">
+    <value>{0} is your bit Fabric verification code</value>
+  </data>
+  <data name="ElevatedAccessHeading" xml:space="preserve">
+    <value>Confirm it's you</value>
+  </data>
+  <data name="ElevatedAccessPreheader" xml:space="preserve">
+    <value>Enter this code to go on with an important change to your account.</value>
+  </data>
+  <data name="ElevatedAccessCodeIntro" xml:space="preserve">
+    <value>To keep your account safe, bit Fabric asks for this code before an important change. Enter it in bit Fabric:</value>
+  </data>
+  <data name="ElevatedAccessWhy" xml:space="preserve">
+    <value>If you didn't ask for this code, you can ignore this email.</value>
+  </data>
+  <data name="AccountExistsSubject" xml:space="preserve">
+    <value>You already have a bit Fabric account</value>
+  </data>
+  <data name="AccountExistsHeading" xml:space="preserve">
+    <value>You already have an account</value>
+  </data>
+  <data name="AccountExistsPreheader" xml:space="preserve">
+    <value>Someone tried to sign up with this email address. Sign in instead.</value>
+  </data>
+  <data name="AccountExistsBody" xml:space="preserve">
+    <value>Someone just tried to sign up with this email address, which already has a bit Fabric account. If it was you, sign in instead:</value>
+  </data>
+  <data name="AccountExistsForgotLead" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="AccountExistsForgotLink" xml:space="preserve">
+    <value>Reset it</value>
+  </data>
+  <data name="AccountExistsWhy" xml:space="preserve">
+    <value>If it wasn't you, you can ignore this email. Nothing changed on your account.</value>
+  </data>
+  <data name="TeamInvitationSubject" xml:space="preserve">
+    <value>{0} invited you to the {1} team on bit Fabric</value>
+  </data>
+  <data name="TeamInvitationHeading" xml:space="preserve">
+    <value>Join {0} on bit Fabric</value>
+  </data>
+  <data name="TeamInvitationPreheader" xml:space="preserve">
+    <value>Open the invitation and sign in to join.</value>
+  </data>
+  <data name="TeamInvitationBody" xml:space="preserve">
+    <value>{0} invited you to join the {1} team. Open the invitation and sign in to join.</value>
+  </data>
+  <data name="TeamInvitationButton" xml:space="preserve">
+    <value>Join the team</value>
+  </data>
+  <data name="TeamInvitationWhy" xml:space="preserve">
+    <value>You got this because {0} entered your email address. If you don't know them, you can ignore this email.</value>
+  </data>
+  <data name="ScansEmailHeading" xml:space="preserve">
+    <value>This week's scans</value>
+  </data>
+  <data name="AlertEmailButton" xml:space="preserve">
+    <value>Open in bit Fabric</value>
+  </data>
+  <data name="AlertEmailWhy" xml:space="preserve">
+    <value>You get this because {0}'s alerts are set to email you. To change that, open its Alerts tab.</value>
+  </data>
+</root>

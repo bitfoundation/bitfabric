@@ -1,0 +1,78 @@
+@inherits DirectionComponentBase
+@* Answer first: the page an answer engine or a search result quotes. The h1 is a definition, the key facts are short enough
+   to quote one by one, and every band is a question whose first sentence is the answer. *@
+
+<DirectionHero Eyebrow="@Localizer["What is bit Fabric?"]"
+               Layout="DirectionHeroLayout.Split"
+               TitleTypography="BitTypography.H3"
+               TitleLines="TitleLines"
+               Lead="@Localizer["It gives you a complete app on web, Android, iOS, Windows and macOS before your first prompt: a complete identity solution, multi-tenancy, an admin panel, an AI assistant and offline sync. Your own AI agent, such as Claude Code, Copilot or Cursor, builds your idea on top of it, on your computer. Your app runs on your own server, and bit Fabric never sees your code, your data or your prompts."]"
+               SecondaryText="@Localizer["How it compares"]"
+               SecondaryHref="@InPage("compare")"
+               SecondaryIcon="@BitIconName.Table">
+    <Aside>
+        <DirectionFacts IsBox Title="@Localizer["Key facts"]" TitleId="an-facts-title" Items="KeyFacts" />
+    </Aside>
+</DirectionHero>
+
+<DirectionBand Anchor="day-one" Title="@Localizer["What do I get on day one?"]"
+               Answer="@Localizer["A production-ready app on five platforms, built and tested before your first prompt, so your AI spends its tokens on your idea."]">
+    <DirectionFeatures OnExplain="OnExplain" />
+</DirectionBand>
+
+<DirectionBand Anchor="compare" Title="@Localizer["How is it different from a hosted AI builder such as Lovable, Bolt or Base44?"]"
+               Answer="@Localizer["With bit Fabric, not only the code but the backend, the secrets, the hosting and your users start out in your own accounts, and you pay for an AI plan and a server rather than credits."]"
+               Intro="@Localizer["Every one of them exports your code. What stays behind is the rest."]"
+               Note="@Localizer["Other entry plans: Replit $20 a month, v0 $30 a month."]"
+               NoteIcon="@BitIconName.Money">
+    <DirectionTable LabelledBy="ah-compare-title" Columns="CompareColumns" Rows="Compare" Highlight="3" TopicWidth="10rem" />
+    <div class="an-source">
+        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="p">
+            @Localizer["Sources, each read on 19 November 2026: lovable.dev/pricing and docs.lovable.dev (plans, Cloud, out of credits, export); bolt.new/pricing and support.bolt.new (tokens, database); base44.com/pricing and docs.base44.com (GitHub, eject, app stores); replit.com/pricing; v0.app/docs."]
+        </BitText>
+    </div>
+</DirectionBand>
+
+<DirectionBand Anchor="cost" Title="@Localizer["What does it cost?"]"
+               Answer="@Localizer["Starting with bit Fabric is free during the beta. Running your app costs a server from about €4 a month, a domain, and the AI plan you already have."]"
+               Note="@Localizer["bitfabric.co, built with bit Fabric, runs on €11 a month with every optional item on, and there are no credits from us."]"
+               NoteIcon="@BitIconName.Savings">
+    <DirectionTiles Items="Costs" Look="DirectionTileLook.Figure" MinWidth="11rem" />
+</DirectionBand>
+
+<DirectionBand Anchor="who-for" Title="@Localizer["Who is it for, and who is it not for?"]"
+               Answer="@Localizer["It's for builders who are technical enough to paste one line and want to own what they build. It's not for anyone who wants an instant preview in the browser with nothing to install."]">
+    <DirectionLists Lists="WhoFor" />
+</DirectionBand>
+
+<DirectionBand Anchor="what-we-see" Title="@Localizer["What does bit Fabric see?"]"
+               Answer="@Localizer["Only what you allow, and never your code, your prompts, your database or your keys."]">
+    <DirectionLists Lists="Sees" />
+</DirectionBand>
+
+<DirectionBand Anchor="if-we-stop" Title="@Localizer["What happens if bit Fabric shuts down?"]"
+               Answer="@Localizer["Your app keeps running unchanged on your server. Only monitoring, alerts and status pages stop."]">
+    <DirectionLists Lists="IfWeStop" />
+</DirectionBand>
+
+<DirectionBand Anchor="which-ai" Title="@Localizer["Which AI can I use?"]"
+               Answer="@Localizer["The agent you already use, or a model on your own computer."]"
+               Intro="@Localizer["The project carries its own instructions and skills, so it works the same whichever you pick. bit Fabric isn't between you and your AI: no credits, and your prompts never pass through us."]">
+    <DirectionChips Items="Agents" Label="@Localizer["AI agents"]" />
+</DirectionBand>
+
+<DirectionBand Anchor="start" Title="@Localizer["How do I start?"]"
+               Answer="@Localizer["Answer a few questions on bitfabric.co, paste one line, and your project opens on your computer."]">
+    <DirectionTiles Items="Steps" Look="DirectionTileLook.Steps" />
+</DirectionBand>
+
+<DirectionBand Anchor="glossary" Title="@Localizer["Glossary"]">
+    <DirectionFacts Items="Glossary" />
+</DirectionBand>
+
+<DirectionFinal Title="@Localizer["Start with something you'll keep"]"
+                Text="@Localizer["Answer a few questions and paste one line, and your AI starts on your idea instead of the sign-in page."]" />
+
+<p class="an-updated">
+    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer["Last updated 19 November 2026. The numbers on this page were checked on 18 November 2026."]</BitText>
+</p>

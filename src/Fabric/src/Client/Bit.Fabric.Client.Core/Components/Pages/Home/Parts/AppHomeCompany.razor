@@ -1,0 +1,38 @@
+@inherits ComponentBase
+@* Who makes bit Fabric, as two cards: the company as FabricSite holds it, and the team behind bit platform with the home page's
+   numbers. /trust and /about show it the same way, each under its own title. *@
+
+<div class="ahco">
+    <div class="ahco-card">
+        <BitText Typography="BitTypography.H6" Element="@HeadingElement" Id="ahco-company-title">@Localizer[nameof(AppStrings.TrustCompany)]</BitText>
+        <dl class="ahco-facts" aria-labelledby="ahco-company-title">
+            @foreach (var (term, detail, url) in Company)
+            {
+                <div @key="term" class="ahco-fact">
+                    <dt>@term</dt>
+                    <dd>
+                        @if (url is null)
+                        {
+                            <bdi>@detail</bdi>
+                        }
+                        else
+                        {
+                            <BitLink Href="@url"><bdi>@detail</bdi></BitLink>
+                        }
+                    </dd>
+                </div>
+            }
+        </dl>
+    </div>
+    <div class="ahco-card">
+        <BitText Typography="BitTypography.H6" Element="@HeadingElement">@Localizer[nameof(AppStrings.TrustTeam)]</BitText>
+        <ul class="ahco-numbers" aria-label="@Localizer[nameof(AppStrings.AppHomeNumbersLabel)]">
+            @foreach (var (number, label) in AppHomeNumbers.Of(Localizer))
+            {
+                @* Isolated left to right, or a right-to-left page shows 120+ as +120 *@
+                <li @key="label"><strong><bdi dir="ltr">@number</bdi></strong> @label</li>
+            }
+        </ul>
+        <BitLink Href="@AppHomeNumbers.GitHubUrl" Target="_blank">@Localizer[nameof(AppStrings.AppHomeBitFabricIsBuiltOnBitPlatformOpenOn)]</BitLink>
+    </div>
+</div>

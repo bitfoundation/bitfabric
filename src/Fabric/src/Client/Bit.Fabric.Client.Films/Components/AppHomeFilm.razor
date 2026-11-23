@@ -1,0 +1,123 @@
+@inherits FilmComponentBase
+
+@{
+    var scene = Current;
+    var device = scene.Device.ToString().ToLowerInvariant();
+}
+
+<CascadingValue Value="Logo" Name="@nameof(Logo)" IsFixed="true">
+<figure class="ah-film">
+    <div class="ah-film-head">
+        <BitText Typography="BitTypography.H6" Element="h2">@Title</BitText>
+        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.ChromeClose"
+                   Title="@Localizer[nameof(AppStrings.Close)]" AriaLabel="@Localizer[nameof(AppStrings.Close)]" OnClick="OnClose" />
+    </div>
+
+    @* A drawing: the caption says what it shows. @key restarts each scene's animations, and the face's when the person changes *@
+    <div class="ah-stage @(IsTall ? "is-tall" : null) @(HasTablet ? "has-tablet" : null)" aria-hidden="true">
+        @if (scene.Person is { } person)
+        {
+            <span class="ah-person" @key="person"><span class="ah-person-face"><AppHomeFace Person="person" /></span><b>@person</b></span>
+        }
+
+        <div class="ah-device is-@device @(scene.Restyled ? "is-restyled" : null)" dir="@(scene.Rtl ? "rtl" : "ltr")" @key="index">
+            @switch (scene.Device)
+            {
+                case AppHomeDevice.Phone:
+                case AppHomeDevice.Tablet:
+                    <div class="ah-display">
+                        @if (scene.Device is AppHomeDevice.Phone)
+                        {
+                            <span class="ah-notch"></span>
+                        }
+                        @if (scene.Url is not null)
+                        {
+                            <span class="ah-phone-url">@scene.Url</span>
+                        }
+                        <div class="ah-screen"><AppHomeFilmParts Parts="Flow" /></div>
+                        <AppHomeFilmParts Parts="Overlays" />
+                    </div>
+                    break;
+                case AppHomeDevice.Browser:
+                case AppHomeDevice.Laptop:
+                    <div class="ah-bar">
+                        <i></i><i></i><i></i>
+                        @if (scene.Url is not null)
+                        {
+                            <span class="ah-url">@scene.Url</span>
+                        }
+                    </div>
+                    <div class="ah-display">
+                        <div class="ah-screen"><AppHomeFilmParts Parts="Flow" /></div>
+                        <AppHomeFilmParts Parts="Overlays" />
+                    </div>
+                    break;
+                case AppHomeDevice.Desktop:
+                    <div class="ah-display is-wallpaper">
+                        <div class="ah-window">
+                            <div class="ah-window-bar"><span>@Localizer[nameof(AppStrings.AppHomeYourApp)]</span><i></i><i></i><i></i></div>
+                            <div class="ah-screen"><AppHomeFilmParts Parts="Flow" /></div>
+                        </div>
+                        <div class="ah-taskbar"><i class="is-start"></i><i class="is-open"></i><i></i><i></i></div>
+                        <AppHomeFilmParts Parts="Overlays" />
+                    </div>
+                    break;
+                case AppHomeDevice.Editor:
+                    @* VS Code's layout, drawn: the activity bar, the files, the code, and the agent's chat, where the scene plays *@
+                    <div class="ah-bar"><i></i><i></i><i></i><span class="ah-editor-title">your-app</span></div>
+                    <div class="ah-display ah-editor">
+                        <span class="ah-editor-activity"><i class="is-on"></i><i></i><i></i><i></i></span>
+                        <span class="ah-editor-files"><i style="--w:70%"></i><i style="--w:55%;--x:1"></i><i class="is-on" style="--w:65%;--x:1"></i><i style="--w:50%;--x:1"></i><i style="--w:60%"></i><i style="--w:45%;--x:1"></i></span>
+                        <span class="ah-editor-code">
+                            <i style="--w:40%"></i><i class="is-key" style="--w:62%;--x:1"></i><i style="--w:48%;--x:2"></i><i class="is-text" style="--w:70%;--x:2"></i>
+                            <i style="--w:30%;--x:1"></i><i class="is-key" style="--w:55%"></i><i class="is-text" style="--w:66%;--x:1"></i><i style="--w:44%;--x:2"></i>
+                        </span>
+                        <div class="ah-editor-chat">
+                            <span class="ah-editor-chat-title">@Localizer[nameof(AppStrings.AppHomeChat)]</span>
+                            <div class="ah-screen"><AppHomeFilmParts Parts="Flow" /></div>
+                        </div>
+                        <AppHomeFilmParts Parts="Overlays" />
+                    </div>
+                    break;
+                default:
+                    <div class="ah-display">
+                        <div class="ah-screen"><AppHomeFilmParts Parts="Flow" /></div>
+                        <AppHomeFilmParts Parts="Overlays" />
+                    </div>
+                    break;
+            }
+        </div>
+
+        @if (scene.Device is AppHomeDevice.Desktop or AppHomeDevice.Kiosk)
+        {
+            <span class="ah-stand"></span>
+        }
+        else if (scene.Device is AppHomeDevice.Laptop)
+        {
+            <span class="ah-base"></span>
+        }
+
+        @if (scene.Label is not null)
+        {
+            <span class="ah-device-label">@scene.Label</span>
+        }
+    </div>
+
+    <figcaption class="ah-film-caption" aria-live="polite">@scene.Caption</figcaption>
+
+    <div class="ah-player">
+        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@(isPaused ? BitIconName.Play : BitIconName.Pause)"
+                   AriaLabel="@(isPaused ? Localizer[nameof(AppStrings.NewProjectFilmPlay)] : Localizer[nameof(AppStrings.NewProjectFilmPause)])" Title="@(isPaused ? Localizer[nameof(AppStrings.NewProjectFilmPlay)] : Localizer[nameof(AppStrings.NewProjectFilmPause)])" OnClick="TogglePause" />
+        <ol class="ah-dots">
+            @for (var i = 0; i < Scenes.Length; i++)
+            {
+                var at = i;
+                <li><button type="button" class="@(at == index ? "is-current" : null)" aria-label="@Localizer[nameof(AppStrings.AppHomeScene), at + 1]"
+                            aria-current="@(at == index ? "step" : null)" @onclick="() => GoTo(at)"></button></li>
+            }
+        </ol>
+        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Refresh"
+                   AriaLabel="@Localizer[nameof(AppStrings.AppHomeReplay)]" Title="@Localizer[nameof(AppStrings.AppHomeReplay)]" OnClick="Replay" />
+    </div>
+</figure>
+</CascadingValue>

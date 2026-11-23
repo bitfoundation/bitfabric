@@ -1,0 +1,14 @@
+{
+    "profiles": {
+        "Bit.Fabric.Web(BlazorWebAssemblyStandalone)": {
+            "commandName": "Project",
+            "dotnetRunMessages": true,
+            "launchBrowser": true,
+            "applicationUrl": "http://localhost:4225",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        }
+    },
+    "$schema": "http://json.schemastore.org/launchsettings.json"
+}

@@ -1,0 +1,307 @@
+@attribute [Route(PageUrls.For)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.For)]
+@attribute [Route(PageUrls.ForGitHubCopilot)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForGitHubCopilot)]
+@attribute [Route(PageUrls.ForClaudeCode)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForClaudeCode)]
+@attribute [Route(PageUrls.ForCodex)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForCodex)]
+@attribute [Route(PageUrls.ForCursor)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForCursor)]
+@attribute [Route(PageUrls.ForAntigravity)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForAntigravity)]
+@attribute [Route(PageUrls.ForGeminiCli)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForGeminiCli)]
+@attribute [Route(PageUrls.ForJunie)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForJunie)]
+@attribute [Route(PageUrls.ForWindsurf)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForWindsurf)]
+@attribute [Route(PageUrls.ForLocalModels)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForLocalModels)]
+@attribute [Route(PageUrls.ForChineseModels)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.ForChineseModels)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppPageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+@using Bit.Fabric.Client.Core.Components.Pages.Home.For.Data
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Compare.Data
+
+@* bitfabric.co/for and a page per agent or model under it (bitfabric-internal/specs/home-page.md, "The AI agent pages"). One
+   component for every page: a page differs from another only by its class under Data. The hub shows what each agent reads
+   in a table and leads to each page; an agent's page shows what it finds in the project, the skills and how it calls them, how
+   to start, what it costs, the other pages, questions, Get started and its sources. Every fact about another product carries
+   the numbers of its sources. Latin digits in every language, so prices, dates and paths stay as written. *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+
+    var subject = Page;
+    var isHub = IsHub(subject);
+    ForHub.MatrixRow[] matrix = isHub ? ForHub.Matrix(Localizer, Agents) : [];
+    var ids = isHub ? ForHub.SourceIds(subject, matrix) : subject.SourceIds;
+    var checkedOn = Localizer[nameof(AppStrings.ForCheckedOnDate)].Value;
+
+    // The numbers of a fact's sources, in the order the page lists them, each leading to its entry in the list
+    RenderFragment<string[]> refs = sources => @<AppHomeSourceRefs PageIds="ids" Ids="sources" />;
+
+    // A path, a command or a skill's call, kept left to right in a right-to-left page
+    RenderFragment<string> chip = text => @<bdi dir="ltr"><code class="for-code">@text</code></bdi>;
+
+    RenderFragment<AgentPage> cardLink = target => @<BitLink Href="@UrlOf(target.Url)" Class="for-card-link">
+        @Localizer[nameof(AppStrings.ForSeePage)]
+        <BitIcon IconName="@BitIconName.Forward" Class="for-forward-icon" />
+    </BitLink>;
+
+    RenderFragment<ForHub.MatrixCell> cell = value => @<div class="for-cell">
+        @foreach (var file in value.Files)
+        {
+            <span @key="file">@chip(file)</span>
+        }
+        @if (value.Text is not null)
+        {
+            <span>@value.Text</span>
+        }
+        @refs(value.Sources)
+    </div>;
+}
+
+<AppPageData PageTitle="@subject.PageTitle" Description="@subject.Description">
+    <Head>
+        <script type="application/ld+json">@((MarkupString)BuildJsonLd(subject, ids))</script>
+    </Head>
+</AppPageData>
+
+<div class="ah-page for app-latin-digits">
+    @if (isHub is false)
+    {
+        <nav class="for-crumbs" aria-label="@Localizer[nameof(AppStrings.ForHubName)]">
+            <BitLink Href="@UrlOf(PageUrls.For)">
+                <BitIcon IconName="@BitIconName.Back" Class="for-back-icon" />
+                @Localizer[nameof(AppStrings.ForAllAgents)]
+            </BitLink>
+        </nav>
+    }
+
+    <section class="ah-hero">
+        <span class="ah-eyebrow">@Localizer[nameof(AppStrings.CompareCheckedOn), checkedOn]</span>
+        <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">@subject.Title</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">@subject.Lead</BitText>
+        @if (isHub is false)
+        {
+            @* What the agent does well, said first and as generously as its own pages allow *@
+            <p class="for-good">
+                <BitIcon IconName="@BitIconName.CheckMark" Color="BitColor.Success" Class="for-good-icon" />
+                <span>@subject.DoesWell.Text@refs(subject.DoesWell.Sources)</span>
+            </p>
+        }
+        <div class="ah-actions">
+            <BitButton Href="@UrlOf(PageUrls.NewProject)" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+            <BitButton Variant="BitVariant.Text" Href="@InPage("sources")" IconName="@BitIconName.ReportDocument">@Localizer[nameof(AppStrings.CompareWhereFrom)]</BitButton>
+        </div>
+    </section>
+
+    @if (isHub)
+    {
+        @* 1. What each agent reads on its own, one row each: the proof that every one is covered *@
+        <section class="ah-band" id="ah-matrix" aria-labelledby="ah-matrix-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="matrix" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.ForMatrixTitle)]" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.ForMatrixIntro)]</BitText>
+            </header>
+            @{
+                var columns = new[]
+                {
+                    Localizer[nameof(AppStrings.ForColumnInstructions)].Value,
+                    Localizer[nameof(AppStrings.ForColumnSkills)].Value,
+                    Localizer[nameof(AppStrings.ForColumnCall)].Value,
+                    Localizer[nameof(AppStrings.ForColumnTools)].Value
+                };
+            }
+            <table class="for-matrix" aria-labelledby="ah-matrix-title" role="table">
+                <thead role="rowgroup">
+                    <tr role="row">
+                        <th scope="col" role="columnheader">@Localizer[nameof(AppStrings.ForColumnAgent)]</th>
+                        @foreach (var column in columns)
+                        {
+                            <th @key="column" scope="col" role="columnheader">@column</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody role="rowgroup">
+                    @foreach (var row in matrix)
+                    {
+                        <tr @key="row.Agent.Url" role="row">
+                            <th scope="row" role="rowheader">
+                                <BitLink Href="@UrlOf(row.Agent.Url)" Class="for-matrix-agent">@row.Agent.Name</BitLink>
+                            </th>
+                            <td role="cell" data-label="@columns[0]">@cell(row.Instructions)</td>
+                            <td role="cell" data-label="@columns[1]">@cell(row.Skills)</td>
+                            <td role="cell" data-label="@columns[2]">@cell(row.Call)</td>
+                            <td role="cell" data-label="@columns[3]">@cell(row.Tools)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Element="p" Class="for-source-line">@Localizer[nameof(AppStrings.ForMatrixSourceLine), checkedOn]</BitText>
+        </section>
+
+        @* 2. A page for each agent *@
+        <section class="ah-band" id="ah-agents" aria-labelledby="ah-agents-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="agents" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.ForAgentsTitle)]" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.ForAgentsIntro)]</BitText>
+            </header>
+            <AppHomeTiles Tiles="@([.. Agents.Select(agent => new AppHomeTile(agent.CardIcon, agent.Name, agent.CardLine, More: cardLink(agent)))])"
+                          HeadingElement="@cardHeading" MinWidth="15rem" />
+        </section>
+
+        @* 3. And the models they can run: one on the visitor's computer, or one of the visitor's choice with their own key *@
+        <section class="ah-band" id="ah-models" aria-labelledby="ah-models-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="models" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.ForModelsTitle)]" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.ForModelsIntro)]</BitText>
+            </header>
+            <AppHomeTiles Tiles="@([.. ModelPages.Select(model => new AppHomeTile(model.CardIcon, model.Name, model.CardLine, More: cardLink(model)))])"
+                          HeadingElement="@cardHeading" MinWidth="18rem" />
+        </section>
+    }
+    else
+    {
+        @* 1. What the agent finds in the project, as a project's panel would list it; on a model's page, the agents it plugs into *@
+        <section class="ah-band" id="ah-reads" aria-labelledby="ah-reads-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="reads" Element="@sectionHeading" Text="@subject.LinesTitle" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@subject.LinesIntro</BitText>
+            </header>
+            <ul class="for-lines">
+                @foreach (var line in subject.Lines)
+                {
+                    <li @key="line.Label" class="for-line">
+                        <BitIcon IconName="@IconOf(line.Kind)" Class="for-line-icon" />
+                        <div class="for-line-words">
+                            @if (line.Kind is AgentLineKind.Agent)
+                            {
+                                <BitText Typography="BitTypography.Subtitle1" Element="@cardHeading" Class="for-line-label">@line.Label</BitText>
+                            }
+                            else
+                            {
+                                <span class="for-line-label">@chip(line.Label)</span>
+                            }
+                            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@line.Text@refs(line.Sources)</BitText>
+                        </div>
+                        @if (line.Code is not null)
+                        {
+                            <span class="for-line-code">@chip(line.Code)</span>
+                        }
+                    </li>
+                }
+            </ul>
+            @if (subject.ToolsNote is { } toolsNote)
+            {
+                <div class="for-note">
+                    <BitIcon IconName="@BitIconName.PlugConnected" Color="BitColor.Primary" Class="for-note-icon" />
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@toolsNote.Text@refs(toolsNote.Sources)</BitText>
+                </div>
+            }
+        </section>
+
+        @if (subject.Models is { } models)
+        {
+            @* The models a page is about, each with how its maker sells it, as listed the day it was read *@
+            <section class="ah-band" id="ah-models" aria-labelledby="ah-models-title">
+                <header class="ah-band-head">
+                    <AppHomeBandTitle Anchor="models" Element="@sectionHeading" Text="@models.Title" />
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@models.Intro</BitText>
+                </header>
+                <AppHomeTiles Tiles="@([.. models.Models.Select(model => new AppHomeTile(BitIconName.Globe, model.Name, model.Text, model.Value, More: ModelMore(model, refs)))])"
+                              HeadingElement="@cardHeading" MinWidth="11rem" />
+            </section>
+        }
+
+        @* 2. The skills, each with how this agent calls it *@
+        <section class="ah-band" id="ah-skills" aria-labelledby="ah-skills-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="skills" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.ForSkillsTitle)]" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@subject.SkillLine.Text@refs(subject.SkillLine.Sources)</BitText>
+            </header>
+            <AppHomeTiles Tiles="@([.. ForShared.Skills(Localizer).Select(skill => new AppHomeTile(skill.Icon, skill.Title, skill.Text, More: subject.SkillCall is { } call ? chip(ForShared.Call(call, skill.Skill)) : null))])"
+                          HeadingElement="@cardHeading" MinWidth="19rem" />
+        </section>
+
+        @* 3. How to start: the two steps every start has, then the agent's own *@
+        <section class="ah-band" id="ah-setup" aria-labelledby="ah-setup-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="setup" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.ForSetupTitle)]" />
+            </header>
+            <ol class="for-steps">
+                @foreach (var step in ForShared.FirstSteps(Localizer).Concat(subject.Steps))
+                {
+                    <li @key="step.Title" class="for-step">
+                        <BitText Typography="BitTypography.H6" Element="@cardHeading">@step.Title</BitText>
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@step.Text@refs(step.Sources)</BitText>
+                        @if (step.Code is not null)
+                        {
+                            <span class="for-step-code">@chip(step.Code)</span>
+                        }
+                    </li>
+                }
+            </ol>
+        </section>
+
+        @* 4. What it costs: the agent's plan, bit Fabric and a server; /pricing says the rest, so it isn't restated here *@
+        <section class="ah-band" id="ah-cost" aria-labelledby="ah-cost-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="cost" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.ForCostTitle)]" />
+            </header>
+            <AppHomeTiles Tiles="@CostTiles(subject, refs)" HeadingElement="@cardHeading" MinWidth="15rem" />
+            @* With the way to why a real app's bill comes out lower, as the comparison pages have *@
+            <div class="ah-band-links">
+                <BitButton Variant="BitVariant.Outline" Href="@UrlOf(PageUrls.Pricing)" IconName="@BitIconName.Savings">@Localizer[nameof(AppStrings.CompareCostLink)]</BitButton>
+                <BitButton Variant="BitVariant.Outline" Href="@UrlOf(PageUrls.Cost)" IconName="@BitIconName.Lightbulb">@Localizer[nameof(AppStrings.CostLink)]</BitButton>
+            </div>
+        </section>
+
+        @* 5. The other pages, so a visitor who uses two agents finds the other one *@
+        <section class="ah-band" id="ah-others" aria-labelledby="ah-others-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="others" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.ForOthersTitle)]" />
+            </header>
+            <div class="ah-band-links">
+                @foreach (var other in Pages.Where(other => other.Url != subject.Url))
+                {
+                    <BitButton @key="other.Url" Variant="BitVariant.Outline" Size="BitSize.Small" Href="@UrlOf(other.Url)" IconName="@other.CardIcon">@other.Name</BitButton>
+                }
+            </div>
+        </section>
+    }
+
+    @* Closed, the answers stay in the page for search engines and find-in-page *@
+    <section class="ah-band" id="ah-questions" aria-labelledby="ah-questions-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="questions" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareQuestionsTitle)]" />
+        </header>
+        <div class="ah-faq">
+            @foreach (var question in subject.Questions)
+            {
+                <BitAccordion @key="question.Question" Title="@question.Question" HeadingLevel="3" HiddenUntilFound Class="ah-faq-item">
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@question.Answer@refs(question.Sources)</BitText>
+                </BitAccordion>
+            }
+        </div>
+    </section>
+
+    <section class="ah-final">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeFinalTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeFinalText)]</BitText>
+        <BitButton Href="@UrlOf(PageUrls.NewProject)" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+
+    @* Every source the page cites, numbered as the page cites them, with its address and the day it was read *@
+    <section class="ah-band" id="ah-sources" aria-labelledby="ah-sources-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="sources" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareSourcesTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.ForSourcesIntro), checkedOn]</BitText>
+        </header>
+        <AppHomeSourceList Sources="@([.. ids.Select(id => ForSources.All[id])])" ReadOn="@checkedOn" />
+    </section>
+</div>

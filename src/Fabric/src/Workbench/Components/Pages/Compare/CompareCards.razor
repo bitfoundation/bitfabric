@@ -1,0 +1,21 @@
+@inherits WorkbenchComponentBase
+@* The hub's way into each comparison: a card per page, its name and what it leads with. On bitfabric.co each is a link to
+   /compare/<key>; here it switches the view's subject, so a link or a screenshot shows the page it opened. *@
+
+<ul class="cc">
+    @foreach (var subject in Subjects)
+    {
+        <li @key="subject.Key">
+            <BitCard Title="@subject.Name" IconName="@subject.CardIcon" HeadingLevel="3" Outlined FullHeight Class="cc-card"
+                     OnClick="() => OnOpen.InvokeAsync(subject.Key)">
+                <div class="cc-body">
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@subject.CardLine</BitText>
+                    <span class="cc-go">
+                        @Localizer["See the comparison"]
+                        <BitIcon IconName="@BitIconName.Forward" Color="BitColor.Primary" Class="cc-go-icon" />
+                    </span>
+                </div>
+            </BitCard>
+        </li>
+    }
+</ul>

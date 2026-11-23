@@ -1,0 +1,66 @@
+@attribute [Route(PageUrls.SetupProject)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.SetupProject)]
+@inherits AppPageBase
+
+@{
+    var answers = Answers;
+}
+
+<AppPageData Title="@Localizer[nameof(AppStrings.SetupProjectTitle)]"
+             PageTitle="@Localizer[nameof(AppStrings.SetupProjectPageTitle)]"
+             Description="@Localizer[nameof(AppStrings.SetupProjectPageDescription)]" />
+
+@* The wizard's parts read the computer, the apps and the help from this state, as on the new project page *@
+<CascadingValue Value="state" IsFixed="true">
+<div class="sp-page">
+    <div class="sp-intro">
+        <BitText Typography="BitTypography.H3" Element="h2" Class="sp-title">@Localizer[nameof(AppStrings.SetupProjectTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
+            @Localizer[nameof(AppStrings.SetupProjectLede)]
+        </BitText>
+    </div>
+
+    <NewProjectQuestion Title="@Localizer[nameof(AppStrings.SetupProjectWhereTitle)]">
+        <BitChoiceGroup TItem="BitChoiceGroupOption<bool>" TValue="bool"
+                        Variant="BitVariant.Outline" Horizontal FullWidth
+                        Value="@isOnThisComputer"
+                        OnChange="(bool isHere) => PickWhere(isHere)">
+            <BitChoiceGroupOption Value="false" Text="@Localizer[nameof(AppStrings.SetupProjectInRepository)]" />
+            <BitChoiceGroupOption Value="true" Text="@Localizer[nameof(AppStrings.SetupProjectOnThisComputer)]" />
+        </BitChoiceGroup>
+
+        @if (isOnThisComputer)
+        {
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.SetupProjectOnThisComputerHint)]
+            </BitText>
+        }
+        else
+        {
+            <BitTextField Label="@Localizer[nameof(AppStrings.SetupProjectRepositoryLabel)]"
+                          Placeholder="https://github.com/acme/Bluebird"
+                          Description="@Localizer[nameof(AppStrings.SetupProjectRepositoryHint)]"
+                          ErrorMessage="@RepositoryError(answers)"
+                          Value="@repository" ValueChanged="(string? value) => Locate(value)"
+                          Immediate DebounceTime="300" Trim
+                          Type="BitInputType.Url" InputMode="BitInputMode.Url"
+                          AutoCorrect="false" SpellCheck="false" AutoCapitalize="off"
+                          InputHtmlAttributes="@ltrInput" FullWidth />
+
+            @if (answers.IsRepositoryValid)
+            {
+                @* The address keeps its own order inside a right-to-left sentence *@
+                <BitMessage Color="BitColor.Warning" Variant="BitVariant.Outline" Tinted Multiline Class="sp-trust">
+                    @Localizer[nameof(AppStrings.SetupProjectTrustWarning), $"⁨{answers.RepositoryAddress}⁩"]
+                </BitMessage>
+            }
+        }
+    </NewProjectQuestion>
+
+    <NewProjectDevicesQuestion OffersLater="false" />
+
+    <SetupProjectGetIt Setup="answers" />
+
+    <NewProjectHelp />
+</div>
+</CascadingValue>

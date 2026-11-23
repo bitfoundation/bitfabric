@@ -1,0 +1,25 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// The frame of the home page directions (HomeDirectionsPage): one column, calm room between the bands
+.cmp-page {
+    display: flex;
+    flex-direction: column;
+    gap: 4.5rem;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 4rem;
+    color: $bit-color-foreground-primary;
+
+    @include lt-md {
+        gap: 3.5rem;
+        padding: 2rem 1rem 3rem;
+    }
+}
+
+// Takes the focus only from the page itself, to bring the view back to the top; it is never drawn
+.cmp-top {
+    display: block;
+    height: 0;
+    outline: none;
+}

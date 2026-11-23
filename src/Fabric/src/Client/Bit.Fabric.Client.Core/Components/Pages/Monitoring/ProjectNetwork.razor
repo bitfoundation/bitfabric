@@ -1,0 +1,38 @@
+@inherits AppComponentBase
+
+<section class="network" aria-labelledby="network-title">
+    <BitStack Gap="0.25rem">
+        <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="network-title">@Localizer[nameof(AppStrings.MonitoringWhereYourAppIsCheckedFrom)]</BitText>
+        <BitText Typography="BitTypography.Body2" Color="BitColor.SecondaryForeground">
+            @Localizer[nameof(AppStrings.MonitoringNetworkAbout)]
+        </BitText>
+    </BitStack>
+
+    <BitCard FullWidth NoShadow NoPadding Outlined Border="BitColorKind.Secondary">
+        <div class="location">
+            <BitCheckbox Value="true" ReadOnly Label="@Localizer[nameof(AppStrings.MonitoringLocationGermany)]" Description="@Localizer[nameof(AppStrings.MonitoringGermanyAbout)]" />
+        </div>
+
+        <div class="network-head">
+            <BitIcon IconName="@BitIconName.Globe" Size="BitSize.Small" Color="BitColor.Primary" />
+            <BitText Typography="BitTypography.Caption1" Weight="BitFontWeight.Semibold">@Localizer[nameof(AppStrings.MonitoringOnTheNetwork)]</BitText>
+        </div>
+
+        @foreach (var location in NetworkLocations.All)
+        {
+            <div class="location" @key="location.Code">
+                <BitCheckbox Value="picked.Contains(location.Code)"
+                             ValueChanged="WrapHandled<bool>(isPicked => Pick(location, isPicked))"
+                             Label="@Localizer[location.NameKey]"
+                             Description="@ReadingText(location)" />
+            </div>
+        }
+    </BitCard>
+
+    <div class="network-actions">
+        <BitButton IconName="@BitIconName.Save" Loading="isSaving" Disabled="IsChanged is false" OnClick="WrapHandled(Save)">@Localizer[nameof(AppStrings.MonitoringSaveLocations)]</BitButton>
+        <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">
+            @Localizer[nameof(AppStrings.MonitoringLocationHelp)]
+        </BitText>
+    </div>
+</section>

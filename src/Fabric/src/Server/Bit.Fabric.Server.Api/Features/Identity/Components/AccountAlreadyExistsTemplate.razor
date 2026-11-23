@@ -1,0 +1,18 @@
+@*
+    Signing up with an email that already has an account looks exactly like a new sign-up, so the sign-up form can't be
+    used to find out who has an account here. The real owner gets this email instead: if it was them, it links to sign-in
+    and to the password reset; if not, they can ignore it (See IdentityController.SignUp).
+*@
+<EmailLayout Title="@EmailLocalizer[nameof(EmailStrings.AccountExistsSubject)]"
+             Preheader="@EmailLocalizer[nameof(EmailStrings.AccountExistsPreheader)]"
+             Heading="@EmailLocalizer[nameof(EmailStrings.AccountExistsHeading)]"
+             WebAppUrl="@HttpContext.Request.GetWebAppUrl()"
+             Why="@EmailLocalizer[nameof(EmailStrings.AccountExistsWhy)]">
+    <EmailGreeting Name="@Model.DisplayName" />
+    <EmailParagraph>@EmailLocalizer[nameof(EmailStrings.AccountExistsBody)]</EmailParagraph>
+    <EmailButton Href="@Model.SignInLink" Text="@EmailLocalizer[nameof(EmailStrings.SignInButton)]" WithFallback="false" />
+    <p class="bf-muted" style="@EmailStyles.Small padding-top:20px;">
+        @EmailLocalizer[nameof(EmailStrings.AccountExistsForgotLead)]
+        <a href="@Model.ForgotPasswordLink.AbsoluteUri" target="_blank" class="bf-link" style="@EmailStyles.Link">@EmailLocalizer[nameof(EmailStrings.AccountExistsForgotLink)]</a>
+    </p>
+</EmailLayout>

@@ -1,0 +1,12 @@
+{
+    "appHost": {
+        "path": "src/Server/Bit.Fabric.Server.AppHost/Bit.Fabric.Server.AppHost.csproj"
+    },
+    "features": {
+        "deployCommandEnabled": true,
+        "execCommandEnabled": true,
+        "defaultWatchEnabled": true,
+        "aspireSkillsRemoteFetchEnabled": true,
+        "terminalCommandsEnabled": true
+    }
+}

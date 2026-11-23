@@ -1,0 +1,92 @@
+@inherits AppComponentBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+
+@* bitfabric.co/about: who and what is behind bit Fabric, a sibling of the home page. Each app's own
+   About page renders it, since the apps on Android, iOS, Windows and macOS know things of themselves only their platform can
+   tell, and passes that in for the last section. Its title is its one h1, as on the home page: the header shows no title for a
+   page that gives it none. *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+}
+
+<AppPageData PageTitle="@Localizer[nameof(AppStrings.AboutBitFabricPageTitle)]"
+             Description="@Localizer[nameof(AppStrings.AboutBitFabricPageDescription)]">
+    <Head>
+        <script type="application/ld+json">@((MarkupString)BuildJsonLd())</script>
+    </Head>
+</AppPageData>
+
+<div class="ah-page">
+    <section class="ah-hero">
+        <span class="ah-eyebrow">@Localizer[nameof(AppStrings.AboutEyebrow)]</span>
+        <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">@Localizer[nameof(AppStrings.AboutTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">@Localizer[nameof(AppStrings.AboutLead)]</BitText>
+    </section>
+
+    @* 1. The brand story: bit gives the warp, the base that is ready on day one, and you weave the weft *@
+    <section class="ah-band" id="ah-story" aria-labelledby="ah-story-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="story" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AboutStoryTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AboutStoryIntro)]</BitText>
+        </header>
+        @* The warp across the whole width, a few rows of weft woven through it, and the blue one, yours, still being woven *@
+        <div class="ab-weave">
+            <svg viewBox="0 0 @WeaveWidth @WeaveHeight" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                @foreach (var x in WarpXs)
+                {
+                    <rect class="ab-warp" x="@x" y="0" width="@ThreadWidth" height="@WeaveHeight" rx="@(ThreadWidth / 2)" />
+                }
+                @foreach (var (y, length, isYours) in WeftRows)
+                {
+                    <rect class="@(isYours ? "ab-weft is-yours" : "ab-weft")" x="0" y="@y" width="@length" height="@ThreadWidth" rx="@(ThreadWidth / 2)" />
+                }
+                @foreach (var (x, y) in WarpOverWeft)
+                {
+                    <rect class="ab-warp" x="@x" y="@y" width="@ThreadWidth" height="@ThreadWidth" />
+                }
+            </svg>
+        </div>
+        <AppHomeTiles Tiles="Story" HeadingElement="@cardHeading" MinWidth="16rem" />
+    </section>
+
+    @* 2. The design principles bit Fabric is built on, each in a sentence or two a visitor who doesn't build software follows *@
+    <section class="ah-band" id="ah-principles" aria-labelledby="ah-principles-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="principles" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AboutPrinciplesTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AboutPrinciplesIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="Principles" HeadingElement="@cardHeading" MinWidth="18rem" />
+    </section>
+
+    @* 3. Who makes it: the company as FabricSite holds it and the team behind bit platform, as /trust shows them *@
+    <section class="ah-band" id="ah-who" aria-labelledby="ah-who-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="who" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AboutWhoTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AboutWhoIntro), FabricSite.LegalName]</BitText>
+        </header>
+        <AppHomeCompany HeadingElement="@cardHeading" />
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@TrustUrl" IconName="@BitIconName.Shield">@Localizer[nameof(AppStrings.AboutSeeTrust)]</BitButton>
+            <BitButton Variant="BitVariant.Outline" Href="@PricingUrl" IconName="@BitIconName.Savings">@Localizer[nameof(AppStrings.AppHomeSeePricing)]</BitButton>
+            <BitButton Variant="BitVariant.Outline" Href="@TermsUrl" IconName="@BitIconName.EntityExtraction">@Localizer[nameof(AppStrings.TrustLegalLink)]</BitButton>
+        </div>
+    </section>
+
+    <section class="ah-final">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeFinalTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeFinalText)]</BitText>
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+
+    @* 4. What a user of the installed app needs from this page, as the app tells it: its version above all, and the licenses of
+       the open-source software in it, on a page of their own *@
+    <section class="ah-band ab-this-app" id="ah-this-app" aria-labelledby="ah-this-app-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="this-app" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AboutThisAppTitle)]" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AboutThisAppIntro)]</BitText>
+        </header>
+        @ChildContent
+        <BitLink Href="@LicensesUrl" Class="ab-licenses">@Localizer[nameof(AppStrings.AboutLicensesLink)]</BitLink>
+    </section>
+</div>

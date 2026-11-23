@@ -1,0 +1,30 @@
+@inherits AppComponentBase
+
+<article class="ah-card">
+    <div class="ah-card-top">
+        <BitIcon IconName="@Feature.Icon" Variant="BitVariant.Fill" Circular="true" Class="ah-card-icon" />
+
+        @if (Feature.Badge is not null)
+        {
+            <span class="ah-card-badge">@Feature.Badge</span>
+        }
+
+        @if (Feature.Url is not null)
+        {
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.OpenInNewWindow" Class="ah-card-info"
+                       Title="@InfoLabel" AriaLabel="@InfoLabel" Href="@Feature.Url" Target="_blank" />
+        }
+        else if (Feature.Explained)
+        {
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Info" Class="ah-card-info"
+                       Title="@InfoLabel" AriaLabel="@InfoLabel" OnClick="() => OnExplain.InvokeAsync(Feature)" />
+        }
+    </div>
+
+    <div class="ah-card-body">
+        <BitText Typography="BitTypography.Subtitle1" Element="@HeadingElement" Class="ah-card-title">@Feature.Title</BitText>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Feature.Text</BitText>
+    </div>
+
+    @ChildContent
+</article>

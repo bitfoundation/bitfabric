@@ -1,0 +1,11 @@
+<EmailLayout Title="@EmailLocalizer[nameof(EmailStrings.OtpCodeSubject), Model.Token]"
+             Preheader="@EmailLocalizer[nameof(EmailStrings.OtpPreheader)]"
+             Heading="@EmailLocalizer[nameof(EmailStrings.OtpHeading)]"
+             WebAppUrl="@HttpContext.Request.GetWebAppUrl()"
+             Why="@EmailLocalizer[nameof(EmailStrings.OtpWhy)]">
+    <EmailGreeting Name="@Model.DisplayName" />
+    <EmailParagraph>@EmailLocalizer[nameof(EmailStrings.OtpCodeIntro)]</EmailParagraph>
+    <EmailCode Code="@Model.Token" ValidFor="@Model.ValidFor" />
+    <EmailParagraph>@EmailLocalizer[nameof(EmailStrings.OtpButtonIntro)]</EmailParagraph>
+    <EmailButton Href="@Model.Link" Text="@EmailLocalizer[nameof(EmailStrings.SignInButton)]" />
+</EmailLayout>

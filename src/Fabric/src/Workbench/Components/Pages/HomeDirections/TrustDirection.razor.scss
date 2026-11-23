@@ -1,0 +1,44 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// The company's card beside the team's three tiles, one under the other on a phone
+.tr-who {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.tr-services {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+// The customers' names in quiet tiles, where their logos go once each one agrees
+.tr-customers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: grid;
+        place-items: center;
+        min-height: 5rem;
+        padding: 1rem;
+        border: 1px solid $bit-color-border-secondary;
+        border-radius: $bit-shape-radius-surface;
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-lg;
+        font-weight: $bit-typography-fw-semibold;
+        letter-spacing: -.01em;
+        text-align: center;
+    }
+}

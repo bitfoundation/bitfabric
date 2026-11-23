@@ -1,0 +1,44 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.db {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    scroll-margin-top: 1rem;
+}
+
+.db-head {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    max-width: 46rem;
+}
+
+::deep .db-answer {
+    font-size: $bit-typography-fs-lg;
+    font-weight: $bit-typography-fw-medium;
+    line-height: 1.45;
+    text-wrap: pretty;
+}
+
+::deep .db-intro {
+    text-wrap: pretty;
+}
+
+::deep .db-line {
+    max-width: 48rem;
+    font-weight: $bit-typography-fw-semibold;
+    text-wrap: balance;
+}
+
+.db-note {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+    max-width: 48rem;
+
+    ::deep .db-note-icon {
+        flex-shrink: 0;
+        margin-top: .125rem;
+    }
+}

@@ -1,0 +1,18 @@
+@* [mirror] each app's About page - keep in sync with:
+   - src/Client/Bit.Fabric.Client.Maui/Components/Pages/AboutPage.razor
+   - src/Client/Bit.Fabric.Client.Windows/Components/Pages/AboutPage.razor *@
+@attribute [Route(PageUrls.About)]
+@attribute [Route("{culture?}" + PageUrls.About)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppPageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home
+
+@* bit Fabric's About page is Client.Core's (bitfabric-internal/specs/home-page.md, 2026-11-19); its last section is what
+   this app tells of itself. Server.Web prerenders this one for bitfabric.co. *@
+<AboutBitFabric>
+    <AppInfoCard AppName="@AboutBitFabric.AppName"
+                 AppVersion="@appVersion"
+                 Platform="@platform"
+                 Environment="@AppEnvironment.Current"
+                 Oem="@oem" />
+</AboutBitFabric>

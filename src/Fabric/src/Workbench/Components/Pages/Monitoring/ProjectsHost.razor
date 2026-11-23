@@ -1,0 +1,18 @@
+@* The app's own projects page (src/Client/Bit.Fabric.Client.Core/Components/Pages/Monitoring/ProjectsPage.razor) on the sample world. *@
+@inherits MonitoringHost
+
+@if (IsReady is false)
+{
+    <AppPagePlaceholder />
+}
+else if (NoTeamState is { } noTeam)
+{
+    @* Signed in, without a team yet: the same user without the tenant claim, for this page only. *@
+    <CascadingValue Value="noTeam">
+        <ProjectsPage @key="pageKey" />
+    </CascadingValue>
+}
+else
+{
+    <ProjectsPage @key="pageKey" />
+}

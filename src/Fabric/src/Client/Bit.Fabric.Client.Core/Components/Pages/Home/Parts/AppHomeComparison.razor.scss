@@ -1,0 +1,19 @@
+@import '../../../../Styles/abstracts/_media-queries.scss';
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+@import '_app-home-table.scss';
+
+.ahx {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+::deep .ah-compare-promise {
+    max-width: 48rem;
+    font-weight: $bit-typography-fw-semibold;
+    text-wrap: balance;
+}
+
+::deep .ah-compare-note {
+    max-width: 48rem;
+}

@@ -1,0 +1,45 @@
+# bit Fabric
+
+> bit Fabric starts your app full featured on web, Android, iOS, Windows and macOS. Your own AI builds your idea on top of it, on your computer, and the app runs on your own server, so the code, the data and the users are yours from the first line. bit Fabric never has your prompts, your code or your users' data: what your AI sees is between you and the AI you choose.
+
+bit Fabric is made by the team behind bit platform, the open-source project every app made with it is built on. It isn't a hosted app builder: it doesn't make apps from a description, host your app, route your prompts or sell AI credits. There is nothing to export, because nothing of yours is with us.
+
+How it works:
+
+1. Answer a few questions at {{Origin}}/en-US/new: a name, the platforms you want and what the app must do. No account is needed, and bit Fabric keeps nothing you pick.
+2. Paste the one line the page gives you. Its installer is a short script you can read first, and it keeps its tools in your user folder, without administrator rights. Your project then lands on your computer.
+3. The project starts full featured, built and tested before your first prompt: a complete identity solution (passkeys, two-step sign-in, social sign-in, magic links, Face ID and fingerprint, enterprise single sign-on, a session per device), many companies in one app, an admin panel with a live dashboard, an AI assistant inside your app, any language with right to left, offline support, GDPR tools, and apps for web, Android, iOS, Windows and macOS from one codebase.
+4. Your own AI builds your idea on it: Claude Code, GitHub Copilot, Cursor, Codex, Gemini, Antigravity or a model on your own computer. The project's skills guide it to ask what it needs to know, plan, show you the design on every device in the Workbench, then build, test and review its work before it says it's done.
+5. You deploy to any Linux server, through the pipeline in your own repository. bit Fabric can then watch the live app: health checks from Germany, North America and Oceania, alerts in Slack, Teams and Discord, a status page on your own domain, and scans for security, performance, SEO and accessibility, each finding with a fix your AI applies. It reads only the app's health report and what any visitor can see, never its data.
+
+What it costs: nobody pays bit Fabric during the beta, and no account is needed to start. bit Fabric sells no AI credits: you use your own AI plan. Your minimum is a Linux server from about €4 a month and a domain, with your AI plan on top, and the app stores' accounts only if you publish there. bitfabric.co itself runs on €11 a month with every optional item on, itemized on the home page.
+{{IfPricing}}After the beta, the planned license is free if you can't pay, €10 a month for up to 3 projects, or €200 a month for every project of one company. The plans start after the beta, and are announced on the pricing page before they apply.
+{{IfNoPricing}}What comes after the beta isn't decided yet, and will be published on the pricing page before it applies.
+
+If bit Fabric stops: your app and its database keep running on your server, your code stays in your repository, and the pipeline keeps building and deploying it. Only what runs on bitfabric.co stops: monitoring, alerts and status pages. The app's health report is plain HTTP any other monitor can read, and the health history and SLA reports can be exported.
+
+## Start
+
+- [Get started]({{Origin}}/en-US/new): a few questions, then the one line that creates your project on your computer. bit Fabric keeps nothing you pick.
+- [Start with your AI agent]({{Origin}}/en-US/for): what each agent reads in a project on its own, how it calls a skill, how to start and what it costs, each fact from the agent's own documentation (read 21 November 2026). One page each: [GitHub Copilot]({{Origin}}/en-US/for/github-copilot), [Claude Code]({{Origin}}/en-US/for/claude-code), [Codex]({{Origin}}/en-US/for/codex), [Cursor]({{Origin}}/en-US/for/cursor), [Antigravity]({{Origin}}/en-US/for/antigravity), [Gemini CLI]({{Origin}}/en-US/for/gemini-cli), [Junie]({{Origin}}/en-US/for/junie) and [Devin Desktop, where windsurf.com leads]({{Origin}}/en-US/for/windsurf); and the models they take: [a model on your computer]({{Origin}}/en-US/for/local-models) and [DeepSeek, Qwen, Kimi, GLM and MiniMax with your own key]({{Origin}}/en-US/for/chinese-models).
+- [Set up an existing project]({{Origin}}/en-US/setup): a teammate's project, or yours on another computer, from its repository's address.
+
+## Product
+
+- [Home]({{Origin}}/en-US/): where each piece lives, what every project starts with, how bit Fabric compares, what this site costs to run, and what happens if bit Fabric stops.
+- [What every project comes with]({{Origin}}/en-US/features): every feature, each with a short film described in text.
+{{IfPricing}}- [Pricing]({{Origin}}/en-US/pricing): the plans by project (free if you can't pay, €10 or €200 a month; nobody pays during the beta), who pays what, an example month on a hosted builder and with bit Fabric, what a license gives, what stays true whatever you pay, and what you pay others, written out. The same as Markdown: [pricing.md]({{Origin}}/pricing.md).
+- [Why a real app costs less]({{Origin}}/en-US/cost): judge the cost of your project, not the price of a token. What counts is the tokens a task takes, which Anthropic's own Opus and Sonnet figures illustrate (twice the price per token, only about 7% more per solved task; read 21 November 2026), and more still the tokens a whole project takes, where bit Fabric has already built and tested much of it and its way of working cuts the rounds of rework. The same as Markdown: [cost.md]({{Origin}}/cost.md).
+- [How bit Fabric compares]({{Origin}}/en-US/compare): bit Fabric side by side with hosted AI builders, your own AI on an empty project and starter kits, each fact about another product with its source and the day it was read (19 November 2026). One page each: [Lovable]({{Origin}}/en-US/compare/lovable), [Bolt]({{Origin}}/en-US/compare/bolt), [Base44]({{Origin}}/en-US/compare/base44), [Replit]({{Origin}}/en-US/compare/replit), [v0]({{Origin}}/en-US/compare/v0), [your AI on an empty project]({{Origin}}/en-US/compare/empty-project) and [starter kits]({{Origin}}/en-US/compare/starter-kits).
+
+## Company and legal
+
+- [About bit Fabric]({{Origin}}/en-US/about): what the name means (the warp is ready; you weave the weft), the principles bit Fabric is built on, and who makes it.
+- [Who makes bit Fabric, and what it can see]({{Origin}}/en-US/trust): the company behind it, what bit Fabric sees and never sees of your project, where everything of yours lives, how to check it yourself and how to report a security problem.
+- [Privacy notice and terms of use]({{Origin}}/en-US/terms): what bitfabric.co holds about you, why and for how long, and the terms of use.
+
+## Optional
+
+- [Everything on one page]({{Origin}}/en-US/contents): the home page as it was until 18 November 2026, every band of it.
+- [A live admin panel](https://adminpanel.bitplatform.dev/): an app made from the same starting point, to see how complete day one can be.
+- [bit platform on GitHub](https://github.com/bitfoundation/bitplatform): the open-source project every app made with bit Fabric is built on.

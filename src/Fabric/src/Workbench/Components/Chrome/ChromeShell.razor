@@ -1,0 +1,119 @@
+@* [mirror] app chrome - nav panel, header, account menu and bottom bar - keep in sync with: *@
+@* - src/Client/Bit.Fabric.Client.Core/Components/Layout/AppShell.razor *@
+@* - src/Client/Bit.Fabric.Client.Core/Components/Layout/Header/Header.razor *@
+@* - src/Client/Bit.Fabric.Client.Core/Components/Layout/NavBar.razor *@
+@* - src/Client/Bit.Fabric.Client.Core/Components/Layout/MainLayout.razor.items.cs *@
+@inherits WorkbenchComponentBase
+
+<CascadingValue Value="this" IsFixed>
+    <BitAppShell PersistScroll ScrollPadding="5rem 0 4rem">
+        <main>
+            <div class="main-container">
+                @* Nav panel: the app's pages, the showcases, and sign-in, tenant and version in its footer *@
+                <BitNavPanel IsOpen="chromeStore.IsNavPanelOpen"
+                             IsOpenChanged="chromeStore.OpenNavPanel"
+                             Toggled="chromeStore.IsNavPanelToggled"
+                             ToggledChanged="chromeStore.ToggleNavPanel"
+                             IconNavUrl="#"
+                             Class="nav-panel"
+                             Classes="@(new() { Header = "nav-panel-header", HeaderIcon = "nav-panel-logo" })"
+                             SearchBoxClasses="@(new() { InputContainer = "nav-panel-search" })"
+                             Items="navPanelItems"
+                             IconUrl="_content/Bit.Fabric.Client.Core/images/bit-logo.svg">
+                    <Footer>
+                        <BitStack Class="footer-stack">
+                            @if (IsSignedIn is false)
+                            {
+                                <BitActionButton IconOnly="chromeStore.IsNavPanelToggled"
+                                                 IconName="@BitIconName.Signin"
+                                                 Title="@AppLocalizer[nameof(AppStrings.SignIn)]"
+                                                 AriaLabel="@AppLocalizer[nameof(AppStrings.SignIn)]"
+                                                 OnClick="ShowSignInNote">
+                                    @AppLocalizer[nameof(AppStrings.SignIn)]
+                                </BitActionButton>
+                                <BitActionButton IconOnly="chromeStore.IsNavPanelToggled"
+                                                 IconName="@BitIconName.UserWindow"
+                                                 Title="@AppLocalizer[nameof(AppStrings.SignInByModal)]"
+                                                 AriaLabel="@AppLocalizer[nameof(AppStrings.SignInByModal)]"
+                                                 OnClick="ShowSignInNote">
+                                    @AppLocalizer[nameof(AppStrings.SignInByModal)]
+                                </BitActionButton>
+                                <BitActionButton IconOnly="chromeStore.IsNavPanelToggled"
+                                                 IconName="@BitIconName.AddFriend"
+                                                 Title="@AppLocalizer[nameof(AppStrings.SignUp)]"
+                                                 AriaLabel="@AppLocalizer[nameof(AppStrings.SignUp)]"
+                                                 OnClick="ShowSignInNote">
+                                    @AppLocalizer[nameof(AppStrings.SignUp)]
+                                </BitActionButton>
+                            }
+                            @if (chromeStore.IsNavPanelToggled is false)
+                            {
+                                @if (IsSignedIn)
+                                {
+                                    <BitActionButton Class="current-tenant" IconName="@BitIconName.Org" Title="@AppLocalizer[nameof(AppStrings.CurrentTenant)]" NoWrap>
+                                        <BitText Typography="BitTypography.Caption2">@Localizer[TenantKey]</BitText>
+                                    </BitActionButton>
+                                }
+                                <BitActionButton Class="app-version">
+                                    <BitText Class="app-latin-digits" Typography="BitTypography.Caption2">0.0.1</BitText>
+                                </BitActionButton>
+                            }
+                        </BitStack>
+                    </Footer>
+                </BitNavPanel>
+
+                <div class="main-body">
+                    @* Header: the menu button on phones, the page title and the account menu *@
+                    <header>
+                        <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.25rem">
+                            <BitButton IconOnly FixedColor
+                                       Class="menu-btn"
+                                       Size="BitSize.Large"
+                                       OnClick="OpenNavPanel"
+                                       Variant="BitVariant.Text"
+                                       Color="BitColor.SecondaryBackground"
+                                       IconName="@BitIconName.CollapseMenu"
+                                       Title="@AppLocalizer[nameof(AppStrings.OpenNavigationMenuTitle)]"
+                                       AriaLabel="@AppLocalizer[nameof(AppStrings.OpenNavigationMenuTitle)]" />
+
+                            <BitStack VerticalAlign="BitAlignment.Center" Gap="0.5rem" AutoSize>
+                                @if (ShowsTitle)
+                                {
+                                    <BitText Typography="BitTypography.H5" Element="h1">@Localizer[Page.TitleKey]</BitText>
+                                }
+                            </BitStack>
+
+                            <BitSpacer />
+
+                            <ChromeAppMenu />
+                        </BitStack>
+                    </header>
+
+                    <div class="body">
+                        @ChildContent
+                    </div>
+                </div>
+            </div>
+
+            @* Bottom bar for phone widths *@
+            <section class="nav-bar">
+                <BitNavBar FullWidth TItem="BitNavBarOption">
+                    @* As the app's NavBar: what a visitor on a phone looks for next *@
+                    <BitNavBarOption Text="@AppLocalizer[nameof(AppStrings.Pricing)]" IconName="@BitIconName.Savings" Url="@PageUrl("app-pricing", "#pricing")" />
+
+                    @* The showcase in the view, unless a signed-out visitor can't open it; the app's own pages keep the app's bar *@
+                    @if (Page.Key != "dashboard" && IsAppPage(Page) is false && (IsSignedIn || Page.NeedsSignIn is false))
+                    {
+                        <BitNavBarOption Text="@Localizer[Page.TitleKey]" IconName="@Page.IconName" Url="@currentPageUrl" />
+                    }
+
+
+
+                    <BitNavBarOption Text="@AppLocalizer[nameof(AppStrings.Compare)]" IconName="@BitIconName.Table" Url="@PageUrl("app-compare", "#compare")" />
+
+                    <BitNavBarOption Text="@AppLocalizer[nameof(AppStrings.Trust)]" IconName="@BitIconName.Shield" Url="@PageUrl("app-trust", "#trust")" />
+                </BitNavBar>
+            </section>
+        </main>
+    </BitAppShell>
+</CascadingValue>

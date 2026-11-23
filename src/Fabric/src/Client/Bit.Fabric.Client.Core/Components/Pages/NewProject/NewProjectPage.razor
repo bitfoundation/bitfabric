@@ -1,0 +1,120 @@
+@attribute [Route(PageUrls.NewProject)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.NewProject)]
+@inherits AppPageBase
+
+<AppPageData Title="@Localizer[nameof(AppStrings.NewProjectSetUpTitle)]"
+             PageTitle="@Localizer[nameof(AppStrings.NewProjectPageTitle)]"
+             Description="@Localizer[nameof(AppStrings.NewProjectPageDescription)]" />
+
+@* The parts read the answers from the page's state; the app's shell already shows the brand, so the page's bar keeps only its help *@
+<CascadingValue Value="state" IsFixed="true">
+<div class="np-page">
+    <header class="np-bar">
+        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Unknown"
+                   OnClick="() => OpenHelp(NewProjectHelpTopics.General)">@Localizer[nameof(AppStrings.NewProjectQuestions)]</BitButton>
+    </header>
+
+    <div class="np-split">
+        <div class="np-split-main">
+            <div class="np-intro">
+                <BitText Typography="BitTypography.H3" Element="h2" Class="np-title">@Localizer[nameof(AppStrings.NewProjectSetUpTitle)]</BitText>
+                <nav class="np-stepper" aria-label="@Localizer[nameof(AppStrings.NewProjectSteps)]">
+                    <ol>
+                        @for (var i = 0; i < StepTitles.Length; i++)
+                        {
+                            var index = i;
+                            <li class="@(index == CurrentStep ? "is-current" : index < CurrentStep ? "is-done" : null)">
+                                <BitButton Variant="BitVariant.Text" Size="BitSize.Small" Class="np-stepper-step"
+                                           aria-current="@(index == CurrentStep ? "step" : null)"
+                                           OnClick="() => Store.GoToStep(index)">
+                                    <span class="np-stepper-number">@(index + 1)</span>
+                                    <span class="np-stepper-title">@StepTitles[index]</span>
+                                </BitButton>
+                            </li>
+                        }
+                    </ol>
+                    <span class="np-stepper-compact">@Localizer[nameof(AppStrings.NewProjectStepOf), CurrentStep + 1, StepTitles.Length, StepTitles[CurrentStep]]</span>
+                </nav>
+            </div>
+
+            <div class="np-step">
+                @switch (CurrentStep)
+                {
+                    case 0:
+                        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="np-lede">@Localizer[nameof(AppStrings.NewProjectLede)]</BitText>
+                        <NewProjectNameQuestion />
+                        <NewProjectGoalQuestion />
+                        break;
+                    case 1:
+                        <NewProjectStartQuestion />
+                        <NewProjectCustomersQuestion />
+                        break;
+                    case 2:
+                        <NewProjectFeaturesQuestion />
+                        <NewProjectErrorsQuestion />
+                        break;
+                    case 3:
+                        <NewProjectDevicesQuestion />
+                        break;
+                    default:
+                        <div class="np-step-summary">
+                            <NewProjectSummary />
+                        </div>
+                        <div class="np-more">
+                            <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
+                                       IconName="@(Store.IsMoreOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
+                                       aria-expanded="@(Store.IsMoreOpen ? "true" : "false")"
+                                       OnClick="() => Store.ShowMore(Store.IsMoreOpen is false)"
+                                       Class="np-more-toggle">@Localizer[nameof(AppStrings.NewProjectTechnicalChoices)]</BitButton>
+                            @if (Store.IsMoreOpen)
+                            {
+                                <NewProjectTechnicalQuestion HeadingElement="h2" />
+                            }
+                            <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
+                                       IconName="@(Store.IsSuperTechnicalOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
+                                       aria-expanded="@(Store.IsSuperTechnicalOpen ? "true" : "false")"
+                                       OnClick="() => Store.ShowSuperTechnical(Store.IsSuperTechnicalOpen is false)"
+                                       Class="np-more-toggle">@SuperTechnicalSummary</BitButton>
+                            @if (Store.IsSuperTechnicalOpen)
+                            {
+                                <NewProjectSuperTechnicalQuestion HeadingElement="h2" />
+                            }
+                        </div>
+                        <NewProjectGetIt />
+                        break;
+                }
+            </div>
+
+            <div class="np-nav">
+                @if (CurrentStep > 0)
+                {
+                    <BitButton Variant="BitVariant.Outline" IconName="@BackIcon" OnClick="() => Store.GoToStep(CurrentStep - 1)">@Localizer[nameof(AppStrings.NewProjectBack)]</BitButton>
+                }
+                @if (CurrentStep < StepTitles.Length - 1)
+                {
+                    <BitButton OnClick="() => Store.GoToStep(CurrentStep + 1)">@(CurrentStep == StepTitles.Length - 2 ? Localizer[nameof(AppStrings.NewProjectShowHowToGetIt)] : Localizer[nameof(AppStrings.NewProjectNext)])</BitButton>
+                }
+                else
+                {
+                    <BitButton Variant="BitVariant.Text" IconName="@BitIconName.Refresh" OnClick="() => Store.StartOver()">@Localizer[nameof(AppStrings.NewProjectStartOver)]</BitButton>
+                }
+            </div>
+            @if (CurrentStep < StepTitles.Length - 1)
+            {
+                <p class="np-reassure"><BitIcon IconName="@BitIconName.Lightbulb" Class="np-reassure-icon" />@Localizer[nameof(AppStrings.NewProjectReassure)]</p>
+            }
+        </div>
+        <aside class="np-split-aside @(CurrentStep is 0 or 4 ? null : "is-quiet")" aria-label="@Localizer[nameof(AppStrings.NewProjectStepProduct)]">
+            <div class="np-sticky">
+                <NewProjectPreview />
+                @if (CurrentStep < StepTitles.Length - 1)
+                {
+                    <NewProjectSummary ShowsList="false" />
+                }
+            </div>
+        </aside>
+    </div>
+
+    <NewProjectHelp />
+</div>
+</CascadingValue>

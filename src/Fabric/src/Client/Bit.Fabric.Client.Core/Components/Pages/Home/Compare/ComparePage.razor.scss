@@ -1,0 +1,59 @@
+@import '../_app-home-page.scss';
+@import '../Parts/_app-home-table.scss';
+
+// bit Fabric's name stays whole when the title wraps
+.cmp-brand {
+    white-space: nowrap;
+}
+
+// The way back to the hub, small, above the hero
+.cmp-crumbs {
+    margin-bottom: -2.5rem;
+    font-size: $bit-typography-fs-sm;
+}
+
+// The arrows point the way the text reads, in either direction
+::deep .cmp-back-icon,
+::deep .cmp-forward-icon {
+    vertical-align: -.125em;
+
+    &:dir(rtl) {
+        transform: scaleX(-1);
+    }
+}
+
+::deep .cmp-back-icon {
+    margin-inline-end: .375rem;
+}
+
+::deep .cmp-forward-icon {
+    margin-inline-start: .25rem;
+}
+
+// A page with one other column gives its topics room; the hub's four columns leave them a narrower one
+.cmp-table tbody th {
+    width: 14rem;
+}
+
+.cmp-table-wide tbody th {
+    width: 10rem;
+}
+
+// The products a column stands for, under its name
+.cmp-column-note {
+    display: block;
+    margin-top: .125rem;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-regular;
+}
+
+::deep .cmp-source-line {
+    max-width: 48rem;
+    text-wrap: pretty;
+}
+
+::deep .cmp-card-link {
+    margin-top: .25rem;
+    font-weight: $bit-typography-fw-medium;
+}

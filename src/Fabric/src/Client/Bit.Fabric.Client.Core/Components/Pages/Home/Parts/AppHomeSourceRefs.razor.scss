@@ -1,0 +1,21 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+// The numbers of a fact's sources, small and close to the words they back
+.ahr-refs {
+    margin-inline-start: .125rem;
+    white-space: nowrap;
+}
+
+::deep .cmp-ref {
+    padding-inline: .0625rem;
+    font-size: $bit-typography-fs-xs;
+    text-decoration: none;
+}
+
+// The comma between two numbers sits up with them
+::deep .cmp-ref + .cmp-ref::before {
+    content: ",";
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    vertical-align: super;
+}

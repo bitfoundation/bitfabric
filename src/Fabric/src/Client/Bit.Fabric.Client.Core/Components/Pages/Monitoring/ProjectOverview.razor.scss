@@ -1,0 +1,148 @@
+// Takes after the app's own Operations page (Pages/Management/OperationsPage.razor.scss), so a project's page and the
+// app's Operations page read alike.
+@import '_monitoring.scss';
+
+::deep {
+    // Every surface below tints itself from its status.
+    .tone-healthy {
+        --tone: #{$bit-color-success};
+    }
+
+    .tone-degraded {
+        --tone: #{$bit-color-warning};
+    }
+
+    .tone-failing {
+        --tone: #{$bit-color-error};
+    }
+
+    .tone-notconfigured {
+        --tone: #{$bit-color-info};
+    }
+
+    .tone-neutral {
+        --tone: #{$bit-color-foreground-secondary};
+    }
+
+    .hero {
+        border: 1px solid color-mix(in srgb, var(--tone) 35%, #{$bit-color-border-secondary});
+        background: linear-gradient(135deg, color-mix(in srgb, var(--tone) 12%, transparent), transparent 55%), #{$bit-color-background-primary};
+    }
+
+    // A stack is full width by default, which would wrap each part of the hero.
+    .hero-summary {
+        width: auto;
+        flex: 1 1 22rem;
+        min-width: min(100%, 18rem);
+    }
+
+    .stat-grid {
+        gap: 0.75rem;
+        display: grid;
+        grid-auto-rows: 1fr;
+        grid-template-columns: repeat(2, 10rem);
+
+        @include xs {
+            width: 100%;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .stat {
+        height: 100%;
+        cursor: pointer;
+        border: 1px solid color-mix(in srgb, var(--tone) 30%, #{$bit-color-border-secondary});
+        background-color: color-mix(in srgb, var(--tone) 6%, #{$bit-color-background-primary});
+        transition: transform 150ms ease, border-color 150ms ease;
+
+        &:hover {
+            transform: translateY(-1px);
+            border-color: var(--tone);
+        }
+
+        &.empty {
+            --tone: #{$bit-color-foreground-secondary};
+        }
+    }
+
+    .search-box {
+        flex: 1 1 18rem;
+        max-width: 28rem;
+    }
+
+    .check-grid {
+        gap: 1rem;
+        display: grid;
+        grid-auto-rows: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr));
+    }
+
+    .check-card {
+        height: 100%;
+        border: 1px solid $bit-color-border-secondary;
+        border-top: 3px solid var(--tone);
+        transition: border-color 150ms ease, box-shadow 150ms ease;
+
+        &:hover {
+            box-shadow: $bit-box-shadow-md;
+            border-color: color-mix(in srgb, var(--tone) 45%, #{$bit-color-border-secondary});
+            border-top-color: var(--tone);
+        }
+    }
+
+    .check-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        flex-shrink: 0;
+        font-size: 1.125rem;
+        align-items: center;
+        border-radius: 0.625rem;
+        justify-content: center;
+        color: var(--tone);
+        background-color: color-mix(in srgb, var(--tone) 14%, transparent);
+    }
+
+    // A report key is code, left to right in every language.
+    .key {
+        direction: ltr;
+        text-align: start;
+        unicode-bidi: isolate;
+    }
+
+    .status-tag {
+        flex-shrink: 0;
+    }
+
+    .check-description {
+        color: var(--tone);
+    }
+
+    // A part's last results, oldest first; time runs left to right in every language.
+    .rounds {
+        gap: 3px;
+        height: 1rem;
+        display: flex;
+        direction: ltr;
+    }
+
+    .round {
+        flex: 1;
+        max-width: 0.625rem;
+        border-radius: 3px;
+        background-color: var(--tone);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::deep {
+        .stat,
+        .check-card {
+            transition: none;
+
+            &:hover {
+                transform: none;
+            }
+        }
+    }
+}

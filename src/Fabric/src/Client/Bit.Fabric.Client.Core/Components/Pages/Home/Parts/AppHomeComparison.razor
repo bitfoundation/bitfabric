@@ -1,0 +1,41 @@
+@inherits ComponentBase
+@* The two edges and bit Fabric between them. A table, so a screen reader reads each answer with its row and column; on a
+   phone each row is a card. *@
+
+<div class="ahx">
+    @{
+        var columns = Columns;
+    }
+    <table class="ah-compare" aria-labelledby="@LabelledBy" role="table">
+        <thead role="rowgroup">
+            <tr role="row">
+                <td></td>
+                @foreach (var column in columns)
+                {
+                    <th scope="col" role="columnheader">@column</th>
+                }
+            </tr>
+        </thead>
+        <tbody role="rowgroup">
+            @foreach (var row in Rows)
+            {
+                <tr role="row">
+                    <th scope="row" role="rowheader">@row.Topic</th>
+                    @for (var i = 0; i < row.Cells.Length; i++)
+                    {
+                        var (mark, text) = row.Cells[i];
+                        @* The label shows only on a phone, where the column headers are gone *@
+                        <td role="cell" data-label="@columns[i]" class="@(i == row.Cells.Length - 1 ? "is-ours" : null)">
+                            <div class="ah-compare-cell">
+                                <BitIcon IconName="@IconOf(mark)" Color="@ColorOf(mark)" Class="ah-compare-mark" />
+                                <span>@text</span>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    <BitText Typography="BitTypography.H4" Element="p" Class="ah-compare-promise">@Localizer[nameof(AppStrings.AppHomeComparePromise)]</BitText>
+    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="ah-compare-note">@Localizer[nameof(AppStrings.AppHomeCompareNote)]</BitText>
+</div>

@@ -1,0 +1,294 @@
+@import '_app-home-page.scss';
+
+// A figure's source numbers, small and up, as on the comparison pages
+.cs-refs {
+    margin-inline-start: .125rem;
+    white-space: nowrap;
+}
+
+::deep .cs-ref {
+    padding-inline: .0625rem;
+    font-size: $bit-typography-fs-xs;
+    text-decoration: none;
+}
+
+// --- The three steps of the argument ---
+
+// A step's number above its title, in a circle of the site's color
+.cs-band-step {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: $bit-typography-fs-md;
+    font-weight: $bit-typography-fw-bold;
+}
+
+// The second part of a step, set apart from the first
+.cs-part {
+    margin-top: 1rem;
+}
+
+// The conclusion, framed so it reads as where the steps lead
+.cs-conclusion {
+    padding: 2rem;
+    border: 1px solid $bit-color-primary;
+    border-radius: $bit-shape-radius-surface;
+
+    @include lt-md {
+        padding: 1.5rem 1rem;
+    }
+}
+
+// --- Fewer rounds of trial and error: building by trial, faded, against each step done once ---
+
+.cs-lanes {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.cs-lane {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+
+    @include lt-md {
+        padding: 1.25rem 1rem;
+    }
+
+    &.is-way {
+        border-color: $bit-color-primary;
+        background: $bit-color-background-secondary;
+    }
+}
+
+// The rounds of trial and error, one after another, wrapping where the screen ends
+.cs-rounds {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cs-round-item {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.cs-round {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    padding: .375rem .875rem;
+    border: 1px dashed $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+
+    &.is-again {
+        border-style: solid;
+        border-color: $bit-color-warning;
+        color: $bit-color-foreground-primary;
+    }
+}
+
+
+// Each step once, numbered by its place, side by side on a wide screen and one under the other on a phone
+.cs-steps {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: cs-step;
+
+    @include lt-lg {
+        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    }
+}
+
+.cs-step {
+    display: flex;
+    flex-direction: column;
+    gap: .375rem;
+    counter-increment: cs-step;
+}
+
+// The icon keeps its own size rather than the column's width
+::deep .cs-step-icon {
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-bottom: .25rem;
+}
+
+// The step's number before its title, in the page's own digits
+::deep .cs-step-title::before {
+    content: counter(cs-step) ". ";
+    color: $bit-color-primary;
+}
+
+// --- Tokens per task: two small panels, each on its own scale ---
+
+.cs-panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+    gap: 1rem;
+}
+
+.cs-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 1.5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-primary;
+
+    @include lt-md {
+        padding: 1.25rem 1rem;
+    }
+}
+
+.cs-panel-title {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-medium;
+}
+
+.cs-bars {
+    display: flex;
+    flex-direction: column;
+    gap: .875rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+// The model's name, its bar and its figure on one line; on a phone the name goes above them
+.cs-bar-row {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .75rem;
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr) auto;
+
+        .cs-bar-name {
+            grid-column: 1 / -1;
+        }
+    }
+}
+
+.cs-bar-name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.cs-bar-model {
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.cs-bar-setting {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+}
+
+.cs-bar-track {
+    display: block;
+    height: .875rem;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-background-tertiary;
+    overflow: hidden;
+}
+
+// The length is the bar's share of the longer one; the stronger model in the site's color, the other in a quiet gray
+.cs-bar {
+    display: block;
+    width: var(--cs-share);
+    height: 100%;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-foreground-secondary;
+
+    .is-stronger & {
+        background: $bit-color-primary;
+    }
+}
+
+.cs-bar-figure {
+    min-width: 4.5rem;
+    font-size: $bit-typography-fs-lg;
+    font-weight: $bit-typography-fw-semibold;
+    text-align: end;
+}
+
+::deep .cs-panel-line {
+    margin-top: auto;
+    text-wrap: balance;
+}
+
+// --- Sources: two columns on a wide screen, one on a phone, each with its number in a small circle ---
+
+.cs-sources {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+    gap: 1.25rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cs-source {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    min-width: 0;
+    scroll-margin-top: 1rem;
+}
+
+.cs-source-number {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.cs-source-words {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .2rem;
+    min-width: 0;
+}
+
+.cs-source-name {
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-medium;
+}
+
+// A long address wraps anywhere rather than widening the page
+::deep .cs-source-url {
+    max-width: 100%;
+    font-size: $bit-typography-fs-xs;
+    overflow-wrap: anywhere;
+}

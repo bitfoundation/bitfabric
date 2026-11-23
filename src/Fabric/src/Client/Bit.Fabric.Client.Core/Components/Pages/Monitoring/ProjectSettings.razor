@@ -1,0 +1,151 @@
+@inherits AppComponentBase
+
+<div class="settings">
+    @if (settings is null)
+    {
+        <BitShimmer Height="10rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingTheSettings)]" />
+    }
+    else
+    {
+        var project = Details.Project!;
+
+        <section class="panel" aria-labelledby="connection-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="connection-title">@Localizer[nameof(AppStrings.MonitoringTheConnection)]</BitText>
+            <dl class="facts">
+                <div><dt>@Localizer[nameof(AppStrings.MonitoringApprovedBy)]</dt><dd>@(settings.ApprovedBy ?? "—")</dd></div>
+                @if (settings.ApprovedOn is { } approvedOn)
+                {
+                    <div><dt>@Localizer[nameof(AppStrings.MonitoringApprovedOn)]</dt><dd>@LocalTime(approvedOn)</dd></div>
+                }
+                <div><dt>@Localizer[nameof(AppStrings.MonitoringReads)]</dt><dd><span class="ltr">@settings.Reads</span> @Localizer[nameof(AppStrings.MonitoringAndNothingElse)]</dd></div>
+                <div><dt>@Localizer[nameof(AppStrings.MonitoringMadeWith)]</dt><dd>@(project.TemplateVersion is { } version ? $"bit platform {version}" : "—")</dd></div>
+                <div>
+                    <dt>@Localizer[nameof(AppStrings.MonitoringRunning)]</dt>
+                    <dd>
+                        <span class="ltr">@(Details.ApplicationVersion ?? "—")</span>
+                        @if (Details.LastDeployedAt is { } deployedAt)
+                        {
+                            <text> · @Localizer[nameof(AppStrings.MonitoringDeployedAt), LocalTime(deployedAt)]</text>
+                        }
+                    </dd>
+                </div>
+            </dl>
+            @if (project.ConnectionStatus is ProjectConnectionStatus.Disconnected)
+            {
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringDisconnectedNotice)]</BitText>
+                <div class="actions">
+                    <BitButton IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(project)">@Localizer[nameof(AppStrings.MonitoringReconnect)]</BitButton>
+                </div>
+            }
+            else
+            {
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringApprovalStopsWorkingHelp)]</BitText>
+                <div class="actions">
+                    <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(project)">@Localizer[nameof(AppStrings.MonitoringReconnectAsSomeoneElse)]</BitButton>
+                    @if (isConfirmingDisconnect)
+                    {
+                        <BitButton Color="BitColor.Error" IconName="@BitIconName.PlugDisconnected" Loading="isDisconnecting" OnClick="WrapHandled(Disconnect)">@Localizer[nameof(AppStrings.MonitoringYesDisconnect), project.Name ?? ""]</BitButton>
+                        <BitButton Variant="BitVariant.Text" OnClick="() => isConfirmingDisconnect = false">@Localizer[nameof(AppStrings.Cancel)]</BitButton>
+                    }
+                    else
+                    {
+                        <BitButton Variant="BitVariant.Text" Color="BitColor.Error" IconName="@BitIconName.PlugDisconnected" OnClick="() => isConfirmingDisconnect = true">@Localizer[nameof(AppStrings.MonitoringDisconnect)]</BitButton>
+                    }
+                </div>
+                @if (isConfirmingDisconnect)
+                {
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringDisconnectHelp)]</BitText>
+                }
+            }
+        </section>
+
+        <section class="panel" aria-labelledby="checking-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="checking-title">@Localizer[nameof(AppStrings.MonitoringCheckingTitle)]</BitText>
+            <dl class="facts">
+                <div><dt>@Localizer[nameof(AppStrings.MonitoringHowOften)]</dt><dd>@(project.ConnectionStatus is ProjectConnectionStatus.Disconnected ? Localizer[nameof(AppStrings.MonitoringDisconnected)] : Localizer[nameof(AppStrings.MonitoringEveryMinute)])</dd></div>
+                <div><dt>@Localizer[nameof(AppStrings.MonitoringFromWhere)]</dt><dd>@CheckedFrom(project)</dd></div>
+            </dl>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringIncidentRuleHelp)]</BitText>
+            <div class="actions">
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Globe" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(LocationsTab))">@Localizer[nameof(AppStrings.MonitoringChangeTheLocations)]</BitButton>
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="project-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="project-title">@Localizer[nameof(AppStrings.MonitoringTheProject)]</BitText>
+            <EditForm Model="settings" OnValidSubmit="WrapHandled(Save)" class="form">
+                <AppDataAnnotationsValidator />
+                <BitTextField @bind-Value="settings.Name" Label="@Localizer[nameof(AppStrings.MonitoringProjectName)]" MaxLength="100" />
+                <ValidationMessage For="() => settings.Name" />
+                <BitTimeZonePicker TValue="string"
+                                   @bind-Value="settings.TimeZoneId"
+                                   Label="@Localizer[nameof(AppStrings.MonitoringItsTimeZone)]"
+                                   Placeholder="@Localizer[nameof(AppStrings.SelectTimeZone)]"
+                                   SearchBoxPlaceholder="@Localizer[nameof(AppStrings.FindTimeZone)]"
+                                   SearchBoxAriaLabel="@Localizer[nameof(AppStrings.FindTimeZone)]"
+                                   NoResultsMessage="@Localizer[nameof(AppStrings.NoTimeZoneMatchesSearchMessage)]"
+                                   ResponsiveCloseButtonAriaLabel="@Localizer[nameof(AppStrings.Close)]"
+                                   Responsive />
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringTimeZoneHelp)]</BitText>
+                <div class="actions">
+                    <BitButton ButtonType="BitButtonType.Submit" IconName="@BitIconName.Save" Loading="isSaving">@Localizer[nameof(AppStrings.Save)]</BitButton>
+                </div>
+            </EditForm>
+        </section>
+
+        <section class="panel" aria-labelledby="windows-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="windows-title">@Localizer[nameof(AppStrings.MonitoringMaintenanceWindows)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringMaintenanceWindowsHelp)]</BitText>
+
+            @if (windows.Length > 0)
+            {
+                <ul class="windows">
+                    @foreach (var window in windows)
+                    {
+                        <li @key="window.Id">
+                            <BitIcon IconName="@BitIconName.ConstructionCone" Color="BitColor.Info" />
+                            <span class="window-text">
+                                <BitText Typography="BitTypography.Body2" Weight="BitFontWeight.Semibold" Element="span">@window.Title</BitText>
+                                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="span">@WhenOf(window)</BitText>
+                            </span>
+                            <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Delete" AriaLabel="@Localizer[nameof(AppStrings.Delete)]"
+                                       Title="@Localizer[nameof(AppStrings.Delete)]" OnClick="WrapHandled(() => DeleteWindow(window))" />
+                        </li>
+                    }
+                </ul>
+            }
+
+            <div class="window-form">
+                <BitTextField @bind-Value="windowTitle" Immediate Label="@Localizer[nameof(AppStrings.MonitoringWhatTheWorkIs)]" MaxLength="200" Class="window-title" />
+                <BitDateRangePicker @bind-Value="windowRange" ShowTimePicker TimeZone="TimeZoneService.CurrentTimeZone" Label="@Localizer[nameof(AppStrings.MonitoringWhen)]" Class="window-range" />
+                <BitCheckbox @bind-Value="windowRepeatsWeekly" Label="@Localizer[nameof(AppStrings.MonitoringEveryWeek)]" />
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Add" Loading="isAddingWindow" Disabled="@(CanAddWindow is false)" OnClick="WrapHandled(AddWindow)">@Localizer[nameof(AppStrings.MonitoringAddAWindow)]</BitButton>
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="history-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="history-title">@Localizer[nameof(AppStrings.MonitoringYourHistory)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringYourHistoryHelp)]</BitText>
+            <div class="actions">
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Download" AutoLoading OnClick="WrapHandled(() => Export(CsvFormat))">CSV</BitButton>
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Download" AutoLoading OnClick="WrapHandled(() => Export(JsonFormat))">JSON</BitButton>
+            </div>
+        </section>
+
+        <section class="panel danger" aria-labelledby="remove-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="remove-title">@Localizer[nameof(AppStrings.MonitoringRemoveThisProject)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringRemoveThisProjectHelp)]</BitText>
+            <div class="actions">
+                @if (isConfirmingRemove)
+                {
+                    <BitButton Color="BitColor.Error" IconName="@BitIconName.Delete" Loading="isRemoving" OnClick="WrapHandled(Remove)">@Localizer[nameof(AppStrings.MonitoringYesRemove), project.Name ?? ""]</BitButton>
+                    <BitButton Variant="BitVariant.Text" OnClick="() => isConfirmingRemove = false">@Localizer[nameof(AppStrings.Cancel)]</BitButton>
+                }
+                else
+                {
+                    <BitButton Variant="BitVariant.Outline" Color="BitColor.Error" IconName="@BitIconName.Delete" OnClick="() => isConfirmingRemove = true">@Localizer[nameof(AppStrings.MonitoringRemove), project.Name ?? ""]</BitButton>
+                }
+            </div>
+        </section>
+    }
+</div>

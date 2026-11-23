@@ -1,0 +1,43 @@
+@import '_app-home-page.scss';
+
+// The weave: the warp quiet, the rows already woven a shade darker, and the visitor's thread in the site's one blue, the way
+// the share picture draws it. It reads in the direction the page does.
+.ab-weave {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+
+    svg {
+        width: 100%;
+        max-width: 36rem;
+        height: auto;
+    }
+
+    &:dir(rtl) svg {
+        transform: scaleX(-1);
+    }
+
+    .ab-warp {
+        fill: $bit-color-border-secondary;
+    }
+
+    .ab-weft {
+        fill: $bit-color-foreground-secondary;
+
+        &.is-yours {
+            fill: $bit-color-info;
+        }
+    }
+}
+
+// What the app tells of itself, kept small under the page's call to action
+.ab-this-app {
+    gap: 1rem;
+    max-width: 48rem;
+}
+
+::deep .ab-licenses {
+    align-self: flex-start;
+}

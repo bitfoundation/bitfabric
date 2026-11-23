@@ -1,0 +1,164 @@
+@attribute [Route(PageUrls.Projects + "/{Id:guid}")]
+@attribute [Route("{culture?}" + PageUrls.Projects + "/{Id:guid}")]
+@attribute [Authorize(Policy = AuthPolicies.TENANT_SELECTED)]
+@inherits AppPageBase
+
+<AppPageData Title="@(details?.Project?.Name ?? Localizer[nameof(AppStrings.MonitoringProject)])" PageTitle="@(details?.Project?.Name ?? Localizer[nameof(AppStrings.MonitoringProject)])" />
+
+<div class="project-page">
+    <div class="back">
+        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BackIcon" Href="@PageUrls.Projects">@Localizer[nameof(AppStrings.MonitoringProjects)]</BitButton>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="loading" aria-busy="true">
+            <BitShimmer Height="5rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingTheProject)]" />
+            <BitShimmer Height="14rem" Radius="0.75rem" />
+        </div>
+    }
+    else if (details?.Project is null && isLoadFailed)
+    {
+        @* It didn't load, which says nothing of whether it's still there: only the server saying so does (See Load). *@
+        <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.75rem" Padding="3rem 1rem" role="alert">
+            <BitIcon IconName="@BitIconName.StatusErrorFull" Size="BitSize.Large" Color="BitColor.SecondaryForeground" />
+            <BitText Typography="BitTypography.H5" Element="h2">@Localizer[nameof(AppStrings.MonitoringProjectDidNotLoad)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringProjectDidNotLoadHelp)]</BitText>
+            <BitButton IconName="@BitIconName.Refresh" OnClick="WrapHandled(Load)">@Localizer[nameof(AppStrings.TryAgain)]</BitButton>
+        </BitStack>
+    }
+    else if (details?.Project is not { } project)
+    {
+        <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.75rem" Padding="3rem 1rem">
+            <BitIcon IconName="@BitIconName.Unknown" Size="BitSize.Large" Color="BitColor.SecondaryForeground" />
+            <BitText Typography="BitTypography.H5" Element="h2">@Localizer[nameof(AppStrings.MonitoringProjectNotHereAnymore)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringProjectMayHaveBeenRemoved)]</BitText>
+            <BitButton Href="@PageUrls.Projects">@Localizer[nameof(AppStrings.MonitoringBackToProjects)]</BitButton>
+        </BitStack>
+    }
+    else
+    {
+        <header class="project-head">
+            <div class="head-text">
+                <BitText Typography="BitTypography.H5" Element="h2">@project.Name</BitText>
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="head-meta">
+                    <span class="ltr">@Host(project.Address)</span>
+                    @if (project.ServerAddress is not null && project.ServerAddress != project.Address)
+                    {
+                        <span>· @Localizer[nameof(AppStrings.MonitoringServerLabel)] <span class="ltr">@Host(project.ServerAddress)</span></span>
+                    }
+                    @if (details.Regions.Length > 0)
+                    {
+                        <span>· @Localizer[nameof(AppStrings.MonitoringFromRegions), RegionsText(details.Regions)]</span>
+                    }
+                    @if (project.LastCheckedAt is { } checkedAt)
+                    {
+                        <span>· @Localizer[nameof(AppStrings.MonitoringCheckedAtTime), TimeZoneService.ToLocalTime(checkedAt).ToString("t", CultureInfo.CurrentUICulture)]</span>
+                    }
+                    @if (details.LastDeployedAt is { } deployedAt)
+                    {
+                        <span>· @Localizer[nameof(AppStrings.MonitoringDeployedAt), TimeZoneService.ToLocalTime(deployedAt).ToString("g", CultureInfo.CurrentUICulture)]</span>
+                    }
+                </BitText>
+            </div>
+            <div class="head-actions">
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Refresh" Loading="isLoading" OnClick="WrapHandled(Load)">@Localizer[nameof(AppStrings.Refresh)]</BitButton>
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.OpenInNewWindow" Href="@project.Address" Target="_blank">@Localizer[nameof(AppStrings.MonitoringOpenTheApp)]</BitButton>
+            </div>
+        </header>
+
+        @if (project.OngoingIncident is { } ongoing)
+        {
+            <BitMessage Color="@(project.Health is ProjectHealth.Down ? BitColor.Error : BitColor.Warning)" Variant="BitVariant.Fill" AutoMultiline Title="@ongoing">
+                <ChildContent>@Localizer[nameof(AppStrings.MonitoringOngoingSince), TimeZoneService.ToLocalTime(project.OngoingIncidentSince!.Value).ToString("t", CultureInfo.CurrentUICulture)]</ChildContent>
+                <Actions>
+                    @* Filled in the page's background color, which reads on the message's error or warning fill in light and dark. *@
+                    <BitButton Size="BitSize.Small" Variant="BitVariant.Fill" Color="BitColor.PrimaryBackground" NoWrap OnClick="@(() => OpenTab(IncidentsTab))">@Localizer[nameof(AppStrings.MonitoringOpenTheIncident)]</BitButton>
+                </Actions>
+            </BitMessage>
+        }
+
+        @if (project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded)
+        {
+            <BitMessage Color="BitColor.SevereWarning" Variant="BitVariant.Outline" AutoMultiline Title="@Localizer[nameof(AppStrings.MonitoringCannotReadHealth)]">
+                @* The app's own reason may come in its own language and direction. *@
+                <ChildContent><span dir="auto">@project.ConnectionProblem</span></ChildContent>
+                <Actions>
+                    <BitButton Size="BitSize.Small" IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(project)">@Localizer[nameof(AppStrings.MonitoringReconnect)]</BitButton>
+                </Actions>
+            </BitMessage>
+        }
+        else if (project.ConnectionStatus is ProjectConnectionStatus.Disconnected)
+        {
+            <BitMessage Color="BitColor.Info" Variant="BitVariant.Outline" AutoMultiline Title="@Localizer[nameof(AppStrings.MonitoringDisconnected)]">
+                <ChildContent>@Localizer[nameof(AppStrings.MonitoringDisconnectedNotice)]</ChildContent>
+                <Actions>
+                    <BitButton Size="BitSize.Small" IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(project)">@Localizer[nameof(AppStrings.MonitoringReconnect)]</BitButton>
+                </Actions>
+            </BitMessage>
+        }
+        else if (project.HasCacheWarning)
+        {
+            <BitMessage Color="BitColor.Warning" Variant="BitVariant.Outline" AutoMultiline Title="@Localizer[nameof(AppStrings.MonitoringCacheAnswersForHomePage)]">
+                @Localizer[nameof(AppStrings.MonitoringCacheAnswersForHomePageHelp)]
+            </BitMessage>
+        }
+
+        <BitPivot SelectedKey="@SelectedTab" SelectedKeyChanged="@((string? key) => OpenTab(key))" OverflowBehavior="BitPivotOverflowBehavior.Scroll" Class="tabs">
+            <BitPivotItem Key="@OverviewTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringOverview)]" IconName="@BitIconName.Health">
+                <ProjectOverview Details="details" />
+            </BitPivotItem>
+            <BitPivotItem Key="@HistoryTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringHistory)]" IconName="@BitIconName.History">
+                @if (SelectedTab == HistoryTab)
+                {
+                    <ProjectHistory Project="project" />
+                }
+            </BitPivotItem>
+            <BitPivotItem Key="@IncidentsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringIncidents)]" IconName="@BitIconName.WarningSolid">
+                @if (SelectedTab == IncidentsTab)
+                {
+                    <ProjectIncidents ProjectId="project.Id" />
+                }
+            </BitPivotItem>
+            <BitPivotItem Key="@PerformanceTab" HeaderText="@Localizer[nameof(AppStrings.AppHomePerformance)]" IconName="@BitIconName.SpeedHigh">
+                @if (SelectedTab == PerformanceTab)
+                {
+                    <ProjectPerformance Project="project" Checks="details.Checks" Regions="details.Regions" />
+                }
+            </BitPivotItem>
+            <BitPivotItem Key="@ScansTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringScans)]" IconName="@BitIconName.SiteScan">
+                @if (SelectedTab == ScansTab)
+                {
+                    <ProjectScans ProjectId="project.Id" />
+                }
+            </BitPivotItem>
+            <BitPivotItem Key="@SlaTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringSla)]" IconName="@BitIconName.ReportDocument">
+                @if (SelectedTab == SlaTab)
+                {
+                    <ProjectSla ProjectId="project.Id" />
+                }
+            </BitPivotItem>
+            <BitPivotItem Key="@LocationsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringLocations)]" IconName="@BitIconName.Globe">
+                <ProjectNetwork Project="project" Readings="details.NetworkReadings" OnSaved="WrapHandled<ProjectDto>(saved => details.Project = saved)" />
+            </BitPivotItem>
+            <BitPivotItem Key="@StatusTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringStatusPage)]" IconName="@BitIconName.Megaphone">
+                @if (SelectedTab == StatusTab)
+                {
+                    <ProjectStatusPage ProjectId="project.Id" />
+                }
+            </BitPivotItem>
+            <BitPivotItem Key="@AlertsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringAlerts)]" IconName="@BitIconName.Ringer">
+                @if (SelectedTab == AlertsTab)
+                {
+                    <ProjectAlerts ProjectId="project.Id" />
+                }
+            </BitPivotItem>
+            <BitPivotItem Key="@SettingsTab" HeaderText="@Localizer[nameof(AppStrings.Settings)]" IconName="@BitIconName.Settings">
+                @if (SelectedTab == SettingsTab)
+                {
+                    <ProjectSettings Details="details" OnRenamed="WrapHandled<string>(Renamed)" OnDisconnected="WrapHandled<ProjectDto>(saved => details.Project = saved)" OnOpenTab="WrapHandled<string>(OpenTab)" />
+                }
+            </BitPivotItem>
+        </BitPivot>
+    }
+</div>

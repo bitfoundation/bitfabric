@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <!--
+        The home page's films: their player, their scenes and their content, one copy for the app (Client.Core's HomePage) and
+        the Workbench's design of it. It depends on nothing of the app but its strings and bit BlazorUI, so Client.Web loads it
+        lazily, the first time a film opens. The home page's onboarding is here too (AppHomeOnboarding), as it is loaded with
+        Bit.Bonboarding for a first visit only, and plays one of the films.
+    -->
+    <PropertyGroup>
+        <TargetFramework>net11.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+
+        <PackageReference Include="Bit.BlazorUI" />
+        <PackageReference Include="Bit.BlazorUI.Icons" />
+        <PackageReference Include="Bit.Bonboarding" />
+
+        <Using Include="Microsoft.JSInterop" />
+        <Using Include="Microsoft.AspNetCore.Components" />
+        <Using Include="Bit.BlazorUI" />
+        <Using Include="Bit.Fabric.Shared" />
+        <Using Include="Bit.Fabric.Shared.Resources" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Shared\Bit.Fabric.Shared.csproj" />
+    </ItemGroup>
+
+    <Target Name="BeforeBuildTasks" BeforeTargets="ResolveProjectStaticWebAssets;ResolveScopedCssInputs" Condition=" '$(DesignTimeBuild)' != 'true' ">
+        <CallTarget Targets="InstallNodejsDependencies" />
+        <CallTarget Targets="BuildCssFiles" />
+        <ItemGroup>
+            <Content Include="**\*.razor.css" Exclude="@(Content);@(None);node_modules\**;bin\**;obj\**" />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="InstallNodejsDependencies" Inputs="package.json;package-lock.json" Outputs="node_modules\.package-lock.json">
+        <Exec Command="npm install" StandardOutputImportance="high" StandardErrorImportance="high" />
+    </Target>
+
+    <Target Name="BuildCssFiles">
+        <Exec Command="node_modules/.bin/sass Components:Components --style compressed --silence-deprecation=import --update --color" StandardOutputImportance="high" StandardErrorImportance="high" LogStandardErrorAsError="true" />
+    </Target>
+
+    <ItemGroup>
+        <Content Remove="package*.json" />
+        <None Include="package*json" />
+    </ItemGroup>
+
+</Project>

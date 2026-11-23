@@ -1,0 +1,39 @@
+@* The small second offer under the plans, such as a share of revenue or a price per delivered app, with its numbers in a table. *@
+@inherits WorkbenchComponentBase
+
+<div class="alternative-wrap">
+<BitCard Outlined Class="alternative">
+    <div class="alternative-body">
+        <div class="alternative-head">
+            <BitText Typography="BitTypography.H5" Element="@HeadingElement">@Alternative.Title</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Alternative.Text</BitText>
+        </div>
+        @* An offer said in one line has no table *@
+        @if (Alternative.Rows.Length > 0)
+        {
+        <table class="alternative-table">
+            <thead>
+                <tr>
+                    @foreach (var header in Alternative.Headers)
+                    {
+                        <th scope="col">@header</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Alternative.Rows)
+                {
+                    <tr @key="row.Label">
+                        <th scope="row">@row.Label</th>
+                        @foreach (var value in row.Values)
+                        {
+                            <td><bdi>@value</bdi></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+</BitCard>
+</div>

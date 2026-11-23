@@ -1,0 +1,259 @@
+@inherits NewProjectPartBase
+
+<figure class="np-mv">
+    <figcaption class="np-mv-title">@Localizer[nameof(AppStrings.NewProjectFilmTitle), ComputerName(Computer)]</figcaption>
+
+    <div class="np-mv-frame">
+        @* Keyed by the scene, so each scene's drawing is new and its animations start from the beginning *@
+        <div class="np-mv-stage is-@Os" data-scene="@Current.Key" aria-hidden="true" @key="@($"{Os}-{index}")">
+            <div class="np-mv-desktop"></div>
+
+            @switch (Os)
+            {
+                case "windows":
+                    <div class="np-mv-taskbar"><span class="np-mv-start"><i></i><i></i><i></i><i></i>@if (Current.Key is "start")
+                        {
+                            <span class="np-mv-cursor" style="--from-x:26cqw;--from-y:-26cqw;--click-at:1.25s"><svg viewBox="0 0 16 22"><path d="M1 1v16.5l4.2-4.1 2.9 6.9 2.9-1.2-2.9-6.8h5.9Z" /></svg><i class="np-mv-ripple"></i></span>
+                        }</span><span class="np-mv-dock-app"></span><span class="np-mv-dock-app"></span><span class="np-mv-dock-app"></span></div>
+                    break;
+                case "mac":
+                    <div class="np-mv-menubar"><i></i><b></b><b></b><b></b></div>
+                    <div class="np-mv-dock"><span class="np-mv-dock-app"></span><span class="np-mv-dock-app"></span><span class="np-mv-dock-app"></span><span class="np-mv-dock-app"></span></div>
+                    break;
+                default:
+                    <div class="np-mv-menubar is-linux"><b></b><b></b><i></i></div>
+                    break;
+            }
+
+            @switch (Current.Key)
+            {
+                case "copy":
+                case "start":
+                    <div class="np-mv-window is-browser @(Current.Key is "start" ? "is-behind" : null)">
+                        <div class="np-mv-window-bar"><i></i><i></i><i></i><span class="np-mv-url">bitfabric.co/new</span></div>
+                        <div class="np-mv-window-body np-mv-site">
+                            <span class="np-mv-line is-title"></span>
+                            <span class="np-mv-line"></span>
+                            <span class="np-mv-line is-short"></span>
+                            <div class="np-mv-linebox">
+                                <code>@Line</code>
+                                <span class="np-mv-copy"><span class="is-before">@Localizer[nameof(AppStrings.NewProjectCopy)]</span><span class="is-after">✓ @Localizer[nameof(AppStrings.NewProjectCopied)]</span>@if (Current.Key is "copy")
+                                    {
+                                        <span class="np-mv-cursor" style="--from-x:-18cqw;--from-y:22cqw"><svg viewBox="0 0 16 22"><path d="M1 1v16.5l4.2-4.1 2.9 6.9 2.9-1.2-2.9-6.8h5.9Z" /></svg><i class="np-mv-ripple"></i></span>
+                                    }</span>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Current.Key is "start")
+                    {
+                        <div class="np-mv-startmenu is-opening">
+                            <div class="np-mv-search"><span class="np-mv-search-icon"></span><span class="np-mv-caret"></span></div>
+                            <div class="np-mv-tiles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        </div>
+                    }
+                    break;
+
+                case "search" when Os is "windows":
+                    <div class="np-mv-startmenu">
+                        <div class="np-mv-search"><span class="np-mv-search-icon"></span><span class="np-mv-typed" style="--chars:10">powershell</span><span class="np-mv-caret"></span></div>
+                        <div class="np-mv-result"><span class="np-mv-app"></span>Windows PowerShell<span class="np-mv-cursor" style="--from-x:4cqw;--from-y:30cqw;--move-at:1.6s;--click-at:2.65s"><svg viewBox="0 0 16 22"><path d="M1 1v16.5l4.2-4.1 2.9 6.9 2.9-1.2-2.9-6.8h5.9Z" /></svg><i class="np-mv-ripple"></i></span></div>
+                    </div>
+                    break;
+
+                case "spotlight":
+                case "search":
+                    <div class="np-mv-spotlight @(Current.Key is "spotlight" ? "is-opening" : null)">
+                        <div class="np-mv-search">
+                            <span class="np-mv-search-icon"></span>
+                            @if (Current.Key is "search")
+                            {
+                                <span class="np-mv-typed" style="--chars:8">Terminal</span>
+                            }
+                            <span class="np-mv-caret"></span>
+                        </div>
+                        @if (Current.Key is "search")
+                        {
+                            <div class="np-mv-result"><span class="np-mv-app"></span>Terminal</div>
+                        }
+                    </div>
+                    @if (Current.Key is "spotlight")
+                    {
+                        <div class="np-mv-keys"><kbd>⌘</kbd><span>+</span><kbd class="is-space">Space</kbd></div>
+                    }
+                    else
+                    {
+                        <div class="np-mv-keys is-late"><kbd class="is-wide">return ↵</kbd></div>
+                    }
+                    break;
+
+                case "open":
+                    <div class="np-mv-keys"><kbd>Ctrl</kbd><span>+</span><kbd>Alt</kbd><span>+</span><kbd>T</kbd></div>
+                    <div class="np-mv-window is-terminal is-late">
+                        <div class="np-mv-window-bar">Terminal</div>
+                        <div class="np-mv-window-body"><span class="np-mv-prompt">you@linux:~$</span><span class="np-mv-caret"></span></div>
+                    </div>
+                    break;
+
+                case "paste-click":
+                case "paste-keys":
+                case "enter":
+                case "allow":
+                    <div class="np-mv-window is-terminal @(Current.Key is "allow" ? "is-behind" : null)">
+                        <div class="np-mv-window-bar">@(Os switch { "windows" => "Windows PowerShell", _ => "Terminal" })</div>
+                        <div class="np-mv-window-body">
+                            <span class="np-mv-prompt">@(Os switch { "windows" => @"PS C:\Users\you>", "mac" => "you@Mac ~ %", _ => "you@linux:~$" })</span>
+                            <span class="np-mv-pasted @(Current.Key.StartsWith("paste", StringComparison.Ordinal) ? "is-arriving" : null)">@Line</span>
+                            @if (Current.Key is "paste-click")
+                            {
+                                <span class="np-mv-spot"><span class="np-mv-cursor" style="--from-x:-4cqw;--from-y:24cqw"><svg viewBox="0 0 16 22"><path d="M1 1v16.5l4.2-4.1 2.9 6.9 2.9-1.2-2.9-6.8h5.9Z" /></svg><i class="np-mv-ripple"></i><span class="np-mv-cursor-label">@Localizer[nameof(AppStrings.NewProjectFilmRightClick)]</span></span></span>
+                            }
+                            @if (Current.Key is "enter" or "allow")
+                            {
+                                <span class="np-mv-output" style="--at:0">✓ .NET SDK</span>
+                                <span class="np-mv-output" style="--at:1">✓ bit CLI</span>
+                                <span class="np-mv-output" style="--at:2" dir="auto">@Localizer[nameof(AppStrings.NewProjectFilmSettingUp), Name]</span>
+                            }
+                        </div>
+                    </div>
+                    @if (Current.Key is "paste-keys")
+                    {
+                        <div class="np-mv-keys">
+                            @if (Os is "mac")
+                            {
+                                <kbd>⌘</kbd><span>+</span><kbd>V</kbd>
+                            }
+                            else
+                            {
+                                <kbd>Ctrl</kbd><span>+</span><kbd>Shift</kbd><span>+</span><kbd>V</kbd>
+                            }
+                        </div>
+                    }
+                    else if (Current.Key is "enter")
+                    {
+                        <div class="np-mv-keys"><kbd class="is-wide">@(Os is "mac" ? "return ↵" : "Enter ↵")</kbd></div>
+                    }
+                    else if (Current.Key is "allow")
+                    {
+                        <div class="np-mv-dim"></div>
+                        <div class="np-mv-uac">
+                            <div class="np-mv-uac-head">@Localizer[nameof(AppStrings.NewProjectFilmUac)]</div>
+                            <div class="np-mv-uac-body">
+                                <b>@Localizer[nameof(AppStrings.NewProjectFilmUacQuestion)]</b>
+                                <div class="np-mv-uac-actions"><span class="np-mv-uac-yes">@Localizer[nameof(AppStrings.NewProjectFilmYes)]<span class="np-mv-cursor" style="--from-x:14cqw;--from-y:20cqw;--move-at:.5s;--click-at:1.55s"><svg viewBox="0 0 16 22"><path d="M1 1v16.5l4.2-4.1 2.9 6.9 2.9-1.2-2.9-6.8h5.9Z" /></svg><i class="np-mv-ripple"></i></span></span><span>@Localizer[nameof(AppStrings.NewProjectFilmNo)]</span></div>
+                            </div>
+                        </div>
+                    }
+                    break;
+
+                case "workbench":
+                    <div class="np-mv-window is-browser is-arriving">
+                        <div class="np-mv-window-bar"><i></i><i></i><i></i><span class="np-mv-url">@Name · @Localizer[nameof(AppStrings.NewProjectFilmWorkbench)]</span></div>
+                        <div class="np-mv-window-body np-mv-workbench">
+                            <div class="np-mv-wb-nav"><span class="np-mv-line"></span><span class="np-mv-line is-short"></span><span class="np-mv-line"></span><span class="np-mv-line is-short"></span></div>
+                            <div class="np-mv-wb-views">
+                                <div class="np-mv-device is-phone"><span class="np-mv-line"></span><span class="np-mv-block"></span><span class="np-mv-line is-short"></span></div>
+                                <div class="np-mv-device is-tablet"><span class="np-mv-line"></span><span class="np-mv-block"></span><span class="np-mv-line is-short"></span></div>
+                                <div class="np-mv-device is-desktop"><span class="np-mv-line"></span><span class="np-mv-block"></span><span class="np-mv-line is-short"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    break;
+
+                case "landing":
+                    <div class="np-mv-window is-browser is-arriving">
+                        <div class="np-mv-window-bar"><i></i><i></i><i></i><span class="np-mv-url">@Name · @Localizer[nameof(AppStrings.NewProjectFilmLanding)]</span></div>
+                        <div class="np-mv-window-body np-mv-landing">
+                            <div class="np-mv-landing-nav"><span class="np-mv-logo">@Initial</span><b>@Name</b><span class="np-mv-pill is-filled"></span></div>
+                            <span class="np-mv-line is-hero"></span>
+                            <span class="np-mv-line is-hero is-short"></span>
+                            <span class="np-mv-line is-lede"></span>
+                            <span class="np-mv-pill is-filled is-cta"></span>
+                        </div>
+                    </div>
+                    break;
+
+                case "app":
+                    <div class="np-mv-window is-browser is-arriving">
+                        <div class="np-mv-window-bar"><i></i><i></i><i></i><span class="np-mv-url">@Name · @Localizer[nameof(AppStrings.NewProjectFilmApp)]</span></div>
+                        <div class="np-mv-window-body np-mv-app-screen">
+                            <div class="np-mv-app-top">
+                                <span class="np-mv-logo">@Initial</span><b>@Name</b>
+                                <span class="np-mv-tenant">@Localizer[nameof(AppStrings.NewProjectSampleCompany)] ⌄</span>
+                                <span class="np-mv-gap"></span>
+                                <span class="np-mv-bell"></span>
+                                <span class="np-mv-avatar">SA</span>
+                            </div>
+                            <div class="np-mv-card">
+                                <b>@Localizer[nameof(AppStrings.NewProjectSampleWelcome)]</b>
+                                <span>@Localizer[nameof(AppStrings.NewProjectSampleProfile)]</span>
+                                <span>@Localizer[nameof(AppStrings.NewProjectSamplePasskeys)]</span>
+                                <span>@Localizer[nameof(AppStrings.NewProjectSampleLanguages)]</span>
+                            </div>
+                            <span class="np-mv-ask">@Localizer[nameof(AppStrings.NewProjectSampleAsk)]</span>
+                        </div>
+                    </div>
+                    break;
+
+                case "yours":
+                    <div class="np-mv-yours">
+                        <div class="np-mv-window is-browser is-arriving">
+                            <div class="np-mv-window-bar"><i></i><i></i><i></i><span class="np-mv-url">@Name · @Localizer[nameof(AppStrings.NewProjectFilmCheckout)]</span></div>
+                            <div class="np-mv-window-body np-mv-checkout">
+                                <b dir="auto">@Localizer[nameof(AppStrings.NewProjectFilmCheckout)]</b>
+                                <div class="np-mv-item" style="--at:0"><span class="np-mv-thumb"></span><span class="np-mv-line"></span><span class="np-mv-price"></span></div>
+                                <div class="np-mv-item" style="--at:1"><span class="np-mv-thumb"></span><span class="np-mv-line is-short"></span><span class="np-mv-price"></span></div>
+                                <div class="np-mv-item is-total" style="--at:2"><span class="np-mv-line is-short"></span><span class="np-mv-price"></span></div>
+                                <span class="np-mv-pay" style="--at:3" dir="auto">@Localizer[nameof(AppStrings.NewProjectFilmPay)]</span>
+                            </div>
+                        </div>
+                        @* Said to the visitor rather than drawn on their screen, so it reads in their language's direction *@
+                        <ul class="np-mv-promises" dir="@(IsRtl ? "rtl" : "ltr")">
+                            <li style="--at:0"><BitIcon IconName="@BitIconName.ThisPC" Variant="BitVariant.Fill" Circular="true" /><span><b>@Localizer[nameof(AppStrings.NewProjectFilmBuiltHere)]</b>@Localizer[nameof(AppStrings.NewProjectFilmBuiltHereText)]</span></li>
+                            <li style="--at:1"><BitIcon IconName="@BitIconName.Lock" Variant="BitVariant.Fill" Circular="true" /><span><b>@Localizer[nameof(AppStrings.NewProjectFilmPrivate)]</b>@Localizer[nameof(AppStrings.NewProjectFilmPrivateText)]</span></li>
+                            <li style="--at:2"><BitIcon IconName="@BitIconName.Permissions" Variant="BitVariant.Fill" Circular="true" /><span><b>@Localizer[nameof(AppStrings.NewProjectFilmYours)]</b>@Localizer[nameof(AppStrings.NewProjectFilmYoursText)]</span></li>
+                        </ul>
+                    </div>
+                    break;
+
+                default:
+                    <div class="np-mv-zoom">
+                        <div class="np-mv-window is-code is-arriving">
+                            <div class="np-mv-window-bar">Visual Studio Code · @Name</div>
+                            <div class="np-mv-window-body np-mv-code">
+                                <div class="np-mv-activity"><i></i><i></i><i></i><i></i></div>
+                                <div class="np-mv-explorer"><span class="np-mv-line"></span><span class="np-mv-line is-short"></span><span class="np-mv-line"></span><span class="np-mv-line is-short"></span><span class="np-mv-line"></span></div>
+                                <div class="np-mv-editor"><span class="np-mv-line" style="--w:70%"></span><span class="np-mv-line" style="--w:52%"></span><span class="np-mv-line" style="--w:64%"></span><span class="np-mv-line" style="--w:38%"></span><span class="np-mv-line" style="--w:58%"></span></div>
+                                <div class="np-mv-chat">
+                                    <b>Claude Code</b>
+                                    <span class="np-mv-line is-reply"></span>
+                                    <span class="np-mv-line is-reply is-short"></span>
+                                    <div class="np-mv-ask-box"><span class="np-mv-typed is-prompt" dir="auto">@Localizer[nameof(AppStrings.NewProjectFilmPrompt)]</span><span class="np-mv-caret"></span><span class="np-mv-send">↑</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    break;
+            }
+
+        </div>
+    </div>
+
+    <div class="np-mv-bar">
+        <span class="np-mv-count">@(index + 1) / @Scenes.Length</span>
+        <span class="np-mv-caption">@Caption(Current.Key)</span>
+        <span class="np-mv-controls">
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
+                       IconName="@(IsRtl ? BitIconName.ChevronRight : BitIconName.ChevronLeft)"
+                       Title="@Localizer[nameof(AppStrings.NewProjectFilmPrevious)]" AriaLabel="@Localizer[nameof(AppStrings.NewProjectFilmPrevious)]"
+                       OnClick="() => GoTo(index - 1)" />
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
+                       IconName="@(isPaused ? BitIconName.Play : BitIconName.Pause)"
+                       Title="@(isPaused ? Localizer[nameof(AppStrings.NewProjectFilmPlay)] : Localizer[nameof(AppStrings.NewProjectFilmPause)])" AriaLabel="@(isPaused ? Localizer[nameof(AppStrings.NewProjectFilmPlay)] : Localizer[nameof(AppStrings.NewProjectFilmPause)])"
+                       OnClick="TogglePause" />
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
+                       IconName="@(IsRtl ? BitIconName.ChevronLeft : BitIconName.ChevronRight)"
+                       Title="@Localizer[nameof(AppStrings.NewProjectFilmNext)]" AriaLabel="@Localizer[nameof(AppStrings.NewProjectFilmNext)]"
+                       OnClick="() => GoTo(index + 1)" />
+        </span>
+    </div>
+</figure>

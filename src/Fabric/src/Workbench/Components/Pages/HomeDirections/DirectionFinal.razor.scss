@@ -1,0 +1,21 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.df {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 3rem 1.5rem;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+    text-align: center;
+}
+
+::deep .df-title {
+    text-wrap: balance;
+}
+
+::deep .df-text {
+    max-width: 36rem;
+    text-wrap: balance;
+}

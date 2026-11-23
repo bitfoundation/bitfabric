@@ -1,0 +1,22 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectGoalTitle)]" Topic="@NewProjectHelpTopics.Goal" HeadingElement="@HeadingElement">
+    <BitChoiceGroup TItem="BitChoiceGroupOption<NewProjectGoal>" TValue="NewProjectGoal"
+                    AriaLabel="@Localizer[nameof(AppStrings.NewProjectGoalTitle)]"
+                    Variant="BitVariant.Outline" FullWidth
+                    Value="@Answers.Goal"
+                    OnChange="(NewProjectGoal goal) => Store.Aim(goal)">
+        <ItemLabelTemplate Context="option">
+            <NewProjectChoiceLabel IconName="@(option.Value is NewProjectGoal.Real ? BitIconName.Rocket : BitIconName.TestBeaker)"
+                                   Text="@option.Text"
+                                   Badge="@(option.Value is NewProjectGoal.Real ? Localizer[nameof(AppStrings.NewProjectRecommended)].Value : null)"
+                                   Description="@(option.Value is NewProjectGoal.Real
+                                                    ? Localizer[nameof(AppStrings.NewProjectGoalRealText)]
+                                                    : Localizer[nameof(AppStrings.NewProjectGoalTryText)])" />
+        </ItemLabelTemplate>
+        <Options>
+            <BitChoiceGroupOption Value="NewProjectGoal.Real" Text="@Localizer[nameof(AppStrings.NewProjectGoalReal)]" />
+            <BitChoiceGroupOption Value="NewProjectGoal.Try" Text="@Localizer[nameof(AppStrings.NewProjectGoalTry)]" />
+        </Options>
+    </BitChoiceGroup>
+</NewProjectQuestion>

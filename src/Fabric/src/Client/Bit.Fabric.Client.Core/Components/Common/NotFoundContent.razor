@@ -1,0 +1,9 @@
+@inherits AppComponentBase
+
+<BitStack HorizontalAlign="BitAlignment.Center" VerticalAlign="BitAlignment.Center" Gap="0.75rem" Class="not-found">
+    <BitText Typography="BitTypography.H6" Align="BitTextAlign.Center">@Localizer[nameof(AppStrings.NotFoundText)]</BitText>
+    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Align="BitTextAlign.Center">
+        @Localizer[nameof(AppStrings.NotFoundHint)]
+    </BitText>
+    <BitButton Href="@CultureInfoManager.GetCurrentCultureUrl(PageUrls.Home)" Color="BitColor.TertiaryBackground">@Localizer[nameof(AppStrings.BackToHome)]</BitButton>
+</BitStack>

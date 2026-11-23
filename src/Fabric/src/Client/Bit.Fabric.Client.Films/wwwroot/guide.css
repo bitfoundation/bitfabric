@@ -1,0 +1,21 @@
+/*
+ * The tours' popover around their bit BlazorUI card (GuideCard), on the app's theme: Bonboarding's own variables (its guide,
+ * "Theming"), mapped to bit BlazorUI's tokens, so it follows the app's light, dark and accent rather than the system's. The
+ * popover keeps Bonboarding's class, which places it and keeps it above the overlay; only its look comes from here.
+ * Loaded after bit-bonboarding.css, and one class more specific than its light, dark and system rules.
+ */
+.bit-bonboarding-root.guide-root,
+.bit-bonboarding-root.guide-root[data-bonboarding-theme] {
+    color-scheme: normal;
+    --bit-bonboarding-surface: var(--bit-clr-bg-pri);
+    --bit-bonboarding-surface-subtle: var(--bit-clr-bg-sec);
+    --bit-bonboarding-text: var(--bit-clr-fg-pri);
+    --bit-bonboarding-text-muted: var(--bit-clr-fg-sec);
+    --bit-bonboarding-border: var(--bit-clr-brd-sec);
+    --bit-bonboarding-border-strong: var(--bit-clr-brd-pri);
+    --bit-bonboarding-accent: var(--bit-clr-pri);
+    --bit-bonboarding-radius: var(--bit-shp-radius-surface);
+    --bit-bonboarding-shadow: var(--bit-shd-cal);
+    --bit-bonboarding-font: inherit;
+    --bit-bonboarding-popover-width: 21rem;
+}

@@ -1,0 +1,8 @@
+@inherits AppComponentBase
+
+@* The home page's onboarding, once the home page has loaded it (See HomeOnboardingService): in the layout, as the tour goes
+   from page to page and back *@
+@if (homeOnboarding.HostType is { } hostType)
+{
+    <DynamicComponent Type="hostType" Parameters="homeOnboarding.HostParameters" />
+}

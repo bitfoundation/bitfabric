@@ -1,0 +1,14 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.dq {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    max-width: 48rem;
+}
+
+::deep .dq-item {
+    --bit-Accordion-border-color: #{$bit-color-border-secondary};
+    --bit-Accordion-header-padding: 1.25rem;
+    --bit-Accordion-content-padding: 0 1.25rem 1.25rem;
+}

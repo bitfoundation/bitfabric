@@ -1,0 +1,209 @@
+@attribute [Route(PageUrls.Compare)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.Compare)]
+@attribute [Route(PageUrls.CompareLovable)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.CompareLovable)]
+@attribute [Route(PageUrls.CompareBolt)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.CompareBolt)]
+@attribute [Route(PageUrls.CompareBase44)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.CompareBase44)]
+@attribute [Route(PageUrls.CompareReplit)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.CompareReplit)]
+@attribute [Route(PageUrls.CompareV0)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.CompareV0)]
+@attribute [Route(PageUrls.CompareEmptyProject)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.CompareEmptyProject)]
+@attribute [Route(PageUrls.CompareStarterKits)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.CompareStarterKits)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppPageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Compare.Data
+
+@* bitfabric.co/compare and a page per subject under it (bitfabric-internal/specs/home-page.md, "The comparison pages"), the
+   Workbench design's "table" format: the answer first, the table with what the other does well as its first row, how bit Fabric is
+   built on purpose, what it costs, questions, Get started, and every source the table's numbers lead to. Every fact about another
+   product is in that product's class under Data, with its sources. Its title is its one h1, as on the home page. Latin digits
+   in every language, so Base44 and v0, prices and dates stay as written under the Persian font (_rtl-fonts.scss). *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+
+    var subject = Subject;
+    var ids = subject.SourceIds;
+    var columns = subject.Columns;
+    var checkedOn = Localizer[nameof(AppStrings.CompareCheckedOnDate)].Value;
+
+    // The numbers of a fact's sources, in the order the page lists them, each leading to its entry in the list
+    RenderFragment<string[]> refs = sources => @<AppHomeSourceRefs PageIds="ids" Ids="sources" />;
+
+    RenderFragment<CompareSubject> cardLink = page => @<BitLink Href="@CultureInfoManager.GetCurrentCultureUrl(page.Url)" Class="cmp-card-link">
+        @Localizer[nameof(AppStrings.CompareSeeComparison)]
+        <BitIcon IconName="@BitIconName.Forward" Class="cmp-forward-icon" />
+    </BitLink>;
+}
+
+<AppPageData PageTitle="@subject.PageTitle" Description="@subject.Description">
+    <Head>
+        <script type="application/ld+json">@((MarkupString)BuildJsonLd(subject))</script>
+    </Head>
+</AppPageData>
+
+<div class="ah-page cmp app-latin-digits">
+    @if (IsHub(subject) is false)
+    {
+        <nav class="cmp-crumbs" aria-label="@Localizer[nameof(AppStrings.Compare)]">
+            <BitLink Href="@HubUrl">
+                <BitIcon IconName="@BitIconName.Back" Class="cmp-back-icon" />
+                @Localizer[nameof(AppStrings.CompareAllComparisons)]
+            </BitLink>
+        </nav>
+    }
+
+    <section class="ah-hero">
+        <span class="ah-eyebrow">@Localizer[nameof(AppStrings.CompareCheckedOn), checkedOn]</span>
+        @* The name stays on one line when the title wraps on a phone *@
+        @{
+            var (beforeBrand, afterBrand) = AroundBrand(subject.Title);
+        }
+        <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">
+            @beforeBrand@if (afterBrand is not null)
+            {
+                <span class="cmp-brand">bit Fabric</span>@afterBrand
+            }
+        </BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">@subject.Answer</BitText>
+        <div class="ah-actions">
+            <BitButton Variant="BitVariant.Text" Href="@InPage("sources")" IconName="@BitIconName.ReportDocument">@Localizer[nameof(AppStrings.CompareWhereFrom)]</BitButton>
+            @if (subject.LeadsToAgents)
+            {
+                @* The agent the visitor already uses, set up on a bit Fabric project *@
+                <BitButton Variant="BitVariant.Text" Href="@CultureInfoManager.GetCurrentCultureUrl(PageUrls.For)" IconName="@BitIconName.Robot">@Localizer[nameof(AppStrings.ForSeeEveryAgent)]</BitButton>
+            }
+        </div>
+    </section>
+
+    @* 1. Side by side: what the other does well first, then the rest; each fact with the numbers of its sources. Nothing is
+       marked good or bad, so no column is judged by an icon; only what each does well carries a check, on every side alike. *@
+    <section class="ah-band" id="ah-side-by-side" aria-labelledby="ah-side-by-side-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="side-by-side" Element="@sectionHeading" Text="@subject.TableTitle" />
+        </header>
+        <table class="ah-compare cmp-table @(columns.Length > 2 ? "cmp-table-wide" : null)" aria-labelledby="ah-side-by-side-title" role="table">
+            <thead role="rowgroup">
+                <tr role="row">
+                    <td></td>
+                    @foreach (var column in columns)
+                    {
+                        <th @key="column.Name" scope="col" role="columnheader">
+                            @column.Name
+                            @if (column.Note is not null)
+                            {
+                                <span class="cmp-column-note">@column.Note</span>
+                            }
+                        </th>
+                    }
+                </tr>
+            </thead>
+            <tbody role="rowgroup">
+                @foreach (var row in subject.Rows)
+                {
+                    <tr @key="row.Topic" role="row">
+                        <th scope="row" role="rowheader">@CompareShared.TopicLabel(Localizer, row.Topic)</th>
+                        @for (var i = 0; i < row.Cells.Length; i++)
+                        {
+                            var fact = row.Cells[i];
+                            @* The label shows only on a phone, where the column headers are gone *@
+                            <td role="cell" data-label="@columns[i].Name" class="@(i == row.Cells.Length - 1 ? "is-ours" : null)">
+                                <div class="ah-compare-cell">
+                                    @if (row.Topic is CompareTopic.DoesWell)
+                                    {
+                                        <BitIcon IconName="@BitIconName.CheckMark" Color="BitColor.Success" Class="ah-compare-mark" />
+                                    }
+                                    <span>@fact.Text@refs(fact.Sources)</span>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Element="p" Class="cmp-source-line">@subject.SourceLine</BitText>
+    </section>
+
+    @if (IsHub(subject))
+    {
+        @* 2. The way into each page *@
+        <section class="ah-band" id="ah-one-by-one" aria-labelledby="ah-one-by-one-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="one-by-one" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareOneByOneTitle)]" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CompareOneByOneIntro)]</BitText>
+            </header>
+            <AppHomeTiles Tiles="@([.. Subjects.Select(page => new AppHomeTile(page.CardIcon, page.Name, page.CardLine, More: cardLink(page)))])"
+                          HeadingElement="@cardHeading" MinWidth="16rem" />
+        </section>
+    }
+
+    @if (subject.Extra is { } extra)
+    {
+        <section class="ah-band" id="ah-more-than-code" aria-labelledby="ah-more-than-code-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="more-than-code" Element="@sectionHeading" Text="@extra.Title" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@extra.Intro</BitText>
+            </header>
+            <AppHomeTiles Tiles="extra.Tiles" HeadingElement="@cardHeading" MinWidth="13rem" />
+        </section>
+    }
+
+    @* 3. How bit Fabric is built on purpose, said only of bit Fabric *@
+    <section class="ah-band" id="ah-by-design" aria-labelledby="ah-by-design-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="by-design" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareLacksTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CompareLacksIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="subject.Gaps" HeadingElement="@cardHeading" MinWidth="14rem" />
+    </section>
+
+    @* 4. What it costs, in a line with its real numbers; /pricing says the rest, so it isn't restated here *@
+    <section class="ah-band" id="ah-cost" aria-labelledby="ah-cost-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="cost" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareCostTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CompareCostText)]@refs(subject.CostSources)</BitText>
+        </header>
+        @* With the way to why a real app's bill comes out lower, which the cost questions below answer in short *@
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@PricingUrl" IconName="@BitIconName.Savings">@Localizer[nameof(AppStrings.CompareCostLink)]</BitButton>
+            <BitButton Variant="BitVariant.Outline" Href="@CostUrl" IconName="@BitIconName.Lightbulb">@Localizer[nameof(AppStrings.CostLink)]</BitButton>
+        </div>
+    </section>
+
+    @* 5. Closed, the answers stay in the page for search engines and find-in-page *@
+    <section class="ah-band" id="ah-questions" aria-labelledby="ah-questions-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="questions" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareQuestionsTitle)]" />
+        </header>
+        <div class="ah-faq">
+            @foreach (var question in subject.Questions)
+            {
+                <BitAccordion @key="question.Question" Title="@question.Question" HeadingLevel="3" HiddenUntilFound Class="ah-faq-item">
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@question.Answer@refs(question.Sources)</BitText>
+                </BitAccordion>
+            }
+        </div>
+    </section>
+
+    <section class="ah-final">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeFinalTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeFinalText)]</BitText>
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+
+    @* 6. Every source the page cites, numbered as the page cites them: its name, its address and the day it was read
+       (bitfabric-internal/.agents/gtm/research/seo-geo.md, section 4.5). Names and addresses are what a reader finds there, so they aren't translated. *@
+    <section class="ah-band" id="ah-sources" aria-labelledby="ah-sources-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="sources" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareSourcesTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CompareSourcesIntro), checkedOn]</BitText>
+        </header>
+        <AppHomeSourceList Sources="@([.. ids.Select(id => CompareSources.All[id])])" ReadOn="@checkedOn" />
+    </section>
+</div>

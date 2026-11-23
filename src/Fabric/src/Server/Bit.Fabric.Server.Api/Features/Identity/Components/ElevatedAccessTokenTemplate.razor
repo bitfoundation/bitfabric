@@ -1,0 +1,9 @@
+<EmailLayout Title="@EmailLocalizer[nameof(EmailStrings.ElevatedAccessCodeSubject), Model.Token]"
+             Preheader="@EmailLocalizer[nameof(EmailStrings.ElevatedAccessPreheader)]"
+             Heading="@EmailLocalizer[nameof(EmailStrings.ElevatedAccessHeading)]"
+             WebAppUrl="@HttpContext.Request.GetWebAppUrl()"
+             Why="@EmailLocalizer[nameof(EmailStrings.ElevatedAccessWhy)]">
+    <EmailGreeting Name="@Model.DisplayName" />
+    <EmailParagraph>@EmailLocalizer[nameof(EmailStrings.ElevatedAccessCodeIntro)]</EmailParagraph>
+    <EmailCode Code="@Model.Token" ValidFor="@Model.ValidFor" />
+</EmailLayout>

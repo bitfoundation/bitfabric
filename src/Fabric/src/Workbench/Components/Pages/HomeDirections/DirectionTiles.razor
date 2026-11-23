@@ -1,0 +1,22 @@
+@inherits DirectionComponentBase
+@* Facts as tiles, one short idea each, so a band reads at a glance instead of as a paragraph. Steps are numbered, and a figure
+   tile says its number large with its line under it. *@
+
+@if (Look is DirectionTileLook.Steps)
+{
+    <ol class="dt dt-steps" style="--dt-min:@MinWidth">
+        @foreach (var tile in Items)
+        {
+            <DirectionTileItem Tile="tile" Look="Look" Inline="Inline" OnExplain="OnExplain" />
+        }
+    </ol>
+}
+else
+{
+    <ul class="dt" style="--dt-min:@MinWidth">
+        @foreach (var tile in Items)
+        {
+            <DirectionTileItem Tile="tile" Look="Look" Inline="Inline" OnExplain="OnExplain" />
+        }
+    </ul>
+}

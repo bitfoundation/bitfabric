@@ -1,0 +1,13 @@
+// As many tiles a row as fit, each at least --dt-min wide, one under the other on a phone
+.dt {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--dt-min), 100%), 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dt-steps {
+    counter-reset: dt-step;
+}

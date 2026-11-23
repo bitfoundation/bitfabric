@@ -1,0 +1,126 @@
+@inherits AppComponentBase
+
+<div class="alerts">
+    @if (alertSettings is null)
+    {
+        <BitShimmer Height="10rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingTheAlerts)]" />
+    }
+    else
+    {
+        <section class="panel" aria-labelledby="steps-title">
+            <div class="panel-head">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="steps-title">@Localizer[nameof(AppStrings.MonitoringWhoHearsAboutAnIncident)]</BitText>
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringAlertStepsHelp)]</BitText>
+            </div>
+
+            @if (routes.Count is 0)
+            {
+                <BitMessage Color="BitColor.Warning" Variant="BitVariant.Outline">@Localizer[nameof(AppStrings.MonitoringNobodyHears)]</BitMessage>
+            }
+
+            <ol class="steps">
+                @foreach (var step in Steps())
+                {
+                    <li @key="step.Key" class="step">
+                        <div class="step-when">
+                            @if (step.Key is 0)
+                            {
+                                <BitText Typography="BitTypography.Subtitle2" Element="span">@Localizer[nameof(AppStrings.MonitoringAtOnce)]</BitText>
+                            }
+                            else
+                            {
+                                <BitNumberField TValue="int" Value="@step.First().DelayMinutes" ValueChanged="@((int minutes) => SetDelay(step.Key, minutes))"
+                                                Min="1" Max="1440" Mode="BitSpinButtonMode.Inline" Label="@Localizer[nameof(AppStrings.MonitoringAfterInMinutes)]" Class="delay" />
+                                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringIfNobodyIsOnItYet)]</BitText>
+                            }
+                        </div>
+                        <ul class="routes">
+                            @foreach (var route in step)
+                            {
+                                <li>
+                                    <BitIcon IconName="@ChannelIcon(route.Channel)" Color="BitColor.Primary" />
+                                    <span class="route-text">
+                                        <BitText Typography="BitTypography.Body2" Element="span">
+                                            @ChannelText(route.Channel)
+                                            @if (route.Channel is ProjectAlertChannel.Webhook)
+                                            {
+                                                <text> · @FormatText(route.WebhookFormat) · </text><span class="ltr">@Host(route.Address)</span>
+                                            }
+                                            else
+                                            {
+                                                <text> · @(route.UserName ?? MemberOf(route.UserId)?.Name)</text>
+                                            }
+                                        </BitText>
+                                        @if (Problem(route) is { } problem)
+                                        {
+                                            <BitText Typography="BitTypography.Caption1" Color="BitColor.Warning" Element="span">@problem</BitText>
+                                        }
+                                    </span>
+                                    <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Delete" Title="@Localizer[nameof(AppStrings.Delete)]"
+                                               AriaLabel="@Localizer[nameof(AppStrings.Delete)]" OnClick="WrapHandled(() => Remove(route))" />
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+            </ol>
+        </section>
+
+        <section class="panel" aria-labelledby="add-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="add-title">@Localizer[nameof(AppStrings.MonitoringAddSomeone)]</BitText>
+            <div class="add-form">
+                <BitDropdown TItem="BitDropdownItem<ProjectAlertChannel>" TValue="ProjectAlertChannel" @bind-Value="newChannel" Label="@Localizer[nameof(AppStrings.MonitoringHow)]" FitWidth
+                             Items="@([new() { Text = ChannelText(ProjectAlertChannel.Push), Value = ProjectAlertChannel.Push },
+                                       new() { Text = ChannelText(ProjectAlertChannel.Email), Value = ProjectAlertChannel.Email },
+                                       new() { Text = ChannelText(ProjectAlertChannel.Sms), Value = ProjectAlertChannel.Sms },
+                                       new() { Text = ChannelText(ProjectAlertChannel.Webhook), Value = ProjectAlertChannel.Webhook }])" />
+
+                @if (newChannel is ProjectAlertChannel.Webhook)
+                {
+                    <BitDropdown TItem="BitDropdownItem<ProjectWebhookFormat>" TValue="ProjectWebhookFormat" @bind-Value="newFormat" Label="@Localizer[nameof(AppStrings.MonitoringTo)]" FitWidth
+                                 Items="@([.. Enum.GetValues<ProjectWebhookFormat>().Select(format => new BitDropdownItem<ProjectWebhookFormat> { Text = FormatText(format), Value = format })])" />
+                    <BitTextField @bind-Value="newAddress" Immediate Label="@Localizer[nameof(AppStrings.MonitoringWebhookAddress)]" Placeholder="https://hooks.slack.com/services/…" Dir="BitDir.Ltr" Class="address" />
+                }
+                else
+                {
+                    <BitDropdown TItem="BitDropdownItem<Guid?>" TValue="Guid?" @bind-Value="newUserId" Label="@Localizer[nameof(AppStrings.MonitoringWho)]" FitWidth
+                                 Items="@([.. alertSettings.Members.Select(member => new BitDropdownItem<Guid?> { Text = member.Name ?? "", Value = member.UserId })])" />
+                }
+
+                <BitDropdown TItem="BitDropdownItem<int>" TValue="int" @bind-Value="newStep" Label="@Localizer[nameof(AppStrings.MonitoringWhen)]" FitWidth
+                             Items="@([.. Enumerable.Range(0, NextStep + 1).Select(step => new BitDropdownItem<int> { Text = step is 0 ? Localizer[nameof(AppStrings.MonitoringAtOnce)] : step == NextStep ? Localizer[nameof(AppStrings.MonitoringANewLaterStep)] : Localizer[nameof(AppStrings.MonitoringWithStep), step + 1], Value = step })])" />
+
+                @if (newStep > 0 && newStep == NextStep)
+                {
+                    <BitNumberField TValue="int" @bind-Value="newDelay" Min="1" Max="1440" Mode="BitSpinButtonMode.Inline" Label="@Localizer[nameof(AppStrings.MonitoringAfterInMinutes)]" Class="delay" />
+                }
+
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Add" Disabled="@(CanAdd is false)" OnClick="WrapHandled(Add)">@Localizer[nameof(AppStrings.Add)]</BitButton>
+            </div>
+            @if (newChannel is ProjectAlertChannel.Webhook)
+            {
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[newFormat is ProjectWebhookFormat.Teams ? nameof(AppStrings.MonitoringTeamsWebhookHelp) : nameof(AppStrings.MonitoringWebhookHelp)]</BitText>
+            }
+        </section>
+
+        <div class="actions">
+            <BitButton IconName="@BitIconName.Save" Loading="isSaving" Disabled="@(isDirty is false)" OnClick="WrapHandled(Save)">@Localizer[nameof(AppStrings.Save)]</BitButton>
+            <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Ringer" Loading="isTesting" Disabled="@(isDirty || routes.Count is 0)" OnClick="WrapHandled(SendTest)">@Localizer[nameof(AppStrings.MonitoringSendATestAlert)]</BitButton>
+        </div>
+
+        @if (testResults is not null)
+        {
+            <ul class="test-results" aria-live="polite">
+                @foreach (var result in testResults)
+                {
+                    <li>
+                        <BitIcon IconName="@(result.Succeeded ? BitIconName.CompletedSolid : BitIconName.StatusErrorFull)" Color="@(result.Succeeded ? BitColor.Success : BitColor.Error)" Size="BitSize.Small" />
+                        <BitText Typography="BitTypography.Body2" Element="span">
+                            @ChannelText(result.Channel) · <span class="ltr">@result.Target</span> · @(result.Succeeded ? Localizer[nameof(AppStrings.MonitoringSent)] : ProblemText(Localizer, result))
+                        </BitText>
+                    </li>
+                }
+            </ul>
+        }
+    }
+</div>

@@ -1,0 +1,15 @@
+@* The app's own new project wizard (src/Client/Bit.Fabric.Client.Core/Components/Pages/NewProject/NewProjectPage.razor), bitfabric.co's. *@
+@inherits SitePageHost
+
+@if (isReady is false)
+{
+    @* Until the page's address holds the answers this view kept: the page reads them only when it starts *@
+    <div class="placeholder" aria-busy="true">
+        <BitShimmer Height="3rem" Radius="0.75rem" />
+        <BitShimmer Height="18rem" Radius="0.75rem" />
+    </div>
+}
+else
+{
+    <Bit.Fabric.Client.Core.Components.Pages.NewProject.NewProjectPage />
+}

@@ -1,0 +1,140 @@
+@import '_monitoring.scss';
+
+@include tones;
+
+.add-page {
+    max-width: 44rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+
+    @include lt-sm {
+        padding: 0.75rem 0;
+    }
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-card;
+}
+
+.address-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+
+    ::deep .address {
+        flex: 1 1 14rem;
+    }
+}
+
+.result {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: $bit-shape-radius-md;
+    border-inline-start: 3px solid var(--tone);
+    background-color: color-mix(in srgb, var(--tone) 7%, transparent);
+}
+
+.mark {
+    font-size: 1.25rem;
+    --bit-Icon-color: var(--tone);
+}
+
+.result-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    ::deep .name {
+        width: 100%;
+    }
+}
+
+.prompt {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: $bit-shape-radius-md;
+    font-size: $bit-typography-fs-sm;
+    background-color: $bit-color-background-secondary;
+}
+
+.prompt-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.waiting {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.reads-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-radius: $bit-shape-radius-surface;
+    background-color: $bit-color-background-secondary;
+}
+
+.reads {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.625rem;
+    font-size: $bit-typography-fs-sm;
+
+    li {
+        display: grid;
+        grid-template-columns: 1.25rem 1fr;
+        gap: 0.5rem;
+        align-items: start;
+    }
+
+    .yes {
+        color: $bit-color-foreground-primary;
+
+        ::deep .mark {
+            --bit-Icon-color: #{$bit-color-success};
+        }
+    }
+
+    .no {
+        color: $bit-color-foreground-secondary;
+
+        ::deep .mark {
+            --bit-Icon-color: #{$bit-color-error};
+        }
+    }
+}

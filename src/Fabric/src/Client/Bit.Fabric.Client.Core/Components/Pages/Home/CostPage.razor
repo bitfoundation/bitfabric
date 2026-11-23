@@ -1,0 +1,218 @@
+@attribute [Route(PageUrls.Cost)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.Cost)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppPageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+
+@* Why a real app costs less with bit Fabric: judge the cost of the project, not the price of a token, in three steps, each
+   a band. Its words are AppCostCase's, which /cost.md writes out as Markdown too.
+   Its title is its one h1, as on the home page: the header shows no title for a page that gives it none. *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+
+    // The numbers of a figure's sources, each leading to its entry in the list at the end, as on the comparison pages
+    RenderFragment<string[]> refs = ids => @<text>
+        @if (ids.Length > 0)
+        {
+            <span class="cs-refs app-latin-digits">
+                @foreach (var number in ids.Select(id => AppCostCase.NumberOf(Localizer, id)).Order())
+                {
+                    <BitLink @key="number" Href="@InPage($"source-{number}")" Class="cs-ref"
+                             AriaLabel="@Localizer[nameof(AppStrings.CompareSourceNumber), number]"><sup>@number</sup></BitLink>
+                }
+            </span>
+        }
+    </text>;
+
+    // Two bars side by side, the longer one's length the whole track; the figures are written next to them, so the bars
+    // repeat what the text says and a screen reader reads the text
+    RenderFragment<AppCostBar[]> bars = rows => @<ul class="cs-bars">
+        @foreach (var bar in rows)
+        {
+            <li @key="bar.Model" class="cs-bar-row @(bar.IsStronger ? "is-stronger" : null)">
+                <span class="cs-bar-name">
+                    <bdi dir="ltr" class="cs-bar-model">@bar.Model</bdi>
+                    @if (bar.Setting is not null)
+                    {
+                        <span class="cs-bar-setting">@bar.Setting</span>
+                    }
+                </span>
+                <span class="cs-bar-track" aria-hidden="true"><span class="cs-bar" style="--cs-share:@Percent(bar.Share)"></span></span>
+                <bdi dir="ltr" class="cs-bar-figure">@bar.Figure</bdi>
+            </li>
+        }
+    </ul>;
+}
+
+<AppPageData PageTitle="@Localizer[nameof(AppStrings.CostPageTitle)]"
+             Description="@Localizer[nameof(AppStrings.CostPageDescription)]">
+    <Head>
+        @* The same page as Markdown, for AI agents (llmstxt.org) *@
+        <link rel="alternate" type="text/markdown" href="@MarkdownUrl" />
+        <script type="application/ld+json">@((MarkupString)BuildJsonLd())</script>
+    </Head>
+</AppPageData>
+
+<div class="ah-page">
+    <section class="ah-hero">
+        <span class="ah-eyebrow">@Localizer[nameof(AppStrings.Cost)]</span>
+        <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">@Localizer[nameof(AppStrings.CostTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">@Localizer[nameof(AppStrings.CostLead)]</BitText>
+        <div class="ah-actions">
+            <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+            <BitButton Variant="BitVariant.Text" Href="@InPage("sources")" IconName="@BitIconName.ReportDocument">@Localizer[nameof(AppStrings.CompareWhereFrom)]</BitButton>
+        </div>
+    </section>
+
+    @* The argument, one story in three steps: a token's price means little on its own, and what counts
+       is the tokens a task takes, which Anthropic's own Opus and Sonnet illustrate; the tokens a whole project takes count more
+       still, where bit Fabric has built much of it already and cuts the rounds of rework; so the project costs less. Opus and
+       Sonnet are the example, never the subject. Each step's number is drawn beside its title, which a screen reader reads in order. *@
+
+    @* 1. Tokens per task: Anthropic's own advice and figures, twice the price per token and about 7% more per solved task. Two
+       small panels, each on its own scale, never one axis for two measures. Latin digits in every language,
+       so prices, shares and the models' names stay as written under the Persian font (_rtl-fonts.scss). *@
+    <section class="ah-band" id="ah-per-task" aria-labelledby="ah-per-task-title">
+        <header class="ah-band-head">
+            <span class="cs-band-step" aria-hidden="true">1</span>
+            <AppHomeBandTitle Anchor="per-task" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CostModelsTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostModelsIntro)]@refs(["ANT-2"])</BitText>
+        </header>
+        <div class="cs-panels app-latin-digits">
+            <figure class="cs-panel">
+                <figcaption class="cs-panel-title">@Localizer[nameof(AppStrings.CostModelsTokenTitle)]@refs(["ANT-3"])</figcaption>
+                @bars(AppCostCase.TokenPrices())
+                <BitText Typography="BitTypography.H6" Element="p" Class="cs-panel-line">@Localizer[nameof(AppStrings.CostModelsTokenLine)]</BitText>
+            </figure>
+            <figure class="cs-panel">
+                <figcaption class="cs-panel-title">@Localizer[nameof(AppStrings.CostModelsTaskTitle)]@refs(["ANT-2"])</figcaption>
+                @bars(AppCostCase.TaskCosts(Localizer))
+                <BitText Typography="BitTypography.H6" Element="p" Class="cs-panel-line">@AppCostCase.TaskLine(Localizer)</BitText>
+            </figure>
+        </div>
+        <div class="ah-band-note app-latin-digits">
+            <BitIcon IconName="@BitIconName.History" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@AppCostCase.Earlier(Localizer)@refs(["ANT-1"])</BitText>
+        </div>
+        @* The bridge to the next step *@
+        <BitText Typography="BitTypography.H5" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.CostModelsWhy)]</BitText>
+    </section>
+
+    @* 2. Tokens per project: what every project starts with, so the AI spends nothing on it, then building by trial, its rounds
+       faded and coming back on themselves, against each step done once *@
+    <section class="ah-band" id="ah-per-project" aria-labelledby="ah-per-project-title">
+        <header class="ah-band-head">
+            <span class="cs-band-step" aria-hidden="true">2</span>
+            <AppHomeBandTitle Anchor="per-project" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CostProjectTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostProjectIntro)]</BitText>
+        </header>
+        <div class="ah-band-head">
+            <BitText Typography="BitTypography.H5" Element="@cardHeading">@Localizer[nameof(AppStrings.CostBuiltTitle)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostBuiltIntro)]</BitText>
+        </div>
+        <AppHomeTiles Tiles="AppCostCase.Built(Localizer)" HeadingElement="h4" />
+        <div class="ah-band-head cs-part">
+            <BitText Typography="BitTypography.H5" Element="@cardHeading">@Localizer[nameof(AppStrings.CostRoundsTitle)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostRoundsIntro)]</BitText>
+        </div>
+        <div class="cs-lanes">
+            <div class="cs-lane is-trial">
+                <BitText Typography="BitTypography.H6" Element="h4" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostTrialTitle)]</BitText>
+                <ol class="cs-rounds">
+                    @foreach (var round in AppCostCase.Trial(Localizer))
+                    {
+                        <li @key="round" class="cs-round-item">
+                            <span class="cs-round">@round</span>
+                            <BitIcon IconName="@BitIconName.Forward" Size="BitSize.Small" Color="BitColor.TertiaryForeground" FlipRtl="true" />
+                        </li>
+                    }
+                    <li class="cs-round-item">
+                        <span class="cs-round is-again">
+                            <BitIcon IconName="@BitIconName.Refresh" Size="BitSize.Small" Color="BitColor.Warning" />
+                            @Localizer[nameof(AppStrings.CostTrialRepeat)]
+                        </span>
+                    </li>
+                </ol>
+            </div>
+            <div class="cs-lane is-way">
+                <BitText Typography="BitTypography.H6" Element="h4">@Localizer[nameof(AppStrings.CostWayTitle)]</BitText>
+                <ol class="cs-steps">
+                    @foreach (var step in AppCostCase.Way(Localizer))
+                    {
+                        <li @key="step.Title" class="cs-step">
+                            <BitIcon IconName="@step.Icon" Variant="BitVariant.Fill" Circular="true" Class="cs-step-icon" />
+                            <BitText Typography="BitTypography.Subtitle1" Element="p" Class="cs-step-title">@step.Title</BitText>
+                            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@step.Text</BitText>
+                        </li>
+                    }
+                </ol>
+            </div>
+        </div>
+        <BitText Typography="BitTypography.H5" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.CostRoundsLine)]</BitText>
+    </section>
+
+    @* 3. The conclusion, and the bill on /pricing, which this page doesn't restate *@
+    <section class="ah-band cs-conclusion" id="ah-costs-less" aria-labelledby="ah-costs-less-title">
+        <header class="ah-band-head">
+            <span class="cs-band-step" aria-hidden="true">3</span>
+            <AppHomeBandTitle Anchor="costs-less" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CostLessTitle)]" />
+        </header>
+        <BitText Typography="BitTypography.H4" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.CostLessText)]</BitText>
+        <BitButton Href="@PricingUrl" IconName="@BitIconName.Savings" Class="ah-band-link">@Localizer[nameof(AppStrings.CostLessLink)]</BitButton>
+    </section>
+
+    @* Questions, closed: the answers stay in the page for search engines and find-in-page *@
+    <section class="ah-band" id="ah-questions" aria-labelledby="ah-questions-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="questions" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareQuestionsTitle)]" />
+        </header>
+        <div class="ah-faq">
+            @foreach (var question in AppCostCase.Questions(Localizer))
+            {
+                <BitAccordion @key="question.Question" Title="@question.Question" HeadingLevel="3" HiddenUntilFound Class="ah-faq-item">
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@question.Answer@refs(question.Sources)</BitText>
+                </BitAccordion>
+            }
+        </div>
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@CompareUrl" IconName="@BitIconName.Table">@Localizer[nameof(AppStrings.AppHomeSeeCompare)]</BitButton>
+        </div>
+    </section>
+
+    <section class="ah-final">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeFinalTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeFinalText)]</BitText>
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+
+    @* Every source the page cites, numbered as the page cites them: its name, its address, the day it was published when
+       it says, and the day it was read. Names and addresses are what a reader finds there, so they aren't translated. *@
+    <section class="ah-band app-latin-digits" id="ah-sources" aria-labelledby="ah-sources-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="sources" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareSourcesTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostSourcesIntro), ReadOn]</BitText>
+        </header>
+        <ol class="cs-sources">
+            @{
+                var sources = AppCostCase.Sources(Localizer);
+            }
+            @for (var i = 0; i < sources.Length; i++)
+            {
+                var source = sources[i];
+                <li @key="source.Id" id="source-@(i + 1)" class="cs-source">
+                    <span class="cs-source-number" aria-hidden="true">@(i + 1)</span>
+                    <div class="cs-source-words">
+                        <bdi class="cs-source-name" dir="ltr">@source.Name</bdi>
+                        <BitLink Href="@source.Url" Target="_blank" Class="cs-source-url"><bdi dir="ltr">@Shown(source.Url)</bdi></BitLink>
+                        @if (source.PublishedOn is not null)
+                        {
+                            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostPublishedOn), source.PublishedOn]</BitText>
+                        }
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CompareReadOn), ReadOn]</BitText>
+                    </div>
+                </li>
+            }
+        </ol>
+    </section>
+</div>

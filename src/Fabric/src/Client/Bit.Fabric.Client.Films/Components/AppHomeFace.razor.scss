@@ -1,0 +1,82 @@
+@import 'app-home';
+
+// The face keeps its colors in light and dark, as a photo would: skin and backgrounds are the theme's colors mixed into white,
+// hair and eyes the fixed neutrals
+.ah-face {
+    display: block;
+    flex: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.ah-face-skin {
+    fill: color-mix(in srgb, #{$bit-color-severe-warning} 24%, #{$bit-color-neutrals-white});
+}
+
+.ah-face-eye {
+    fill: $bit-color-neutrals-gray160;
+}
+
+.ah-face-smile {
+    fill: none;
+    stroke: $bit-color-neutrals-gray160;
+    stroke-linecap: round;
+    stroke-width: 1.1;
+}
+
+.is-sara {
+    .ah-face-back {
+        fill: color-mix(in srgb, #{$bit-color-info} 28%, #{$bit-color-neutrals-white});
+    }
+
+    .ah-face-hair {
+        fill: $bit-color-neutrals-gray160;
+    }
+
+    .ah-face-body {
+        fill: $bit-color-info;
+    }
+}
+
+.is-emma {
+    .ah-face-back {
+        fill: color-mix(in srgb, #{$bit-color-success} 26%, #{$bit-color-neutrals-white});
+    }
+
+    .ah-face-hair {
+        fill: color-mix(in srgb, #{$bit-color-severe-warning} 70%, #{$bit-color-neutrals-gray160});
+    }
+
+    .ah-face-body {
+        fill: $bit-color-success;
+    }
+}
+
+.is-lucas {
+    .ah-face-back {
+        fill: color-mix(in srgb, #{$bit-color-warning} 34%, #{$bit-color-neutrals-white});
+    }
+
+    .ah-face-hair {
+        fill: color-mix(in srgb, #{$bit-color-warning} 45%, #{$bit-color-neutrals-gray130});
+    }
+
+    .ah-face-body {
+        fill: $bit-color-tertiary;
+    }
+}
+
+.is-noah {
+    .ah-face-back {
+        fill: color-mix(in srgb, #{$bit-color-error} 20%, #{$bit-color-neutrals-white});
+    }
+
+    .ah-face-hair {
+        fill: $bit-color-neutrals-gray130;
+    }
+
+    .ah-face-body {
+        fill: $bit-color-neutrals-gray130;
+    }
+}

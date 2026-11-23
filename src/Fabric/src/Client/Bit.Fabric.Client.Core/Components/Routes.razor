@@ -1,0 +1,11 @@
+<AppErrorBoundary @key="softRestartKey">
+    <AppBitParams>
+        <CascadingAuthenticationState>
+            <AppClientCoordinator />
+            <Bit.Belemetry.BelemetryInitializer />
+            <LayoutView Layout="@(Layout ?? typeof(MainLayout))">
+                <AppRoutes />
+            </LayoutView>
+        </CascadingAuthenticationState>
+    </AppBitParams>
+</AppErrorBoundary>

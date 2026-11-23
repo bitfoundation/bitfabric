@@ -1,0 +1,8 @@
+@inherits DirectionComponentBase
+@* A direction's closing call to action: its last line, then Get started *@
+
+<section class="df" aria-labelledby="df-title">
+    <BitText Typography="BitTypography.H3" Element="h2" Id="df-title" Class="df-title">@Title</BitText>
+    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="df-text">@Text</BitText>
+    <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@AppLocalizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+</section>

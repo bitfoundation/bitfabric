@@ -1,0 +1,93 @@
+using Bit.Fabric.Shared.Features.Tenants.Dtos;
+
+namespace Bit.Fabric.Client.Core.Components.Layout;
+
+public partial class AppShell
+{
+    [Parameter] public bool? IsIdentityPage { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public List<BitNavItem> NavPanelItems { get; set; } = [];
+
+    /// <summary>
+    /// The tenant the user is currently signed into, or null when none is selected. Shown next to the app version.
+    /// </summary>
+    [CascadingParameter] public TenantDto? CurrentTenant { get; set; }
+
+
+    [AutoInject] private IAppUpdateService appUpdateService = default!;
+    [AutoInject] private SignInModalService signInModalService = default!;
+
+
+    private bool isNavPanelOpen;
+    private bool isNavPanelToggled;
+    private readonly List<Action> unsubscribers = [];
+
+    /// <summary>
+    /// MainLayout passes ChildContent and NavPanelItems and cascades CurrentTenant, all class instances, so each of its
+    /// renders would re-render the shell, the nav panel and its items as well.
+    /// NavPanelItems is compared by reference, which holds because MainLayout assigns a fully built list and never changes it
+    /// afterwards. ChildContent is a new delegate on every MainLayout render, but delegates compare equal by their target and
+    /// method; what it renders is MainLayout's Body, which stays the same for a MainLayout's whole life (a soft restart
+    /// creates a new one), so ChildContent must not show anything that depends on MainLayout's state.
+    /// </summary>
+    protected override object? GetParametersRenderKey()
+        => (IsIdentityPage, ChildContent, NavPanelItems, AuthenticationStateTask, CurrentTenant?.Title, CurrentTenant?.Name);
+
+    protected override async Task OnInitAsync()
+    {
+        await base.OnInitAsync();
+
+        NavigationManager.LocationChanged += NavigationManager_LocationChanged;
+
+        unsubscribers.Add(PubSubService.Subscribe(ClientAppMessages.OPEN_NAV_PANEL, async _ =>
+        {
+            isNavPanelOpen = true;
+            isNavPanelToggled = false;
+            StateHasChanged();
+        }));
+
+        unsubscribers.Add(PubSubService.Subscribe(ClientAppMessages.CLOSE_NAV_PANEL, async _ =>
+        {
+            isNavPanelOpen = false;
+            isNavPanelToggled = false;
+            StateHasChanged();
+        }));
+    }
+
+
+    private string GetMainCssClass()
+    {
+        return IsIdentityPage is true ? "identity"
+             : IsIdentityPage is false ? "non-identity"
+             : string.Empty;
+    }
+
+    private async Task ModalSignIn()
+    {
+        await signInModalService.SignIn();
+    }
+
+    private async Task UpdateApp()
+    {
+        await appUpdateService.ForceUpdate();
+    }
+
+    private void NavigationManager_LocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        // The sign-in and sign-up buttons href are bound to NavigationManager.GetRelativePath().
+        // To ensure the bound values update with each route change, it's necessary to call StateHasChanged on location changes.
+        StateHasChanged();
+    }
+
+
+    protected override async ValueTask DisposeAsync(bool disposing)
+    {
+        if (disposing is false) return;
+
+        unsubscribers.ForEach(us => us.Invoke());
+
+        NavigationManager.LocationChanged -= NavigationManager_LocationChanged;
+
+        await base.DisposeAsync(disposing);
+    }
+}

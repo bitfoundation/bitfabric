@@ -1,0 +1,27 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectCustomersTitle)]" Topic="@NewProjectHelpTopics.Customers" HeadingElement="@HeadingElement">
+    <BitChoiceGroup TItem="BitChoiceGroupOption<bool>" TValue="bool"
+                    AriaLabel="@Localizer[nameof(AppStrings.NewProjectCustomersTitle)]"
+                    Variant="BitVariant.Outline" FullWidth
+                    Value="@Answers.IsMultiTenant"
+                    OnChange="(bool isMultiTenant) => Store.Serve(isMultiTenant is false)">
+        <ItemLabelTemplate Context="option">
+            @if (option.Value)
+            {
+                <NewProjectChoiceLabel IconName="@BitIconName.CompanyDirectory" Text="@option.Text"
+                                       Badge="@Localizer[nameof(AppStrings.NewProjectRecommendedForSaas)]"
+                                       Description="@Localizer[nameof(AppStrings.NewProjectCustomersManyText)]" />
+            }
+            else
+            {
+                <NewProjectChoiceLabel IconName="@BitIconName.People" Text="@option.Text"
+                                       Description="@Localizer[nameof(AppStrings.NewProjectCustomersOneText)]" />
+            }
+        </ItemLabelTemplate>
+        <Options>
+            <BitChoiceGroupOption Value="true" Text="@Localizer[nameof(AppStrings.NewProjectCustomersMany)]" />
+            <BitChoiceGroupOption Value="false" Text="@Localizer[nameof(AppStrings.NewProjectCustomersOne)]" />
+        </Options>
+    </BitChoiceGroup>
+</NewProjectQuestion>

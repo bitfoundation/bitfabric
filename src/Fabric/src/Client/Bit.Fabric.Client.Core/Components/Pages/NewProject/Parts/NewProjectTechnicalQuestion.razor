@@ -1,0 +1,69 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectDatabaseTitle)]" Topic="@NewProjectHelpTopics.Database" HeadingElement="@HeadingElement">
+    @if (Answers.IsTry)
+    {
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+            @Localizer[nameof(AppStrings.NewProjectDatabaseTryNote)]
+        </BitText>
+    }
+    else
+    {
+        <BitChoiceGroup TItem="BitChoiceGroupOption<NewProjectDatabase>" TValue="NewProjectDatabase"
+                        AriaLabel="@Localizer[nameof(AppStrings.NewProjectDatabaseTitle)]"
+                        Variant="BitVariant.Outline" FullWidth
+                        Value="@Answers.Database"
+                        OnChange="(NewProjectDatabase database) => Store.PickDatabase(database)">
+            <ItemLabelTemplate Context="option">
+                <NewProjectChoiceLabel Text="@option.Text"
+                                       Badge="@(option.Value is NewProjectDatabase.PostgreSql ? Localizer[nameof(AppStrings.NewProjectRecommended)].Value : null)"
+                                       Description="@DatabaseDescription(option.Value)" />
+            </ItemLabelTemplate>
+            <Options>
+                <BitChoiceGroupOption Value="NewProjectDatabase.PostgreSql" Text="PostgreSQL" />
+                <BitChoiceGroupOption Value="NewProjectDatabase.Sqlite" Text="SQLite" />
+                <BitChoiceGroupOption Value="NewProjectDatabase.SqlServer" Text="SQL Server" />
+                <BitChoiceGroupOption Value="NewProjectDatabase.MySql" Text="MySQL" />
+            </Options>
+        </BitChoiceGroup>
+
+        @if (Answers.Database is NewProjectDatabase.MySql)
+        {
+            <BitMessage Color="BitColor.Warning" Variant="BitVariant.Outline" Tinted Multiline>@Localizer[nameof(AppStrings.NewProjectMySqlLicense)]</BitMessage>
+        }
+        else if (Answers.Database is NewProjectDatabase.SqlServer)
+        {
+            <BitMessage Color="BitColor.Info" Variant="BitVariant.Outline" Tinted Multiline>@Localizer[nameof(AppStrings.NewProjectSqlServerWarning)]</BitMessage>
+        }
+    }
+</NewProjectQuestion>
+
+<NewProjectOptionQuestion Option="FilesStorage" DefaultBadge="@Localizer[nameof(AppStrings.NewProjectRecommended)].Value" HeadingElement="@HeadingElement" />
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectOfflineTitle)]" Topic="@NewProjectHelpTopics.Offline" HeadingElement="@HeadingElement">
+    <BitToggle Inline FullWidth
+               Label="@Localizer[nameof(AppStrings.NewProjectOfflineLabel)]"
+               Description="@Localizer[nameof(AppStrings.NewProjectOfflineText)]"
+               Value="@Answers.IsOffline"
+               OnChange="(bool isOn) => Store.SwitchOffline(isOn)" />
+    @if (Answers.IsOffline)
+    {
+        <BitMessage Color="BitColor.Warning" Variant="BitVariant.Outline" Tinted Multiline>@Localizer[nameof(AppStrings.NewProjectOfflineWarning)]</BitMessage>
+    }
+</NewProjectQuestion>
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectGitHubTitle)]" Topic="@NewProjectHelpTopics.GitHub" HeadingElement="@HeadingElement">
+    <BitToggle Inline FullWidth
+               Label="@Localizer[nameof(AppStrings.NewProjectGitHubLabel)]"
+               Description="@Localizer[nameof(AppStrings.NewProjectGitHubText)]"
+               Value="@Answers.HasGitHubRepo"
+               OnChange="(bool isOn) => Store.SwitchGitHubRepo(isOn)" />
+</NewProjectQuestion>
+
+<NewProjectQuestion Title="@(NewProjectOptionTexts.Title(Localizer, "cloudflare"))" HeadingElement="@HeadingElement">
+    <BitToggle Inline FullWidth
+               Label="@Localizer[nameof(AppStrings.NewProjectServeThroughCloudflare)]"
+               Description="@Localizer[nameof(AppStrings.NewProjectServeThroughCloudflareText)]"
+               Value="@IsCloudflareOn"
+               OnChange="WrapHandled((bool isOn) => SwitchCloudflare(isOn))" />
+</NewProjectQuestion>

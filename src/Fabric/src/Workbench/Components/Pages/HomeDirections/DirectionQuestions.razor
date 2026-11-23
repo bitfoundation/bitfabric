@@ -1,0 +1,11 @@
+@inherits WorkbenchComponentBase
+@* Questions, closed, whose answers stay in the page for search engines and find-in-page, as on the app's home page *@
+
+<div class="dq">
+    @foreach (var item in Items)
+    {
+        <BitAccordion Title="@item.Question" HeadingLevel="3" HiddenUntilFound Class="dq-item">
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@item.Answer</BitText>
+        </BitAccordion>
+    }
+</div>

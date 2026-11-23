@@ -1,0 +1,23 @@
+@attribute [Route(PageUrls.OpenSourceLicenses)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.OpenSourceLicenses)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppPageBase
+
+@* The open-source software the apps are made with, and its licenses: the license notice the About page's last section links
+   (bitfabric-internal/specs/home-page.md, 2026-11-19). It was on the About page until that became bit Fabric's own page,
+   which names nothing of the technology underneath (bitfabric-internal/specs/product.md, Q09); search engines leave it out,
+   as only the app sends people here (PageUrls.OpenSourceLicenses). *@
+
+<AppPageData Title="@Localizer[nameof(AppStrings.OpenSourceLicensesTitle)]"
+             PageTitle="@Localizer[nameof(AppStrings.OpenSourceLicensesTitle)]" />
+
+<CascadingValue Value="BitDir.Ltr">
+    <section>
+        @if (showAcknowledgements)
+        {
+            <BitCard FullSize>
+                <Acknowledgements />
+            </BitCard>
+        }
+    </section>
+</CascadingValue>

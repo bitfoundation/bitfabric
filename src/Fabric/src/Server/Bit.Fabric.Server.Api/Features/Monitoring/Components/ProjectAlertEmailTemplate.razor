@@ -1,0 +1,12 @@
+@using Microsoft.Extensions.Localization
+@using Bit.Fabric.Server.Api.Features.Identity.Resources
+@using Bit.Fabric.Server.Api.Infrastructure.Emails
+
+<EmailLayout Title="@Model.Title"
+             Preheader="@Model.Body"
+             Heading="@Model.Title"
+             WebAppUrl="@Model.WebAppUrl"
+             Why="@EmailLocalizer[nameof(EmailStrings.AlertEmailWhy), Model.ProjectName]">
+    <EmailParagraph>@Model.Body</EmailParagraph>
+    <EmailButton Href="@Model.Link" Text="@EmailLocalizer[nameof(EmailStrings.AlertEmailButton)]" />
+</EmailLayout>

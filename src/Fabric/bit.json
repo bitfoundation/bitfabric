@@ -1,0 +1,27 @@
+{
+    "template": "bit-bp",
+    "version": "11.0.0-pre-22",
+    "name": "Bit.Fabric",
+    "options": {
+        "framework": "net11.0",
+        "database": "PostgreSQL",
+        "filesStorage": "S3",
+        "api": "Standalone",
+        "module": "None",
+        "multitenant": "True",
+        "captcha": "None",
+        "aspire": "True",
+        "redis": "True",
+        "notification": "True",
+        "sample": "False",
+        "sentry": "False",
+        "appInsights": "False",
+        "signalR": "True",
+        "offlineDb": "False",
+        "cloudflare": "True",
+        "ads": "False",
+        "brouter": "True",
+        "theme": "Fluent2",
+        "advancedTests": "False"
+    }
+}

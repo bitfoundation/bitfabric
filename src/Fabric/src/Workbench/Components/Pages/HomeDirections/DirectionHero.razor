@@ -1,0 +1,32 @@
+@inherits DirectionComponentBase
+@* A direction's hero: an eyebrow, the page's one h1, a lead, Get started and a second way in, a line under the buttons, and
+   what the direction shows first beside them on a wide screen and under them on a phone *@
+
+<section class="dh @(Layout is DirectionHeroLayout.Split ? "dh-split" : "dh-centered")">
+    <div class="dh-words">
+        @if (Eyebrow is not null)
+        {
+            <span class="dh-eyebrow">@Eyebrow</span>
+        }
+        <BitText Typography="TitleTypography" Element="h1" Class="dh-title">
+            @foreach (var line in TitleLines)
+            {
+                <span class="dh-title-line">@line</span>
+            }
+        </BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="dh-lead">@Lead</BitText>
+        <div class="dh-actions">
+            <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@AppLocalizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+            @if (SecondaryText is not null)
+            {
+                <BitButton Variant="BitVariant.Outline" Href="@SecondaryHref" IconName="@SecondaryIcon">@SecondaryText</BitButton>
+            }
+        </div>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="dh-fine">@(Fine ?? AppLocalizer[nameof(AppStrings.AppHomeStartingIsFree)])</BitText>
+        @ChildContent
+    </div>
+    @if (Aside is not null)
+    {
+        <div class="dh-aside">@Aside</div>
+    }
+</section>

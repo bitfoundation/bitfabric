@@ -1,0 +1,19 @@
+{
+    /* Typechecks only (npm run typecheck): wrangler bundles src/index.ts itself when it deploys. */
+    "compilerOptions": {
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "lib": [ "ES2022" ],
+        "types": [ "@cloudflare/workers-types" ],
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true
+    },
+    "include": [ "src" ],
+    "exclude": [ "node_modules" ]
+}

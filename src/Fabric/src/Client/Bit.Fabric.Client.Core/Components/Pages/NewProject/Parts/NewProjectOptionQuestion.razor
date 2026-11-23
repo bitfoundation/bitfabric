@@ -1,0 +1,21 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Title(Option.Name)" Lead="@NewProjectOptionTexts.Lead(Localizer, Option.Name)" HeadingElement="@HeadingElement">
+    <BitChoiceGroup TItem="BitChoiceGroupOption<string>" TValue="string"
+                    AriaLabel="@Title(Option.Name)"
+                    Variant="BitVariant.Outline" FullWidth
+                    Value="@Answers.Option(Option.Name)"
+                    OnChange="WrapHandled((string? value) => Store.SetTemplateOption(Option.Name, value))">
+        <ItemLabelTemplate Context="choice">
+            <NewProjectChoiceLabel Text="@choice.Text"
+                                   Badge="@(choice.Value == Option.Default ? DefaultBadge ?? Title("default") : null)"
+                                   Description="@NewProjectOptionTexts.ChoiceDescription(Localizer, Option.Name, choice.Value)" />
+        </ItemLabelTemplate>
+        <Options>
+            @foreach (var choice in Option.Choices)
+            {
+                <BitChoiceGroupOption Value="@choice" Text="@NewProjectOptionTexts.ChoiceText(Localizer, Option.Name, choice)" />
+            }
+        </Options>
+    </BitChoiceGroup>
+</NewProjectQuestion>

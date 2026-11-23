@@ -1,0 +1,25 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+// Where the address lands: a little above the title, clear of the top of the screen
+.ahb-target {
+    scroll-margin-top: 1rem;
+}
+
+// Always a little visible, as a finger has no hover to find it with
+::deep .ahb-icon {
+    opacity: .4;
+    font-size: .75em;
+    transition: opacity $bit-motion-duration $bit-motion-easing;
+}
+
+:hover > ::deep .ahb-icon,
+:focus-visible > ::deep .ahb-icon {
+    opacity: 1;
+}
+
+.ahb-copied {
+    margin-inline-start: .5rem;
+    color: $bit-color-success-dark;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-regular;
+}

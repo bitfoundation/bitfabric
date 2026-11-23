@@ -1,0 +1,38 @@
+{
+    "requestedUrl": "{url}",
+    "finalUrl": "{url}",
+    "formFactor": "desktop",
+    "lighthouseVersion": "13.6.0",
+    "fetchTime": "2026-11-13T05:53:47.016Z",
+    "runtimeError": null,
+    "benchmarkIndex": 724,
+    "performanceScore": 1,
+    "accessibilityScore": 1,
+    "metrics": {
+        "firstContentfulPaintMs": 252.167,
+        "largestContentfulPaintMs": 252.167,
+        "totalBlockingTimeMs": 0,
+        "cumulativeLayoutShift": 0,
+        "speedIndexMs": 261.001146839342,
+        "timeToFirstByteMs": 175
+    },
+    "findings": [
+        {
+            "id": "network-dependency-tree-insight",
+            "category": "performance",
+            "group": "insights",
+            "weight": 0,
+            "score": 0,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": {
+                "LCP": 0
+            },
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 3,
+            "where": []
+        }
+    ],
+    "refusedRequests": 0
+}

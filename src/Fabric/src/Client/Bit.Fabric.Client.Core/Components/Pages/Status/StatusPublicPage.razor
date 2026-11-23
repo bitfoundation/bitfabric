@@ -1,0 +1,234 @@
+@attribute [Route("/status/{Slug}")]
+@attribute [Route("{culture?}/status/{Slug}")]
+@attribute [AllowAnonymous]
+@attribute [ExcludeFromInteractiveRouting]
+@inherits AppPageBase
+
+<AppPageData Title="@(status is null ? Localizer[nameof(AppStrings.AppHomeStatus)] : Localizer[nameof(AppStrings.MonitoringAppStatus), status.Name ?? ""])"
+             PageTitle="@(status is null ? Localizer[nameof(AppStrings.AppHomeStatus)] : Localizer[nameof(AppStrings.MonitoringAppStatus), status.Name ?? ""])"
+             Description="@(status is null ? null : Localizer[nameof(AppStrings.MonitoringStatusPageDescription), status.Name ?? ""])" />
+
+<div class="status-site">
+    @if (notFound || status is null)
+    {
+        <main class="site-main">
+            <section class="banner tone-nodata" role="status">
+                <span class="banner-icon"><BitIcon IconName="@BitIconName.Unknown" /></span>
+                <div>
+                    <BitText Typography="BitTypography.H5" Element="h1">@Localizer[nameof(AppStrings.MonitoringNoStatusPageHere)]</BitText>
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNoStatusPageHereHelp)]</BitText>
+                </div>
+            </section>
+        </main>
+    }
+    else
+    {
+        <header class="site-bar">
+            <div class="brand">
+                @if (IconUrl is { } iconUrl)
+                {
+                    <BitImage Src="@iconUrl" Alt="" Width="2.5rem" Height="2.5rem" Rounded ImageFit="BitImageFit.Contain" Class="app-icon">
+                        <ErrorTemplate><span class="monogram" aria-hidden="true">@Monogram</span></ErrorTemplate>
+                    </BitImage>
+                }
+                else
+                {
+                    <span class="monogram" aria-hidden="true">@Monogram</span>
+                }
+                <span class="brand-name">
+                    <BitText Typography="BitTypography.Subtitle1" Element="span">@status.Name</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="span">@Localizer[nameof(AppStrings.AppHomeStatus)]</BitText>
+                </span>
+            </div>
+            <div class="bar-actions">
+                <details class="languages">
+                    @* Its name starts with what it shows, as a control's name must contain its visible text. *@
+                    <summary aria-label="@($"{CultureInfo.CurrentUICulture.NativeName}{Localizer[nameof(AppStrings.MonitoringPartsSeparator)]}{Localizer[nameof(AppStrings.Language)]}")"><BitIcon IconName="@BitIconName.Globe" Size="BitSize.Small" /> @CultureInfo.CurrentUICulture.NativeName</summary>
+                    <ul>
+                        @foreach (var (displayName, culture) in CultureInfoManager.SupportedCultures)
+                        {
+                            <li><a href="@LanguageUrl(culture.Name)" lang="@culture.Name" hreflang="@culture.Name">@displayName</a></li>
+                        }
+                    </ul>
+                </details>
+                @if (status.PushPublicKey is not null)
+                {
+                    <button type="button" class="follow" data-follow
+                            data-api="@FollowApi" data-slug="@Slug" data-key="@status.PushPublicKey" data-culture="@CultureInfo.CurrentUICulture.Name"
+                            data-follow-text="@Localizer[nameof(AppStrings.MonitoringGetNotified)]" data-following="@Localizer[nameof(AppStrings.MonitoringFollowing)]"
+                            data-unfollowed="@Localizer[nameof(AppStrings.MonitoringUnfollowed)]"
+                            data-failed="@Localizer[nameof(AppStrings.MonitoringBrowserDidNotAllowNotifications)]" data-ios="@Localizer[nameof(AppStrings.MonitoringAddToHomeScreenFirst)]">
+                        <BitIcon IconName="@BitIconName.Ringer" Size="BitSize.Small" /> <span>@Localizer[nameof(AppStrings.MonitoringGetNotified)]</span>
+                    </button>
+                    @* Shown by the script once this browser follows the page (See wwwroot/status-follow.js). *@
+                    <button type="button" class="unfollow" data-unfollow hidden>@Localizer[nameof(AppStrings.MonitoringStopFollowing)]</button>
+                }
+                @if (status.AppAddress is { } appAddress)
+                {
+                    <a class="to-app" href="@appAddress" target="_blank" rel="noopener">@Localizer[nameof(AppStrings.MonitoringGoTo), status.Name ?? ""]</a>
+                }
+            </div>
+        </header>
+
+        <main class="site-main">
+            <section class="@($"banner {BannerTone}")" role="status">
+                <span class="banner-icon"><BitIcon IconName="@BannerIcon" /></span>
+                <div class="banner-text">
+                    <BitText Typography="BitTypography.H5" Element="h1">@Banner</BitText>
+                    @if (status.CheckedAt is { } checkedAt)
+                    {
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringCheckedEveryMinuteLastAt), LocalTime(checkedAt, "t")]</BitText>
+                    }
+                </div>
+            </section>
+            <p class="follow-note" data-follow-note hidden></p>
+
+            @foreach (var incident in status.Active)
+            {
+                <article id="@incident.Id" class="@($"incident {(incident.Impact is ProjectHealth.Down ? "tone-down" : "tone-degraded")}")">
+                    <BitText Typography="BitTypography.Subtitle1" Element="h2">@incident.Title</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">
+                        @Localizer[nameof(AppStrings.MonitoringSince), LocalTime(incident.StartedAt, "g")]
+                        @if (ComponentNames(incident) is { Length: > 0 } names)
+                        {
+                            <text> · @names</text>
+                        }
+                    </BitText>
+                    <ol class="updates">
+                        @foreach (var update in incident.Updates)
+                        {
+                            <li>
+                                <strong>@PhaseText(update.Phase)</strong> · <time datetime="@update.At.ToString("o")">@LocalTime(update.At, "t")</time>
+                                @* In its own direction, as one not written in the visitor's language comes in the page's main one. *@
+                                <p lang="@(update.IsFallback ? status.Languages.FirstOrDefault() : null)" dir="auto">@update.Text</p>
+                            </li>
+                        }
+                    </ol>
+                </article>
+            }
+
+            @foreach (var window in status.Maintenance.Where(window => window.EndsAt > DateTimeOffset.UtcNow || window.RepeatsWeekly))
+            {
+                <article class="incident tone-maintenance">
+                    <BitText Typography="BitTypography.Subtitle1" Element="h2">@window.Title</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">
+                        @(window.RepeatsWeekly ? Localizer[nameof(AppStrings.MonitoringEveryWeekday), LocalTime(window.StartsAt, "dddd"), LocalTime(window.StartsAt, "t"), LocalTime(window.EndsAt, "t")] : $"{LocalTime(window.StartsAt, "g")} – {LocalTime(window.EndsAt, "g")}")
+                    </BitText>
+                </article>
+            }
+
+            <section class="panel" aria-labelledby="parts-title">
+                <div class="panel-head">
+                    <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="parts-title">@Localizer[nameof(AppStrings.MonitoringEveryPartOf), status.Name ?? ""]</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringUptimeOverTheLast90Days)]</BitText>
+                </div>
+                <ul class="parts">
+                    @foreach (var (id, name, days, uptime) in rows)
+                    {
+                        var component = status.Components.First(component => component.Id == id);
+                        <li>
+                            <div class="part-head">
+                                <span class="part-name">
+                                    <BitText Typography="BitTypography.Body1" Weight="BitFontWeight.Semibold" Element="span">@name</BitText>
+                                    @if (string.IsNullOrWhiteSpace(component.Description) is false)
+                                    {
+                                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="span">@component.Description</BitText>
+                                    }
+                                </span>
+                                <span class="@($"part-state {StateTone(component.State)}")">@StateText(component.State)</span>
+                            </div>
+                            <div class="bars" dir="ltr" role="img" aria-label="@Localizer[nameof(AppStrings.MonitoringPart90Days), name]">
+                                @foreach (var day in days)
+                                {
+                                    <span class="@($"bar {DayTone(day.Tone)}")" title="@DayLabel(name, day)"></span>
+                                }
+                            </div>
+                            @* Laid out the way the bars above run, left to right in every language, each label in its own direction. *@
+                            <div class="part-foot" dir="ltr">
+                                <span dir="auto">@Localizer[nameof(AppStrings.Monitoring90DaysAgo)]</span>
+                                <span dir="auto" class="part-uptime">@Localizer[nameof(AppStrings.MonitoringUptimePercent), Percent(uptime)]</span>
+                                <span dir="auto">@Localizer[nameof(AppStrings.AssistantToday)]</span>
+                            </div>
+                        </li>
+                    }
+                </ul>
+                <div class="legend" aria-hidden="true">
+                    <span><span class="swatch tone-ok"></span>@Localizer[nameof(AppStrings.MonitoringOperational)]</span>
+                    <span><span class="swatch tone-degraded"></span>@Localizer[nameof(AppStrings.MonitoringDegraded)]</span>
+                    <span><span class="swatch tone-down"></span>@Localizer[nameof(AppStrings.MonitoringOutage)]</span>
+                    <span><span class="swatch tone-maintenance"></span>@Localizer[nameof(AppStrings.MonitoringMaintenance)]</span>
+                    <span><span class="swatch tone-nodata"></span>@Localizer[nameof(AppStrings.MonitoringNoData)]</span>
+                </div>
+            </section>
+
+            <div class="numbers">
+                <div class="number">
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringUptime90Days)]</BitText>
+                    <BitText Typography="BitTypography.H5" Element="span" Numeric>@Percent(StatusDays.UptimeOf(appDays))</BitText>
+                </div>
+                @if (status.MedianResponseMs is { } medianMs)
+                {
+                    <div class="number">
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringTypicalResponseTime)]</BitText>
+                        <BitText Typography="BitTypography.H5" Element="span" Numeric>@Localizer[nameof(AppStrings.AppHomeMs), medianMs]</BitText>
+                    </div>
+                }
+            </div>
+
+            <section class="panel" aria-labelledby="past-title">
+                <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="past-title">@Localizer[nameof(AppStrings.MonitoringPastIncidents)]</BitText>
+                <ol class="past">
+                    @foreach (var (day, incidents) in PastDays())
+                    {
+                        <li>
+                            <BitText Typography="BitTypography.Subtitle2" Element="h3">@day.ToString("D", CultureInfo.CurrentUICulture)</BitText>
+                            @if (incidents.Length is 0)
+                            {
+                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNoIncidents)]</BitText>
+                            }
+                            @foreach (var incident in incidents)
+                            {
+                                <details id="@incident.Id" class="@($"past-incident {(incident.Kind is ProjectIncidentKind.Announcement ? "tone-ok" : incident.Impact is ProjectHealth.Down ? "tone-down" : "tone-degraded")}")">
+                                    <summary>
+                                        <strong>@incident.Title</strong>
+                                        @if (incident.Kind is ProjectIncidentKind.Incident)
+                                        {
+                                            <span class="muted"> · @LocalTime(incident.StartedAt, "t") · @Duration(incident)</span>
+                                        }
+                                    </summary>
+                                    <ol class="updates">
+                                        @foreach (var update in incident.Updates)
+                                        {
+                                            <li>
+                                                <strong>@PhaseText(update.Phase)</strong> · <time datetime="@update.At.ToString("o")">@LocalTime(update.At, "g")</time>
+                                                <p lang="@(update.IsFallback ? status.Languages.FirstOrDefault() : null)" dir="auto">@update.Text</p>
+                                            </li>
+                                        }
+                                    </ol>
+                                </details>
+                            }
+                        </li>
+                    }
+                </ol>
+            </section>
+        </main>
+
+        <footer class="site-foot">
+            <nav class="foot-links" aria-label="@Localizer[nameof(AppStrings.MonitoringOtherWaysToFollow)]">
+                <a href="@Feed("Rss")"><BitIcon IconName="@BitIconName.RssFeed" Size="BitSize.Small" /> RSS</a>
+                <a href="@Feed("Atom")">Atom</a>
+                <a href="@Feed("Calendar")"><BitIcon IconName="@BitIconName.EventDate" Size="BitSize.Small" /> @Localizer[nameof(AppStrings.MonitoringMaintenanceCalendar)]</a>
+                <a href="@Feed("Summary")">summary.json</a>
+                @if (status.SupportAddress is { } support)
+                {
+                    <a href="@(support.Contains('@') ? $"mailto:{support}" : support)"><BitIcon IconName="@BitIconName.Mail" Size="BitSize.Small" /> @Localizer[nameof(AppStrings.MonitoringContactSupport)]</a>
+                }
+            </nav>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringTimesAreIn), TimeZoneService.CurrentTimeZone.DisplayName]</BitText>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringWatchedBy)] <a href="https://bitfabric.co" target="_blank" rel="noopener">bit Fabric</a></BitText>
+        </footer>
+
+        @* The one script the page runs: following it by push (See wwwroot/status-follow.js). *@
+        @((MarkupString)"<script src=\"/status-follow.js\" defer></script>")
+    }
+</div>

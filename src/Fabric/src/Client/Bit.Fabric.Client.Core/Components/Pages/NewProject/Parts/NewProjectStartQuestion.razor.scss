@@ -1,0 +1,9 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.np-demo-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    margin: 0;
+    font-size: $bit-typography-fs-sm;
+}

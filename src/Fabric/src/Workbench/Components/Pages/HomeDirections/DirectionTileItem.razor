@@ -1,0 +1,33 @@
+@inherits DirectionComponentBase
+@* One tile of DirectionTiles *@
+
+<li class="dti dti-@Look.ToString().ToLowerInvariant() @(Inline ? "dti-inline" : null)">
+    @if (Look is DirectionTileLook.Figure)
+    {
+        <p class="dti-number"><bdi>@Tile.Title</bdi></p>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Tile.Text</BitText>
+    }
+    else
+    {
+        @if (Look is not DirectionTileLook.Steps)
+        {
+            <BitIcon IconName="@Tile.Icon" Variant="BitVariant.Fill" Circular="true" Class="dti-icon" />
+        }
+        <div class="dti-words">
+            <BitText Typography="BitTypography.H6" Element="h3">@Tile.Title</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Tile.Text</BitText>
+            @if (Tile.Placeholder is not null)
+            {
+                <DirectionPlaceholder Text="@Tile.Placeholder" />
+            }
+            @if (Tile.FilmId is { } filmId)
+            {
+                <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Play" Class="dti-film"
+                           AriaLabel="@Localizer["See how it works: {0}", Tile.Title]"
+                           OnClick="() => Play(filmId, Tile.Icon, Tile.Title, Tile.Text)">
+                    @Localizer["See how it works"]
+                </BitButton>
+            }
+        </div>
+    }
+</li>

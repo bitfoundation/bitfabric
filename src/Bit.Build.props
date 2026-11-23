@@ -1,0 +1,110 @@
+<Project>
+
+    <PropertyGroup>
+
+        <!-- Info -->
+        <Authors>bit platform</Authors>
+        <Company>bit platform</Company>
+        <Product>bit platform</Product>
+        <Title>$(MSBuildProjectName)</Title>
+        <Description>$(MSBuildProjectName)</Description>
+        <Copyright>Copyright © bit platform 2026</Copyright>
+
+        <!-- Repo -->
+        <RepositoryUrl>https://github.com/bitfoundation/bitfabric</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+
+        <!-- nupkg -->
+        <PackageId>$(MSBuildProjectName)</PackageId>
+        <PackageTags>Bit</PackageTags>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder Condition=" '$(Configuration)' == 'Release' ">$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <PackageDescription>$(MSBuildProjectName)</PackageDescription>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageIcon>PackageIcon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageProjectUrl>https://bitfabric.co</PackageProjectUrl>
+
+        <!-- Version -->
+        <ReleaseVersion>11.0.0-pre-23</ReleaseVersion>
+          <PackageVersion>$(ReleaseVersion)</PackageVersion>
+        <PackageReleaseNotes>https://github.com/bitfoundation/bitfabric/releases/tag/v-$(ReleaseVersion)</PackageReleaseNotes>
+        <Version Condition=" '$(Configuration)' == 'Release' ">$([System.String]::Copy($(ReleaseVersion)).Replace('-pre-', '.'))</Version>
+          <Deterministic>true</Deterministic>
+        <IsAotCompatible>true</IsAotCompatible>
+
+        <!-- Compile -->
+        <NeutralLanguage>en</NeutralLanguage>
+        <LangVersion>preview</LangVersion>
+        <Nullable>enable</Nullable>
+        <NoWarn>$(NoWarn);NU1605;CS1591;NU1701;CA1303;CA1308;CA2007;CA1014;CA2227;BL0007;CA1056;BL0005;CS1998;BL0016</NoWarn>
+        <WarningsAsErrors>$(WarningsAsErrors);CS0114;RZ10012</WarningsAsErrors>
+        <!-- https://stackoverflow.com/a/46815541/2720104 -->
+        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    </PropertyGroup>
+
+    <!-- IsAotCompatible and IsTrimmable above turn on ILLink's Roslyn analyzers, whose
+         DynamicallyAccessedMembersAnalyzer walks every method body: on a project the size of
+         Bit.BlazorUI that is ~26s of wall clock (260s of CPU) added to every incremental compile,
+         and with Bit.BlazorUI, .Extras and .Legacy each paying it, it dominates the inner loop -
+         editing one component and rebuilding the demo client costs 58s instead of 14s.
+
+         Trim/AOT warnings only decide something when the package ships, so the analysis is kept
+         where it is read - Release builds, and CI, which builds Debug but sets CI=true on every
+         runner - and dropped from local Debug builds. Pass -p:RunTrimAnalyzers=true to run them
+         locally. All three switches have to go off together: any one of them left on loads the
+         analyzer and costs the full time. -->
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' And '$(CI)' != 'true' And '$(RunTrimAnalyzers)' != 'true' ">
+        <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+        <EnableAotAnalyzer>false</EnableAotAnalyzer>
+        <EnableSingleFileAnalyzer>false</EnableSingleFileAnalyzer>
+    </PropertyGroup>
+
+    <!-- Some files carry a hand-written copy of ReleaseVersion (the version a script reports at runtime, Info.Version
+         and the like). A project lists each of them as a ReleaseVersionLiteral, and the build fails when one of them
+         does not hold ReleaseVersion as a quoted literal, so a version bump that misses a file is caught by CI instead
+         of shipping a runtime version that disagrees with the package. The quotes keep a stale 1.2.0-pre-03 from
+         passing for 1.2.0. -->
+    <Target Name="VerifyReleaseVersionLiterals" BeforeTargets="BeforeBuild" Condition=" '@(ReleaseVersionLiteral)' != '' ">
+        <PropertyGroup>
+            <_ReleaseVersionLiteralPattern>['"]$([System.Text.RegularExpressions.Regex]::Escape('$(ReleaseVersion)'))['"]</_ReleaseVersionLiteralPattern>
+        </PropertyGroup>
+        <ItemGroup>
+            <_StaleReleaseVersionLiteral Include="@(ReleaseVersionLiteral)"
+                                         Condition=" !$([System.Text.RegularExpressions.Regex]::IsMatch($([System.IO.File]::ReadAllText('%(FullPath)')), '$(_ReleaseVersionLiteralPattern)')) " />
+        </ItemGroup>
+        <Error Condition=" '@(_StaleReleaseVersionLiteral)' != '' " ContinueOnError="ErrorAndContinue"
+               File="%(_StaleReleaseVersionLiteral.FullPath)"
+               Text="%(_StaleReleaseVersionLiteral.Identity) does not declare the release version '$(ReleaseVersion)' (see ReleaseVersion in Bit.Build.props). Update its version literal." />
+    </Target>
+
+    <!-- Static web assets packed in the format every SDK reads. With net11.0 among TargetFrameworks, the .NET 11 SDK
+         packs the whole package in its new format - a json manifest behind a generated build\<PackageId>.targets -
+         which the .NET 10 SDK doesn't read: an app built with it got none of the package's css and js.
+         That generated file also took the place of a package's own build\<PackageId>.targets, which is how
+         Bit.Butil's publish-time trimming stopped running. The switch is the SDK's own (private, read only by
+         Microsoft.NET.Sdk.StaticWebAssets.Pack.targets); drop it once every SDK the packages support reads the new
+         format. -->
+    <PropertyGroup>
+        <_UseJsonManifestPackaging>false</_UseJsonManifestPackaging>
+    </PropertyGroup>
+
+    <!-- README, LICENSE.md and the icon, from the nearest folder above that has them -->
+
+    <ItemGroup>
+        <None Include="$([System.IO.Path]::GetFullPath($([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)', 'LICENSE.md'))\LICENSE.md))">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="$([System.IO.Path]::GetFullPath($([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)', 'README.md'))\README.md))">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="$([System.IO.Path]::GetFullPath($([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)', 'PackageIcon.png'))\PackageIcon.png))">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
+</Project>

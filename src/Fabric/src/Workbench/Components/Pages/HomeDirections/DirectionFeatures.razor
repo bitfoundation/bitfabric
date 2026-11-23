@@ -1,0 +1,13 @@
+@inherits DirectionComponentBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home
+@* What every project starts with: the app's home page's eight cards, each with its film, then the way to the rest on /features *@
+
+<div class="dfe">
+    <div class="dfe-grid">
+        @foreach (var feature in DayOne)
+        {
+            <AppHomeFeatureCard Feature="feature" HeadingElement="h3" OnExplain="OnExplain" />
+        }
+    </div>
+    <BitButton Variant="BitVariant.Outline" Href="@PageUrls.Features" Class="dfe-link">@AppLocalizer[nameof(AppStrings.AppHomeSeeEverythingAProjectStartsWith)]</BitButton>
+</div>

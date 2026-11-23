@@ -1,0 +1,130 @@
+@inherits AppComponentBase
+
+<article class="@($"project-card {Tone}")" aria-labelledby="@($"project-{Project.Id:N}")">
+    <a class="card-link" href="@($"{PageUrls.Projects}/{Project.Id}")" aria-labelledby="@($"project-{Project.Id:N}")"></a>
+
+    <header class="card-head">
+        @if (IconUrl is { } iconUrl)
+        {
+            <BitImage Src="@iconUrl" Alt="" Width="2.5rem" Height="2.5rem" Rounded ImageFit="BitImageFit.Contain" Class="app-icon">
+                <ErrorTemplate><span class="monogram" aria-hidden="true">@Monogram</span></ErrorTemplate>
+            </BitImage>
+        }
+        else
+        {
+            <span class="monogram" aria-hidden="true">@Monogram</span>
+        }
+        <span class="card-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="@($"project-{Project.Id:N}")">@Project.Name</BitText>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="ltr">@Host</BitText>
+        </span>
+        <BitTag Size="BitSize.Small" Variant="BitVariant.Fill" Color="@StateColor" IconName="@StateIcon" Text="@StateText" />
+    </header>
+
+    @if (Project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected)
+    {
+        @* Reconnecting is the only way forward from either, so the card offers it rather than only the project's page. *@
+        <div class="notice reconnect">
+            <BitText Typography="BitTypography.Body2">
+                @* The app's own reason may come in its own language and direction. *@
+                <span dir="auto">@(Project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded ? Project.ConnectionProblem : Localizer[nameof(AppStrings.MonitoringDisconnectedNotice)])</span>
+            </BitText>
+            <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(Project)" Class="reconnect-button">
+                @Localizer[nameof(AppStrings.MonitoringReconnect)]
+            </BitButton>
+        </div>
+    }
+    else if (Project.OngoingIncident is { } ongoing)
+    {
+        <BitText Typography="BitTypography.Body2" Class="notice">@ongoing</BitText>
+    }
+    else if (Project.FailingChecks.Length > 0)
+    {
+        <BitText Typography="BitTypography.Body2" Class="notice">
+            @Localizer[nameof(AppStrings.MonitoringNotWorkingRightNow), string.Join(", ", Project.FailingChecks)]
+        </BitText>
+    }
+    else if (Project.ConnectionStatus is ProjectConnectionStatus.FirstChecks)
+    {
+        <BitText Typography="BitTypography.Body2" Class="notice">@Localizer[nameof(AppStrings.MonitoringFirstChecksAreRunning)]</BitText>
+    }
+
+    @if (Project.Last30Days.Length > 0)
+    {
+        @* A bar a day, as the approved card design draws them,
+           above the link that covers the card so each bar's tooltip says how its day went; they open the project's History.
+           Time runs left to right in every language, as on any chart. *@
+        <div class="history">
+            <a class="day-bars" dir="ltr" href="@HistoryHref" aria-label="@Localizer[nameof(AppStrings.MonitoringLast30DaysOpenHistory)]">
+                @foreach (var day in Project.Last30Days)
+                {
+                    <span class="@($"bar {ProjectDayWords.ToneClass(day.Tone)}")" title="@ProjectDayWords.Label(Localizer, Project.Name ?? "", day.Tone, day.Date, day.DownMinutes, day.DegradedMinutes)"></span>
+                }
+            </a>
+            <div class="history-legend">
+                <BitText Typography="BitTypography.Caption2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringCard30Days)]</BitText>
+                <BitText Typography="BitTypography.Caption1" Weight="BitFontWeight.Semibold">@Localizer[nameof(AppStrings.MonitoringUptimeValue), Project.Uptime30Days is { } uptime ? FormatPercent(uptime) : "—"]</BitText>
+            </div>
+        </div>
+    }
+
+    <dl class="metrics">
+        <div>
+            <dt title="@Localizer[nameof(AppStrings.MonitoringHomePagePastCache)]">@Localizer[nameof(AppStrings.MonitoringResponseTime)]</dt>
+            <dd>@(Project.MedianMs is { } median ? Localizer[nameof(AppStrings.AppHomeMs), median] : "—")</dd>
+        </div>
+        <div>
+            <dt>@Localizer[nameof(AppStrings.MonitoringSlowest5Percent)]</dt>
+            <dd>@(Project.P95Ms is { } p95 ? Localizer[nameof(AppStrings.AppHomeMs), p95] : "—")</dd>
+        </div>
+    </dl>
+
+    @if (Project.ResponseLast24Hours.Any(ms => ms > 0))
+    {
+        <MonitoringSparkline Values="Project.ResponseLast24Hours" AriaLabel="@Localizer[nameof(AppStrings.MonitoringResponseTimeLast24Hours)]" />
+    }
+
+    @if (Project.Scans.Length > 0)
+    {
+        var mainScans = Project.Scans.Where(scan => ScanFindings.IsMainKind(scan.Kind)).ToArray();
+        var otherScans = Project.Scans.Except(mainScans).ToArray();
+
+        @* A list of links, each in an item of its own, as a link can't be a list item. *@
+        <ul class="scans" aria-label="@Localizer[nameof(AppStrings.MonitoringScans)]">
+            @foreach (var scan in mainScans)
+            {
+                <li>
+                    <a class="@($"scan {ScanTone(scan)}")" title="@ScanTitle(scan)" href="@ScansHref">
+                        <BitIcon IconName="@ProjectScanWords.KindIcon(scan.Kind)" Size="BitSize.Small" Class="scan-icon" />
+                        <span class="scan-name">@ProjectScanWords.KindName(Localizer, scan.Kind)</span>
+                        <span class="scan-value">@ScanValue(scan)</span>
+                    </a>
+                </li>
+            }
+            @if (otherScans.Length > 0)
+            {
+                var toFix = otherScans.Count(scan => scan.Verdict is ProjectScanVerdict.NeedsWork or ProjectScanVerdict.Poor);
+                <li>
+                    <a class="@($"scan more {(toFix > 0 ? "tone-degraded" : "tone-nodata")}")" href="@ScansHref"
+                       title="@string.Join(" · ", otherScans.Select(scan => $"{ProjectScanWords.KindName(Localizer, scan.Kind)}: {ScanValue(scan)}"))">
+                        <span class="scan-value">@(toFix > 0 ? Localizer[nameof(AppStrings.MonitoringScanMoreToFix), otherScans.Length, toFix] : Localizer[nameof(AppStrings.MonitoringScanMore), otherScans.Length])</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+
+    <footer class="card-foot">
+        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">
+            @(Project.LastCheckedAt is { } checkedAt ? Localizer[nameof(AppStrings.MonitoringCheckedAt), TimeZoneService.ToLocalTime(checkedAt).ToString("g", CultureInfo.CurrentUICulture)] : Localizer[nameof(AppStrings.MonitoringNotCheckedYet)])
+        </BitText>
+        @if (Project.HasCacheWarning)
+        {
+            <BitText Typography="BitTypography.Caption1" Class="cache-warning">@Localizer[nameof(AppStrings.MonitoringCacheIgnoresQueryString)]</BitText>
+        }
+        @if (Project.Scans.Length > 0 && Project.Scans.All(scan => scan.FinishedAt is null && scan.IsRunning is false))
+        {
+            <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.Play" AutoLoading Class="run-scans" OnClick="WrapHandled(RunScans)">@Localizer[nameof(AppStrings.MonitoringScanRunScans)]</BitButton>
+        }
+    </footer>
+</article>

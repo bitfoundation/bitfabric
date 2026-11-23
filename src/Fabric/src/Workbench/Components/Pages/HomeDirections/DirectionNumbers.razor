@@ -1,0 +1,14 @@
+@inherits WorkbenchComponentBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home
+@* The numbers right under a hero, where a visitor who doubts it looks first: the app's own (AppHomeNumbers) *@
+
+<div class="dn">
+    <ul class="dn-list" aria-label="@AppLocalizer[nameof(AppStrings.AppHomeNumbersLabel)]">
+        @foreach (var (number, label) in AppHomeNumbers.Of(AppLocalizer))
+        {
+            @* Isolated left to right, or a right-to-left page shows 120+ as +120 *@
+            <li><strong><bdi dir="ltr">@number</bdi></strong> @label</li>
+        }
+    </ul>
+    <BitLink Href="@AppHomeNumbers.GitHubUrl" Target="_blank">@AppLocalizer[nameof(AppStrings.AppHomeBitFabricIsBuiltOnBitPlatformOpenOn)]</BitLink>
+</div>

@@ -1,0 +1,30 @@
+@inherits DirectionComponentBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+@* One band of a direction: one idea, under an h2 whose click copies the band's address, as on the app's home page. An answer
+   first band says its answer in its first sentence, drawn larger than a lead, for an answer engine to quote. *@
+
+<section class="db" aria-labelledby="ah-@(Anchor)-title">
+    <header class="db-head">
+        <AppHomeBandTitle Anchor="@Anchor" Element="h2" Text="@Title" />
+        @if (Answer is not null)
+        {
+            <BitText Typography="BitTypography.Subtitle1" Element="p" Class="db-answer">@Answer</BitText>
+        }
+        @if (Intro is not null)
+        {
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="db-intro">@Intro</BitText>
+        }
+    </header>
+    @ChildContent
+    @if (Line is not null)
+    {
+        <BitText Typography="BitTypography.H5" Element="p" Class="db-line">@Line</BitText>
+    }
+    @if (Note is not null)
+    {
+        <div class="db-note">
+            <BitIcon IconName="@NoteIcon" Color="BitColor.Primary" FontSize="1.125rem" Class="db-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Note</BitText>
+        </div>
+    }
+</section>

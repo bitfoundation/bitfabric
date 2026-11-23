@@ -1,0 +1,27 @@
+@import '_app-home-page.scss';
+@import 'Parts/_app-home-table.scss';
+
+// The installers to read, side by side
+.tr-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+}
+
+// The line that verifies a build, written as it is typed
+.tr-command {
+    display: block;
+    padding: .5rem .75rem;
+    border-radius: $bit-shape-radius-control;
+    background: $bit-color-background-primary;
+    color: $bit-color-foreground-primary;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-sm;
+    // Between words first, so an option such as --repo stays whole
+    overflow-wrap: break-word;
+}
+
+// What of the visitor's each row is about reads on one or two lines, wider than the comparison's topics
+.tr-sees tbody th {
+    width: 17rem;
+}

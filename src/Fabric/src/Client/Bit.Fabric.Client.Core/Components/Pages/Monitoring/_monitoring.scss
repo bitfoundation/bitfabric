@@ -1,0 +1,50 @@
+// What the monitoring pages share (from the approved design):
+// the tone each state tints a surface with, the tone's own color for text (--tone-text, which reads on the page in light and
+// dark), and a project's mark.
+@import '../../../Styles/abstracts/_media-queries.scss';
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+@mixin tones {
+    .tone-ok {
+        --tone: #{$bit-color-success};
+        --tone-text: #{$bit-color-success-foreground};
+    }
+
+    .tone-degraded {
+        --tone: #{$bit-color-warning};
+        --tone-text: #{$bit-color-warning-foreground};
+    }
+
+    .tone-partial {
+        --tone: #{$bit-color-severe-warning};
+        --tone-text: #{$bit-color-severe-warning-foreground};
+    }
+
+    .tone-down {
+        --tone: #{$bit-color-error};
+        --tone-text: #{$bit-color-error-foreground};
+    }
+
+    .tone-maintenance {
+        --tone: #{$bit-color-info};
+        --tone-text: #{$bit-color-info-foreground};
+    }
+
+    .tone-nodata {
+        --tone: #{$bit-color-neutrals-gray60};
+        --tone-text: #{$bit-color-foreground-secondary};
+    }
+}
+
+@mixin monogram($size: 2.75rem) {
+    width: $size;
+    height: $size;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    font-weight: $bit-typography-fw-bold;
+    font-size: calc(#{$size} * 0.42);
+    border-radius: calc(#{$size} * 0.28);
+    color: $bit-color-primary-text;
+    background-color: $bit-color-primary;
+}

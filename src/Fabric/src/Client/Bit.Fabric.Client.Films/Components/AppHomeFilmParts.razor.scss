@@ -1,0 +1,1403 @@
+@import 'app-home';
+
+@include ah-tap;
+@include ah-reduced-motion;
+
+// The accent of the drawn app, which Rebrand's scene changes (AppHomeFilm's .is-restyled)
+$accent: var(--ah-accent, #{$bit-color-primary});
+$accent-text: var(--ah-accent-text, #{$bit-color-primary-text});
+$radius: var(--ah-radius, #{$bit-shape-radius-control});
+
+.is-late {
+    animation: ah-in .35s var(--in) ease-out both;
+}
+
+.ah-step {
+    color: $bit-color-foreground-secondary;
+    font-size: .72em;
+}
+
+.ah-title {
+    font-size: 1.3em;
+}
+
+.ah-text {
+    color: $bit-color-foreground-secondary;
+}
+
+.ah-field {
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+    padding: .5em .75em;
+    border: 1px solid $bit-color-border-primary;
+    border-radius: $radius;
+
+    small {
+        color: $bit-color-foreground-secondary;
+        font-size: .75em;
+    }
+
+    // Typed in from the start side, letter by letter
+    &.is-typing .ah-field-value {
+        clip-path: inset(0 100% 0 0);
+        animation: ah-type 1.6s calc(var(--in, 0s) + .3s) steps(24, end) forwards;
+    }
+}
+
+[dir="rtl"] .ah-field.is-typing .ah-field-value {
+    clip-path: inset(0 0 0 100%);
+}
+
+.ah-button {
+    position: relative;
+    padding: .55em;
+    overflow: hidden;
+    border-radius: var(--ah-radius, #{$bit-shape-radius-full});
+    font-weight: $bit-typography-fw-medium;
+    text-align: center;
+
+    &.is-accent {
+        background: $accent;
+        color: $accent-text;
+    }
+
+    &.is-bad {
+        background: $bit-color-error;
+        color: $bit-color-error-text;
+    }
+
+    &.is-good {
+        background: $bit-color-success;
+        color: $bit-color-success-text;
+    }
+
+    &.is-outline {
+        border: 1px solid $bit-color-border-primary;
+        background: transparent;
+        color: $bit-color-foreground-primary;
+    }
+
+    &.is-small {
+        align-self: center;
+        padding: .4em 1.1em;
+    }
+}
+
+.ah-code {
+    display: flex;
+    gap: .35rem;
+
+    i {
+        display: grid;
+        flex: 1;
+        place-items: center;
+        height: 2.2rem;
+        border: 1px solid $bit-color-border-primary;
+        border-radius: $bit-shape-radius-sm;
+        font-style: normal;
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    &.is-filling i {
+        opacity: 0;
+        border-color: $bit-color-foreground-primary;
+        animation: ah-in .2s calc(var(--in, 0s) + .2s + var(--at) * .12s) ease-out forwards;
+    }
+}
+
+.ah-note {
+    align-self: flex-start;
+    padding: .2em .65em;
+    border-radius: $bit-shape-radius-full;
+    font-size: .8em;
+    font-weight: $bit-typography-fw-medium;
+
+    &.is-good {
+        background: $bit-color-success-light;
+        color: $bit-color-success-dark;
+    }
+
+    &.is-bad {
+        background: $bit-color-error-light;
+        color: $bit-color-error-dark;
+    }
+
+    &.is-accent {
+        background: $bit-color-primary-light;
+        color: $bit-color-primary-dark;
+    }
+
+    &.is-neutral {
+        background: $bit-color-background-secondary;
+        color: $bit-color-foreground-secondary;
+    }
+}
+
+.ah-choice {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: .55em .75em;
+    overflow: hidden;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $radius;
+
+    small {
+        color: $bit-color-foreground-secondary;
+        font-size: .85em;
+    }
+
+    &.is-used {
+        color: $bit-color-foreground-disabled;
+    }
+
+    &.is-picked {
+        border-color: $bit-color-foreground-primary;
+    }
+
+    &.is-off {
+        opacity: .45;
+    }
+}
+
+.ah-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .6em;
+    padding: .45em .6em;
+    border-radius: $radius;
+    background: $bit-color-background-secondary;
+    --bit-Icon-size: 1em;
+
+    // Lit by a bar on its start side, as the theme's light primary is too dark a gray for the text on it
+    &.is-new {
+        border-inline-start: 3px solid $bit-color-foreground-primary;
+        background: $bit-color-background-tertiary;
+        animation: ah-slide .45s var(--in, .2s) ease-out both;
+    }
+
+    &.is-picked {
+        outline: 1.5px solid $bit-color-foreground-primary;
+    }
+
+    &.is-used {
+        color: $bit-color-foreground-disabled;
+    }
+
+    &.is-off {
+        opacity: .45;
+    }
+}
+
+.ah-row-face {
+    flex: none;
+    width: 1.9em;
+    height: 1.9em;
+}
+
+::deep .ah-row-icon {
+    flex: none;
+    color: $bit-color-foreground-secondary;
+}
+
+.ah-row-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+
+    small {
+        color: $bit-color-foreground-secondary;
+        font-size: .85em;
+    }
+}
+
+.ah-row-end {
+    flex: none;
+    font-size: .85em;
+    font-weight: $bit-typography-fw-medium;
+
+    &.is-good {
+        color: $bit-color-success-dark;
+    }
+
+    &.is-bad {
+        color: $bit-color-error-dark;
+    }
+
+    &.is-accent {
+        color: $bit-color-primary-dark;
+    }
+
+    &.is-neutral {
+        color: $bit-color-foreground-secondary;
+    }
+}
+
+.ah-bubble {
+    align-self: flex-start;
+    max-width: 82%;
+    padding: .5em .75em;
+    border-radius: 1em 1em 1em .25em;
+    background: $bit-color-background-secondary;
+
+    &.is-mine {
+        align-self: flex-end;
+        border-radius: 1em 1em .25em 1em;
+        background: $accent;
+        color: $accent-text;
+    }
+}
+
+.ah-done {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .6em;
+    margin-block: auto;
+    text-align: center;
+
+    i {
+        display: grid;
+        place-items: center;
+        width: 3.4rem;
+        height: 3.4rem;
+        border-radius: 50%;
+        font-size: 1.6rem;
+        font-style: normal;
+        animation: ah-pop .5s var(--in, 0s) ease-out both;
+    }
+
+    b {
+        font-size: 1.15em;
+    }
+
+    small {
+        color: $bit-color-foreground-secondary;
+    }
+
+    &.is-good i {
+        background: $bit-color-success;
+        color: $bit-color-success-text;
+    }
+
+    &.is-bad i {
+        background: $bit-color-error;
+        color: $bit-color-error-text;
+    }
+}
+
+.ah-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: .35em;
+    height: 4.5em;
+    padding: .5em;
+    border-radius: $radius;
+    background: $bit-color-background-secondary;
+
+    i {
+        flex: 1;
+        height: calc(var(--v) * 1%);
+        border-radius: .2em .2em 0 0;
+        background: $accent;
+        transform-origin: bottom;
+        animation: ah-grow .5s calc(var(--in, 0s) + var(--at) * .06s) ease-out both;
+    }
+}
+
+.ah-stat {
+    display: flex;
+    flex-direction: column;
+
+    b {
+        font-size: 2em;
+        letter-spacing: -.02em;
+        line-height: 1.1;
+    }
+
+    small {
+        color: $bit-color-foreground-secondary;
+    }
+}
+
+// A scanner's score: the ring fills to the score, and its color says how good it is
+.ah-ring {
+    --ah-ring: #{$bit-color-success};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .4em;
+    align-self: center;
+
+    i {
+        display: grid;
+        place-items: center;
+        width: 4.4em;
+        height: 4.4em;
+        border-radius: 50%;
+        background: conic-gradient(var(--ah-ring) calc(var(--v) * 1%), #{$bit-color-background-tertiary} 0);
+        font-style: normal;
+        animation: ah-pop .5s var(--in, 0s) ease-out both;
+    }
+
+    b {
+        display: grid;
+        place-items: center;
+        width: calc(100% - .7em);
+        height: calc(100% - .7em);
+        border-radius: 50%;
+        background: $bit-color-background-primary;
+        font-size: 1.35em;
+    }
+
+    small {
+        color: $bit-color-foreground-secondary;
+        font-size: .85em;
+    }
+
+    &.is-fair {
+        --ah-ring: #{$bit-color-warning};
+    }
+
+    &.is-poor {
+        --ah-ring: #{$bit-color-error};
+    }
+}
+
+.ah-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35em;
+
+    i {
+        padding: .25em .7em;
+        border: 1px solid $bit-color-border-secondary;
+        border-radius: $bit-shape-radius-full;
+        font-size: .9em;
+        font-style: normal;
+
+        &.is-picked {
+            border-color: $bit-color-foreground-primary;
+            background: $bit-color-foreground-primary;
+            color: $bit-color-background-primary;
+        }
+    }
+}
+
+// Pictures: a photo, a blocked image, a crop, the camera scanning a code or a face, a voice, an ad's video
+.ah-picture {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    height: 8.5em;
+    overflow: hidden;
+    border-radius: $radius;
+    background: $bit-color-background-tertiary;
+    --bit-Icon-size: 2.2em;
+
+    small {
+        position: absolute;
+        inset: auto 0 .5em;
+        text-align: center;
+        font-size: .8em;
+    }
+
+    &.is-scan,
+    &.is-video {
+        background: $bit-color-foreground-primary;
+        color: $bit-color-background-primary;
+    }
+
+    &.is-blocked {
+        background: repeating-linear-gradient(45deg, $bit-color-error-light 0 .6em, $bit-color-background-tertiary .6em 1.2em);
+        color: $bit-color-error-dark;
+    }
+}
+
+.ah-crop {
+    position: absolute;
+    inset: 12%;
+    border: 2px dashed $bit-color-foreground-primary;
+    box-shadow: 0 0 0 100em color-mix(in srgb, #{$bit-color-foreground-primary} 35%, transparent);
+    animation: ah-crop 1.2s calc(var(--in, 0s) + .4s) ease-in-out both;
+}
+
+.ah-corners {
+    position: absolute;
+    inset: 16%;
+    border: 3px solid currentColor;
+    border-radius: .4em;
+    mask: conic-gradient(at 1.2em 1.2em, transparent 75%, #000 0) 0 0 / calc(100% - 1.2em) calc(100% - 1.2em);
+}
+
+.ah-scanline {
+    position: absolute;
+    inset: 18% 18% auto;
+    height: 2px;
+    background: $bit-color-success;
+    animation: ah-scan 1.4s var(--in, 0s) ease-in-out infinite alternate;
+}
+
+// A drawn photo: the sky, the sun and two hills, in the same colors in light and dark, as a photo keeps
+.ah-photo {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: color-mix(in srgb, #{$bit-color-info} 32%, #{$bit-color-neutrals-white});
+}
+
+.ah-photo-sun {
+    position: absolute;
+    top: 16%;
+    inset-inline-end: 20%;
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: 50%;
+    background: $bit-color-warning;
+}
+
+.ah-photo-hill {
+    position: absolute;
+    inset: 45% -10% 0 -20%;
+    border-radius: 50% 50% 0 0;
+    background: color-mix(in srgb, #{$bit-color-success} 70%, #{$bit-color-neutrals-gray160});
+
+    &.is-back {
+        inset: 34% -30% 0 35%;
+        background: color-mix(in srgb, #{$bit-color-success} 45%, #{$bit-color-neutrals-white});
+    }
+}
+
+// Rotate: the photo, smaller, turns a quarter
+.ah-picture.is-rotate .ah-photo {
+    inset: 20% 28%;
+    border-radius: .3em;
+    box-shadow: $bit-box-shadow-card;
+    animation: ah-rotate .9s calc(var(--in, 0s) + .7s) ease-in-out both;
+}
+
+// Face ID: the user's face, a ring that goes round while it looks, then the check. The fingerprint is drawn the same way
+.ah-picture.is-face,
+.ah-picture.is-fingerprint {
+    background: $bit-color-background-secondary;
+}
+
+// The icon takes its size from its public variable, which it inherits from here
+.ah-faceid.is-fingerprint {
+    --bit-Icon-size: 3.4em;
+    color: $accent;
+}
+
+.ah-faceid {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 6.2em;
+    height: 6.2em;
+}
+
+.ah-faceid-face {
+    width: 4.8em;
+    height: 4.8em;
+}
+
+.ah-faceid-ring {
+    position: absolute;
+    inset: 0;
+    border: 3px dashed $accent;
+    border-radius: 50%;
+    animation: ah-spin 2.4s linear infinite, ah-found .3s calc(var(--in, 0s) + 1.5s) ease-out forwards;
+}
+
+.ah-faceid-check {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    display: grid;
+    place-items: center;
+    width: 1.7em;
+    height: 1.7em;
+    border: 2px solid $bit-color-background-secondary;
+    border-radius: 50%;
+    background: $bit-color-success;
+    color: $bit-color-success-text;
+    font-style: normal;
+    font-weight: $bit-typography-fw-bold;
+    animation: ah-pop .4s calc(var(--in, 0s) + 1.5s) ease-out both;
+}
+
+// The microphone sits above its sound wave
+.ah-picture.is-voice ::deep .ah-picture-icon {
+    margin-bottom: 2.5em;
+}
+
+.ah-wave {
+    position: absolute;
+    inset: auto 0 2.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .25em;
+    height: 1.6em;
+
+    i {
+        width: .3em;
+        height: 100%;
+        border-radius: .2em;
+        background: $accent;
+        animation: ah-wave .8s ease-in-out infinite alternate;
+
+        &:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        &:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+        &:nth-child(4) {
+            animation-delay: .45s;
+        }
+
+        &:nth-child(5) {
+            animation-delay: .6s;
+        }
+    }
+}
+
+.ah-progress {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 3px;
+    background: $bit-color-warning;
+    transform-origin: left;
+    animation: ah-fill 2.4s var(--in, 0s) linear both;
+}
+
+// The app's top bar, with the signed-in person's face on the end side
+.ah-appbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .6em;
+    margin: -.4rem -.2rem .2rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid $bit-color-border-secondary;
+
+    b {
+        flex: 1;
+    }
+
+    .ah-tap {
+        inset-inline-end: 0;
+    }
+}
+
+.ah-appbar-menu {
+    width: .9em;
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    box-shadow: 0 -.28em 0 currentColor, 0 .28em 0 currentColor;
+}
+
+.ah-appbar-me {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .35em;
+
+    small {
+        color: $bit-color-foreground-secondary;
+        font-size: .8em;
+    }
+}
+
+.ah-appbar-face {
+    width: 1.9em;
+    height: 1.9em;
+}
+
+// A data grid: its header, its rows sliding in one after another, and the pager
+.ah-datagrid {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $radius;
+    font-size: .86em;
+}
+
+.ah-datagrid-row {
+    display: grid;
+    gap: .4em;
+    padding: .38em .6em;
+    border-top: 1px solid $bit-color-border-secondary;
+    animation: ah-in .3s calc(var(--in, 0s) + .15s + var(--at, 0) * .08s) ease-out both;
+
+    span,
+    b {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &.is-head {
+        border-top: none;
+        background: $bit-color-background-secondary;
+        animation: none;
+    }
+}
+
+.ah-datagrid-pager {
+    display: flex;
+    align-items: center;
+    gap: .6em;
+    padding: .35em .6em;
+    border-top: 1px solid $bit-color-border-secondary;
+    color: $bit-color-foreground-secondary;
+    font-size: .9em;
+
+    span {
+        flex: 1;
+    }
+
+    i {
+        font-style: normal;
+    }
+}
+
+// A month: the days of the week, five rows of days with their events, and one event dragged to another day
+.ah-calendar {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    font-size: .8em;
+}
+
+.ah-calendar-head {
+    display: flex;
+    align-items: center;
+    gap: .8em;
+    padding-bottom: .4em;
+
+    b {
+        flex: 1;
+        font-size: 1.15em;
+    }
+
+    i {
+        font-style: normal;
+    }
+}
+
+.ah-calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    color: $bit-color-foreground-secondary;
+    font-size: .85em;
+    text-align: center;
+
+    i {
+        font-style: normal;
+    }
+}
+
+.ah-calendar-grid {
+    position: relative;
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    min-height: 8em;
+    border-top: 1px solid $bit-color-border-secondary;
+    border-inline-start: 1px solid $bit-color-border-secondary;
+}
+
+.ah-calendar-cell {
+    display: flex;
+    flex-direction: column;
+    gap: .15em;
+    min-width: 0;
+    padding: .15em;
+    overflow: hidden;
+    border-bottom: 1px solid $bit-color-border-secondary;
+    border-inline-end: 1px solid $bit-color-border-secondary;
+
+    small {
+        color: $bit-color-foreground-secondary;
+        font-size: .8em;
+        line-height: 1;
+    }
+
+    &.is-out {
+        background: $bit-color-background-secondary;
+    }
+}
+
+.ah-calendar-event {
+    padding: .05em .25em;
+    overflow: hidden;
+    border-radius: .25em;
+    font-size: .78em;
+    font-style: normal;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &.is-accent {
+        background: $accent;
+        color: $accent-text;
+    }
+
+    &.is-good {
+        background: $bit-color-success;
+        color: $bit-color-success-text;
+    }
+
+    &.is-bad {
+        background: $bit-color-error;
+        color: $bit-color-error-text;
+    }
+
+    &.is-neutral {
+        background: $bit-color-background-tertiary;
+        color: $bit-color-foreground-primary;
+    }
+
+    // Lifted from its day, carried by the finger to the other one, and put down there
+    &.is-moving {
+        position: absolute;
+        top: calc(var(--from-y) + 1.3em);
+        left: calc(var(--from-x) + .2em);
+        width: calc(100% / 7 - .5em);
+        overflow: visible;
+        z-index: 1;
+        animation: ah-drag 1s var(--move-at) ease-in-out both;
+    }
+}
+
+[dir="rtl"] .ah-calendar-event.is-moving {
+    left: auto;
+    right: calc(var(--from-x) + .2em);
+    animation-name: ah-drag-rtl;
+}
+
+.ah-finger {
+    position: absolute;
+    top: 50%;
+    inset-inline-end: -.3em;
+    width: 1.4em;
+    height: 1.4em;
+    margin-top: -.7em;
+    border-radius: 50%;
+    background: color-mix(in srgb, #{$bit-color-foreground-primary} 25%, transparent);
+    animation: ah-hold 1.4s calc(var(--move-at) - .2s) ease-in-out both;
+}
+
+// The image editor's toolbar: the named tools, then buttons for the many it doesn't name
+.ah-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35em;
+    --bit-Icon-size: 1.1em;
+
+    i {
+        display: grid;
+        place-items: center;
+        width: 2.1em;
+        height: 2.1em;
+        border-radius: $radius;
+        background: $bit-color-background-secondary;
+        font-style: normal;
+
+        &.is-picked {
+            background: $accent;
+            color: $accent-text;
+        }
+
+        &.is-more {
+            background: $bit-color-background-tertiary;
+        }
+    }
+}
+
+// The well-known sign-in providers' marks, popping in one after another
+.ah-logos {
+    display: flex;
+    flex-direction: column;
+    gap: .8em;
+    margin-block: auto;
+    text-align: center;
+
+    small {
+        color: $bit-color-foreground-secondary;
+    }
+}
+
+.ah-logos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: .6em;
+    --bit-Icon-size: 1.5em;
+
+    i {
+        display: grid;
+        place-items: center;
+        aspect-ratio: 1;
+        border-radius: $radius;
+        background: $bit-color-background-secondary;
+        animation: ah-pop .35s calc(var(--in, 0s) + .2s + var(--at) * .1s) ease-out both;
+
+        ::deep svg {
+            width: 1.6em;
+            height: 1.6em;
+        }
+    }
+}
+
+// Microsoft's four squares and Instagram's camera, drawn, as the app's own marks have neither
+.ah-logo-microsoft {
+    grid-template-columns: .7em .7em;
+    gap: .12em;
+    place-content: center;
+
+    b {
+        width: .7em;
+        height: .7em;
+        background: $bit-color-foreground-primary;
+    }
+}
+
+.ah-logo-instagram b {
+    position: relative;
+    width: 1.5em;
+    height: 1.5em;
+    border: .16em solid $bit-color-foreground-primary;
+    border-radius: .45em;
+    box-sizing: border-box;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 22%;
+        border: .16em solid $bit-color-foreground-primary;
+        border-radius: 50%;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: .12em;
+        right: .12em;
+        width: .2em;
+        height: .2em;
+        border-radius: 50%;
+        background: $bit-color-foreground-primary;
+    }
+}
+
+// Devices drawn small, side by side, as the Workbench shows a page's views, or as its store screenshots; and pages in a row with arrows
+// between them, as its flows draw them
+.ah-frames,
+.ah-flow {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: .7em;
+    margin-block: auto;
+}
+
+.ah-flow {
+    align-items: center;
+    gap: .35em;
+}
+
+.ah-frame {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    gap: .35em;
+    animation: ah-pop .4s calc(var(--in, 0s) + .2s + var(--at) * .25s) ease-out both;
+
+    small {
+        color: $bit-color-foreground-secondary;
+        font-size: .8em;
+        white-space: nowrap;
+    }
+}
+
+.ah-frame-screen {
+    display: flex;
+    flex-direction: column;
+    gap: .3em;
+    width: 3.4em;
+    aspect-ratio: 9 / 19;
+    padding: .4em .3em;
+    border: .22em solid $bit-color-foreground-primary;
+    border-radius: .6em;
+    background: $bit-color-background-primary;
+    box-sizing: border-box;
+
+    i {
+        display: block;
+        flex: none;
+        width: 85%;
+        height: .3em;
+        border-radius: $bit-shape-radius-full;
+        background: $bit-color-background-tertiary;
+
+        &.is-bar {
+            width: 100%;
+            height: .45em;
+            border-radius: .15em;
+            background: $bit-color-background-secondary;
+        }
+
+        &.is-head {
+            width: 65%;
+            height: .45em;
+            background: $bit-color-border-primary;
+        }
+
+        &.is-short {
+            width: 50%;
+        }
+
+        // What a change adds: there only once the change shows
+        &.is-added {
+            display: none;
+        }
+
+        &.is-button {
+            width: 100%;
+            height: .65em;
+            margin-top: auto;
+            background: $accent;
+        }
+    }
+}
+
+.ah-frame.is-tablet .ah-frame-screen {
+    width: 6em;
+    aspect-ratio: 3 / 4;
+    border-radius: .5em;
+}
+
+.ah-frame:is(.is-browser, .is-laptop, .is-desktop) .ah-frame-screen {
+    width: 9.5em;
+    aspect-ratio: 16 / 10;
+    border-width: .16em;
+    border-radius: .35em;
+
+    i.is-button {
+        width: 35%;
+    }
+}
+
+// The light and the dark theme's views, each in its own colors whichever theme the page around it is in
+.ah-frame.is-light .ah-frame-screen {
+    border-color: $bit-color-neutrals-gray160;
+    background: $bit-color-neutrals-white;
+
+    i {
+        background: $bit-color-neutrals-gray30;
+
+        &.is-bar,
+        &.is-head {
+            background: $bit-color-neutrals-gray50;
+        }
+
+        &.is-button {
+            background: $bit-color-neutrals-gray160;
+        }
+    }
+}
+
+.ah-frame.is-dark .ah-frame-screen {
+    border-color: $bit-color-neutrals-gray160;
+    background: $bit-color-neutrals-gray190;
+
+    i {
+        background: $bit-color-neutrals-gray150;
+
+        &.is-bar,
+        &.is-head {
+            background: $bit-color-neutrals-gray130;
+        }
+
+        &.is-button {
+            background: $bit-color-neutrals-gray20;
+        }
+    }
+}
+
+// The same change, on every view at the same moment: a new line, and the button in the success color
+.ah-frames.is-changing .ah-frame-screen i {
+    &.is-added {
+        display: block;
+        width: 75%;
+        background: $bit-color-success;
+        transform-origin: left;
+        animation: ah-fill .4s var(--change-at) ease-out both;
+    }
+
+    &.is-button {
+        animation: ah-change .4s var(--change-at) ease-out forwards;
+    }
+}
+
+.ah-frames.is-changing .ah-frame-screen[dir="rtl"] i.is-added {
+    transform-origin: right;
+}
+
+// A store screenshot: the caption, then the device, on a colored background
+.ah-frame.is-shot {
+    gap: .3em;
+    padding: .45em .4em .35em;
+    border-radius: .5em;
+    background: $accent;
+
+    .ah-frame-caption {
+        max-width: 4.6em;
+        color: $accent-text;
+        font-size: .62em;
+        line-height: 1.15;
+        text-align: center;
+    }
+
+    .ah-frame-screen {
+        border-color: $bit-color-background-primary;
+    }
+
+    small {
+        color: $accent-text;
+        font-size: .7em;
+    }
+}
+
+.ah-frame.is-shot.is-good {
+    background: $bit-color-success;
+
+    .ah-frame-caption,
+    small {
+        color: $bit-color-success-text;
+    }
+}
+
+.ah-frame.is-shot:is(.is-browser, .is-laptop, .is-desktop) .ah-frame-caption {
+    max-width: none;
+}
+
+// A flow's page, with the button that leads on ringed once the arrow sets off from it
+.ah-flow-page {
+    animation-delay: calc(var(--in, 0s) + .2s + var(--at) * .5s);
+
+    .is-leads {
+        outline: .12em solid transparent;
+        outline-offset: .12em;
+        animation: ah-lead .5s calc(var(--in, 0s) + .45s + var(--at) * .5s) ease-out forwards;
+    }
+}
+
+.ah-flow-arrow {
+    position: relative;
+    flex: none;
+    width: 1.8em;
+    height: .14em;
+    margin-bottom: 1.2em;
+    background: $bit-color-foreground-primary;
+    transform-origin: left;
+    animation: ah-fill .3s calc(var(--in, 0s) + .05s + var(--at) * .5s) ease-out both;
+
+    // The head, which points the way the text reads
+    &::after {
+        content: "";
+        position: absolute;
+        inset-inline-end: -.1em;
+        top: 50%;
+        border-block: .3em solid transparent;
+        border-inline-start: .42em solid $bit-color-foreground-primary;
+        transform: translateY(-50%);
+    }
+}
+
+[dir="rtl"] .ah-flow-arrow {
+    transform-origin: right;
+}
+
+@keyframes ah-change {
+    to {
+        background: $bit-color-success;
+    }
+}
+
+@keyframes ah-lead {
+    to {
+        outline-color: $bit-color-foreground-primary;
+    }
+}
+
+// The account menu, under the top bar's face, as the app's own opens there
+.ah-menu {
+    position: absolute;
+    inset: var(--ah-menu-top, 3.4rem) .6rem auto auto;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    width: min(13rem, 80%);
+    padding: .7rem;
+    border-radius: .9rem;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-popup;
+    animation: ah-pop-in-menu .3s var(--in, .4s) ease-out both;
+}
+
+[dir="rtl"] .ah-menu {
+    inset: var(--ah-menu-top, 3.4rem) auto auto .6rem;
+}
+
+// Over the screen: the notification from the top, the sheet from the bottom, the dialog in the middle
+.ah-banner {
+    position: absolute;
+    inset: 2rem .5rem auto;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    padding: .6rem .75rem;
+    border-radius: 1rem;
+    background: $bit-color-background-tertiary;
+    box-shadow: $bit-box-shadow-popup;
+    animation: ah-drop .45s var(--in, .4s) ease-out both;
+}
+
+.ah-sheet {
+    position: absolute;
+    inset: auto .5rem .5rem;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    padding: .9rem;
+    border-radius: 1.1rem;
+    background: $bit-color-background-tertiary;
+    box-shadow: $bit-box-shadow-popup;
+    text-align: center;
+    animation: ah-rise .45s var(--in, 1s) ease-out both;
+}
+
+.ah-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: $bit-color-background-overlay;
+    animation: ah-fade .3s var(--in, .4s) ease-out both;
+}
+
+.ah-dialog {
+    position: absolute;
+    inset: 50% .8rem auto;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-dialog;
+    transform: translateY(-50%);
+    animation: ah-pop-in .4s var(--in, .4s) ease-out both;
+}
+
+@keyframes ah-in {
+    from {
+        opacity: 0;
+        transform: translateY(.4rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes ah-slide {
+    from {
+        opacity: 0;
+        transform: translateY(-.6rem);
+    }
+}
+
+@keyframes ah-type {
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes ah-pop {
+    from {
+        opacity: 0;
+        transform: scale(.4);
+    }
+}
+
+@keyframes ah-pop-in {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) scale(.85);
+    }
+}
+
+@keyframes ah-fade {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes ah-grow {
+    from {
+        transform: scaleY(0);
+    }
+}
+
+@keyframes ah-crop {
+    from {
+        inset: 0;
+    }
+}
+
+@keyframes ah-scan {
+    to {
+        top: 80%;
+    }
+}
+
+@keyframes ah-wave {
+    from {
+        transform: scaleY(.25);
+    }
+}
+
+@keyframes ah-fill {
+    from {
+        transform: scaleX(0);
+    }
+}
+
+@keyframes ah-drop {
+    from {
+        opacity: 0;
+        transform: translateY(-120%);
+    }
+}
+
+@keyframes ah-rise {
+    from {
+        opacity: 0;
+        transform: translateY(120%);
+    }
+}
+
+@keyframes ah-rotate {
+    to {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes ah-spin {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+@keyframes ah-found {
+    to {
+        border-style: solid;
+        border-color: #{$bit-color-success};
+    }
+}
+
+@keyframes ah-drag {
+    0% {
+        transform: none;
+    }
+
+    20% {
+        left: calc(var(--from-x) + .2em);
+        top: calc(var(--from-y) + 1.3em);
+        transform: scale(1.12);
+        box-shadow: $bit-box-shadow-popup;
+    }
+
+    80% {
+        left: calc(var(--to-x) + .2em);
+        top: calc(var(--to-y) + 1.3em);
+        transform: scale(1.12);
+        box-shadow: $bit-box-shadow-popup;
+    }
+
+    100% {
+        left: calc(var(--to-x) + .2em);
+        top: calc(var(--to-y) + 1.3em);
+        transform: none;
+    }
+}
+
+@keyframes ah-drag-rtl {
+    0% {
+        transform: none;
+    }
+
+    20% {
+        right: calc(var(--from-x) + .2em);
+        top: calc(var(--from-y) + 1.3em);
+        transform: scale(1.12);
+        box-shadow: $bit-box-shadow-popup;
+    }
+
+    80% {
+        right: calc(var(--to-x) + .2em);
+        top: calc(var(--to-y) + 1.3em);
+        transform: scale(1.12);
+        box-shadow: $bit-box-shadow-popup;
+    }
+
+    100% {
+        right: calc(var(--to-x) + .2em);
+        top: calc(var(--to-y) + 1.3em);
+        transform: none;
+    }
+}
+
+@keyframes ah-hold {
+    0% {
+        opacity: 0;
+        transform: scale(.4);
+    }
+
+    15%,
+    85% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.4);
+    }
+}
+
+@keyframes ah-pop-in-menu {
+    from {
+        opacity: 0;
+        transform: translateY(-.4rem) scale(.95);
+    }
+}

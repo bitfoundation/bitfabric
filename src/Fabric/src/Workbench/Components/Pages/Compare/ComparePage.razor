@@ -1,0 +1,15 @@
+@inherits SitePageHost
+@* bitfabric.co/compare and the comparisons under it, the view's subject switch picking which: the hub, a hosted builder, an
+   empty project or starter kits. Two design options set the format: the table leads, or the choice does. Every fact about
+   another product is in that product's class under Data, with its sources
+   (bitfabric-internal/.agents/gtm/research/competitors.md). A design, not the app's page: the one picked is built in the
+   app. *@
+
+@* Where the view goes back to when another comparison opens, so its hero shows rather than the place the card was *@
+<span class="cmp-top" tabindex="-1" @ref="top"></span>
+
+@* Latin digits in every language while the page is in English: product names such as Base44 and v0, prices and dates stay
+   as written under the Persian font, which otherwise draws Persian digits (app-latin-digits, _rtl-fonts.scss) *@
+<div class="cmp-page app-latin-digits">
+    <CompareView Subject="Subject" IsFit="IsFit" Subjects="Subjects" OnOpen="Open" />
+</div>

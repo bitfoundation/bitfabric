@@ -1,0 +1,79 @@
+name: ci-boilerplate
+
+# Packs bit Boilerplate, then sets up and builds the template itself with this checkout's bit CLI, and checks its
+# formatting. By hand it can take the libraries from bitplatform's newest prerelease run instead of nuget.org.
+on:
+  pull_request:
+    paths:
+    - 'src/Boilerplate/**'
+    - 'src/Cli/**'
+    - 'src/Bit.Build.props'
+    - 'src/global.json'
+    - '.github/actions/setup-bit-cli/**'
+    - '.github/actions/use-prerelease-packages/**'
+    - '.github/workflows/ci-boilerplate.yml'
+  push:
+    branches: [ main ]
+    paths:
+    - 'src/Boilerplate/**'
+    - '.github/workflows/ci-boilerplate.yml'
+  workflow_dispatch:
+    inputs:
+      prerelease_packages:
+        description: The libraries from bitplatform's newest CD Prerelease nuget packages run instead of nuget.org
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      prerelease_packages:
+        type: boolean
+        default: false
+
+env:
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ci-boilerplate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-Boilerplate:
+    name: build bit Boilerplate
+    runs-on: ubuntu-26.04
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+          persist-credentials: false
+
+    - name: Setup .NET 11.0
+      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      with:
+        global-json-file: src/global.json
+
+    - name: dotnet pack
+      run: dotnet pack src/Boilerplate/Bit.Boilerplate.ProjectTemplate.csproj --output ./packages --configuration Release
+
+    - name: Use prerelease packages
+      if: inputs.prerelease_packages
+      uses: ./.github/actions/use-prerelease-packages
+      with:
+        project-folder: src/Boilerplate/Bit.Boilerplate
+
+    - name: Setup bit CLI
+      uses: ./.github/actions/setup-bit-cli
+
+    # It takes about 5 minutes here, and has a time limit of its own well past that, so a step that gets stuck fails under
+    # its own name instead of running to the job's limit.
+    - name: Set up and build Boilerplate with bit setup
+      run: bit setup src/Boilerplate/Bit.Boilerplate --platforms android --no-browsers --yes -p:EnforceCodeStyleInBuild=true
+      timeout-minutes: 20
+
+    - name: Verify formatting
+      run: dotnet format whitespace src/Boilerplate/Bit.Boilerplate/Boilerplate.slnx --verify-no-changes

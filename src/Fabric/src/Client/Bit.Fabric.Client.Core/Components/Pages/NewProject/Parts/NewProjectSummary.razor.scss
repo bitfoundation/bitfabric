@@ -1,0 +1,53 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.np-summary {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+}
+
+.np-summary-list {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: grid;
+        grid-template-columns: 16px minmax(0, 1fr);
+        gap: 10px;
+        align-items: start;
+        font-size: $bit-typography-fs-sm;
+    }
+
+    ::deep .np-summary-icon {
+        margin-top: 3px;
+        color: $bit-color-success;
+        font-size: $bit-typography-fs-xs;
+    }
+}
+
+.np-estimate {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: $bit-shape-radius-full;
+        background: $bit-color-background-secondary;
+        font-size: $bit-typography-fs-xs;
+        font-weight: $bit-typography-fw-medium;
+    }
+
+    ::deep .np-estimate-icon {
+        color: $bit-color-foreground-secondary;
+    }
+}

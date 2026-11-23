@@ -1,0 +1,639 @@
+// The app's look, re-valued after grok.com: the Fluent 2 preset's light and dark themes, re-valued in place, so theme
+// persistence, the server-rendered first paint and the light/dark toggle keep working unchanged.
+
+// [mirror] This file owns the page background (--bit-clr-bg-pri) of both themes. Whatever paints outside the document has
+// to carry the same two colors, or it meets the page in a visible seam: AppThemePresets (the native chrome, registered for
+// the first-paint theme-color tag too) and the static theme-color tags of
+// src/Client/Bit.Fabric.Client.Maui/wwwroot/index.html, src/Client/Bit.Fabric.Client.Web/wwwroot/index.html and
+// src/Client/Bit.Fabric.Client.Web/wwwroot/manifest.json.
+
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../fonts/inter/inter-latin-ext.woff2") format("woff2");
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../fonts/inter/inter-latin.woff2") format("woff2");
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@mixin grok-shared {
+    --bit-tpg-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bit-tpg-font-family-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Cascadia Mono", monospace;
+    --bit-tpg-fw-regular: 425;
+    --bit-tpg-fw-medium: 525;
+    --bit-tpg-fw-semibold: 650;
+    --bit-tpg-fw-bold: 700;
+    --bit-tpg-font-weight: 525;
+    --bit-tpg-ctrl-letter-spacing: 0.0071em;
+    --bit-tpg-button-font-weight: 525;
+    --bit-tpg-button-letter-spacing: 0.0071em;
+    --bit-tpg-body1-font-size: 0.9375rem;
+    --bit-tpg-body1-font-weight: 425;
+    --bit-tpg-body1-line-height: 1.6;
+    --bit-tpg-body1-letter-spacing: 0.0027em;
+    --bit-tpg-body2-font-weight: 425;
+    --bit-tpg-body2-letter-spacing: 0.0071em;
+    --bit-tpg-caption1-font-weight: 425;
+    --bit-tpg-caption1-letter-spacing: 0.01em;
+    --bit-tpg-caption2-font-weight: 425;
+    --bit-tpg-caption2-letter-spacing: 0.01em;
+    --bit-tpg-subtitle1-font-weight: 650;
+    --bit-tpg-subtitle2-font-weight: 650;
+    --bit-tpg-overline-font-weight: 650;
+    --bit-tpg-h1-font-weight: 525;
+    --bit-tpg-h2-font-weight: 525;
+    --bit-tpg-h3-font-weight: 525;
+    --bit-tpg-h4-font-weight: 650;
+    --bit-tpg-h4-line-height: 1.3;
+    --bit-tpg-h5-font-weight: 650;
+    --bit-tpg-h6-font-size: 1.0625rem;
+    --bit-tpg-h6-font-weight: 650;
+    --bit-tpg-dialog-title-font-size: 1.0625rem;
+
+    --bit-shp-brd-radius: 0.625rem;
+    --bit-shp-radius-control: 0.625rem;
+    --bit-shp-radius-button: var(--bit-shp-radius-full);
+    --bit-shp-radius-chip: var(--bit-shp-radius-full);
+    --bit-shp-radius-selection: 0.375rem;
+    --bit-shp-radius-surface: 1.125rem;
+    --bit-shp-radius-popup: 1rem;
+    --bit-shp-radius-dialog: 1.25rem;
+    --bit-shp-radius-progress: var(--bit-shp-radius-full);
+    --bit-shp-focus-ring-offset: 0.125rem;
+
+    --bit-clr-pri-focus: #1084FE;
+    --bit-clr-sec-focus: #1084FE;
+    --bit-clr-ter-focus: #1084FE;
+    --bit-clr-inf-focus: #1084FE;
+    --bit-clr-suc-focus: #1084FE;
+    --bit-clr-wrn-focus: #1084FE;
+    --bit-clr-swr-focus: #1084FE;
+    --bit-clr-err-focus: #1084FE;
+    --bit-clr-bg-pri-focus: var(--bit-clr-pri-focus);
+    --bit-clr-bg-sec-focus: var(--bit-clr-pri-focus);
+    --bit-clr-bg-ter-focus: var(--bit-clr-pri-focus);
+    --bit-clr-fg-pri-focus: var(--bit-clr-pri-focus);
+    --bit-clr-fg-sec-focus: var(--bit-clr-pri-focus);
+    --bit-clr-fg-ter-focus: var(--bit-clr-pri-focus);
+    --bit-clr-brd-pri-focus: var(--bit-clr-pri-focus);
+    --bit-clr-brd-sec-focus: var(--bit-clr-pri-focus);
+    --bit-clr-brd-ter-focus: var(--bit-clr-pri-focus);
+
+    --bit-clr-ntr-gray10: #FAF9F7;
+    --bit-clr-ntr-gray20: #F3F2F0;
+    --bit-clr-ntr-gray30: #ECEBE9;
+    --bit-clr-ntr-gray40: #E0DFDD;
+    --bit-clr-ntr-gray50: #D1D0CE;
+    --bit-clr-ntr-gray60: #C7C6C4;
+    --bit-clr-ntr-gray70: #BCBBB9;
+    --bit-clr-ntr-gray80: #B1B0AE;
+    --bit-clr-ntr-gray90: #A09F9D;
+    --bit-clr-ntr-gray100: #969593;
+    --bit-clr-ntr-gray110: #898886;
+    --bit-clr-ntr-gray120: #787775;
+    --bit-clr-ntr-gray130: #5F5E5C;
+    --bit-clr-ntr-gray140: #474644;
+    --bit-clr-ntr-gray150: #3B3A38;
+    --bit-clr-ntr-gray160: #32312F;
+    --bit-clr-ntr-gray170: #292826;
+    --bit-clr-ntr-gray180: #252423;
+    --bit-clr-ntr-gray190: #201F1E;
+    --bit-clr-ntr-gray200: #1B1A19;
+    --bit-clr-ntr-gray210: #161514;
+    --bit-clr-ntr-gray220: #11100F;
+
+    --bit-clr-tooltip-bg: var(--bit-clr-bg-pri-light);
+    --bit-clr-tooltip-fg: var(--bit-clr-fg-pri);
+
+    --bit-siz-ctrl-min-width: auto;
+    --bit-siz-icon-md: 1.125rem;
+    --bit-siz-switch-w-md-steps: 4.25;
+    --bit-siz-switch-h-md-steps: 2.5;
+    --bit-siz-switch-thumb-md-steps: 2;
+    --bit-spa-card-sm-steps: 1.5;
+    --bit-spa-card-md-steps: 2;
+    --bit-spa-card-lg-steps: 3;
+
+    --bit-mot-duration-full: 180ms;
+    --bit-mot-duration-short-full: 120ms;
+    --bit-mot-duration-long-full: 320ms;
+    --bit-mot-easing: cubic-bezier(0.2, 0, 0, 1);
+    --bit-mot-easing-decelerate: cubic-bezier(0, 0, 0, 1);
+    --bit-mot-easing-accelerate: cubic-bezier(0.3, 0, 1, 1);
+
+    --bit-shd-appbar-top: none;
+    --bit-shd-appbar-bottom: none;
+
+    // grok's sidebar is the page's own color, split from it by one hairline.
+    --bit-NavPanel-background: var(--bit-clr-bg-pri);
+    --bit-NavPanel-padding: 0;
+    // The library's 96px rail is sized for its 16px panel padding, which Grok's flush sidebar drops: 68px holds the
+    // 50px icon-only item, the 8px container padding on both sides and the 1px border.
+    --bit-NavPanel-toggled-width: 68px;
+    --bit-NavPanel-gap: 0.5rem;
+    --bit-NavPanel-radius: 0;
+    --bit-NavPanel-border-width: 1px;
+    --bit-NavPanel-border-color: var(--bit-clr-brd-ter);
+    --bit-NavPanel-header-icon-size: 28px;
+    --bit-NavPanel-drawer-shadow: none;
+
+    --bit-Nav-item-min-height: 2.5rem;
+    --bit-Nav-item-padding: 0.375rem;
+    --bit-Nav-item-gap: 0.25rem;
+    --bit-Nav-item-radius: 0.75rem;
+    --bit-Nav-indicator-width: 0;
+    --bit-Nav-color: var(--bit-clr-fg-sec);
+    --bit-Nav-icon-color: var(--bit-clr-fg-sec);
+    --bit-Nav-hover-color: var(--bit-clr-fg-pri);
+    --bit-Nav-hover-icon-color: var(--bit-clr-fg-pri);
+    --bit-Nav-hover-background: var(--bit-clr-bg-pri-hover);
+    --bit-Nav-pressed-color: var(--bit-clr-fg-pri);
+    --bit-Nav-pressed-icon-color: var(--bit-clr-fg-pri);
+    --bit-Nav-pressed-background: var(--bit-clr-bg-ter-active);
+    --bit-Nav-selected-color: var(--bit-clr-fg-pri);
+    --bit-Nav-selected-icon-color: var(--bit-clr-fg-pri);
+    --bit-Nav-selected-background: var(--bit-clr-bg-ter);
+    --bit-Nav-selected-hover-color: var(--bit-clr-fg-pri);
+    --bit-Nav-selected-hover-icon-color: var(--bit-clr-fg-pri);
+    --bit-Nav-selected-hover-background: var(--bit-clr-bg-ter-hover);
+    --bit-Nav-selected-pressed-background: var(--bit-clr-bg-ter-active);
+
+    --bit-NavBar-background: var(--bit-clr-bg-pri);
+    --bit-NavBar-item-color: var(--bit-clr-fg-sec);
+    --bit-NavBar-item-hover-color: var(--bit-clr-fg-pri);
+    --bit-NavBar-item-hover-background: var(--bit-clr-bg-pri-hover);
+    --bit-NavBar-selected-color: var(--bit-clr-fg-pri);
+    --bit-NavBar-selected-background: var(--bit-clr-bg-ter);
+    --bit-NavBar-item-border-radius: 0.75rem;
+
+    --bit-ActionButton-color: var(--bit-clr-fg-pri);
+    --bit-ActionButton-icon-color: var(--bit-clr-fg-pri);
+    --bit-ActionButton-hover-color: var(--bit-clr-fg-pri);
+    --bit-ActionButton-active-color: var(--bit-clr-fg-pri);
+    --bit-ActionButton-hover-background: var(--bit-clr-bg-pri-hover);
+    --bit-ActionButton-active-background: var(--bit-clr-bg-pri-active);
+    --bit-ActionButton-radius: var(--bit-shp-radius-control);
+
+    --bit-DropMenu-hover-background: var(--bit-clr-bg-pri-hover);
+    --bit-DropMenu-active-background: var(--bit-clr-bg-pri-active);
+    --bit-DropMenu-callout-background: var(--bit-clr-bg-pri-light);
+
+    --bit-Card-background: var(--bit-clr-bg-pri-light);
+
+    // A date range is selected the way grok selects: a neutral wash under the page's own text. The library's default,
+    // the primary's -light tier under --bit-clr-fg-pri, can't hold contrast with an ink primary
+    // (bitfabric-internal/specs/workarounds.md).
+    --bit-DateRangePicker-range-background: var(--bit-clr-bg-ter);
+
+    --bit-TextField-background: var(--bit-clr-bg-pri-light);
+    --bit-SearchBox-background: var(--bit-clr-bg-pri-light);
+    --bit-SearchBox-icon-color: var(--bit-clr-fg-sec);
+    --bit-SearchBox-hover-icon-color: var(--bit-clr-fg-pri);
+
+    // Links stay grok's blue, read at the tone that clears 4.5:1 on every surface, and underline on hover.
+    --bit-Link-color: var(--bit-clr-inf-fg);
+    --bit-Link-hover-color: var(--bit-clr-inf-fg);
+    --bit-Link-active-color: var(--bit-clr-inf-fg);
+}
+
+:root[bit-theme="fluent2-light"],
+:root [bit-theme="fluent2-light"] {
+    @include grok-shared;
+
+    --bit-shd-card: 0 0 0 1px rgba(43, 28, 0, 0.07), 0 12px 32px rgba(43, 28, 0, 0.03);
+    --bit-shd-card-hover: 0 0 0 1px rgba(43, 28, 0, 0.09), 0 12px 32px rgba(43, 28, 0, 0.06);
+    --bit-shd-popup: 0 0 0 1px rgba(43, 28, 0, 0.08), 0 2px 6px rgba(43, 28, 0, 0.04), 0 8px 12px rgba(43, 28, 0, 0.04);
+    --bit-shd-tooltip: 0 0 0 1px rgba(43, 28, 0, 0.08), 0 4px 16px rgba(10, 9, 8, 0.1), 0 1px 3px rgba(10, 9, 8, 0.06);
+    --bit-shd-snackbar: 0 0 0 1px rgba(43, 28, 0, 0.08), 0 4px 16px rgba(10, 9, 8, 0.1), 0 1px 3px rgba(10, 9, 8, 0.06);
+    --bit-shd-dialog: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 12px 40px rgba(10, 9, 8, 0.18), 0 2px 8px rgba(10, 9, 8, 0.08);
+    --bit-shd-sheet: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 12px 40px rgba(10, 9, 8, 0.18), 0 2px 8px rgba(10, 9, 8, 0.08);
+
+    --app-logo-filter: brightness(0);
+    --app-text-selection: rgba(16, 132, 254, 0.2);
+
+    --bit-clr-pri: #2C2C2B;
+    --bit-clr-pri-active: #1B1B1B;
+    --bit-clr-pri-dark: #1D1D1C;
+    --bit-clr-pri-dark-active: #141413;
+    --bit-clr-pri-dark-hover: #181817;
+    --bit-clr-pri-dis: #EBEBEA;
+    --bit-clr-pri-dis-text: #838382;
+    --bit-clr-pri-hover: #40403E;
+    --bit-clr-pri-light: #959595;
+    --bit-clr-pri-light-active: #737372;
+    --bit-clr-pri-light-hover: #828282;
+    --bit-clr-pri-text: #FFFFFF;
+
+    --bit-clr-ter: #636363;
+    --bit-clr-ter-active: #515151;
+    --bit-clr-ter-dark: #454545;
+    --bit-clr-ter-dark-active: #343434;
+    --bit-clr-ter-dark-hover: #3C3C3C;
+    --bit-clr-ter-dis: #EBEBEB;
+    --bit-clr-ter-dis-text: #838383;
+    --bit-clr-ter-hover: #595959;
+    --bit-clr-ter-light: #B3B3B3;
+    --bit-clr-ter-light-active: #9A9A9A;
+    --bit-clr-ter-light-hover: #A5A5A5;
+    --bit-clr-ter-text: #FFFFFF;
+
+    --bit-clr-inf: #0E75E2;
+    --bit-clr-inf-active: #005FBE;
+    --bit-clr-inf-dark: #0052A5;
+    --bit-clr-inf-dark-active: #003E7F;
+    --bit-clr-inf-dark-hover: #004791;
+    --bit-clr-inf-dis: #DFEDFF;
+    --bit-clr-inf-dis-text: #74859B;
+    --bit-clr-inf-fg: #0D6BCE;
+    --bit-clr-inf-hover: #0069D0;
+    --bit-clr-inf-light: #99C1F6;
+    --bit-clr-inf-light-active: #75AAF0;
+    --bit-clr-inf-light-hover: #85B5F3;
+    --bit-clr-inf-text: #FFFFFF;
+
+    --bit-clr-suc: #04884C;
+    --bit-clr-suc-active: #00703D;
+    --bit-clr-suc-dark: #006134;
+    --bit-clr-suc-dark-active: #004926;
+    --bit-clr-suc-dark-hover: #00542D;
+    --bit-clr-suc-dis: #DCF2E2;
+    --bit-clr-suc-dis-text: #718B79;
+    --bit-clr-suc-fg: #047D46;
+    --bit-clr-suc-hover: #007B44;
+    --bit-clr-suc-light: #9BC7A9;
+    --bit-clr-suc-light-active: #78B48C;
+    --bit-clr-suc-light-hover: #88BD99;
+    --bit-clr-suc-text: #FFFFFF;
+
+    --bit-clr-wrn: #D77F02;
+    --bit-clr-wrn-active: #B26800;
+    --bit-clr-wrn-dark: #AA6402;
+    --bit-clr-wrn-dark-active: #C87602;
+    --bit-clr-wrn-dark-hover: #B96D02;
+    --bit-clr-wrn-dis: #FAE7D7;
+    --bit-clr-wrn-dis-text: #957E6B;
+    --bit-clr-wrn-fg: #9E5D01;
+    --bit-clr-wrn-hover: #C37300;
+    --bit-clr-wrn-light: #EFC49E;
+    --bit-clr-wrn-light-active: #E9AF7A;
+    --bit-clr-wrn-light-hover: #ECB98A;
+    --bit-clr-wrn-text: #000000;
+
+    --bit-clr-err: #D42032;
+    --bit-clr-err-active: #B40022;
+    --bit-clr-err-dark: #9D001C;
+    --bit-clr-err-dark-active: #790013;
+    --bit-clr-err-dark-hover: #890017;
+    --bit-clr-err-dis: #FFE4E2;
+    --bit-clr-err-dis-text: #9A7A78;
+    --bit-clr-err-fg: #C01D2D;
+    --bit-clr-err-hover: #C60026;
+    --bit-clr-err-light: #F5A39E;
+    --bit-clr-err-light-active: #ED827D;
+    --bit-clr-err-light-hover: #F1918C;
+    --bit-clr-err-text: #FFFFFF;
+
+    --bit-clr-bg-dis: #F5F5F4;
+    --bit-clr-bg-overlay: rgba(5, 5, 5, 0.2);
+    --bit-clr-bg-pri: #FFFFFF;
+    --bit-clr-bg-pri-active: #EEEDEB;
+    --bit-clr-bg-pri-dark: #F7F6F5;
+    --bit-clr-bg-pri-dark-active: #EAE8E6;
+    --bit-clr-bg-pri-dark-hover: #F0EFED;
+    --bit-clr-bg-pri-dis: #F7F6F5;
+    --bit-clr-bg-pri-dis-text: #8C8B89;
+    --bit-clr-bg-pri-hover: #F4F4F2;
+    --bit-clr-bg-pri-light: #FFFFFF;
+    --bit-clr-bg-pri-light-active: #F2F1F0;
+    --bit-clr-bg-pri-light-hover: #F9F8F7;
+    --bit-clr-bg-sec: #F9F8F7;
+    --bit-clr-bg-sec-active: #E9E6E3;
+    --bit-clr-bg-sec-dark: #F1EFED;
+    --bit-clr-bg-sec-dark-active: #E4E2DE;
+    --bit-clr-bg-sec-dark-hover: #EBE9E6;
+    --bit-clr-bg-sec-dis: #F0EFED;
+    --bit-clr-bg-sec-dis-text: #858482;
+    --bit-clr-bg-sec-hover: #EFEDEB;
+    --bit-clr-bg-sec-light: #FCFCFB;
+    --bit-clr-bg-sec-light-active: #EFEFEC;
+    --bit-clr-bg-sec-light-hover: #F6F5F3;
+    --bit-clr-bg-ter: #F0EFED;
+    --bit-clr-bg-ter-active: #E0DEDA;
+    --bit-clr-bg-ter-dark: #E8E7E4;
+    --bit-clr-bg-ter-dark-active: #DCDAD5;
+    --bit-clr-bg-ter-dark-hover: #E2E0DC;
+    --bit-clr-bg-ter-dis: #EBEAE8;
+    --bit-clr-bg-ter-dis-text: #807F7D;
+    --bit-clr-bg-ter-hover: #E6E4E1;
+    --bit-clr-bg-ter-light: #F7F6F5;
+    --bit-clr-bg-ter-light-active: #EBE9E6;
+    --bit-clr-bg-ter-light-hover: #F1EFEE;
+
+    --bit-clr-fg-dis: #908F8D;
+    --bit-clr-fg-pri: #2C2C2B;
+    --bit-clr-fg-pri-active: #232322;
+    --bit-clr-fg-pri-dark: #1D1D1C;
+    --bit-clr-fg-pri-dark-active: #141413;
+    --bit-clr-fg-pri-dark-hover: #181817;
+    --bit-clr-fg-pri-dis: #EBEBEA;
+    --bit-clr-fg-pri-dis-text: #838382;
+    --bit-clr-fg-pri-hover: #272726;
+    --bit-clr-fg-pri-light: #959595;
+    --bit-clr-fg-pri-light-active: #737372;
+    --bit-clr-fg-pri-light-hover: #828282;
+    --bit-clr-fg-sec: #6D6D6D;
+    --bit-clr-fg-sec-active: #595959;
+    --bit-clr-fg-sec-dark: #4D4D4D;
+    --bit-clr-fg-sec-dark-active: #393939;
+    --bit-clr-fg-sec-dark-hover: #424242;
+    --bit-clr-fg-sec-dis: #EBEBEB;
+    --bit-clr-fg-sec-dis-text: #838383;
+    --bit-clr-fg-sec-hover: #626262;
+    --bit-clr-fg-sec-light: #B8B8B8;
+    --bit-clr-fg-sec-light-active: #A0A0A0;
+    --bit-clr-fg-sec-light-hover: #ABABAB;
+    --bit-clr-fg-ter: #727272;
+    --bit-clr-fg-ter-active: #5D5D5D;
+    --bit-clr-fg-ter-dark: #505050;
+    --bit-clr-fg-ter-dark-active: #3C3C3C;
+    --bit-clr-fg-ter-dark-hover: #464646;
+    --bit-clr-fg-ter-dis: #EBEBEB;
+    --bit-clr-fg-ter-dis-text: #838383;
+    --bit-clr-fg-ter-hover: #676767;
+    --bit-clr-fg-ter-light: #BBBBBB;
+    --bit-clr-fg-ter-light-active: #A4A4A4;
+    --bit-clr-fg-ter-light-hover: #AEAEAE;
+
+    --bit-clr-brd-dis: #E1E0DE;
+    --bit-clr-brd-pri: #8B8A88;
+    --bit-clr-brd-pri-active: #72716F;
+    --bit-clr-brd-pri-dark: #636260;
+    --bit-clr-brd-pri-dark-active: #4B4A48;
+    --bit-clr-brd-pri-dark-hover: #565553;
+    --bit-clr-brd-pri-dis: #ECEBE9;
+    --bit-clr-brd-pri-dis-text: #848381;
+    --bit-clr-brd-pri-hover: #7E7D7B;
+    --bit-clr-brd-pri-light: #C7C7C6;
+    --bit-clr-brd-pri-light-active: #B4B4B2;
+    --bit-clr-brd-pri-light-hover: #BDBCBB;
+    --bit-clr-brd-sec: #E6E5E3;
+    --bit-clr-brd-sec-active: #BEBDBB;
+    --bit-clr-brd-sec-dark: #A6A5A3;
+    --bit-clr-brd-sec-dark-active: #807F7D;
+    --bit-clr-brd-sec-dark-hover: #92918F;
+    --bit-clr-brd-sec-dis: #ECEBE9;
+    --bit-clr-brd-sec-dis-text: #848381;
+    --bit-clr-brd-sec-hover: #D1D0CE;
+    --bit-clr-brd-sec-light: #F3F3F2;
+    --bit-clr-brd-sec-light-active: #EFEFED;
+    --bit-clr-brd-sec-light-hover: #F1F1EF;
+    --bit-clr-brd-ter: #EAE9E8;
+    --bit-clr-brd-ter-active: #C2C1C0;
+    --bit-clr-brd-ter-dark: #A9A8A7;
+    --bit-clr-brd-ter-dark-active: #828180;
+    --bit-clr-brd-ter-dark-hover: #949392;
+    --bit-clr-brd-ter-dis: #ECEBEA;
+    --bit-clr-brd-ter-dis-text: #848382;
+    --bit-clr-brd-ter-hover: #D4D3D2;
+    --bit-clr-brd-ter-light: #F5F5F4;
+    --bit-clr-brd-ter-light-active: #F2F1F0;
+    --bit-clr-brd-ter-light-hover: #F3F3F2;
+}
+
+:root[bit-theme="fluent2-dark"],
+:root [bit-theme="fluent2-dark"] {
+    @include grok-shared;
+
+    --bit-shd-card: 0 0 0 1px rgba(255, 255, 255, 0.086), 0 12px 32px rgba(0, 0, 0, 0.25);
+    --bit-shd-card-hover: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 12px 32px rgba(0, 0, 0, 0.32);
+    --bit-shd-popup: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 12px rgba(0, 0, 0, 0.25);
+    --bit-shd-tooltip: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --bit-shd-snackbar: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --bit-shd-dialog: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+    --bit-shd-sheet: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 40px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+
+    --app-logo-filter: brightness(0) invert(1);
+    --app-text-selection: rgba(16, 132, 254, 0.3);
+
+    --bit-clr-pri: #E6E5E3;
+    --bit-clr-pri-active: #D4D3CF;
+    --bit-clr-pri-dark: #C2C1BF;
+    --bit-clr-pri-dark-active: #DAD9D7;
+    --bit-clr-pri-dark-hover: #D0CFCD;
+    --bit-clr-pri-dis: #2E2E2C;
+    --bit-clr-pri-dis-text: #7B7A78;
+    --bit-clr-pri-hover: #F8F8F7;
+    --bit-clr-pri-light: #F0F0EF;
+    --bit-clr-pri-light-active: #F7F6F6;
+    --bit-clr-pri-light-hover: #F4F4F3;
+    --bit-clr-pri-text: #1E1D1D;
+
+    --bit-clr-ter: #9E9E9E;
+    --bit-clr-ter-active: #B4B4B4;
+    --bit-clr-ter-dark: #848484;
+    --bit-clr-ter-dark-active: #959595;
+    --bit-clr-ter-dark-hover: #8E8E8E;
+    --bit-clr-ter-dis: #2E2E2E;
+    --bit-clr-ter-dis-text: #7A7A7A;
+    --bit-clr-ter-hover: #ABABAB;
+    --bit-clr-ter-light: #C5C5C5;
+    --bit-clr-ter-light-active: #DDDDDD;
+    --bit-clr-ter-light-hover: #D3D3D3;
+    --bit-clr-ter-text: #000000;
+
+    --bit-clr-inf: #0E75E2;
+    --bit-clr-inf-active: #5798EC;
+    --bit-clr-inf-dark: #0061C1;
+    --bit-clr-inf-dark-active: #006ED9;
+    --bit-clr-inf-dark-hover: #0068CF;
+    --bit-clr-inf-dis: #242F3D;
+    --bit-clr-inf-dis-text: #607187;
+    --bit-clr-inf-fg: #459FFE;
+    --bit-clr-inf-hover: #3F8AE8;
+    --bit-clr-inf-light: #7FB1F2;
+    --bit-clr-inf-light-active: #B5D2F9;
+    --bit-clr-inf-light-hover: #9FC4F6;
+    --bit-clr-inf-text: #FFFFFF;
+
+    --bit-clr-suc: #00C972;
+    --bit-clr-suc-active: #6BD794;
+    --bit-clr-suc-dark: #008D50;
+    --bit-clr-suc-dark-active: #00B566;
+    --bit-clr-suc-dark-hover: #00A15B;
+    --bit-clr-suc-dis: #223227;
+    --bit-clr-suc-dis-text: #688270;
+    --bit-clr-suc-fg: #00C972;
+    --bit-clr-suc-hover: #50D186;
+    --bit-clr-suc-light: #92E1AD;
+    --bit-clr-suc-light-active: #C2EED0;
+    --bit-clr-suc-light-hover: #AFE9C1;
+    --bit-clr-suc-text: #000000;
+
+    --bit-clr-wrn: #FF9800;
+    --bit-clr-wrn-active: #FFB469;
+    --bit-clr-wrn-dark: #B26A00;
+    --bit-clr-wrn-dark-active: #E58800;
+    --bit-clr-wrn-dark-hover: #CB7900;
+    --bit-clr-wrn-dis: #392B1E;
+    --bit-clr-wrn-dis-text: #8C7662;
+    --bit-clr-wrn-fg: #FF9800;
+    --bit-clr-wrn-hover: #FFA84E;
+    --bit-clr-wrn-light: #FFC691;
+    --bit-clr-wrn-light-active: #FFDFC2;
+    --bit-clr-wrn-light-hover: #FFD5AE;
+    --bit-clr-wrn-text: #000000;
+
+    --bit-clr-err: #FF6B7A;
+    --bit-clr-err-active: #FF959B;
+    --bit-clr-err-dark: #BF505C;
+    --bit-clr-err-dark-active: #E96270;
+    --bit-clr-err-dark-hover: #D45966;
+    --bit-clr-err-dis: #3C2828;
+    --bit-clr-err-dis-text: #917172;
+    --bit-clr-err-fg: #FF6B7A;
+    --bit-clr-err-hover: #FF858E;
+    --bit-clr-err-light: #FFB0B3;
+    --bit-clr-err-light-active: #FFD3D4;
+    --bit-clr-err-light-hover: #FFC5C6;
+    --bit-clr-err-text: #000000;
+
+    --bit-clr-bg-dis: #282727;
+    --bit-clr-bg-overlay: rgba(6, 6, 6, 0.5);
+    --bit-clr-bg-pri: #1E1D1D;
+    --bit-clr-bg-pri-active: #343434;
+    --bit-clr-bg-pri-dark: #191919;
+    --bit-clr-bg-pri-dark-active: #272727;
+    --bit-clr-bg-pri-dark-hover: #202020;
+    --bit-clr-bg-pri-dis: #191818;
+    --bit-clr-bg-pri-dis-text: #6E6D6C;
+    --bit-clr-bg-pri-hover: #2C2B2B;
+    --bit-clr-bg-pri-light: #191919;
+    --bit-clr-bg-pri-light-active: #2B2B2B;
+    --bit-clr-bg-pri-light-hover: #222222;
+    --bit-clr-bg-sec: #282726;
+    --bit-clr-bg-sec-active: #3E3D3C;
+    --bit-clr-bg-sec-dark: #222120;
+    --bit-clr-bg-sec-dark-active: #2F2E2D;
+    --bit-clr-bg-sec-dark-hover: #292827;
+    --bit-clr-bg-sec-dis: #242323;
+    --bit-clr-bg-sec-dis-text: #757473;
+    --bit-clr-bg-sec-hover: #353433;
+    --bit-clr-bg-sec-light: #31302F;
+    --bit-clr-bg-sec-light-active: #414140;
+    --bit-clr-bg-sec-light-hover: #393837;
+    --bit-clr-bg-ter: #343434;
+    --bit-clr-bg-ter-active: #484848;
+    --bit-clr-bg-ter-dark: #2C2B2B;
+    --bit-clr-bg-ter-dark-active: #393838;
+    --bit-clr-bg-ter-dark-hover: #323131;
+    --bit-clr-bg-ter-dis: #2F2E2D;
+    --bit-clr-bg-ter-dis-text: #7E7D7C;
+    --bit-clr-bg-ter-hover: #404040;
+    --bit-clr-bg-ter-light: #404040;
+    --bit-clr-bg-ter-light-active: #4F4F4F;
+    --bit-clr-bg-ter-light-hover: #484848;
+
+    --bit-clr-fg-dis: #72716F;
+    --bit-clr-fg-pri: #E6E5E3;
+    --bit-clr-fg-pri-active: #ECEBEA;
+    --bit-clr-fg-pri-dark: #C2C1BF;
+    --bit-clr-fg-pri-dark-active: #DAD9D7;
+    --bit-clr-fg-pri-dark-hover: #D0CFCD;
+    --bit-clr-fg-pri-dis: #2E2E2C;
+    --bit-clr-fg-pri-dis-text: #7B7A78;
+    --bit-clr-fg-pri-hover: #E9E9E7;
+    --bit-clr-fg-pri-light: #F0F0EF;
+    --bit-clr-fg-pri-light-active: #F7F6F6;
+    --bit-clr-fg-pri-light-hover: #F4F4F3;
+    --bit-clr-fg-sec: #9F9E9D;
+    --bit-clr-fg-sec-active: #B5B4B4;
+    --bit-clr-fg-sec-dark: #858483;
+    --bit-clr-fg-sec-dark-active: #969594;
+    --bit-clr-fg-sec-dark-hover: #8F8E8D;
+    --bit-clr-fg-sec-dis: #2E2E2D;
+    --bit-clr-fg-sec-dis-text: #7B7A79;
+    --bit-clr-fg-sec-hover: #ACABAA;
+    --bit-clr-fg-sec-light: #C6C5C5;
+    --bit-clr-fg-sec-light-active: #DEDDDD;
+    --bit-clr-fg-sec-light-hover: #D4D3D3;
+    --bit-clr-fg-ter: #939291;
+    --bit-clr-fg-ter-active: #ACABAA;
+    --bit-clr-fg-ter-dark: #7B7A79;
+    --bit-clr-fg-ter-dark-active: #8B8A89;
+    --bit-clr-fg-ter-dark-hover: #848382;
+    --bit-clr-fg-ter-dis: #2E2E2D;
+    --bit-clr-fg-ter-dis-text: #7B7A79;
+    --bit-clr-fg-ter-hover: #A1A1A0;
+    --bit-clr-fg-ter-light: #BEBEBD;
+    --bit-clr-fg-ter-light-active: #DAD9D9;
+    --bit-clr-fg-ter-light-hover: #CECECD;
+
+    --bit-clr-brd-dis: #31302E;
+    --bit-clr-brd-pri: #7E7D79;
+    --bit-clr-brd-pri-active: #9B9B97;
+    --bit-clr-brd-pri-dark: #696864;
+    --bit-clr-brd-pri-dark-active: #777672;
+    --bit-clr-brd-pri-dark-hover: #71706C;
+    --bit-clr-brd-pri-dis: #2F2E2A;
+    --bit-clr-brd-pri-dis-text: #757470;
+    --bit-clr-brd-pri-hover: #8F8E8B;
+    --bit-clr-brd-pri-light: #B1B1AE;
+    --bit-clr-brd-pri-light-active: #D2D1D0;
+    --bit-clr-brd-pri-light-hover: #C4C4C2;
+    --bit-clr-brd-sec: #383836;
+    --bit-clr-brd-sec-active: #636361;
+    --bit-clr-brd-sec-dark: #2E2E2C;
+    --bit-clr-brd-sec-dark-active: #343432;
+    --bit-clr-brd-sec-dark-hover: #323230;
+    --bit-clr-brd-sec-dis: #2B2B29;
+    --bit-clr-brd-sec-dis-text: #757573;
+    --bit-clr-brd-sec-hover: #50504F;
+    --bit-clr-brd-sec-light: #848483;
+    --bit-clr-brd-sec-light-active: #B7B7B6;
+    --bit-clr-brd-sec-light-hover: #A1A1A0;
+    --bit-clr-brd-ter: #302F2F;
+    --bit-clr-brd-ter-active: #5C5B5B;
+    --bit-clr-brd-ter-dark: #272626;
+    --bit-clr-brd-ter-dark-active: #2D2C2C;
+    --bit-clr-brd-ter-dark-hover: #2A2929;
+    --bit-clr-brd-ter-dis: #252424;
+    --bit-clr-brd-ter-dis-text: #767573;
+    --bit-clr-brd-ter-hover: #494848;
+    --bit-clr-brd-ter-light: #7F7E7E;
+    --bit-clr-brd-ter-light-active: #B3B3B3;
+    --bit-clr-brd-ter-light-hover: #9D9D9D;
+}
+
+// Inter draws Latin only: the non-Latin cultures name their script's system faces ahead of the generic family.
+// Persian and Arabic take Vazirmatn in front of the whole stack (_rtl-fonts.scss).
+:root:lang(hi) body {
+    --bit-tpg-font-family: "Inter", "Nirmala UI", "Kohinoor Devanagari", "Noto Sans Devanagari", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+:root:lang(zh) body {
+    --bit-tpg-font-family: "Inter", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", "Noto Sans CJK SC", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+// What bit BlazorUI does not paint: the selection highlight and the browser's autofill repaint.
+::selection {
+    background-color: var(--app-text-selection);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+    caret-color: var(--bit-clr-fg-pri);
+    -webkit-text-fill-color: var(--bit-clr-fg-pri);
+    -webkit-box-shadow: 0 0 0 1000px var(--bit-clr-bg-pri-light) inset;
+    transition: background-color 600000s 0s;
+}

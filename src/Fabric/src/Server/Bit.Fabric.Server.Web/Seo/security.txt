@@ -1,0 +1,6 @@
+# bit Fabric (bitfabric.co): whom to tell about a security vulnerability, as RFC 9116 describes.
+# Renew Expires before it passes: HomePageSeoTests fails once it has, and once it is more than a year away.
+Contact: mailto:info@bitplatform.dev
+Expires: 2027-11-01T00:00:00.000Z
+Preferred-Languages: en, fa
+Canonical: {{Origin}}/.well-known/security.txt

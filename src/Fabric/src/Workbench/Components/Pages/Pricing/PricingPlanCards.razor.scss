@@ -1,0 +1,111 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// Four across where they fit, two by two on a tablet, stacked on a phone: never three and one left over
+.cards-wrap {
+    container-type: inline-size;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @container (min-width: 34rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @container (min-width: 58rem) {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.card-cell {
+    display: flex;
+    min-width: 0;
+}
+
+::deep .card {
+    --bit-Card-padding: 1.5rem;
+    --bit-Card-background: #{$bit-color-background-primary};
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    height: 100%;
+    // The price scales with the card, so "from €1,500 a month" stays on one line in a row of four
+    container-type: inline-size;
+}
+
+.card-tag {
+    display: flex;
+    align-items: center;
+    min-height: 1.5rem;
+    margin-bottom: -.25rem;
+
+    // Stacked on a phone, a card without a tag doesn't keep the room for one
+    @include lt-sm {
+        &:empty {
+            display: none;
+        }
+    }
+}
+
+.price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .25rem .375rem;
+    margin: .5rem 0 0;
+}
+
+.price-from,
+.price-period {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+}
+
+.price-amount {
+    font-size: clamp(#{$bit-typography-h4-font-size}, 13cqi, #{$bit-typography-h2-font-size});
+    font-weight: $bit-typography-fw-bold;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+}
+
+.price-notes {
+    display: flex;
+    flex-direction: column;
+    gap: .125rem;
+    min-height: 1.25rem;
+}
+
+.seats {
+    min-height: 2.5rem;
+}
+
+.includes {
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+    margin: .5rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: .5rem;
+    }
+
+    ::deep .include-mark {
+        flex-shrink: 0;
+        margin-top: .1875rem;
+    }
+}

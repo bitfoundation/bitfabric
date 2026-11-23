@@ -1,0 +1,17 @@
+@using Microsoft.AspNetCore.Components.Sections
+
+<PageTitle>@(PageTitle ?? Title)</PageTitle>
+
+@* Not a HeadContent of its own: only the last one rendered into the document's single HeadOutlet survives. *@
+<SectionContent SectionName="@HeadSectionName">
+    <meta name="description" content="@MetaDescription" />
+    <link rel="canonical" href="@CanonicalUrl" />
+    @if (NoIndex)
+    {
+        <meta name="robots" content="noindex" />
+    }
+
+    @* What a link to this page shows where it is shared - a chat, a social network: bit Fabric's card, on every page. *@
+    <AppSharePreview Title="@(PageTitle ?? Title ?? "bit Fabric")" Description="@MetaDescription" />
+    @Head
+</SectionContent>

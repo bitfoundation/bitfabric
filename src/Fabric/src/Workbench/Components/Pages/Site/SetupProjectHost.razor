@@ -1,0 +1,14 @@
+@* The app's own page that sets up a project that already exists (src/Client/Bit.Fabric.Client.Core/Components/Pages/SetupProject/SetupProjectPage.razor), bitfabric.co's. *@
+@inherits SitePageHost
+
+@if (isReady is false)
+{
+    <div class="placeholder" aria-busy="true">
+        <BitShimmer Height="3rem" Radius="0.75rem" />
+        <BitShimmer Height="18rem" Radius="0.75rem" />
+    </div>
+}
+else
+{
+    <Bit.Fabric.Client.Core.Components.Pages.SetupProject.SetupProjectPage />
+}

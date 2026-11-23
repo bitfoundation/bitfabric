@@ -1,0 +1,262 @@
+@import '../../../Styles/abstracts/_media-queries.scss';
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+.np-page {
+    min-height: 100%;
+    background: $bit-color-background-primary;
+    color: $bit-color-foreground-primary;
+
+    // The page's quiet buttons (the steps, "Help me choose", "Technical choices", Back) get a soft tint under the pointer
+    // instead of a Text button's full ink fill, which left their grey texts on a white pill in dark (the user's review).
+    // Through bit BlazorUI's own public variables; they inherit down to every Text button of the page and its panels.
+    --bit-Button-text-hover-background: #{$bit-color-background-primary-hover};
+    --bit-Button-text-hover-color: #{$bit-color-foreground-primary};
+    --bit-Button-text-active-background: #{$bit-color-background-primary-active};
+    --bit-Button-text-active-color: #{$bit-color-foreground-primary};
+}
+
+// Their own grey texts turn full ink under the pointer, as the rest of the button does. The current step's number keeps
+// its own color, as it sits on the filled circle
+::deep .np-stepper-step:hover .np-stepper-title,
+li:not(.is-current) ::deep .np-stepper-step:hover .np-stepper-number {
+    color: $bit-color-foreground-primary;
+}
+
+// Only the help button: the app's shell above it shows the brand and keeps the screen's safe areas
+.np-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px 24px;
+
+    @include lt-sm {
+        padding: 12px 16px;
+    }
+}
+
+// Shared by the questions of every design option.
+::deep .np-recommended {
+    margin-inline-start: 8px;
+    padding: 1px 8px;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-background-tertiary;
+    color: $bit-color-foreground-primary;
+    font-size: $bit-typography-fs-2xs;
+    font-weight: $bit-typography-fw-semibold;
+    white-space: nowrap;
+}
+
+::deep .np-switches {
+    display: grid;
+    gap: 14px;
+}
+
+.np-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+}
+
+::deep .np-title {
+    margin: 0;
+    font-weight: $bit-typography-fw-semibold;
+    letter-spacing: -.02em;
+    overflow-wrap: anywhere;
+}
+
+::deep .np-lede {
+    margin: 0;
+    max-width: 60ch;
+}
+
+.np-reassure {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px;
+    margin: 0;
+    max-width: 64ch;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+}
+
+::deep .np-reassure-icon {
+    margin-top: 2px;
+}
+
+// One question at a time, and a starting point first: the questions beside a sketch of the product.
+.np-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+    gap: 56px;
+    align-items: start;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 24px 64px;
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+    }
+
+    @include lt-sm {
+        padding: 8px 16px 48px;
+    }
+}
+
+.np-split-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    min-width: 0;
+    max-width: 680px;
+}
+
+.np-split-aside {
+    min-width: 0;
+
+    // On a narrow screen the sketch follows the questions, so the first screen asks something, and it shows only where it
+    // says something new.
+    @include lt-md {
+        width: 100%;
+        max-width: 420px;
+
+        &.is-quiet {
+            display: none;
+        }
+    }
+}
+
+.np-sticky {
+    position: sticky;
+    top: 24px;
+    display: grid;
+    gap: 16px;
+}
+
+.np-stepper {
+    display: grid;
+    gap: 8px;
+    margin-top: 6px;
+
+    ol {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child)::after {
+            content: "";
+            width: 18px;
+            height: 1px;
+            margin-inline: 2px;
+            background: $bit-color-border-secondary;
+        }
+    }
+
+    @include lt-sm {
+        ol {
+            display: none;
+        }
+    }
+}
+
+::deep .np-stepper-step {
+    padding-inline: 8px;
+}
+
+.np-stepper-number {
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    margin-inline-end: 6px;
+    border: $bit-shape-border-width solid $bit-color-border-primary;
+    border-radius: 50%;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-2xs;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.np-stepper-title {
+    color: $bit-color-foreground-secondary;
+}
+
+.is-done {
+    .np-stepper-number {
+        border-color: $bit-color-foreground-primary;
+        color: $bit-color-foreground-primary;
+    }
+}
+
+.is-current {
+    .np-stepper-number {
+        border-color: $bit-color-primary;
+        background: $bit-color-primary;
+        color: $bit-color-primary-text;
+    }
+
+    .np-stepper-title {
+        color: $bit-color-foreground-primary;
+        font-weight: $bit-typography-fw-semibold;
+    }
+}
+
+.np-stepper-compact {
+    display: none;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+
+    @include lt-sm {
+        display: block;
+    }
+}
+
+.np-step {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    min-width: 0;
+}
+
+.np-step-summary {
+    padding: 18px 20px;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+}
+
+.np-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: $bit-shape-border-width solid $bit-color-border-secondary;
+}
+
+.np-more {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+
+    > * {
+        width: 100%;
+    }
+}
+
+::deep .np-more-toggle {
+    justify-self: start;
+    width: auto;
+    margin-inline-start: -8px;
+    // Through the button's own variable, so its hover color still applies
+    --bit-Button-text-color: #{$bit-color-foreground-secondary};
+}
+

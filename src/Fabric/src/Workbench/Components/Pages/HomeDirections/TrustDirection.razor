@@ -1,0 +1,81 @@
+@inherits DirectionComponentBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+@* Trust first: for a European buyer who asks who is behind it, and what they can see, before anything else *@
+
+<DirectionHero Eyebrow="@Localizer["bit Fabric · made in the Netherlands"]"
+               TitleLines="TitleLines"
+               Lead="@Localizer["bit Fabric starts your app full featured on web, Android, iOS, Windows and macOS. Your own AI builds it on your computer, and it runs on a server you choose. We never see your code, your data or your prompts."]"
+               SecondaryText="@Localizer["See what we see"]"
+               SecondaryHref="@InPage("what-we-see")"
+               SecondaryIcon="@BitIconName.View">
+    <DirectionChips Items="HeroChips" IsCentered Label="@Localizer["Who is behind it"]" />
+</DirectionHero>
+
+<DirectionNumbers />
+
+<DirectionBand Anchor="who" Title="@Localizer["Who makes bit Fabric"]"
+               Intro="@Localizer["BitPlatform, a company registered in Leeuwarden, the Netherlands, run by the team behind bit platform, the open-source libraries every bit Fabric app is built on."]">
+    <div class="tr-who">
+        <DirectionFacts IsBox Title="@Localizer["The company"]" TitleId="tr-company-title" TitleElement="h3" Items="Company" />
+        <DirectionTiles Items="Team" Look="DirectionTileLook.Outlined" MinWidth="100%" Inline />
+    </div>
+</DirectionBand>
+
+<DirectionBand Anchor="what-we-see" Title="@Localizer["What bit Fabric sees, and what it never sees"]"
+               Intro="@Localizer["Every line of yours, and whether we ever see it. What we see, we see only when you allow it."]"
+               Line="@AppLocalizer[nameof(AppStrings.AppHomeComparePromise)]">
+    <DirectionTable LabelledBy="ah-what-we-see-title" TopicHeader="@Localizer["Of yours"]" Columns="SeesColumns" Rows="Sees" TopicWidth="22rem" />
+</DirectionBand>
+
+<DirectionBand Anchor="where" Title="@Localizer["Where everything of yours lives"]"
+               Intro="@Localizer["Every piece starts out in your own accounts and on your own machines. Nothing waits on our side to be exported."]"
+               Note="@Localizer["By default, a free Cloudflare Tunnel puts your app online, so Cloudflare sits in front of it and sees its traffic as it passes. If you'd rather have no third party in front, serve it from your own server with Caddy instead."]"
+               NoteIcon="@BitIconName.Info">
+    <DirectionTiles Items="Where" MinWidth="12rem" />
+</DirectionBand>
+
+<DirectionBand Anchor="if-we-stop" Title="@AppLocalizer[nameof(AppStrings.AppHomeIfWeStopTitle)]"
+               Intro="@AppLocalizer[nameof(AppStrings.AppHomeIfWeStopIntro)]"
+               Note="@Localizer["Versions already published under MIT stay MIT."]"
+               NoteIcon="@BitIconName.Certificate">
+    <DirectionLists Lists="IfWeStop" />
+</DirectionBand>
+
+<DirectionBand Anchor="check" Title="@Localizer["Check it yourself"]"
+               Intro="@Localizer["Don't take our word for any of this. Each part is open to read before you trust it."]">
+    <DirectionTiles Items="Check" />
+</DirectionBand>
+
+<DirectionBand Anchor="cost" Title="@Localizer["What it costs, written out"]"
+               Intro="@AppLocalizer[nameof(AppStrings.AppHomeCostIntro)]"
+               Note="@Localizer["That's bitfabric.co with every optional item on. Your own minimum is a €4 server and a domain, your AI plan comes on top, and there are no credits from us. Starting with bit Fabric is free."]"
+               NoteIcon="@BitIconName.Savings">
+    <AppHomeCostCalculator HeadingElement="h3" />
+</DirectionBand>
+
+<DirectionBand Anchor="paperwork" Title="@Localizer["The paperwork, in plain words"]"
+               Intro="@Localizer["What your legal and IT people will ask for, answered before they ask."]">
+    <DirectionTiles Items="Paperwork" Look="DirectionTileLook.Outlined" />
+    <div class="tr-services">
+        <BitText Typography="BitTypography.Subtitle2" Element="h3">@Localizer["The services bitfabric.co itself uses"]</BitText>
+        <DirectionChips Items="Services" Label="@Localizer["The services bitfabric.co itself uses"]" />
+    </div>
+</DirectionBand>
+
+<DirectionBand Anchor="customers" Title="@Localizer["Customers"]"
+               Intro="@Localizer["bitfabric.co itself is built with bit Fabric, on all five platforms. These are the customers the site shows today."]">
+    <ul class="tr-customers" aria-label="@Localizer["Customers"]">
+        @foreach (var name in Customers)
+        {
+            <li>@name</li>
+        }
+    </ul>
+    <DirectionPlaceholder Text="@Localizer["Logos shown once each customer agrees"]" />
+</DirectionBand>
+
+<DirectionBand Anchor="questions" Title="@Localizer["Questions a careful buyer asks"]">
+    <DirectionQuestions Items="Questions" />
+</DirectionBand>
+
+<DirectionFinal Title="@Localizer["Check everything, then start"]"
+                Text="@Localizer["No account is needed. Answer a few questions and paste one line, and everything is created on your computer and in your own accounts."]" />

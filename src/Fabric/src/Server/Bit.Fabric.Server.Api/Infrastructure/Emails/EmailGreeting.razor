@@ -1,0 +1,1 @@
+<p class="bf-body" style="@EmailStyles.Paragraph">@(string.IsNullOrWhiteSpace(Name) ? EmailLocalizer[nameof(EmailStrings.EmailGreetingNoName)] : EmailLocalizer[nameof(EmailStrings.EmailGreeting), Name])</p>

@@ -1,0 +1,17 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.dp {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.dp-text {
+    padding: .125rem .5rem;
+    border: 1px dashed $bit-color-border-primary;
+    border-radius: $bit-shape-radius-sm;
+    color: $bit-color-foreground-secondary;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-sm;
+}

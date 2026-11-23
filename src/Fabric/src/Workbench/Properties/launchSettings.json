@@ -1,0 +1,12 @@
+{
+    "profiles": {
+        "Bit.Fabric.Workbench": {
+            "commandName": "Project",
+            "launchBrowser": true,
+            "applicationUrl": "http://localhost:6198",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        }
+    }
+}

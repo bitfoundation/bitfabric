@@ -1,0 +1,15 @@
+@inherits ComponentBase
+@* A band's title on the home page. A click or a tap copies the address that leads to the band. *@
+
+<BitText Typography="BitTypography.H4" Element="@Element" Id="@($"ah-{Anchor}-title")">
+    <span id="@Anchor" class="ahb-target" @ref="target"></span>
+    <BitLink Href="@Address" PreventDefault NoColor NoUnderline OnClick="Copy"
+             Title="@Localizer[nameof(AppStrings.AppHomeCopySectionLink)]"
+             AriaDescription="@Localizer[nameof(AppStrings.AppHomeCopySectionLink)]">
+        @Text
+        <BitIcon IconName="@(isCopied ? BitIconName.CheckMark : BitIconName.Link)"
+                 Color="@(isCopied ? BitColor.Success : null)"
+                 Class="@(isCopied ? null : "ahb-icon")" />
+    </BitLink>
+    <span class="ahb-copied" role="status">@(isCopied ? Localizer[nameof(AppStrings.AppHomeLinkCopied)] : null)</span>
+</BitText>

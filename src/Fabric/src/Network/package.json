@@ -1,0 +1,19 @@
+{
+    "name": "bit-fabric-network",
+    "private": true,
+    "description": "The bitplatform Network: times each project's front door every minute from the locations its customer picks (README.md).",
+    "type": "module",
+    "engines": {
+        "node": ">=22"
+    },
+    "scripts": {
+        "typecheck": "tsc --noEmit",
+        "dev": "wrangler dev --test-scheduled",
+        "deploy": "wrangler deploy"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "5.20261027.1",
+        "typescript": "7.0.2",
+        "wrangler": "4.153.0"
+    }
+}

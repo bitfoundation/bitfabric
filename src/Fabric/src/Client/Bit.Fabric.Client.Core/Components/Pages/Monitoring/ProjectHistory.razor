@@ -1,0 +1,118 @@
+@inherits AppComponentBase
+
+<div class="history">
+    @if (history is null)
+    {
+        <BitShimmer Height="12rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingTheHistory)]" />
+    }
+    else
+    {
+        <section class="panel" aria-labelledby="days-title">
+            <div class="panel-head">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="days-title">@Localizer[nameof(AppStrings.MonitoringLast90Days)]</BitText>
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringBarADayHelp)]</BitText>
+            </div>
+
+            <div class="rows">
+                @foreach (var (key, title, rowDays, uptime) in rows)
+                {
+                    <div @key="key" class="@($"row {(key == AppRow ? "is-app" : null)}")">
+                        <BitText Typography="@(key == AppRow ? BitTypography.Subtitle2 : BitTypography.Body2)" Element="span" Class="row-title" title="@title">@title</BitText>
+                        @* Time runs left to right in every language, as on any chart. *@
+                        <div class="bars" dir="ltr" role="group" aria-label="@title">
+                            @foreach (var day in rowDays)
+                            {
+                                <button type="button"
+                                        class="@($"bar {ToneClass(day.Tone)} {(selectedDay == day.Date ? "is-selected" : null)}")"
+                                        title="@DayLabel(key, title, day)"
+                                        aria-label="@DayLabel(key, title, day)"
+                                        aria-pressed="@(selectedDay == day.Date ? "true" : "false")"
+                                        @onclick="() => Select(day)"></button>
+                            }
+                        </div>
+                        <BitText Typography="BitTypography.Caption1" Numeric Class="row-uptime">@Percent(uptime)</BitText>
+                    </div>
+                }
+            </div>
+
+            <div class="legend">
+                <span><span class="swatch tone-ok" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringWorks)]</span>
+                <span><span class="swatch tone-degraded" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringDegraded)]</span>
+                <span><span class="swatch tone-down" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringDown)]</span>
+                <span><span class="swatch tone-maintenance" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringMaintenance)]</span>
+                <span><span class="swatch tone-nodata" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringNotWatchedYet)]</span>
+            </div>
+        </section>
+
+        @if (Selected is { } picked)
+        {
+            var incidents = history.Incidents.Where(incident => incident.StartedAt < picked.End && (incident.EndedAt ?? DateTimeOffset.UtcNow) > picked.Start).ToArray();
+            var starts = history.Starts.Where(start => start.At >= picked.Start && start.At < picked.End).ToArray();
+            var periods = history.Periods.Where(period => period.StartedAt < picked.End && (period.EndedAt ?? DateTimeOffset.UtcNow) > picked.Start).ToArray();
+
+            <section class="panel" aria-labelledby="day-title" aria-live="polite">
+                <div class="panel-head">
+                    <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="day-title">@picked.Date.ToString("D", CultureInfo.CurrentUICulture)</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringUptimeValue), Percent(rows[0].Days.First(d => d.Date == picked.Date).Uptime)]</BitText>
+                </div>
+
+                @if (incidents.Length is 0 && starts.Length is 0 && periods.Length is 0)
+                {
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNothingHappenedThatDay)]</BitText>
+                }
+
+                @if (incidents.Length > 0)
+                {
+                    <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringIncidents)]</BitText>
+                    <ul class="events">
+                        @foreach (var incident in incidents)
+                        {
+                            <li class="@(incident.Impact is ProjectHealth.Down ? "tone-down" : "tone-degraded")">
+                                <span class="dot" aria-hidden="true"></span>
+                                <BitText Typography="BitTypography.Body2" Element="span">
+                                    <strong>@incident.Title</strong> · @LocalTime(incident.StartedAt, "t")–@(incident.EndedAt is { } ended ? LocalTime(ended, "t") : Localizer[nameof(AppStrings.MonitoringNow)])
+                                </BitText>
+                            </li>
+                        }
+                    </ul>
+                }
+
+                @if (starts.Length > 0)
+                {
+                    <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringDeploysAndRestarts)]</BitText>
+                    <ul class="events">
+                        @foreach (var start in starts)
+                        {
+                            <li class="tone-maintenance">
+                                <span class="dot" aria-hidden="true"></span>
+                                <BitText Typography="BitTypography.Body2" Element="span">
+                                    @LocalTime(start.At, "t") · @(start.IsDeploy ? Localizer[nameof(AppStrings.MonitoringDeployed)] : Localizer[nameof(AppStrings.MonitoringRestarted)]) <span class="ltr">@start.ApplicationVersion</span>
+                                </BitText>
+                            </li>
+                        }
+                    </ul>
+                }
+
+                @if (periods.Length > 0)
+                {
+                    <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringPartsThatDidNotWork)]</BitText>
+                    <ul class="events">
+                        @foreach (var period in periods)
+                        {
+                            <li class="@(period.Status is HealthCheckStatus.Unhealthy ? "tone-down" : "tone-degraded")">
+                                <span class="dot" aria-hidden="true"></span>
+                                <BitText Typography="BitTypography.Body2" Element="span">
+                                    <strong>@(period.Title ?? period.CheckKey)</strong> · @LocalTime(period.StartedAt, "t")–@(period.EndedAt is { } ended ? LocalTime(ended, "t") : Localizer[nameof(AppStrings.MonitoringNow)])
+                                    @if (string.IsNullOrWhiteSpace(period.Description) is false)
+                                    {
+                                        <text> · @period.Description</text>
+                                    }
+                                </BitText>
+                            </li>
+                        }
+                    </ul>
+                }
+            </section>
+        }
+    }
+</div>

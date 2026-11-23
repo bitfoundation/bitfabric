@@ -1,0 +1,71 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.np-help {
+    display: grid;
+    gap: 16px;
+    font-size: $bit-typography-fs-sm;
+}
+
+.np-help-lead {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.np-help-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+
+    > div {
+        display: grid;
+        gap: 4px;
+    }
+
+    span {
+        color: $bit-color-foreground-secondary;
+    }
+}
+
+::deep .np-help-card-icon {
+    margin-top: 2px;
+}
+
+.np-help-prompt {
+    display: block;
+    margin-top: 4px;
+    padding: 8px 12px;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-primary;
+    font-style: normal;
+    quotes: "“" "”";
+}
+
+.np-help-demos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+// A question reads as text in the panel, not as a heading of its own
+::deep .np-help-faq-question {
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-medium;
+}
+
+::deep .np-help-faq-title {
+    margin: 4px 0 0;
+}
+
+.np-help-answer {
+    margin: 0;
+    color: $bit-color-foreground-secondary;
+    line-height: 1.6;
+}
+
+.np-help-contact {
+    margin: 0;
+    color: $bit-color-foreground-secondary;
+}

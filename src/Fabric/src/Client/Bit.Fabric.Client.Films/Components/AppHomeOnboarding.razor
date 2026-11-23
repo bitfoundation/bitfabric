@@ -1,0 +1,12 @@
+@* [mirror] the home page's onboarding - keep in sync with: *@
+@* - src/Client/Bit.Fabric.Client.Core/Components/Pages/Home/HomePage.razor.Onboarding.cs *@
+@inherits FilmComponentBase
+
+@* Downloaded with the tour, not with every page *@
+<link rel="stylesheet" href="_content/Bit.Bonboarding/bit-bonboarding.css" />
+<link rel="stylesheet" href="_content/Bit.Fabric.Client.Films/guide.css" />
+
+@* The card is bit BlazorUI's (GuideCard), as the Workbench's tours' is, on Bonboarding's popover in the app's theme *@
+<BonboardingRoot Class="guide-root">
+    <GuideCard Model="context" />
+</BonboardingRoot>

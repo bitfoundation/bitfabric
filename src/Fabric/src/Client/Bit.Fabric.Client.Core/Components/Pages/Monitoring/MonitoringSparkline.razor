@@ -1,0 +1,8 @@
+@inherits AppComponentBase
+
+<svg class="sparkline" viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label="@AriaLabel">
+    @foreach (var segment in Segments())
+    {
+        <polyline points="@segment" />
+    }
+</svg>

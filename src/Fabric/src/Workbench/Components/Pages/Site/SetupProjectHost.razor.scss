@@ -1,0 +1,8 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: $bit-spacing-card-md;
+    padding: $bit-spacing-card-md;
+}

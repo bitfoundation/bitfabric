@@ -1,0 +1,212 @@
+@inherits AppComponentBase
+
+@if (Details.Checks.Length is 0)
+{
+    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNoHealthReportYet)]</BitText>
+}
+else
+{
+    @* A plain element first, so the scoped styles below reach the cards inside (::deep). *@
+    <div class="overview">
+    <BitStack Gap="1.25rem" HorizontalAlign="BitAlignment.Stretch">
+
+        <BitCard FullWidth NoShadow Class="@($"hero {ToneClass(HeroTone)}")">
+            <BitStack Horizontal Wrap VerticalAlign="BitAlignment.Center" Gap="2rem">
+
+                <BitStack FitSize NoShrink HorizontalAlign="BitAlignment.Center" Gap="0.25rem">
+                    <BitChart Config="ringChart" Width="9.5rem" Height="9.5rem" AriaLabel="@Localizer[nameof(AppStrings.MonitoringPartsByStatus)]" />
+                    <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">
+                        @Localizer[nameof(AppStrings.MonitoringPartsWork),Count(Filter.Healthy), Details.Checks.Length - Count(Filter.NotConfigured)]
+                    </BitText>
+                </BitStack>
+
+                <BitStack Gap="0.6rem" FitHeight Class="hero-summary">
+                    @* A live region around the heading, as a heading can't be one itself. *@
+                    <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.6rem" role="status">
+                        <BitIcon IconName="@(IsStale ? BitIconName.PlugDisconnected : ToneIcon(OverallTone))" Color="ToneColor(HeroTone)" Size="BitSize.Large" />
+                        <BitText Typography="BitTypography.H4" Element="h3">@OverallHeadline</BitText>
+                    </BitStack>
+                    <BitText Typography="BitTypography.Body1" Color="BitColor.SecondaryForeground">@OverallExplanation</BitText>
+                    <BitStack Horizontal Wrap Gap="0.5rem">
+                        @if (Details.CheckedAt is { } checkedAt)
+                        {
+                            <BitTag Size="BitSize.Small" Variant="BitVariant.Outline" Color="BitColor.SecondaryForeground" IconName="@BitIconName.Clock"
+                                    Text="@Localizer[nameof(AppStrings.MonitoringReportCheckedAt),LocalTime(checkedAt, "T")]" Title="@LocalTime(checkedAt, "F")" />
+                        }
+                        @if (Details.ReportMs is { } reportMs)
+                        {
+                            <BitTag Size="BitSize.Small" Variant="BitVariant.Outline" Color="DurationColor(reportMs)" IconName="@BitIconName.Timer"
+                                    Text="@Localizer[nameof(AppStrings.MonitoringReportReadIn), FormatMs(reportMs)]" Title="@Localizer[nameof(AppStrings.MonitoringReportReadInHelp)]" />
+                        }
+                    </BitStack>
+                </BitStack>
+
+                <div class="stat-grid">
+                    @foreach (var (filter, tone, label) in Stats())
+                    {
+                        var count = Count(filter);
+                        <BitCard NoShadow FullWidth
+                                 Class="@($"stat {ToneClass(tone)} {(count is 0 ? "empty" : "")}")"
+                                 OnClick="WrapHandled(() => ShowOnly(filter))"
+                                 AriaLabel="@Localizer[nameof(AppStrings.MonitoringStatShowThem), count, label]">
+                            <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.6rem">
+                                <BitIcon IconName="@ToneIcon(tone)" Color="@(count is 0 ? BitColor.SecondaryForeground : ToneColor(tone))" />
+                                <BitStack Gap="0">
+                                    <BitText Typography="BitTypography.H5" Element="span" Numeric Color="@(count is 0 ? BitColor.SecondaryForeground : null)">@count</BitText>
+                                    <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">@label</BitText>
+                                </BitStack>
+                            </BitStack>
+                        </BitCard>
+                    }
+                </div>
+
+            </BitStack>
+        </BitCard>
+
+        @if (Count(Filter.Attention) is > 0 and var attentionCount)
+        {
+            <BitMessage Color="ToneColor(OverallTone)" Variant="BitVariant.Outline" AutoMultiline>
+                <ChildContent>
+                    <BitText Element="span" Typography="BitTypography.Inherit" Weight="BitFontWeight.Semibold">
+                        @(attentionCount is 1 ? Localizer[nameof(AppStrings.MonitoringOnePartNeedsAttention)] : Localizer[nameof(AppStrings.MonitoringPartsNeedAttention), attentionCount])
+                    </BitText>
+                    @string.Join(", ", Details.Checks.Where(check => ToneOf(check) is not Tone.Healthy).Select(ProjectChecks.TitleOf))
+                </ChildContent>
+                <Actions>
+                    <BitButton Size="BitSize.Small" Variant="BitVariant.Text" NoWrap OnClick="WrapHandled(() => ShowOnly(Filter.Attention))">@Localizer[nameof(AppStrings.MonitoringShowThem)]</BitButton>
+                </Actions>
+            </BitMessage>
+        }
+
+        <BitStack Horizontal Wrap VerticalAlign="BitAlignment.Center" Gap="0.5rem">
+            <BitSearchBox @bind-Value="searchText" Immediate DebounceTime="200" Placeholder="@Localizer[nameof(AppStrings.MonitoringSearchParts)]" Class="search-box" />
+            @foreach (var (filter, tone, label) in Chips())
+            {
+                var count = Count(filter);
+                <BitTag Variant="BitVariant.Outline"
+                        Shape="BitShape.Pill"
+                        Color="@(tone is Tone.Neutral ? BitColor.Primary : ToneColor(tone))"
+                        Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), label, count]"
+                        Disabled="@(filter is not Filter.All && count is 0)"
+                        Selected="@(statusFilter == filter)"
+                        SelectedChanged="@(_ => statusFilter = filter)" />
+            }
+        </BitStack>
+
+        @{
+            var visible = Visible().ToArray();
+        }
+
+        @if (visible.Length is 0)
+        {
+            <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.5rem" Padding="3rem 1rem">
+                <BitIcon IconName="@BitIconName.ClearFilter" Size="BitSize.Large" Color="BitColor.SecondaryForeground" />
+                <BitText Typography="BitTypography.Subtitle1">@Localizer[nameof(AppStrings.MonitoringNoPartMatches)]</BitText>
+                <BitButton Variant="BitVariant.Text" OnClick="WrapHandled(ClearFilters)">@Localizer[nameof(AppStrings.MonitoringClearTheFilters)]</BitButton>
+            </BitStack>
+        }
+
+        @foreach (var group in visible.GroupBy(ProjectChecks.GroupOf).OrderBy(group => ProjectChecks.OrderOf(group.Key)).ThenBy(group => group.Key))
+        {
+            var checks = group.OrderBy(check => Rank(ToneOf(check))).ThenBy(ProjectChecks.TitleOf).ToArray();
+            var about = ProjectChecks.AboutOf(group.Key);
+
+            <BitStack Gap="0.75rem" HorizontalAlign="BitAlignment.Stretch" Element="section" aria-label="@Localizer[ProjectChecks.TitleOf(group.Key)]">
+                <BitStack Horizontal Wrap VerticalAlign="BitAlignment.Center" Gap="0.5rem">
+                    <BitIcon IconName="@ProjectChecks.IconOf(group.Key)" Color="BitColor.Primary" />
+                    <BitText Typography="BitTypography.H6" Element="h3">@Localizer[ProjectChecks.TitleOf(group.Key)]</BitText>
+                    <BitBadge Content="checks.Length" Color="BitColor.Primary" Variant="BitVariant.Outline" Size="BitSize.Small" />
+                    @if (about.Length > 0)
+                    {
+                        <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">@Localizer[about]</BitText>
+                    }
+                </BitStack>
+
+                <div class="check-grid">
+                    @foreach (var check in checks)
+                    {
+                        var tone = ToneOf(check);
+                        var title = ProjectChecks.TitleOf(check);
+                        var usage = TimeoutUsage(check);
+
+                        <BitCard @key="check.Key" NoShadow FullWidth Class="@($"check-card {ToneClass(tone)}")">
+                            @* Stretched, so the timeout's meter and the last checks get the card's width rather than none. *@
+                            <BitStack Gap="0.75rem" HorizontalAlign="BitAlignment.Stretch">
+
+                                <BitStack Horizontal FitHeight VerticalAlign="BitAlignment.Start" Gap="0.75rem">
+                                    <BitIcon IconName="@(string.IsNullOrEmpty(check.IconName) ? ProjectChecks.IconOf(group.Key) : check.IconName)" Class="check-icon" />
+                                    <BitStack Gap="0" FitHeight FillContent Shrinkable>
+                                        <BitText Typography="BitTypography.Subtitle1" Element="h4" NoWrap title="@title">@title</BitText>
+                                        <BitText Typography="BitTypography.Caption2" Color="BitColor.SecondaryForeground" Monospace NoWrap title="@check.Key" Class="key">@check.Key</BitText>
+                                    </BitStack>
+                                    <BitTag Size="BitSize.Small"
+                                            Class="status-tag"
+                                            Variant="@(tone is Tone.Healthy ? BitVariant.Outline : BitVariant.Fill)"
+                                            Color="ToneColor(tone)"
+                                            IconName="@ToneIcon(tone)"
+                                            Text="@StatusText(tone)" />
+                                </BitStack>
+
+                                @if (string.IsNullOrWhiteSpace(check.About) is false)
+                                {
+                                    <BitText Typography="BitTypography.Body2" Color="BitColor.SecondaryForeground">@check.About</BitText>
+                                }
+
+                                @if (tone is not Tone.Healthy && string.IsNullOrWhiteSpace(check.Description) is false)
+                                {
+                                    <BitText Typography="BitTypography.Body2" Class="check-description">@check.Description</BitText>
+                                }
+
+                                @if (tone is not Tone.NotConfigured)
+                                {
+                                    <BitStack Gap="0.3rem" FitHeight HorizontalAlign="BitAlignment.Stretch">
+                                        <BitStack Horizontal Wrap FitHeight VerticalAlign="BitAlignment.Center" Gap="0.4rem">
+                                            <BitIcon IconName="@BitIconName.Stopwatch" Size="BitSize.Small" Color="BitColor.SecondaryForeground" />
+                                            <BitText Typography="BitTypography.Caption1" Numeric Color="UsageColor(usage)">@FormatMs(check.DurationMs)</BitText>
+                                            @if (check.TimeoutMs is { } timeout)
+                                            {
+                                                <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">@Localizer[nameof(AppStrings.MonitoringOfATimeout), FormatMs(timeout)]</BitText>
+                                            }
+                                            <BitSpacer />
+                                            @if (check.VerifiedAt is { } verifiedAt)
+                                            {
+                                                <BitTooltip Alignment="BitPlacement.End" Text="@Localizer[nameof(AppStrings.MonitoringVerifiedHelp)]">
+                                                    <BitStack Horizontal FitWidth VerticalAlign="BitAlignment.Center" Gap="0.25rem">
+                                                        <BitIcon IconName="@BitIconName.History" Size="BitSize.Small" Color="BitColor.SecondaryForeground" />
+                                                        <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">@Localizer[nameof(AppStrings.MonitoringVerifiedAgo), Ago(verifiedAt)]</BitText>
+                                                    </BitStack>
+                                                </BitTooltip>
+                                            }
+                                        </BitStack>
+                                        @if (usage is { } percent)
+                                        {
+                                            <BitProgress Rounded Meter Percent="percent" Thickness="4" Color="UsageColor(percent)" AriaLabel="@Localizer[nameof(AppStrings.MonitoringTimeoutShare)]" />
+                                        }
+                                    </BitStack>
+                                }
+
+                                @if (tone is not Tone.Healthy && check.Since is { } since)
+                                {
+                                    <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">@Localizer[nameof(AppStrings.MonitoringSince), LocalTime(since, "g")]</BitText>
+                                }
+
+                                @if (tone is not Tone.NotConfigured && check.Recent.Length > 1)
+                                {
+                                    <div class="rounds" role="img" aria-label="@Localizer[nameof(AppStrings.MonitoringLastChecksOf), check.Recent.Length, title]">
+                                        @foreach (var round in check.Recent)
+                                        {
+                                            <span class="@($"round {StatusClass(round.Status)}")"
+                                                  title="@($"{LocalTime(round.At, "t")} · {StatusText(ToneOf(round.Status))}{(round.DurationMs is { } ms ? $" · {FormatMs(ms)}" : "")}")"></span>
+                                        }
+                                    </div>
+                                }
+
+                            </BitStack>
+                        </BitCard>
+                    }
+                </div>
+            </BitStack>
+        }
+    </BitStack>
+    </div>
+}

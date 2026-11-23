@@ -1,0 +1,26 @@
+@inherits SitePageHost
+@using Bit.Fabric.Client.Core.Components.Pages.Home
+@* Four directions for bitfabric.co's home page, one a design option of this page, compared side by side with each other and with
+   the app's own home page (app-home), which leads with ownership. A design, not the app's page: the one picked is built in the
+   app (bitfabric-internal/.agents/gtm/README.md, bitfabric-internal/specs/home-page.md). Every claim stays within the claims
+   table of bitfabric-internal/.agents/product-marketing.md. *@
+
+<div class="hd-page">
+    @switch (Direction)
+    {
+        case AnswersKey:
+            <AnswersDirection OnExplain="Explain" />
+            break;
+        case EuroKey:
+            <EuroDirection OnExplain="Explain" />
+            break;
+        case PromiseKey:
+            <PromiseDirection OnExplain="Explain" />
+            break;
+        default:
+            <TrustDirection OnExplain="Explain" />
+            break;
+    }
+</div>
+
+<AppHomeFilmDialog Playing="playing" FilmType="typeof(AppHomeFilm)" OnClose="CloseFilm" />

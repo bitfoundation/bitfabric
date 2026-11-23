@@ -1,0 +1,18 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectFeaturesTitle)]"
+                    Lead="@Localizer[nameof(AppStrings.NewProjectFeaturesLead)]"
+                    Topic="@NewProjectHelpTopics.Features" HeadingElement="@HeadingElement">
+    <div class="np-switches">
+        <BitToggle Inline FullWidth
+                   Label="@Localizer[nameof(AppStrings.NewProjectAssistant)]"
+                   Description="@Localizer[nameof(AppStrings.NewProjectAssistantText)]"
+                   Value="@Answers.HasAssistant"
+                   OnChange="(bool isOn) => Store.SwitchAssistant(isOn)" />
+        <BitToggle Inline FullWidth
+                   Label="@Localizer[nameof(AppStrings.NewProjectPush)]"
+                   Description="@Localizer[nameof(AppStrings.NewProjectPushText)]"
+                   Value="@Answers.HasPush"
+                   OnChange="(bool isOn) => Store.SwitchPush(isOn)" />
+    </div>
+</NewProjectQuestion>

@@ -1,0 +1,17 @@
+{
+  "solution": {
+    "path": "Bit.Fabric.slnx",
+    "projects": [
+      "src\\Client\\Bit.Fabric.Client.Core\\Bit.Fabric.Client.Core.csproj",
+      "src\\Client\\Bit.Fabric.Client.Films\\Bit.Fabric.Client.Films.csproj",
+      "src\\Client\\Bit.Fabric.Client.Web\\Bit.Fabric.Client.Web.csproj",
+      "src\\Server\\Bit.Fabric.Server.AppHost\\Bit.Fabric.Server.AppHost.csproj",
+      "src\\Server\\Bit.Fabric.Server.Api\\Bit.Fabric.Server.Api.csproj",
+      "src\\Server\\Bit.Fabric.Server.Shared\\Bit.Fabric.Server.Shared.csproj",
+      "src\\Server\\Bit.Fabric.Server.Web\\Bit.Fabric.Server.Web.csproj",
+      "src\\Shared\\Bit.Fabric.Shared.csproj",
+      "src\\Tests\\Bit.Fabric.Tests.csproj",
+      "src\\Workbench\\Bit.Fabric.Workbench.csproj"
+    ]
+  }
+}

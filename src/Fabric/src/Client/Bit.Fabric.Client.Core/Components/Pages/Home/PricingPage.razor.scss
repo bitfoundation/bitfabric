@@ -1,0 +1,195 @@
+@import '_app-home-page.scss';
+
+// The plans, side by side, stacked on a phone; the recommended one stands out with the primary color
+.pr-plans {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include lt-md {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pr-plan {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.5rem;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-primary;
+
+    &.is-highlighted {
+        border: 2px solid $bit-color-primary;
+        box-shadow: $bit-box-shadow-card;
+    }
+
+    ::deep .pr-tag {
+        position: absolute;
+        inset-block-start: -.75rem;
+        inset-inline-start: 1.5rem;
+    }
+}
+
+.pr-price {
+    display: flex;
+    align-items: baseline;
+    gap: .375rem;
+    margin-block-start: .5rem;
+}
+
+.pr-amount {
+    font-size: 2rem;
+    font-weight: $bit-typography-fw-bold;
+    line-height: 1.1;
+}
+
+.pr-period {
+    color: $bit-color-foreground-secondary;
+}
+
+.pr-includes,
+.pr-why {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin: .5rem 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: .5rem;
+    }
+
+    ::deep .pr-check {
+        flex-shrink: 0;
+        margin-block-start: .2rem;
+    }
+}
+
+.pr-why {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: .75rem 2rem;
+}
+
+// An example month, row by row: the rows line up across the two cards, so bit Fabric's ends one row later, at its license
+.pr-bills {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 1rem;
+
+    @include lt-md {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pr-bill {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.5rem;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-primary;
+
+    &.is-ours {
+        border-color: $bit-color-success;
+    }
+
+    ::deep .pr-kept {
+        align-self: flex-start;
+    }
+}
+
+.pr-lines {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.pr-line {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    min-height: 4.5rem;
+    padding: .75rem 0;
+    border-bottom: $bit-shape-border-width solid $bit-color-border-secondary;
+
+    @include lt-md {
+        min-height: 0;
+    }
+
+    &.is-extra {
+        border-bottom-color: $bit-color-success;
+    }
+}
+
+.pr-dot {
+    flex-shrink: 0;
+    width: .75rem;
+    height: .75rem;
+    margin-block-start: .3rem;
+    border-radius: $bit-shape-radius-full;
+
+    &.is-ai {
+        background: $bit-color-primary;
+    }
+
+    &.is-hosting {
+        background: $bit-color-info;
+    }
+
+    &.is-build {
+        background: $bit-color-secondary;
+    }
+
+    &.is-license {
+        background: $bit-color-success;
+    }
+}
+
+.pr-who {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: .125rem;
+    min-width: 0;
+}
+
+.pr-what {
+    font-weight: $bit-typography-fw-medium;
+}
+
+.pr-to {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+}
+
+.pr-line-amount {
+    flex-shrink: 0;
+    font-weight: $bit-typography-fw-semibold;
+
+    &.is-included {
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-sm;
+        font-weight: $bit-typography-fw-medium;
+    }
+}
+
+.pr-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: $bit-typography-fs-lg;
+    font-weight: $bit-typography-fw-semibold;
+}

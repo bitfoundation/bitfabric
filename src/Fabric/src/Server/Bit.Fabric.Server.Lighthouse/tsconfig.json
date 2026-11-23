@@ -1,0 +1,21 @@
+{
+    /* Typechecks only (npm run typecheck): Node runs src/server.ts as it is, stripping its types. */
+    "compilerOptions": {
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "target": "ES2024",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "allowImportingTsExtensions": true,
+        "erasableSyntaxOnly": true,
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "lib": [ "ES2024" ],
+        "types": [ "node" ],
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true
+    },
+    "include": [ "src" ],
+    "exclude": [ "node_modules" ]
+}

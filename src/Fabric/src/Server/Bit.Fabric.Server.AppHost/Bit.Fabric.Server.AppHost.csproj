@@ -1,0 +1,33 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.6.5">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net11.0</TargetFramework>
+        <Features>$(Features);runtime-async=on</Features>
+        <IsAspireHost>true</IsAspireHost>
+        <EntryPointAccessibility>public</EntryPointAccessibility>
+        <UserSecretsId>BF12BB12-683A-4D41-8F17-82E0B7A256D0</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Shirubasoft.Aspire.CloudflareTunnels" />
+        <PackageReference Include="Aspire.Hosting.Keycloak" />
+        <PackageReference Include="Aspire.Hosting.Docker" />
+        <PackageReference Include="Aspire.Hosting.Redis" />
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.MailPit" />
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" />
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.PostgreSQL.Extensions" />
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.Redis.Extensions" />
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.DbGate" />
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.RustFs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Client\Bit.Fabric.Client.Web\Bit.Fabric.Client.Web.csproj" />
+        <ProjectReference Include="..\..\Client\Bit.Fabric.Client.Windows\Bit.Fabric.Client.Windows.csproj" />
+        <ProjectReference Include="..\Bit.Fabric.Server.Web\Bit.Fabric.Server.Web.csproj" />
+        <ProjectReference Include="..\Bit.Fabric.Server.Shared\Bit.Fabric.Server.Shared.csproj" IsAspireProjectResource="false" />
+        <ProjectReference Include="..\Bit.Fabric.Server.Api\Bit.Fabric.Server.Api.csproj" />
+    </ItemGroup>
+
+</Project>

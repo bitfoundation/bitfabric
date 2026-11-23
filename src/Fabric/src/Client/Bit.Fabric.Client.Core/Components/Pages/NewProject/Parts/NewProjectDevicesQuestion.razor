@@ -1,0 +1,64 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectDevicesTitle)]"
+                    Lead="@Localizer[nameof(AppStrings.NewProjectDevicesLead)]"
+                    Topic="@NewProjectHelpTopics.Devices" HeadingElement="@HeadingElement">
+    <BitChoiceGroup TItem="BitChoiceGroupOption<NewProjectComputer>" TValue="NewProjectComputer"
+                    Label="@Localizer[nameof(AppStrings.NewProjectYourComputer)]"
+                    Description="@ComputerHint"
+                    Variant="BitVariant.Outline" Horizontal FullWidth
+                    Value="@Answers.Computer"
+                    OnChange="(NewProjectComputer computer) => Store.PickComputer(computer)">
+        <BitChoiceGroupOption Value="NewProjectComputer.Windows" Text="@ComputerName(NewProjectComputer.Windows)" />
+        <BitChoiceGroupOption Value="NewProjectComputer.MacOs" Text="@ComputerName(NewProjectComputer.MacOs)" />
+        <BitChoiceGroupOption Value="NewProjectComputer.Linux" Text="@ComputerName(NewProjectComputer.Linux)" />
+    </BitChoiceGroup>
+
+    <div class="np-devices">
+        <div class="np-device-web">
+            <BitIcon IconName="@BitIconName.CheckMark" Class="np-device-web-icon" />
+            <div>
+                <div class="np-device-web-title">@Localizer[nameof(AppStrings.NewProjectWebApp)]</div>
+                <div class="np-device-web-text">@Localizer[nameof(AppStrings.NewProjectWebAppText)]</div>
+            </div>
+        </div>
+        <div class="np-switches">
+            @foreach (var device in Enum.GetValues<NewProjectDevice>())
+            {
+                if (Answers.CanBuild(device))
+                {
+                    <BitToggle Inline FullWidth
+                               Label="@DeviceName(device)"
+                               Value="@Answers.Devices.Contains(device)"
+                               OnChange="(bool isOn) => Store.SwitchDevice(device, isOn)">
+                        <DescriptionTemplate>
+                            @DeviceNote(device)
+                            @* A switched-on app can wait, and where it is set up later
+                               is a page of its own rather than a bit CLI line, which means nothing to the visitor yet *@
+                            @if (OffersLater && Answers.Devices.Contains(device))
+                            {
+                                <span class="np-device-later">
+                                    @Localizer[nameof(AppStrings.NewProjectDeviceOrSetItUpLater)]
+                                    <BitLink Href="@LaterUrl(device)" Target="_blank">@Localizer[nameof(AppStrings.NewProjectSetUpExistingLink)]</BitLink>
+                                </span>
+                            }
+                        </DescriptionTemplate>
+                    </BitToggle>
+                }
+                else
+                {
+                    @* Not a disabled switch: why it can't be set up here is worth reading, and disabled text is too faint for that. *@
+                    <div class="np-device-off">
+                        <div class="np-device-off-title">@DeviceName(device)</div>
+                        <div class="np-device-off-text">@DeviceNote(device)</div>
+                    </div>
+                }
+            }
+        </div>
+        @* The computer only limits what runs here, never what the project ships *@
+        <div class="np-devices-note">
+            <BitIcon IconName="@BitIconName.Info" Color="BitColor.Info" Class="np-devices-note-icon" />
+            <span>@Localizer[nameof(AppStrings.NewProjectWhicheverComputerYouHaveYouGetEvery)]</span>
+        </div>
+    </div>
+</NewProjectQuestion>

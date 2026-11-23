@@ -1,0 +1,46 @@
+@using Microsoft.Extensions.Localization
+@using Bit.Fabric.Server.Api.Features.Identity.Resources
+@using Bit.Fabric.Server.Api.Infrastructure.Emails
+
+<EmailLayout Title="@Localizer[nameof(AppStrings.MonitoringScansEmailSubject), Model.TeamName]"
+             Preheader="@Localizer[nameof(AppStrings.MonitoringScansEmailIntro), Model.TeamName]"
+             Heading="@EmailLocalizer[nameof(EmailStrings.ScansEmailHeading)]"
+             WebAppUrl="@Model.WebAppUrl"
+             Why="@Localizer[nameof(AppStrings.MonitoringScansEmailWhy), Model.TeamName]">
+    <EmailGreeting Name="@Model.DisplayName" />
+    <EmailParagraph>@Localizer[nameof(AppStrings.MonitoringScansEmailIntro), Model.TeamName]</EmailParagraph>
+    @foreach (var project in Model.Projects)
+    {
+        <table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-top:8px;">
+            <tr>
+                <td style="border-top:1px solid #E2E6EB; padding:20px 0 4px;">
+                    <div class="bf-text" style="font-size:18px; font-weight:700; line-height:1.4; color:#14171C;">@project.Name</div>
+                    <div class="bf-muted" dir="ltr" style="font-size:13px; line-height:1.5; color:#5F6773; padding-bottom:12px; unicode-bidi:isolate;">@project.Host</div>
+                    @foreach (var scan in project.Scans)
+                    {
+                        <div class="bf-body" style="font-size:15px; line-height:1.7; color:#3A414B;">
+                            @scan.Kind: <span style="color:@scan.Color; font-weight:600;">@scan.Result</span>
+                        </div>
+                    }
+                    @if (project.Urgent.Length > 0)
+                    {
+                        <div style="font-size:15px; font-weight:700; color:#A4262C; padding-top:12px;">@Localizer[nameof(AppStrings.MonitoringScansEmailUrgent)]</div>
+                        <ul class="bf-body" style="margin:4px 0 0; padding-inline-start:20px; font-size:15px; line-height:1.6; color:#3A414B;">
+                            @foreach (var finding in project.Urgent)
+                            {
+                                <li>@finding</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div style="font-size:15px; color:#107C10; padding-top:12px;">@Localizer[nameof(AppStrings.MonitoringScansEmailNothingUrgent)]</div>
+                    }
+                    <div style="padding:16px 0 12px;">
+                        <EmailButton Href="@project.ScansLink" Text="@Localizer[nameof(AppStrings.MonitoringScansEmailOpenTheScans)]" WithFallback="false" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    }
+</EmailLayout>

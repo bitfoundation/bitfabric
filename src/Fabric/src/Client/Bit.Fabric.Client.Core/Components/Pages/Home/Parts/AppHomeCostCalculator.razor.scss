@@ -1,0 +1,186 @@
+@import '../../../../Styles/abstracts/_media-queries.scss';
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ahc {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.ahc-total {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    margin: 0;
+    color: $bit-color-foreground-secondary;
+}
+
+.ahc-total-number {
+    color: $bit-color-foreground-primary;
+    font-size: $bit-typography-fs-4xl;
+    font-weight: $bit-typography-fw-semibold;
+    letter-spacing: -.02em;
+}
+
+.ahc-bar {
+    display: flex;
+    width: 100%;
+}
+
+.ahc-part {
+    flex: 0 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: .375rem;
+    min-width: 0;
+    overflow: hidden;
+    transition: flex-grow $bit-motion-duration $bit-motion-easing;
+}
+
+.ahc-fill {
+    display: block;
+    height: .875rem;
+    margin-inline-end: 3px;
+    border-radius: $bit-shape-radius-xs;
+    background: color-mix(in srgb, $bit-color-success var(--ahc-shade), transparent);
+}
+
+.ahc-part-price {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    white-space: nowrap;
+}
+
+.ahc-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+
+    @include lt-lg {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.ahc-tile {
+    display: flex;
+    flex-direction: column;
+    gap: .375rem;
+    padding: 1rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid transparent;
+    background: $bit-color-background-secondary;
+    transition: background-color $bit-motion-duration $bit-motion-easing, border-color $bit-motion-duration $bit-motion-easing;
+
+    // Off the bill by its outline, its swatch and its price, not by fading it: its words stay as readable as an on tile's
+    &.is-off {
+        border-style: dashed;
+        border-color: $bit-color-border-secondary;
+        background: transparent;
+    }
+}
+
+.ahc-tile-top {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.ahc-name {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 .375rem;
+    min-width: 0;
+
+    strong {
+        font-weight: $bit-typography-fw-medium;
+    }
+
+    small {
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-2xs;
+    }
+}
+
+.ahc-swatch {
+    flex-shrink: 0;
+    width: .625rem;
+    height: .625rem;
+    border-radius: $bit-shape-radius-full;
+    background: color-mix(in srgb, $bit-color-success var(--ahc-shade), transparent);
+}
+
+.is-off .ahc-swatch {
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px color-mix(in srgb, $bit-color-success var(--ahc-shade), transparent);
+}
+
+.ahc-price {
+    font-size: $bit-typography-fs-2xl;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.is-off .ahc-price {
+    color: $bit-color-foreground-secondary;
+    text-decoration: line-through;
+}
+
+.ahc-note {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+}
+
+.ahc-free {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid $bit-color-border-secondary;
+}
+
+.ahc-free-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .875rem 1.5rem;
+
+    @include lt-lg {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    li {
+        display: flex;
+        align-items: baseline;
+        gap: .5rem;
+    }
+}
+
+.ahc-free-words {
+    display: flex;
+    flex-direction: column;
+    gap: .125rem;
+    min-width: 0;
+
+    strong {
+        font-weight: $bit-typography-fw-medium;
+    }
+
+    span {
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-xs;
+    }
+}

@@ -1,0 +1,110 @@
+@inherits AppComponentBase
+
+<section class="panel connected" aria-labelledby="connected-title">
+    @if (details?.Project is not { } project)
+    {
+        <BitShimmer Height="12rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingTheProject)]" />
+    }
+    else
+    {
+        <div class="connected-head">
+            <span class="big-mark" aria-hidden="true"><BitIcon IconName="@BitIconName.CompletedSolid" Color="BitColor.Success" Size="BitSize.Large" /></span>
+            <div class="connected-text">
+                <BitText Typography="BitTypography.H5" Element="h2" Id="connected-title">@Localizer[nameof(AppStrings.MonitoringProjectIsConnected), project.Name ?? ""]</BitText>
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" aria-live="polite">
+                    @(AllAnswered ? Localizer[nameof(AppStrings.MonitoringFirstChecksAllIn)] : Localizer[nameof(AppStrings.MonitoringFirstChecksFromEveryLocation)])
+                </BitText>
+            </div>
+        </div>
+
+        <ul class="regions" aria-label="@Localizer[nameof(AppStrings.MonitoringFirstChecks)]">
+            @foreach (var location in Locations)
+            {
+                <li @key="location.Name" class="@(location.Answered is null ? "tone-nodata" : location.Answered.Value ? "tone-ok" : "tone-down")">
+                    @if (location.Answered is null)
+                    {
+                        <BitRingLoading Size="BitSize.Small" AriaLabel="@Localizer[nameof(AppStrings.MonitoringCheckingFrom), location.Name]" />
+                    }
+                    else
+                    {
+                        <BitIcon IconName="@(location.Answered.Value ? BitIconName.CompletedSolid : BitIconName.StatusErrorFull)" Color="@(location.Answered.Value ? BitColor.Success : BitColor.Error)" />
+                    }
+                    <BitText Typography="BitTypography.Body2" Weight="BitFontWeight.Semibold" Element="span" Class="region-name">@location.Name</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="span" Class="region-reading">@location.Reading</BitText>
+                </li>
+            }
+        </ul>
+
+        @if (details.Checks.Length > 0)
+        {
+            <div class="parts">
+                <BitText Typography="BitTypography.Subtitle2" Element="h3">@Localizer[nameof(AppStrings.MonitoringPartsFound), details.Checks.Length]</BitText>
+                <div class="part-chips">
+                    @foreach (var check in details.Checks.OrderBy(check => ProjectChecks.TitleOf(check), StringComparer.CurrentCultureIgnoreCase))
+                    {
+                        <span @key="check.Key" class="@($"part {PartTone(check)}")" title="@check.About">
+                            <BitIcon IconName="@(string.IsNullOrWhiteSpace(check.IconName) ? ProjectChecks.IconOf(ProjectChecks.GroupOf(check)) : check.IconName)" Size="BitSize.Small" Class="part-icon" />
+                            @ProjectChecks.TitleOf(check)
+                            @if (check.IsNotConfigured)
+                            {
+                                <span class="part-note">@Localizer[nameof(AppStrings.MonitoringNotConfigured)]</span>
+                            }
+                        </span>
+                    }
+                </div>
+            </div>
+        }
+
+        <BitText Typography="BitTypography.Subtitle1" Element="h3">@Localizer[nameof(AppStrings.MonitoringNext)]</BitText>
+        <div class="next-steps">
+            <div class="next">
+                <BitIcon IconName="@BitIconName.Ringer" Class="next-icon" />
+                <div class="next-text">
+                    <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringNextAlertsTitle)]</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNextAlertsText)]</BitText>
+                    @if (isPushBlocked)
+                    {
+                        <BitText Typography="BitTypography.Caption1" Color="BitColor.SevereWarning">@Localizer[nameof(AppStrings.MonitoringPushBlockedOnThisDevice)]</BitText>
+                    }
+                </div>
+                <div class="next-actions">
+                    @if (areAlertsOn)
+                    {
+                        <BitTag Size="BitSize.Small" Variant="BitVariant.Outline" Color="BitColor.Success" IconName="@BitIconName.CheckMark" Text="@Localizer[nameof(AppStrings.MonitoringAlertsAreOn)]" />
+                    }
+                    else
+                    {
+                        <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.Ringer" AutoLoading OnClick="WrapHandled(TurnOnAlerts)">@Localizer[nameof(AppStrings.MonitoringTurnOn)]</BitButton>
+                    }
+                    <BitButton Variant="BitVariant.Text" Size="BitSize.Small" Href="@TabHref("alerts")">@Localizer[nameof(AppStrings.MonitoringAlerts)]</BitButton>
+                </div>
+            </div>
+
+            <div class="next">
+                <BitIcon IconName="@BitIconName.Megaphone" Class="next-icon" />
+                <div class="next-text">
+                    <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringNextStatusTitle)]</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNextStatusText)]</BitText>
+                </div>
+                <div class="next-actions">
+                    <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" Href="@TabHref("status")">@Localizer[nameof(AppStrings.MonitoringSetItUp)]</BitButton>
+                </div>
+            </div>
+
+            <div class="next">
+                <BitIcon IconName="@BitIconName.People" Class="next-icon" />
+                <div class="next-text">
+                    <BitText Typography="BitTypography.Subtitle2" Element="h4">@Localizer[nameof(AppStrings.MonitoringNextTeamTitle)]</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNextTeamText)]</BitText>
+                </div>
+                <div class="next-actions">
+                    <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" Href="@PageUrls.ManageMyTenants">@Localizer[nameof(AppStrings.Invite)]</BitButton>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <BitButton IconName="@ForwardIcon" IconPosition="BitIconPosition.End" Href="@($"{PageUrls.Projects}/{ProjectId}")">@Localizer[nameof(AppStrings.MonitoringOpenTheProject)]</BitButton>
+        </div>
+    }
+</section>

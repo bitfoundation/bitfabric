@@ -1,0 +1,86 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DebugBlazorServer" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Folder Name="/.SolutionItems/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path=".vsconfig" />
+    <File Path="Clean.bat" />
+    <File Path="global.json" />
+    <File Path="vs-spell.dic" />
+    <File Path="README.md" />
+    <File Path="settings.VisualStudio.json" />
+    <File Path="Bit.ResxTranslator.json" />
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/.SolutionItems/.docs/">
+    <File Path=".docs/00- Wiki.md" />
+    <File Path=".docs/01- Entity Framework Core.md" />
+    <File Path=".docs/02- DTOs, Mappers, and Mapperly.md" />
+    <File Path=".docs/03- API Controllers and OData.md" />
+    <File Path=".docs/04- Background Jobs and CancellationToken Management.md" />
+    <File Path=".docs/05- Localization and Multi-language Support.md" />
+    <File Path=".docs/06- Exception Handling and Error Management.md" />
+    <File Path=".docs/07- ASP.NET Core Identity - Authentication &amp; Authorization.md" />
+    <File Path=".docs/08- Blazor Pages, Components, Styling &amp; Navigation.md" />
+    <File Path=".docs/09- Dependency Injection &amp; Service Registration.md" />
+    <File Path=".docs/10- Configuration (appsettings.json).md" />
+    <File Path=".docs/11- TypeScript, Build Process &amp; JavaScript Interop.md" />
+    <File Path=".docs/12- Blazor Modes, PreRendering &amp; PWA.md" />
+    <File Path=".docs/13- Force Update System.md" />
+    <File Path=".docs/14- Response Caching System.md" />
+    <File Path=".docs/15- Logging, OpenTelemetry and Health Checks.md" />
+    <File Path=".docs/16- CI-CD Pipeline and Environments.md" />
+    <File Path=".docs/17- Automated Testing (Unitigration Tests).md" />
+    <File Path=".docs/18- Available Agent Skills.md" />
+    <File Path=".docs/19- Project Miscellaneous Files.md" />
+    <File Path=".docs/20- .NET Aspire.md" />
+    <File Path=".docs/21- .NET MAUI - Blazor Hybrid.md" />
+    <File Path=".docs/22- Messaging.md" />
+    <File Path=".docs/23- Diagnostic Modal.md" />
+    <File Path=".docs/24- WebAuthn and Passwordless Authentication (Advanced).md" />
+  </Folder>
+  <Folder Name="/Server/">
+    <Project Path="src/Server/Bit.Fabric.Server.Web/Bit.Fabric.Server.Web.csproj" />
+    <Project Path="src/Server/Bit.Fabric.Server.Api/Bit.Fabric.Server.Api.csproj" />
+    <Project Path="src/Server/Bit.Fabric.Server.Shared/Bit.Fabric.Server.Shared.csproj" />
+    <Project Path="src/Server/Bit.Fabric.Server.AppHost/Bit.Fabric.Server.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/.SolutionItems/.grafana/">
+    <File Path=".grafana/dashboard.json" />
+    <File Path=".grafana/README.md" />
+  </Folder>
+  <Folder Name="/Client/">
+    <Project Path="src/Client/Bit.Fabric.Client.Core/Bit.Fabric.Client.Core.csproj" />
+    <Project Path="src/Client/Bit.Fabric.Client.Films/Bit.Fabric.Client.Films.csproj" />
+    <Project Path="src/Client/Bit.Fabric.Client.Diagrams/Bit.Fabric.Client.Diagrams.csproj" />
+    <Project Path="src/Client/Bit.Fabric.Client.Maui/Bit.Fabric.Client.Maui.csproj">
+      <Build Solution="DebugBlazorServer|*" Project="false" />
+      <Deploy Solution="Debug|*" />
+      <Deploy Solution="Release|*" />
+    </Project>
+    <Project Path="src/Client/Bit.Fabric.Client.Web/Bit.Fabric.Client.Web.csproj">
+      <Build Solution="DebugBlazorServer|*" Project="false" />
+    </Project>
+    <Project Path="src/Client/Bit.Fabric.Client.Windows/Bit.Fabric.Client.Windows.csproj">
+        <Build Solution="DebugBlazorServer|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="src/Shared/Bit.Fabric.Shared.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="src/Tests/Bit.Fabric.Tests.csproj">
+      <Build Solution="DebugBlazorServer|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Workbench/">
+    <Project Path="src/Workbench/Bit.Fabric.Workbench.csproj">
+      <Build Solution="DebugBlazorServer|*" Project="false" />
+    </Project>
+  </Folder>
+</Solution>

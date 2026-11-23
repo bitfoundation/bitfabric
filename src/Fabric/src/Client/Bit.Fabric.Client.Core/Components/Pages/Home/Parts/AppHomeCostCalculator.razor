@@ -1,0 +1,67 @@
+@inherits ComponentBase
+@* What bitfabric.co pays to run: the prices stay, and the visitor switches on or off what's on the bill. *@
+
+<div class="ahc">
+    <p class="ahc-total" aria-live="polite">
+        <bdi class="ahc-total-number">€@Total</bdi>
+        <span>@Localizer[nameof(AppStrings.AppHomeCostPerMonth)]</span>
+    </p>
+
+    @* The bill as one bar, split the way the money is *@
+    <div class="ahc-bar" aria-hidden="true">
+        @foreach (var row in Paid)
+        {
+            <div @key="row.Id" class="ahc-part" style="flex-grow:@(IsOn(row) ? row.Euros : 0);--ahc-shade:@(row.Shade)%">
+                <span class="ahc-fill"></span>
+                <bdi class="ahc-part-price">€@row.Euros</bdi>
+            </div>
+        }
+    </div>
+
+    <ul class="ahc-tiles">
+        @foreach (var row in Paid)
+        {
+            <li @key="row.Id" class="ahc-tile @(IsOn(row) ? null : "is-off")" style="--ahc-shade:@(row.Shade)%">
+                <div class="ahc-tile-top">
+                    <span class="ahc-swatch" aria-hidden="true"></span>
+                    <span class="ahc-name">
+                        <strong>@row.Title</strong>
+                        @if (row.IsOptional)
+                        {
+                            <small>@Localizer[nameof(AppStrings.AppHomeCostOptional)]</small>
+                        }
+                    </span>
+                    <BitToggle Size="BitSize.Small" Color="BitColor.Success" AriaLabel="@row.Title" ReadOnly="row.IsRequired" DefaultValue="IsOn(row)" OnChange="on => Set(row, on)" />
+                </div>
+                <bdi class="ahc-price">€@row.Euros</bdi>
+                @if (row.Spec is not null)
+                {
+                    <span class="ahc-note">@row.Spec</span>
+                }
+                <span class="ahc-note">@row.Text</span>
+            </li>
+        }
+    </ul>
+
+    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeCostFootnote)]</BitText>
+
+    <div class="ahc-free">
+        <BitText Typography="BitTypography.H6" Element="@HeadingElement">@Localizer[nameof(AppStrings.AppHomeCostFreeTitle)]</BitText>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeCostFreeIntro)]</BitText>
+        <ul class="ahc-free-list">
+            @foreach (var (title, text) in Free)
+            {
+                <li>
+                    <BitIcon IconName="@BitIconName.CheckMark" Color="BitColor.Success" />
+                    <span class="ahc-free-words">
+                        <strong>@title</strong>
+                        @if (text is not null)
+                        {
+                            <span>@text</span>
+                        }
+                    </span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

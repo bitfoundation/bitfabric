@@ -1,0 +1,10 @@
+[Unit]
+Description=Back up bitfabric.co's database and files to the locked R2 bucket
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/bitfabric-backup/backup.env
+ExecStart=/usr/local/sbin/bitfabric-backup
+TimeoutStartSec=1h

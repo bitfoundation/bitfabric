@@ -1,0 +1,106 @@
+@import '_monitoring.scss';
+
+.status-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+}
+
+.panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.row,
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.actions {
+    align-items: center;
+}
+
+.fields {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+
+.post-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+.components {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid $bit-color-border-secondary;
+    }
+}
+
+.component-fields {
+    flex: 1;
+    display: grid;
+    gap: 0.5rem;
+    align-items: end;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+}
+
+::deep .hostname {
+    flex: 1 1 16rem;
+}
+
+.snippet {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.snippet-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    code {
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        background-color: $bit-color-background-secondary;
+    }
+}
+
+.ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+}

@@ -1,0 +1,199 @@
+@attribute [Route(PageUrls.Home)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.Home)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppHomePageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+
+@* The hero's title is the page's one h1: the header shows no title for a page that gives it none *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+}
+
+<AppPageData PageTitle="@Localizer[nameof(AppStrings.HomePageTitle)]">
+    <Head>
+        <script type="application/ld+json">@((MarkupString)BuildSiteJsonLd())</script>
+    </Head>
+</AppPageData>
+
+<div class="ah-page">
+    <section class="ah-hero" @ref="hero">
+        <span class="ah-eyebrow">bit Fabric</span>
+        <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">
+            @foreach (var sentence in HeroTitleSentences)
+            {
+                <span class="ah-hero-line">@sentence</span>
+            }
+        </BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">
+            @Localizer[nameof(AppStrings.AppHomeHeroLead)]
+        </BitText>
+        <div class="ah-actions" @ref="heroActions">
+            @* A real app is a smaller step than an install for someone who doubts it. It's offered as how complete a project can
+               be on day one, not as the team's best demo, which it isn't *@
+            <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+            <BitButton Variant="BitVariant.Outline" Href="@AppHomeNumbers.AdminPanelDemoUrl" Target="_blank" IconName="@BitIconName.OpenInNewWindow"
+                       Title="@Localizer[nameof(AppStrings.AppHomeSeeDayOneTitle)]">
+                @Localizer[nameof(AppStrings.AppHomeSeeDayOne)]
+            </BitButton>
+        </div>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="ah-hero-fine">
+            @Localizer[nameof(AppStrings.AppHomeStartingIsFree)]
+        </BitText>
+        <ul class="ah-pills" aria-label="@Localizer[nameof(AppStrings.AppHomeWhatWeAdd)]" data-bonboarding-anchor="home-why">
+            @foreach (var (icon, title) in Pills)
+            {
+                <li><BitIcon IconName="@icon" />@title</li>
+            }
+        </ul>
+    </section>
+
+    @* The numbers right under the hero, where a visitor who doubts it looks first *@
+    <div class="ah-proof">
+        <ul class="ah-proof-list" aria-label="@Localizer[nameof(AppStrings.AppHomeNumbersLabel)]">
+            @foreach (var (number, label) in AppHomeNumbers.Of(Localizer))
+            {
+                @* Isolated left to right, or a right-to-left page shows 120+ as +120 *@
+                <li><strong><bdi dir="ltr">@number</bdi></strong> @label</li>
+            }
+        </ul>
+        <BitLink Href="@AppHomeNumbers.GitHubUrl" Target="_blank">@Localizer[nameof(AppStrings.AppHomeBitFabricIsBuiltOnBitPlatformOpenOn)]</BitLink>
+    </div>
+
+    @* 1. Where each piece lives, so owning it all is something to check rather than a claim *@
+    <section class="ah-band" id="ah-own" aria-labelledby="ah-own-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="own" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeOwnTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeOwnIntro)]
+            </BitText>
+        </header>
+        <AppHomeTiles Tiles="Owns" HeadingElement="@cardHeading" />
+        <BitText Typography="BitTypography.H5" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.AppHomeOwnLine)]</BitText>
+    </section>
+
+    @* 2. What every project starts with, eight cards with their films; the rest is on /features *@
+    <section class="ah-band" id="ah-day-one" aria-labelledby="ah-day-one-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="day-one" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeDayOneTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeDayOneIntro)]
+            </BitText>
+        </header>
+        <div class="ah-grid">
+            @foreach (var feature in DayOne)
+            {
+                <AppHomeFeatureCard Feature="feature" HeadingElement="@cardHeading" OnExplain="WrapHandled<AppHomeFeature>(Explain)">
+                    @* Search engines read the films too: their text is in the prerendered page, hidden, and only there *@
+                    @if (InPrerenderSession && feature.Explained)
+                    {
+                        <p hidden>@TextOf(feature)</p>
+                    }
+                </AppHomeFeatureCard>
+            }
+        </div>
+        <BitButton Variant="BitVariant.Outline" Href="@FeaturesUrl" Class="ah-band-link">@Localizer[nameof(AppStrings.AppHomeSeeEverythingAProjectStartsWith)]</BitButton>
+    </section>
+
+    @* 3. The two edges and bit Fabric between them *@
+    <section class="ah-band" id="ah-compare" aria-labelledby="ah-compare-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="compare" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeCompareTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeCompareIntro)]</BitText>
+        </header>
+        <AppHomeComparison />
+        @* The same, one by one and with every fact's source *@
+        <BitButton Variant="BitVariant.Outline" Href="@CompareUrl" IconName="@BitIconName.Table" Class="ah-band-link">@Localizer[nameof(AppStrings.AppHomeSeeCompare)]</BitButton>
+    </section>
+
+    @* 4. A cost to predict: this site's own bill, then what a visitor's minimum is and what comes on top *@
+    <section class="ah-band" id="ah-cost" aria-labelledby="ah-cost-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="cost" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeCostTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeCostIntro)]</BitText>
+        </header>
+        <AppHomeCostCalculator HeadingElement="@cardHeading" />
+        <div class="ah-band-note">
+            <BitIcon IconName="@BitIconName.Savings" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeCostMinimum)]
+            </BitText>
+        </div>
+        @* Why a real app's whole bill comes out lower *@
+        <BitButton Variant="BitVariant.Outline" Href="@CostUrl" IconName="@BitIconName.Lightbulb" Class="ah-band-link">@Localizer[nameof(AppStrings.CostLink)]</BitButton>
+    </section>
+
+    @* 5. What keeps running and what stops, if bit Fabric does: the question a visitor who has seen platforms close asks first *@
+    <section class="ah-band" id="ah-if-we-stop" aria-labelledby="ah-if-we-stop-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="if-we-stop" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeIfWeStopTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeIfWeStopIntro)]</BitText>
+        </header>
+        <AppHomeIfWeStop HeadingElement="@cardHeading" />
+        <div class="ah-band-note">
+            <BitIcon IconName="@BitIconName.Sync" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeUpgradesAreYours), AppHomeNumbers.ImprovementsAMonth]
+            </BitText>
+        </div>
+    </section>
+
+    @* 6. How it works, in the order of bitfabric-internal/specs/getting-started.md, with the install shown as small and as open to inspection as it is *@
+    <section class="ah-band" id="ah-how" aria-labelledby="ah-how-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="how" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeHowTitle)]" />
+        </header>
+        <ol class="ah-how">
+            @foreach (var (title, text) in HowSteps)
+            {
+                <li class="ah-how-step">
+                    <BitText Typography="BitTypography.H6" Element="@cardHeading">@title</BitText>
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@text</BitText>
+                </li>
+            }
+        </ol>
+        <div class="ah-band-note">
+            <BitIcon IconName="@BitIconName.Shield" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeHowSigned)]
+            </BitText>
+        </div>
+        @* How the third step goes in each agent *@
+        <BitButton Variant="BitVariant.Outline" Href="@ForUrl" IconName="@BitIconName.Robot" Class="ah-band-link">@Localizer[nameof(AppStrings.ForSeeEveryAgent)]</BitButton>
+    </section>
+
+    @* 7. What a visitor who doubts it asks before starting. Closed, the answers stay in the page for search engines and find-in-page *@
+    <section class="ah-band" id="ah-questions" aria-labelledby="ah-questions-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="questions" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.NewProjectHelpGeneralTitle)]" />
+        </header>
+        <div class="ah-faq">
+            @foreach (var (question, answer) in Questions)
+            {
+                <BitAccordion Title="@question" HeadingLevel="3" HiddenUntilFound Class="ah-faq-item">
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@answer</BitText>
+                </BitAccordion>
+            }
+        </div>
+        @* The two questions the four above leave, each with a page of its own *@
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@PricingUrl" IconName="@BitIconName.Savings">@Localizer[nameof(AppStrings.AppHomeSeePricing)]</BitButton>
+            <BitButton Variant="BitVariant.Outline" Href="@TrustUrl" IconName="@BitIconName.Shield">@Localizer[nameof(AppStrings.AppHomeSeeTrust)]</BitButton>
+        </div>
+    </section>
+
+    <section class="ah-final" @ref="finalBand">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeFinalTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeFinalText)]</BitText>
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+</div>
+
+@* "Get started" at hand down the page, as a tab on the screen's edge *@
+<div class="ah-dock @(IsCtaShown ? "is-shown" : null)" inert="@(IsCtaShown is false)">
+    <div class="ah-dock-inner">
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket" Class="ah-dock-button">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </div>
+</div>
+
+<AppHomeFilmDialog Playing="playing" FilmType="filmType" IsOnboarding="isOnboardingFilm" OnClose="WrapHandled(CloseFilm)" />

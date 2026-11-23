@@ -1,0 +1,231 @@
+@inherits AppComponentBase
+
+<div class="sla">
+    @if (report is null || settings is null)
+    {
+        <BitShimmer Height="18rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringSlaLoading)]" />
+    }
+    else
+    {
+        var monthName = ProjectSlaMonths.NameOf(report.Year, report.Month, CultureInfo.CurrentUICulture);
+        var availability = report.App.Availability;
+        var met = availability >= settings.TargetPercent;
+        var tone = availability is null ? "tone-nodata" : met ? "tone-ok" : "tone-down";
+
+        <div class="toolbar">
+            <div class="target">
+                <BitDropdown TItem="BitDropdownItem<double>" TValue="double"
+                             Label="@Localizer[nameof(AppStrings.MonitoringSlaWhatYouPromise)]"
+                             Items="@Choices(targets, settings.TargetPercent)"
+                             Value="@settings.TargetPercent"
+                             ValueChanged="@(WrapHandled((double value) => Save(edited => edited.TargetPercent = value)))"
+                             FitWidth />
+            </div>
+            <div class="exports">
+                <BitButton AutoLoading Variant="BitVariant.Outline" IconName="@BitIconName.PDF" OnClick="WrapHandled(ExportPdf)">@Localizer[nameof(AppStrings.MonitoringSlaPdfOf), monthName]</BitButton>
+                <BitButton AutoLoading Variant="BitVariant.Outline" IconName="@BitIconName.ExcelDocument" OnClick="WrapHandled(ExportCsv)">CSV</BitButton>
+            </div>
+        </div>
+
+        <section class="kpis" aria-label="@monthName">
+            <div class="@($"kpi big {tone}")">
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@(report.IsCurrent ? Localizer[nameof(AppStrings.MonitoringSlaAvailabilityInSoFar), monthName] : Localizer[nameof(AppStrings.MonitoringSlaAvailabilityIn), monthName])</BitText>
+                <BitText Typography="BitTypography.H3" Element="span" Numeric>@Percent(availability)</BitText>
+                <BitText Typography="BitTypography.Body2">
+                    @if (availability is null)
+                    {
+                        @Localizer[nameof(AppStrings.MonitoringSlaNothingCountedYetHelp)]
+                    }
+                    else
+                    {
+                        <BitIcon IconName="@(met ? BitIconName.CompletedSolid : BitIconName.StatusErrorFull)" Color="@(met ? BitColor.Success : BitColor.Error)" Size="BitSize.Small" />
+                        @(met ? Localizer[nameof(AppStrings.MonitoringSlaMeetsYourPromise), Percent(settings.TargetPercent)] : Localizer[nameof(AppStrings.MonitoringSlaBelowYourPromise), Percent(settings.TargetPercent)])
+                    }
+                </BitText>
+            </div>
+            <div class="kpi">
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@(report.IsCurrent ? Localizer[nameof(AppStrings.MonitoringSlaDowntimeYouCanStillAffordThisMonth)] : Localizer[nameof(AppStrings.MonitoringSlaDowntimeLeftOverThatMonth)])</BitText>
+                <BitText Typography="BitTypography.H4" Element="span" Numeric>@Minutes(report.LeftMinutes)</BitText>
+                <BitProgress Meter Rounded Thickness="8" Percent="@BudgetLeftPercent"
+                             Color="@(BudgetLeftPercent > 50 ? BitColor.Success : BudgetLeftPercent > 20 ? BitColor.Warning : BitColor.Error)"
+                             AriaLabel="@Localizer[nameof(AppStrings.MonitoringSlaErrorBudgetLeft)]" />
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">
+                    @Localizer[nameof(AppStrings.MonitoringSlaUsedOf), Minutes(report.App.WeightedMinutes), Minutes(report.BudgetMinutes)]
+                </BitText>
+            </div>
+            <div class="kpi">
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaServiceCredit)]</BitText>
+                @if (report.Credit is { } monthCredit)
+                {
+                    <BitText Typography="BitTypography.H4" Element="span" Numeric Color="BitColor.Error">@Localizer[nameof(AppStrings.MonitoringSlaCreditBack), Number(monthCredit.CreditPercent)]</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaBelowInYourContract), Percent(monthCredit.BelowPercent)]</BitText>
+                }
+                else
+                {
+                    <BitText Typography="BitTypography.H4" Element="span">@Localizer[nameof(AppStrings.MonitoringSlaNoCredit)]</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">
+                        @(settings.Credits.Length is 0 ? Localizer[nameof(AppStrings.MonitoringSlaCreditsNotSet)] : Localizer[nameof(AppStrings.MonitoringSlaAboveEveryTier)])
+                    </BitText>
+                }
+            </div>
+        </section>
+
+        <div class="sla-split">
+            <section class="panel" aria-labelledby="months-title">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="months-title">@Localizer[nameof(AppStrings.MonitoringSlaLast12Months)]</BitText>
+                @* Time runs left to right in every language, as on any chart. *@
+                <div class="months" dir="ltr" role="group" aria-label="@Localizer[nameof(AppStrings.MonitoringSlaMonthsAriaLabel)]">
+                    <span class="target-line" style="@($"--at:{Height(settings.TargetPercent)}")" title="@Percent(settings.TargetPercent)"></span>
+                    @foreach (var month in report.Months)
+                    {
+                        var name = ProjectSlaMonths.NameOf(month.Year, month.Month, CultureInfo.CurrentUICulture);
+                        var isSelected = month.Year == report.Year && month.Month == report.Month;
+                        var label = month.Availability is null ? Localizer[nameof(AppStrings.MonitoringSlaMonthNotWatched), name] : Localizer[nameof(AppStrings.MonitoringSlaMonthAvailability), name, Percent(month.Availability)];
+                        var shortName = ProjectSlaMonths.ShortNameOf(month.Year, month.Month, CultureInfo.CurrentUICulture);
+                        @* Its name starts with the month it shows, as a control's name must contain its visible text. *@
+                        <button type="button" @key="(month.Year * 100 + month.Month)"
+                                class="@($"month {(month.Availability is null ? "tone-nodata" : month.Availability >= settings.TargetPercent ? "tone-ok" : "tone-down")} {(isSelected ? "is-selected" : null)}")"
+                                title="@label" aria-label="@($"{shortName}{Localizer[nameof(AppStrings.MonitoringPartsSeparator)]}{label}")" aria-pressed="@(isSelected ? "true" : "false")"
+                                @onclick="WrapHandled(() => Open(month.Year, month.Month))">
+                            <span class="month-bar" style="@($"--h:{(month.Availability is { } value ? Height(value) : "2")}%")"></span>
+                            <span class="month-label">@shortName</span>
+                        </button>
+                    }
+                </div>
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaMonthsHelp)]</BitText>
+            </section>
+
+            <section class="panel" aria-labelledby="formula-title">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="formula-title">@Localizer[nameof(AppStrings.MonitoringSlaHowItsCounted)]</BitText>
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaHowItsCountedHelp), report.TimeZoneId ?? ""]</BitText>
+                <ul class="rules">
+                    <li><span class="rule-mark tone-down"></span>@Localizer[nameof(AppStrings.MonitoringSlaAppDownCountsInFull)]</li>
+                    <li>
+                        <span class="rule-mark tone-partial"></span>
+                        <span class="rule-text">@Localizer[nameof(AppStrings.MonitoringSlaPartFailingCountsAs)]</span>
+                        <BitDropdown TItem="BitDropdownItem<double>" TValue="double" Items="@Choices(partialWeights, settings.PartialWeight, weight: true)" Value="@settings.PartialWeight"
+                                     ValueChanged="@(WrapHandled((double value) => Save(edited => edited.PartialWeight = value)))" FitWidth AriaLabel="@Localizer[nameof(AppStrings.MonitoringSlaPartialWeightAriaLabel)]" />
+                    </li>
+                    <li>
+                        <span class="rule-mark tone-degraded"></span>
+                        <span class="rule-text">@Localizer[nameof(AppStrings.MonitoringSlaSlowCountsAs)]</span>
+                        <BitDropdown TItem="BitDropdownItem<double>" TValue="double" Items="@Choices(degradedWeights, settings.DegradedWeight, weight: true)" Value="@settings.DegradedWeight"
+                                     ValueChanged="@(WrapHandled((double value) => Save(edited => edited.DegradedWeight = value)))" FitWidth AriaLabel="@Localizer[nameof(AppStrings.MonitoringSlaDegradedWeightAriaLabel)]" />
+                    </li>
+                    <li><span class="rule-mark tone-maintenance"></span>@Localizer[nameof(AppStrings.MonitoringSlaMaintenanceDoesntCount)]</li>
+                </ul>
+                @* In the page's direction, as the PDF draws it: its words are the viewer's language. *@
+                <div class="formula">@Localizer[nameof(AppStrings.MonitoringSlaFormula), Number(settings.PartialWeight), Number(settings.DegradedWeight)]</div>
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">
+                    @Localizer[nameof(AppStrings.MonitoringSlaMonthMinutes), monthName, Minutes(report.App.CountedMinutes), Minutes(report.App.DownMinutes), Minutes(report.App.PartialMinutes), Minutes(report.App.DegradedMinutes)]
+                </BitText>
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaWeightsHelp)]</BitText>
+            </section>
+        </div>
+
+        <section class="panel" aria-labelledby="parts-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="parts-title">@Localizer[nameof(AppStrings.MonitoringSlaEachPartIn), monthName]</BitText>
+            <div class="rows" role="table" aria-labelledby="parts-title">
+                <div class="row head" role="row">
+                    <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringSlaPartAsYourAppCallsIt)]</span>
+                    <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringSlaAvailability)]</span>
+                    <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringSlaDown)]</span>
+                    <span role="columnheader">@Localizer[nameof(AppStrings.MonitoringSlaPartly)]</span>
+                </div>
+                @foreach (var row in report.Parts.Prepend(report.App))
+                {
+                    var isApp = row == report.App;
+                    <div @key="(row.Key ?? AppRow)" class="@($"row {(isApp ? "is-app" : null)}")" role="row">
+                        <span role="cell" class="part" title="@row.Title">@(isApp ? Localizer[nameof(AppStrings.MonitoringSlaAsAWhole), row.Title ?? ""] : row.Title)</span>
+                        <span role="cell" class="@(row.Availability is null ? null : row.Availability >= settings.TargetPercent ? "ok" : "bad")">@Percent(row.Availability)</span>
+                        <span role="cell">@(row.DownMinutes >= 0.5 ? Minutes(row.DownMinutes) : "—")</span>
+                        <span role="cell">@(row.PartialMinutes >= 0.5 ? Minutes(row.PartialMinutes) : "—")</span>
+                    </div>
+                }
+            </div>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaPartsHelp)]</BitText>
+        </section>
+
+        <div class="sla-split">
+            <section class="panel" aria-labelledby="credits-title">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="credits-title">@Localizer[nameof(AppStrings.MonitoringSlaServiceCreditsInYourContract)]</BitText>
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaServiceCreditsHelp)]</BitText>
+
+                @if (credits is not null)
+                {
+                    <ul class="credit-editor">
+                        @foreach (var credit in credits)
+                        {
+                            <li @key="credit">
+                                <BitNumberField TValue="double" @bind-Value="credit.BelowPercent" Min="1" Max="100" Step="0.01" Label="@Localizer[nameof(AppStrings.MonitoringSlaBelowInPercent)]" />
+                                <BitNumberField TValue="double" @bind-Value="credit.CreditPercent" Min="1" Max="100" Step="1" Label="@Localizer[nameof(AppStrings.MonitoringSlaBackInPercent)]" />
+                                <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Delete" Title="@Localizer[nameof(AppStrings.Delete)]"
+                                           AriaLabel="@Localizer[nameof(AppStrings.Delete)]" OnClick="() => credits!.Remove(credit)" />
+                            </li>
+                        }
+                    </ul>
+                    <div class="actions">
+                        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Add" OnClick="AddCredit">@Localizer[nameof(AppStrings.MonitoringSlaAddATier)]</BitButton>
+                        <BitButton AutoLoading Size="BitSize.Small" IconName="@BitIconName.Save" OnClick="WrapHandled(SaveCredits)">@Localizer[nameof(AppStrings.Save)]</BitButton>
+                        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" OnClick="() => credits = null">@Localizer[nameof(AppStrings.Cancel)]</BitButton>
+                    </div>
+                }
+                else
+                {
+                    @if (settings.Credits.Length is 0)
+                    {
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaNoCreditsYet)]</BitText>
+                    }
+                    else
+                    {
+                        <ul class="credits">
+                            @foreach (var credit in settings.Credits)
+                            {
+                                var applies = report.Credit is { } applied && applied.BelowPercent == credit.BelowPercent;
+                                <li class="@(applies ? "is-applied" : null)">
+                                    <span>@Localizer[nameof(AppStrings.MonitoringSlaBelow), Percent(credit.BelowPercent)]</span>
+                                    <span class="credit">@Localizer[nameof(AppStrings.MonitoringSlaCreditBack), Number(credit.CreditPercent)]</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    <div class="actions">
+                        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Edit" OnClick="EditCredits">@Localizer[nameof(AppStrings.MonitoringSlaChangeTheCredits)]</BitButton>
+                    </div>
+                }
+            </section>
+
+            <section class="panel" aria-labelledby="excluded-title">
+                <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="excluded-title">@Localizer[nameof(AppStrings.MonitoringSlaLeftOutOf), monthName]</BitText>
+                @if (report.Maintenance.Length is 0)
+                {
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringSlaNoMaintenanceThisMonth)]</BitText>
+                }
+                @foreach (var maintenance in report.Maintenance)
+                {
+                    <div class="excluded">
+                        <BitIcon IconName="@BitIconName.ConstructionCone" Color="BitColor.Info" />
+                        <span>
+                            <BitText Typography="BitTypography.Body2" Weight="BitFontWeight.Semibold" Element="span">@maintenance.Title</BitText>
+                            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="span">@Localizer[nameof(AppStrings.MonitoringSlaMaintenanceLeftOut), LocalTime(maintenance.StartsAt), LocalTime(maintenance.EndsAt), Minutes(maintenance.Minutes)]</BitText>
+                        </span>
+                    </div>
+                }
+                @if (report.NoDataMinutes >= 1)
+                {
+                    <div class="excluded">
+                        <BitIcon IconName="@BitIconName.PlugDisconnected" Color="BitColor.SecondaryForeground" />
+                        <BitText Typography="BitTypography.Body2" Element="span">@Localizer[nameof(AppStrings.MonitoringSlaNoReading), Minutes(report.NoDataMinutes)]</BitText>
+                    </div>
+                }
+                @if (report.NotWatchedMinutes >= 1)
+                {
+                    <div class="excluded">
+                        <BitIcon IconName="@BitIconName.Hide3" Color="BitColor.SecondaryForeground" />
+                        <BitText Typography="BitTypography.Body2" Element="span">@Localizer[nameof(AppStrings.MonitoringSlaBeforeWatched), Minutes(report.NotWatchedMinutes)]</BitText>
+                    </div>
+                }
+            </section>
+        </div>
+    }
+</div>

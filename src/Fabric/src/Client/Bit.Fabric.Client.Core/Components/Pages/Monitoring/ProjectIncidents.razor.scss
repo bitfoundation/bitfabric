@@ -1,0 +1,148 @@
+@import '_monitoring.scss';
+
+@include tones;
+
+.incident-list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.incident {
+    overflow: hidden;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    border-inline-start: 3px solid var(--tone);
+    background-color: $bit-color-background-primary;
+}
+
+.incident-head {
+    width: 100%;
+    border: none;
+    display: flex;
+    cursor: pointer;
+    text-align: start;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    color: inherit;
+    font: inherit;
+    background: transparent;
+
+    &:hover {
+        background-color: $bit-color-background-secondary;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $bit-color-primary;
+        outline-offset: -2px;
+    }
+}
+
+.kind-icon {
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    place-items: center;
+    border-radius: 0.5rem;
+    color: var(--tone);
+    background-color: color-mix(in srgb, var(--tone) 14%, transparent);
+}
+
+.incident-title {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.incident-tags {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.375rem;
+}
+
+.incident-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1rem 1rem;
+}
+
+.after-deploy,
+.ack,
+.prompt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.after-deploy {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background-color: color-mix(in srgb, #{$bit-color-info} 10%, transparent);
+}
+
+.update {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.post-update {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.post-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.prompt {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background-color: $bit-color-background-secondary;
+}
+
+// A prompt for an AI agent is English, left to right in every language.
+.prompt-text {
+    flex: 1;
+    min-width: 0;
+    direction: ltr;
+    text-align: start;
+    unicode-bidi: isolate;
+}
+
+.alerts ul {
+    margin: 0.25rem 0 0;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+.ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+}

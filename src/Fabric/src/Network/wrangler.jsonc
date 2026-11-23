@@ -1,0 +1,37 @@
+// The bitplatform Network (README.md). One Worker per environment: cd-network.yml deploys it as
+// bit-fabric-network-test and bit-fabric-network-production with --name, and gives each its FABRIC_URL and its NETWORK_SECRET.
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "bit-fabric-network",
+    "main": "src/index.ts",
+    "compatibility_date": "2026-10-20",
+
+    // Every minute the Worker pokes each location's object, which keeps its own alarm a minute armed (src/index.ts).
+    "triggers": {
+        "crons": [ "* * * * *" ]
+    },
+
+    "durable_objects": {
+        "bindings": [
+            { "name": "LOCATIONS", "class_name": "NetworkLocation" }
+        ]
+    },
+
+    // The Workers free plan only has SQLite-backed Durable Objects.
+    "migrations": [
+        { "tag": "v1", "new_sqlite_classes": [ "NetworkLocation" ] }
+    ],
+
+    // Set by the deployment with --var; empty here, so a Worker deployed without it does nothing.
+    "vars": {
+        "FABRIC_URL": ""
+    },
+
+    // It answers no one: nothing reaches it but its cron trigger.
+    "workers_dev": false,
+    "preview_urls": false,
+
+    "observability": {
+        "enabled": true
+    }
+}

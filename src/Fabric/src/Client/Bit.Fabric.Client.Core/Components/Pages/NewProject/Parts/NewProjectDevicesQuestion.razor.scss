@@ -1,0 +1,68 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.np-devices {
+    display: grid;
+    gap: 12px;
+}
+
+.np-device-web {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    padding: 12px 14px;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+}
+
+::deep .np-device-web-icon {
+    margin-top: 3px;
+    color: $bit-color-success;
+}
+
+.np-device-web-title {
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.np-device-web-text {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+}
+
+.np-device-later {
+    display: block;
+    margin-top: 2px;
+}
+
+.np-device-off {
+    display: grid;
+    gap: 2px;
+    padding-inline-start: 12px;
+    border-inline-start: 2px solid $bit-color-border-secondary;
+}
+
+.np-device-off-title {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+}
+
+.np-device-off-text {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+}
+
+.np-devices-note {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px;
+    align-items: start;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+}
+
+// An info icon, so the note is not missed under the switches
+::deep .np-devices-note-icon {
+    margin-top: 1px;
+    font-size: $bit-typography-fs-md;
+}

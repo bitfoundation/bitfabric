@@ -1,0 +1,40 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+// The full width of its column, also in the folded sections, which line their items up at the start
+.np-question {
+    display: grid;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+}
+
+.np-question-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px 12px;
+}
+
+::deep .np-question-title {
+    margin: 0;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+::deep .np-question-help {
+    margin-inline-end: -8px;
+    // Through the button's own variable, so its hover color still applies
+    --bit-Button-text-color: #{$bit-color-foreground-secondary};
+}
+
+::deep .np-question-lead {
+    margin: 0;
+    max-width: 64ch;
+}
+
+.np-question-body {
+    display: grid;
+    gap: 12px;
+    margin-top: 4px;
+    min-width: 0;
+}

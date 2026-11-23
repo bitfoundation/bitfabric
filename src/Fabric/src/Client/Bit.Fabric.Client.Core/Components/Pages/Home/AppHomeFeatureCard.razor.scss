@@ -1,0 +1,39 @@
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+.ah-card {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding: 1.25rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-primary;
+}
+
+.ah-card-top {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-height: 2.25rem;
+    --bit-Icon-size: 1rem;
+    --bit-Icon-padding: .55rem;
+}
+
+::deep .ah-card-info {
+    margin-inline-start: auto;
+}
+
+.ah-card-badge {
+    padding: .1rem .55rem;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-warning-light;
+    color: $bit-color-warning-dark;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.ah-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}

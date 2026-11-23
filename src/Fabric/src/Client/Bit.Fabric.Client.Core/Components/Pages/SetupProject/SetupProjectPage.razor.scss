@@ -1,0 +1,29 @@
+@import '../../../Styles/abstracts/_media-queries.scss';
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+// One column of questions, then the line; the wizard's parts bring their own styles
+.sp-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+    padding: 24px 16px 48px;
+    line-height: $bit-typography-body1-line-height;
+
+    @include lt-sm {
+        gap: 24px;
+        padding-top: 16px;
+    }
+}
+
+.sp-intro {
+    display: grid;
+    gap: 8px;
+}
+
+::deep .sp-title {
+    margin: 0;
+    font-weight: $bit-typography-fw-semibold;
+}

@@ -1,0 +1,23 @@
+@inherits ComponentBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Compare.Data
+@* Every source a page cites, numbered as the page cites them: its name, its address and the day it was read
+   (bitfabric-internal/.agents/gtm/research/seo-geo.md, section 4.5). Names and addresses are what a reader finds there, so
+   they aren't translated. The comparison pages' and the AI agent pages'. *@
+
+<ol class="cmp-sources">
+    @for (var i = 0; i < Sources.Length; i++)
+    {
+        var source = Sources[i];
+        <li @key="source.Id" id="@AnchorOf(source.Id)" class="cmp-source">
+            <span class="cmp-source-number" aria-hidden="true">@(i + 1)</span>
+            <div class="cmp-source-words">
+                <bdi class="cmp-source-name" dir="ltr">@source.Name</bdi>
+                @foreach (var url in source.Urls)
+                {
+                    <BitLink @key="url" Href="@url" Target="_blank" Class="cmp-source-url"><bdi dir="ltr">@Shown(url)</bdi></BitLink>
+                }
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="cmp-source-read">@Localizer[nameof(AppStrings.CompareReadOn), ReadOn]</BitText>
+            </div>
+        </li>
+    }
+</ol>

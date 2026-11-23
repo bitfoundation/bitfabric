@@ -1,0 +1,241 @@
+@import '_monitoring.scss';
+
+@include tones;
+
+.project-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 1.125rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    border-top: 3px solid var(--tone);
+    background-color: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-card;
+    transition: box-shadow $bit-motion-duration-short, transform $bit-motion-duration-short;
+
+    &:hover {
+        box-shadow: $bit-box-shadow-card-hover;
+    }
+
+    &:focus-within {
+        outline: 2px solid $bit-color-primary;
+        outline-offset: 2px;
+    }
+}
+
+// The whole card opens the project, while the text stays selectable and readable by a screen reader once.
+.card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+// The name wins the room: the state's tag goes under it when both don't fit on one line.
+.card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+}
+
+.monogram {
+    @include monogram(2.5rem);
+}
+
+// The app's own icon, in the monogram's corners.
+::deep .app-icon {
+    flex-shrink: 0;
+    --bit-Image-radius: calc(2.5rem * 0.28);
+}
+
+.card-title {
+    // As wide as the name and the address on one line each, so the tag wraps before the name has to.
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    // The name and the address keep to the start side, the address being left to right in every language.
+    align-items: flex-start;
+    // A word breaks only when it's wider than the card on its own.
+    overflow-wrap: break-word;
+}
+
+::deep .notice {
+    padding: 0.5rem 0.75rem;
+    border-radius: $bit-shape-radius-md;
+    background-color: color-mix(in srgb, var(--tone) 10%, transparent);
+}
+
+.reconnect {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+// Above the link that covers the card, so the button gets its own click.
+::deep .reconnect-button {
+    position: relative;
+    z-index: 1;
+}
+
+// The last 30 days, a bar a day (from the approved design's MonitoringDayBars, compact), above the link that covers the
+// card so each bar's tooltip shows; they open the History tab.
+.history {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.day-bars {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 2px;
+    height: 1.375rem;
+    border-radius: $bit-shape-radius-sm;
+
+    &:focus-visible {
+        outline: 2px solid $bit-color-primary;
+        outline-offset: 2px;
+    }
+
+    .bar {
+        flex: 1;
+        min-width: 0;
+        border-radius: 2px;
+        background-color: var(--tone);
+        transition: transform $bit-motion-duration-short;
+
+        &:hover {
+            transform: scaleY(1.15);
+        }
+    }
+}
+
+.history-legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.metrics {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+
+    dt {
+        font-size: $bit-typography-fs-xs;
+        color: $bit-color-foreground-secondary;
+    }
+
+    dd {
+        margin: 0;
+        font-size: $bit-typography-fs-md;
+        font-weight: $bit-typography-fw-semibold;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.card-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+}
+
+// The scans row, as the approved card design draws it.
+.scans {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+
+    li {
+        display: flex;
+    }
+}
+
+// Each scan opens the Scans tab, above the link that covers the card, so its tooltip shows the most urgent finding.
+.scan {
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: $bit-shape-radius-full;
+    font-size: $bit-typography-fs-xs;
+    color: $bit-color-foreground-primary;
+    border: 1px solid color-mix(in srgb, var(--tone) 40%, #{$bit-color-border-secondary});
+    background-color: color-mix(in srgb, var(--tone) 8%, transparent);
+
+    &:hover {
+        border-color: var(--tone);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $bit-color-primary;
+        outline-offset: 2px;
+    }
+
+    ::deep .scan-icon {
+        color: var(--tone);
+        --bit-Icon-color: var(--tone);
+    }
+
+    .scan-value {
+        font-weight: $bit-typography-fw-semibold;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &.tone-nodata {
+        border-style: dashed;
+        color: $bit-color-foreground-secondary;
+
+        .scan-value {
+            font-weight: $bit-typography-fw-regular;
+        }
+    }
+}
+
+// Above the link that covers the card, so the button gets its own click.
+::deep .run-scans {
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+::deep .cache-warning {
+    color: $bit-color-severe-warning;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .day-bars .bar {
+        transition: none;
+    }
+}
+
+::deep .ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+}

@@ -1,0 +1,37 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+// What keeps running and what stops, side by side on a wide screen
+.ahs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    gap: 1rem;
+}
+
+.ahs-card {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding: 1.5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+.ahs-list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: .5rem;
+
+        ::deep .ahs-mark {
+            flex-shrink: 0;
+            margin-top: .2rem;
+        }
+    }
+}

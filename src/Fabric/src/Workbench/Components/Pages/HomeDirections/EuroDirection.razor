@@ -1,0 +1,114 @@
+@inherits DirectionComponentBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+@* Day one, to the euro: Concept 2 of bitfabric-internal/specs/changes/2026-11-18-home-page-concepts.md. Production-ready on
+   day one, and a bill that is a real site's, itemized, rather than a credit meter. *@
+
+<DirectionHero Eyebrow="bit Fabric"
+               Layout="DirectionHeroLayout.Split"
+               TitleLines="TitleLines"
+               Lead="@Localizer["A complete identity solution, multi-tenancy, an admin panel with a live dashboard, offline sync and apps for web, Android, iOS, Windows and macOS are built and tested before your first prompt, so your AI spends its tokens on your idea. You pay for your AI plan and your server, with no credits from us."]"
+               SecondaryText="@Localizer["See this site's monthly bill"]"
+               SecondaryHref="@InPage("cost")"
+               SecondaryIcon="@BitIconName.Savings">
+    <Aside>
+        @* The bill chip of the concept, drawn as the bill itself: a number a visitor can recompute *@
+        <figure class="eu-bill">
+            <figcaption class="eu-bill-head">
+                <span>bitfabric.co</span>
+                <span class="eu-bill-sub">@Localizer["Its own bill, every month"]</span>
+            </figcaption>
+            <ul class="eu-bill-lines">
+                @foreach (var (item, euros) in Bill)
+                {
+                    <li><span>@item</span><bdi class="eu-bill-euros">@($"€{euros}")</bdi></li>
+                }
+            </ul>
+            <div class="eu-bill-total">
+                <span>@Localizer["A month"]</span>
+                <bdi>€11</bdi>
+            </div>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="p">
+                @Localizer["Your own minimum: the €4 server and a domain."]
+            </BitText>
+        </figure>
+    </Aside>
+</DirectionHero>
+
+<DirectionNumbers />
+
+<DirectionBand Anchor="day-one" Title="@Localizer["What every app needs, built and tested before your first prompt"]"
+               Intro="@Localizer["Every part that is ready is tokens and days your AI doesn't spend, and security it doesn't have to get right on its own."]">
+    <div class="eu-groups">
+        @foreach (var group in Groups)
+        {
+            <div class="eu-group">
+                <BitText Typography="BitTypography.H6" Element="h3">@group.Title</BitText>
+                <ul class="eu-group-items">
+                    @foreach (var tile in group.Items)
+                    {
+                        <li>
+                            <BitIcon IconName="@tile.Icon" Color="BitColor.SecondaryForeground" Class="eu-group-icon" />
+                            <span class="eu-group-text">@tile.Title</span>
+                            @if (tile.FilmId is { } filmId)
+                            {
+                                <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Play" IconOnly
+                                           Title="@AppLocalizer[nameof(AppStrings.AppHomeSeeHowWorks), tile.Title]"
+                                           AriaLabel="@AppLocalizer[nameof(AppStrings.AppHomeSeeHowWorks), tile.Title]"
+                                           OnClick="() => Play(filmId, tile.Icon, tile.Title, tile.Text)" />
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+    <div class="eu-actions">
+        <BitButton Variant="BitVariant.Outline" Href="@PageUrls.Features">@AppLocalizer[nameof(AppStrings.AppHomeSeeEverythingAProjectStartsWith)]</BitButton>
+    </div>
+</DirectionBand>
+
+<DirectionBand Anchor="security" Title="@Localizer["Security built on the server, not prompted in"]"
+               Intro="@Localizer["The big leaks of AI-built apps had one cause: a database key in the browser and no access rules behind it. UpGuard found 16,326 such databases, about 9,104 of them exposing personal data (23 September 2026). In a bit Fabric app, no database key ever reaches the browser, and access is checked on the server."]">
+    <DirectionTiles Items="Security" Look="DirectionTileLook.Outlined" MinWidth="18rem" OnExplain="OnExplain" />
+</DirectionBand>
+
+<DirectionBand Anchor="cost" Title="@Localizer["What it costs to run: this site's own bill"]"
+               Intro="@AppLocalizer[nameof(AppStrings.AppHomeCostIntro)]"
+               Note="@Localizer["That's bitfabric.co with every optional item on. Your minimum is the €4 server and a domain. Your AI plan comes on top, from $10 a month: Copilot Pro is $10, Claude Pro $20. The app stores cost money only if you publish there: Apple charges $99 a year, Google Play $25 once."]"
+               NoteIcon="@BitIconName.Savings">
+    <AppHomeCostCalculator HeadingElement="h3" />
+    <div class="eu-license">
+        <BitText Typography="BitTypography.Subtitle2" Element="p">@Localizer["bit Fabric itself: starting is free."]</BitText>
+        <DirectionPlaceholder Text="@Localizer["What comes after the beta, once it is decided"]" />
+    </div>
+</DirectionBand>
+
+<DirectionBand Anchor="platforms" Title="@Localizer["One codebase, five platforms, in the stores today"]"
+               Intro="@Localizer["Native features and offline sync on every one of them. When a version has to go, everyone on it updates before they carry on."]">
+    <DirectionTiles Items="Platforms" MinWidth="12rem" OnExplain="OnExplain" />
+    <div class="eu-actions">
+        <BitButton Variant="BitVariant.Outline" Href="@AppHomeNumbers.AdminPanelDemoUrl" Target="_blank" IconName="@BitIconName.OpenInNewWindow"
+                   Title="@AppLocalizer[nameof(AppStrings.AppHomeSeeDayOneTitle)]">
+            @AppLocalizer[nameof(AppStrings.AppHomeSeeDayOne)]
+        </BitButton>
+    </div>
+</DirectionBand>
+
+<DirectionBand Anchor="ai-team" Title="@Localizer["An AI that works like a team, and checks its own work"]"
+               Line="@Localizer["It says it's done only after the build and the tests pass."]">
+    <DirectionTiles Items="Relay" Look="DirectionTileLook.Steps" MinWidth="11rem" />
+    <DirectionChips Items="Agents" Label="@Localizer["AI agents"]" />
+</DirectionBand>
+
+<DirectionBand Anchor="live" Title="@Localizer["Live with no downtime, and watched once it is"]"
+               Line="@Localizer["We read only your app's health and what any visitor sees, never its data."]">
+    <DirectionTiles Items="Live" MinWidth="12rem" OnExplain="OnExplain" />
+</DirectionBand>
+
+<DirectionBand Anchor="questions" Title="@Localizer["Before you start"]">
+    <DirectionQuestions Items="Questions" />
+</DirectionBand>
+
+<DirectionFinal Title="@Localizer["Spend your AI's first prompt on your idea"]"
+                Text="@Localizer["Answer a few questions and paste one line. What every app needs is already there, so your AI starts on what only your app does."]" />

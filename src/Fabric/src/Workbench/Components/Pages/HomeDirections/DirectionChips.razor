@@ -1,0 +1,9 @@
+@inherits WorkbenchComponentBase
+@* Short names in a row, such as the AI agents a project works with or the services the site itself uses *@
+
+<ul class="dc @(IsCentered ? "dc-centered" : null)" aria-label="@Label">
+    @foreach (var (icon, text) in Items)
+    {
+        <li><BitIcon IconName="@icon" />@text</li>
+    }
+</ul>

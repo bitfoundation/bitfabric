@@ -1,0 +1,40 @@
+@using Bit.Bonboarding
+
+@* A tour's card, all of it bit BlazorUI's, so a tour follows the app's theme and button styles: the app's home page onboarding
+   and every tour of the Workbench. Bonboarding renders only the popover around it, which places it, keeps the focus in it and
+   makes it a dialog (its guide, "Headless and custom rendering"), on the app's theme (guide.css): the card brings no surface
+   of its own, so the two read as one. *@
+<BitCard Class="guide-card" Size="BitSize.Small" Background="BitColorKind.Transparent" NoShadow HeadingLevel="2"
+         Title="@Model.Title" Subtitle="@(Model.Options.Progress is BonboardingProgressStyle.None ? null : Model.ProgressText)">
+    <Actions>
+        @if (Model.Options.ShowClose)
+        {
+            <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Cancel"
+                       Title="@Model.Labels.Close" AriaLabel="@Model.Labels.Close" OnClick="Model.CloseAsync" />
+        }
+    </Actions>
+    <ChildContent>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Model.Description</BitText>
+    </ChildContent>
+    <Footer>
+        <div class="foot">
+            @if (Model.Options.ShowSkip && Model.IsLast is false)
+            {
+                <BitButton Variant="BitVariant.Text" Size="BitSize.Small" OnClick="Model.SkipAsync" Class="guide-skip">@Model.SkipLabel</BitButton>
+            }
+            <BitSpacer />
+            @if (Model.Options.ShowPrevious && Model.IsFirst is false)
+            {
+                <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" OnClick="Model.PreviousAsync" Class="guide-previous">@Model.PreviousLabel</BitButton>
+            }
+            @if (Model.Options.ShowNext)
+            {
+                <BitButton Size="BitSize.Small" data-bonboarding-autofocus="true" OnClick="Model.NextAsync" Class="guide-next">@Model.NextLabel</BitButton>
+            }
+        </div>
+    </Footer>
+</BitCard>
+
+@code {
+    [Parameter, EditorRequired] public required BonboardingStepRenderContext Model { get; set; }
+}

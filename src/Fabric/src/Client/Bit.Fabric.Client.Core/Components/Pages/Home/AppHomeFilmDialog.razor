@@ -1,0 +1,18 @@
+@inherits AppComponentBase
+
+@* A film's components load the first time one opens (See AppHomePageBase.Explain), so this names none of their types. The film
+   the onboarding plays leaves the focus with the tour's card, which says what it is, and sits at the bottom of the screen, so
+   on a phone the card has the top of it (See HomePage.ShowOnboardingFilm) *@
+<BitModal IsOpen="Playing is not null" IsOpenChanged="WrapHandled<bool>(Changed)" MaxWidth="30rem" NoAutoFocus="IsOnboarding" NoFocusTrap="IsOnboarding"
+          Position="@(IsOnboarding ? BitPosition.BottomCenter : null)">
+    @if (Playing?.Note is { } note)
+    {
+        <AppHomeNoteView @key="Playing.Id" Title="@Playing.Title" Note="note" OnClose="WrapHandled(Close)" />
+    }
+    else if (Playing is not null && FilmType is not null)
+    {
+        <div class="@(IsOnboarding ? "ah-film-sheet" : null)">
+            <DynamicComponent @key="Playing.Id" Type="FilmType" Parameters="FilmParameters(Playing)" />
+        </div>
+    }
+</BitModal>

@@ -1,0 +1,116 @@
+@import '_monitoring.scss';
+
+.projects-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+
+    @include lt-sm {
+        padding: 0.75rem 0;
+    }
+}
+
+.grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+}
+
+.filters-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+
+    ::deep .search {
+        flex: 0 1 20rem;
+    }
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.steps {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
+    font-size: $bit-typography-fs-sm;
+    color: $bit-color-foreground-secondary;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+.step-number {
+    width: 1.5rem;
+    height: 1.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-weight: $bit-typography-fw-semibold;
+    color: $bit-color-primary;
+    background-color: color-mix(in srgb, #{$bit-color-primary} 12%, transparent);
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.pitch,
+.empty,
+.team {
+    max-width: 36rem;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-card;
+}
+
+.team {
+    align-items: stretch;
+    text-align: start;
+}
+
+.team-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+
+    ::deep .team-name {
+        flex: 1 1 14rem;
+    }
+}
+
+.pitch-mark {
+    width: 3.5rem;
+    height: 3.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1rem;
+    --bit-Icon-color: #{$bit-color-success};
+    background-color: color-mix(in srgb, #{$bit-color-success} 12%, transparent);
+}

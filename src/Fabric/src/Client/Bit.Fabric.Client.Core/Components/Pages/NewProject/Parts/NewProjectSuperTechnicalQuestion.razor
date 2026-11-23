@@ -1,0 +1,28 @@
+@inherits NewProjectPartBase
+
+<BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+    @Lead("intro")
+</BitText>
+
+@foreach (var option in ChoicesBeforeSwitches)
+{
+    <NewProjectOptionQuestion Option="option" HeadingElement="@HeadingElement" />
+}
+
+<NewProjectQuestion Title="@Title("builtIn")" Lead="@Lead("builtIn")" HeadingElement="@HeadingElement">
+    <div class="np-switches">
+        @foreach (var option in Options(NewProjectOptionKind.Toggle))
+        {
+            <BitToggle Inline FullWidth
+                       Label="@Title(option.Name)"
+                       Description="@Lead(option.Name)"
+                       Value="@IsOn(Answers, option.Name)"
+                       OnChange="WrapHandled((bool isOn) => Switch(option.Name, isOn))" />
+        }
+    </div>
+</NewProjectQuestion>
+
+@foreach (var option in ChoicesAfterSwitches)
+{
+    <NewProjectOptionQuestion Option="option" HeadingElement="@HeadingElement" />
+}

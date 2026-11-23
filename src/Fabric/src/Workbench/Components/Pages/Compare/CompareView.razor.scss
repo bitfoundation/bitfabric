@@ -1,0 +1,22 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// The way back to the hub, small, above the hero
+.cv-crumbs {
+    margin-bottom: -3rem;
+    font-size: $bit-typography-fs-sm;
+}
+
+// The arrow points back in either direction of reading
+::deep .cv-back-icon {
+    margin-inline-end: .375rem;
+    vertical-align: -.125em;
+
+    &:dir(rtl) {
+        transform: scaleX(-1);
+    }
+}
+
+::deep .cv-source-line {
+    max-width: 48rem;
+    text-wrap: pretty;
+}

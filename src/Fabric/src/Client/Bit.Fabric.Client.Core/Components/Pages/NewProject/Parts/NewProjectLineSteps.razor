@@ -1,0 +1,125 @@
+@inherits NewProjectPartBase
+
+@{
+    var computer = Answers.Computer;
+}
+
+<NewProjectWalkthrough Computer="computer" Line="@GuideLine" Name="@Name" />
+
+<ol class="np-howto">
+    <li>
+        <span class="np-howto-number" aria-hidden="true">1</span>
+        <div class="np-howto-text">
+            <b>@Localizer[nameof(AppStrings.NewProjectCopyThisLine)]</b>
+
+            @if (status is NewProjectLoadStatus.Loading)
+            {
+                <div class="np-line-box is-loading" aria-busy="true" aria-label="@Localizer[nameof(AppStrings.NewProjectGettingInstaller)]">
+                    <BitShimmer Height="1rem" Width="85%" Background="BitColor.PrimaryBackground" />
+                    <BitShimmer Height="1rem" Width="55%" Background="BitColor.PrimaryBackground" />
+                </div>
+            }
+            else if (status is NewProjectLoadStatus.Failed)
+            {
+                <BitMessage Color="BitColor.Error" Variant="BitVariant.Outline" Tinted Multiline>
+                    @Localizer[nameof(AppStrings.NewProjectInstallerFailed)]
+                </BitMessage>
+                <div>
+                    <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.Refresh" OnClick="LoadRelease">@Localizer[nameof(AppStrings.NewProjectTryAgain)]</BitButton>
+                </div>
+            }
+            else if (release is not null && release.HasInstaller(computer) is false)
+            {
+                <BitMessage Color="BitColor.Info" Variant="BitVariant.Outline" Tinted Multiline>
+                    @Localizer[nameof(AppStrings.NewProjectInstallerNotSigned), ComputerName(computer)]
+                </BitMessage>
+                <div>
+                    <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.Download" Href="https://dotnet.microsoft.com/download" Target="_blank">@Localizer[nameof(AppStrings.NewProjectGetDeveloperTools)]</BitButton>
+                </div>
+                <div class="np-line-box">
+                    <code class="np-line-text">@Tokens(ManualLines)</code>
+                    <BitButton Size="BitSize.Small" IconName="@(copiedText == ManualLines ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(ManualLines))" Class="np-line-copy">
+                        @(copiedText == ManualLines ? Localizer[nameof(AppStrings.NewProjectCopied)] : Localizer[nameof(AppStrings.NewProjectCopy)])
+                    </BitButton>
+                </div>
+            }
+            else
+            {
+                <div class="np-line-box">
+                    <code class="np-line-text">@Tokens(InstallLine)</code>
+                    <BitButton Size="BitSize.Small" IconName="@(copiedText == InstallLine ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(InstallLine))" Class="np-line-copy">
+                        @(copiedText == InstallLine ? Localizer[nameof(AppStrings.NewProjectCopied)] : Localizer[nameof(AppStrings.NewProjectCopy)])
+                    </BitButton>
+                </div>
+            }
+
+            <span class="np-line-safety"><BitIcon IconName="@BitIconName.Lock" Size="BitSize.Small" />@Localizer[nameof(AppStrings.NewProjectLineSafety)]</span>
+
+            @* Why the line is safe, behind a green shield. The prerendered page carries the whole
+               text, for a search engine and for a visitor before the page is interactive; once it is, the text folds away until opened *@
+            <div class="np-safe">
+                @if (InPrerenderSession)
+                {
+                    <span class="np-safe-title"><BitIcon IconName="@BitIconName.Shield" Color="BitColor.Success" />@Localizer[nameof(AppStrings.NewProjectSafeTitle)]</span>
+                }
+                else
+                {
+                    <BitButton Variant="BitVariant.Text" Size="BitSize.Small" Color="BitColor.Success" IconName="@BitIconName.Shield"
+                               aria-expanded="@(isSafeOpen ? "true" : "false")" aria-controls="np-safe-text"
+                               OnClick="() => isSafeOpen = isSafeOpen is false"
+                               Class="np-safe-toggle">@Localizer[nameof(AppStrings.NewProjectSafeTitle)]</BitButton>
+                }
+                @if (InPrerenderSession || isSafeOpen)
+                {
+                    <ul class="np-safe-text" id="np-safe-text">
+                        <li>
+                            @Localizer[nameof(AppStrings.NewProjectSafeInstaller)]
+                            <BitLink Href="@InstallerUrl(computer)" Target="_blank">@Localizer[nameof(AppStrings.NewProjectReadInstaller)]</BitLink>
+                        </li>
+                        <li>@Localizer[nameof(AppStrings.NewProjectSafeForYourUser)]</li>
+                        <li>@Localizer[nameof(AppStrings.NewProjectSafeSigned)]</li>
+                        <li>
+                            @Localizer[nameof(AppStrings.NewProjectSafeVerify), "⁨bit about⁩"]
+                            <code class="np-safe-command" dir="ltr">gh attestation verify &lt;bit.dll&gt; --repo bitfoundation/bitplatform</code>
+                        </li>
+                    </ul>
+                }
+            </div>
+
+            <div>
+                <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
+                           IconName="@(Store.IsLineExplained ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
+                           aria-expanded="@(Store.IsLineExplained ? "true" : "false")" aria-controls="np-plan"
+                           OnClick="() => Store.ExplainLine(Store.IsLineExplained is false)"
+                           Class="np-explain">@Localizer[nameof(AppStrings.NewProjectWhatLineDoes)]</BitButton>
+            </div>
+            @if (Store.IsLineExplained)
+            {
+                <ol class="np-plan" id="np-plan">
+                    @foreach (var step in PlanSteps)
+                    {
+                        <li>@step</li>
+                    }
+                </ol>
+                <span class="np-plan-links">
+                    <BitLink Href="@InstallerUrl(computer)" Target="_blank">@Localizer[nameof(AppStrings.NewProjectReadInstaller)]</BitLink>
+                    <BitLink OnClick="() => OpenHelp(NewProjectHelpTopics.Line)">@Localizer[nameof(AppStrings.NewProjectIsItSafe)]</BitLink>
+                </span>
+            }
+        </div>
+    </li>
+    <li>
+        <span class="np-howto-number" aria-hidden="true">2</span>
+        <div class="np-howto-text">
+            <b>@Localizer[nameof(AppStrings.NewProjectPasteInto), TerminalName(computer)]</b>
+            <span>@TerminalHowTo(computer)</span>
+        </div>
+    </li>
+    <li>
+        <span class="np-howto-number" aria-hidden="true">3</span>
+        <div class="np-howto-text">
+            <b>@Localizer[nameof(AppStrings.NewProjectLookAround)]</b>
+            <span>@LookAround</span>
+        </div>
+    </li>
+</ol>

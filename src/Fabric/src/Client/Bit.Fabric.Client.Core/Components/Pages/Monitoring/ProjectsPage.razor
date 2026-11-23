@@ -1,0 +1,105 @@
+@attribute [Route(PageUrls.Projects)]
+@attribute [Route("{culture?}" + PageUrls.Projects)]
+@inherits AppPageBase
+
+<AppPageData Title="@Localizer[nameof(AppStrings.MonitoringProjects)]" PageTitle="@Localizer[nameof(AppStrings.MonitoringYourProjects)]" />
+
+<div class="projects-page">
+    <AuthorizeView>
+        <NotAuthorized>
+            @* The menu item shows to everyone; signed out, the page says what signing in gives. *@
+            <section class="pitch" aria-labelledby="pitch-title">
+                <span class="pitch-mark" aria-hidden="true"><BitIcon IconName="@BitIconName.Health" Size="BitSize.Large" /></span>
+                <BitText Typography="BitTypography.H5" Element="h2" Id="pitch-title">@Localizer[nameof(AppStrings.MonitoringPitchTitle)]</BitText>
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringPitchText)]</BitText>
+                <BitButton Href="@SignInUrl" IconName="@BitIconName.Signin">@Localizer[nameof(AppStrings.SignIn)]</BitButton>
+            </section>
+        </NotAuthorized>
+        <Authorized>
+            @if (isLoading)
+            {
+                <div class="grid" aria-busy="true">
+                    @for (var i = 0; i < 3; i++)
+                    {
+                        <BitShimmer Height="14rem" Radius="0.75rem" Label="@(i is 0 ? Localizer[nameof(AppStrings.MonitoringLoadingYourProjects)] : null)" />
+                    }
+                </div>
+            }
+            else if (hasTeam is false)
+            {
+                @* A project belongs to a team, so someone without one makes it first, in one step. *@
+                <section class="team" aria-labelledby="team-title">
+                    <BitText Typography="BitTypography.H6" Element="h2" Id="team-title">@Localizer[nameof(AppStrings.MonitoringFirstATeam)]</BitText>
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringFirstATeamHelp)]</BitText>
+                    <div class="team-form">
+                        <BitTextField @bind-Value="teamName" Immediate Label="@Localizer[nameof(AppStrings.MonitoringTeamName)]" MaxLength="64" Class="team-name" />
+                        <BitButton IconName="@BitIconName.People" Loading="isCreatingTeam" Disabled="@string.IsNullOrWhiteSpace(teamName)"
+                                   OnClick="WrapHandled(CreateTeam)">@Localizer[nameof(AppStrings.MonitoringCreateTheTeam)]</BitButton>
+                    </div>
+                </section>
+            }
+            else if (projects.Count is 0)
+            {
+                <section class="empty" aria-labelledby="empty-title">
+                    <span class="pitch-mark" aria-hidden="true"><BitIcon IconName="@BitIconName.Health" Size="BitSize.Large" /></span>
+                    <BitText Typography="BitTypography.H6" Element="h2" Id="empty-title">@Localizer[nameof(AppStrings.MonitoringAddYourFirstApp)]</BitText>
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringAddYourFirstAppHelp)]</BitText>
+                    <BitButton Href="@PageUrls.AddProject" IconName="@BitIconName.Add">@Localizer[nameof(AppStrings.MonitoringAddAProject)]</BitButton>
+                    <ol class="steps">
+                        <li><span class="step-number" aria-hidden="true">1</span>@Localizer[nameof(AppStrings.MonitoringStepTypeTheAddress)]</li>
+                        <li><span class="step-number" aria-hidden="true">2</span>@Localizer[nameof(AppStrings.MonitoringStepApproveInYourApp)]</li>
+                        <li><span class="step-number" aria-hidden="true">3</span>@Localizer[nameof(AppStrings.MonitoringStepSeeEveryPart)]</li>
+                    </ol>
+                </section>
+            }
+            else
+            {
+                var visible = Visible().ToArray();
+
+                <div class="toolbar">
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                        @(NeedsAttention is 0 ? Localizer[nameof(AppStrings.MonitoringAllProjectsFine), projects.Count] : Localizer[nameof(AppStrings.MonitoringProjectsNeedYou), NeedsAttention, projects.Count])
+                    </BitText>
+                    <BitButton Href="@PageUrls.AddProject" IconName="@BitIconName.Add">@Localizer[nameof(AppStrings.MonitoringAddAProject)]</BitButton>
+                </div>
+                @if (NeedsAttention > 0 || projects.Count > SearchFrom)
+                {
+                    @* From the approved design: only what needs you, and a search once there are more cards than a screen holds. *@
+                    <div class="filters-bar">
+                        <div class="filters" role="group" aria-label="@Localizer[nameof(AppStrings.MonitoringShowProjects)]">
+                            <BitTag Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="BitColor.Primary"
+                                    Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), Localizer[nameof(AppStrings.All)], projects.Count]"
+                                    Selected="@(onlyAttention is false)" SelectedChanged="@(_ => onlyAttention = false)" />
+                            <BitTag Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="@(NeedsAttention > 0 ? BitColor.Error : BitColor.Primary)"
+                                    Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), Localizer[nameof(AppStrings.MonitoringNeedsAttention)], NeedsAttention]"
+                                    Disabled="@(NeedsAttention is 0)"
+                                    Selected="onlyAttention" SelectedChanged="@(_ => onlyAttention = true)" />
+                        </div>
+                        @if (projects.Count > SearchFrom)
+                        {
+                            <BitSearchBox @bind-Value="search" Immediate DebounceTime="200" Placeholder="@Localizer[nameof(AppStrings.MonitoringSearchProjects)]"
+                                          AriaLabel="@Localizer[nameof(AppStrings.MonitoringSearchProjects)]" Class="search" />
+                        }
+                    </div>
+                }
+                @if (visible.Length is 0)
+                {
+                    <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.5rem" Padding="3rem 1rem">
+                        <BitIcon IconName="@BitIconName.Search" Size="BitSize.Large" Color="BitColor.SecondaryForeground" />
+                        <BitText Typography="BitTypography.Subtitle1">@Localizer[nameof(AppStrings.MonitoringNoProjectMatches)]</BitText>
+                        <BitButton Variant="BitVariant.Text" OnClick="ShowAll">@Localizer[nameof(AppStrings.MonitoringShowAllProjects)]</BitButton>
+                    </BitStack>
+                }
+                else
+                {
+                    <div class="grid">
+                        @foreach (var project in visible)
+                        {
+                            <ProjectCard @key="project.Id" Project="project" />
+                        }
+                    </div>
+                }
+            }
+        </Authorized>
+    </AuthorizeView>
+</div>

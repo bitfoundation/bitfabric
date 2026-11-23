@@ -1,0 +1,358 @@
+@attribute [Route(PageUrls.Features)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.Features)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppHomePageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+
+@* The page's own title is its one h1: the header shows no title for a page that gives it none.
+   As /contents (See ContentsPage) it is the home page as it was until 2026-11-18: the old hero, What we add, the comparison
+   and the calculator join it, in their old places. *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+    // The showcase's accordion sits among the cards, and its own cards one level below
+    const int showcaseHeading = 3;
+    const string showcaseCardHeading = "h4";
+}
+
+@if (IsOldHomePage)
+{
+    <AppPageData PageTitle="@Localizer[nameof(AppStrings.ContentsPageTitle)]"
+                 Description="@Localizer[nameof(AppStrings.ContentsPageDescription)]" />
+}
+else
+{
+    @* /contents leaves JSON-LD to the home page; /features describes itself *@
+    <AppPageData PageTitle="@Localizer[nameof(AppStrings.FeaturesPageTitle)]"
+                 Description="@Localizer[nameof(AppStrings.FeaturesPageDescription)]">
+        <Head>
+            <script type="application/ld+json">@((MarkupString)BuildFeaturesJsonLd())</script>
+        </Head>
+    </AppPageData>
+}
+
+@if (arePicturesWanted)
+{
+    @* Blow's stylesheet comes when the pictures do, so it doesn't hold up the page's first paint *@
+    <link rel="stylesheet" href="_content/Bit.Blow/bit-blow.css" />
+}
+
+<div class="ah-page">
+    @if (IsOldHomePage)
+    {
+        <section class="ah-hero">
+            <span class="ah-eyebrow">bit Fabric</span>
+            <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">
+                @foreach (var sentence in HeroTitleSentences)
+                {
+                    <span class="ah-hero-line">@sentence</span>
+                }
+            </BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">
+                @Localizer[nameof(AppStrings.AppHomeYourAppStartsFullFeaturedNotFromAn)]
+            </BitText>
+            <div class="ah-actions" @ref="heroActions">
+                <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+            </div>
+            <ul class="ah-pills" aria-label="@Localizer[nameof(AppStrings.AppHomeWhatWeAdd)]">
+                @foreach (var value in Values.Take(3))
+                {
+                    <li><BitIcon IconName="@value.Icon" />@value.Title</li>
+                }
+            </ul>
+        </section>
+
+        <section class="ah-band" id="ah-values" aria-labelledby="ah-values-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="values" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeWhatWeAdd)]" />
+            </header>
+            <div class="ah-values">
+                @foreach (var value in Values)
+                {
+                    <div class="ah-value">
+                        <BitIcon IconName="@value.Icon" Variant="BitVariant.Fill" Circular="true" Class="ah-value-icon" />
+                        <BitText Typography="BitTypography.H6" Element="@cardHeading">@value.Title</BitText>
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@value.Text</BitText>
+                    </div>
+                }
+            </div>
+        </section>
+
+        <section class="ah-band" id="ah-compare" aria-labelledby="ah-compare-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="compare" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeCompareTitle)]" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeCompareIntro)]</BitText>
+            </header>
+            <AppHomeComparison />
+        </section>
+    }
+    else
+    {
+        <section class="ah-hero">
+            <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">@Localizer[nameof(AppStrings.FeaturesTitle)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">
+                @Localizer[nameof(AppStrings.FeaturesLead)]
+            </BitText>
+            <div class="ah-actions" @ref="heroActions">
+                <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+            </div>
+        </section>
+    }
+
+    @foreach (var section in Sections)
+    {
+        <section class="ah-band" id="ah-@section.Id" aria-labelledby="ah-@section.Id-title">
+            <header class="ah-band-head">
+                <AppHomeBandTitle Anchor="@section.Id" Element="@sectionHeading" Text="@section.Title" />
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@section.Intro</BitText>
+            </header>
+            @foreach (var (features, showcaseAfter) in GridsOf(section))
+            {
+                <div class="ah-grid">
+                    @foreach (var feature in features)
+                    {
+                        <AppHomeFeatureCard Feature="feature" HeadingElement="@cardHeading" OnExplain="WrapHandled<AppHomeFeature>(Explain)">
+                            @* Search engines read the films too: their text is in the prerendered page, hidden, and only there *@
+                            @if (InPrerenderSession && feature.Explained)
+                            {
+                                <p hidden>@TextOf(feature)</p>
+                            }
+                        </AppHomeFeatureCard>
+                    }
+                </div>
+
+                @if (showcaseAfter && section.Showcase is { } showcase)
+                {
+                    @* Closed, its cards stay in the page for search engines and find-in-page *@
+                    <BitAccordion Title="@showcase.Title" IconName="@BitIconName.Puzzle" HeadingLevel="@showcaseHeading" HiddenUntilFound Class="ah-showcase">
+                        <div class="ah-showcase-body">
+                            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@showcase.Intro</BitText>
+                            <div class="ah-grid">
+                                @foreach (var feature in showcase.Features)
+                                {
+                                    <AppHomeFeatureCard Feature="feature" HeadingElement="@showcaseCardHeading" />
+                                }
+                            </div>
+                        </div>
+                    </BitAccordion>
+                }
+            }
+            @if (section.Note is not null)
+            {
+                <div class="ah-band-note">
+                    <BitIcon IconName="@BitIconName.Sync" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@section.Note</BitText>
+                </div>
+            }
+            @if (section.LinkUrl is not null)
+            {
+                @* Another site opens in a new tab; a page of this one, such as /for, in this one *@
+                <BitLink Href="@section.LinkUrl" Target="@(section.LinkUrl.StartsWith('/') ? null : "_blank")" Class="ah-band-link">@section.LinkText</BitLink>
+            }
+        </section>
+
+        @if (section.Id is "platforms")
+        {
+            <section class="ah-band" id="ah-try" aria-labelledby="ah-try-title">
+                <header class="ah-band-head">
+                    <AppHomeBandTitle Anchor="try" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeSeeItForYourself)]" />
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeRealAppsBuiltTheWayYoursWillBeOpen)]</BitText>
+                </header>
+                <div class="ah-tries">
+                    @foreach (var app in Tries)
+                    {
+                        <article class="ah-try">
+                            <BitText Typography="BitTypography.H6" Element="@cardHeading">@app.Name</BitText>
+                            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@app.Text</BitText>
+                            <ul class="ah-try-links" aria-label="@Localizer[nameof(AppStrings.AppHomeOpen), app.Name]">
+                                @foreach (var link in app.Links)
+                                {
+                                    <li><BitButton Variant="BitVariant.Outline" Size="BitSize.Small" Href="@link.Url" Target="_blank">@link.Platform</BitButton></li>
+                                }
+                            </ul>
+                        </article>
+                    }
+                </div>
+            </section>
+        }
+
+        @if (section.Id is "fast")
+        {
+            @if (IsOldHomePage)
+            {
+                <section class="ah-band" id="ah-cost" aria-labelledby="ah-cost-title">
+                    <header class="ah-band-head">
+                        <AppHomeBandTitle Anchor="cost" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeCostTitle)]" />
+                        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeCostIntro)]</BitText>
+                    </header>
+                    <AppHomeCostCalculator HeadingElement="@cardHeading" />
+                </section>
+            }
+
+            @* The pictures come from libraries loaded once the page is interactive (See LoadPictures), so the page names none of
+               their types. Until then, or if they never arrive, the same words are a plain list, which is what search engines
+               read and, once the picture is there, what a screen reader does. Their height is kept, so nothing jumps. *@
+            <section class="ah-band" id="ah-going-live" aria-labelledby="ah-going-live-title">
+                <header class="ah-band-head">
+                    <AppHomeBandTitle Anchor="going-live" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeGoingLiveTitle)]" />
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeGoingLiveIntro)]</BitText>
+                </header>
+                <div class="ah-picture ah-picture-going-live">
+                    @if (pictureType is not null)
+                    {
+                        <DynamicComponent Type="pictureType" Parameters="goingLiveParameters ??= PictureParameters(GoingLivePicture)" />
+                    }
+                    <ol class="ah-steps @(pictureType is null ? null : "is-behind")">
+                        @foreach (var step in GoingLiveSteps)
+                        {
+                            <li>
+                                <strong>@step.Title</strong>
+                                @if (step.Text is not null)
+                                {
+                                    <span>@step.Text</span>
+                                }
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </section>
+
+            <section class="ah-band" id="ah-protection" aria-labelledby="ah-protection-title">
+                <header class="ah-band-head">
+                    <AppHomeBandTitle Anchor="protection" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeProtectionTitle)]" />
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeProtectionIntro)]</BitText>
+                </header>
+                <div class="ah-picture ah-picture-protection">
+                    @if (pictureType is not null)
+                    {
+                        <DynamicComponent Type="pictureType" Parameters="protectionParameters ??= PictureParameters(ProtectionPicture)" />
+                    }
+                    <ol class="ah-steps @(pictureType is null ? null : "is-behind")">
+                        @foreach (var step in ProtectionSteps)
+                        {
+                            <li>
+                                <strong>@step.Title</strong>
+                                @if (step.Text is not null)
+                                {
+                                    <span>@step.Text</span>
+                                }
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </section>
+        }
+
+        @if (section.Id is "batteries")
+        {
+            @* How the AI builds a feature (AI-DLC), loaded and listed the way the two pictures above are *@
+            <section class="ah-band" id="ah-ai-dlc" aria-labelledby="ah-ai-dlc-title">
+                <header class="ah-band-head">
+                    <AppHomeBandTitle Anchor="ai-dlc" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeAiDlcTitle)]" />
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeAiDlcIntro)]</BitText>
+                </header>
+                <div class="ah-picture ah-picture-ai-dlc">
+                    @if (pictureType is not null)
+                    {
+                        <DynamicComponent Type="pictureType" Parameters="aiDlcParameters ??= PictureParameters(AiDlcPicture)" />
+                    }
+                    <ol class="ah-steps @(pictureType is null ? null : "is-behind")">
+                        @foreach (var step in AiDlcSteps)
+                        {
+                            <li>
+                                <strong>@step.Title</strong>
+                                @if (step.Text is not null)
+                                {
+                                    <span>@step.Text</span>
+                                }
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </section>
+        }
+
+        @if (section.Id is "workbench")
+        {
+            <section class="ah-band" id="ah-landing" aria-labelledby="ah-landing-title">
+                <header class="ah-band-head">
+                    <AppHomeBandTitle Anchor="landing" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeALandingPageThatScores100)]" />
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeEveryProjectGetsItsOwnLandingPageIn)]</BitText>
+                </header>
+                <div class="ah-scores">
+                    @foreach (var score in Scores)
+                    {
+                        <div class="ah-score">
+                            <BitProgress Circular Meter Value="100" Max="100" Color="BitColor.Success" Thickness="6" Diameter="84"
+                                         ShowPercentNumber PercentNumberFormat="{0:F0}" AriaLabel="@($"{score} 100")" />
+                            <span>@score</span>
+                        </div>
+                    }
+                    <div class="ah-score">
+                        <span class="ah-score-badge">3/3</span>
+                        <span>@Localizer[nameof(AppStrings.AppHomeAgenticBrowsing)]</span>
+                    </div>
+                </div>
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="ah-scores-source">
+                    @Localizer[nameof(AppStrings.AppHomeMeasuredWithPageSpeedOnAPhone)]
+                    <BitLink Href="https://pagespeed.web.dev/report?url=landingpage.bitplatform.dev&amp;utm_source=search_console&amp;form_factor=mobile&amp;hl=en" Target="_blank">@Localizer[nameof(AppStrings.AppHomeTestItYourself)]</BitLink>
+                    <BitLink Href="https://landingpage.bitplatform.dev" Target="_blank">@Localizer[nameof(AppStrings.AppHomeSeeTheLandingPages)]</BitLink>
+                </BitText>
+            </section>
+        }
+    }
+
+    <section class="ah-band ah-trust" aria-labelledby="ah-trust-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="trust" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeOpenSourceAndTrusted)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeBitFabricIsBuiltOnBitPlatformOpenOn)]</BitText>
+        </header>
+        <dl class="ah-numbers">
+            @foreach (var number in AppHomeNumbers.Of(Localizer))
+            {
+                <div class="ah-number">
+                    <dt>@number.Label</dt>
+                    @* Isolated left to right, or a right-to-left page shows 120+ as +120 *@
+                    <dd><bdi dir="ltr">@number.Number</bdi></dd>
+                </div>
+            }
+        </dl>
+        <BitLink Href="@AppHomeNumbers.GitHubUrl" Target="_blank" Class="ah-band-link">@Localizer[nameof(AppStrings.AppHomeSeeItOnGitHub)]</BitLink>
+    </section>
+
+    <section class="ah-band" aria-labelledby="ah-customers-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="customers" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AppHomeBuiltOnBitPlatform)]" />
+        </header>
+        @* Without the next and previous buttons, which covered the cards' texts; the dots, a drag and the keyboard move it *@
+        <BitCarousel AutoPlay AutoPlayInterval="4000" InfiniteScrolling ShowPlayPause HideNextPrev Gap="1rem"
+                     VisibleItemsCountXs="1" VisibleItemsCountSm="2" VisibleItemsCountMd="3"
+                     AriaLabel="@Localizer[nameof(AppStrings.AppHomeProjectsBuiltOnBitPlatform)]" Class="ah-customers">
+            @foreach (var customer in Customers)
+            {
+                <BitCarouselItem>
+                    <div class="ah-customer">
+                        <span class="ah-customer-name">@customer.Name</span>
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@customer.Text</BitText>
+                        <BitLink Href="@customer.Url" Target="_blank">@Localizer[nameof(AppStrings.AppHomeVisit)]</BitLink>
+                    </div>
+                </BitCarouselItem>
+            }
+        </BitCarousel>
+    </section>
+
+    <section class="ah-final" @ref="finalBand">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeStartWithEverythingOwnAllOfIt)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeAnswerAFewQuestionsPasteOneLineAnd)]</BitText>
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+</div>
+
+@* "Get started" at hand down the page, as a tab on the screen's edge *@
+<div class="ah-dock @(IsCtaShown ? "is-shown" : null)" inert="@(IsCtaShown is false)">
+    <div class="ah-dock-inner">
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket" Class="ah-dock-button">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </div>
+</div>
+
+<AppHomeFilmDialog Playing="playing" FilmType="filmType" OnClose="WrapHandled(CloseFilm)" />

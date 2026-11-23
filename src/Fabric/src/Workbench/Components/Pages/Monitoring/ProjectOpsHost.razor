@@ -1,0 +1,15 @@
+@* The app's own project page (src/Client/Bit.Fabric.Client.Core/Components/Pages/Monitoring/ProjectPage.razor) on the sample world. *@
+@attribute [Authorize(Policy = AuthPolicies.TENANT_SELECTED)]
+@inherits MonitoringHost
+
+@if (IsReady is false)
+{
+    <AppPagePlaceholder />
+}
+else
+{
+    <ProjectPage @key="ProjectId" Id="ProjectId" />
+}
+
+@* The anchor the app's layout renders for downloads (See FileSaveService), which the SLA's and the history's files go through. *@
+<Bit.Fabric.Client.Core.Components.Layout.AppFileSaveAnchor />

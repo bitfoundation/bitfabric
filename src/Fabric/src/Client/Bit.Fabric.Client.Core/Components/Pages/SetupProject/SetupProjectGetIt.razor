@@ -1,0 +1,30 @@
+@inherits NewProjectPartBase
+
+<section class="sp-getit" aria-labelledby="sp-get-title">
+    <BitText Typography="BitTypography.H5" Element="h2" Id="sp-get-title" Class="sp-getit-title">@Localizer[nameof(AppStrings.SetupProjectGetItTitle)]</BitText>
+
+    @if (Setup.HasLine)
+    {
+        <NewProjectLineSteps Arguments="@Setup.BitSetupArguments" Name="@(Setup.RepositoryName ?? Localizer[nameof(AppStrings.AppHomeYourApp)])" PlanSteps="@PlanSteps">
+            <LookAround>
+                @Localizer[nameof(AppStrings.SetupProjectLookAroundText)]
+                @if (Setup.Devices.Count > 0)
+                {
+                    @(" ")@Localizer[nameof(AppStrings.NewProjectToolsInBackground), ListOf(Setup.Devices.Select(DeviceName))]
+                }
+            </LookAround>
+        </NewProjectLineSteps>
+    }
+    else
+    {
+        <p class="sp-waiting">
+            <BitIcon IconName="@BitIconName.Info" Color="BitColor.Info" Class="sp-waiting-icon" />
+            <span>@Localizer[nameof(AppStrings.SetupProjectWaitingForAddress)]</span>
+        </p>
+    }
+
+    <p class="sp-privacy">
+        <BitIcon IconName="@BitIconName.Lock" Class="sp-privacy-icon" />
+        <span>@Localizer[nameof(AppStrings.SetupProjectPrivacy)]</span>
+    </p>
+</section>

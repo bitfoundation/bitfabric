@@ -1,0 +1,24 @@
+@inherits WorkbenchComponentBase
+@* Terms and what they mean, each short enough to be quoted alone: the key facts box under a hero, or a glossary *@
+
+<div class="dfx @(IsBox ? "dfx-box" : "dfx-grid")">
+    @if (Title is not null)
+    {
+        <BitText Typography="BitTypography.H6" Element="@TitleElement" Id="@TitleId" Class="dfx-title">@Title</BitText>
+    }
+    <dl class="dfx-list" aria-labelledby="@(Title is null ? null : TitleId)">
+        @foreach (var fact in Items)
+        {
+            <div class="dfx-item">
+                <dt>@fact.Term</dt>
+                <dd>
+                    @fact.Detail
+                    @if (fact.Placeholder is not null)
+                    {
+                        <DirectionPlaceholder Text="@fact.Placeholder" />
+                    }
+                </dd>
+            </div>
+        }
+    </dl>
+</div>

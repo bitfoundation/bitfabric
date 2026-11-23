@@ -1,0 +1,9 @@
+// Across the card, so the step's own button sits at its end and Skip at its start
+.foot {
+    gap: 0.5rem;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}

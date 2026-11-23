@@ -1,0 +1,312 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.np-preview {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    min-width: 0;
+}
+
+// The computer and the phone side by side, bottoms aligned, so neither hides a part of the other.
+.np-preview-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 104px;
+    gap: 14px;
+    align-items: end;
+}
+
+.np-browser {
+    overflow: hidden;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-lg;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-md;
+}
+
+.np-browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 12px;
+    border-bottom: $bit-shape-border-width solid $bit-color-border-secondary;
+    background: $bit-color-background-secondary;
+}
+
+.np-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $bit-color-border-primary;
+}
+
+.np-browser-address {
+    flex: 1;
+    height: 14px;
+    margin-inline-start: 10px;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-background-tertiary;
+}
+
+.np-app {
+    position: relative;
+    display: grid;
+    gap: 12px;
+    min-height: 196px;
+    // Room under the content for the assistant's button, so it covers nothing.
+    padding: 12px 14px 52px;
+}
+
+.np-app-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-size: $bit-typography-fs-xs;
+
+    &.is-phone {
+        padding: 0 2px;
+    }
+}
+
+.np-app-logo {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: $bit-shape-radius-sm;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: $bit-typography-fs-2xs;
+    font-weight: $bit-typography-fw-bold;
+}
+
+.np-app-name {
+    overflow: hidden;
+    min-width: 0;
+    font-weight: $bit-typography-fw-semibold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.np-app-tenant {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 8px;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+}
+
+.np-app-gap {
+    flex: 1;
+}
+
+.np-app-bell {
+    display: inline-flex;
+    position: relative;
+    color: $bit-color-foreground-secondary;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: -1px;
+        inset-inline-end: -2px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: $bit-color-error;
+    }
+}
+
+.np-app-avatar {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: $bit-color-background-tertiary;
+    font-size: $bit-typography-fs-2xs;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.np-app-body {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+}
+
+.np-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.np-tile {
+    display: grid;
+    gap: 2px;
+    padding: 8px 10px;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-secondary;
+
+    span {
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-2xs;
+    }
+
+    b {
+        font-size: $bit-typography-fs-sm;
+    }
+}
+
+.np-chart {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 86px;
+    padding: 10px;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-secondary;
+
+    > span:not(.np-live) {
+        flex: 1;
+        height: var(--bar);
+        border-radius: $bit-shape-radius-xs $bit-shape-radius-xs 0 0;
+        background: $bit-color-foreground-primary;
+        opacity: .8;
+    }
+
+    &.is-phone {
+        height: 56px;
+    }
+}
+
+.np-live {
+    position: absolute;
+    top: 8px;
+    inset-inline-end: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-background-primary;
+    font-size: $bit-typography-fs-2xs;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.np-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $bit-color-success;
+}
+
+.np-products {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.np-product {
+    display: grid;
+    gap: 5px;
+}
+
+.np-product-photo {
+    aspect-ratio: 4 / 3;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-tertiary;
+}
+
+.np-line {
+    height: 6px;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-background-tertiary;
+
+    &.is-short {
+        width: 55%;
+    }
+}
+
+.np-welcome {
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    border-radius: $bit-shape-radius-md;
+    background: $bit-color-background-secondary;
+    font-size: $bit-typography-fs-xs;
+
+    b {
+        font-size: $bit-typography-fs-sm;
+    }
+}
+
+.np-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $bit-color-foreground-secondary;
+}
+
+.np-sample {
+    justify-self: start;
+    padding: 2px 8px;
+    border: $bit-shape-border-width dashed $bit-color-border-primary;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-2xs;
+}
+
+.np-chat {
+    position: absolute;
+    inset-inline-end: 12px;
+    bottom: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: $bit-typography-fs-2xs;
+    box-shadow: $bit-box-shadow-sm;
+}
+
+.np-phone {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    width: 104px;
+    height: 190px;
+    padding: 18px 8px 10px;
+    border: 4px solid $bit-color-foreground-primary;
+    border-radius: 22px;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-lg;
+}
+
+.np-phone-notch {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 30px;
+    height: 5px;
+    border-radius: $bit-shape-radius-full;
+    background: $bit-color-foreground-primary;
+    transform: translateX(-50%);
+}
+
+.np-phone-body {
+    display: grid;
+    gap: 8px;
+}
+
+.np-phone-hello {
+    font-size: $bit-typography-fs-2xs;
+}

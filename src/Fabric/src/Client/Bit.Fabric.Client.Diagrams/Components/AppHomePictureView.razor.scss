@@ -1,0 +1,120 @@
+@import '../../Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.ahp {
+    width: 100%;
+    max-width: 66rem;
+    margin-inline: auto;
+}
+
+.ahp-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: .875rem 1rem;
+    color: $bit-color-foreground-primary;
+    background: $bit-color-background-secondary;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+.ahp-words {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    min-width: 0;
+    font-size: .875rem;
+    line-height: 1.35;
+
+    strong {
+        font-weight: 600;
+    }
+
+    span {
+        color: $bit-color-foreground-secondary;
+    }
+}
+
+.ahp-good {
+    background: color-mix(in srgb, $bit-color-success 10%, $bit-color-background-secondary);
+    border-color: color-mix(in srgb, $bit-color-success 55%, transparent);
+}
+
+.ahp-bad {
+    background: color-mix(in srgb, $bit-color-error 10%, $bit-color-background-secondary);
+    border-color: color-mix(in srgb, $bit-color-error 55%, transparent);
+}
+
+.ahp-bar,
+.ahp-chip {
+    flex-direction: row;
+    align-items: center;
+    gap: .75rem;
+    padding-block: .5rem;
+
+    .ahp-words {
+        text-align: start;
+    }
+}
+
+.ahp-chip {
+    background: $bit-color-background-primary;
+}
+
+.ahp-chip.ahp-good {
+    background: color-mix(in srgb, $bit-color-success 10%, $bit-color-background-primary);
+}
+
+.ahp-room {
+    background: transparent;
+    border-style: dashed;
+    border-width: 2px;
+    gap: .25rem;
+    align-items: flex-start;
+
+    .ahp-words {
+        text-align: start;
+    }
+}
+
+.ahp-wall {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: repeating-linear-gradient(45deg, $bit-color-border-primary 0 4px, transparent 4px 8px);
+    border: 0;
+    border-radius: 2px;
+}
+
+.ahp-wall-name {
+    position: absolute;
+    bottom: -1.5rem;
+    white-space: nowrap;
+    color: $bit-color-foreground-secondary;
+    font-size: .75rem;
+}
+
+.ahp-light {
+    position: absolute;
+    inset: -2px;
+    border: 2px solid $bit-color-success;
+    border-radius: inherit;
+    box-shadow: 0 0 .875rem color-mix(in srgb, $bit-color-success 45%, transparent);
+    opacity: 0;
+    pointer-events: none;
+}
+
+// Without motion, nothing loops: the picture just stands there, every box in its place
+@media (prefers-reduced-motion: reduce) {
+    .ahp-light {
+        display: none;
+    }
+}
+
+// The Workbench's Reduce motion switch
+[data-wb-motion="reduce"] .ahp-light {
+    display: none;
+}

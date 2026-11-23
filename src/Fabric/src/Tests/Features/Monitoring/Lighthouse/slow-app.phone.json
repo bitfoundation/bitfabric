@@ -1,0 +1,326 @@
+{
+    "requestedUrl": "{url}",
+    "finalUrl": "{url}",
+    "formFactor": "mobile",
+    "lighthouseVersion": "13.6.0",
+    "fetchTime": "2026-11-13T05:33:55.337Z",
+    "runtimeError": null,
+    "benchmarkIndex": 2397.5,
+    "performanceScore": 0.54,
+    "accessibilityScore": 0.87,
+    "metrics": {
+        "firstContentfulPaintMs": 1408.8690000000001,
+        "largestContentfulPaintMs": 4474.869000000001,
+        "totalBlockingTimeMs": 3760.5000000000005,
+        "cumulativeLayoutShift": 0.0011471709256835746,
+        "speedIndexMs": 2244.5361357523425,
+        "timeToFirstByteMs": 659
+    },
+    "findings": [
+        {
+            "id": "cache-insight",
+            "category": "performance",
+            "group": "insights",
+            "weight": 0,
+            "score": 0,
+            "numericValue": 84199.5,
+            "numericUnit": "byte",
+            "metricSavings": {
+                "FCP": 0,
+                "LCP": 300
+            },
+            "savingsMs": null,
+            "savingsBytes": 84199.5,
+            "itemCount": 47,
+            "where": [
+                "{origin}/_content/Bit.BlazorUI.Assets/fonts/segoe-ui-normal.woff2",
+                "{origin}/_content/Bit.BlazorUI.Assets/fonts/segoe-ui-bold.woff2",
+                "{origin}/_content/Bit.BlazorUI.Assets/fonts/segoe-ui-semibold.woff2",
+                "{origin}/images/home/hero-image.webp",
+                "{origin}/_content/Bit.BlazorUI/styles/bit.blazorui.css?v=sha256-_FlhuyxroP4QU5Gw6Em0ZanCp55wo4ECU4cdGzdqbSs",
+                "{origin}/_content/Bit.BlazorUI/scripts/bit.blazorui.js?v=sha256-5VdV6ATDZKqWsI9ILBrrmMNQh3WqlXDLWJKdatmsrWI",
+                "{origin}/_framework/bit.blazor.web.es2019.js?v=sha256-8EXgTolBx4raW9fUSa5np7inzD913ubMBJRIfnfs7_8",
+                "{origin}/images/home/bswup.webp",
+                "{origin}/Bit.Websites.Platform.Client.bundle.scp.css?v=sha256-j-wto3R9TPVuBsQHhh7cxpgjWstv0v5K9i1QA7Q96k4",
+                "{origin}/_content/Bit.BlazorUI/fonts/FabMDL2.4.66.bit.BlazorUI.woff2"
+            ]
+        },
+        {
+            "id": "forced-reflow-insight",
+            "category": "performance",
+            "group": "insights",
+            "weight": 0,
+            "score": 0,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": null,
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 1,
+            "where": []
+        },
+        {
+            "id": "image-delivery-insight",
+            "category": "performance",
+            "group": "insights",
+            "weight": 0,
+            "score": 0.5,
+            "numericValue": 8632,
+            "numericUnit": "byte",
+            "metricSavings": {
+                "FCP": 0,
+                "LCP": 0
+            },
+            "savingsMs": null,
+            "savingsBytes": 8632,
+            "itemCount": 1,
+            "where": [
+                "{origin}/images/home/hero-image.webp"
+            ]
+        },
+        {
+            "id": "network-dependency-tree-insight",
+            "category": "performance",
+            "group": "insights",
+            "weight": 0,
+            "score": 0,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": {
+                "LCP": 0
+            },
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 3,
+            "where": []
+        },
+        {
+            "id": "render-blocking-insight",
+            "category": "performance",
+            "group": "insights",
+            "weight": 0,
+            "score": 0,
+            "numericValue": 252,
+            "numericUnit": "millisecond",
+            "metricSavings": {
+                "FCP": 250,
+                "LCP": 250
+            },
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 5,
+            "where": [
+                "{origin}/_content/Bit.BlazorUI.Extras/styles/bit.blazorui.extras.css?v=sha256-JCQrb-ksraXAwbb7GQFYCsuzWIQbBM2wS3lZtdxesoM",
+                "{origin}/_content/Bit.BlazorUI/styles/bit.blazorui.css?v=sha256-_FlhuyxroP4QU5Gw6Em0ZanCp55wo4ECU4cdGzdqbSs",
+                "{origin}/_content/Bit.BlazorUI.Assets/styles/bit.blazorui.assets.css?v=sha256-7_z4Lad4iKnPC-njhni9bhBcUcmzC6oT2CPR5d7IMzE",
+                "{origin}/styles/app.css?v=sha256-c_9ZUWtF6vekHIQmTOJ7IZvTpWcEmAjn6WCsoaO8Gxw",
+                "{origin}/Bit.Websites.Platform.Client.bundle.scp.css?v=sha256-j-wto3R9TPVuBsQHhh7cxpgjWstv0v5K9i1QA7Q96k4"
+            ]
+        },
+        {
+            "id": "unminified-javascript",
+            "category": "performance",
+            "group": "diagnostics",
+            "weight": 0,
+            "score": 0.5,
+            "numericValue": 0,
+            "numericUnit": "millisecond",
+            "metricSavings": {
+                "FCP": 0,
+                "LCP": 0
+            },
+            "savingsMs": 0,
+            "savingsBytes": 31041,
+            "itemCount": 1,
+            "where": [
+                "{origin}/_framework/dotnet.native.js?v=sha256-qwaRVVQGji8o47-Q7C7O6AkYC-F13_wLhgHEdyRiZkM"
+            ]
+        },
+        {
+            "id": "unused-css-rules",
+            "category": "performance",
+            "group": "diagnostics",
+            "weight": 0,
+            "score": 0,
+            "numericValue": 380,
+            "numericUnit": "millisecond",
+            "metricSavings": {
+                "FCP": 300,
+                "LCP": 400
+            },
+            "savingsMs": 380,
+            "savingsBytes": 88424,
+            "itemCount": 2,
+            "where": [
+                "{origin}/_content/Bit.BlazorUI/styles/bit.blazorui.css?v=sha256-_FlhuyxroP4QU5Gw6Em0ZanCp55wo4ECU4cdGzdqbSs",
+                "{origin}/Bit.Websites.Platform.Client.bundle.scp.css?v=sha256-j-wto3R9TPVuBsQHhh7cxpgjWstv0v5K9i1QA7Q96k4"
+            ]
+        },
+        {
+            "id": "unused-javascript",
+            "category": "performance",
+            "group": "diagnostics",
+            "weight": 0,
+            "score": 0,
+            "numericValue": 380,
+            "numericUnit": "millisecond",
+            "metricSavings": {
+                "FCP": 0,
+                "LCP": 400
+            },
+            "savingsMs": 380,
+            "savingsBytes": 145519,
+            "itemCount": 4,
+            "where": [
+                "{origin}/_content/Bit.BlazorUI/scripts/bit.blazorui.js?v=sha256-5VdV6ATDZKqWsI9ILBrrmMNQh3WqlXDLWJKdatmsrWI",
+                "{origin}/_framework/dotnet.native.js?v=sha256-qwaRVVQGji8o47-Q7C7O6AkYC-F13_wLhgHEdyRiZkM",
+                "{origin}/_framework/bit.blazor.web.es2019.js?v=sha256-8EXgTolBx4raW9fUSa5np7inzD913ubMBJRIfnfs7_8",
+                "{origin}/_framework/dotnet.runtime.js?v=sha256-6SBqDbLLy460Bxd7wMZoiO97hZfLTuF-HRhWT3elS7U"
+            ]
+        },
+        {
+            "id": "bootup-time",
+            "category": "performance",
+            "group": "diagnostics",
+            "weight": 0,
+            "score": 0,
+            "numericValue": 6111.855999999946,
+            "numericUnit": "millisecond",
+            "metricSavings": {
+                "TBT": 3600
+            },
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 5,
+            "where": [
+                "{origin}/_framework/bit.blazor.web.es2019.js?v=sha256-8EXgTolBx4raW9fUSa5np7inzD913ubMBJRIfnfs7_8",
+                "{origin}/",
+                "{origin}/_content/Bit.BlazorUI/scripts/bit.blazorui.js?v=sha256-5VdV6ATDZKqWsI9ILBrrmMNQh3WqlXDLWJKdatmsrWI",
+                "{origin}/_content/Bit.BlazorUI.Extras/scripts/bit.blazorui.extras.js?v=sha256-wG5OesxEtp83ESWfUlbHL9CZE82lJcuDFtO_vYsrUmI"
+            ]
+        },
+        {
+            "id": "mainthread-work-breakdown",
+            "category": "performance",
+            "group": "diagnostics",
+            "weight": 0,
+            "score": 0,
+            "numericValue": 8815.735999999937,
+            "numericUnit": "millisecond",
+            "metricSavings": {
+                "TBT": 3750
+            },
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 7,
+            "where": []
+        },
+        {
+            "id": "unsized-images",
+            "category": "performance",
+            "group": "diagnostics",
+            "weight": 0,
+            "score": 0.5,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": {
+                "CLS": 0
+            },
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 2,
+            "where": [
+                "{origin}/images/home/hero-image.webp",
+                "{origin}/images/home/bswup.webp"
+            ]
+        },
+        {
+            "id": "button-name",
+            "category": "accessibility",
+            "group": "a11y-names-labels",
+            "weight": 10,
+            "score": 0,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": null,
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 1,
+            "where": [
+                "<button id=\"yp94dn\" style=\"--bit-Button-float-offset:1rem\" class=\"bit-btn-ntx bit-btn-otl bit-btn-pbg bit-btn-ffx bit-btn-drg bit-btn-brg bi…\" type=\"button\" aria-keyshortcuts=\"ArrowUp ArrowDown Arrow…"
+            ]
+        },
+        {
+            "id": "color-contrast",
+            "category": "accessibility",
+            "group": "a11y-color-contrast",
+            "weight": 7,
+            "score": 0,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": null,
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 2,
+            "where": [
+                "<span class=\"animated a-3\" b-ojm45qyihn=\"\">",
+                "<a class=\"template-link\" href=\"/templates\" b-ojm45qyihn=\"\">"
+            ]
+        },
+        {
+            "id": "heading-order",
+            "category": "accessibility",
+            "group": "a11y-navigation",
+            "weight": 3,
+            "score": 0,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": null,
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 6,
+            "where": [
+                "<h4 id=\"ecc6g33\" class=\"bit-txt-h4 bit-txt-gutter bit-txt hero-subtitle\" _bl_8=\"\">",
+                "<h6 id=\"bcv0fi8\" class=\"bit-txt-h6 bit-txt-gutter bit-txt section-title\" _bl_9=\"\">",
+                "<h5 id=\"kcwtvi8\" class=\"bit-txt-h5 bit-txt text-subtitle\" _bl_11=\"\">",
+                "<h5 id=\"rcvlm71\" class=\"bit-txt-h5 bit-txt text-subtitle\" _bl_14=\"\">",
+                "<h6 id=\"db7o73o\" class=\"bit-txt-h6 bit-txt-gutter bit-txt section-title\" _bl_19=\"\">",
+                "<h6 id=\"eovv0p\" class=\"bit-txt-h6 bit-txt text-subtitle\" _bl_202=\"\">"
+            ]
+        },
+        {
+            "id": "landmark-one-main",
+            "category": "accessibility",
+            "group": "a11y-best-practices",
+            "weight": 3,
+            "score": 0,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": null,
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 1,
+            "where": [
+                "<html lang=\"en\" bit-theme-system=\"\" bit-theme-persist=\"\" bit-theme-persist-cookie=\"\" bit-theme-view-transition=\"\" bit-theme=\"light\" style=\"--bit-env-win-width: 412px; --bit-env-win-height: 823px;\">"
+            ]
+        },
+        {
+            "id": "image-alt",
+            "category": "accessibility",
+            "group": "a11y-names-labels",
+            "weight": 10,
+            "score": 0,
+            "numericValue": null,
+            "numericUnit": null,
+            "metricSavings": null,
+            "savingsMs": null,
+            "savingsBytes": null,
+            "itemCount": 2,
+            "where": [
+                "<img src=\"/images/products/mug.png\" class=\"product-image\">",
+                "<img src=\"/images/products/tote.png\" class=\"product-image\">"
+            ]
+        }
+    ],
+    "refusedRequests": 0
+}

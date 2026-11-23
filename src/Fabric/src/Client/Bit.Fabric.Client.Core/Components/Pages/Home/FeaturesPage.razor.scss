@@ -1,0 +1,235 @@
+@import '_app-home-page.scss';
+
+.ah-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .5rem;
+    margin: .75rem 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        padding: .35rem .8rem;
+        border-radius: $bit-shape-radius-full;
+        background: $bit-color-background-secondary;
+        font-size: $bit-typography-fs-sm;
+        font-weight: $bit-typography-fw-medium;
+    }
+}
+
+.ah-values {
+    display: grid;
+    // Six values: three by two at the page's widest, two by three, then one under the other, never one left alone
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1rem;
+}
+
+.ah-value {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.5rem;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+    --bit-Icon-size: 1.25rem;
+    --bit-Icon-padding: .6rem;
+}
+
+// A circular icon stays a circle rather than stretching across the column
+::deep .ah-value-icon {
+    align-self: flex-start;
+}
+
+// bit Fabric itself and the two demos, side by side on a wide screen
+.ah-tries {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+}
+
+.ah-try {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+.ah-try-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: auto 0 0;
+    padding: .5rem 0 0;
+    list-style: none;
+}
+
+// The components behind an accordion, framed like the cards around it
+::deep .ah-showcase {
+    --bit-Accordion-border-color: #{$bit-color-border-secondary};
+    --bit-Accordion-header-padding: 1.25rem;
+    --bit-Accordion-content-padding: 0 1.25rem 1.25rem;
+}
+
+.ah-showcase-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ah-scores {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2.5rem;
+}
+
+.ah-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    min-width: 6rem;
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-medium;
+    text-align: center;
+}
+
+.ah-score-badge {
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    width: 84px;
+    height: 84px;
+    border: 6px solid $bit-color-success;
+    border-radius: 50%;
+    color: $bit-color-success-dark;
+    font-size: $bit-typography-fs-xl;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+::deep .ah-scores-source {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+// The height each picture takes (AppHomePictures), kept while it's still on its way
+.ah-picture {
+    position: relative;
+}
+
+.ah-picture-going-live {
+    min-height: 330px;
+
+    @include lt-md {
+        min-height: 880px;
+    }
+}
+
+.ah-picture-protection {
+    min-height: 590px;
+
+    @include lt-md {
+        min-height: 800px;
+    }
+}
+
+.ah-picture-ai-dlc {
+    min-height: 380px;
+
+    @include lt-md {
+        min-height: 1130px;
+    }
+}
+
+.ah-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: .75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        flex-direction: column;
+        gap: .25rem;
+        padding: 1rem;
+        border: 1px solid $bit-color-border-secondary;
+        border-radius: $bit-shape-radius-surface;
+        font-size: $bit-typography-fs-sm;
+    }
+
+    span {
+        color: $bit-color-foreground-secondary;
+    }
+
+    // Behind the picture, for screen readers: the picture itself is only an image to them
+    &.is-behind {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+}
+
+.ah-numbers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 0;
+
+    @include lt-md {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include lt-sm {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ah-number {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: .25rem;
+    padding: 1.5rem;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+
+    dt {
+        color: $bit-color-foreground-secondary;
+    }
+
+    dd {
+        margin: 0;
+        font-size: $bit-typography-fs-4xl;
+        font-weight: $bit-typography-fw-semibold;
+        letter-spacing: -.02em;
+    }
+}
+
+::deep .ah-customers {
+    --bit-Carousel-height: 11rem;
+}
+
+.ah-customer {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    height: 100%;
+    padding: 1.5rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+.ah-customer-name {
+    font-size: $bit-typography-fs-lg;
+    font-weight: $bit-typography-fw-semibold;
+}

@@ -1,0 +1,80 @@
+@import '_monitoring.scss';
+
+@include tones;
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 0.75rem;
+}
+
+.panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.panel-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-width: 42rem;
+}
+
+.zoom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.timeline-box {
+    min-width: 0;
+    border-radius: $bit-shape-radius-md;
+    overflow: hidden;
+    border: 1px solid $bit-color-border-secondary;
+}
+
+.timeline-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem 1rem;
+    font-size: $bit-typography-fs-xs;
+    color: $bit-color-foreground-secondary;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .hint {
+        margin-inline-start: auto;
+    }
+}
+
+.swatch {
+    width: 0.875rem;
+    height: 0.5rem;
+    border-radius: 2px;
+    background-color: var(--tone);
+
+    // A deploy or restart is a moment, so its swatch is a tick rather than a bar.
+    &.is-deploy,
+    &.is-restart {
+        width: 0.3125rem;
+        height: 0.75rem;
+    }
+
+    &.is-deploy {
+        background-color: $bit-color-secondary;
+    }
+
+    &.is-restart {
+        background-color: color-mix(in srgb, #{$bit-color-secondary} 45%, transparent);
+    }
+}

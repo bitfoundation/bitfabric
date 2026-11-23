@@ -1,0 +1,161 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// The look of the app's home page comparison (AppHomeComparison), for any number of columns
+.dtb {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: $bit-typography-fs-sm;
+
+    th,
+    td {
+        padding: .875rem 1rem;
+        border-bottom: 1px solid $bit-color-border-secondary;
+        text-align: start;
+        vertical-align: top;
+    }
+
+    thead th {
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    tbody th {
+        width: var(--dtb-topic);
+        font-weight: $bit-typography-fw-medium;
+    }
+
+    td {
+        color: $bit-color-foreground-secondary;
+    }
+
+    .is-ours {
+        background: $bit-color-background-secondary;
+        color: $bit-color-foreground-primary;
+    }
+
+    thead .is-ours {
+        border-start-start-radius: $bit-shape-radius-surface;
+        border-start-end-radius: $bit-shape-radius-surface;
+    }
+
+    tbody tr:last-child .is-ours {
+        border-end-start-radius: $bit-shape-radius-surface;
+        border-end-end-radius: $bit-shape-radius-surface;
+    }
+
+    @include lt-md {
+        thead {
+            display: none;
+        }
+
+        tbody,
+        tr,
+        th,
+        td {
+            display: block;
+        }
+
+        tr {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            padding-block: 1rem;
+            border-bottom: 1px solid $bit-color-border-secondary;
+        }
+
+        tbody th,
+        td {
+            width: auto;
+            padding: 0;
+            border: none;
+        }
+
+        tbody th {
+            font-size: $bit-typography-fs-md;
+            font-weight: $bit-typography-fw-semibold;
+        }
+
+        // One column of answers needs no label over each of them
+        &.dtb-single td::before {
+            content: none;
+        }
+
+        td::before {
+            content: attr(data-label);
+            display: block;
+            margin-bottom: .125rem;
+            color: $bit-color-foreground-primary;
+            font-weight: $bit-typography-fw-medium;
+        }
+
+        .is-ours,
+        tbody tr:last-child .is-ours {
+            padding: .5rem .75rem;
+            border-radius: $bit-shape-radius-surface;
+        }
+    }
+}
+
+// A table with few columns that carries a page: its text a size larger, with more room around each answer
+.dtb-large {
+    font-size: $bit-typography-fs-md;
+    line-height: 1.5;
+
+    th,
+    td {
+        padding: 1.125rem 1.25rem;
+    }
+
+    thead th {
+        font-size: $bit-typography-fs-lg;
+    }
+
+    @include lt-md {
+        tr {
+            padding-block: 1.25rem;
+        }
+
+        tbody th,
+        td {
+            padding: 0;
+        }
+
+        tbody th {
+            font-size: $bit-typography-fs-lg;
+        }
+
+        .is-ours,
+        tbody tr:last-child .is-ours {
+            padding: .75rem 1rem;
+        }
+    }
+}
+
+.dtb-column-note {
+    display: block;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    font-weight: $bit-typography-fw-regular;
+}
+
+// The numbers of the sources a cell rests on, small after its text, a little apart from each other
+.dtb-refs {
+    display: inline-flex;
+    gap: .3rem;
+    margin-inline-start: .2rem;
+    font-size: $bit-typography-fs-2xs;
+    font-weight: $bit-typography-fw-medium;
+    line-height: 1;
+}
+
+.dtb-cell {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+
+    ::deep .dtb-mark {
+        flex-shrink: 0;
+        margin-top: .125rem;
+    }
+}

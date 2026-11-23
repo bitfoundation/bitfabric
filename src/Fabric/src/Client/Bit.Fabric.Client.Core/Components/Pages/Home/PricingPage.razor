@@ -1,0 +1,207 @@
+@attribute [Route(PageUrls.Pricing)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.Pricing)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppPageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+
+@* What bit Fabric will cost and what the visitor pays others.
+   Its title is its one h1, as on the home page: the header shows no title for a page that gives it none. What it says is
+   AppPricing's, which /pricing.md writes out as Markdown too. The plans and the example month follow the Workbench's pricing
+   page, option 1 with its "row by row" saving. *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+}
+
+@* Production shows no plans for now, only that they are coming (See AppPricing.IsShown) *@
+@if (AppPricing.IsShown is false)
+{
+    <AppPageData PageTitle="@Localizer[nameof(AppStrings.PricingComingSoonPageTitle)]"
+                 Description="@Localizer[nameof(AppStrings.PricingComingSoonText)]" />
+
+    <div class="ah-page">
+        <section class="ah-hero">
+            <span class="ah-eyebrow">@Localizer[nameof(AppStrings.Pricing)]</span>
+            <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">@Localizer[nameof(AppStrings.PricingComingSoon)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">@Localizer[nameof(AppStrings.PricingComingSoonText)]</BitText>
+            <div class="ah-actions">
+                <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+            </div>
+        </section>
+    </div>
+
+    return;
+}
+
+<AppPageData PageTitle="@Localizer[nameof(AppStrings.PricingPageTitle)]"
+             Description="@Localizer[nameof(AppStrings.PricingPageDescription)]">
+    <Head>
+        @* The same page as Markdown, for AI agents (llmstxt.org) *@
+        <link rel="alternate" type="text/markdown" href="@MarkdownUrl" />
+        <script type="application/ld+json">@((MarkupString)BuildJsonLd())</script>
+    </Head>
+</AppPageData>
+
+<div class="ah-page">
+    <section class="ah-hero">
+        <span class="ah-eyebrow">@Localizer[nameof(AppStrings.Pricing)]</span>
+        <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">@Localizer[nameof(AppStrings.PricingTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">@Localizer[nameof(AppStrings.PricingLead)]</BitText>
+    </section>
+
+    @* 1. The plans: free if you can't pay, then by the number of projects *@
+    <section class="ah-band" id="ah-plans" aria-labelledby="ah-plans-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="plans" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.PricingPlansTitle)]" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.PricingPlansNote)]</BitText>
+        </header>
+        <ul class="pr-plans">
+            @foreach (var plan in AppPricing.Plans(Localizer))
+            {
+                <li @key="plan.Name" class="pr-plan @(plan.IsHighlighted ? "is-highlighted" : null)">
+                    @if (plan.IsHighlighted)
+                    {
+                        <BitTag Color="BitColor.Primary" Variant="BitVariant.Fill" Size="BitSize.Small" Text="@Localizer[nameof(AppStrings.PricingRecommended)]" Class="pr-tag" />
+                    }
+                    <BitText Typography="BitTypography.H5" Element="@cardHeading">@plan.Name</BitText>
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@plan.Audience</BitText>
+                    <div class="pr-price">
+                        <bdi class="pr-amount app-latin-digits">@plan.Price</bdi>
+                        @if (plan.Period is not null)
+                        {
+                            <span class="pr-period">@plan.Period</span>
+                        }
+                    </div>
+                    @if (plan.Note is not null)
+                    {
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="app-latin-digits">@plan.Note</BitText>
+                    }
+                    <ul class="pr-includes">
+                        @foreach (var include in plan.Includes)
+                        {
+                            <li @key="include"><BitIcon IconName="@BitIconName.CheckMark" Color="BitColor.Success" Size="BitSize.Small" Class="pr-check" />@include</li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </section>
+
+    @* 2. Who pays what, as examples *@
+    <section class="ah-band" id="ah-examples" aria-labelledby="ah-examples-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="examples" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.PricingExamplesTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.PricingExamplesIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="AppPricing.Examples(Localizer)" HeadingElement="@cardHeading" />
+    </section>
+
+    @* 3. Where a month's money goes: the same rows on both sides, bit Fabric's a row longer for its license *@
+    <section class="ah-band" id="ah-saving" aria-labelledby="ah-saving-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="saving" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.PricingSavingTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.PricingSavingIntro)]</BitText>
+        </header>
+        <div class="pr-bills">
+            <div class="pr-bill">
+                <BitText Typography="BitTypography.H6" Element="@cardHeading">@Localizer[nameof(AppStrings.PricingSavingBuilder)]</BitText>
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.PricingSavingBuilderSub)]</BitText>
+                <ul class="pr-lines">
+                    @foreach (var line in Saving.Where(l => l.BuilderNote is not null))
+                    {
+                        <li @key="line.Kind" class="pr-line">
+                            <span class="pr-dot is-@line.Kind" aria-hidden="true"></span>
+                            <span class="pr-who"><span class="pr-what">@line.Label</span><span class="pr-to">@line.BuilderNote</span></span>
+                            <bdi class="pr-line-amount app-latin-digits @(line.BuilderAmount is null ? "is-included" : null)">@(line.BuilderAmount ?? Localizer[nameof(AppStrings.PricingSavingInItsPrice)].Value)</bdi>
+                        </li>
+                    }
+                </ul>
+                <div class="pr-total"><span>@Localizer[nameof(AppStrings.PricingSavingMonth)]</span><bdi class="app-latin-digits">@AppPricing.Euros(AppPricing.ExampleBuilderTotal)</bdi></div>
+            </div>
+            <div class="pr-bill is-ours">
+                <BitText Typography="BitTypography.H6" Element="@cardHeading">@Localizer[nameof(AppStrings.PricingSavingFabric)]</BitText>
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.PricingSavingFabricSub)]</BitText>
+                <ul class="pr-lines">
+                    @foreach (var line in Saving)
+                    {
+                        <li @key="line.Kind" class="pr-line @(line.BuilderNote is null ? "is-extra" : null)">
+                            <span class="pr-dot is-@line.Kind" aria-hidden="true"></span>
+                            <span class="pr-who"><span class="pr-what">@line.Label</span><span class="pr-to">@line.FabricPaidTo</span></span>
+                            <bdi class="pr-line-amount app-latin-digits">@line.FabricAmount</bdi>
+                        </li>
+                    }
+                </ul>
+                <div class="pr-total"><span>@Localizer[nameof(AppStrings.PricingSavingMonth)]</span><bdi class="app-latin-digits">@AppPricing.Euros(AppPricing.ExampleFabricTotal)</bdi></div>
+                <BitTag Color="BitColor.Success" Variant="BitVariant.Fill" Text="@Localizer[nameof(AppStrings.PricingSavingKept), AppPricing.Euros(AppPricing.ExampleKept)]" Class="pr-kept app-latin-digits" />
+            </div>
+        </div>
+        <ul class="pr-why">
+            @foreach (var why in AppPricing.SavingWhy(Localizer))
+            {
+                <li @key="why"><BitIcon IconName="@BitIconName.CheckMark" Color="BitColor.Success" Size="BitSize.Small" Class="pr-check" /><BitText Typography="BitTypography.Body2">@why</BitText></li>
+            }
+        </ul>
+        <div class="ah-band-note">
+            <BitIcon IconName="@BitIconName.Info" Color="BitColor.Info" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.PricingSavingHonest)]</BitText>
+        </div>
+        @* Why the AI's side of the bill is smaller too *@
+        <BitButton Variant="BitVariant.Outline" Href="@CostUrl" IconName="@BitIconName.Lightbulb" Class="ah-band-link">@Localizer[nameof(AppStrings.CostLink)]</BitButton>
+    </section>
+
+    @* 4. What a license gives: the right to keep developing *@
+    <section class="ah-band" id="ah-license" aria-labelledby="ah-license-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="license" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.PricingLicenseTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.PricingLicenseIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="AppPricing.License(Localizer)" HeadingElement="@cardHeading" />
+    </section>
+
+    @* 5. What no price can change, since nothing of the visitor's is with bit Fabric *@
+    <section class="ah-band" id="ah-always" aria-labelledby="ah-always-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="always" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.PricingAlwaysTitle)]" />
+        </header>
+        <AppHomeTiles Tiles="AppPricing.Always(Localizer)" HeadingElement="@cardHeading" />
+    </section>
+
+    @* 6. The rest of the bill: the visitor's AI plan, then the home page's own calculator as it is, never a copy of its numbers *@
+    <section class="ah-band" id="ah-others" aria-labelledby="ah-others-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="others" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.PricingOthersTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.PricingOthersIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="[AppPricing.AiPlan(Localizer)]" HeadingElement="@cardHeading" />
+        <div class="ah-band-head">
+            <BitText Typography="BitTypography.H5" Element="@cardHeading">@Localizer[nameof(AppStrings.AppHomeCostTitle)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeCostIntro)]</BitText>
+        </div>
+        <AppHomeCostCalculator HeadingElement="h4" />
+        <div class="ah-band-note">
+            <BitIcon IconName="@BitIconName.Savings" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeCostMinimum)]</BitText>
+        </div>
+    </section>
+
+    @* 7. Closed, the answers stay in the page for search engines and find-in-page *@
+    <section class="ah-band" id="ah-questions" aria-labelledby="ah-questions-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="questions" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.PricingQuestionsTitle)]" />
+        </header>
+        <div class="ah-faq">
+            @foreach (var (question, answer) in AppPricing.Questions(Localizer))
+            {
+                <BitAccordion @key="question" Title="@question" HeadingLevel="3" HiddenUntilFound Class="ah-faq-item">
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@answer</BitText>
+                </BitAccordion>
+            }
+        </div>
+    </section>
+
+    <section class="ah-final">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeFinalTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeFinalText)]</BitText>
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+</div>

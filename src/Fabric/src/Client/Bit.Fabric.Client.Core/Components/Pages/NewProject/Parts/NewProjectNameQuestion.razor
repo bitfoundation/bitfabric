@@ -1,0 +1,30 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectNameTitle)]" Topic="@NewProjectHelpTopics.Name" HeadingElement="@HeadingElement">
+    <BitTextField Label="@Localizer[nameof(AppStrings.NewProjectNameLabel)]"
+                  Placeholder="@Localizer[nameof(AppStrings.NewProjectNamePlaceholder)]"
+                  Value="@Store.ProductName"
+                  OnChange="(string? name) => Store.Rename(name)"
+                  Immediate DebounceTime="200"
+                  MaxLength="60"
+                  AutoComplete="off"
+                  Class="np-name-field" />
+    @* A name that can't name a C# project is said to be invalid, with a valid one to take *@
+    <div aria-live="polite">
+        @if (Answers.IsNameValid)
+        {
+            <p class="np-name-hint">@Localizer[nameof(AppStrings.NewProjectNameHint)]</p>
+        }
+        else
+        {
+            <div class="np-name-invalid">
+                <BitIcon IconName="@BitIconName.ErrorBadge" Color="BitColor.Error" Class="np-name-invalid-icon" />
+                <div class="np-name-invalid-text">
+                    <span>@Localizer[nameof(AppStrings.NewProjectNameNotValid)]</span>
+                    <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" Class="np-name-suggestion"
+                               OnClick="WrapHandled(UseSuggestedName)">@Localizer[nameof(AppStrings.NewProjectNameUseSuggestion), Answers.SuggestedName]</BitButton>
+                </div>
+            </div>
+        }
+    </div>
+</NewProjectQuestion>

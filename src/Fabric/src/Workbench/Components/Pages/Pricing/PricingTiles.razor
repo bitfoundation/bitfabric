@@ -1,0 +1,19 @@
+@* A band's tiles: an icon, a title, an amount when there is one, and one line. As a row, they sit side by side in one card. *@
+@inherits WorkbenchComponentBase
+
+<ul class="tiles @(IsRow ? "is-row" : null)">
+    @foreach (var tile in Tiles)
+    {
+        <li @key="tile.Title" class="tile">
+            <BitIcon IconName="@tile.Icon" Variant="BitVariant.Fill" Circular Class="tile-icon" />
+            <div class="tile-words">
+                <BitText Typography="BitTypography.H6" Element="@HeadingElement">@tile.Title</BitText>
+                @if (tile.Value is { } value)
+                {
+                    <bdi class="tile-value">@value</bdi>
+                }
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@tile.Text</BitText>
+            </div>
+        </li>
+    }
+</ul>

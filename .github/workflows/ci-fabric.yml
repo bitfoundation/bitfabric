@@ -1,0 +1,95 @@
+name: ci-fabric
+
+# bit Fabric's build, formatting and tests, on every pull request that touches it and on each push to main. Standard
+# GitHub-hosted runners cost nothing on a public repository. One run per pull request: a newer push replaces the run it
+# outdates. The deployments read this workflow's result for a commit instead of running the tests again.
+on:
+  pull_request:
+    paths:
+    - 'src/Fabric/**'
+    - '.github/workflows/ci-fabric.yml'
+  push:
+    branches: [ main ]
+    paths:
+    - 'src/Fabric/**'
+    - '.github/workflows/ci-fabric.yml'
+  workflow_dispatch:
+
+env:
+  DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-fabric-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: src/Fabric
+
+jobs:
+
+  build_and_test:
+    name: build and test
+    runs-on: ubuntu-26.04
+    timeout-minutes: 45
+
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+          persist-credentials: false
+
+    # The runner's preinstalled toolchains leave a thin margin once the tests are built, so drop the ones no project here uses.
+    - name: Free disk space
+      run: |
+        sudo rm -rf /opt/ghc /usr/local/.ghcup /usr/share/swift /usr/local/share/boost /opt/hostedtoolcache/CodeQL /usr/local/share/powershell /usr/share/miniconda /opt/az /usr/local/lib/android/sdk/ndk
+        df -h /
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      with:
+        global-json-file: src/Fabric/global.json
+
+    - name: Verify formatting
+      run: dotnet format whitespace --folder . --verify-no-changes
+
+    # bit setup installs what the project needs and the runner lacks (Node.js, the workloads, the Android SDK, Playwright's
+    # browsers), then builds it. The version is the bit CLI that came with bit Fabric's template version.
+    - name: Set up and build with bit setup
+      shell: pwsh
+      run: |
+        $PSNativeCommandUseErrorActionPreference = $true
+        $tools = Join-Path $env:RUNNER_TEMP 'bit-cli'
+        dotnet tool install Bit.Cli --version 11.0.0-pre-22 --tool-path $tools
+        Add-Content $env:GITHUB_PATH $tools
+        & (Join-Path $tools 'bit') setup --yes --platforms android -p:EnforceCodeStyleInBuild=true
+
+    # The bitplatform Network is a Cloudflare Worker outside the .NET solution (src/Network/README.md).
+    - name: Typecheck the bitplatform Network
+      working-directory: src/Fabric/src/Network
+      run: npm ci --no-audit --no-fund && npm run typecheck
+
+    # The Lighthouse service runs as TypeScript Node strips the types of; its image is built by the deployment.
+    - name: Typecheck and test the Lighthouse service
+      working-directory: src/Fabric/src/Server/Bit.Fabric.Server.Lighthouse
+      run: npm ci --no-audit --no-fund && npm run typecheck && npm test
+
+    - name: Check that the api still works for the app versions it supports
+      run: bit api check
+
+    - name: Test
+      id: test
+      working-directory: src/Fabric/src/Tests
+      run: dotnet test
+
+    - name: Upload Tests Artifact
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      if: ${{ failure() && steps.test.conclusion == 'failure' }}
+      with:
+        name: tests-artifact
+        path: ./src/Fabric/src/Tests/TestResults
+        retention-days: 14

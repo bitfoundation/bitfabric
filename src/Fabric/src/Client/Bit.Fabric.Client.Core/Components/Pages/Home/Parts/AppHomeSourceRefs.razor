@@ -1,0 +1,14 @@
+@inherits ComponentBase
+@* The small numbers of a fact's sources beside its words, each leading to its entry in the page's list of sources
+   (AppHomeSourceList): the comparison pages' and the AI agent pages'. *@
+
+@if (Ids.Length > 0)
+{
+    <span class="ahr-refs">
+        @foreach (var number in Ids.Select(id => Array.IndexOf(PageIds, id) + 1).Where(number => number > 0).Distinct().Order())
+        {
+            <BitLink @key="number" Href="@InPage(AppHomeSourceList.AnchorOf(PageIds[number - 1]))" Class="cmp-ref"
+                     AriaLabel="@Localizer[nameof(AppStrings.CompareSourceNumber), number]"><sup>@number</sup></BitLink>
+        }
+    </span>
+}

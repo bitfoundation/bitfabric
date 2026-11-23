@@ -1,0 +1,252 @@
+@import '_monitoring.scss';
+
+@include tones;
+
+.sla {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.exports,
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.kpis {
+    display: grid;
+    gap: 0.875rem;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+
+    @include lt-md {
+        grid-template-columns: 1fr;
+    }
+}
+
+.kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: 1rem 1.125rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+
+    &.big {
+        border-color: color-mix(in srgb, var(--tone) 40%, #{$bit-color-border-secondary});
+        background: linear-gradient(135deg, color-mix(in srgb, var(--tone) 13%, transparent), transparent 60%), #{$bit-color-background-primary};
+    }
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+    padding: 1rem 1.125rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+}
+
+.sla-split {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+    @include lt-lg {
+        grid-template-columns: 1fr;
+    }
+}
+
+.months {
+    position: relative;
+    height: 11rem;
+    display: grid;
+    gap: 0.375rem;
+    align-items: end;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    padding-bottom: 1.25rem;
+}
+
+.target-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(1.25rem + (100% - 1.25rem) * var(--at) / 100);
+    border-top: 2px dashed $bit-color-foreground-secondary;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.month {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background: none;
+    border-radius: 4px 4px 2px 2px;
+
+    &:focus-visible {
+        outline: 2px solid $bit-color-primary;
+        outline-offset: 2px;
+    }
+
+    &:hover .month-bar {
+        opacity: 0.9;
+    }
+
+    &.is-selected .month-bar {
+        opacity: 1;
+        box-shadow: 0 0 0 2px $bit-color-background-primary, 0 0 0 3px var(--tone);
+    }
+}
+
+.month-bar {
+    width: 100%;
+    height: var(--h);
+    border-radius: 4px 4px 2px 2px;
+    background-color: var(--tone);
+    opacity: 0.6;
+}
+
+.month-label {
+    position: absolute;
+    left: 50%;
+    bottom: -1.25rem;
+    transform: translateX(-50%);
+    font-size: $bit-typography-fs-2xs;
+    color: $bit-color-foreground-secondary;
+    white-space: nowrap;
+}
+
+.rules {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    font-size: $bit-typography-fs-sm;
+
+    li {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+.rule-mark {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 3px;
+    background-color: var(--tone);
+}
+
+.formula {
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    border-radius: $bit-shape-radius-sm;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-sm;
+    overflow-wrap: anywhere;
+    background-color: $bit-color-background-secondary;
+}
+
+.rows {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+    font-size: $bit-typography-fs-sm;
+    font-variant-numeric: tabular-nums;
+    border-bottom: 1px solid $bit-color-border-secondary;
+
+    &.head {
+        font-size: $bit-typography-fs-xs;
+        color: $bit-color-foreground-secondary;
+    }
+
+    &.is-app {
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    .part {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .ok {
+        color: $bit-color-success;
+    }
+
+    .bad {
+        color: $bit-color-error;
+        font-weight: $bit-typography-fw-semibold;
+    }
+}
+
+.credits,
+.credit-editor {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.375rem;
+}
+
+.credits li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    border-radius: $bit-shape-radius-md;
+    font-size: $bit-typography-fs-sm;
+    background-color: $bit-color-background-secondary;
+
+    &.is-applied {
+        color: $bit-color-error;
+        font-weight: $bit-typography-fw-semibold;
+        background-color: color-mix(in srgb, #{$bit-color-error} 10%, transparent);
+    }
+}
+
+.credit-editor li {
+    display: grid;
+    gap: 0.5rem;
+    align-items: end;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+}
+
+.credit {
+    font-variant-numeric: tabular-nums;
+}
+
+.excluded {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+
+    > span {
+        display: flex;
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,23 @@
+@inherits ComponentBase
+@* What keeps running and what stops if bit Fabric does: the home page's band, and /trust's *@
+
+<div class="ahs">
+    <div class="ahs-card">
+        <BitText Typography="BitTypography.H6" Element="@HeadingElement">@Localizer[nameof(AppStrings.AppHomeKeepsRunning)]</BitText>
+        <ul class="ahs-list">
+            @foreach (var line in KeepsRunning)
+            {
+                <li><BitIcon IconName="@BitIconName.CheckMark" Color="BitColor.Success" Class="ahs-mark" />@line</li>
+            }
+        </ul>
+    </div>
+    <div class="ahs-card">
+        <BitText Typography="BitTypography.H6" Element="@HeadingElement">@Localizer[nameof(AppStrings.AppHomeStops)]</BitText>
+        <ul class="ahs-list">
+            <li><BitIcon IconName="@BitIconName.Cancel" Color="BitColor.SevereWarning" Class="ahs-mark" />@Localizer[nameof(AppStrings.AppHomeStopsWhat)]</li>
+        </ul>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+            @Localizer[nameof(AppStrings.AppHomeStopsHealth)]
+        </BitText>
+    </div>
+</div>

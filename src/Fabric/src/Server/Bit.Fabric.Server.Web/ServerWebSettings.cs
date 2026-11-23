@@ -1,0 +1,104 @@
+using Bit.Fabric.Client.Core;
+using Bit.Fabric.Client.Web;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Options;
+
+namespace Bit.Fabric.Server.Web;
+
+public partial class ServerWebSettings : ClientWebSettings
+{
+    /// <summary>
+    /// Specifies the allowed origins for CORS requests, URLs returned after external sign-in and email confirmation, and permitted origins for Web Auth, as well as forwarded headers middleware in ASP.NET Core.
+    /// Each entry may contain the <c>*</c> wildcard (e.g. <c>https://*.myapp.com</c>) so a single entry can trust every tenant subdomain.
+    /// </summary>
+    public string[] TrustedOrigins { get; set; } = [];
+    [Required]
+    public WebAppRenderOptions WebAppRender { get; set; } = default!;
+
+    /// <summary>
+    /// In a production environment, <see cref="ClientCoreSettings.ServerAddress"/> is usually set to  
+    /// a URL like <c>https://api.myproject.com</c>, often secured behind a CDN or firewall.  
+    /// However, during pre-rendering or in Blazor Server/Auto mode, using a local address
+    /// such as <c>http://localhost:8080</c> is much more efficient.
+    /// This optional setting allows overriding HttpClient's BaseAddress specifically for the server project.
+    /// </summary>
+    public string? ServerSideHttpClientBaseAddress { get; set; }
+
+    /// <summary>What the one-line installers at /install.ps1 and /install.sh put on the visitor's computer.</summary>
+    [ValidateObjectMembers]
+    public InstallOptions Install { get; set; } = new();
+}
+
+public partial class InstallOptions
+{
+    /// <summary>The .NET SDK channel they install when the computer lacks it, the one the template targets.</summary>
+    [Required, RegularExpression(@"^\d+\.\d+$")]
+    public string SdkChannel { get; set; } = "10.0";
+
+    /// <summary>The bit CLI version they install; empty for the newest one on nuget.org, a preview as well as a release. It goes into the scripts as it is, so only a version's characters are allowed.</summary>
+    [RegularExpression(@"^[0-9A-Za-z.\-]*$")]
+    public string? BitCliVersion { get; set; }
+}
+
+[OptionsValidator]
+public partial class ServerWebSettingsValidator : IValidateOptions<ServerWebSettings>
+{
+}
+
+public partial class WebAppRenderOptions
+{
+    public bool PrerenderEnabled { get; set; }
+
+    public BlazorWebAppMode BlazorMode { get; set; }
+
+    private BlazorWebAppMode EffectiveBlazorMode
+    {
+        get
+        {
+            var mode = BlazorMode;
+
+            // When opening an .slnx/.slnf solutions in Visual Studio instead of .sln,
+            // you can switch between to `DebugBlazorServer` configuration to have optimized build times during development.
+            // If `DebugBlazorServer` is selected, `BlazorMode` will be set to `BlazorServer`
+            // regardless of its value in appsettings.json
+#if DebugBlazorServer
+            mode = BlazorWebAppMode.BlazorServer;
+#endif
+
+            return mode;
+        }
+    }
+
+    public IComponentRenderMode? RenderMode => GetRenderMode(PrerenderEnabled);
+
+    /// <summary>
+    /// What <c>?no-prerender</c> renders with: the configured mode, only without pre-rendering. It deliberately does
+    /// NOT force WebAssembly - the flag says "skip pre-rendering", not "change how this app runs", and the shipped
+    /// service worker requests the app shell with that flag on every published deployment.
+    /// </summary>
+    public IComponentRenderMode? NoPrerenderRenderMode => GetRenderMode(prerenderEnabled: false);
+
+    private IComponentRenderMode? GetRenderMode(bool prerenderEnabled) => EffectiveBlazorMode switch
+    {
+        BlazorWebAppMode.BlazorAuto => new InteractiveAutoRenderMode(prerenderEnabled),
+        BlazorWebAppMode.BlazorWebAssembly => new InteractiveWebAssemblyRenderMode(prerenderEnabled),
+        BlazorWebAppMode.BlazorServer => new InteractiveServerRenderMode(prerenderEnabled),
+        BlazorWebAppMode.BlazorSsr => null,
+        _ => throw new NotImplementedException(),
+    };
+}
+
+/// <summary>
+/// https://learn.microsoft.com/en-us/aspnet/core/blazor/components/render-modes#render-modes
+/// </summary>
+public enum BlazorWebAppMode
+{
+    BlazorAuto,
+    BlazorServer,
+    BlazorWebAssembly,
+    /// <summary>
+    /// Pre-rendering without interactivity
+    /// </summary>
+    BlazorSsr,
+}

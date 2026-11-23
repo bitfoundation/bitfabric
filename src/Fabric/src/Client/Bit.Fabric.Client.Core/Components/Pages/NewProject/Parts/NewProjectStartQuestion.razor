@@ -1,0 +1,24 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectStartTitle)]"
+                    Lead="@Localizer[nameof(AppStrings.NewProjectStartLead)]"
+                    Topic="@NewProjectHelpTopics.Start" HeadingElement="@HeadingElement">
+    <BitChoiceGroup TItem="BitChoiceGroupOption<NewProjectStart>" TValue="NewProjectStart"
+                    AriaLabel="@Localizer[nameof(AppStrings.NewProjectStartTitle)]"
+                    Variant="BitVariant.Outline" FullWidth
+                    Value="@Answers.Start"
+                    OnChange="(NewProjectStart start) => Store.StartWith(start)">
+        <ItemLabelTemplate Context="option">
+            <NewProjectChoiceLabel IconName="@Icon(option.Value)" Text="@option.Text" Description="@Description(option.Value)" />
+        </ItemLabelTemplate>
+        <Options>
+            <BitChoiceGroupOption Value="NewProjectStart.Blank" Text="@Localizer[nameof(AppStrings.NewProjectStartBlank)]" />
+            <BitChoiceGroupOption Value="NewProjectStart.Admin" Text="@Localizer[nameof(AppStrings.NewProjectStartAdmin)]" />
+            <BitChoiceGroupOption Value="NewProjectStart.Store" Text="@Localizer[nameof(AppStrings.NewProjectStartStore)]" />
+        </Options>
+    </BitChoiceGroup>
+    <p class="np-demo-links">
+        <BitLink Href="https://adminpanel.bitplatform.dev" Target="_blank">@Localizer[nameof(AppStrings.NewProjectDemoAdminPanel)]</BitLink>
+        <BitLink Href="https://sales.bitplatform.dev" Target="_blank">@Localizer[nameof(AppStrings.NewProjectDemoStore)]</BitLink>
+    </p>
+</NewProjectQuestion>

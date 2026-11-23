@@ -1,0 +1,35 @@
+@inherits NewProjectPartBase
+
+<NewProjectQuestion Title="@Localizer[nameof(AppStrings.NewProjectErrorsTitle)]"
+                    Lead="@Localizer[nameof(AppStrings.NewProjectErrorsLead)]"
+                    Topic="@NewProjectHelpTopics.Errors" HeadingElement="@HeadingElement">
+    <BitChoiceGroup TItem="BitChoiceGroupOption<NewProjectErrors>" TValue="NewProjectErrors"
+                    AriaLabel="@Localizer[nameof(AppStrings.NewProjectErrorsTitle)]"
+                    Variant="BitVariant.Outline" FullWidth
+                    Value="@Answers.Errors"
+                    OnChange="(NewProjectErrors errors) => Store.SendErrorsTo(errors)">
+        <ItemLabelTemplate Context="option">
+            @switch (option.Value)
+            {
+                case NewProjectErrors.OwnServer:
+                    <NewProjectChoiceLabel IconName="@BitIconName.Server" Text="@option.Text"
+                                           Badge="@Localizer[nameof(AppStrings.NewProjectRecommended)]"
+                                           Description="@Localizer[nameof(AppStrings.NewProjectErrorsOwnServerText)]" />
+                    break;
+                case NewProjectErrors.Sentry:
+                    <NewProjectChoiceLabel IconName="@BitIconName.Bug" Text="@option.Text"
+                                           Description="@Localizer[nameof(AppStrings.NewProjectErrorsSentryText)]" />
+                    break;
+                default:
+                    <NewProjectChoiceLabel IconName="@BitIconName.AzureIcon" Text="@option.Text"
+                                           Description="@Localizer[nameof(AppStrings.NewProjectErrorsAppInsightsText)]" />
+                    break;
+            }
+        </ItemLabelTemplate>
+        <Options>
+            <BitChoiceGroupOption Value="NewProjectErrors.OwnServer" Text="@Localizer[nameof(AppStrings.NewProjectErrorsOwnServer)]" />
+            <BitChoiceGroupOption Value="NewProjectErrors.Sentry" Text="Sentry" />
+            <BitChoiceGroupOption Value="NewProjectErrors.AppInsights" Text="Azure Application Insights" />
+        </Options>
+    </BitChoiceGroup>
+</NewProjectQuestion>

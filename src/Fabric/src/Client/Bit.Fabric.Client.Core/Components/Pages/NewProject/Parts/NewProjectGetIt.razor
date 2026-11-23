@@ -1,0 +1,78 @@
+@inherits NewProjectPartBase
+
+@{
+    var answers = Answers;
+    var (_, to) = answers.Minutes;
+}
+
+<section class="np-getit" id="np-get" aria-labelledby="np-get-title">
+    <div class="np-getit-head">
+        <BitText Typography="BitTypography.H5" Element="@HeadingElement" Id="np-get-title" Class="np-getit-title">@Localizer[nameof(AppStrings.NewProjectGetItTitle), answers.DisplayName]</BitText>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.NewProjectGetItLead)]</BitText>
+    </div>
+
+    <div class="np-phone-note">
+        <BitIcon IconName="@BitIconName.CellPhone" Class="np-phone-note-icon" />
+        <div class="np-phone-note-text">
+            <b>@Localizer[nameof(AppStrings.NewProjectOnPhone)]</b>
+            <span>@Localizer[nameof(AppStrings.NewProjectOnPhoneText)]</span>
+            <div class="np-phone-actions">
+                <BitButton Size="BitSize.Small" IconName="@BitIconName.Mail" Href="@MailLink">@Localizer[nameof(AppStrings.NewProjectEmailIt)]</BitButton>
+                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.Link" OnClick="CopyLink">@(isLinkCopied ? Localizer[nameof(AppStrings.NewProjectLinkCopied)] : Localizer[nameof(AppStrings.NewProjectCopyLink)])</BitButton>
+            </div>
+        </div>
+    </div>
+
+    <NewProjectLineSteps Arguments="@answers.BitNewArguments" Name="@answers.DisplayName" PlanSteps="@PlanSteps(answers)">
+        <LookAround>
+            @Localizer[nameof(AppStrings.NewProjectLookAroundText), to]
+            @if (answers.Devices.Count > 0)
+            {
+                @(" ")@Localizer[nameof(AppStrings.NewProjectToolsInBackground), ListOf(answers.Devices.Select(DeviceName))]
+            }
+        </LookAround>
+    </NewProjectLineSteps>
+
+    <div class="np-needs">
+        <BitText Typography="BitTypography.Subtitle2" Element="@SubheadingElement">@Localizer[nameof(AppStrings.NewProjectNeedsTitle)]</BitText>
+        <ul>
+            <li>@ComputerNeed(answers)</li>
+            @if (answers.HasGitHubRepo)
+            {
+                <li>@Localizer[nameof(AppStrings.NewProjectNeedGitHub)]</li>
+            }
+            @if (answers.Errors is NewProjectErrors.Sentry)
+            {
+                <li>@Localizer[nameof(AppStrings.NewProjectNeedSentry)]</li>
+            }
+            else if (answers.Errors is NewProjectErrors.AppInsights)
+            {
+                <li>@Localizer[nameof(AppStrings.NewProjectNeedAppInsights)]</li>
+            }
+            @if (answers.NeedsXcode)
+            {
+                <li>@Localizer[nameof(AppStrings.NewProjectNeedXcode)]</li>
+            }
+            @if (answers.NeedsMacForIos)
+            {
+                <li>@Localizer[nameof(AppStrings.NewProjectNeedMacForIos)]</li>
+            }
+            <li>@Localizer[nameof(AppStrings.NewProjectNeedAgent)]</li>
+        </ul>
+    </div>
+
+    @* Another computer and a teammate set the project up from a page of its own *@
+    <p class="np-elsewhere">
+        <BitIcon IconName="@BitIconName.People" Class="np-elsewhere-icon" />
+        <span>
+            <b>@Localizer[nameof(AppStrings.NewProjectElsewhereTitle)]</b>
+            @Localizer[nameof(AppStrings.NewProjectElsewhereText)]
+            <BitLink Href="@CultureInfoManager.GetCurrentCultureUrl(PageUrls.SetupProject)">@Localizer[nameof(AppStrings.NewProjectElsewhereLink)]</BitLink>
+        </span>
+    </p>
+
+    <p class="np-privacy">
+        <BitIcon IconName="@BitIconName.Lock" Class="np-privacy-icon" />
+        <span>@Localizer[nameof(AppStrings.NewProjectPrivacy)]</span>
+    </p>
+</section>

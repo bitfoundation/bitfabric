@@ -1,0 +1,1223 @@
+@import '../../../../Styles/abstracts/_media-queries.scss';
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.np-mv {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+}
+
+.np-mv-title {
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+// Everything in the drawing is sized in em of a font that follows the frame's width, so it scales as one picture
+.np-mv-frame {
+    container-type: inline-size;
+}
+
+.np-mv-stage {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+    color: $bit-color-foreground-primary;
+    font-size: 2.2cqw;
+    line-height: 1.35;
+    // A drawing of the computer's own screen, which reads left to right in every language
+    direction: ltr;
+    text-align: left;
+}
+
+.np-mv-desktop {
+    position: absolute;
+    inset: 0;
+    background: $bit-color-background-secondary;
+}
+
+// The schematic pieces: bars stand for text, blocks for pictures
+.np-mv-line {
+    display: block;
+    width: var(--w, 62%);
+    height: .5em;
+    border-radius: 9999px;
+    background: $bit-color-border-secondary;
+
+    &.is-short {
+        width: 38%;
+    }
+
+    &.is-title {
+        width: 46%;
+        height: .8em;
+        background: $bit-color-foreground-secondary;
+    }
+}
+
+.np-mv-block {
+    display: block;
+    height: 1.8em;
+    border-radius: .3em;
+    background: $bit-color-border-secondary;
+}
+
+.np-mv-pill {
+    display: inline-block;
+    width: 4em;
+    height: 1.3em;
+    border-radius: 9999px;
+    background: $bit-color-border-secondary;
+
+    &.is-filled {
+        background: $bit-color-primary;
+    }
+}
+
+.np-mv-logo {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: .35em;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: .8em;
+    font-weight: $bit-typography-fw-bold;
+}
+
+// The computer's own bars
+.np-mv-taskbar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6em;
+    height: 9%;
+    border-top: $bit-shape-border-width solid $bit-color-border-secondary;
+    background: $bit-color-background-primary;
+}
+
+.np-mv-start {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, .45em);
+    gap: .1em;
+
+    i {
+        height: .45em;
+        background: $bit-color-primary;
+    }
+}
+
+.np-mv-dock-app {
+    width: 1.1em;
+    height: 1.1em;
+    border-radius: .3em;
+    background: $bit-color-border-secondary;
+}
+
+.np-mv-menubar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: .8em;
+    height: 5.5%;
+    padding: 0 1em;
+    background: $bit-color-background-primary;
+
+    i {
+        width: .7em;
+        height: .7em;
+        border-radius: 50%;
+        background: $bit-color-foreground-primary;
+    }
+
+    b {
+        width: 2.4em;
+        height: .4em;
+        border-radius: 9999px;
+        background: $bit-color-border-secondary;
+    }
+
+    &.is-linux {
+        justify-content: space-between;
+    }
+}
+
+.np-mv-dock {
+    position: absolute;
+    bottom: 2.5%;
+    left: 50%;
+    display: flex;
+    gap: .5em;
+    padding: .35em .6em;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: .7em;
+    background: $bit-color-background-primary;
+    transform: translateX(-50%);
+}
+
+// A window: a browser, a terminal or VS Code
+.np-mv-window {
+    position: absolute;
+    inset: 7% 7% 14% 7%;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: .6em;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-callout;
+
+    .is-mac &,
+    .is-linux & {
+        inset: 10% 7% 15% 7%;
+    }
+
+    &.is-behind {
+        opacity: .45;
+    }
+
+    &.is-arriving {
+        animation: np-mv-arrive .45s .1s both;
+    }
+
+    &.is-late {
+        animation: np-mv-arrive .4s 1.3s both;
+    }
+
+    &.is-terminal {
+        inset: 15% 15% 24% 15%;
+        border-color: $bit-color-neutrals-gray130;
+        background: $bit-color-neutrals-gray160;
+        color: $bit-color-neutrals-gray20;
+    }
+
+    &.is-code {
+        inset: 5% 4% 12% 4%;
+        border-color: $bit-color-neutrals-gray130;
+        background: $bit-color-neutrals-gray160;
+        color: $bit-color-neutrals-gray20;
+    }
+}
+
+.np-mv-window-bar {
+    display: flex;
+    align-items: center;
+    gap: .3em;
+    min-width: 0;
+    padding: .35em .6em;
+    border-bottom: $bit-shape-border-width solid $bit-color-border-secondary;
+    color: $bit-color-foreground-secondary;
+    font-size: .7em;
+    white-space: nowrap;
+
+    i {
+        flex: none;
+        width: .55em;
+        height: .55em;
+        border-radius: 50%;
+        background: $bit-color-border-secondary;
+    }
+
+    .is-terminal &,
+    .is-code & {
+        border-color: $bit-color-neutrals-gray130;
+        background: $bit-color-neutrals-gray150;
+        color: $bit-color-neutrals-gray40;
+    }
+}
+
+.np-mv-url {
+    flex: 1;
+    min-width: 0;
+    margin-inline-start: .5em;
+    padding: .1em .7em;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: $bit-color-background-secondary;
+    text-overflow: ellipsis;
+}
+
+.np-mv-window-body {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: .55em;
+    min-height: 0;
+    padding: 1em 1.2em;
+
+    .is-terminal & {
+        display: block;
+        padding: .8em;
+        overflow: hidden;
+        font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+        font-size: .7em;
+        line-height: 1.55;
+        word-break: break-all;
+    }
+}
+
+// bitfabric.co with the line and its Copy button
+.np-mv-linebox {
+    display: flex;
+    align-items: center;
+    gap: .6em;
+    margin-top: .8em;
+    padding: .55em .6em .55em .8em;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: .5em;
+    background: $bit-color-background-secondary;
+
+    code {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        font-size: .65em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.np-mv-copy {
+    position: relative;
+    display: inline-grid;
+    flex: none;
+    padding: .3em .8em;
+    border-radius: 9999px;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: .72em;
+    font-weight: $bit-typography-fw-semibold;
+    white-space: nowrap;
+
+    > span {
+        grid-area: 1 / 1;
+    }
+
+    .is-after {
+        visibility: hidden;
+    }
+
+    [data-scene="copy"] & {
+        .is-before {
+            animation: np-mv-hide 0s 1.35s forwards;
+        }
+
+        .is-after {
+            animation: np-mv-show .2s 1.35s forwards;
+        }
+    }
+
+    [data-scene="start"] & {
+        .is-before {
+            visibility: hidden;
+        }
+
+        .is-after {
+            visibility: visible;
+        }
+    }
+}
+
+// The Start menu and Spotlight, with what is typed into them
+.np-mv-startmenu {
+    position: absolute;
+    bottom: 11%;
+    left: 28%;
+    display: grid;
+    align-content: start;
+    gap: .9em;
+    width: 44%;
+    height: 60%;
+    padding: .9em;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: .7em;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-callout;
+
+    &.is-opening {
+        animation: np-mv-rise .35s 1.4s both;
+    }
+}
+
+.np-mv-spotlight {
+    position: absolute;
+    top: 24%;
+    right: 20%;
+    left: 20%;
+    display: grid;
+    gap: .5em;
+    padding: .6em;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: .8em;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-callout;
+
+    &.is-opening {
+        animation: np-mv-arrive .3s 1.1s both;
+    }
+
+    .np-mv-search {
+        border-radius: .5em;
+    }
+}
+
+.np-mv-search {
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    min-height: 2em;
+    padding: .35em .8em;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: 9999px;
+    background: $bit-color-background-secondary;
+    font-size: .85em;
+}
+
+.np-mv-search-icon {
+    flex: none;
+    width: .75em;
+    height: .75em;
+    border: .13em solid $bit-color-foreground-secondary;
+    border-radius: 50%;
+}
+
+.np-mv-caret {
+    width: .08em;
+    height: 1em;
+    background: currentColor;
+    animation: np-mv-blink 1s steps(1) infinite;
+}
+
+// Typed one letter after another; a clip, so it works for any text and either direction
+.np-mv-typed {
+    white-space: nowrap;
+    clip-path: inset(0 100% 0 0);
+    animation: np-mv-type 1.1s steps(var(--chars, 12)) .3s forwards;
+
+    &:dir(rtl) {
+        clip-path: inset(0 0 0 100%);
+        animation-name: np-mv-type-rtl;
+    }
+
+    + .np-mv-caret {
+        display: none;
+    }
+}
+
+.np-mv-result {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    padding: .45em .7em;
+    border-radius: .45em;
+    background: $bit-color-background-secondary;
+    font-size: .8em;
+    font-weight: $bit-typography-fw-semibold;
+    white-space: nowrap;
+    visibility: hidden;
+    animation: np-mv-show .25s 1.45s forwards;
+}
+
+.np-mv-app {
+    flex: none;
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: .25em;
+    background: $bit-color-neutrals-gray160;
+}
+
+.np-mv-tiles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: .6em;
+
+    i {
+        aspect-ratio: 1;
+        border-radius: .35em;
+        background: $bit-color-background-secondary;
+    }
+}
+
+// Keys pressed together, drawn under the window
+.np-mv-keys {
+    position: absolute;
+    bottom: 19%;
+    left: 50%;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: .35em;
+    color: $bit-color-foreground-secondary;
+    font-size: .9em;
+    visibility: hidden;
+    transform: translateX(-50%);
+    animation: np-mv-show .2s .2s forwards;
+
+    kbd {
+        display: inline-grid;
+        place-items: center;
+        min-width: 2.2em;
+        height: 2.2em;
+        padding: 0 .6em;
+        border: $bit-shape-border-width solid $bit-color-border-primary;
+        border-bottom-width: .2em;
+        border-radius: .4em;
+        background: $bit-color-background-primary;
+        color: $bit-color-foreground-primary;
+        font-family: inherit;
+        font-size: .85em;
+        font-weight: $bit-typography-fw-semibold;
+        animation: np-mv-press .3s .65s both;
+
+        &.is-wide,
+        &.is-space {
+            min-width: 5em;
+        }
+    }
+
+    &.is-late {
+        animation-delay: 2s;
+
+        kbd {
+            animation-delay: 2.35s;
+        }
+    }
+}
+
+// The terminal: the prompt, the pasted line and what bit CLI prints
+.np-mv-prompt {
+    margin-inline-end: .5em;
+    color: $bit-color-neutrals-gray60;
+}
+
+.np-mv-pasted {
+    color: $bit-color-neutrals-white;
+
+    // A paste arrives at once, when the right-click or the keys land
+    &.is-arriving {
+        visibility: hidden;
+        animation: np-mv-show .12s 1.4s forwards;
+
+        [data-scene="paste-keys"] & {
+            animation-delay: .9s;
+        }
+    }
+}
+
+.np-mv-output {
+    display: block;
+    margin-top: .3em;
+    color: $bit-color-neutrals-gray40;
+    visibility: hidden;
+    animation: np-mv-show .2s calc(.9s + var(--at) * .6s) forwards;
+
+    [data-scene="allow"] & {
+        visibility: visible;
+        animation: none;
+    }
+}
+
+// Where the right-click lands in the window
+.np-mv-spot {
+    position: absolute;
+    top: 64%;
+    left: 52%;
+}
+
+// Windows' permission, over a dimmed screen
+.np-mv-dim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: $bit-color-neutrals-black;
+    opacity: 0;
+    animation: np-mv-dim .3s .1s forwards;
+}
+
+.np-mv-uac {
+    position: absolute;
+    top: 22%;
+    right: 24%;
+    left: 24%;
+    z-index: 3;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: .5em;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-callout;
+    visibility: hidden;
+    animation: np-mv-show .25s .2s forwards;
+}
+
+.np-mv-uac-head {
+    padding: .45em .8em;
+    border-radius: .5em .5em 0 0;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: .7em;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.np-mv-uac-body {
+    display: grid;
+    gap: .9em;
+    padding: .8em;
+    font-size: .75em;
+
+    b {
+        font-weight: $bit-typography-fw-semibold;
+    }
+}
+
+.np-mv-uac-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5em;
+
+    // Only the buttons: the mouse inside Yes is a span too
+    > span {
+        position: relative;
+        padding: .3em 1.1em;
+        border: $bit-shape-border-width solid $bit-color-border-primary;
+        border-radius: .3em;
+    }
+
+    .np-mv-uac-yes {
+        border-color: $bit-color-primary;
+        background: $bit-color-primary;
+        color: $bit-color-primary-text;
+    }
+}
+
+// What opens by itself: the Workbench, the landing page and the app
+.np-mv-workbench {
+    grid-template-columns: 22% minmax(0, 1fr);
+    align-items: end;
+    gap: 1em;
+    height: 100%;
+}
+
+.np-mv-wb-nav {
+    display: grid;
+    align-self: stretch;
+    align-content: start;
+    gap: .55em;
+    padding-inline-end: .8em;
+    border-inline-end: $bit-shape-border-width solid $bit-color-border-secondary;
+}
+
+.np-mv-wb-views {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: .8em;
+}
+
+.np-mv-device {
+    display: grid;
+    align-content: start;
+    gap: .35em;
+    padding: .45em;
+    border: .2em solid $bit-color-foreground-secondary;
+    border-radius: .5em;
+    background: $bit-color-background-secondary;
+
+    &.is-phone {
+        width: 3.4em;
+        height: 6.6em;
+    }
+
+    &.is-tablet {
+        width: 6.4em;
+        height: 7.6em;
+    }
+
+    &.is-desktop {
+        width: 10em;
+        height: 6.4em;
+        border-radius: .3em;
+    }
+
+    .np-mv-line {
+        width: 80%;
+        height: .35em;
+    }
+
+    .np-mv-block {
+        height: 1.6em;
+    }
+}
+
+.np-mv-landing {
+    justify-items: center;
+    gap: .7em;
+
+    .np-mv-line {
+        &.is-hero {
+            width: 64%;
+            height: .95em;
+            background: $bit-color-foreground-secondary;
+        }
+
+        &.is-hero.is-short {
+            width: 44%;
+        }
+
+        &.is-lede {
+            width: 56%;
+            margin-top: .3em;
+        }
+    }
+
+    .is-cta {
+        width: 6em;
+        height: 1.6em;
+        margin-top: .4em;
+    }
+}
+
+.np-mv-landing-nav {
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    justify-self: stretch;
+    margin-bottom: 1.2em;
+    font-size: .8em;
+
+    .np-mv-pill {
+        margin-inline-start: auto;
+    }
+}
+
+.np-mv-app-screen {
+    gap: .8em;
+    height: 100%;
+}
+
+.np-mv-app-top {
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    font-size: .8em;
+    white-space: nowrap;
+}
+
+.np-mv-tenant {
+    padding: .1em .7em;
+    border: $bit-shape-border-width solid $bit-color-border-primary;
+    border-radius: 9999px;
+    color: $bit-color-foreground-secondary;
+    font-size: .9em;
+}
+
+.np-mv-gap {
+    flex: 1;
+}
+
+.np-mv-bell {
+    width: .9em;
+    height: .9em;
+    border: .14em solid $bit-color-foreground-secondary;
+    border-radius: 50% 50% .2em .2em;
+}
+
+.np-mv-avatar {
+    display: inline-grid;
+    place-items: center;
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: 50%;
+    background: $bit-color-background-secondary;
+    font-size: .75em;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.np-mv-card {
+    display: grid;
+    gap: .4em;
+    padding: .9em 1em;
+    border-radius: .6em;
+    background: $bit-color-background-secondary;
+    font-size: .8em;
+
+    b {
+        font-size: 1.15em;
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    > span {
+        display: flex;
+        align-items: center;
+        gap: .5em;
+        color: $bit-color-foreground-secondary;
+
+        &::before {
+            content: "";
+            flex: none;
+            width: .7em;
+            height: .7em;
+            border: .12em solid $bit-color-foreground-secondary;
+            border-radius: 50%;
+        }
+    }
+}
+
+.np-mv-ask {
+    position: absolute;
+    right: 1.2em;
+    bottom: 1em;
+    padding: .35em 1em;
+    border-radius: 9999px;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: .72em;
+}
+
+// VS Code with the AI's chat, zoomed in on the prompt as it is typed
+.np-mv-zoom {
+    position: absolute;
+    inset: 0;
+    // At the right end of the prompt box, so the whole box stays in view as it grows
+    transform-origin: 92% 86%;
+    animation: np-mv-zoom 1s 1.1s ease-in-out both;
+}
+
+.np-mv-code {
+    grid-template-columns: 6% 18% minmax(0, 1fr) 32%;
+    grid-template-rows: minmax(0, 1fr);
+    align-content: stretch;
+    gap: 0;
+    height: 100%;
+    padding: 0;
+
+    .np-mv-line {
+        background: $bit-color-neutrals-gray130;
+    }
+}
+
+.np-mv-activity {
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    gap: .7em;
+    padding-top: .7em;
+    background: $bit-color-neutrals-gray150;
+
+    i {
+        width: .9em;
+        height: .9em;
+        border-radius: .2em;
+        background: $bit-color-neutrals-gray100;
+    }
+}
+
+.np-mv-explorer,
+.np-mv-editor {
+    display: grid;
+    align-content: start;
+    gap: .6em;
+    padding: .8em .7em;
+}
+
+.np-mv-explorer {
+    border-inline-end: $bit-shape-border-width solid $bit-color-neutrals-gray130;
+}
+
+.np-mv-chat {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: .55em;
+    padding: .7em;
+    border-inline-start: $bit-shape-border-width solid $bit-color-neutrals-gray130;
+    font-size: .7em;
+
+    b {
+        color: $bit-color-neutrals-white;
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    .is-reply {
+        width: 86%;
+    }
+}
+
+.np-mv-ask-box {
+    position: absolute;
+    right: .6em;
+    bottom: .6em;
+    left: .6em;
+    display: flex;
+    align-items: center;
+    gap: .4em;
+    min-height: 2.4em;
+    padding: .4em .5em;
+    border: $bit-shape-border-width solid $bit-color-neutrals-gray100;
+    border-radius: .5em;
+    color: $bit-color-neutrals-white;
+
+    .np-mv-typed {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: clip;
+        animation-duration: 1.8s;
+        animation-delay: 2.2s;
+        animation-timing-function: steps(26);
+    }
+}
+
+.np-mv-send {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: .35em;
+    background: $bit-color-neutrals-gray130;
+    color: $bit-color-neutrals-white;
+    animation: np-mv-send .4s 4.3s both;
+}
+
+// What the prompt built, and what that means for the one who asked it
+.np-mv-yours {
+    position: absolute;
+    inset: 7% 5% 14% 5%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 5%;
+
+    .is-mac &,
+    .is-linux & {
+        inset: 10% 5% 15% 5%;
+    }
+
+    > .np-mv-window {
+        position: relative;
+        inset: auto;
+        height: 100%;
+    }
+}
+
+.np-mv-checkout {
+    gap: .7em;
+
+    > b {
+        font-size: .95em;
+        font-weight: $bit-typography-fw-bold;
+    }
+}
+
+// Each part of the page comes in as the AI writes it
+.np-mv-item,
+.np-mv-pay {
+    visibility: hidden;
+    animation: np-mv-show .3s calc(.6s + var(--at) * .35s) forwards;
+}
+
+.np-mv-item {
+    display: flex;
+    align-items: center;
+    gap: .6em;
+    padding-bottom: .55em;
+    border-bottom: $bit-shape-border-width solid $bit-color-border-secondary;
+
+    &.is-total {
+        border-bottom: 0;
+
+        .np-mv-line {
+            background: $bit-color-foreground-secondary;
+        }
+    }
+}
+
+.np-mv-thumb {
+    flex: none;
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: .35em;
+    background: $bit-color-border-secondary;
+}
+
+.np-mv-price {
+    flex: none;
+    width: 2em;
+    height: .5em;
+    margin-inline-start: auto;
+    border-radius: 9999px;
+    background: $bit-color-foreground-secondary;
+}
+
+.np-mv-pay {
+    padding: .45em;
+    border-radius: .45em;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-size: .75em;
+    font-weight: $bit-typography-fw-semibold;
+    text-align: center;
+}
+
+.np-mv-promises {
+    --bit-Icon-size: 1.1em;
+    --bit-Icon-padding: .45em;
+    display: grid;
+    gap: 1.1em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: start;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: .7em;
+        visibility: hidden;
+        animation: np-mv-enter .4s calc(1.9s + var(--at) * .9s) forwards;
+    }
+
+    li > span {
+        display: grid;
+        gap: .2em;
+        color: $bit-color-foreground-secondary;
+        font-size: .68em;
+        line-height: 1.4;
+    }
+
+    b {
+        color: $bit-color-foreground-primary;
+        font-size: 1.25em;
+        font-weight: $bit-typography-fw-semibold;
+    }
+}
+
+// The mouse: it flies in to what it clicks, then clicks
+.np-mv-cursor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 5;
+    width: 1.35em;
+    height: 1.85em;
+    pointer-events: none;
+    animation: np-mv-move .9s var(--move-at, .2s) ease-in-out both;
+
+    svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        fill: $bit-color-foreground-primary;
+        stroke: $bit-color-background-primary;
+        stroke-width: 1.2;
+        stroke-linejoin: round;
+        overflow: visible;
+    }
+
+    .is-terminal & svg {
+        fill: $bit-color-neutrals-white;
+        stroke: $bit-color-neutrals-black;
+    }
+}
+
+.np-mv-ripple {
+    position: absolute;
+    top: -.6em;
+    left: -.6em;
+    width: 1.2em;
+    height: 1.2em;
+    border: .14em solid $bit-color-primary;
+    border-radius: 50%;
+    opacity: 0;
+    animation: np-mv-ripple .55s var(--click-at, 1.2s) ease-out both;
+}
+
+.np-mv-cursor-label {
+    position: absolute;
+    top: 1.6em;
+    left: 1em;
+    padding: .15em .55em;
+    border-radius: 9999px;
+    background: $bit-color-primary;
+    color: $bit-color-primary-text;
+    font-family: $bit-typography-font-family;
+    font-size: .75em;
+    white-space: nowrap;
+    visibility: hidden;
+    animation: np-mv-show .2s 1.15s forwards;
+}
+
+// Under the drawing: which step, what it shows, and pause or step through
+.np-mv-bar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+}
+
+.np-mv-count {
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: $bit-color-background-secondary;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.np-mv-caption {
+    color: $bit-color-foreground-primary;
+    font-size: $bit-typography-fs-sm;
+    line-height: $bit-typography-body2-line-height;
+}
+
+.np-mv-controls {
+    display: flex;
+    gap: 2px;
+}
+
+@keyframes np-mv-show {
+    from {
+        visibility: visible;
+        opacity: 0;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@keyframes np-mv-enter {
+    from {
+        visibility: visible;
+        opacity: 0;
+        transform: translateY(.6em);
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes np-mv-hide {
+    to {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+@keyframes np-mv-arrive {
+    from {
+        opacity: 0;
+        transform: scale(.96);
+    }
+}
+
+@keyframes np-mv-rise {
+    from {
+        opacity: 0;
+        transform: translateY(12%);
+    }
+}
+
+@keyframes np-mv-move {
+    from {
+        transform: translate(var(--from-x, 0), var(--from-y, 0));
+    }
+
+    to {
+        transform: none;
+    }
+}
+
+@keyframes np-mv-ripple {
+    0% {
+        opacity: 0;
+        transform: scale(.3);
+    }
+
+    15% {
+        opacity: .9;
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.9);
+    }
+}
+
+@keyframes np-mv-press {
+    50% {
+        border-bottom-width: $bit-shape-border-width;
+        background: $bit-color-background-secondary;
+        transform: translateY(.12em);
+    }
+}
+
+@keyframes np-mv-type {
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes np-mv-type-rtl {
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes np-mv-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes np-mv-dim {
+    to {
+        opacity: .45;
+    }
+}
+
+@keyframes np-mv-zoom {
+    to {
+        transform: scale(1.8);
+    }
+}
+
+@keyframes np-mv-send {
+    50% {
+        background: $bit-color-primary;
+        color: $bit-color-primary-text;
+        transform: scale(1.2);
+    }
+
+    100% {
+        background: $bit-color-primary;
+        color: $bit-color-primary-text;
+    }
+}
+
+// Without motion, each scene shows how it ends: the steps still follow one another, and Pause stops them
+@media (prefers-reduced-motion: reduce) {
+    .np-mv-stage * {
+        animation-duration: .01ms !important;
+        animation-delay: 0s !important;
+    }
+}

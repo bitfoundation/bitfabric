@@ -1,0 +1,40 @@
+@inherits AppComponentBase
+
+<section class="panel" aria-labelledby="performance-title">
+    <div class="panel-head">
+        <div class="panel-text">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="performance-title">@Localizer[nameof(AppStrings.MonitoringEveryPartEveryMinute)]</BitText>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringTimelineHelp)]</BitText>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringHomePagePastCache)]</BitText>
+        </div>
+        <div class="zoom" role="group" aria-label="@Localizer[nameof(AppStrings.MonitoringHowMuchToShow)]">
+            @foreach (var (days, label) in Ranges())
+            {
+                <BitButton Size="BitSize.Small" Variant="@(shownDays == days ? BitVariant.Fill : BitVariant.Outline)" OnClick="WrapHandled(() => Show(days))">@label</BitButton>
+            }
+            <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.ZoomOut" OnClick="WrapHandled(ZoomOut)" AriaLabel="@Localizer[nameof(AppStrings.MonitoringZoomOut)]" />
+            <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.ZoomIn" OnClick="WrapHandled(ZoomIn)" AriaLabel="@Localizer[nameof(AppStrings.MonitoringZoomIn)]" />
+            <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.EventDate" OnClick="WrapHandled(GoToNow)">@Localizer[nameof(AppStrings.AppHomeNow)]</BitButton>
+        </div>
+    </div>
+
+    @* Time runs left to right in every language, as on any chart. *@
+    <div class="timeline-box" dir="ltr" style="@($"height:{TimelineHeight}px")">
+        <BitResourceTimeline @ref="timeline"
+                             Config="config"
+                             Options="options"
+                             LoadAllocationsAsync="Load"
+                             OnViewChanged="WrapHandled<BitResourceTimelineView>(OnViewChanged)"
+                             AriaLabel="@Localizer[nameof(AppStrings.MonitoringTimelineAriaLabel)]"
+                             Style="height:100%" />
+    </div>
+
+    <div class="timeline-legend">
+        <span><span class="swatch tone-ok" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringWorks)]</span>
+        <span><span class="swatch tone-degraded" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringSlowOrPartlyWorking)]</span>
+        <span><span class="swatch tone-down" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringFailingOrNotAnswering)]</span>
+        <span><span class="swatch is-deploy" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringDeploy)]</span>
+        <span><span class="swatch is-restart" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringRestart)]</span>
+        <span class="hint">@StepText</span>
+    </div>
+</section>

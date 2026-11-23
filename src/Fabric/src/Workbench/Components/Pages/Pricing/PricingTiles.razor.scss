@@ -1,0 +1,69 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.5rem 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+
+    // The icon keeps its own size rather than the column's width
+    ::deep .tile-icon {
+        flex-shrink: 0;
+        align-self: flex-start;
+    }
+}
+
+.tile-words {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.tile-value {
+    font-size: $bit-typography-fs-lg;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+// The cloud add-on: three cells in one card, a line between them, stacked on a phone
+.is-row {
+    grid-template-columns: none;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: 0;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+
+    .tile {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .tile + .tile {
+        border-inline-start: $bit-shape-border-width solid $bit-color-border-secondary;
+    }
+
+    @include lt-sm {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr;
+
+        .tile + .tile {
+            border-inline-start: none;
+            border-top: $bit-shape-border-width solid $bit-color-border-secondary;
+        }
+    }
+
+    ::deep .tile-icon {
+        flex-shrink: 0;
+    }
+}

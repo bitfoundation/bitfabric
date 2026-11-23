@@ -1,0 +1,345 @@
+@inherits FilmComponentBase
+
+@foreach (var part in Parts)
+{
+    switch (part)
+    {
+        case FilmStep step:
+            <span class="ah-step @Late(part)" style="@Times(part)">@step.Text</span>
+            break;
+        case FilmTitle title:
+            <b class="ah-title @Late(part)" style="@Times(part)">@title.Text</b>
+            break;
+        case FilmText text:
+            <span class="ah-text @Late(part)" style="@Times(part)">@text.Text</span>
+            break;
+        case FilmAppBar bar:
+            <span class="ah-appbar @Late(part)" style="@Times(part, bar.Tap)">
+                <i class="ah-appbar-menu"></i>
+                <b>@bar.Title</b>
+                @if (bar.Person is { } person)
+                {
+                    <span class="ah-appbar-me">
+                        @if (bar.Name is not null)
+                        {
+                            <small>@bar.Name</small>
+                        }
+                        <span class="ah-appbar-face"><AppHomeFace Person="person" /></span>
+                        @if (bar.Tap is not null)
+                        {
+                            <i class="ah-tap"></i>
+                        }
+                    </span>
+                }
+            </span>
+            break;
+        case FilmField field:
+            <span class="ah-field @(field.Typing ? "is-typing" : null) @Late(part)" style="@Times(part)">
+                @if (field.Label is not null)
+                {
+                    <small>@field.Label</small>
+                }
+                <span class="ah-field-value">@field.Value</span>
+            </span>
+            break;
+        case FilmButton button:
+            <span class="ah-button @ToneOf(button.Tone) @(button.Outline ? "is-outline" : null) @Late(part)" style="@Times(part, button.Tap)">
+                @button.Text
+                @if (button.Tap is not null)
+                {
+                    <i class="ah-tap"></i>
+                }
+            </span>
+            break;
+        case FilmCode code:
+            <span class="ah-code @(code.Fill ? "is-filling" : null) @Late(part)" style="@Times(part)">
+                @for (var i = 0; i < code.Digits.Length; i++)
+                {
+                    <i style="--at:@i">@(code.Fill ? code.Digits[i].ToString() : null)</i>
+                }
+            </span>
+            break;
+        case FilmNote note:
+            <span class="ah-note @ToneOf(note.Tone) @Late(part)" style="@Times(part)">@note.Text</span>
+            break;
+        case FilmChoice choice:
+            <span class="ah-choice @MarkOf(choice.Mark) @Late(part)" style="@Times(part, choice.Tap)">
+                @if (choice.Mark is AppHomeMark.Used)
+                {
+                    <s>@choice.Text</s>
+                }
+                else
+                {
+                    @choice.Text
+                }
+                @if (choice.Sub is not null)
+                {
+                    <small>@choice.Sub</small>
+                }
+                @if (choice.Tap is not null)
+                {
+                    <i class="ah-tap"></i>
+                }
+            </span>
+            break;
+        case FilmRow row:
+            <span class="ah-row @MarkOf(row.Mark) @Late(part)" style="@Times(part, row.Tap)">
+                @if (row.Person is { } rowPerson)
+                {
+                    <span class="ah-row-face"><AppHomeFace Person="rowPerson" /></span>
+                }
+                else
+                {
+                    <BitIcon IconName="@row.Icon" Class="ah-row-icon" />
+                }
+                <span class="ah-row-text">
+                    @if (row.Mark is AppHomeMark.Used)
+                    {
+                        <s>@row.Text</s>
+                    }
+                    else
+                    {
+                        @row.Text
+                    }
+                    @if (row.Sub is not null)
+                    {
+                        <small>@row.Sub</small>
+                    }
+                </span>
+                @if (row.End is not null)
+                {
+                    <span class="ah-row-end @ToneOf(row.EndTone)">@row.End</span>
+                }
+                @if (row.Tap is not null)
+                {
+                    <i class="ah-tap"></i>
+                }
+            </span>
+            break;
+        case FilmBubble bubble:
+            <span class="ah-bubble @(bubble.Mine ? "is-mine" : null) @Late(part)" style="@Times(part)">@bubble.Text</span>
+            break;
+        case FilmDone done:
+            <span class="ah-done @ToneOf(done.Tone) @Late(part)" style="@Times(part)">
+                <i>@(done.Tone is AppHomeTone.Bad ? "✕" : "✓")</i>
+                <b>@done.Text</b>
+                @if (done.Sub is not null)
+                {
+                    <small>@done.Sub</small>
+                }
+            </span>
+            break;
+        case FilmBars bars:
+            <span class="ah-bars @Late(part)" style="@Times(part)">
+                @for (var i = 0; i < bars.Values.Length; i++)
+                {
+                    <i style="--v:@bars.Values[i];--at:@i"></i>
+                }
+            </span>
+            break;
+        case FilmStat stat:
+            <span class="ah-stat @Late(part)" style="@Times(part)"><b>@stat.Number</b><small>@stat.Label</small></span>
+            break;
+        case FilmScore score:
+            <span class="ah-ring @RingOf(score.Value) @Late(part)" style="--v:@score.Value;@Times(part)">
+                <i><b>@score.Value</b></i>
+                <small>@score.Label</small>
+            </span>
+            break;
+        case FilmChips chips:
+            <span class="ah-chips @Late(part)" style="@Times(part)">
+                @for (var i = 0; i < chips.Items.Length; i++)
+                {
+                    <i class="@(i == chips.Picked ? "is-picked" : null)">@chips.Items[i]</i>
+                }
+            </span>
+            break;
+        case FilmPicture picture:
+            <span class="ah-picture is-@picture.Kind.ToString().ToLowerInvariant() @Late(part)" style="@Times(part)">
+                @switch (picture.Kind)
+                {
+                    case AppHomePicture.Photo:
+                    case AppHomePicture.Crop:
+                    case AppHomePicture.Rotate:
+                        <span class="ah-photo"><i class="ah-photo-sun"></i><i class="ah-photo-hill is-back"></i><i class="ah-photo-hill"></i></span>
+                        @if (picture.Kind is AppHomePicture.Crop)
+                        {
+                            <i class="ah-crop"></i>
+                        }
+                        break;
+                    case AppHomePicture.Face:
+                        <span class="ah-faceid">
+                            <i class="ah-faceid-ring"></i>
+                            <span class="ah-faceid-face"><AppHomeFace Person="picture.Person" /></span>
+                            <i class="ah-faceid-check">✓</i>
+                        </span>
+                        break;
+                    case AppHomePicture.Fingerprint:
+                        <span class="ah-faceid is-fingerprint">
+                            <i class="ah-faceid-ring"></i>
+                            <BitIcon IconName="@BitIconName.Fingerprint" />
+                            <i class="ah-faceid-check">✓</i>
+                        </span>
+                        break;
+                    default:
+                        <BitIcon IconName="@IconOf(picture.Kind)" Class="ah-picture-icon" />
+                        break;
+                }
+                @switch (picture.Kind)
+                {
+                    case AppHomePicture.Scan:
+                        <i class="ah-corners"></i>
+                        <i class="ah-scanline"></i>
+                        break;
+                    case AppHomePicture.Voice:
+                        <span class="ah-wave"><i></i><i></i><i></i><i></i><i></i></span>
+                        break;
+                    case AppHomePicture.Video:
+                        <i class="ah-progress"></i>
+                        break;
+                }
+                @if (picture.Label is not null)
+                {
+                    <small>@picture.Label</small>
+                }
+            </span>
+            break;
+        case FilmGrid grid:
+            <span class="ah-datagrid @Late(part)" style="@Times(part)">
+                <span class="ah-datagrid-row is-head" style="@ColumnsOf(grid)">
+                    @for (var i = 0; i < grid.Columns.Length; i++)
+                    {
+                        <b>@grid.Columns[i]@(i == grid.Sorted ? " ↓" : null)</b>
+                    }
+                </span>
+                @for (var r = 0; r < grid.Rows.Length; r++)
+                {
+                    <span class="ah-datagrid-row" style="@ColumnsOf(grid)--at:@r;">
+                        @foreach (var cell in grid.Rows[r])
+                        {
+                            <span>@cell</span>
+                        }
+                    </span>
+                }
+                <span class="ah-datagrid-pager"><span>@grid.Pager</span><i>‹</i><i>›</i></span>
+            </span>
+            break;
+        case FilmCalendar calendar:
+            <span class="ah-calendar @Late(part)" style="@Times(part)">
+                <span class="ah-calendar-head"><b>@calendar.Month</b><i>‹</i><i>›</i></span>
+                <span class="ah-calendar-days">
+                    @foreach (var name in WeekDays)
+                    {
+                        <i>@name</i>
+                    }
+                </span>
+                <span class="ah-calendar-grid">
+                    @for (var d = 1; d <= 35; d++)
+                    {
+                        var cell = d;
+                        <span class="ah-calendar-cell @(DayOf(cell) is null ? "is-out" : null)">
+                            <small>@DayOf(cell)</small>
+                            @for (var e = 0; e < calendar.Events.Length; e++)
+                            {
+                                if (calendar.Events[e].Day == cell && e != calendar.Moving)
+                                {
+                                    <i class="ah-calendar-event @ToneOf(calendar.Events[e].Tone)">@calendar.Events[e].Text</i>
+                                }
+                            }
+                        </span>
+                    }
+                    @if (calendar.Moving >= 0)
+                    {
+                        var moving = calendar.Events[calendar.Moving];
+                        <i class="ah-calendar-event is-moving @ToneOf(moving.Tone)" style="@MoveOf(calendar)">@moving.Text<i class="ah-finger"></i></i>
+                    }
+                </span>
+            </span>
+            break;
+        case FilmTools tools:
+            <span class="ah-tools @Late(part)" style="@Times(part)">
+                @for (var i = 0; i < tools.Icons.Length; i++)
+                {
+                    <i class="@(i == tools.Picked ? "is-picked" : null)"><BitIcon IconName="@tools.Icons[i]" /></i>
+                }
+                @for (var i = 0; i < tools.More; i++)
+                {
+                    <i class="is-more"></i>
+                }
+            </span>
+            break;
+        case FilmLogos logos:
+            <span class="ah-logos @Late(part)" style="@Times(part)">
+                <span class="ah-logos-grid">
+                    <i style="--at:0">@Logo?.Invoke("google")</i>
+                    <i style="--at:1">@Logo?.Invoke("apple")</i>
+                    <i style="--at:2" class="ah-logo-microsoft"><b></b><b></b><b></b><b></b></i>
+                    <i style="--at:3">@Logo?.Invoke("github")</i>
+                    <i style="--at:4">@Logo?.Invoke("twitter")</i>
+                    <i style="--at:5">@Logo?.Invoke("facebook")</i>
+                    <i style="--at:6"><BitIcon IconName="@BitIconName.LinkedInLogo" /></i>
+                    <i style="--at:7" class="ah-logo-instagram"><b></b></i>
+                </span>
+                <small>@logos.Text</small>
+            </span>
+            break;
+        case FilmFrames frames:
+            <span class="ah-frames @(frames.ChangeAt is null ? null : "is-changing") @Late(part)" style="@FramesStyle(frames)">
+                @for (var i = 0; i < frames.Frames.Length; i++)
+                {
+                    var frame = frames.Frames[i];
+                    <span class="ah-frame is-@frame.Device.ToString().ToLowerInvariant() @(frame.Dark switch { true => "is-dark", false => "is-light", _ => null }) @(frame.Caption is null ? null : $"is-shot {ToneOf(frame.Tone)}")" style="--at:@i">
+                        @if (frame.Caption is not null)
+                        {
+                            <b class="ah-frame-caption">@frame.Caption</b>
+                        }
+                        <span class="ah-frame-screen" dir="@(frame.Rtl ? "rtl" : null)">
+                            <i class="is-bar"></i><i class="is-head"></i><i></i><i class="is-short"></i><i class="is-added"></i><i class="is-button"></i>
+                        </span>
+                        <small>@frame.Label</small>
+                    </span>
+                }
+            </span>
+            break;
+        case FilmFlow flow:
+            <span class="ah-flow @Late(part)" style="@Times(part)">
+                @for (var i = 0; i < flow.Pages.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        <i class="ah-flow-arrow" style="--at:@i"></i>
+                    }
+                    <span class="ah-frame ah-flow-page" style="--at:@i">
+                        <span class="ah-frame-screen">
+                            <i class="is-bar"></i><i class="is-head"></i><i></i><i class="is-short"></i>
+                            @if (i < flow.Pages.Length - 1)
+                            {
+                                <i class="is-button is-leads"></i>
+                            }
+                        </span>
+                        <small>@flow.Pages[i]</small>
+                    </span>
+                }
+            </span>
+            break;
+        case FilmBanner banner:
+            <div class="ah-banner" style="@Times(part)"><b>@banner.From</b>@banner.Text</div>
+            break;
+        case FilmSheet sheet:
+            <div class="ah-sheet" style="@Times(part, sheet.Tap)">
+                <span>@sheet.Text</span>
+                <span class="ah-button is-accent is-small">@sheet.Button<i class="ah-tap"></i></span>
+            </div>
+            break;
+        case FilmMenu menu:
+            <div class="ah-menu" style="@Times(part)"><AppHomeFilmParts Parts="menu.Parts" /></div>
+            break;
+        case FilmDialog dialog:
+            <div class="ah-backdrop" style="@Times(part)"></div>
+            <div class="ah-dialog" style="@Times(part)">
+                <b class="ah-title">@dialog.Title</b>
+                <AppHomeFilmParts Parts="dialog.Parts" />
+            </div>
+            break;
+    }
+}

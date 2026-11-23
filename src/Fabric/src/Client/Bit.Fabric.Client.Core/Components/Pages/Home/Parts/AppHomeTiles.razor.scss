@@ -1,0 +1,52 @@
+@import '../../../../Styles/abstracts/_media-queries.scss';
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+// Four tiles across at the page's widest, two by two, then one under the other
+.aht {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--aht-min), 100%), 1fr));
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.aht-tile {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.5rem;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+    --bit-Icon-size: 1.25rem;
+    --bit-Icon-padding: .6rem;
+
+    // On a phone, one under the other, with the icon beside the words so the tiles take less of the screen
+    @include lt-sm {
+        flex-direction: row;
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+}
+
+// A circular icon stays a circle rather than stretching across the column
+::deep .aht-icon {
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.aht-words {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    min-width: 0;
+
+    @include lt-sm {
+        gap: .25rem;
+    }
+}
+
+.aht-value {
+    font-size: $bit-typography-fs-lg;
+    font-weight: $bit-typography-fw-semibold;
+}

@@ -1,0 +1,21 @@
+@inherits NewProjectPartBase
+
+<section class="np-question" aria-labelledby="@headingId">
+    <div class="np-question-head">
+        <BitText Typography="BitTypography.H6" Element="@HeadingElement" Id="@headingId" Class="np-question-title">@Title</BitText>
+        @if (Topic is not null)
+        {
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Unknown"
+                       Class="np-question-help"
+                       AriaLabel="@Localizer[nameof(AppStrings.NewProjectHelpMeChooseFor), Title]"
+                       OnClick="() => OpenHelp(Topic)">@Localizer[nameof(AppStrings.NewProjectHelpMeChoose)]</BitButton>
+        }
+    </div>
+    @if (Lead is not null)
+    {
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="np-question-lead">@Lead</BitText>
+    }
+    <div class="np-question-body">
+        @ChildContent
+    </div>
+</section>

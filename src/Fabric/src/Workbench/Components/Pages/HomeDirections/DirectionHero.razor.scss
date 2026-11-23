@@ -1,0 +1,91 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.dh {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: 2rem 1rem;
+
+    @include lt-md {
+        gap: 2rem;
+        padding-block: 1rem .5rem;
+    }
+}
+
+.dh-words {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+// Centred, as the app's own home page: the words over the page, the picture under them
+.dh-centered {
+    justify-items: center;
+    text-align: center;
+
+    .dh-words {
+        align-items: center;
+    }
+
+    .dh-actions {
+        justify-content: center;
+    }
+
+    ::deep .dh-lead {
+        max-width: 42rem;
+    }
+}
+
+// The words at the start and the picture beside them; one under the other below a tablet's width
+.dh-split {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: center;
+
+    .dh-words {
+        align-items: flex-start;
+    }
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.dh-eyebrow {
+    padding: .25rem .75rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-medium;
+}
+
+::deep .dh-title {
+    letter-spacing: -.02em;
+    text-wrap: balance;
+}
+
+.dh-title-line {
+    display: block;
+    text-wrap: balance;
+}
+
+::deep .dh-lead {
+    max-width: 40rem;
+    text-wrap: pretty;
+}
+
+::deep .dh-fine {
+    text-wrap: balance;
+}
+
+.dh-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-top: .5rem;
+}
+
+.dh-aside {
+    width: 100%;
+    min-width: 0;
+}

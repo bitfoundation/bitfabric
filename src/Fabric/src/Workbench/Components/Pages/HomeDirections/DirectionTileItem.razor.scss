@@ -1,0 +1,94 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.dti {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    min-width: 0;
+    padding: 1.5rem;
+    border-radius: $bit-shape-radius-surface;
+    --bit-Icon-size: 1.25rem;
+    --bit-Icon-padding: .6rem;
+
+    // On a phone, the icon beside the words, so a row of tiles takes less of the screen
+    @include lt-sm {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+}
+
+// The icon beside the words on every screen, for tiles stacked in a narrow column
+.dti-inline {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+}
+
+.dti-filled,
+.dti-steps {
+    background: $bit-color-background-secondary;
+}
+
+.dti-outlined,
+.dti-figure {
+    border: 1px solid $bit-color-border-secondary;
+}
+
+// A circular icon stays a circle rather than stretching across the column
+::deep .dti-icon {
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.dti-words {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .375rem;
+    min-width: 0;
+}
+
+::deep .dti-film {
+    margin-inline-start: -.5rem;
+}
+
+// The steps, numbered by the list they're in
+.dti-steps {
+    counter-increment: dt-step;
+
+    &::before {
+        content: counter(dt-step);
+        display: grid;
+        flex-shrink: 0;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: $bit-shape-radius-full;
+        background: $bit-color-foreground-primary;
+        color: $bit-color-background-primary;
+        font-weight: $bit-typography-fw-semibold;
+    }
+}
+
+// A figure: its number large, its line under it, one under the other on every screen
+.dti-figure {
+    gap: .25rem;
+
+    @include lt-sm {
+        flex-direction: column;
+        gap: .25rem;
+    }
+}
+
+.dti-number {
+    margin: 0;
+    color: $bit-color-foreground-primary;
+    font-size: $bit-typography-fs-3xl;
+    font-weight: $bit-typography-fw-semibold;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+}
