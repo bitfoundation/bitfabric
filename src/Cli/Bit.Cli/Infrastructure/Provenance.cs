@@ -35,7 +35,7 @@ public static class Provenance
         return Convert.ToHexStringLower(SHA256.HashData(stream));
     }
 
-    public static string AttestationsApiUrl(string sha256) => $"https://api.github.com/repos/bitfoundation/bitplatform/attestations/sha256:{sha256}";
+    public static string AttestationsApiUrl(string sha256) => $"https://api.github.com/repos/bitfoundation/bitfabric/attestations/sha256:{sha256}";
 
     public static async Task<AttestationState> FindAttestationAsync(HttpMessageHandler handler, string path, CancellationToken cancellationToken)
     {

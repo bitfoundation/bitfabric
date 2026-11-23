@@ -1,7 +1,7 @@
 
 # bit Boilerplate
 
-Free, open-source, full-stack, cross-platform, cloud-ready, and battle-tested project template for those who love C# & Blazor ❤️
+Source-available, full-stack, cross-platform, cloud-ready, and battle-tested project template for those who love C# & Blazor ❤️
 
 ## Features
 
@@ -66,6 +66,6 @@ dotnet tool install --global Bit.Cli --version 11.0.0-pre-23
 bit new MyApp
 ```
 
-Pick the options on the [create project page](https://bitplatform.dev/templates/create-project), which builds the command. `bit new` installs what the project needs and leaves it built, with git, its first migration and your IDE open.
+Pick the options on the [create project page](https://bitfabric.co/new), which builds the command. `bit new` installs what the project needs and leaves it built, with git, its first migration and your IDE open.
 
-Check out our [30-part documentation](https://bitplatform.dev/templates/getting-started) to learn more.
+Learn more at [bitfabric.co](https://bitfabric.co), and in the 30-part documentation in every project's `.docs` folder.

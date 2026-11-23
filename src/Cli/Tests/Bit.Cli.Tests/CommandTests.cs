@@ -52,8 +52,8 @@ public class CommandTests
         Assert.AreEqual(0, await host.RunAsync("about"));
 
         StringAssert.Contains(host.Output, BuildInfo.Version);
-        StringAssert.Contains(host.Output, "github.com/bitfoundation/bitplatform");
-        StringAssert.Contains(host.Output, "MIT");
+        StringAssert.Contains(host.Output, "github.com/bitfoundation/bitfabric");
+        StringAssert.Contains(host.Output, "FCL-1.0-MIT");
     }
 
     [TestMethod]

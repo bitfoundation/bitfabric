@@ -1,6 +1,6 @@
 ﻿# bit CLI
 
-Create [bit platform](https://bitplatform.dev) projects that are ready to run on Windows, macOS and Linux, translate `.resx` files with an LLM, decode stack traces minified by Bit.Minifier, and write the profiles that compile Blazor WebAssembly apps ahead of time.
+Create [bit Fabric](https://bitfabric.co) projects that are ready to run on Windows, macOS and Linux, translate `.resx` files with an LLM, decode stack traces minified by Bit.Minifier, and write the profiles that compile Blazor WebAssembly apps ahead of time.
 
 ```bash
 dotnet tool install --global Bit.Cli --version 11.0.0-pre-23
@@ -17,9 +17,9 @@ It needs a .NET 10 SDK or later. `dnx` asks once before it downloads the package
 
 ## bit new
 
-`bit new` creates a project from [bit Boilerplate](https://bitplatform.dev/templates) and gets it ready, so the first run works:
+`bit new` creates a project from [bit Boilerplate](https://bitfabric.co) and gets it ready, so the first run works:
 
-1. Takes the project name and options from its arguments. The [create project page](https://bitplatform.dev/templates/create-project) builds the whole command. A name that is also the name of a type in bit Boilerplate's code, like `App` or `Program`, is refused, because its namespace would hide that type and the project wouldn't build. When a newer bit is out, the run continues with it, see [Staying up to date](#staying-up-to-date).
+1. Takes the project name and options from its arguments. The [create project page](https://bitfabric.co/new) builds the whole command. A name that is also the name of a type in bit Boilerplate's code, like `App` or `Program`, is refused, because its namespace would hide that type and the project wouldn't build. When a newer bit is out, the run continues with it, see [Staying up to date](#staying-up-to-date).
 2. Checks this machine, lists what the project needs and is missing, and installs what you tick: the .NET SDK the template's `global.json` pins, nuget.org as a package source when it's missing or disabled, Node.js, a container runtime that is free for commercial use (Podman on Windows, Colima with the docker CLI on macOS, Docker Engine on Linux; a Docker you already have is used as it is), WSL and the Windows Virtual Machine Platform that Podman runs on, Git, the Aspire CLI, the HTTPS development certificate, VS Code, the GitHub CLI when you ask for a GitHub repository, Windows long paths, and for native apps the Windows Hypervisor Platform the Android emulator uses and Windows developer mode, plus Python 3 on Linux when the offline database's native WebAssembly build needs it. Things already installed aren't shown, and neither is anything that doesn't apply to your operating system. A project that runs without its containers, such as one with SQLite and no Redis, still gets them, but a restart they ask for is a note, not a warning. The development certificate is trusted first, because Windows and macOS ask you to confirm it, so once that and the administrator prompt are answered you can leave it to finish. On Windows that one prompt, right after the plan, also covers the build support and the Android SDK when their folders need administrator rights. The versions come from the project: the .NET SDK from `global.json`, Node.js from `engines.node` in Client.Core's `package.json`, and the Aspire CLI from the AppHost's Aspire version, so an older Aspire CLI is updated to it. A missing Aspire CLI comes from Aspire's own installer, and from `dotnet tool install --global` only when that installer fails and the CLI is still missing. When nvm, fnm or Volta manages Node.js, Node.js is installed or updated through it, so the version it picks is the one that runs. On macOS with a native app, it also checks that Xcode is the one the project's .NET for iOS asks for.
 3. Warns, only when it's sure, about hardware that makes development slow: virtualization turned off in the BIOS or UEFI while the project's containers or the Android emulator need it, less than 15 GB of memory, or a project drive that is a hard disk rather than an SSD. Drives are judged only when they're internal and on real hardware; USB drives, virtual disks and virtual machines are left alone.
 4. Creates the project, with a development certificate and web push (VAPID) keys of its own, and keeps only its `.slnx`: the `.sln` the template also ships for older Visual Studio versions is removed.
@@ -83,7 +83,7 @@ And these of its own:
 | `--tools node,docker,...` | Tools to install when missing. Default: the ones the project needs. `none` installs nothing. |
 | `--ide code\|vs\|rider\|none` | Open the project in this IDE. Default: VS Code; `none` in CI. bit installs and sets up VS Code only; Visual Studio and Rider are opened when they're already installed. |
 | `--template-version <version>` | The bit Boilerplate version. Default: the CLI's own version. |
-| `--template-package <nupkg or folder>` | Create from a local Bit.Boilerplate package, or from the template's folder in a bitplatform checkout, the way this repository's CI does. |
+| `--template-package <nupkg or folder>` | Create from a local Bit.Boilerplate package, or from the template's folder in a bitfabric checkout, the way this repository's CI does. |
 | `--github-repo` | Create a private GitHub repository for the project and push to it. |
 | `--no-update` | Create it with this bit even when a newer one is out. |
 | `-y, --yes` | Install the tools the project needs and create it without asking. Windows' permission prompt, `sudo`'s password and the GitHub sign-in still show when there's a terminal. |
@@ -141,7 +141,7 @@ Shows what changed in bit Boilerplate between two versions, for your project:
 ```bash
 bit diff
 bit diff 10.6.2 10.7.0
-bit diff --template-package ../bitplatform/src/Templates/Boilerplate/Bit.Boilerplate
+bit diff --template-package ../bitfabric/src/Boilerplate/Bit.Boilerplate
 ```
 
 - It creates the project with each version, the old one first, into one git repository in your home folder, so the second commit is exactly the upgrade, and writes it as `bit-diff.patch` in that repository too. Your project isn't touched.
@@ -524,7 +524,7 @@ bit about
 shows the version, the commit and the GitHub Actions run that built it. Release packages are built from this repository by GitHub Actions, which signs the bit assemblies inside them, `bit.dll` included, and attests the provenance and the SBOM of every package and of those assemblies. On Windows, `bit about` says who signed the `bit.dll` it runs once Windows has checked the signature. For a release, it also asks GitHub whether it holds a build attestation for that exact `bit.dll`, and prints the command that verifies it fully:
 
 ```bash
-gh attestation verify ~/.dotnet/tools/.store/bit.cli/<version>/bit.cli/<version>/tools/net10.0/any/bit.dll --repo bitfoundation/bitplatform
+gh attestation verify ~/.dotnet/tools/.store/bit.cli/<version>/bit.cli/<version>/tools/net10.0/any/bit.dll --repo bitfoundation/bitfabric
 ```
 
 ## Exit codes

@@ -1,6 +1,6 @@
 ## Welcome!
 
-Thank you for creating a new project with bit platform! We appreciate your trust in our platform and are excited to see what you'll build.
+Thank you for creating a new project with bit Fabric! We appreciate your trust in our platform and are excited to see what you'll build.
 
 ## On another computer, or a teammate's
 
@@ -35,8 +35,8 @@ and performance checks, a status page and more.
 
 To help you get started, we have comprehensive documentation available. You can find detailed guides, samples, and more at:
 
-[bitplatform.dev/templates](https://bitplatform.dev/templates/overview)
+[bitfabric.co](https://bitfabric.co)
 
-If you have any questions or need further assistance, feel free to [reach out](https://github.com/bitfoundation/bitplatform/issues/new/choose). Happy coding!
+If you have any questions or need further assistance, feel free to [reach out](https://github.com/bitfoundation/bitfabric/issues/new/choose). Happy coding!
 
 The **bit platform** team.

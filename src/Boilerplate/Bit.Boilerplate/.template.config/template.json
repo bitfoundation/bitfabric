@@ -152,7 +152,7 @@
             "displayName": "More info at",
             "type": "parameter",
             "datatype": "string",
-            "defaultValue": "https://bitplatform.dev/templates/create-project",
+            "defaultValue": "https://bitfabric.co/new",
             "description": "Open the following url in order to get more information about the following parameters."
         },
         //Guid generator for App Id
