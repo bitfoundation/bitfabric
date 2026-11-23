@@ -223,6 +223,8 @@ ModelManifest.xml
 
 # VS Code
 .vscode
+# ...except the template's own, which every project made from it ships
+!src/Boilerplate/Bit.Boilerplate/.vscode
 
 # .NET Meteor
 .meteor

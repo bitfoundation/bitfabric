@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "ms-dotnettools.csharp",
+        "Anthropic.claude-code",
+        "EditorConfig.EditorConfig",
+        "microsoft-aspire.aspire-vscode",
+        "ms-vscode-remote.remote-containers",
+        "ms-dotnettools.blazorwasm-companion",
+        "ms-dotnettools.vscode-dotnet-runtime"
+    ]
+}
