@@ -1,6 +1,7 @@
 using Bit.Fabric.Shared.Features.Chatbot;
 using Bit.Fabric.Shared.Features.Diagnostic;
 using Bit.Fabric.Shared.Features.Identity.OAuth.Dtos;
+using Bit.Fabric.Shared.Features.Licensing.Dtos;
 using Bit.Fabric.Shared.Features.Monitoring.Dtos;
 using Bit.Fabric.Shared.Features.PushNotification;
 using Bit.Fabric.Shared.Features.Statistics;
@@ -83,6 +84,11 @@ namespace Bit.Fabric.Shared.Infrastructure.Dtos;
 [JsonSerializable(typeof(NetworkTargetDto[]))]
 [JsonSerializable(typeof(NetworkResultsDto))]
 [JsonSerializable(typeof(NetworkResultsResponseDto))]
+
+[JsonSerializable(typeof(TrialLicenseRequestDto))]
+[JsonSerializable(typeof(IssueLicenseRequestDto))]
+[JsonSerializable(typeof(LicenseResponseDto))]
+[JsonSerializable(typeof(IssuedLicenseDto))]
 
 [JsonSerializable(typeof(TenantDto))]
 [JsonSerializable(typeof(List<TenantDto>))]

@@ -1,6 +1,7 @@
 using System.Reflection;
 using Bit.Fabric.Server.Api.Features.Attachments;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth.Models;
+using Bit.Fabric.Server.Api.Features.Licensing.Models;
 using Bit.Fabric.Server.Api.Features.Monitoring.Models;
 using Bit.Fabric.Server.Api.Features.PushNotification;
 using Bit.Fabric.Server.Api.Features.Tenants;
@@ -65,6 +66,10 @@ public partial class AppDbContext
     public DbSet<ProjectScanSettings> ProjectScanSettings { get; set; } = default!;
     public DbSet<ProjectScanFindingReport> ProjectScanFindingReports { get; set; } = default!;
     public DbSet<ProjectScansEmail> ProjectScansEmails { get; set; } = default!;
+
+    /// <summary>The projects bit CLI made or licensed, and the free licenses issued for them (See LicenseController).</summary>
+    public DbSet<LicensedProject> LicensedProjects { get; set; } = default!;
+    public DbSet<IssuedLicense> IssuedLicenses { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
