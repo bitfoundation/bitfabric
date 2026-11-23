@@ -8751,7 +8751,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>The installer puts Microsoft's .NET, from Microsoft, and bit CLI, from nuget.org, in your user's folder, without administrator rights.</value>
   </data>
     <data name="NewProjectSafeSigned" xml:space="preserve">
-    <value>bit CLI is open source. GitHub Actions builds it from the public bitfoundation/bitplatform repository, signs it with Microsoft's Azure Artifact Signing (formerly Trusted Signing), and records an attestation of every build on GitHub.</value>
+    <value>bit CLI is source-available. GitHub Actions builds it from the public bitfoundation/bitfabric repository, signs it with Microsoft's Azure Artifact Signing (formerly Trusted Signing), and records an attestation of every build on GitHub.</value>
   </data>
     <data name="NewProjectSafeVerify" xml:space="preserve">
     <value>Check it yourself: {0} shows the build, its signature and its attestation, with the line that verifies it through the GitHub CLI:</value>
@@ -8892,7 +8892,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Any Linux server. bit Fabric then watches its health and what any visitor can see, never its data.</value>
   </data>
     <data name="AppHomeHowSigned" xml:space="preserve">
-    <value>The tool the line installs is open source, built by GitHub Actions, signed and attested, so you can check that what you run is what was published.</value>
+    <value>The tool the line installs is source-available, built by GitHub Actions, signed and attested, so you can check that what you run is what was published.</value>
   </data>
     <data name="AppHomeQuestionAISeesCode" xml:space="preserve">
     <value>Does my AI see my code?</value>
@@ -9174,7 +9174,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>A short script you can read</value>
   </data>
   <data name="TrustCheckOpen" xml:space="preserve">
-    <value>Open source, built in public</value>
+    <value>Source-available, built in public</value>
   </data>
   <data name="TrustCheckSigned" xml:space="preserve">
     <value>Signed and attested</value>

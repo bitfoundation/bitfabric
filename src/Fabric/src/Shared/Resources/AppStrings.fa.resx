@@ -8751,7 +8751,7 @@
     <value>نصب‌کننده ⁨.NET⁩ مایکروسافت را از خود مایکروسافت و bit CLI را از nuget.org، در پوشهٔ کاربر شما و بدون دسترسی مدیر سیستم نصب می‌کند.</value>
   </data>
     <data name="NewProjectSafeSigned" xml:space="preserve">
-    <value>bit CLI متن‌باز است. GitHub Actions آن را از مخزن عمومی bitfoundation/bitplatform می‌سازد، با Azure Artifact Signing مایکروسافت (که پیش‌تر Trusted Signing نام داشت) امضا می‌کند و برای هر build یک attestation در GitHub ثبت می‌کند.</value>
+    <value>bit CLI، source-available است. GitHub Actions آن را از مخزن عمومی bitfoundation/bitfabric می‌سازد، با Azure Artifact Signing مایکروسافت (که پیش‌تر Trusted Signing نام داشت) امضا می‌کند و برای هر build یک attestation در GitHub ثبت می‌کند.</value>
   </data>
     <data name="NewProjectSafeVerify" xml:space="preserve">
     <value>خودتان بررسی کنید: {0} build، امضا و attestation آن را نشان می‌دهد، همراه خطی که با GitHub CLI درستی‌اش را می‌سنجد:</value>
@@ -8892,7 +8892,7 @@
     <value>هر سرور Linux. بعد bit Fabric سلامتش و آنچه هر بازدیدکننده‌ای می‌تواند ببیند را زیر نظر می‌گیرد، نه داده‌هایش را.</value>
   </data>
     <data name="AppHomeHowSigned" xml:space="preserve">
-    <value>ابزاری که این خط نصب می‌کند open source است، با GitHub Actions ساخته، امضا و attest شده، پس می‌توانید بررسی کنید آنچه اجرا می‌کنید همانی است که منتشر شده.</value>
+    <value>ابزاری که این خط نصب می‌کند source-available است، با GitHub Actions ساخته، امضا و attest شده، پس می‌توانید بررسی کنید آنچه اجرا می‌کنید همانی است که منتشر شده.</value>
   </data>
     <data name="AppHomeQuestionAISeesCode" xml:space="preserve">
     <value>آیا AI من کدم را می‌بیند؟</value>
@@ -9174,7 +9174,7 @@
     <value>اسکریپتی کوتاه که می‌توانید بخوانید</value>
   </data>
   <data name="TrustCheckOpen" xml:space="preserve">
-    <value>open source، ساخته‌شده جلوی چشم همه</value>
+    <value>source-available، ساخته‌شده جلوی چشم همه</value>
   </data>
   <data name="TrustCheckSigned" xml:space="preserve">
     <value>امضاشده و attestشده</value>

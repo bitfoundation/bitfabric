@@ -38,7 +38,7 @@ public partial class SetupProjectPageUITests : AppPageTest
         await Expect(Page.GetByText(AppStrings.NewProjectSafeSigned)).ToBeHiddenAsync();
         await safe.ClickAsync();
         await Expect(Page.GetByText(AppStrings.NewProjectSafeSigned)).ToBeVisibleAsync();
-        await Expect(Page.Locator(".np-safe-command")).ToHaveTextAsync("gh attestation verify <bit.dll> --repo bitfoundation/bitplatform");
+        await Expect(Page.Locator(".np-safe-command")).ToHaveTextAsync("gh attestation verify <bit.dll> --repo bitfoundation/bitfabric");
         await Expect(Page).ToHaveURLAsync(new Regex(@"[?&]repo=https%3A%2F%2Fgithub\.com%2Facme%2FBluebird"));
 
         // An app to set up as well goes into the same line
