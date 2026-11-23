@@ -1,4 +1,5 @@
 using Bit.Fabric.Server.Api;
+using Bit.Fabric.Server.Api.Features.DocsMcp;
 using ModelContextProtocol.AspNetCore;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -29,8 +30,14 @@ public static class DevMcpServiceCollectionExtensions
         return services.AddMcpServer()
             .WithHttpTransport(options =>
             {
-                options.ConfigureSessionOptions = (httpContext, mcpOptions, _) =>
+                options.ConfigureSessionOptions = async (httpContext, mcpOptions, cancellationToken) =>
                 {
+                    if (httpContext.Request.Path.StartsWithSegments(DocsMcpServer.Path))
+                    {
+                        await httpContext.RequestServices.GetRequiredService<DocsMcpServer>().ConfigureSession(httpContext, mcpOptions, cancellationToken);
+                        return;
+                    }
+
                     if (httpContext.Request.Path.StartsWithSegments("/dev-mcp"))
                     {
                         // An agent has the dev-mcp of Test and of Production side by side, so every session says which
@@ -48,7 +55,6 @@ public static class DevMcpServiceCollectionExtensions
                         foreach (var tool in DevMcpToolCatalog.Tools)
                             mcpOptions.ToolCollection.Add(tool);
                     }
-                    return Task.CompletedTask;
                 };
             })
             .AddAuthorizationFilters();

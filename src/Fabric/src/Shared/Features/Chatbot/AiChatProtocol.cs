@@ -61,9 +61,11 @@ public static class AiChatProtocol
         public const string SetApplicationTheme = nameof(SetApplicationTheme);
         public const string CheckLastError = nameof(CheckLastError);
         public const string ClearAppFiles = nameof(ClearAppFiles);
+        public const string GetBitLibraryTools = nameof(GetBitLibraryTools);
+        public const string CallBitLibraryTool = nameof(CallBitLibraryTool);
 
         /// <summary>The calls the user doesn't see: the ones that only feed the model, and the suggestions, which show under the answer.</summary>
-        public static readonly IReadOnlySet<string> Hidden = new HashSet<string>([GetCurrentDateTime, GetAppPages, ShowFollowUpSuggestions]);
+        public static readonly IReadOnlySet<string> Hidden = new HashSet<string>([GetCurrentDateTime, GetAppPages, ShowFollowUpSuggestions, GetBitLibraryTools]);
 
         /// <summary>The calls drawn as a card of their own: a form, an approval, products.</summary>
         public static readonly IReadOnlySet<string> Cards = new HashSet<string>([
@@ -77,7 +79,10 @@ public static class AiChatProtocol
         /// </summary>
         public static bool IsStep(string toolName) => Hidden.Contains(toolName) is false && Cards.Contains(toolName) is false;
 
-        /// <summary>The AppStrings key of what a call is shown as, a line or a step; null leaves the tool's own name.</summary>
+        /// <summary>
+        /// The AppStrings key of what a call is shown as, a line or a step; null leaves the tool's own name. A text not in
+        /// AppStrings yet is its English itself, which the localizer returns as it is.
+        /// </summary>
         public static string? TitleKey(string toolName) => toolName switch
         {
             NavigateToPage => nameof(AppStrings.AiChatToolNavigation),
@@ -87,6 +92,7 @@ public static class AiChatProtocol
             CheckLastError => nameof(AppStrings.AiChatToolErrorCheck),
             ClearAppFiles => nameof(AppStrings.AiChatApprovalClearAppFilesApprove),
             RequestHumanFollowUp => nameof(AppStrings.AiChatHumanFollowUpPrompt),
+            CallBitLibraryTool => "Reading the docs",
             _ => null
         };
     }
