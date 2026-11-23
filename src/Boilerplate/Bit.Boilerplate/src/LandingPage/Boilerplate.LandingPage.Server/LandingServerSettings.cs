@@ -116,7 +116,7 @@ public partial class SiteOptions
 public partial class EmailOptions
 {
     [Required, EmailAddress]
-    public string DefaultFromEmail { get; set; } = "DoNotReply@bitplatform.dev";
+    public string DefaultFromEmail { get; set; } = "DoNotReply@bitfabric.co";
 
     [Required]
     public string DefaultFromName { get; set; } = "Boilerplate";

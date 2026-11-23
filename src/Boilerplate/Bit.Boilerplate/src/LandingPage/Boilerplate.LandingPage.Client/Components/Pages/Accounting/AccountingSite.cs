@@ -4,7 +4,7 @@ public static class AccountingSite
 {
     public const string Path = "/accounting";
 
-    public const string SignUpUrl = "https://adminpanel.bitplatform.dev/sign-up";
+    public const string SignUpUrl = "https://adminpanel.bitfabric.co/sign-up";
 
     public static LandingSite Info { get; } = new()
     {
@@ -17,14 +17,14 @@ public static class AccountingSite
         Logo = typeof(AccountingLogo),
         Strings = typeof(AccountingStrings),
         AppleAppId = "6450611349",
-        WebAppUrl = "https://adminpanel.bitplatform.dev/",
+        WebAppUrl = "https://adminpanel.bitfabric.co/",
         StatusUrl = "https://status.example.com/",
         Platforms =
         [
             new(LandingPlatform.iOS, LandingPlatformStatus.Live, "https://apps.apple.com/app/bit-adminpanel/id6450611349"),
             new(LandingPlatform.Android, LandingPlatformStatus.Live, "https://play.google.com/store/apps/details?id=com.bitplatform.AdminPanel.Template"),
-            new(LandingPlatform.Windows, LandingPlatformStatus.Live, "https://windows-admin.bitplatform.dev/AdminPanel.Client.Windows-win-Setup.exe"),
-            new(LandingPlatform.Web, LandingPlatformStatus.Live, "https://adminpanel.bitplatform.dev/")
+            new(LandingPlatform.Windows, LandingPlatformStatus.Live, "https://windows-adminpanel.bitfabric.co/AdminPanel.Client.Windows-win-Setup.exe"),
+            new(LandingPlatform.Web, LandingPlatformStatus.Live, "https://adminpanel.bitfabric.co/")
         ],
         Company = new()
         {

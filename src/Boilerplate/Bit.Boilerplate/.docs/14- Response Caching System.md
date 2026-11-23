@@ -20,7 +20,7 @@ The project implements a sophisticated caching strategy that spans **four distin
 ### Key Benefit: Zero Server Overhead for Cached Content
 
 **Real-World Impact:**
-- Every page refresh on cached pages (like https://sales.bitplatform.dev product pages) adds **zero overhead** to the server
+- Every page refresh on cached pages (like https://sales.bitfabric.co product pages) adds **zero overhead** to the server
 - The complete response is served directly from Cloudflare's edge servers (CDN)
 - This dramatically reduces server load, database queries, and infrastructure costs
 - Enables handling millions of requests with minimal server resources
@@ -269,9 +269,18 @@ Vary: Origin, X-Origin
 The `UserAgnostic` property is critical for security. If a response contains user-specific data (e.g., user's name, roles, or tenant information), it **must not** be cached in shared caches (CDN edge or output cache). Setting `UserAgnostic = true` is only safe when the response is identical for all users.
 
 > **Multi-tenant + CDN edge:** the `Tenant` discriminator above is part of the **ASP.NET Core output cache key only** -
-> `VaryByValues` never becomes a response header, so a CDN cannot see it. The output cache therefore keeps tenants apart
-> correctly, but an edge cache keyed on host + path does not. Until the tenant is part of the URL or the host, treat
-> `UserAgnostic = true` together with `EnableCdnEdgeCaching` as unsafe for any response whose body is tenant-filtered.
+> `VaryByValues` never becomes a response header, so a CDN cannot see it. That's why a response the server filtered by
+> the caller's tenant claim gets no edge or browser lifetime at all, and only the output cache keeps it.
+>
+> An anonymous caller's tenant comes from the host, so its answer is cached as usual. A signed-in member of another
+> tenant asks for the very same url though, so the client adds the member's tenant to every GET it sends
+> (`?_tenant=...`, See `AuthDelegatingHandler`) and never reads the anonymous answer from the edge or the browser cache.
+> The server does not resolve the tenant from that parameter, and a response to a url carrying it never gets an edge or
+> browser lifetime, so an anonymous caller can't plant an answer where a tenant's members look.
+>
+> Pre-rendered pages are covered the same way: the values persisted into a page are keyed by the signed-in user (See
+> `WebClientPrerenderStateService`), so when the edge hands a member a page rendered for an anonymous visitor, the
+> member's client fetches its own data instead of reusing the host's.
 
 ---
 
@@ -288,8 +297,8 @@ CDN in front of the app. The Cloudflare parts below are what that option adds.
 
 **Real-World Example - Product Page Caching:**
 
-1. **Initial State**: A product page like `https://sales.bitplatform.dev/product/10036` is viewed and cached on Cloudflare CDN
-2. **Data Update**: Admin updates the product at `https://adminpanel.bitplatform.dev/add-edit-product/e7f8a9b0-c1d2-e3f4-5678-9012a3b4c5d6`
+1. **Initial State**: A product page like `https://sales.bitfabric.co/product/10036` is viewed and cached on Cloudflare CDN
+2. **Data Update**: Admin updates the product at `https://adminpanel.bitfabric.co/add-edit-product/e7f8a9b0-c1d2-e3f4-5678-9012a3b4c5d6`
 3. **Cache Purge**: The server automatically sends a request to Cloudflare to purge/remove that page from the Edge Cache
 4. **Next Request**: The next user who visits the product page gets the updated version (which is then cached again)
 
@@ -467,8 +476,8 @@ protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage 
 - Provides fastest possible response time for repeated requests
 
 **Real-World Example:**
-If you navigate between products on `https://sales.bitplatform.dev`:
-1. **Open website** by navigating to [https://sales.bitplatform.dev](https://sales.bitplatform.dev)
+If you navigate between products on `https://sales.bitfabric.co`:
+1. **Open website** by navigating to [https://sales.bitfabric.co](https://sales.bitfabric.co)
 2. **First visit** to Product A: Server request, data cached in memory
 3. **Navigate** to Product B: Server request, data cached in memory
 4. **Navigate back** to Product A: **Instant load** from memory cache - no loading indicator, no spinner, no shimmer - the page appears instantly!

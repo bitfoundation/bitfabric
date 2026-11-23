@@ -6,6 +6,6 @@ namespace Boilerplate.Tests.E2E.Infrastructure;
 /// </summary>
 public static class StoreAdmin
 {
-    public const string Email = "store-admin@bitplatform.dev";
+    public const string Email = "store-admin@bitfabric.co";
     public const string Password = "12345678";
 }

@@ -8,7 +8,7 @@ namespace Boilerplate.Tests.E2E.Features.CodeSigning;
 [TestClass, TestCategory(TestCategories.Windows), DoNotParallelize, Retry(2)]
 public partial class WindowsCodeSigningTests : AppTestBase
 {
-    private const string repository = "https://github.com/bitfoundation/bitplatform";
+    private const string repository = "https://github.com/bitfoundation/bitfabric";
 
     private static readonly HttpClient feedClient = new();
 
@@ -208,7 +208,7 @@ public partial class WindowsCodeSigningTests : AppTestBase
 
     private async Task<JsonNode> VerifyAttestation(string package)
     {
-        ProcessStartInfo startInfo = new("gh", ["attestation", "verify", package, "--repo", "bitfoundation/bitplatform", "--format", "json"])
+        ProcessStartInfo startInfo = new("gh", ["attestation", "verify", package, "--repo", "bitfoundation/bitfabric", "--format", "json"])
         {
             RedirectStandardOutput = true,
             RedirectStandardError = true

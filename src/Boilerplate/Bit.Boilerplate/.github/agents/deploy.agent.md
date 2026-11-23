@@ -522,8 +522,8 @@ have taken requests, so a failure from then on leaves the database ahead and und
   that container's logs (`docker compose logs` in the deploy folder) before you change anything. Then check the environment at its public
   address: the home page, signing up with its email, and a file upload. Read whatever can't be seen from outside through that environment's
   dev-mcp.
-- The migrations seed `test@bitplatform.dev`, a global admin, and `store-admin@bitplatform.dev` and
-  `store-user@bitplatform.dev`, all with a password that is in this repository, in every environment, and anyone can sign
+- The migrations seed `test@bitfabric.co`, a global admin, and `store-admin@bitfabric.co` and
+  `store-user@bitfabric.co`, all with a password that is in this repository, in every environment, and anyone can sign
   in with them until that changes. As soon as the environment's first deployment is up, before the checks above, change
   the admin's password in the app and give the new one to the user to keep, and delete the other two or change theirs.
   Then open

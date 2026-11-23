@@ -563,20 +563,8 @@
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>使用您已经熟悉并喜爱的技术</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>观看视频</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>了解更多</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>开箱即全功能的应用，覆盖所有平台</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>一套高性能、易自定义且美观的 Blazor 组件</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>这个应用的起点：一切都已接好，源码完全属于你。</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Boilerplate 使用 ASP.NET Core、Identity、Web API、EF Core 和 Blazor 构建。</value>

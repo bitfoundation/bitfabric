@@ -333,13 +333,13 @@ chmod +x Clean.sh  # Make it executable (first time only)
 
 **AI Provider**: Uses OpenAI's GPT-4.1-mini model (or Azure OpenAI)
 
-**Learn more**: See [bit translate documentation](https://github.com/bitfoundation/bitplatform/tree/develop/src/Toolings/Cli#bit-translate)
+**Learn more**: See [bit translate documentation](https://github.com/bitfoundation/bitfabric/tree/main/src/Cli#bit-translate)
 
 **Installation and Usage**:
 
 ```bash
 # Run the translator anywhere in the project; dnx fetches the bit CLI, nothing is installed
-dnx Bit.Cli --version 11.0.0-pre-23 -- translate
+dnx Bit.Cli --version 11.0.0-pre-24 -- translate
 ```
 
 **To add a new language**:
@@ -436,7 +436,7 @@ dnx Bit.Cli --version 11.0.0-pre-23 -- translate
     "servers": {
         "bitplatform": {
             "type": "http",
-            "url": "https://bitplatform.dev/mcp?v=11.0.0"
+            "url": "https://api.bitfabric.co/docs-mcp?v=11.0.0"
         }
     }
 }
@@ -580,7 +580,7 @@ When you open the project in VS Code, you'll be prompted to install these extens
 **Contains**:
 - Welcome message
 - The seeded accounts and their password, which is random for every project
-- Link to comprehensive documentation at [bitplatform.dev/templates](https://bitplatform.dev/templates/overview)
+- Link to [bitfabric.co](https://bitfabric.co)
 
 ### 8.2 `bit.json`
 

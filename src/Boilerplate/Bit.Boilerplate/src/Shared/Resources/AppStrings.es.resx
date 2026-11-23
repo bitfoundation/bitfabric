@@ -563,20 +563,8 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>usando lo que ya conoces y amas</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>Ver video</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Saber más</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>Una app con todo incluido en cada plataforma, desde el primer día</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>Un conjunto de componentes Blazor de alto rendimiento, fáciles de personalizar y hermosos</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>El punto de partida de esta app: todo ya conectado, y el código fuente es enteramente tuyo.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>El Boilerplate está construido con ASP.NET Core, Identity, Web API, EF Core y Blazor.</value>

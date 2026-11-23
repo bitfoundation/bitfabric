@@ -9,7 +9,7 @@ public partial class UserGroupFeatureManagementUITests : AppPageTest
     // The seeded store tenant admin (a t-admin, not a global admin). See UserConfiguration and UserRoleConfiguration.
     // She is only ever the ACTOR here: the user-group she edits and the member who signs in are both created per run,
     // so this test never mutates anything another test - or its own next run - depends on.
-    private const string StoreAdminEmail = "store-admin@bitplatform.dev";
+    private const string StoreAdminEmail = "store-admin@bitfabric.co";
     private const string Password = "12345678";
 
     // The "Manage roles" (a.k.a. "User groups") page is gated behind the Roles_Manage feature. In the role editor's
@@ -86,7 +86,7 @@ public partial class UserGroupFeatureManagementUITests : AppPageTest
         // Short enough to stay readable in the user-groups list, which is where the test clicks it.
         var suffix = Guid.NewGuid().ToString("N")[..8];
         var userGroupName = $"test-{suffix}";
-        var memberEmail = $"{userGroupName}@bitplatform.dev";
+        var memberEmail = $"{userGroupName}@bitfabric.co";
 
         var userGroup = new Role
         {

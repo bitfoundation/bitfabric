@@ -4,7 +4,7 @@ public static class CrmSite
 {
     public const string Path = "/crm";
 
-    public const string TrialUrl = "https://adminpanel.bitplatform.dev/sign-up";
+    public const string TrialUrl = "https://adminpanel.bitfabric.co/sign-up";
 
     public const string SalesEmail = "sales@brightlane.example";
 
@@ -19,12 +19,12 @@ public static class CrmSite
         Logo = typeof(CrmLogo),
         Strings = typeof(CrmStrings),
         AppleAppId = "6450611349",
-        WebAppUrl = "https://adminpanel.bitplatform.dev/",
+        WebAppUrl = "https://adminpanel.bitfabric.co/",
         StatusUrl = "https://status.example.com/",
         Platforms =
         [
-            new(LandingPlatform.Web, LandingPlatformStatus.Live, "https://adminpanel.bitplatform.dev/"),
-            new(LandingPlatform.Windows, LandingPlatformStatus.Live, "https://windows-admin.bitplatform.dev/AdminPanel.Client.Windows-win-Setup.exe"),
+            new(LandingPlatform.Web, LandingPlatformStatus.Live, "https://adminpanel.bitfabric.co/"),
+            new(LandingPlatform.Windows, LandingPlatformStatus.Live, "https://windows-adminpanel.bitfabric.co/AdminPanel.Client.Windows-win-Setup.exe"),
             new(LandingPlatform.macOS, LandingPlatformStatus.Live, "https://apps.apple.com/app/bit-adminpanel/id6450611349"),
             new(LandingPlatform.iOS, LandingPlatformStatus.Live, "https://apps.apple.com/app/bit-adminpanel/id6450611349"),
             new(LandingPlatform.Android, LandingPlatformStatus.Live, "https://play.google.com/store/apps/details?id=com.bitplatform.AdminPanel.Template")

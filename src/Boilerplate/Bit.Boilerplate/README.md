@@ -1,6 +1,6 @@
 ## Welcome!
 
-Thank you for creating a new project with bit platform! We appreciate your trust in our platform and are excited to see what you'll build.
+Thank you for creating a new project with bit Fabric! We appreciate your trust in our platform and are excited to see what you'll build.
 
 ## On another computer, or a teammate's
 
@@ -16,10 +16,10 @@ pre-confirmed accounts whose password is **`12345678`**:
 
 | E-mail | Password | Role |
 |---|---|---|
-| `test@bitplatform.dev` | `12345678` | `g-admin` - global administrator |
+| `test@bitfabric.co` | `12345678` | `g-admin` - global administrator |
 <!--#if (multitenant == true)-->
-| `store-admin@bitplatform.dev` | `12345678` | `t-admin` of the seeded `store` tenant |
-| `store-user@bitplatform.dev` | `12345678` | `demo` member of the seeded `store` tenant |
+| `store-admin@bitfabric.co` | `12345678` | `t-admin` of the seeded `store` tenant |
+| `store-user@bitfabric.co` | `12345678` | `demo` member of the seeded `store` tenant |
 <!--#endif-->
 
 These passwords are for development and are not for Production: the first deployment still creates the accounts, so
@@ -35,8 +35,8 @@ and performance checks, a status page and more.
 
 To help you get started, we have comprehensive documentation available. You can find detailed guides, samples, and more at:
 
-[bitplatform.dev/templates](https://bitplatform.dev/templates/overview)
+[bitfabric.co](https://bitfabric.co)
 
-If you have any questions or need further assistance, feel free to [reach out](https://github.com/bitfoundation/bitplatform/issues/new/choose). Happy coding!
+If you have any questions or need further assistance, feel free to [reach out](https://github.com/bitfoundation/bitfabric/issues/new/choose). Happy coding!
 
 The **bit platform** team.

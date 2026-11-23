@@ -563,20 +563,8 @@
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>باستخدام ما تعرفه وتحبه بالفعل</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>شاهد الفيديو</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>تعرف على المزيد</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>تطبيق كامل المزايا على كل المنصات، منذ اليوم الأول</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>مجموعة مكونات Blazor عالية الأداء، سهلة التخصيص وجميلة</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>نقطة الانطلاق وراء هذا التطبيق: كل شيء جاهز ومتصل، والكود المصدري ملك لك بالكامل.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>تم بناء الـ Boilerplate باستخدام ASP.NET Core، Identity، Web API، EF Core و Blazor</value>

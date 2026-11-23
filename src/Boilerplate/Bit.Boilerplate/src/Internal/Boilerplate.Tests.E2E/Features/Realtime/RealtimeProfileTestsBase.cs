@@ -25,7 +25,7 @@ public abstract partial class RealtimeProfileTestsBase : AppTestBase
     {
         await SkipWithoutGlobalAdminCredentials();
 
-        var email = $"e2e-{Guid.NewGuid():N}"[..14] + "@bitplatform.dev";
+        var email = $"e2e-{Guid.NewGuid():N}"[..14] + "@bitfabric.co";
         var userId = await CreateUser(email);
 
         // Registered before anything is uploaded: the picture lives in blob storage, not only in the database.

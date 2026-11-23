@@ -72,15 +72,15 @@ public class TrustedOriginsTests
     /// case-insensitively), so a different scheme or host is rejected.
     /// </summary>
     [TestMethod]
-    [DataRow("https://adminpanel.bitplatform.dev", "https://adminpanel.bitplatform.dev", true)]
+    [DataRow("https://adminpanel.bitfabric.co", "https://adminpanel.bitfabric.co", true)]
     // Host comparison is case-insensitive...
-    [DataRow("https://adminpanel.bitplatform.dev", "https://ADMINPANEL.bitplatform.dev", true)]
+    [DataRow("https://adminpanel.bitfabric.co", "https://ADMINPANEL.bitfabric.co", true)]
     // ...a trailing slash on the request is ignored...
-    [DataRow("https://adminpanel.bitplatform.dev", "https://adminpanel.bitplatform.dev/", true)]
+    [DataRow("https://adminpanel.bitfabric.co", "https://adminpanel.bitfabric.co/", true)]
     // ...but the scheme must match...
-    [DataRow("https://adminpanel.bitplatform.dev", "http://adminpanel.bitplatform.dev", false)]
+    [DataRow("https://adminpanel.bitfabric.co", "http://adminpanel.bitfabric.co", false)]
     // ...and so must the host.
-    [DataRow("https://adminpanel.bitplatform.dev", "https://other.bitplatform.dev", false)]
+    [DataRow("https://adminpanel.bitfabric.co", "https://other.bitfabric.co", false)]
     public void IsTrustedOrigin_Should_MatchExactEntries(string trustedOrigin, string requestOrigin, bool expected)
     {
         Assert.AreEqual(expected, IsTrusted(requestOrigin, trustedOrigin),
@@ -178,9 +178,9 @@ public class TrustedOriginsTests
     [TestMethod]
     public void IsTrustedOrigin_Should_ConsiderEveryConfiguredEntry()
     {
-        string[] trustedOrigins = ["https://adminpanel.bitplatform.dev", "https://*.myapp.com"];
+        string[] trustedOrigins = ["https://adminpanel.bitfabric.co", "https://*.myapp.com"];
 
-        Assert.IsTrue(IsTrusted("https://adminpanel.bitplatform.dev", trustedOrigins), "The exact entry should match.");
+        Assert.IsTrue(IsTrusted("https://adminpanel.bitfabric.co", trustedOrigins), "The exact entry should match.");
         Assert.IsTrue(IsTrusted("https://tenant1.myapp.com", trustedOrigins), "The wildcard entry should match.");
         Assert.IsFalse(IsTrusted("https://unlisted.example.com", trustedOrigins), "An unlisted origin should not match.");
     }

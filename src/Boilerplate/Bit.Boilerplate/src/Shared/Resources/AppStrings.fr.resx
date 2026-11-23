@@ -563,20 +563,8 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>en utilisant ce que vous connaissez et aimez déjà</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>Regarder la vidéo</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>En savoir plus</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>Une application complète sur chaque plateforme, dès le premier jour</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>Un ensemble de composants Blazor performants, faciles à personnaliser et élégants</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>Le point de départ de cette application : tout est déjà en place, et le code source est entièrement à vous.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Le Boilerplate est construit avec ASP.NET Core, Identity, Web API, EF Core et Blazor.</value>

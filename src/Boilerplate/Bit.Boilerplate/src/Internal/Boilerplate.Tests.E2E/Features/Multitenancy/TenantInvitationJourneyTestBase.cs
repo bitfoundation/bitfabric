@@ -36,7 +36,7 @@ public abstract class TenantInvitationJourneyTestBase : AppTestBase
             .SingleAsync(t => t.Name == e2eTenantName, TestContext.CancellationToken);
 
         var tenantDisplayName = tenant.DisplayName!;
-        var aUserToBeInvitedEmail = $"{Guid.NewGuid()}@bitplatform.dev";
+        var aUserToBeInvitedEmail = $"{Guid.NewGuid()}@bitfabric.co";
         var faCulture = CultureInfoManager.GetCultureInfo("fa-IR")!;
 
         try

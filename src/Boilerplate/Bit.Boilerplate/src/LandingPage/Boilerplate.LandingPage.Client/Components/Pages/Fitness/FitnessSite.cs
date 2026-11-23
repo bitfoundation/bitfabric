@@ -6,7 +6,7 @@ public static class FitnessSite
 
     public const string AppStoreUrl = "https://apps.apple.com/app/bit-adminpanel/id6450611349";
 
-    public const string WebAppUrl = "https://adminpanel.bitplatform.dev/";
+    public const string WebAppUrl = "https://adminpanel.bitfabric.co/";
 
     public const string PressEmail = "press@pulsepath.example";
 
