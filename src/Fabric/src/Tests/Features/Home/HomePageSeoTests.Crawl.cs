@@ -15,7 +15,7 @@ public partial class HomePageSeoTests
 {
     /// <summary>The site's public pages, which the sitemap lists under every culture and llms.txt may name.</summary>
     private static readonly string[] PublicPages =
-        [PageUrls.Home, PageUrls.Features, PageUrls.Pricing, PageUrls.Trust, PageUrls.Cost, PageUrls.Contents, PageUrls.NewProject, PageUrls.SetupProject, PageUrls.Terms, PageUrls.PrivacyPolicy, PageUrls.About, .. ComparePages, .. ForPages];
+        [PageUrls.Home, PageUrls.Features, PageUrls.Pricing, PageUrls.Trust, PageUrls.Cost, PageUrls.Cli, PageUrls.Contents, PageUrls.NewProject, PageUrls.SetupProject, PageUrls.Terms, PageUrls.PrivacyPolicy, PageUrls.About, .. ComparePages, .. ForPages];
 
     /// <summary>Pages that only exist to sign in, or that need an account to show anything.</summary>
     private static readonly string[] AccountPages = [PageUrls.SignIn, PageUrls.SignUp, PageUrls.Projects, PageUrls.Settings];
@@ -41,7 +41,7 @@ public partial class HomePageSeoTests
         var origin = server.WebAppAddress.ToString().TrimEnd('/');
         var ownLinks = Regex.Matches(llms, @"\]\((?<url>[^)]+)\)").Select(match => match.Groups["url"].Value).Where(url => url.StartsWith(origin, StringComparison.Ordinal)).ToArray();
         Assert.IsGreaterThanOrEqualTo(5, ownLinks.Length, "It lists the site's own pages, under this host's address.");
-        foreach (var page in new[] { $"{origin}/en-US{PageUrls.Pricing}", $"{origin}{AppPricing.MarkdownUrl}", $"{origin}/en-US{PageUrls.Trust}", $"{origin}/en-US{PageUrls.About}", $"{origin}/en-US{PageUrls.Cost}", $"{origin}{AppCostCase.MarkdownUrl}" }.Concat(ComparePages.Select(compare => $"{origin}/en-US{compare}")))
+        foreach (var page in new[] { $"{origin}/en-US{PageUrls.Pricing}", $"{origin}{AppPricing.MarkdownUrl}", $"{origin}/en-US{PageUrls.Trust}", $"{origin}/en-US{PageUrls.About}", $"{origin}/en-US{PageUrls.Cost}", $"{origin}{AppCostCase.MarkdownUrl}", $"{origin}/en-US{PageUrls.Cli}", $"{origin}{AppCliGuide.MarkdownUrl}" }.Concat(ComparePages.Select(compare => $"{origin}/en-US{compare}")))
         {
             Assert.Contains(page, ownLinks, $"It lists {page}.");
         }
@@ -243,7 +243,7 @@ public partial class HomePageSeoTests
 
         foreach (var culture in new[] { "en-US", "fa-IR" })
         {
-            foreach (var page in new[] { PageUrls.Home, PageUrls.Features, PageUrls.Pricing, PageUrls.Trust, PageUrls.About, PageUrls.Contents, PageUrls.NewProject, PageUrls.SetupProject, PageUrls.Terms }.Concat(ComparePages))
+            foreach (var page in new[] { PageUrls.Home, PageUrls.Features, PageUrls.Pricing, PageUrls.Trust, PageUrls.Cli, PageUrls.About, PageUrls.Contents, PageUrls.NewProject, PageUrls.SetupProject, PageUrls.Terms }.Concat(ComparePages))
             {
                 var path = page is "/" ? $"/{culture}/" : $"/{culture}{page}";
                 var html = await GetPage(server, Googlebot, path);

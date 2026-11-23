@@ -293,6 +293,7 @@ public partial class HomePageSeoTests
             ($"/en-US{PageUrls.Features}", AppStrings.FeaturesPageTitle, AppStrings.FeaturesPageDescription),
             ($"/en-US{PageUrls.Pricing}", AppStrings.PricingPageTitle, AppStrings.PricingPageDescription),
             ($"/en-US{PageUrls.Trust}", AppStrings.TrustPageTitle, AppStrings.TrustPageDescription),
+            ($"/en-US{PageUrls.Cli}", AppStrings.CliPageTitle, AppStrings.CliPageDescription),
             ($"/en-US{PageUrls.About}", AppStrings.AboutBitFabricPageTitle, AppStrings.AboutBitFabricPageDescription),
             ($"/en-US{PageUrls.Compare}", AppStrings.CompareHubPageTitle, AppStrings.CompareHubDescription),
             ($"/en-US{PageUrls.CompareLovable}", AppStrings.CompareLovablePageTitle, AppStrings.CompareLovableDescription),
