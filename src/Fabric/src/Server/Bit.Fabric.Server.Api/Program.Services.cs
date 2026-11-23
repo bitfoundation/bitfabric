@@ -7,6 +7,7 @@ using Bit.Belemetry;
 using Bit.Bmage;
 using Bit.Fabric.Server.Api.Features.Attachments;
 using Bit.Fabric.Server.Api.Features.Diagnostic;
+using Bit.Fabric.Server.Api.Features.DocsMcp;
 using Bit.Fabric.Server.Api.Features.Identity;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth.Services;
@@ -71,6 +72,8 @@ public static partial class Program
         services.AddOAuth();
 
         services.AddMonitoring();
+
+        services.AddDocsMcp();
 
         services.AddScoped<IdentityEmailService>();
         services.AddScoped<EmailServiceJobsRunner>();

@@ -28,6 +28,9 @@ public partial class ServerApiSettings : ServerSharedSettings
     /// <summary>Watching customers' apps. Usable as is.</summary>
     public MonitoringOptions Monitoring { get; set; } = new();
 
+    /// <summary>The bit platform documentation MCP server at /docs-mcp. Usable as is.</summary>
+    public DocsMcpOptions DocsMcp { get; set; } = new();
+
     public AIOptions? AI { get; set; }
 
     public SmsOptions? Sms { get; set; }
