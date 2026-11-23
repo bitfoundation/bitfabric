@@ -41,15 +41,31 @@ public sealed class LicenseCheck(CliServices cli)
     /// <summary>Whether bit can wait for the license here: someone is at the terminal, and it isn't CI.</summary>
     public bool CanWait => cli.IsInteractive && cli.Environment.IsCI is false;
 
+    /// <summary>The first bit Boilerplate whose projects <c>bit new</c> gives an id and a license.</summary>
+    public const string FirstLicensedTemplate = "11.0.0-pre-24";
+
     /// <summary>
-    /// Before a command that works on the project in <paramref name="folder"/>: true when the command goes on. Only a
-    /// project with an id in its bit.json, which <c>bit new</c> writes, has a license to check; bit Boilerplate's own folder
-    /// and a project made before licenses have none, and <c>bit license</c> gives one an id.
+    /// Whether the project <paramref name="bitJson"/> belongs to has a license to check: every project on
+    /// <see cref="FirstLicensedTemplate"/> or later, with an id or without, and one whose bit.json doesn't say its version.
+    /// A project on an older bit Boilerplate never had an id, and bit Boilerplate's own source folder isn't a project.
     /// </summary>
+    public static bool IsLicensed(BitJsonFile bitJson) => bitJson.IsTemplateSource is false
+        && (bitJson.TemplateVersion is not { } version
+            || Infrastructure.SelfUpdate.IsValidVersion(version) is false
+            || Infrastructure.SelfUpdate.CompareVersions(version, FirstLicensedTemplate) >= 0);
+
+    /// <summary>Before a command that works on the project in <paramref name="folder"/>: true when the command goes on.</summary>
     public async Task<bool> BeforeCommandAsync(string folder, CancellationToken cancellationToken)
     {
-        if (Options.ChecksCommands is false || BitJsonFile.Find(folder) is not { ProjectId: not null } bitJson)
+        if (Options.ChecksCommands is false || BitJsonFile.Find(folder) is not { } bitJson || IsLicensed(bitJson) is false)
             return true;
+
+        if (bitJson.ProjectId is null)
+        {
+            // Without an id there is no link to give; bit license makes one.
+            await SayAsync(bitJson, new LicenseStatus(null, true, [new("This project has no id in bit.json, so it has no license yet. Run bit license to give it its id and the link that gets it a license, free.")]), cancellationToken);
+            return false;
+        }
 
         var status = await EvaluateAsync(bitJson, bitJson.License, cancellationToken);
 

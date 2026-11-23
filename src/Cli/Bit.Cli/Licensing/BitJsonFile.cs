@@ -46,6 +46,15 @@ public sealed class BitJsonFile
 
     public string? License => Text(LicenseProperty) is { Length: > 0 } license ? license : null;
 
+    /// <summary>The bit Boilerplate version the project was made from or last upgraded to: bit.json's <c>version</c>.</summary>
+    public string? TemplateVersion => Text("version") is { Length: > 0 } version ? version : null;
+
+    /// <summary>
+    /// bit Boilerplate's own source folder rather than a project made from it: only the template has a
+    /// <c>.template.config/template.json</c> next to its bit.json.
+    /// </summary>
+    public bool IsTemplateSource => File.Exists(Path.Combine(Directory, ".template.config", "template.json"));
+
     /// <summary>The nearest bit.json, in <paramref name="directory"/> or a folder above it.</summary>
     public static BitJsonFile? Find(string directory)
     {

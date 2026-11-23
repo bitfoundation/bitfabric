@@ -17,10 +17,10 @@ public class LicenseTests
     private static readonly DateTimeOffset issued = new(2026, 11, 1, 9, 0, 0, TimeSpan.Zero);
 
     /// <summary>
-    /// A command that checks the license, then fails on its own, quickly and without starting anything: bit diff in a
-    /// project whose bit.json doesn't say its version. Its exit code tells whether the license let it run.
+    /// A command that checks the license, then fails on its own, quickly and without starting anything: bit diff from a
+    /// version that isn't one. Its exit code tells whether the license let it run.
     /// </summary>
-    private static readonly string[] aCommand = ["diff"];
+    private static readonly string[] aCommand = ["diff", "not-a-version"];
 
     private const int CommandRan = CliApp.ExitUsage;
 
@@ -339,24 +339,56 @@ public class LicenseTests
         Assert.DoesNotContain("license", project.Host.Output);
     }
 
-    /// <summary>bit Boilerplate's own folder, and a project made before licenses: a bit.json without an id.</summary>
+    /// <summary>Deleting projectId from bit.json doesn't turn the check off.</summary>
     [TestMethod]
-    public async Task ABitJsonWithoutAnId_Should_HaveNothingToCheck_UntilBitLicenseGivesItOne()
+    public async Task AProjectOnTheFirstLicensedTemplateWithoutAnId_Should_Stop_UntilBitLicenseGivesItOne()
     {
         if (await GitIdentity.GitAvailableAsync() is false)
             return;
 
         using var project = await LicensedProject.CreateAsync();
-        File.WriteAllText(project.BitJsonPath, """{ "template": "bit-bp", "name": "Contoso" }""");
+        const string bitJson = """{ "template": "bit-bp", "version": "11.0.0-pre-24", "name": "Contoso" }""";
+        File.WriteAllText(project.BitJsonPath, bitJson);
 
-        Assert.AreEqual(CommandRan, await project.Host.RunAsync(aCommand), project.Host.Output);
-        Assert.DoesNotContain("license", project.Host.Output);
-        Assert.AreEqual("""{ "template": "bit-bp", "name": "Contoso" }""", File.ReadAllText(project.BitJsonPath), "Nothing is written into it.");
+        Assert.AreEqual(CliApp.ExitFailed, await project.Host.RunAsync(aCommand), project.Host.Output);
+        StringAssert.Contains(project.Host.FlatOutput, "This project has no id in bit.json, so it has no license yet. Run bit license to give it its id and the link that gets it a license, free.");
+        Assert.AreEqual(bitJson, File.ReadAllText(project.BitJsonPath), "Only bit license writes the id.");
 
         await project.Host.RunAsync("license");
 
         var id = Guid.Parse(project.ReadBitJson()["projectId"]!.GetValue<string>());
         StringAssert.Contains(project.Host.Output, $"Get one, free: https://bitfabric.co/license?project=Contoso&id={id:D}&commit=");
+    }
+
+    /// <summary>A project made before licenses never had an id.</summary>
+    [TestMethod]
+    [DataRow("11.0.0-pre-22")]
+    [DataRow("10.4.0")]
+    public async Task AProjectOnAnOlderTemplate_Should_HaveNothingToCheck(string version)
+    {
+        if (await GitIdentity.GitAvailableAsync() is false)
+            return;
+
+        using var project = await LicensedProject.CreateAsync();
+        File.WriteAllText(project.BitJsonPath, $$"""{ "template": "bit-bp", "version": "{{version}}", "name": "Contoso" }""");
+
+        Assert.AreEqual(CommandRan, await project.Host.RunAsync(aCommand), project.Host.Output);
+        Assert.DoesNotContain("license", project.Host.Output);
+    }
+
+    /// <summary>bit Boilerplate's own source, which CI runs bit setup on: the template's bit.json, without an id.</summary>
+    [TestMethod]
+    public async Task TheTemplatesOwnFolder_Should_HaveNothingToCheck()
+    {
+        if (await GitIdentity.GitAvailableAsync() is false)
+            return;
+
+        using var project = await LicensedProject.CreateAsync();
+        File.WriteAllText(project.BitJsonPath, """{ "template": "bit-bp", "version": "11.0.0-pre-24", "name": "Boilerplate" }""");
+        File.WriteAllText(Path.Combine(Directory.CreateDirectory(Path.Combine(project.Directory, ".template.config")).FullName, "template.json"), "{}");
+
+        Assert.AreEqual(CommandRan, await project.Host.RunAsync(aCommand), project.Host.Output);
+        Assert.DoesNotContain("license", project.Host.Output);
     }
 
     [TestMethod]
