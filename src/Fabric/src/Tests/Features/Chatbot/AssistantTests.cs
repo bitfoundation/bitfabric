@@ -1,6 +1,8 @@
 using System.Text;
 using Bit.BlazorUI;
+using Bit.Fabric.Server.Api.Features.DocsMcp;
 using Bit.Fabric.Shared.Features.Chatbot;
+using Bit.Fabric.Tests.Features.DocsMcp;
 using Microsoft.Extensions.AI;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -43,11 +45,26 @@ public partial class AssistantTests
         await AssertAnswer(question, rightAnswer);
     }
 
-    private async Task AssertAnswer(string question, string rightAnswer)
+    /// <summary>
+    /// A question about a bit platform library is answered from that library's own documentation, through the tools /docs-mcp
+    /// serves (See DocsMcpChatbotTools): Bmage's here, stood in by one that says what no model knows from memory.
+    /// </summary>
+    [TestMethod]
+    public async Task ALibraryQuestion_Should_BeAnsweredFromItsDocs()
+    {
+        await using var platform = new FakeBitPlatform();
+        await platform.Start(TestContext.CancellationToken);
+
+        await AssertAnswer("Do you also have an image editor, and what can it do?",
+            "Says yes, and that it crops, resizes, rotates, redacts faces and exports PNG, JPEG and WebP - all of these, as Bmage's documentation says.",
+            services => services.AddHttpClient(DocsMcpHttp.ClientName).AddHttpMessageHandler(() => new FakeBitPlatform.Handler(platform)));
+    }
+
+    private async Task AssertAnswer(string question, string rightAnswer, Action<IServiceCollection>? configureTestServices = null)
     {
         await using var server = new AppTestServer();
 
-        await server.Build().Start(TestContext.CancellationToken);
+        await server.Build(configureTestServices).Start(TestContext.CancellationToken);
 
         var chatClient = server.ApiApp.Services.GetService<IChatClient>()
             ?? throw new AssertInconclusiveException("The assistant has no chat model here: set AI:OpenAI:ChatApiKey with dotnet user-secrets in Server.Api.");

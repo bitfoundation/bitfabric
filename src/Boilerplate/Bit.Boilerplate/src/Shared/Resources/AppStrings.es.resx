@@ -563,20 +563,29 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>usando lo que ya conoces y amas</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>Ver video</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Saber más</value>
   </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>Una app con todo incluido en cada plataforma, desde el primer día</value>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>Esta app se creó con bit Fabric. Tu agente de IA construye sobre una base donde todo ya funciona, y el código es tuyo.</value>
   </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>Un conjunto de componentes Blazor de alto rendimiento, fáciles de personalizar y hermosos</value>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>Crea el tuyo</value>
   </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>El punto de partida de esta app: todo ya conectado, y el código fuente es enteramente tuyo.</value>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>Responde unas preguntas sobre tu producto y bit Fabric prepara un proyecto como este para tu agente de IA.</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>Crear un proyecto</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>Funciona con tu agente de IA</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>Claude Code, GitHub Copilot, Codex, Cursor y otros leen las instrucciones y skills propias del proyecto.</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>Crea el proyecto, lo prepara en cualquier equipo, genera sus claves y lo mantiene al día, desde la línea de comandos.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>El Boilerplate está construido con ASP.NET Core, Identity, Web API, EF Core y Blazor.</value>

@@ -27,7 +27,7 @@ public static class AboutCommand
         void Row(string name, string value) => grid.AddRow($"[grey]{Markup.Escape(name)}[/]", Markup.Escape(value));
 
         Row("Version", BuildInfo.Commit is null ? BuildInfo.Version : $"{BuildInfo.Version} (commit {BuildInfo.ShortCommit})");
-        Row("Source", $"{BuildInfo.SourceUrl}  (MIT license)");
+        Row("Source", $"{BuildInfo.SourceUrl}  (source-available, FCL-1.0-MIT)");
         Row("Built by", BuildInfo.RunUrl is { } runUrl ? $"GitHub Actions {runUrl}" : "a local build, not GitHub Actions");
         Row("Package", BuildInfo.PackageUrl);
 
@@ -49,11 +49,11 @@ public static class AboutCommand
             using var handler = http is null ? new HttpClientHandler() : null;
             Row("Attestation", await Provenance.FindAttestationAsync(http ?? handler!, assemblyPath, cancellationToken) switch
             {
-                AttestationState.Found => "GitHub has a build attestation for this exact bit.dll in bitfoundation/bitplatform",
+                AttestationState.Found => "GitHub has a build attestation for this exact bit.dll in bitfoundation/bitfabric",
                 AttestationState.Missing => "GitHub has no attestation for this bit.dll, so it isn't the file a release built",
                 _ => "couldn't reach GitHub to look for this bit.dll's attestation"
             });
-            Row("Verify", $"gh attestation verify {ProcessSpec.Quote(assemblyPath)} --repo bitfoundation/bitplatform");
+            Row("Verify", $"gh attestation verify {ProcessSpec.Quote(assemblyPath)} --repo bitfoundation/bitfabric");
         }
 
         Row("Runs on", $".NET {Environment.Version} on {OsName(cli.Environment.Os)} {Environment.OSVersion.Version} ({cli.Environment.Architecture.ToString().ToLowerInvariant()})");

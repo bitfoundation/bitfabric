@@ -265,6 +265,22 @@ public static partial class WebApplicationExtensions
                 await context.Response.WriteAsync(markdown, context.RequestAborted);
             }).CacheOutput("AppResponseCachePolicy").WithTags("Sitemaps");
 
+            // /cli as Markdown for AI agents, which the page links from its head. AppCliGuide writes it from the texts the page
+            // renders, so the two can't say different things; in English, with links that carry this host's own address.
+            app.MapGet(AppCliGuide.MarkdownUrl, [AppResponseCache(SharedMaxAge = 3600 * 24)] async (HttpContext context, IStringLocalizer<AppStrings> localizer) =>
+            {
+                CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfoManager.DefaultCulture;
+
+                var origin = context.Request.GetBaseUrl().ToString().TrimEnd('/');
+                var markdown = AppCliGuide.Markdown(localizer,
+                    pageUrl: $"{origin}{CultureInfoManager.GetCurrentCultureUrl(PageUrls.Cli)}",
+                    getStartedUrl: $"{origin}{CultureInfoManager.GetCurrentCultureUrl(PageUrls.NewProject)}");
+
+                context.Response.Headers.ContentType = "text/markdown; charset=utf-8";
+
+                await context.Response.WriteAsync(markdown, context.RequestAborted);
+            }).CacheOutput("AppResponseCachePolicy").WithTags("Sitemaps");
+
             // https://www.rfc-editor.org/rfc/rfc9116 - whom to tell about a vulnerability. Its Expires is a date in the file,
             // renewed by hand before it passes (See HomePageSeoTests).
             var securityTxt = ReadSeoFile("security.txt");

@@ -74,7 +74,7 @@
             "emailVerified": true,
             "firstName": "Test",
             "lastName": "User",
-            "email": "test@bitplatform.dev",
+            "email": "test@bitfabric.co",
             "credentials": [
                 {
                     "type": "password",
@@ -98,7 +98,7 @@
             "emailVerified": true,
             "firstName": "Store",
             "lastName": "Admin",
-            "email": "store-admin@bitplatform.dev",
+            "email": "store-admin@bitfabric.co",
             "credentials": [
                 {
                     "type": "password",

@@ -10,7 +10,7 @@ namespace Boilerplate.Tests.E2E.Features.Smoke;
 public partial class ApiSmokeTests
 {
     /// <summary>The seeded non-admin member of the default store tenant; see UserConfiguration.</summary>
-    private const string storeUserEmail = "store-user@bitplatform.dev";
+    private const string storeUserEmail = "store-user@bitfabric.co";
     private const string storeUserPassword = "12345678";
 
     public TestContext TestContext { get; set; } = default!;

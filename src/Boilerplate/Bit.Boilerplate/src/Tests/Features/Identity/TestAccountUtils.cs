@@ -7,7 +7,7 @@ namespace Boilerplate.Tests.Features.Identity;
 
 /// <summary>
 /// Creates the account a test needs, per run, through the shipped endpoints only - no direct seeding of users and no
-/// reuse of the seeded <c>test@bitplatform.dev</c> account.
+/// reuse of the seeded <c>test@bitfabric.co</c> account.
 /// <para>
 /// This matters for more than isolation. Several identity flows are throttled or stamped <b>per user</b>
 /// (<c>ElevatedAccessTokenRequestedOn</c>, <c>EmailTokenRequestedOn</c>, the lockout counter), and the test database

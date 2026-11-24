@@ -1,3 +1,5 @@
+using Bit.Fabric.Client.Core.Components.Pages.Home;
+
 namespace Bit.Fabric.Tests.Features.Home;
 
 public partial class HomePageUITests
@@ -81,5 +83,36 @@ public partial class HomePageUITests
 
         // It is in the navigation panel, after Pricing, with the culture in its address
         await Expect(Page.Locator($"a[href='/en-US{PageUrls.Compare}']").Filter(new() { HasText = AppStrings.Compare }).First).ToBeAttachedAsync();
+    }
+
+    /// <summary>
+    /// /cli as a visitor reaches it: from the home page's How it works, the page that says what bit CLI does for them, then the
+    /// lines that install it on its own, each copied with its button as it is to be pasted.
+    /// </summary>
+    [TestMethod]
+    public async Task AVisitor_Should_FindWhatBitCliDoes_AndCopyTheLineThatInstallsIt()
+    {
+        await using var server = new AppTestServer(Context);
+        await server.Build().Start(TestContext.CancellationToken);
+
+        await Page.GotoAsync(server.WebAppAddress.ToString(), new() { WaitUntil = WaitUntilState.NetworkIdle });
+        await Page.WaitForBlazorInteractive();
+        await Page.GetByRole(AriaRole.Button, new() { Name = AppStrings.TourSkip }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = AppStrings.AppHomeSeeCli }).ClickAsync();
+        await Expect(Page).ToHaveURLAsync(new Regex($"{PageUrls.Cli}$"));
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Level = 1, Name = AppStrings.CliTitle })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Rowheader, new() { Name = "bit pipeline" })).ToBeVisibleAsync();
+        await Page.WaitForBlazorInteractive();
+
+        // The hero's Install bit CLI leads to the lines, on this page
+        await Page.GetByRole(AriaRole.Link, new() { Name = AppStrings.CliInstall }).ClickAsync();
+        await Expect(Page).ToHaveURLAsync(new Regex($"{PageUrls.Cli}#install$"));
+
+        await Context.GrantPermissionsAsync(["clipboard-read", "clipboard-write"]);
+        var windows = Page.Locator(".cli-install").Filter(new() { HasText = AppStrings.NewProjectWindows });
+        await windows.GetByRole(AriaRole.Button, new() { Name = AppStrings.NewProjectCopy }).ClickAsync();
+        await Expect(windows.GetByRole(AriaRole.Button, new() { Name = AppStrings.NewProjectCopied })).ToBeVisibleAsync();
+        Assert.AreEqual(AppCliGuide.WindowsInstallLine, await Page.EvaluateAsync<string>("() => navigator.clipboard.readText()"));
     }
 }

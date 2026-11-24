@@ -4,7 +4,7 @@ namespace Bit.Cli.Infrastructure;
 
 public static class BuildInfo
 {
-    public const string RepositoryUrl = "https://github.com/bitfoundation/bitplatform";
+    public const string RepositoryUrl = "https://github.com/bitfoundation/bitfabric";
 
     public const string PackageId = "Bit.Cli";
 
@@ -24,7 +24,7 @@ public static class BuildInfo
 
     public static bool IsOfficialBuild => RunUrl is not null;
 
-    public static string SourceUrl => $"{RepositoryUrl}/tree/{Commit?[..12] ?? "develop"}/src/Toolings/Cli";
+    public static string SourceUrl => $"{RepositoryUrl}/tree/{Commit?[..12] ?? "main"}/src/Cli";
 
     public static string PackageUrl => $"https://www.nuget.org/packages/{PackageId}/{Version}";
 

@@ -1,5 +1,6 @@
 
 using Bit.Fabric.Server.Api.Features.Attachments;
+using Bit.Fabric.Server.Api.Features.DocsMcp;
 using Bit.Fabric.Server.Api.Features.Identity;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth.Services;
@@ -96,6 +97,9 @@ public static partial class Program
         // The feature AND two factor, for the app's own bearer scheme or a token issued for this resource; every
         // requirement is read off OAuthResources (OAuthEndpoints.AuthorizationFor).
         app.MapMcp(OAuthResources.DevMcpPath).RequireAuthorization(OAuthEndpoints.AuthorizationFor(OAuthResources.DevMcpPath));
+
+        // The bit platform's documentation tools, for any agent and without sign-in (See DocsMcpServer).
+        app.MapDocsMcp();
 
         app.MapOpenIdConfiguration();
 

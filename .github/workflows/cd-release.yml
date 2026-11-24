@@ -1,0 +1,162 @@
+name: cd-release
+
+# Publishes bit CLI (Bit.Cli) and bit Boilerplate (Bit.Boilerplate) to nuget.org at the version in src/Bit.Build.props,
+# from main, then tags v-<version> and writes its GitHub release. By hand, once the version's pull request is merged.
+# The Release environment holds what it needs and lets only main use it: the Azure Artifact Signing sign-in, bit CLI's
+# telemetry connection string and the nuget.org user whose trusted publishing policy names this workflow.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-release
+  cancel-in-progress: false
+
+jobs:
+  pack:
+    name: pack
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    environment: Release
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+          persist-credentials: false
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      with:
+        global-json-file: src/global.json
+
+    - name: Read the version
+      id: version
+      run: echo "version=$(grep -oP '(?<=<ReleaseVersion>)[^<]+' src/Bit.Build.props)" >> "$GITHUB_OUTPUT"
+
+    - name: Pack bit CLI
+      env:
+        BitCliBuildRunUrl: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        BitCliTelemetryConnectionString: ${{ secrets.APPLICATION_INSIGHTS_CONNECTION_STRING }}
+      run: |
+        dotnet build src/Cli/Bit.Cli/Bit.Cli.csproj -c Release -p:GeneratePackageOnBuild=false -p:WarningLevel=0 -p:RunCodeAnalysis=false
+        dotnet pack src/Cli/Bit.Cli/Bit.Cli.csproj --output packages --configuration Release
+
+    - name: Pack bit Boilerplate
+      run: dotnet pack src/Boilerplate/Bit.Boilerplate.ProjectTemplate.csproj --output packages --configuration Release
+
+    - name: Upload the packages
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: unsigned-nupkg-files
+        path: packages/*.nupkg
+        if-no-files-found: error
+        retention-days: 1
+
+  publish:
+    name: sign, attest & publish
+    needs: pack
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    environment: Release
+    permissions:
+      contents: write # the v-<version> tag and its release
+      id-token: write
+      attestations: write
+    env:
+      VERSION: ${{ needs.pack.outputs.version }}
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+          persist-credentials: false
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+      with:
+        global-json-file: src/global.json
+
+    - name: Download the packages
+      uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+      with:
+        name: unsigned-nupkg-files
+        path: ${{ runner.temp }}/packages
+
+    - name: Unzip bit CLI's assembly
+      run: |
+        for package in "$RUNNER_TEMP"/packages/*.nupkg; do
+          unzip -o -q "$package" '*.dll' -d "$RUNNER_TEMP/assemblies/$(basename "$package" .nupkg)" || true
+        done
+
+    - name: Log in to Azure for code signing
+      if: vars.CODE_SIGNING_ACCOUNT != ''
+      uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+      with:
+        client-id: ${{ secrets.CODE_SIGNING_CLIENT_ID }}
+        tenant-id: ${{ secrets.CODE_SIGNING_TENANT_ID }}
+        subscription-id: ${{ secrets.CODE_SIGNING_SUBSCRIPTION_ID }}
+
+    # Signs bit.dll with Azure Artifact Signing (Jsign, since this runs on Linux) and puts it back into its package.
+    - name: Sign bit CLI
+      if: vars.CODE_SIGNING_ACCOUNT != ''
+      run: |
+        curl -fsSL -o "$RUNNER_TEMP/jsign.jar" https://github.com/ebourg/jsign/releases/download/7.5/jsign-7.5.jar
+        echo "602a51c3545a6dc4fb99bd2ea7152b26d1345916d0c93ddfbd5936cb735af91c  $RUNNER_TEMP/jsign.jar" | sha256sum -c -
+        export CODE_SIGNING_TOKEN=$(az account get-access-token --resource https://codesigning.azure.net --query accessToken -o tsv)
+        endpoint="${{ vars.CODE_SIGNING_ENDPOINT }}"
+        endpoint="${endpoint#https://}"
+        cd "$RUNNER_TEMP/assemblies"
+        java -jar "$RUNNER_TEMP/jsign.jar" --storetype TRUSTEDSIGNING --keystore "${endpoint%/}" --storepass env:CODE_SIGNING_TOKEN --alias "${{ vars.CODE_SIGNING_ACCOUNT }}/${{ vars.CODE_SIGNING_CERTIFICATE_PROFILE }}" --tsaurl http://timestamp.acs.microsoft.com --tsmode RFC3161 '**/bit.dll'
+        for package in "$RUNNER_TEMP"/packages/*.nupkg; do
+          folder="$RUNNER_TEMP/assemblies/$(basename "$package" .nupkg)"
+          [ -d "$folder" ] || continue
+          files=$(cd "$folder" && find . -name 'bit.dll' -printf '%P\n')
+          [ -z "$files" ] || (cd "$folder" && zip -q "$package" $files)
+        done
+
+    - name: Attest the packages' provenance
+      uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+      with:
+        subject-path: |
+          ${{ runner.temp }}/packages/*.nupkg
+          ${{ runner.temp }}/assemblies/**/bit.dll
+
+    # An SPDX list of everything inside the packages, attested below. The tool targets .NET 8, hence --allow-roll-forward.
+    - name: Generate the packages' SBOM
+      run: dnx Microsoft.Sbom.DotNetTool@4.1.13 --yes --allow-roll-forward -- generate -b "$RUNNER_TEMP/packages" -bc src -pn "bit Fabric" -pv "$VERSION" -ps "bit foundation" -nsb https://github.com/bitfoundation/bitfabric -V Warning
+
+    - name: Attest the packages' SBOM
+      uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e # v4.1.0
+      with:
+        subject-path: |
+          ${{ runner.temp }}/packages/*.nupkg
+          ${{ runner.temp }}/assemblies/**/bit.dll
+        sbom-path: ${{ runner.temp }}/packages/_manifest/spdx_2.2/manifest.spdx.json
+
+    - name: Upload the packages
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: nupkg-files
+        path: ${{ runner.temp }}/packages/*.nupkg
+
+    - name: Log in to nuget.org
+      id: nuget_login
+      uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+      with:
+        user: ${{ vars.NUGET_USER }}
+
+    - name: dotnet nuget push
+      run: dotnet nuget push "$RUNNER_TEMP/packages/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget_login.outputs.NUGET_API_KEY }} --skip-duplicate
+
+    - name: Tag and write the release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        prerelease=""
+        [[ "$VERSION" == *-pre-* ]] && prerelease="--prerelease"
+        gh release create "v-$VERSION" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "v-$VERSION" --generate-notes $prerelease "$RUNNER_TEMP"/packages/*.nupkg

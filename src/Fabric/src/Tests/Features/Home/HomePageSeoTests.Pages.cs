@@ -127,7 +127,7 @@ public partial class HomePageSeoTests
             FabricSite.LegalName, FabricSite.Address, FabricSite.KvkNumber, FabricSite.VatNumber, FabricSite.Email,
             AppHomeNumbers.GitHubStars, AppHomeNumbers.Contributors, AppHomeNumbers.Downloads, AppHomeNumbers.ImprovementsAMonth,
             AppStrings.TrustWhereCloudflare, AppStrings.AppHomeIfWeStopTitle, AppStrings.AppHomeStopsHealth,
-            AppStrings.NewProjectSafeSigned, "gh attestation verify <bit.dll> --repo bitfoundation/bitplatform"
+            AppStrings.NewProjectSafeSigned, "gh attestation verify <bit.dll> --repo bitfoundation/bitfabric"
         })
         {
             Assert.Contains(fact, text, $"The page says \"{fact}\".");

@@ -23,6 +23,17 @@ public static class RateLimitOptionsExtensions
     /// </summary>
     public const string SPEECH = "speech";
 
+    /// <summary>
+    /// Applied to <c>LicenseController.Trial</c>, which <c>bit new</c> calls once per new project without an account. Far
+    /// more than anyone creates by hand in an hour; it stops a script from filling the projects table.
+    /// </summary>
+    public const string LICENSE_TRIAL = "licenseTrial";
+
+    /// <summary>
+    /// Applied to <c>LicenseController.Claim</c>, which a waiting bit CLI calls every few seconds for up to ten minutes.
+    /// </summary>
+    public const string LICENSE_CLAIM = "licenseClaim";
+
     extension(RateLimiterOptions options)
     {
         /// <summary>
@@ -59,6 +70,24 @@ public static class RateLimitOptionsExtensions
                     factory: _ => new FixedWindowRateLimiterOptions
                     {
                         PermitLimit = 10,
+                        Window = TimeSpan.FromMinutes(1)
+                    }));
+
+            options.AddPolicy(LICENSE_TRIAL, context =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: GetPartitionKey(context),
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 10,
+                        Window = TimeSpan.FromHours(1)
+                    }));
+
+            options.AddPolicy(LICENSE_CLAIM, context =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: GetPartitionKey(context),
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 60,
                         Window = TimeSpan.FromMinutes(1)
                     }));
 

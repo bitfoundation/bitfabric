@@ -1,15 +1,15 @@
 
 # bit Boilerplate
 
-Free, open-source, full-stack, cross-platform, cloud-ready, and battle-tested project template for those who love C# & Blazor ❤️
+Source-available, full-stack, cross-platform, cloud-ready, and battle-tested project template for those who love C# & Blazor ❤️
 
 ## Features
 
 ###  Modern Web Apps
 - **Public facing Web Apps** Pre-render enabled, Ultra-fast, SEO-Friendly Websites using Blazor WebAssembly! [Demo](https://bitplatform.dev)
-- **AdminPanels** Realtime Dashboard, DataGrid etc. [Demo](https://adminpanel.bitplatform.dev)
-- **Offline-capable PWA** with client-side database and sync feature. [Demo](https://todo-offline.bitplatform.cc/offline-todo)
-- **Blazor WebAssembly standalone** For Azure Static Pages, GitHub Pages, Cloudflare Pages etc. [Demo](https://adminpanel.bitplatform.cc)
+- **AdminPanels** Realtime Dashboard, DataGrid etc. [Demo](https://adminpanel.bitfabric.co)
+- **Offline-capable PWA** with client-side database and sync feature. [Demo](https://todo-offline.bitfabric.co/offline-todo)
+- **Blazor WebAssembly standalone** For Azure Static Pages, GitHub Pages, Cloudflare Pages etc. [Demo](https://adminpanel-standalone.bitfabric.co)
 
 ### Cross-Platform Native Apps
 Generate production-ready **Android**, **iOS**, **Windows**, and **macOS** applications from a single codebase using .NET MAUI Blazor Hybrid.
@@ -62,10 +62,10 @@ Try it out on [Google Play, App Store, Web, and Windows](https://bitplatform.dev
 Create a project that's ready to run, on Windows, macOS or Linux, with the [bit CLI](https://www.nuget.org/packages/Bit.Cli):
 
 ```bash
-dotnet tool install --global Bit.Cli --version 11.0.0-pre-23
+dotnet tool install --global Bit.Cli --version 11.0.0-pre-24
 bit new MyApp
 ```
 
-Pick the options on the [create project page](https://bitplatform.dev/templates/create-project), which builds the command. `bit new` installs what the project needs and leaves it built, with git, its first migration and your IDE open.
+Pick the options on the [create project page](https://bitfabric.co/new), which builds the command. `bit new` installs what the project needs and leaves it built, with git, its first migration and your IDE open.
 
-Check out our [30-part documentation](https://bitplatform.dev/templates/getting-started) to learn more.
+Learn more at [bitfabric.co](https://bitfabric.co), and in the 30-part documentation in every project's `.docs` folder.

@@ -136,9 +136,9 @@
                                     <BitStack Horizontal>
                                         <BitText>Repo:</BitText>
                                         <BitLink Target="_blank"
-                                                 Href="https://github.com/bitfoundation/bitplatform">
-                                            <BitImage Alt="bitplatform GitHub stars"
-                                                      Src="https://img.shields.io/github/stars/bitfoundation/bitplatform?style=social&label=Github%20%E2%9C%A8" />
+                                                 Href="https://github.com/bitfoundation/bitfabric">
+                                            <BitImage Alt="bit Fabric GitHub stars"
+                                                      Src="https://img.shields.io/github/stars/bitfoundation/bitfabric?style=social&label=Github%20%E2%9C%A8" />
                                         </BitLink>
                                     </BitStack>
                                 </BitStack>
@@ -155,18 +155,18 @@
         <br />
         @*#endif*@
 
+        @* What made this app: bit Fabric and bit CLI, in every module. *@
         <BitCard FullWidth Style="padding:4rem">
             <BitStack HorizontalAlign="BitAlignment.Center">
-                <BitText Typography="BitTypography.H5">bit platform</BitText>
-                <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">@Localizer[nameof(AppStrings.BitPlatformMessage)]</BitText>
-                <BitLink Href="https://bitplatform.dev" Target="_blank" NoUnderline>
+                <BitText Typography="BitTypography.H5">bit Fabric</BitText>
+                <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">
+                    @Localizer[nameof(AppStrings.BitFabricMessage)]
+                </BitText>
+                <BitLink Href="https://bitfabric.co" Target="_blank" NoUnderline>
                     <BitStack Horizontal VerticalAlign="BitAlignment.Baseline" Gap="0.5rem">
                         @Localizer[nameof(AppStrings.LearnMore)]
                         <BitIcon Size="BitSize.Small" IconName="@(CurrentDir is BitDir.Rtl ? BitIconName.ChromeBack : BitIconName.ChromeBackMirrored)" />
                     </BitStack>
-                </BitLink>
-                <BitLink Href="https://www.nuget.org/profiles/bit-foundation" Target="_blank" NoUnderline>
-                    <BitImage Src="https://img.shields.io/badge/packages_download-10M-blue.svg?logo=nuget" Alt="nuget downloads" />
                 </BitLink>
             </BitStack>
         </BitCard>
@@ -174,14 +174,23 @@
         <BitStack Horizontal Wrap WrapSm="false" Gap="2rem">
             <BitCard Style="padding:3rem" FullWidth>
                 <BitStack HorizontalAlign="BitAlignment.Center">
-                    <BitText Typography="BitTypography.H5">bit BlazorUI</BitText>
+                    <BitText Typography="BitTypography.H5">@Localizer[nameof(AppStrings.StartYourOwn)]</BitText>
                     <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">
-                        @Localizer[nameof(AppStrings.BitBlazorUIMessage)]
+                        @Localizer[nameof(AppStrings.StartYourOwnMessage)]
                     </BitText>
-                    <BitButton Variant="BitVariant.Outline" Href="https://www.youtube.com/watch?v=ahgpbDAshmY" Target="_blank">
-                        @Localizer[nameof(AppStrings.WatchVideo)]
+                    <BitButton Variant="BitVariant.Outline" Href="https://bitfabric.co/new" Target="_blank">
+                        @Localizer[nameof(AppStrings.CreateProject)]
                     </BitButton>
-                    <BitLink Href="https://blazorui.bitplatform.dev/" Target="_blank" NoUnderline>
+                </BitStack>
+            </BitCard>
+
+            <BitCard Style="padding:3rem" FullWidth>
+                <BitStack HorizontalAlign="BitAlignment.Center">
+                    <BitText Typography="BitTypography.H5">@Localizer[nameof(AppStrings.WorksWithYourAIAgent)]</BitText>
+                    <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">
+                        @Localizer[nameof(AppStrings.WorksWithYourAIAgentMessage)]
+                    </BitText>
+                    <BitLink Href="https://bitfabric.co/for" Target="_blank" NoUnderline>
                         <BitStack Horizontal VerticalAlign="BitAlignment.Baseline" Gap="0.5rem">
                             @Localizer[nameof(AppStrings.LearnMore)]
                             <BitIcon Size="BitSize.Small" IconName="@(CurrentDir is BitDir.Rtl ? BitIconName.ChromeBack : BitIconName.ChromeBackMirrored)" />
@@ -192,14 +201,11 @@
 
             <BitCard Style="padding:3rem" FullWidth>
                 <BitStack HorizontalAlign="BitAlignment.Center">
-                    <BitText Typography="BitTypography.H5">bit project template</BitText>
+                    <BitText Typography="BitTypography.H5">bit CLI</BitText>
                     <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">
-                        @Localizer[nameof(AppStrings.BitProjectTemplateMessage)]
+                        @Localizer[nameof(AppStrings.BitCliMessage)]
                     </BitText>
-                    <BitButton Variant="BitVariant.Outline" Href="https://www.youtube.com/watch?v=UjdWBvb0xac" Target="_blank">
-                        @Localizer[nameof(AppStrings.WatchVideo)]
-                    </BitButton>
-                    <BitLink Href="https://bitplatform.dev/templates/overview/" Target="_blank" NoUnderline>
+                    <BitLink Href="https://bitfabric.co/cli" Target="_blank" NoUnderline>
                         <BitStack Horizontal VerticalAlign="BitAlignment.Baseline" Gap="0.5rem">
                             @Localizer[nameof(AppStrings.LearnMore)]
                             <BitIcon Size="BitSize.Small" IconName="@(CurrentDir is BitDir.Rtl ? BitIconName.ChromeBack : BitIconName.ChromeBackMirrored)" />

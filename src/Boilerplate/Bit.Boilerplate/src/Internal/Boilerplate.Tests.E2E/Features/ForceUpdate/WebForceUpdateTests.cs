@@ -32,7 +32,7 @@ public partial class WebForceUpdateTests : AppTestBase
 
         await SkipWithoutGlobalAdminCredentials();
 
-        var email = $"e2e-{Guid.NewGuid():N}"[..14] + "@bitplatform.dev";
+        var email = $"e2e-{Guid.NewGuid():N}"[..14] + "@bitfabric.co";
         // Should the rewrite ever miss, the magic link below would reach the endpoint and could create this user.
         RegisterForCleanup(() => DeleteUser(email));
 

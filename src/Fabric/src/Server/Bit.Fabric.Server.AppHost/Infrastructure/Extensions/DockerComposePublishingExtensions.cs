@@ -21,7 +21,8 @@ public static class DockerComposePublishingExtensions
         /// the deploy job supplies: the connection strings and parameters of
         /// the generated <c>.env</c>, the <c>serverweb.env</c> (and <c>serverapi.env</c>) files, and the environment's own
         /// <c>AppCertificate</c>. The Lighthouse service's image goes to the registry with the apps', and the service runs
-        /// locked down on a network of its own that only the api joins.
+        /// locked down on a network of its own that only the api joins. The api keeps the source code index of its /docs-mcp
+        /// on a <c>docs-mcp</c> volume.
         /// </summary>
         public void ConfigureDockerComposePublishing(
             IResourceBuilder<DockerComposeEnvironmentResource> compose,
@@ -141,6 +142,18 @@ public static class DockerComposePublishingExtensions
                     service.AddVolume(new Volume { Name = "app-certificate", Type = "bind", Source = "./app-certificate", Target = "/app-certificate", ReadOnly = true });
                 });
 
+            // The source code index of the api's /docs-mcp (See DocsMcpCodeIndexer): the codebase-memory command line it
+            // installs, the sources of every served bit platform release and their index - a few GB at most, and minutes of
+            // work a release - kept across deployments on a volume of their own. It is mounted over /home/app, the home of the
+            // aspnet image's app user, which nothing else of the app uses: Docker fills a new volume with what the image holds
+            // at its target, ownership included, so the app, which runs as that user, can write to it. Nothing else is needed
+            // on the server or in the image: no git (each release is read from GitHub's archive of its tag) and no Node.js.
+            apiProject.WithEnvironment("DocsMcp__CodeIndex__DataDirectoryPath", "/home/app/docs-mcp")
+                .PublishAsDockerComposeService((_, service) =>
+                {
+                    service.AddVolume(new Volume { Name = "docs-mcp", Type = "volume", Source = "docs-mcp", Target = "/home/app" });
+                });
+
             // The Aspire dashboard and DbGate listen on the server's loopback only, where SSH reaches them: for Production,
             // ssh -L 18888:127.0.0.1:18888 -L 3000:127.0.0.1:3000. Each environment has an address of its own, so Test and
             // Production can share a server.
@@ -226,6 +239,9 @@ public static class DockerComposePublishingExtensions
                 // internet, and none of the database, Redis, the dashboard or the other services, which are on Aspire's network
                 // alone. The migrations, made from the api's service above, stay off it.
                 composeFile.Networks["lighthouse"] = new Network { Name = "lighthouse", Driver = "bridge" };
+
+                // The api's /docs-mcp volume, which it is given above.
+                composeFile.AddVolume(new Volume { Name = "docs-mcp", Driver = "local" });
                 composeFile.Services[lighthouse.Resource.Name].Networks = ["lighthouse"];
                 api.Networks.Add("lighthouse");
 

@@ -7,7 +7,7 @@ namespace Boilerplate.Tests.Features.TemplateConfig;
 /// <c>"sourceName": "Boilerplate"</c> makes the template engine rewrite that word everywhere it appears - file names,
 /// namespaces, and <b>the inside of string literals</b>, including absolute urls. That is exactly what is wanted for
 /// the project's own identifiers and exactly wrong for a url that points at somebody else's host: the emitted project
-/// gets <c>https://github.com/bitfoundation/bitplatform/tree/develop/src/Templates/Contoso</c>, which is a 404.
+/// gets <c>https://github.com/bitfoundation/bitfabric/tree/main/src/Contoso</c>, which is a 404.
 /// <para>
 /// The failure is silent in every way that matters. It compiles, it renders, the link is a decorative badge nobody
 /// clicks during development, and it only appears in a <b>generated</b> project - never in this repository, where the
@@ -84,11 +84,12 @@ public class SourceNameLeakTests
     }
 
     [TestMethod]
-    public void BitPlatformRepositoryPath_Should_NotContainTheLowercaseSourceName()
+    public void BitRepositoryPath_Should_NotContainTheSourceName()
     {
         var root = GetTemplateRoot();
 
-        var pathPattern = new Regex($@"bitfoundation/bitplatform[^\s""'<>)\]}}\\]*{LowercaseSourceName}[^\s""'<>)\]}}\\]*", RegexOptions.Compiled);
+        // The template itself lives in the bitfabric repository, so a link into its folder is the likeliest one to break.
+        var pathPattern = new Regex($@"bitfoundation/bit(?:platform|fabric)[^\s""'<>)\]}}\\]*{LowercaseSourceName}[^\s""'<>)\]}}\\]*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         var offenders = new List<string>();
 
@@ -107,9 +108,9 @@ public class SourceNameLeakTests
         }
 
         Assert.IsEmpty(offenders,
-            $"A path in the bitplatform repository contains '{LowercaseSourceName}', which the template engine rewrites " +
-            $"along with the sourceName, so `dotnet new -n Contoso` names a folder that doesn't exist there. A symbol that " +
-            $"replaces a token with itself doesn't help, the engine drops it: name that folder without the word." +
+            $"A path in the bitplatform or bitfabric repository contains '{SourceName}' in some case, which the template " +
+            $"engine rewrites, so `dotnet new -n Contoso` names a folder that doesn't exist there. A symbol that replaces a " +
+            $"token with itself doesn't help, the engine drops it: link to a folder whose path doesn't have the word." +
             $"{Environment.NewLine}{string.Join(Environment.NewLine, offenders)}");
     }
 

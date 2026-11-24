@@ -25,34 +25,34 @@ public enum App
 public static class DeployedApps
 {
     /// <summary>Admin module, prerendered PWA served by Server.Web with a standalone API (Azure Web App + Cloudflare CDN).</summary>
-    public const string AdminPanel = "https://adminpanel.bitplatform.dev/";
+    public const string AdminPanel = "https://adminpanel.bitfabric.co/";
 
     /// <summary>Admin module, AOT compiled Blazor WebAssembly Standalone (Azure Static Web App).</summary>
-    public const string AdminPanelWasmStandalone = "https://adminpanel.bitplatform.cc/";
+    public const string AdminPanelWasmStandalone = "https://adminpanel-standalone.bitfabric.co/";
 
     /// <summary>Todo sample, prerendered PWA served by Server.Web with a standalone API (Azure Web App + Cloudflare CDN).</summary>
-    public const string Todo = "https://todo.bitplatform.dev/";
+    public const string Todo = "https://todo.bitfabric.co/";
 
     /// <summary>Todo sample, AOT compiled Blazor WebAssembly Standalone (Azure Static Web App).</summary>
-    public const string TodoAot = "https://todo-aot.bitplatform.cc/";
+    public const string TodoAot = "https://todo-aot.bitfabric.co/";
 
     /// <summary>Todo sample, Blazor WebAssembly Standalone published for the smallest download footprint (Azure Static Web App).</summary>
-    public const string TodoSmall = "https://todo-small.bitplatform.cc/";
+    public const string TodoSmall = "https://todo-small.bitfabric.co/";
 
     /// <summary>Todo sample with the offline in-browser SQLite database and sync, full-offline bswup mode (Azure Static Web App).</summary>
-    public const string TodoOffline = "https://todo-offline.bitplatform.cc/";
+    public const string TodoOffline = "https://todo-offline.bitfabric.co/";
 
     /// <summary>Sales module, prerendered PWA served by Server.Web with an integrated API (Azure Web App + Cloudflare CDN).</summary>
-    public const string Sales = "https://sales.bitplatform.dev/";
+    public const string Sales = "https://sales.bitfabric.co/";
 
     /// <summary>The landing page project's gallery of samples, prerendered and served by its own server (IIS).</summary>
-    public const string LandingPage = "https://landingpage.bitplatform.dev/";
+    public const string LandingPage = "https://landingpage.bitfabric.co/";
 
     /// <summary>Standalone API of both admin panel apps (Azure Web App).</summary>
-    public const string AdminPanelApi = "https://adminpanel-api.bitplatform.dev/";
+    public const string AdminPanelApi = "https://adminpanel-api.bitfabric.co/";
 
     /// <summary>Standalone API of every todo sample app (Azure Web App).</summary>
-    public const string TodoApi = "https://todo-api.bitplatform.dev/";
+    public const string TodoApi = "https://todo-api.bitfabric.co/";
 
     /// <summary>Where an app is served, for a test that reaches it over http rather than through an opener.</summary>
     public static string AddressOf(App app) => app switch
@@ -123,9 +123,9 @@ public static class DeployedApps
     /// </summary>
     public static string? WindowsUpdateFeedOf(App app) => app switch
     {
-        App.Todo => "https://windows-todo.bitplatform.dev/",
-        App.AdminPanel => "https://windows-adminpanel.bitplatform.dev/",
-        App.Sales => "https://windows-sales.bitplatform.dev/",
+        App.Todo => "https://windows-todo.bitfabric.co/",
+        App.AdminPanel => "https://windows-adminpanel.bitfabric.co/",
+        App.Sales => "https://windows-sales.bitfabric.co/",
         _ => null,
     };
 }

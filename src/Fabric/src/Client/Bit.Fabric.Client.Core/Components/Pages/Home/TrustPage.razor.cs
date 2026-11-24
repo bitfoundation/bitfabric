@@ -16,10 +16,12 @@ public partial class TrustPage
 
     private static string TermsUrl => CultureInfoManager.GetCurrentCultureUrl(PageUrls.Terms);
 
+    private static string CliUrl => CultureInfoManager.GetCurrentCultureUrl(PageUrls.Cli);
+
     private string SecurityTxtUrl => $"{AppHomeJsonLd.SiteUrlOf(NavigationManager)}/.well-known/security.txt";
 
     /// <summary>The line the wizard's green shield gives to check a build's attestation (See NewProjectLineSteps).</summary>
-    private const string AttestationLine = "gh attestation verify <bit.dll> --repo bitfoundation/bitplatform";
+    private const string AttestationLine = "gh attestation verify <bit.dll> --repo bitfoundation/bitfabric";
 
     /// <summary>The installers the pasted line runs, as the wizard links them: one for macOS and Linux, one for Windows.</summary>
     private static (string Name, string Url)[] Installers =>

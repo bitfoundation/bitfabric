@@ -23,6 +23,7 @@ If bit Fabric stops: your app and its database keep running on your server, your
 - [Get started]({{Origin}}/en-US/new): a few questions, then the one line that creates your project on your computer. bit Fabric keeps nothing you pick.
 - [Start with your AI agent]({{Origin}}/en-US/for): what each agent reads in a project on its own, how it calls a skill, how to start and what it costs, each fact from the agent's own documentation (read 21 November 2026). One page each: [GitHub Copilot]({{Origin}}/en-US/for/github-copilot), [Claude Code]({{Origin}}/en-US/for/claude-code), [Codex]({{Origin}}/en-US/for/codex), [Cursor]({{Origin}}/en-US/for/cursor), [Antigravity]({{Origin}}/en-US/for/antigravity), [Gemini CLI]({{Origin}}/en-US/for/gemini-cli), [Junie]({{Origin}}/en-US/for/junie) and [Devin Desktop, where windsurf.com leads]({{Origin}}/en-US/for/windsurf); and the models they take: [a model on your computer]({{Origin}}/en-US/for/local-models) and [DeepSeek, Qwen, Kimi, GLM and MiniMax with your own key]({{Origin}}/en-US/for/chinese-models).
 - [Set up an existing project]({{Origin}}/en-US/setup): a teammate's project, or yours on another computer, from its repository's address.
+- [bit CLI]({{Origin}}/en-US/cli): the tool every project is made and kept with, which your AI agent usually runs for you. What each command does, every command in one line, how to install it on its own and how to check the build you run. The same as Markdown: [cli.md]({{Origin}}/cli.md).
 
 ## Product
 

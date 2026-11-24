@@ -24,10 +24,10 @@ public partial class ChromeShell
     /// <summary>
     /// Whether the header names the page in an h1, as the app's header does only for a page that gives it a title: bitfabric.co's
     /// home page and /features give none, as their own titles are their h1s (bitfabric-internal/specs/home-page.md, 2026-11-18),
-    /// and nor do the home page's directions, each of which is a home page too, or the comparison pages, whose heroes hold their
-    /// h1s the same way.
+    /// and nor do the home page's directions, each of which is a home page too, or the comparison pages and /cli, whose heroes
+    /// hold their h1s the same way.
     /// </summary>
-    private bool ShowsTitle => Page.Key is not (Pages.Site.SitePageHost.HomeKey or Pages.Site.SitePageHost.FeaturesKey or Pages.HomeDirections.HomeDirectionsPage.Key or Pages.Compare.ComparePage.Key);
+    private bool ShowsTitle => Page.Key is not (Pages.Site.SitePageHost.HomeKey or Pages.Site.SitePageHost.FeaturesKey or Pages.Site.SitePageHost.CliKey or Pages.HomeDirections.HomeDirectionsPage.Key or Pages.Compare.ComparePage.Key);
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
 

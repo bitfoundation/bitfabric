@@ -19,7 +19,7 @@ namespace Boilerplate.Tests.Features.SignalR;
 public partial class DashboardBroadcastTenantScopeTests
 {
     // Seeded tenant-admin of the default (fallback) "store" tenant; holds ProductCatalog_Manage. See UserConfiguration.
-    private const string StoreAdminEmail = "store-admin@bitplatform.dev";
+    private const string StoreAdminEmail = "store-admin@bitfabric.co";
     private const string Password = "12345678";
 
     public TestContext TestContext { get; set; } = default!;

@@ -35,6 +35,7 @@ internal static class AppAiChatTools
                 AiChatProtocol.Tools.CheckLastError => BitIconName.Bug,
                 AiChatProtocol.Tools.ClearAppFiles => BitIconName.Broom,
                 AiChatProtocol.Tools.RequestHumanFollowUp => BitIconName.Contact,
+                AiChatProtocol.Tools.CallBitLibraryTool => BitIconName.Library,
                 _ => null
             },
             // Destructive: the approval's allow button takes the error color, so it doesn't read as the safe answer

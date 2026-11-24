@@ -4,7 +4,7 @@ namespace Boilerplate.WorkbenchTests.Features.AppPages;
 [TestClass, TestCategory("UITest")]
 public class AccountSectionUITests : SettingsPageTest
 {
-    private const string NewEmail = "new.address@bitplatform.dev";
+    private const string NewEmail = "new.address@bitfabric.co";
     private const string NewPhone = "+31612345678";
 
     private ILocator Account => Section(AppStrings.AccountTitle);

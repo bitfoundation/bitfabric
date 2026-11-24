@@ -1,0 +1,56 @@
+name: cd-fabric-dispatch
+
+# Production deploys by itself after each merge into main: once ci-fabric has passed on that push, this starts
+# cd-fabric-production.yml in the private bitfoundation/bitfabric-internal, where the deployment, its runner and its
+# secrets live. Its token can only start workflows there. Pull requests never run it: a workflow_run workflow always runs
+# this file as it is on main, and the job below takes only pushes to this repository's main.
+on:
+  workflow_run:
+    workflows: [ ci-fabric ]
+    types: [ completed ]
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-fabric-dispatch
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    name: start Production's deployment
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    # The environment holds BITFABRIC_DISPATCH_TOKEN and lets only main use it.
+    environment: Production
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      # Only a change to what runs on the server or in the apps is deployed: a change to the tests, the Workbench or the
+      # docs alone isn't. Pull requests are squash-merged, so the push is one commit.
+      - name: Start cd-fabric-production in bitfabric-internal
+        env:
+          GH_TOKEN: ${{ secrets.BITFABRIC_DISPATCH_TOKEN }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          if ! git diff --name-only HEAD~1 HEAD | grep -qE '^src/Fabric/src/(Shared|Server|Client)/|^src/Fabric/src/Directory\.(Build|Packages)\.props$'; then
+            echo "Nothing that runs on the server or in the apps changed in $SHA: Production isn't deployed." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::warning::BITFABRIC_DISPATCH_TOKEN isn't set, so Production isn't deployed by itself. Deploy it by hand: gh workflow run cd-fabric-production.yml --repo bitfoundation/bitfabric-internal -f ref=$SHA"
+            exit 0
+          fi
+          gh workflow run cd-fabric-production.yml --repo bitfoundation/bitfabric-internal -f ref="$SHA"
+          echo "Started Production's deployment of $SHA." >> "$GITHUB_STEP_SUMMARY"

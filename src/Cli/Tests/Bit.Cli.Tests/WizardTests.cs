@@ -73,7 +73,7 @@ public class WizardTests
         Assert.AreEqual(CliApp.ExitUsage, await host.RunAsync("new"), host.Output);
 
         StringAssert.Contains(host.Output, "bit new <name>");
-        StringAssert.Contains(host.Output, "https://bitplatform.dev/templates/create-project");
+        StringAssert.Contains(host.Output, "https://bitfabric.co/new");
         Assert.IsEmpty(prompter.Prompts);
     }
 

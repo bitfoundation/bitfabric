@@ -14,7 +14,7 @@ public class CommandTests
         var root = CliApp.BuildRootCommand(() => throw new InvalidOperationException());
 
         CollectionAssert.AreEquivalent(
-            new[] { "new", "setup", "run", "diff", "doctor", "trust", "clean", "rename", "remove", "migration", "api", "translate", "decode", "keys", "pipeline", "aot-profile", "telemetry", "update", "about", "admin-helper" },
+            new[] { "new", "setup", "run", "diff", "doctor", "trust", "clean", "rename", "remove", "migration", "api", "translate", "decode", "keys", "pipeline", "aot-profile", "telemetry", "update", "license", "about", "admin-helper" },
             root.Subcommands.Select(c => c.Name).ToArray());
     }
 
@@ -52,8 +52,8 @@ public class CommandTests
         Assert.AreEqual(0, await host.RunAsync("about"));
 
         StringAssert.Contains(host.Output, BuildInfo.Version);
-        StringAssert.Contains(host.Output, "github.com/bitfoundation/bitplatform");
-        StringAssert.Contains(host.Output, "MIT");
+        StringAssert.Contains(host.Output, "github.com/bitfoundation/bitfabric");
+        StringAssert.Contains(host.Output, "FCL-1.0-MIT");
     }
 
     [TestMethod]

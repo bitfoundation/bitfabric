@@ -1,0 +1,248 @@
+@attribute [Route(PageUrls.Cli)]
+@attribute [Route("{culture:nonfile?}" + PageUrls.Cli)]
+@attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
+@inherits AppPageBase
+@using Bit.Fabric.Client.Core.Components.Pages.Home.Parts
+
+@* bit CLI, the tool every project is made and kept with: what it does for the visitor first, in plain words, then how their
+   AI runs it for them, every command, how to install it and how to check the build. Its words are AppCliGuide's, which
+   /cli.md writes out as Markdown too. Its title is its one h1, as on the home page: the header shows no title for a page that
+   gives it none. Commands and lines to paste read left to right whole, in a right-to-left page too. *@
+@{
+    const string sectionHeading = "h2";
+    const string cardHeading = "h3";
+
+    // A command, kept left to right and whole
+    RenderFragment<string> chip = text => @<bdi dir="ltr" class="cli-chip"><code class="cli-code">@text</code></bdi>;
+
+    // A sentence with commands in it, each shown as a command where its placeholder is
+    RenderFragment<(string Format, string[] Commands)> sentence = value => @<text>
+        @foreach (var (part, isCommand) in Parts(value.Format, value.Commands))
+        {
+            if (isCommand)
+            {
+                @chip(part)
+            }
+            else
+            {
+                @part
+            }
+        }
+    </text>;
+
+    // A line to paste, with its copy button. It wraps between its words, never inside an option such as --global
+    RenderFragment<string> paste = text => @<div class="cli-paste">
+        <code class="cli-paste-text" dir="ltr">
+            @foreach (var (word, i) in text.Split(' ').Select((word, i) => (word, i)))
+            {
+                @(i > 0 ? " " : null)<span class="cli-word">@word</span>
+            }
+        </code>
+        <BitButton Size="BitSize.Small" Variant="BitVariant.Outline"
+                   IconName="@(copied == text ? BitIconName.CheckMark : BitIconName.Copy)"
+                   OnClick="WrapHandled(() => Copy(text))" Class="cli-paste-copy">
+            @(copied == text ? Localizer[nameof(AppStrings.NewProjectCopied)] : Localizer[nameof(AppStrings.NewProjectCopy)])
+        </BitButton>
+    </div>;
+
+    RenderFragment source = @<span class="cli-links">
+        <BitLink Href="@AppCliGuide.SourceUrl" Target="_blank" IconName="@BitIconName.OpenInNewWindow">@Localizer[nameof(AppStrings.CliSourceLink)]</BitLink>
+        <BitLink Href="@AppCliGuide.LicenseUrl" Target="_blank" IconName="@BitIconName.OpenInNewWindow"><bdi dir="ltr">@AppCliGuide.License</bdi></BitLink>
+    </span>;
+
+    RenderFragment verify = @<span class="cli-verify">
+        @chip("bit about")
+        <code class="cli-command" dir="ltr">@AppCliGuide.AttestationLine</code>
+    </span>;
+
+    RenderFragment telemetry = @<span>@chip(AppCliGuide.TelemetryOffLine)</span>;
+}
+
+<AppPageData PageTitle="@Localizer[nameof(AppStrings.CliPageTitle)]"
+             Description="@Localizer[nameof(AppStrings.CliPageDescription)]">
+    <Head>
+        @* The same page as Markdown, for AI agents (llmstxt.org) *@
+        <link rel="alternate" type="text/markdown" href="@MarkdownUrl" />
+        <script type="application/ld+json">@((MarkupString)BuildJsonLd())</script>
+    </Head>
+</AppPageData>
+
+<div class="ah-page cli">
+    <section class="ah-hero">
+        <span class="ah-eyebrow"><bdi dir="ltr">bit CLI</bdi></span>
+        <BitText Typography="BitTypography.H2" Element="h1" Class="ah-hero-title">
+            @for (var i = 0; i < TitleSentences.Length; i++)
+            {
+                @(i > 0 ? " " : null)<span class="ah-hero-line">@TitleSentences[i]</span>
+            }
+        </BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="ah-hero-lead">@Lead</BitText>
+        <div class="ah-actions">
+            <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+            <BitButton Variant="BitVariant.Text" Href="@InPage("install")" IconName="@BitIconName.Download">@Localizer[nameof(AppStrings.CliInstall)]</BitButton>
+        </div>
+
+        @* What it looks like: the visitor asks their AI in their own words, and it runs bit CLI. An illustration, the commands as
+           they are *@
+        <figure class="cli-chat">
+            <figcaption class="cli-chat-head">
+                <BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" />
+                <span>@Localizer[nameof(AppStrings.CliYourAgent)]</span>
+            </figcaption>
+            <ol class="cli-chat-turns">
+                @foreach (var turn in AppCliGuide.Conversation(Localizer))
+                {
+                    <li @key="turn.Command" class="cli-turn">
+                        <p class="cli-ask">@turn.Ask</p>
+                        <div class="cli-run" dir="ltr">
+                            <BitIcon IconName="@BitIconName.CommandPrompt" Size="BitSize.Small" Class="cli-run-icon" />
+                            <code class="cli-run-command" dir="ltr">@turn.Command</code>
+                            <BitIcon IconName="@BitIconName.CheckMark" Size="BitSize.Small" Color="BitColor.Success" Class="cli-run-done" />
+                        </div>
+                        <p class="cli-reply">@turn.Reply</p>
+                    </li>
+                }
+            </ol>
+        </figure>
+    </section>
+
+    @* 1. What it does for the visitor, by the stage of the project it serves, each command's job in plain words first *@
+    <section class="ah-band cli-what" id="ah-what" aria-labelledby="ah-what-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="what" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CliWhatTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CliWhatIntro)]</BitText>
+        </header>
+        <div class="cli-stages">
+            @foreach (var stage in AppCliGuide.Stages(Localizer))
+            {
+                <article @key="stage.Title" class="cli-stage">
+                    <header class="cli-stage-head">
+                        <BitIcon IconName="@stage.Icon" Variant="BitVariant.Fill" Circular="true" Class="cli-stage-icon" />
+                        <div class="cli-stage-words">
+                            <BitText Typography="BitTypography.H5" Element="@cardHeading">@stage.Title</BitText>
+                            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@stage.Text</BitText>
+                        </div>
+                    </header>
+                    <ul class="cli-stage-list">
+                        @foreach (var command in stage.Commands)
+                        {
+                            <li @key="command.Command" class="cli-job">
+                                <BitText Typography="BitTypography.Subtitle1" Element="h4" Class="cli-job-title">@command.Title</BitText>
+                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@command.Text</BitText>
+                                @chip(command.Command)
+                            </li>
+                        }
+                    </ul>
+                </article>
+            }
+        </div>
+    </section>
+
+    @* 2. Why the visitor rarely types any of it *@
+    <section class="ah-band" id="ah-your-ai" aria-labelledby="ah-your-ai-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="your-ai" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CliYourAITitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CliYourAIIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="AppCliGuide.YourAI(Localizer)" HeadingElement="@cardHeading" MinWidth="14rem" />
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@ForUrl" IconName="@BitIconName.Robot">@Localizer[nameof(AppStrings.ForSeeEveryAgent)]</BitButton>
+        </div>
+    </section>
+
+    @* 3. Every command bit --help lists, one line each: a table a crawler and a screen reader read with its columns, and a card
+       a row on a phone *@
+    <section class="ah-band" id="ah-commands" aria-labelledby="ah-commands-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="commands" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CliCommandsTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@sentence((Localizer[nameof(AppStrings.CliCommandsIntro)], [AppCliGuide.HelpLine, "bit <command> --help"]))</BitText>
+        </header>
+        @{
+            var commandColumn = Localizer[nameof(AppStrings.CliCommandColumn)].Value;
+            var whatColumn = Localizer[nameof(AppStrings.NewProjectStepWhatItDoes)].Value;
+        }
+        <table class="cli-table" aria-labelledby="ah-commands-title" role="table">
+            <thead role="rowgroup">
+                <tr role="row">
+                    <th scope="col" role="columnheader">@commandColumn</th>
+                    <th scope="col" role="columnheader">@whatColumn</th>
+                </tr>
+            </thead>
+            <tbody role="rowgroup">
+                @foreach (var command in AppCliGuide.Commands(Localizer))
+                {
+                    <tr @key="command.Command" role="row">
+                        <th scope="row" role="rowheader">@chip(command.Command)</th>
+                        <td role="cell">@command.Text</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@AppCliGuide.GuideUrl" Target="_blank" IconName="@BitIconName.Documentation">@Localizer[nameof(AppStrings.CliGuideLink)]</BitButton>
+        </div>
+    </section>
+
+    @* 4. Installing it on its own: the one line's installers without a project to create, or the package where the SDK is
+       already there *@
+    <section class="ah-band" id="ah-install" aria-labelledby="ah-install-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="install" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CliInstallTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CliInstallIntro)]</BitText>
+        </header>
+        <ul class="cli-installs">
+            @foreach (var install in AppCliGuide.Installs(Localizer))
+            {
+                <li @key="install.Line" class="cli-install">
+                    <div class="cli-install-words">
+                        <div class="cli-install-head">
+                            <BitIcon IconName="@install.Icon" Class="cli-install-icon" />
+                            <BitText Typography="BitTypography.H6" Element="@cardHeading">@install.Title</BitText>
+                        </div>
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@install.Text</BitText>
+                    </div>
+                    @paste(install.Line)
+                </li>
+            }
+        </ul>
+        <div class="ah-band-note">
+            <BitIcon IconName="@BitIconName.Info" Color="BitColor.Primary" FontSize="1.125rem" Class="ah-band-note-icon" />
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@sentence((Localizer[nameof(AppStrings.CliInstallThen)], [AppCliGuide.HelpLine]))</BitText>
+        </div>
+        <div class="ah-band-links">
+            <BitButton Variant="BitVariant.Outline" Href="@AppCliGuide.PackageUrl" Target="_blank" IconName="@BitIconName.NugetLogo">@Localizer[nameof(AppStrings.CliPackageLink)]</BitButton>
+            <BitButton Variant="BitVariant.Outline" Href="@AppCliGuide.SourceUrl" Target="_blank" IconName="@BitIconName.Code">@Localizer[nameof(AppStrings.CliSourceLink)]</BitButton>
+        </div>
+    </section>
+
+    @* 5. What the visitor can check for themselves: the source, the build and what it reports. Latin digits in every
+       language, so the license's name stays as written *@
+    <section class="ah-band app-latin-digits" id="ah-check" aria-labelledby="ah-check-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="check" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CliCheckTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CliCheckIntro)]</BitText>
+        </header>
+        <AppHomeTiles Tiles="AppCliGuide.Check(Localizer, source, verify, telemetry)" HeadingElement="@cardHeading" MinWidth="14rem" />
+    </section>
+
+    @* Questions, closed: the answers stay in the page for search engines and find-in-page *@
+    <section class="ah-band" id="ah-questions" aria-labelledby="ah-questions-title">
+        <header class="ah-band-head">
+            <AppHomeBandTitle Anchor="questions" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CompareQuestionsTitle)]" />
+        </header>
+        <div class="ah-faq">
+            @foreach (var question in AppCliGuide.Questions(Localizer))
+            {
+                <BitAccordion @key="question.Question" Title="@question.Question" HeadingLevel="3" HiddenUntilFound Class="ah-faq-item">
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@question.Answer</BitText>
+                </BitAccordion>
+            }
+        </div>
+    </section>
+
+    <section class="ah-final">
+        <BitText Typography="BitTypography.H3" Element="@sectionHeading">@Localizer[nameof(AppStrings.AppHomeFinalTitle)]</BitText>
+        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AppHomeFinalText)]</BitText>
+        <BitButton Href="@GetStartedUrl" IconName="@BitIconName.Rocket">@Localizer[nameof(AppStrings.AppHomeGetStarted)]</BitButton>
+    </section>
+</div>

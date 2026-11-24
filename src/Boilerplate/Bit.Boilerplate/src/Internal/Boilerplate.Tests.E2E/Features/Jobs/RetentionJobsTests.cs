@@ -86,7 +86,7 @@ public partial class RetentionJobsTests
         var marker = Guid.NewGuid().ToString("N")[..10];
         var stale = DateTimeOffset.UtcNow - wellPastEveryRetention;
         var tenant = new Tenant { Id = Guid.NewGuid(), Name = $"e2e-{marker}", Title = $"E2E {marker}" };
-        var keeperEmail = $"e2e-keeper-{marker}@bitplatform.dev";
+        var keeperEmail = $"e2e-keeper-{marker}@bitfabric.co";
 
         // Registered before the writes, so a half-made fixture is undone too.
         RegisterForCleanup(() => DeleteFixture(tenant.Id));
@@ -95,7 +95,7 @@ public partial class RetentionJobsTests
         await using var dbContext = await globalApiClient.DbContextFactory!.CreateDbContextAsync(cancellationToken);
 
         // ---- An account nobody ever confirmed, old enough that no lawful basis is left for holding it ----
-        var unconfirmedUserId = await CreateUser(dbContext, tenant, $"e2e-unconfirmed-{marker}@bitplatform.dev", confirmed: false, createdOn: stale);
+        var unconfirmedUserId = await CreateUser(dbContext, tenant, $"e2e-unconfirmed-{marker}@bitfabric.co", confirmed: false, createdOn: stale);
 
         // ---- And one in use, which every other fixture hangs off ----
         var keeperUserId = await CreateUser(dbContext, tenant, keeperEmail, confirmed: true, createdOn: DateTimeOffset.UtcNow);

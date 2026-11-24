@@ -35,7 +35,7 @@ public class TemplateConfigurationTests
 {
     /// <summary>
     /// Not a declared symbol, and deliberately so: <c>//#if (IsInsideProjectTemplate == true)</c> blocks are stripped
-    /// from every generated project and exist only so the bitplatform repository's own working copy builds.
+    /// from every generated project and exist only so the bitfabric repository's own working copy builds.
     /// </summary>
     private const string TemplateOnlySymbol = "IsInsideProjectTemplate";
 

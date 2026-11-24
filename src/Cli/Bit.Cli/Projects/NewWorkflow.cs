@@ -10,7 +10,7 @@ namespace Bit.Cli.Projects;
 
 public sealed partial class NewWorkflow(CliServices cli)
 {
-    private const string CreateProjectPage = "https://bitplatform.dev/templates/create-project";
+    private const string CreateProjectPage = "https://bitfabric.co/new";
 
     public async Task<int> RunAsync(NewRequest request, CancellationToken cancellationToken)
     {
@@ -139,6 +139,7 @@ public sealed partial class NewWorkflow(CliServices cli)
                 if (request.NoGit is false)
                 {
                     await RunProjectStepAsync(steps, context, "git", "Initializing git", projectSteps.GitAsync, cancellationToken);
+                    await RunProjectStepAsync(steps, context, "trial-license", "Getting a trial license", projectSteps.TrialLicenseAsync, cancellationToken);
                 }
 
                 var sdkReady = await RunSetupStepsAsync(cli, steps, context, projectSteps, request.NoWorkloads, request.NoRestore, request.NoBuild, request.NoBrowsers, runMode, cancellationToken);
@@ -450,7 +451,7 @@ public sealed partial class NewWorkflow(CliServices cli)
 
         cli.Console.Out.WriteLine();
         cli.Console.Out.MarkupLine($"  [bold blue]bit[/] [grey]CLI {Markup.Escape(BuildInfo.Version)}[/]");
-        cli.Console.Out.MarkupLine($"  [grey]open source at github.com/bitfoundation/bitplatform · {Markup.Escape(provenance)} · details: bit about[/]");
+        cli.Console.Out.MarkupLine($"  [grey]source-available under FCL-1.0-MIT at github.com/bitfoundation/bitfabric · {Markup.Escape(provenance)} · details: bit about[/]");
         cli.Console.Out.WriteLine();
     }
 
@@ -535,6 +536,11 @@ public sealed partial class NewWorkflow(CliServices cli)
                 File.Delete(legacySolution);
             }
 
+            if (result.Succeeded && context.Exists)
+            {
+                Licensing.NewProjectIdentity.Assign(context.Directory);
+            }
+
             var files = context.Exists ? Directory.EnumerateFiles(context.Directory, "*", SearchOption.AllDirectories).Count() : 0;
             return StepResult.FromProcess(result, $"Created {context.Name}", $"Couldn't create {context.Name}", null, $"bit Boilerplate{(package.Version is TemplateSource.FolderVersion ? "" : $" {package.Version}")}, {files} files");
         }, cancellationToken);
@@ -577,6 +583,7 @@ public sealed partial class NewWorkflow(CliServices cli)
         var stepsList = new List<string> { "create" };
         if (request.NoCertificate is false) stepsList.Add("unique app certificate and web push keys");
         if (request.NoGit is false) stepsList.Add("git with main");
+        if (request.NoGit is false) stepsList.Add("trial license");
         stepsList.Add(".NET SDK check");
         if (selection.Aspire && cli.Environment.IsCI is false) stepsList.Add("container runtime for Aspire");
         if (request.NoBuild is false) stepsList.Add(runMode is ProjectRunMode.UntilClosed ? "build and open the Workbench" : "build the Workbench");
@@ -646,8 +653,8 @@ public sealed partial class NewWorkflow(CliServices cli)
             }
 
             cli.Console.Out.MarkupLine($"  [bold]Run it[/]     cd {Markup.Escape(ProcessSpec.Quote(relative))}  [grey]then[/]  {Markup.Escape(run)}");
-            cli.Console.Out.MarkupLine($"  [bold]Sign in[/]    test@bitplatform.dev / {Markup.Escape(context.SeedPassword ?? "123456")}  [grey]seeded accounts, remove them before you deploy[/]");
-            cli.Console.Out.MarkupLine("  [bold]Docs[/]       https://bitplatform.dev/templates");
+            cli.Console.Out.MarkupLine($"  [bold]Sign in[/]    test@bitfabric.co / {Markup.Escape(context.SeedPassword ?? "123456")}  [grey]seeded accounts, remove them before you deploy[/]");
+            cli.Console.Out.MarkupLine("  [bold]Docs[/]       https://bitfabric.co");
         }
 
         var followUps = steps.Reports.Where(r => r.Result.FollowUp is not null && r.Result.Status is StepStatus.Failed or StepStatus.Warning).ToList();

@@ -8,7 +8,11 @@ namespace Bit.Cli.Tests.Infrastructure;
 public sealed class TestHost : IDisposable
 {
     /// <param name="realProcesses">Runs the commands bit starts for real, instead of answering them from <see cref="Runner"/>.</param>
-    public TestHost(HostOs? os = null, IDictionary<string, string>? variables = null, IPrompter? prompter = null, bool realProcesses = false)
+    /// <param name="checksLicenses">
+    /// Checks the project's license before a command, as bit does. Off for the tests of everything else, whose projects
+    /// have no license (See LicenseTests).
+    /// </param>
+    public TestHost(HostOs? os = null, IDictionary<string, string>? variables = null, IPrompter? prompter = null, bool realProcesses = false, bool checksLicenses = false)
     {
         Root = Directory.CreateTempSubdirectory("bit-cli-tests-").FullName;
         Home = Directory.CreateDirectory(Path.Combine(Root, "home")).FullName;
@@ -44,7 +48,13 @@ public sealed class TestHost : IDisposable
         Error = new TestConsole().Width(140);
         Console = new CliConsole(Out, Error);
         Services = new CliServices(Environment, Console, prompter, realProcesses ? new ProcessRunner(Environment, CliLog.None) : Runner);
+        Services.License.ChecksCommands = checksLicenses;
+        // No test reaches bit Fabric: one that asks it for a license gets bit Fabric of its own (See FakeBitFabric).
+        Services.License.Http = BitFabric;
     }
+
+    /// <summary>What answers bit's requests to bit Fabric: nothing, as offline, until a test sets it up.</summary>
+    public FakeBitFabric BitFabric { get; } = new();
 
     public string Root { get; }
 

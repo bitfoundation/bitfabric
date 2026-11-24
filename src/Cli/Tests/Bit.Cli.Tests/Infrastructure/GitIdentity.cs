@@ -15,9 +15,9 @@ public sealed class GitIdentity : IDisposable
         File.WriteAllText(emptyConfig, "");
 
         Set("GIT_AUTHOR_NAME", "bit tests");
-        Set("GIT_AUTHOR_EMAIL", "tests@bitplatform.dev");
+        Set("GIT_AUTHOR_EMAIL", "tests@bitfabric.co");
         Set("GIT_COMMITTER_NAME", "bit tests");
-        Set("GIT_COMMITTER_EMAIL", "tests@bitplatform.dev");
+        Set("GIT_COMMITTER_EMAIL", "tests@bitfabric.co");
         Set("GIT_CONFIG_GLOBAL", emptyConfig);
         Set("GIT_CONFIG_NOSYSTEM", "1");
     }

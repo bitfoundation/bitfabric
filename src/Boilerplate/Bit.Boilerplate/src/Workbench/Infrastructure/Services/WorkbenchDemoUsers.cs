@@ -8,9 +8,9 @@ public static class WorkbenchDemoUsers
 {
     public static IReadOnlyList<WorkbenchDemoUser> All { get; } =
     [
-        new(nameof(WorkbenchStrings.DemoUserYas), "yas@bitplatform.dev", AppRoles.GlobalAdmin),
-        new(nameof(WorkbenchStrings.DemoUserSaleh), "saleh@bitplatform.dev", StoreManagerRole),
-        new(nameof(WorkbenchStrings.DemoUserZahra), "zahra@bitplatform.dev", AppRoles.Demo),
+        new(nameof(WorkbenchStrings.DemoUserYas), "yas@bitfabric.co", AppRoles.GlobalAdmin),
+        new(nameof(WorkbenchStrings.DemoUserSaleh), "saleh@bitfabric.co", StoreManagerRole),
+        new(nameof(WorkbenchStrings.DemoUserZahra), "zahra@bitfabric.co", AppRoles.Demo),
     ];
 
     public static IReadOnlyList<string> TenantKeys { get; } =

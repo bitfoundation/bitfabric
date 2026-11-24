@@ -7,9 +7,11 @@ using Bit.Belemetry;
 using Bit.Bmage;
 using Bit.Fabric.Server.Api.Features.Attachments;
 using Bit.Fabric.Server.Api.Features.Diagnostic;
+using Bit.Fabric.Server.Api.Features.DocsMcp;
 using Bit.Fabric.Server.Api.Features.Identity;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth.Services;
+using Bit.Fabric.Server.Api.Features.Licensing;
 using Bit.Fabric.Server.Api.Features.Monitoring;
 using Bit.Fabric.Server.Api.Features.PersonalData;
 using Bit.Fabric.Server.Api.Features.PushNotification;
@@ -71,6 +73,9 @@ public static partial class Program
         services.AddOAuth();
 
         services.AddMonitoring();
+
+        services.AddDocsMcp();
+        services.AddLicensing();
 
         services.AddScoped<IdentityEmailService>();
         services.AddScoped<EmailServiceJobsRunner>();
@@ -859,6 +864,7 @@ public static partial class Program
         services.AddScoped<IPersonalDataSource, AttachmentsPersonalDataSource>();
         services.AddScoped<IPersonalDataSource, PushNotificationsPersonalDataSource>();
         services.AddScoped<IPersonalDataSource, TenantsPersonalDataSource>();
+        services.AddScoped<IPersonalDataSource, LicensingPersonalDataSource>();
 
         return services;
     }

@@ -16,6 +16,8 @@ public abstract partial class SitePageHost : WorkbenchComponentBase
 
     public const string CostKey = "app-cost";
 
+    public const string CliKey = "app-cli";
+
     public const string NewProjectKey = "new-project";
 
     public const string SetupProjectKey = "setup-project";
@@ -42,7 +44,7 @@ public abstract partial class SitePageHost : WorkbenchComponentBase
     public static string PreviewOf(string pageKey, WorkbenchScenario scenario, string? paneId)
         => WorkbenchUrls.Preview(pageKey, scenario with { Variant = null, Switches = null }, paneId);
 
-    /// <summary>What a link of the app means here: the home page, the features page, the cost page, the wizard, the setup page or the sign-in note; null leaves it to others.</summary>
+    /// <summary>What a link of the app means here: the home page, the features page, the cost page, the bit CLI page, the wizard, the setup page or the sign-in note; null leaves it to others.</summary>
     private Func<Task>? TranslateAppLink(Uri target)
     {
         var path = CultureSegmentRegex().Replace(target.AbsolutePath, string.Empty).TrimEnd('/');
@@ -58,6 +60,9 @@ public abstract partial class SitePageHost : WorkbenchComponentBase
 
         if (string.Equals(path, PageUrls.Cost, StringComparison.OrdinalIgnoreCase))
             return Go(CostKey);
+
+        if (string.Equals(path, PageUrls.Cli, StringComparison.OrdinalIgnoreCase))
+            return Go(CliKey);
 
         if (string.Equals(path, PageUrls.NewProject, StringComparison.OrdinalIgnoreCase))
             return Go(NewProjectKey);

@@ -28,6 +28,13 @@ public partial class ServerApiSettings : ServerSharedSettings
     /// <summary>Watching customers' apps. Usable as is.</summary>
     public MonitoringOptions Monitoring { get; set; } = new();
 
+    /// <summary>The bit platform documentation MCP server at /docs-mcp. Usable as is.</summary>
+    public DocsMcpOptions DocsMcp { get; set; } = new();
+
+    /// <summary>Signing projects' licenses. Its private key is required outside Development.</summary>
+    [ValidateObjectMembers]
+    public LicensingOptions Licensing { get; set; } = new();
+
     public AIOptions? AI { get; set; }
 
     public SmsOptions? Sms { get; set; }
@@ -128,6 +135,12 @@ public partial class ServerApiSettings : ServerSharedSettings
             if (AdsPushVapid?.PrivateKey is "dMIR1ICj-lDWYZ-ZYCwXKyC2ShYayYYkEL-oOPnpq9c" || AdsPushVapid?.Subject is "mailto:you@example.com")
             {
                 throw new InvalidOperationException("The AdsPushVapid's PrivateKey and Subject are not set. Please set them in the server's appsettings.json file.");
+            }
+
+            // Outside Development a key made at startup would sign licenses no bit CLI accepts.
+            if (string.IsNullOrWhiteSpace(Licensing.PrivateKey))
+            {
+                validationResults.Add(new ValidationResult($"{nameof(LicensingOptions.PrivateKey)} must be set, from the SERVERAPI__LICENSING__PRIVATEKEY secret.", [nameof(Licensing)]));
             }
         }
 

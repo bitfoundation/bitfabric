@@ -1,0 +1,451 @@
+using System.Collections.Concurrent;
+using Bit.Fabric.Server.Api.Features.DocsMcp;
+using Bit.Fabric.Server.Api.Features.DocsMcp.CodeIndex;
+using Bit.Fabric.Server.Api.Infrastructure.SignalR;
+using FluentEmail.Core;
+using FluentEmail.Core.Interfaces;
+using FluentEmail.Core.Models;
+using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Logging.Abstractions;
+using ModelContextProtocol.Client;
+using ModelContextProtocol.Protocol;
+
+namespace Bit.Fabric.Tests.Features.DocsMcp;
+
+/// <summary>
+/// The bit platform's documentation MCP server at /docs-mcp, called over HTTP the way a coding agent calls it, with every
+/// server it reaches stood in by <see cref="FakeBitPlatform"/>; and the same tools as the in-app assistant calls them.
+/// </summary>
+[TestClass, TestCategory("IntegrationTest")]
+public partial class DocsMcpTests
+{
+    private const string TeamAddress = "team@bitplatform.test";
+
+    [TestMethod]
+    public async Task TheTools_Should_BeListed_EveryLibrarysOnRequest()
+    {
+        await using var platform = new FakeBitPlatform();
+        await using var server = await StartServer(platform);
+        await using var mcp = await Connect(server);
+
+        Assert.AreEqual("bitplatform", mcp.ServerInfo!.Name);
+
+        var tools = (await mcp.ListToolsAsync(cancellationToken: TestContext.CancellationToken)).ToDictionary(tool => tool.Name);
+
+        string[] listed = ["SendBitPlatformFeedback", "GetBitPlatformReleases", "SearchBitBlazorUI", "SearchButil", "FindBitPlatformSymbols", "SearchBitPlatformCode",
+                           "GetBitPlatformSymbolSource", "microsoft_docs_search", "AskGitHubRepository"];
+        Assert.IsEmpty(listed.Except(tools.Keys), $"Listed: {string.Join(", ", tools.Keys)}");
+        Assert.DoesNotContain("SearchBmage", tools.Keys, "Every other library's tools are listed on request.");
+        Assert.DoesNotContain("read_wiki_structure", tools.Keys, "Only DeepWiki's question tool is exposed, under a name of its own.");
+        Assert.DoesNotContain(name => name is "GetProjects" or "GetAppPages", tools.Keys, "The chatbot's tools stay on /mcp.");
+
+        Assert.IsFalse(tools["SendBitPlatformFeedback"].ProtocolTool.Annotations!.ReadOnlyHint, "Feedback reaches people.");
+        Assert.IsTrue(tools.Values.Where(tool => tool.Name is not "SendBitPlatformFeedback").All(tool => tool.ProtocolTool.Annotations?.ReadOnlyHint is true), "Everything else only reads.");
+
+        await using var everyLibrary = await Connect(server, "libraries=all");
+
+        var all = (await everyLibrary.ListToolsAsync(cancellationToken: TestContext.CancellationToken)).Select(tool => tool.Name).ToArray();
+        Assert.Contains("SearchBmage", all);
+        Assert.Contains("SearchBheadless", all);
+        Assert.Contains("SearchBitBlazorUI", all);
+    }
+
+    [TestMethod]
+    public async Task EveryTool_Should_Answer()
+    {
+        await using var platform = new FakeBitPlatform();
+        var sender = new CapturingSender();
+        await using var server = await StartServer(platform, sender);
+        await using var mcp = await Connect(server, "libraries=all&v=10.6.0&project=a-project");
+
+        Assert.AreEqual("BlazorUI on BitDataGrid.", await Call(mcp, "SearchBitBlazorUI", new() { ["query"] = "BitDataGrid" }));
+        Assert.StartsWith(FakeBitPlatform.BmageAnswer, await Call(mcp, "SearchBmage", new() { ["query"] = "crop" }));
+        Assert.AreEqual("The resize recipe of Bmage.", await Call(mcp, "GetBmageRecipe", new() { ["recipe"] = "resize" }));
+        Assert.AreEqual("Microsoft Learn on Blazor.", await Call(mcp, "microsoft_docs_search", new() { ["query"] = "Blazor" }));
+        Assert.AreEqual("riok/mapperly answers How?.", await Call(mcp, "AskGitHubRepository", new() { ["repoName"] = "riok/mapperly", ["question"] = "How?" }));
+
+        var releases = await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "10.6.0" });
+        Assert.StartsWith("10.6.0 is behind: 1 newer release, the newest being 10.7.0", releases, "The prerelease and the draft don't count.");
+        Assert.Contains("BitDataGrid exports to Excel.", releases);
+
+        Assert.AreEqual("The report reached the bit platform team. Tell the user it was sent.",
+            await Call(mcp, "SendBitPlatformFeedback", new() { ["title"] = "BitDropdown loses its selection", ["report"] = "Scroll a virtualized list, then pick." }));
+
+        var email = sender.Sent.Single();
+        Assert.AreEqual(TeamAddress, email.Data.ToAddresses.Single().EmailAddress);
+        Assert.Contains("BitDropdown loses its selection", email.Data.Subject);
+        Assert.Contains("Release: 10.6.0", email.Data.Body, "Stamped with the release the agent connected for.");
+        Assert.Contains("Project: a-project", email.Data.Body);
+        Assert.Contains("Scroll a virtualized list, then pick.", email.Data.Body);
+        Assert.IsFalse(email.Data.IsHtml, "Nothing an agent writes renders.");
+
+        var refused = await mcp.CallToolAsync("SendBitPlatformFeedback", new Dictionary<string, object?> { ["title"] = "No report" }, cancellationToken: TestContext.CancellationToken);
+        Assert.IsTrue(refused.IsError);
+        Assert.HasCount(1, sender.Sent, "A report without its text isn't sent.");
+    }
+
+    [TestMethod]
+    public async Task TheRelease_Should_BeTheOneTheAddressNames()
+    {
+        await using var platform = new FakeBitPlatform();
+        await using var server = await StartServer(platform);
+
+        await using (var current = await Connect(server, "v=10.7.0"))
+        {
+            Assert.StartsWith("10.7.0 is up to date", await Call(current, "GetBitPlatformReleases"), "Without a version argument, the one ?v= names is checked.");
+        }
+
+        await using var older = await Connect(server, "v=10.6.0");
+        Assert.StartsWith("10.6.0 is behind", await Call(older, "GetBitPlatformReleases"));
+
+        // The source code tools read the release ?v= names, the newest when it names none or one not served.
+        var versions = new DocsMcpVersions(new() { DocsMcp = new() { CodeIndex = new() { DataDirectoryPath = "anywhere" } } });
+        Assert.IsNull(versions.Resolve("10.7.0"));
+        Assert.Contains("still being built", versions.Describe("10.7.0"));
+
+        versions.Add(new(Release("10.6.0"), "sources/v-10.6.0", "project-10.6.0"));
+        versions.Add(new(Release("10.7.0"), "sources/v-10.7.0", "project-10.7.0"));
+
+        Assert.AreEqual("10.6.0", versions.Resolve("10.6.0")!.Name);
+        Assert.AreEqual("10.7.0", versions.Resolve(null)!.Name);
+        Assert.AreEqual("10.7.0", versions.Resolve("11.0.0")!.Name);
+        Assert.Contains("asked for release 11.0.0, which this endpoint's source code index does not hold", versions.Describe("11.0.0"));
+        Assert.Contains("read release 10.6.0, the one this connection asked for", versions.Describe("10.6.0"));
+    }
+
+    /// <summary>
+    /// A release's sources come from GitHub's archives of its tag: the project template from bitfabric's from 11.0.0 on and
+    /// from bitplatform's before, at the same path in the index either way - the template's scaffold-entity skill narrows
+    /// its searches to src/Templates - and nothing else of either repository, nor a file that would land outside the
+    /// release's folder.
+    /// </summary>
+    [TestMethod]
+    public async Task ARelease_Should_BeExtracted_WithTheTemplateWhereverItLives()
+    {
+        await using var platform = new FakeBitPlatform();
+        platform.Archives["bitplatform/v-10.7.0"] = new()
+        {
+            ["src/Websites/Platform/Startup.cs"] = "class Startup { }",
+            ["src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs"] = "// The template of 10.7.0",
+            ["src/BlazorUI/Bit.BlazorUI/BitButton.cs"] = "class BitButton { }",
+            ["src/Websites/../../../outside.cs"] = "class Outside { }"
+        };
+        platform.Archives["bitplatform/v-11.0.0"] = new()
+        {
+            ["src/Websites/Platform/Startup.cs"] = "class Startup { }",
+            ["src/BlazorUI/Bit.BlazorUI/BitButton.cs"] = "class BitButton { }"
+        };
+        platform.Archives["bitfabric/v-11.0.0"] = new()
+        {
+            ["src/Boilerplate/Bit.Boilerplate/src/Program.cs"] = "// The template of 11.0.0",
+            ["src/Cli/Program.cs"] = "// bit CLI",
+            ["src/Fabric/src/Server/Program.cs"] = "// bit Fabric"
+        };
+        platform.Archives["bitplatform/v-11.1.0"] = platform.Archives["bitplatform/v-11.0.0"];
+
+        var sources = new BitPlatformSources(HttpClientFactoryOf(platform), NullLogger<BitPlatformSources>.Instance);
+        var directory = Directory.CreateTempSubdirectory("docs-mcp-sources-");
+
+        try
+        {
+            var older = Path.Combine(directory.FullName, "v-10.7.0");
+            Assert.IsTrue(await sources.Ensure(Release("10.7.0"), older, TestContext.CancellationToken));
+            Assert.AreSequenceEqual(new[] { "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs", "src/Websites/Platform/Startup.cs" }, FilesUnder(older));
+            Assert.IsFalse(File.Exists(Path.Combine(directory.FullName, "outside.cs")));
+
+            var newer = Path.Combine(directory.FullName, "v-11.0.0");
+            Assert.IsTrue(await sources.Ensure(Release("11.0.0"), newer, TestContext.CancellationToken));
+            Assert.AreSequenceEqual(new[] { "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs", "src/Websites/Platform/Startup.cs" }, FilesUnder(newer));
+            Assert.AreEqual("// The template of 11.0.0", File.ReadAllText(Path.Combine(newer, "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs")));
+
+            // Without its bitfabric tag yet, a release is left for a later attempt rather than indexed without the template.
+            Assert.IsFalse(await sources.Ensure(Release("11.1.0"), Path.Combine(directory.FullName, "v-11.1.0"), TestContext.CancellationToken));
+            Assert.IsFalse(File.Exists(Path.Combine(directory.FullName, "v-11.1.0.extracted")));
+        }
+        finally
+        {
+            directory.Delete(recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// The command line installs itself from codebase-memory's GitHub release, the archive for this machine checked against
+    /// the checksums published with it. One that doesn't match leaves nothing behind to run.
+    /// </summary>
+    [TestMethod]
+    public async Task TheCommandLine_Should_BeInstalled_OnlyAsPublished()
+    {
+        await using var platform = new FakeBitPlatform { ServesTamperedCli = true };
+        var directory = Directory.CreateTempSubdirectory("docs-mcp-cli-");
+
+        try
+        {
+            Server.Api.ServerApiSettings settings = new() { DocsMcp = new() { CodeIndex = new() { DataDirectoryPath = directory.FullName } } };
+
+            var tampered = new CodebaseMemoryCli(HttpClientFactoryOf(platform), settings, NullLogger<CodebaseMemoryCli>.Instance);
+            Assert.AreEqual("codebase-memory 0.12.1 could not be installed", await tampered.EnsureInstalled(TestContext.CancellationToken));
+            Assert.IsNull(tampered.ExecutablePath);
+            Assert.IsEmpty(Directory.EnumerateFiles(directory.FullName, "*", SearchOption.AllDirectories), "Nothing unchecked is kept, the download included.");
+
+            platform.ServesTamperedCli = false;
+
+            var installed = new CodebaseMemoryCli(HttpClientFactoryOf(platform), settings, NullLogger<CodebaseMemoryCli>.Instance);
+            Assert.IsNull(await installed.EnsureInstalled(TestContext.CancellationToken));
+            Assert.AreSequenceEqual(FakeBitPlatform.CliExecutable, File.ReadAllBytes(installed.ExecutablePath!));
+            Assert.AreEqual(Path.Combine(directory.FullName, "cli", "0.12.1"), Path.GetDirectoryName(installed.ExecutablePath));
+
+            if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+            {
+                Assert.IsTrue(File.GetUnixFileMode(installed.ExecutablePath!).HasFlag(UnixFileMode.UserExecute), "It is installed to run.");
+            }
+        }
+        finally
+        {
+            directory.Delete(recursive: true);
+        }
+    }
+
+    private static BitPlatformRelease Release(string name)
+        => new(Version.Parse(name), $"v-{name}", $"https://github.com/bitfoundation/bitplatform/releases/tag/v-{name}", DateTimeOffset.UtcNow, "");
+
+    private static string[] FilesUnder(string directory)
+        => [.. Directory.EnumerateFiles(directory, "*", SearchOption.AllDirectories).Select(file => Path.GetRelativePath(directory, file).Replace(Path.DirectorySeparatorChar, '/')).Order(StringComparer.Ordinal)];
+
+    /// <summary>For the parts that need no server: every client they create answers from <paramref name="platform"/>.</summary>
+    private static IHttpClientFactory HttpClientFactoryOf(FakeBitPlatform platform)
+    {
+        var factory = A.Fake<IHttpClientFactory>();
+        A.CallTo(() => factory.CreateClient(A<string>._)).ReturnsLazily(() => new HttpClient(new FakeBitPlatform.Handler(platform) { InnerHandler = new SocketsHttpHandler() }));
+        return factory;
+    }
+
+    [TestMethod]
+    public async Task AServerThatDoesNotAnswer_Should_LeaveTheOthersAnswering()
+    {
+        await using var platform = new FakeBitPlatform();
+        platform.Down["butil.bitplatform.dev"] = true;
+        platform.Down["mcp.deepwiki.com"] = true;
+
+        await using var server = await StartServer(platform);
+        await using var mcp = await Connect(server);
+
+        var tools = (await mcp.ListToolsAsync(cancellationToken: TestContext.CancellationToken)).Select(tool => tool.Name).ToArray();
+        Assert.DoesNotContain("SearchButil", tools);
+        Assert.DoesNotContain("AskGitHubRepository", tools);
+        Assert.Contains("SearchBitBlazorUI", tools, "One server down leaves the others' tools listed.");
+
+        // A server that goes down after it was listed: the call says so rather than failing the session.
+        platform.Down["blazorui.bitplatform.dev"] = true;
+
+        var result = await mcp.CallToolAsync("SearchBitBlazorUI", new Dictionary<string, object?> { ["query"] = "BitButton" }, cancellationToken: TestContext.CancellationToken);
+        Assert.IsTrue(result.IsError);
+        Assert.Contains("did not answer", Text(result));
+
+        // Back up, the next call answers.
+        platform.Down.TryRemove("blazorui.bitplatform.dev", out _);
+        Assert.AreEqual("BlazorUI on BitButton.", await Call(mcp, "SearchBitBlazorUI", new() { ["query"] = "BitButton" }));
+    }
+
+    [TestMethod]
+    public async Task TheSourceCodeTools_Should_SayWhy_WithoutAnIndex()
+    {
+        await using var platform = new FakeBitPlatform();
+        await using var server = await StartServer(platform);
+        await using var mcp = await Connect(server);
+
+        Assert.Contains("source code tools don't answer for now: this server has no source code index configured", mcp.ServerInstructions!);
+
+        var result = await mcp.CallToolAsync("FindBitPlatformSymbols", new Dictionary<string, object?> { ["query"] = "BitButton" }, cancellationToken: TestContext.CancellationToken);
+        Assert.IsTrue(result.IsError);
+        Assert.Contains("The source code index is not available: this server has no source code index configured", Text(result));
+
+        using var versions = JsonDocument.Parse(await server.CreateRawHttpClient().GetStringAsync(new Uri(server.ApiAppAddress, "docs-mcp/versions"), TestContext.CancellationToken));
+        Assert.AreEqual(JsonValueKind.Null, versions.RootElement.GetProperty("latest").ValueKind);
+        Assert.AreEqual(0, versions.RootElement.GetProperty("versions").GetArrayLength());
+    }
+
+    /// <summary>A release whose command line can't be installed - here a download that doesn't match its checksum - is said so.</summary>
+    [TestMethod]
+    public async Task TheSourceCodeTools_Should_SayWhy_WhenTheirCommandLineCantBeInstalled()
+    {
+        var dataDirectory = Directory.CreateTempSubdirectory("docs-mcp-");
+
+        try
+        {
+            await using var platform = new FakeBitPlatform { ServesTamperedCli = true };
+            await using var server = await StartServer(platform, configure: configuration => configuration["DocsMcp:CodeIndex:DataDirectoryPath"] = dataDirectory.FullName);
+
+            var versions = server.ApiApp.Services.GetRequiredService<DocsMcpVersions>();
+
+            using var deadline = CancellationTokenSource.CreateLinkedTokenSource(TestContext.CancellationToken);
+            deadline.CancelAfter(TimeSpan.FromSeconds(30));
+
+            while (versions.Unavailable?.Contains("could not be installed") is not true)
+            {
+                await Task.Delay(100, deadline.Token);
+            }
+
+            await using var mcp = await Connect(server);
+
+            var result = await mcp.CallToolAsync("SearchBitPlatformCode", new Dictionary<string, object?> { ["pattern"] = "BitButton" }, cancellationToken: TestContext.CancellationToken);
+            Assert.IsTrue(result.IsError);
+            Assert.Contains("codebase-memory 0.12.1 could not be installed", Text(result));
+
+            Assert.AreEqual("BlazorUI on BitButton.", await Call(mcp, "SearchBitBlazorUI", new() { ["query"] = "BitButton" }), "Every other tool answers.");
+            Assert.IsEmpty(Directory.EnumerateFiles(dataDirectory.FullName, "codebase-memory-mcp*", SearchOption.AllDirectories), "Nothing unchecked is left to run.");
+        }
+        finally
+        {
+            dataDirectory.Delete(recursive: true);
+        }
+    }
+
+    [TestMethod]
+    public async Task TheProject_Should_ReachTheAccessCheck()
+    {
+        await using var platform = new FakeBitPlatform();
+        var access = new RecordingAccess();
+        await using var server = await StartServer(platform, configureServices: services => services.Replace(ServiceDescriptor.Scoped<IDocsMcpAccess>(_ => access)));
+
+        await using (var licensed = await Connect(server, "project=licensed-project"))
+        {
+            Assert.AreEqual("BlazorUI on BitButton.", await Call(licensed, "SearchBitBlazorUI", new() { ["query"] = "BitButton" }));
+        }
+
+        Assert.Contains("licensed-project", access.Asked);
+
+        await using var unlicensed = await Connect(server, $"project={RecordingAccess.UnlicensedProject}");
+
+        Assert.EndsWith(RecordingAccess.Refusal, unlicensed.ServerInstructions!, "The agent learns why as it connects.");
+
+        var refused = await unlicensed.CallToolAsync("SearchBitBlazorUI", new Dictionary<string, object?> { ["query"] = "BitButton" }, cancellationToken: TestContext.CancellationToken);
+        Assert.IsTrue(refused.IsError);
+        Assert.AreEqual(RecordingAccess.Refusal, Text(refused));
+    }
+
+    /// <summary>
+    /// The in-app assistant reads a library's documentation through the same tools, in the same process: the library's tools
+    /// for the one it asks about, then a call of one of them. What it says with them is AssistantTests'.
+    /// </summary>
+    [TestMethod]
+    public async Task TheAssistant_Should_ReadALibrarysDocs()
+    {
+        await using var platform = new FakeBitPlatform();
+        await using var server = await StartServer(platform);
+        await using var scope = server.ApiApp.Services.CreateAsyncScope();
+
+        var functions = scope.ServiceProvider.GetRequiredService<AppChatbot>().GetAIFunctions().ToDictionary(function => function.Name);
+
+        var bmageTools = await Invoke(functions["GetBitLibraryTools"], new() { ["library"] = "bit Bmage" });
+        Assert.Contains("SearchBmage", bmageTools);
+        Assert.Contains("GetBmageRecipe", bmageTools);
+        Assert.DoesNotContain("SearchBitBlazorUI", bmageTools, "One library's tools at a time.");
+
+        Assert.Contains("no bit platform library named Photoshop", await Invoke(functions["GetBitLibraryTools"], new() { ["library"] = "Photoshop" }));
+
+        using var arguments = JsonDocument.Parse("""{ "query": "an image editor" }""");
+        var answer = await Invoke(functions["CallBitLibraryTool"], new() { ["toolName"] = "SearchBmage", ["arguments"] = arguments.RootElement });
+        Assert.StartsWith(FakeBitPlatform.BmageAnswer, answer);
+
+        var feedback = await Invoke(functions["CallBitLibraryTool"], new() { ["toolName"] = "SendBitPlatformFeedback", ["arguments"] = null });
+        Assert.Contains("not a tool GetBitLibraryTools lists", feedback, "Only the libraries' tools: feedback reaches people.");
+    }
+
+    /// <summary>The server, with the far side of /docs-mcp stood in by <paramref name="platform"/>.</summary>
+    private async Task<AppTestServer> StartServer(FakeBitPlatform platform, CapturingSender? sender = null, Action<IServiceCollection>? configureServices = null, Action<Microsoft.Extensions.Configuration.ConfigurationManager>? configure = null)
+    {
+        await platform.Start(TestContext.CancellationToken);
+
+        var server = new AppTestServer();
+
+        await server.Build(configureTestServices: services =>
+        {
+            // Last in the pipeline but the socket: everything /docs-mcp reaches is answered by the fake.
+            services.AddHttpClient(DocsMcpHttp.ClientName).AddHttpMessageHandler(() => new FakeBitPlatform.Handler(platform));
+
+            // These tests are about the documentation, not the license: every project gets it, unless a test says otherwise.
+            services.Replace(ServiceDescriptor.Scoped<IDocsMcpAccess, OpenAccess>());
+
+            if (sender is not null)
+            {
+                services.Replace(ServiceDescriptor.Singleton<ISender>(sender));
+            }
+
+            configureServices?.Invoke(services);
+        }, configureTestConfiguration: configuration =>
+        {
+            configuration["DocsMcp:FeedbackEmailAddress"] = TeamAddress;
+            configure?.Invoke(configuration);
+        }).Start(TestContext.CancellationToken);
+
+        return server;
+    }
+
+    private async Task<McpClient> Connect(AppTestServer server, string? query = null)
+    {
+        var transport = new HttpClientTransport(new HttpClientTransportOptions
+        {
+            Endpoint = new Uri(server.ApiAppAddress, query is null ? "docs-mcp" : $"docs-mcp?{query}"),
+            TransportMode = HttpTransportMode.StreamableHttp
+        });
+
+        return await McpClient.CreateAsync(transport, cancellationToken: TestContext.CancellationToken);
+    }
+
+    private async Task<string> Call(McpClient mcp, string tool, Dictionary<string, object?>? arguments = null)
+    {
+        var result = await mcp.CallToolAsync(tool, arguments ?? [], cancellationToken: TestContext.CancellationToken);
+
+        var text = Text(result);
+        Assert.IsFalse(result.IsError ?? false, text);
+
+        return text;
+    }
+
+    /// <summary>What a function of the assistant returned, as the model reads it.</summary>
+    private async Task<string> Invoke(AIFunction function, AIFunctionArguments arguments)
+        => await function.InvokeAsync(arguments, TestContext.CancellationToken) switch
+        {
+            JsonElement { ValueKind: JsonValueKind.String } text => text.GetString()!,
+            var result => result?.ToString() ?? ""
+        };
+
+    private static string Text(CallToolResult result) => string.Join("\n", result.Content.OfType<TextContentBlock>().Select(block => block.Text));
+
+    /// <summary>Keeps the emails the app sends rather than handing them to an SMTP server.</summary>
+    public sealed class CapturingSender : ISender
+    {
+        public ConcurrentQueue<IFluentEmail> Sent { get; } = [];
+
+        public SendResponse Send(IFluentEmail email, CancellationToken? token = null)
+        {
+            Sent.Enqueue(email);
+            return new SendResponse();
+        }
+
+        public Task<SendResponse> SendAsync(IFluentEmail email, CancellationToken? token = null) => Task.FromResult(Send(email, token));
+    }
+
+    /// <summary>Answers every project but one, and remembers which it was asked about.</summary>
+    private sealed class OpenAccess : IDocsMcpAccess
+    {
+        public ValueTask<DocsMcpAccessDecision> Decide(string? projectId, CancellationToken cancellationToken) => ValueTask.FromResult(DocsMcpAccessDecision.Allowed);
+    }
+
+    private sealed class RecordingAccess : IDocsMcpAccess
+    {
+        public const string UnlicensedProject = "unlicensed-project";
+
+        public const string Refusal = "This project's license doesn't cover the bit platform's documentation tools.";
+
+        public ConcurrentQueue<string?> Asked { get; } = [];
+
+        public ValueTask<DocsMcpAccessDecision> Decide(string? projectId, CancellationToken cancellationToken)
+        {
+            Asked.Enqueue(projectId);
+            return ValueTask.FromResult(projectId is UnlicensedProject ? new DocsMcpAccessDecision(Refusal) : DocsMcpAccessDecision.Allowed);
+        }
+    }
+
+    public TestContext TestContext { get; set; } = default!;
+}
