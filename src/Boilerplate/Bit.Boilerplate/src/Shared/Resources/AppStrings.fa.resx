@@ -569,6 +569,27 @@
     <data name="LearnMore" xml:space="preserve">
     <value>بیشتر بدانید</value>
   </data>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>این اپ با bit Fabric ساخته شده است. AI Agent شما روی پایه‌ای کار می‌کند که همه‌چیز در آن از قبل کار می‌کند، و کد مال خودتان است.</value>
+  </data>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>پروژه‌ی خودتان را شروع کنید</value>
+  </data>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>به چند سؤال درباره‌ی محصولتان پاسخ دهید تا bit Fabric پروژه‌ای مانند همین را برای AI Agent شما آماده کند.</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>ساخت پروژه</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>سازگار با AI Agent شما</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>Claude Code، GitHub Copilot، Codex، Cursor و دیگران دستورالعمل‌ها و Skillهای خود پروژه را می‌خوانند.</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>پروژه را می‌سازد، روی هر کامپیوتری راه‌اندازی می‌کند، کلیدهایش را می‌سازد و به‌روز نگهش می‌دارد، از خط فرمان.</value>
+  </data>
     <data name="NewPassword" xml:space="preserve">
     <value>رمز عبور جدید</value>
   </data>

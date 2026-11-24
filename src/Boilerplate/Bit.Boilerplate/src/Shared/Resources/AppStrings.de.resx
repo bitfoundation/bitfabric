@@ -566,6 +566,27 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
   <data name="LearnMore" xml:space="preserve">
     <value>Mehr erfahren</value>
   </data>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>Diese App wurde mit bit Fabric erstellt. Ihr KI-Agent baut auf einer Grundlage auf, auf der bereits alles funktioniert, und der Code gehört Ihnen.</value>
+  </data>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>Ihr eigenes Projekt starten</value>
+  </data>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>Beantworten Sie ein paar Fragen zu Ihrem Produkt, und bit Fabric richtet für Ihren KI-Agenten ein Projekt wie dieses ein.</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>Projekt erstellen</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>Funktioniert mit Ihrem KI-Agenten</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>Claude Code, GitHub Copilot, Codex, Cursor und andere lesen die eigenen Anweisungen und Skills des Projekts.</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>Erstellt das Projekt, richtet es auf jedem Computer ein, erzeugt seine Schlüssel und hält es aktuell, über die Befehlszeile.</value>
+  </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Das Boilerplate ist mit ASP.NET Core, Identity, Web API, EF Core und Blazor aufgebaut.</value>
   </data>

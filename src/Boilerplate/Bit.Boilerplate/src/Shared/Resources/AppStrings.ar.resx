@@ -566,6 +566,27 @@
   <data name="LearnMore" xml:space="preserve">
     <value>تعرف على المزيد</value>
   </data>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>صُنع هذا التطبيق باستخدام bit Fabric. يبني وكيل الذكاء الاصطناعي الخاص بك على أساس يعمل فيه كل شيء بالفعل، والكود ملك لك.</value>
+  </data>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>ابدأ مشروعك الخاص</value>
+  </data>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>أجب عن بضعة أسئلة حول منتجك، وسيُعدّ bit Fabric مشروعًا مثل هذا لوكيل الذكاء الاصطناعي الخاص بك.</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>أنشئ مشروعًا</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>يعمل مع وكيل الذكاء الاصطناعي الخاص بك</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>يقرأ Claude Code وGitHub Copilot وCodex وCursor وغيرها تعليمات المشروع ومهاراته الخاصة.</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>ينشئ المشروع، ويُعدّه على أي حاسوب، ويصنع مفاتيحه ويبقيه محدّثًا، من سطر الأوامر.</value>
+  </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>تم بناء الـ Boilerplate باستخدام ASP.NET Core، Identity، Web API، EF Core و Blazor</value>
   </data>

@@ -566,6 +566,27 @@
   <data name="LearnMore" xml:space="preserve">
     <value>了解更多</value>
   </data>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>这个应用由 bit Fabric 构建。你的 AI 智能体在一个一切都已可用的基础上开发，代码完全属于你。</value>
+  </data>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>创建你自己的项目</value>
+  </data>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>回答几个关于你产品的问题，bit Fabric 就会为你的 AI 智能体搭建一个像这样的项目。</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>创建项目</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>适用于你的 AI 智能体</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>Claude Code、GitHub Copilot、Codex、Cursor 等会读取项目自身的说明和技能。</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>通过命令行创建项目、在任意电脑上完成设置、生成密钥并保持更新。</value>
+  </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Boilerplate 使用 ASP.NET Core、Identity、Web API、EF Core 和 Blazor 构建。</value>
   </data>

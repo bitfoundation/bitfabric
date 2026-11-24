@@ -160,7 +160,7 @@
             <BitStack HorizontalAlign="BitAlignment.Center">
                 <BitText Typography="BitTypography.H5">bit Fabric</BitText>
                 <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">
-                    @Localizer["This app was made with bit Fabric. Your AI agent builds on a foundation where everything already works, and the code is yours."]
+                    @Localizer[nameof(AppStrings.BitFabricMessage)]
                 </BitText>
                 <BitLink Href="https://bitfabric.co" Target="_blank" NoUnderline>
                     <BitStack Horizontal VerticalAlign="BitAlignment.Baseline" Gap="0.5rem">
@@ -174,21 +174,21 @@
         <BitStack Horizontal Wrap WrapSm="false" Gap="2rem">
             <BitCard Style="padding:3rem" FullWidth>
                 <BitStack HorizontalAlign="BitAlignment.Center">
-                    <BitText Typography="BitTypography.H5">@Localizer["Start your own"]</BitText>
+                    <BitText Typography="BitTypography.H5">@Localizer[nameof(AppStrings.StartYourOwn)]</BitText>
                     <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">
-                        @Localizer["Answer a few questions about your product, and bit Fabric sets up a project like this one for your AI agent."]
+                        @Localizer[nameof(AppStrings.StartYourOwnMessage)]
                     </BitText>
                     <BitButton Variant="BitVariant.Outline" Href="https://bitfabric.co/new" Target="_blank">
-                        @Localizer["Create a project"]
+                        @Localizer[nameof(AppStrings.CreateProject)]
                     </BitButton>
                 </BitStack>
             </BitCard>
 
             <BitCard Style="padding:3rem" FullWidth>
                 <BitStack HorizontalAlign="BitAlignment.Center">
-                    <BitText Typography="BitTypography.H5">@Localizer["Works with your AI agent"]</BitText>
+                    <BitText Typography="BitTypography.H5">@Localizer[nameof(AppStrings.WorksWithYourAIAgent)]</BitText>
                     <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">
-                        @Localizer["Claude Code, GitHub Copilot, Codex, Cursor and others read the project's own instructions and skills."]
+                        @Localizer[nameof(AppStrings.WorksWithYourAIAgentMessage)]
                     </BitText>
                     <BitLink Href="https://bitfabric.co/for" Target="_blank" NoUnderline>
                         <BitStack Horizontal VerticalAlign="BitAlignment.Baseline" Gap="0.5rem">
@@ -203,7 +203,7 @@
                 <BitStack HorizontalAlign="BitAlignment.Center">
                     <BitText Typography="BitTypography.H5">bit CLI</BitText>
                     <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center">
-                        @Localizer["Creates the project, sets it up on any computer, makes its keys and keeps it up to date, from the command line."]
+                        @Localizer[nameof(AppStrings.BitCliMessage)]
                     </BitText>
                     <BitLink Href="https://bitfabric.co/cli" Target="_blank" NoUnderline>
                         <BitStack Horizontal VerticalAlign="BitAlignment.Baseline" Gap="0.5rem">

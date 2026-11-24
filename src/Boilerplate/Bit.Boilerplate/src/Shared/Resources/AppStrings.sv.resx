@@ -566,6 +566,27 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
   <data name="LearnMore" xml:space="preserve">
     <value>Läs mer</value>
   </data>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>Den här appen är byggd med bit Fabric. Din AI-agent bygger vidare på en grund där allt redan fungerar, och koden är din.</value>
+  </data>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>Starta ditt eget</value>
+  </data>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>Svara på några frågor om din produkt, så sätter bit Fabric upp ett projekt som det här åt din AI-agent.</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>Skapa ett projekt</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>Fungerar med din AI-agent</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>Claude Code, GitHub Copilot, Codex, Cursor och andra läser projektets egna instruktioner och skills.</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>Skapar projektet, sätter upp det på vilken dator som helst, skapar dess nycklar och håller det uppdaterat, från kommandoraden.</value>
+  </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Boilerplate är byggt med ASP.NET Core, Identity, Web API, EF Core och Blazor.</value>
   </data>

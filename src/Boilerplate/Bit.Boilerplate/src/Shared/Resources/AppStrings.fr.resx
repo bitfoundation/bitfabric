@@ -566,6 +566,27 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
   <data name="LearnMore" xml:space="preserve">
     <value>En savoir plus</value>
   </data>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>Cette application a été créée avec bit Fabric. Votre agent IA s'appuie sur une base où tout fonctionne déjà, et le code vous appartient.</value>
+  </data>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>Lancez le vôtre</value>
+  </data>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>Répondez à quelques questions sur votre produit, et bit Fabric prépare un projet comme celui-ci pour votre agent IA.</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>Créer un projet</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>Fonctionne avec votre agent IA</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>Claude Code, GitHub Copilot, Codex, Cursor et d'autres lisent les instructions et les skills propres au projet.</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>Crée le projet, le prépare sur n'importe quel ordinateur, génère ses clés et le tient à jour, depuis la ligne de commande.</value>
+  </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Le Boilerplate est construit avec ASP.NET Core, Identity, Web API, EF Core et Blazor.</value>
   </data>

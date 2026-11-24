@@ -566,6 +566,27 @@
   <data name="LearnMore" xml:space="preserve">
     <value>और जानें</value>
   </data>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>यह ऐप bit Fabric से बनाया गया है। आपका AI एजेंट ऐसी नींव पर काम करता है जहाँ सब कुछ पहले से काम करता है, और कोड आपका है।</value>
+  </data>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>अपना खुद का प्रोजेक्ट शुरू करें</value>
+  </data>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>अपने प्रोडक्ट के बारे में कुछ सवालों के जवाब दें, और bit Fabric आपके AI एजेंट के लिए इसी तरह का प्रोजेक्ट तैयार कर देता है।</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>प्रोजेक्ट बनाएँ</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>आपके AI एजेंट के साथ काम करता है</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>Claude Code, GitHub Copilot, Codex, Cursor और अन्य, प्रोजेक्ट के अपने निर्देश और स्किल्स पढ़ते हैं।</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>कमांड लाइन से प्रोजेक्ट बनाता है, उसे किसी भी कंप्यूटर पर सेट करता है, उसकी कुंजियाँ बनाता है और उसे अप-टू-डेट रखता है।</value>
+  </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>बॉयलरप्लेट ASP.NET Core, Identity, Web API, EF Core और Blazor के साथ बनाया गया है।</value>
   </data>
