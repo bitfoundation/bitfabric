@@ -7,7 +7,7 @@ public partial class IdentityRequestDto : IValidatableObject
     [Display(Name = nameof(AppStrings.UserName))]
     public virtual string? UserName { get; set; }
 
-    /// <example>"test@bitplatform.dev"</example>
+    /// <example>"test@bitfabric.co"</example>
     [EmailAddress(ErrorMessage = nameof(AppStrings.EmailAddressAttribute_ValidationError))]
     [Display(Name = nameof(AppStrings.Email))]
     public virtual string? Email { get; set; }

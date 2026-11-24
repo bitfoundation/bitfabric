@@ -16,7 +16,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261123221718_AddProjectLicenses";
+    public override string LastMigrationId => "20261124073240_MoveAccountsToBitfabricCo";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -334,14 +334,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                         BirthDate = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         ConcurrencyStamp = "315e1a26-5b3a-4544-8e91-2760cd28e231",
                         CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                        Email = "test@bitplatform.dev",
+                        Email = "test@bitfabric.co",
                         EmailConfirmed = true,
                         EmailTokenRequestedOn = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         FullName = "Bit.Fabric test account",
                         Gender = 0,
                         HasProfileImage = false,
                         LockoutEnabled = true,
-                        NormalizedEmail = "TEST@BITPLATFORM.DEV",
+                        NormalizedEmail = "TEST@BITFABRIC.CO",
                         NormalizedUserName = "TEST",
                         PasswordHash = "AQAAAAIAAYagAAAAEBK7Er86aEFNjxeC4LeiVtD3p/Qm8ZfvfYN/6jbyermwDMsN+ms0mRyMlFSF7IkZRQ==",
                         PhoneNumber = "+31684207362",
@@ -357,14 +357,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                         BirthDate = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         ConcurrencyStamp = "425e1a26-5b3a-4544-8e91-2760cd28e230",
                         CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                        Email = "store-admin@bitplatform.dev",
+                        Email = "store-admin@bitfabric.co",
                         EmailConfirmed = true,
                         EmailTokenRequestedOn = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         FullName = "Store tenant admin",
                         Gender = 0,
                         HasProfileImage = false,
                         LockoutEnabled = true,
-                        NormalizedEmail = "STORE-ADMIN@BITPLATFORM.DEV",
+                        NormalizedEmail = "STORE-ADMIN@BITFABRIC.CO",
                         NormalizedUserName = "STORE-ADMIN",
                         PasswordHash = "AQAAAAIAAYagAAAAEBK7Er86aEFNjxeC4LeiVtD3p/Qm8ZfvfYN/6jbyermwDMsN+ms0mRyMlFSF7IkZRQ==",
                         PhoneNumberConfirmed = false,
@@ -379,14 +379,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                         BirthDate = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         ConcurrencyStamp = "435e1a26-5b3a-4544-8e91-2760cd28e229",
                         CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                        Email = "store-user@bitplatform.dev",
+                        Email = "store-user@bitfabric.co",
                         EmailConfirmed = true,
                         EmailTokenRequestedOn = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         FullName = "Store tenant user",
                         Gender = 0,
                         HasProfileImage = false,
                         LockoutEnabled = true,
-                        NormalizedEmail = "STORE-USER@BITPLATFORM.DEV",
+                        NormalizedEmail = "STORE-USER@BITFABRIC.CO",
                         NormalizedUserName = "STORE-USER",
                         PasswordHash = "AQAAAAIAAYagAAAAEBK7Er86aEFNjxeC4LeiVtD3p/Qm8ZfvfYN/6jbyermwDMsN+ms0mRyMlFSF7IkZRQ==",
                         PhoneNumberConfirmed = false,
