@@ -7,9 +7,6 @@ name: cd-fabric-test
 
 on:
   workflow_dispatch:
-  # Temporary, removed before merge: a workflow runs by hand only once it is on main, so the first test runs on push.
-  push:
-    branches: [ ci/builds-in-public ]
 
 # Queued, not cancelled: a build that has already uploaded the Windows app must not be killed halfway.
 concurrency:
