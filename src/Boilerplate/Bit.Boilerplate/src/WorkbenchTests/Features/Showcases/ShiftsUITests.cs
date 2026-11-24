@@ -137,7 +137,12 @@ public class ShiftsUITests : ShowcaseUITest
 
         if (day.Month != today.Month)
         {
-            await Press(OpenPopups.Last.GetByRole(AriaRole.Button, new() { Name = "Go to next month", Exact = true }));
+            // The month button is on the top edge of the date picker's panel. Its box stays the same from one frame to the next,
+            // yet Playwright's click and tap never find it stable there, so the click goes to the button itself. This branch
+            // only runs in the last days of a month, which is why it went unnoticed.
+            var nextMonth = OpenPopups.Last.GetByRole(AriaRole.Button, new() { Name = "Go to next month", Exact = true });
+            await Expect(nextMonth).ToBeVisibleAsync();
+            await nextMonth.DispatchEventAsync("click");
         }
 
         await Press(OpenPopups.Last.GetByRole(AriaRole.Gridcell, new() { Name = day.ToString("dddd, MMMM d, yyyy", CultureInfo.CurrentCulture), Exact = true }));
