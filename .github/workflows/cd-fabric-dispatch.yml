@@ -52,5 +52,6 @@ jobs:
             echo "::warning::BITFABRIC_DISPATCH_TOKEN isn't set, so Production isn't deployed by itself. Deploy it by hand: gh workflow run cd-fabric-production.yml --repo bitfoundation/bitfabric-internal -f ref=$SHA"
             exit 0
           fi
-          gh workflow run cd-fabric-production.yml --repo bitfoundation/bitfabric-internal -f ref="$SHA"
+          # --ref spares the token a read of that repository's default branch, which it may not do: it can only start workflows.
+          gh workflow run cd-fabric-production.yml --repo bitfoundation/bitfabric-internal --ref main -f ref="$SHA"
           echo "Started Production's deployment of $SHA." >> "$GITHUB_STEP_SUMMARY"
