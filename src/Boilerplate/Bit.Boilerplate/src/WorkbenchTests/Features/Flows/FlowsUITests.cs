@@ -337,8 +337,8 @@ public class FlowsUITests : FlowPageTest
 
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ShowAllScreens }));
 
-        await Expect(CardOf(flow.Screens[0].Id)).ToBeInViewportAsync(new() { Ratio = 1 });
-        await Expect(CardOf(flow.Screens[1].Id)).ToBeInViewportAsync(new() { Ratio = 1 });
+        await Expect(CardOf(flow.Screens[0].Id)).ToBeInViewportAsync(new() { Ratio = FullyInSight });
+        await Expect(CardOf(flow.Screens[1].Id)).ToBeInViewportAsync(new() { Ratio = FullyInSight });
     }
 
     [TestMethod, EverySurface]
@@ -379,9 +379,15 @@ public class FlowsUITests : FlowPageTest
 
         await Press(Page.Locator(".bit-blow-controls-button").Nth(2));
 
-        await Expect(CardOf(flow.Screens[0].Id)).ToBeInViewportAsync(new() { Ratio = 1 });
-        await Expect(CardOf(flow.Screens[1].Id)).ToBeInViewportAsync(new() { Ratio = 1 });
+        await Expect(CardOf(flow.Screens[0].Id)).ToBeInViewportAsync(new() { Ratio = FullyInSight });
+        await Expect(CardOf(flow.Screens[1].Id)).ToBeInViewportAsync(new() { Ratio = FullyInSight });
     }
+
+    /// <summary>
+    /// A whole card, give or take what rounding leaves: fitting the board puts the outer cards on its edge, where rounding left
+    /// one 0.9999998 in sight in CI (2026-11-24).
+    /// </summary>
+    private const float FullyInSight = 0.999f;
 
     [TestMethod, EverySurface]
     public async Task AScreensLink_Should_OpenItsViewInTheWorkbench(WorkbenchSurface surface)
