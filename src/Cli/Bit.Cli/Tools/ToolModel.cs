@@ -10,12 +10,16 @@ public enum ToolState
     Installed,
     Missing,
     Outdated,
-    NotRunning
+    NotRunning,
+    NeedsRepair
 }
 
 public sealed record ToolStatus(ToolState State, string? Version = null, string? Detail = null)
 {
     public bool IsSatisfied => State is ToolState.Installed;
+
+    /// <summary>What the check found for the repair to act on, such as the name of Podman's machine. It isn't shown.</summary>
+    public string? Target { get; init; }
 
     public static ToolStatus Missing(string? detail = null) => new(ToolState.Missing, null, detail);
 
@@ -127,6 +131,9 @@ public sealed record ToolAction
     public bool Interactive { get; init; }
 
     public string? AfterInstall { get; init; }
+
+    /// <summary>A line shown with the step once it has succeeded, such as what it kept.</summary>
+    public string? Note { get; init; }
 
     public IReadOnlyList<int> SuccessExitCodes { get; init; } = [0];
 

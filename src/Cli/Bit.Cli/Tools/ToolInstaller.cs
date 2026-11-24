@@ -16,7 +16,7 @@ public sealed class ToolInstaller(CliServices cli, StepRunner steps)
         var afterHomebrew = context.Environment.IsMacOS && context.PackageManagers.Brew is null && selected.Any(c => c.Tool.Id is "homebrew" && c.Action is not null);
         var withActions = selected.Where(c => c.Action is not null || afterHomebrew).ToList();
 
-        void InstallYourself(ToolCheck manual) => steps.Add(manual.Tool.Id, StepResult.Warning($"{(manual.Status.State is ToolState.NotRunning ? "Start" : "Install")} {manual.Tool.Name} yourself", manual.Manual ?? "bit can't install it on this machine", manual.Manual));
+        void InstallYourself(ToolCheck manual) => steps.Add(manual.Tool.Id, StepResult.Warning($"{manual.Status.State switch { ToolState.NotRunning => "Start", ToolState.NeedsRepair => "Fix", _ => "Install" }} {manual.Tool.Name} yourself", manual.Manual ?? "bit can't install it on this machine", manual.Manual));
 
         Func<CancellationToken, Task<ToolStatus>> Detect(ToolCheck check) => ct => check.Tool.DetectAsync(new ToolContext(context.Environment, context.Runner, context.Needs, PackageManagers.Detect(context.Environment, context.Runner)), ct);
 
@@ -202,9 +202,12 @@ public sealed class ToolInstaller(CliServices cli, StepRunner steps)
             if (after is { State: ToolState.Missing or ToolState.Outdated })
                 return StepResult.Warning(done, after.State is ToolState.Missing ? "still not found" : $"still {after.Version ?? "too old"}, {after.Detail}");
 
+            if (after is { State: ToolState.NeedsRepair })
+                return StepResult.Warning(done, "it still needs a repair", hint: after.Detail);
+
             if (succeeded)
                 return action.AfterInstall is null || action.Optional
-                    ? StepResult.Succeeded(done, action.AfterInstall)
+                    ? StepResult.Succeeded(done, action.AfterInstall ?? action.Note)
                     : StepResult.Warning(done, action.AfterInstall, hint: action.AfterInstall);
 
             if (action.Partial is { } partial && last is { NotFound: false, TimedOut: false } && last.ExitCode == partial.ExitCode)
@@ -294,7 +297,7 @@ public sealed class ToolInstaller(CliServices cli, StepRunner steps)
             else if (exitCodes.TryGetValue(action.ToolId, out var exitCode) && action.SuccessExitCodes.Contains(exitCode))
             {
                 steps.Add(action.ToolId, action.AfterInstall is null || action.Optional
-                    ? StepResult.Succeeded(done, action.AfterInstall)
+                    ? StepResult.Succeeded(done, action.AfterInstall ?? action.Note)
                     : StepResult.Warning(done, action.AfterInstall));
             }
             else
@@ -611,7 +614,7 @@ public sealed class ToolInstaller(CliServices cli, StepRunner steps)
 
     private static string DoneTitle(string title)
     {
-        foreach (var (present, past) in new[] { ("Install ", "Installed "), ("Update ", "Updated "), ("Start ", "Started "), ("Enable ", "Enabled "), ("Trust ", "Trusted "), ("Turn on ", "Turned on ") })
+        foreach (var (present, past) in new[] { ("Install ", "Installed "), ("Update ", "Updated "), ("Start ", "Started "), ("Enable ", "Enabled "), ("Trust ", "Trusted "), ("Turn on ", "Turned on "), ("Move ", "Moved ") })
         {
             if (title.StartsWith(present, StringComparison.Ordinal))
                 return past + title[present.Length..];
