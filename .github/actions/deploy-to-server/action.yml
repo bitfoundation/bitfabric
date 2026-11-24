@@ -1,5 +1,5 @@
 name: Deploy to server
-description: Downloads a published server bundle and mirrors it into a site on the self-hosted runner, stopping and starting its app pool around the copy.
+description: Downloads a published server bundle, from this run or another one, and mirrors it into a site on the self-hosted runner, stopping and starting its app pool around the copy.
 
 # Server-owned files are never copied or deleted.
 
@@ -25,6 +25,18 @@ inputs:
   cloudflare-token:
     description: Cloudflare API token carrying the Zone / Cache Purge permission.
     required: true
+  run-id:
+    description: The run whose artifact this is, when it isn't the running one, such as a build in another repository.
+    required: false
+    default: ''
+  repository:
+    description: The repository of that run, as owner/name.
+    required: false
+    default: ''
+  github-token:
+    description: A token that can read that run's artifacts. Without it, the artifact is the running run's.
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -36,6 +48,9 @@ runs:
       with:
         name: ${{ inputs.artifact-name }}
         path: ${{ runner.temp }}\${{ inputs.artifact-name }}
+        run-id: ${{ inputs.run-id || github.run_id }}
+        repository: ${{ inputs.repository || github.repository }}
+        github-token: ${{ inputs.github-token }}
 
     - name: Verify bundle
       shell: pwsh

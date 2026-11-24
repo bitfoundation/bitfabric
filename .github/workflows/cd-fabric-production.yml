@@ -1,0 +1,77 @@
+name: cd-fabric-production
+
+# Builds main for Production after each push whose ci-fabric passed, when it changed what runs on the server or in the
+# apps: a change to the tests, the Workbench or the docs alone isn't deployed. When the build ends, cd-fabric-dispatch.yml
+# starts its deployment in bitfoundation/bitfabric-internal. It also runs by hand, on main only: the Production
+# environment lets no other branch use it.
+
+on:
+  workflow_run:
+    workflows: [ ci-fabric ]
+    types: [ completed ]
+    branches: [ main ]
+  workflow_dispatch:
+
+# Queued, not cancelled: two pushes in quick succession must not leave the older commit deployed.
+concurrency:
+  group: cd-fabric-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+
+  # A workflow_run workflow always runs this file as it is on main, and this job takes only pushes to this repository's
+  # main whose ci-fabric passed, never a pull request's run (whose head branch may be a fork's own main).
+  changes:
+    name: find what changed
+    if: >-
+      github.event_name == 'workflow_dispatch' || (
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    outputs:
+      sha: ${{ steps.changes.outputs.sha }}
+      deploy: ${{ steps.changes.outputs.deploy }}
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      # Pull requests are squash-merged, so the push is one commit. A run by hand always deploys.
+      - name: Find whether the server or the apps changed
+        id: changes
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+          BY_HAND: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          if [ "$BY_HAND" = true ] || git diff --name-only HEAD~1 HEAD | grep -qE '^src/Fabric/src/(Shared|Server|Client)/|^src/Fabric/src/Directory\.(Build|Packages)\.props$'; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing that runs on the server or in the apps changed in $SHA: Production isn't deployed." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  build_production:
+    name: build for production
+    needs: changes
+    if: needs.changes.outputs.deploy == 'true'
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+      # build_server pushes the server's images to GitHub Container Registry.
+      packages: write
+    uses: ./.github/workflows/cd-fabric.yml
+    with:
+      ENV_NAME: Production
+      CODE_REF: ${{ needs.changes.outputs.sha }}
+    secrets: inherit

@@ -1,0 +1,32 @@
+name: cd-fabric-test
+
+# Builds a branch for the Test environment, by hand only: `gh workflow run cd-fabric-test.yml --ref <branch>`. When it
+# ends, cd-fabric-dispatch.yml starts its deployment in bitfoundation/bitfabric-internal, which puts it on
+# test.bitfabric.co. Test runs whichever branch was deployed to it last. A task that changes the deployment too has a
+# branch of the same name there: run its cd-fabric-test.yml from that branch by hand, with this run's id.
+
+on:
+  workflow_dispatch:
+
+# Queued, not cancelled: a build that has already uploaded the Windows app must not be killed halfway.
+concurrency:
+  group: cd-fabric-test
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build_test:
+    name: build for test
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+      # build_server pushes the server's images to GitHub Container Registry.
+      packages: write
+    uses: ./.github/workflows/cd-fabric.yml
+    with:
+      ENV_NAME: Test
+      CODE_REF: ${{ github.sha }}
+    secrets: inherit
