@@ -89,9 +89,12 @@ jobs:
 
     - name: Unzip bit CLI's assembly
       run: |
+        # unzip -d makes only the last folder of its path. The template's package has no dll, so its unzip finds nothing.
+        mkdir -p "$RUNNER_TEMP/assemblies"
         for package in "$RUNNER_TEMP"/packages/*.nupkg; do
           unzip -o -q "$package" '*.dll' -d "$RUNNER_TEMP/assemblies/$(basename "$package" .nupkg)" || true
         done
+        find "$RUNNER_TEMP/assemblies" -name bit.dll | grep -q . || { echo "::error::No bit.dll came out of the packages."; exit 1; }
 
     - name: Log in to Azure for code signing
       if: vars.CODE_SIGNING_ACCOUNT != ''
