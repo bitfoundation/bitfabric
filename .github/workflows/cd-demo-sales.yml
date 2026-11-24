@@ -184,6 +184,7 @@ jobs:
       with:
         files: 'SalesModule\**\appsettings*json'
       env:
+        Sentry.Dsn: ${{ secrets.SALES_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_ADDRESS }}
         ServerAddress: ${{ env.SERVER_ADDRESS }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}

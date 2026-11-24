@@ -222,6 +222,7 @@ jobs:
       with:
         files: 'AdminPanel/**/appsettings*json'
       env:
+        Sentry.Dsn: ${{ secrets.ADMINPANEL_SENTRY_DSN }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
         AdsPushVapid.PublicKey: ${{ secrets.ADMINPANEL_PUBLIC_VAPIDKEY }}
@@ -290,6 +291,7 @@ jobs:
       with:
         files: 'AdminPanel\**\appsettings*json'
       env:
+        Sentry.Dsn: ${{ secrets.ADMINPANEL_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
@@ -403,6 +405,7 @@ jobs:
       with:
         files: 'AdminPanel/**/appsettings*json'
       env:
+        Sentry.Dsn: ${{ secrets.ADMINPANEL_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}  
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
@@ -486,6 +489,7 @@ jobs:
       with:
         files: 'AdminPanel/**/appsettings*json'
       env:
+        Sentry.Dsn: ${{ secrets.ADMINPANEL_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}

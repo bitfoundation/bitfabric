@@ -464,6 +464,7 @@ jobs:
       with:
         files: 'TodoSample\**\appsettings*json'
       env:
+        Sentry.Dsn: ${{ secrets.TODO_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         WindowsUpdate.FilesUrl: https://windows-todo.bitfabric.co
@@ -576,6 +577,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        Sentry.Dsn: ${{ secrets.TODO_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
@@ -680,6 +682,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        Sentry.Dsn: ${{ secrets.TODO_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
