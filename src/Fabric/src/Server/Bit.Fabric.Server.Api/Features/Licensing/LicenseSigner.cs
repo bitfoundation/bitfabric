@@ -25,8 +25,7 @@ public sealed partial class LicenseSigner : IHostedService, IDisposable
     {
         if (string.IsNullOrWhiteSpace(settings.Licensing.PrivateKey) is false)
         {
-            key = ECDsa.Create();
-            key.ImportPkcs8PrivateKey(Convert.FromBase64String(settings.Licensing.PrivateKey), out _);
+            key = ImportPrivateKey(Convert.FromBase64String(settings.Licensing.PrivateKey));
             PublicKey = Convert.ToBase64String(key.ExportSubjectPublicKeyInfo());
         }
         else if (environment.IsDevelopment())
@@ -39,6 +38,26 @@ public sealed partial class LicenseSigner : IHostedService, IDisposable
         {
             throw new InvalidOperationException("Licensing:PrivateKey is not set. Set it from the SERVERAPI__LICENSING__PRIVATEKEY secret.");
         }
+    }
+
+    /// <summary>
+    /// The private key's DER in either of its two standard encodings: PKCS#8, or SEC1, which <c>openssl pkey -outform DER</c>
+    /// writes for an EC key.
+    /// </summary>
+    public static ECDsa ImportPrivateKey(byte[] der)
+    {
+        var key = ECDsa.Create();
+
+        try
+        {
+            key.ImportPkcs8PrivateKey(der, out _);
+        }
+        catch (CryptographicException)
+        {
+            key.ImportECPrivateKey(der, out _);
+        }
+
+        return key;
     }
 
     /// <summary>The public half: base64 of its SubjectPublicKeyInfo DER, as bit CLI carries it.</summary>
