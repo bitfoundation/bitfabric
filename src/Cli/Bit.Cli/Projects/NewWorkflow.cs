@@ -429,6 +429,7 @@ public sealed partial class NewWorkflow(CliServices cli)
         {
             ToolState.Outdated => $" (found {check.Status.Version}, {check.Status.Detail})",
             ToolState.NotRunning => " (installed, not running)",
+            ToolState.NeedsRepair => $" ({check.Status.Detail})",
             _ => ""
         };
 

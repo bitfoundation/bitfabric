@@ -70,6 +70,12 @@ public static partial class ToolCatalog
     [GeneratedRegex(@"\d+\.\d+(\.\d+)?")]
     private static partial Regex VersionRegex();
 
+    [GeneratedRegex(@"^(?<manager>\S+) \[(?<controllers>[^\]]*)\]$")]
+    private static partial Regex PodmanCgroupsRegex();
+
+    [GeneratedRegex(@"^[A-Za-z0-9][A-Za-z0-9_.-]*$")]
+    private static partial Regex PodmanMachineNameRegex();
+
     public static async Task<string?> ResolveSdkAsync(IProcessRunner runner, string directory, CancellationToken cancellationToken)
     {
         var result = await runner.RunAsync(new ProcessSpec { FileName = "dotnet", Arguments = ["--version"], WorkingDirectory = directory, Timeout = TimeSpan.FromMinutes(1) }, cancellationToken);
@@ -598,6 +604,12 @@ public static partial class ToolCatalog
 
         private const string PodmanMachineStopped = "Podman's machine isn't running";
 
+        private const string PodmanWithoutMemoryLimits = "Podman's machine gives containers no memory limits, which the database needs";
+
+        private const string LegacySystemdFolder = "/root/podman-legacy-systemd";
+
+        private static readonly Version PodmanWithWslSystemd = new(6, 2);
+
         private const string DockerWithoutAccess = "your user can't reach it";
 
         private const string SignOutAndIn = "Sign out and back in so your user can run docker without sudo.";
@@ -632,7 +644,13 @@ public static partial class ToolCatalog
             if (FindPodman(context) is { } podman)
             {
                 if ((await context.RunAsync(podman, ["container", "ls", "-n", "1"], cancellationToken, TimeSpan.FromSeconds(20))).Succeeded)
-                    return ToolStatus.Installed($"Podman {ParseVersion((await context.RunAsync(podman, ["--version"], cancellationToken)).Output)}".Trim());
+                {
+                    var podmanVersion = $"Podman {ParseVersion((await context.RunAsync(podman, ["--version"], cancellationToken)).Output)}".Trim();
+
+                    return context.Environment.IsWindows && await CheckMemoryLimitsAsync(context, podman, cancellationToken) is (false, var machine)
+                        ? new ToolStatus(ToolState.NeedsRepair, podmanVersion, PodmanWithoutMemoryLimits) { Target = machine }
+                        : ToolStatus.Installed(podmanVersion);
+                }
 
                 if (context.Environment.IsWindows)
                     return new ToolStatus(ToolState.NotRunning, null, (await context.RunAsync(podman, ["machine", "inspect"], cancellationToken)).Succeeded ? PodmanMachineStopped : PodmanWithoutMachine);
@@ -645,6 +663,34 @@ public static partial class ToolCatalog
             return client.Succeeded ? new ToolStatus(ToolState.NotRunning, ParseVersion(client.Output)?.ToString(), "installed, but not running") : ToolStatus.Missing();
         }
 
+        /// <summary>
+        /// WSL 3 changed cgroups: a machine Podman 6.1 or older created runs systemd in a namespace of its own, which can't give containers
+        /// the memory controller, so a container with a memory setting, such as the AppHost's PostgreSQL, doesn't start
+        /// (podman issues #29749 and #29966). The machine's name comes back only when bit knows the repair: the machine is that older kind,
+        /// or Podman manages its cgroups without systemd.
+        /// </summary>
+        private static async Task<(bool MemoryLimits, string? Machine)> CheckMemoryLimitsAsync(ToolContext context, string podman, CancellationToken cancellationToken)
+        {
+            var info = await context.RunAsync(podman, ["info", "--format", "{{.Host.CgroupManager}} {{.Host.CgroupControllers}}"], cancellationToken, TimeSpan.FromSeconds(20));
+
+            if (info.Succeeded is false || info.OutputLines.Select(line => PodmanCgroupsRegex().Match(line.Trim())).LastOrDefault(match => match.Success) is not { } cgroups
+                || cgroups.Groups["controllers"].Value.Split(' ', StringSplitOptions.RemoveEmptyEntries).Contains("memory"))
+                return (true, null);
+
+            var inspect = await context.RunAsync(podman, ["machine", "inspect", "--format", "{{.Name}}"], cancellationToken);
+
+            if (inspect.Succeeded is false || inspect.OutputLines.Select(line => line.Trim()).LastOrDefault(PodmanMachineNameRegex().IsMatch) is not { } machine)
+                return (false, null);
+
+            var olderKind = cgroups.Groups["manager"].Value is "cgroupfs"
+                || (await context.RunAsync("wsl.exe", ["-d", WslDistribution(machine), "--exec", "test", "-e", "/usr/local/bin/enterns"], cancellationToken)).Succeeded;
+
+            return (false, olderKind ? machine : null);
+        }
+
+        /// <summary>Podman names a machine's WSL distribution after it, with podman- in front unless the name starts with podman.</summary>
+        private static string WslDistribution(string machine) => machine.StartsWith("podman", StringComparison.Ordinal) ? machine : "podman-" + machine;
+
         public override ToolAction? PlanInstall(ToolContext context, ToolStatus status)
         {
             return Plan(context, status) is { } action ? action with { Optional = context.Needs.ContainersRequired is false } : null;
@@ -652,6 +698,9 @@ public static partial class ToolCatalog
 
         private ToolAction? Plan(ToolContext context, ToolStatus status)
         {
+            if (status.State is ToolState.NeedsRepair)
+                return status.Target is { } machine && FindPodman(context) is { } podman ? MoveToWslSystemd(context, status, podman, machine) : null;
+
             if (status.State is ToolState.NotRunning)
             {
                 return context.Environment.Os switch
@@ -705,9 +754,71 @@ public static partial class ToolCatalog
             _ => "https://docs.docker.com/engine/install/"
         };
 
-        public override string? ManualInstructions(ToolContext context, ToolStatus status) => status.State is ToolState.NotRunning
-            ? "start Docker Desktop, or whatever runs the engine of your docker command"
-            : ManualInstructions(context);
+        public override string? ManualInstructions(ToolContext context, ToolStatus status) => status.State switch
+        {
+            ToolState.NotRunning => "start Docker Desktop, or whatever runs the engine of your docker command",
+            ToolState.NeedsRepair => "https://github.com/podman-container-tools/podman/issues/29749",
+            _ => ManualInstructions(context)
+        };
+
+        /// <summary>
+        /// Moves a machine Podman 6.1 or older created onto WSL's own systemd in place, the way Podman 6.2 creates one (podman PRs #29837 and
+        /// #30130), so its volumes stay; a new machine would start without them. Podman in the machine is updated first, and the setting that
+        /// overrides the image's cgroupfs is written while the machine runs, when its /etc/containers is the one Podman reads. With the machine
+        /// stopped, the files the older kind starts systemd with move to /root/podman-legacy-systemd, and WSL's systemd and Podman 6.2's
+        /// bootstrap take their place. A Podman older than 6.2 doesn't know such a machine, so it's updated with winget first.
+        /// </summary>
+        private ToolAction? MoveToWslSystemd(ToolContext context, ToolStatus status, string podman, string machine)
+        {
+            var distribution = WslDistribution(machine);
+
+            ProcessSpec Podman(params string[] arguments) => new() { FileName = podman, Arguments = arguments, Timeout = TimeSpan.FromMinutes(15) };
+
+            ProcessSpec Wsl(params string[] arguments) => new() { FileName = "wsl.exe", Arguments = arguments, Environment = new Dictionary<string, string?> { ["WSL_UTF8"] = "1" }, Timeout = TimeSpan.FromMinutes(5) };
+
+            IReadOnlyList<ProcessSpec> commands =
+            [
+                Podman("machine", "ssh", machine, "sudo -n dnf -y -q upgrade podman crun containers-common"),
+                Podman("machine", "ssh", machine, SystemdCgroupsScript),
+                Podman("machine", "stop", machine),
+                Wsl("-d", distribution, "-u", "root", "--exec", "sh", "-c", WslSystemdScript),
+                Wsl("--terminate", distribution),
+                Podman("machine", "start", machine)
+            ];
+
+            var note = $"its old setup files are in {LegacySystemdFolder}";
+
+            if (ParseVersion(status.Version ?? "") is not { } version || version >= PodmanWithWslSystemd)
+                return new ToolAction { ToolId = Id, Title = "Move Podman's machine to WSL's systemd, keeping its volumes", Note = note, Commands = commands };
+
+            return context.PackageManagers.WingetInstall(Id, "Update Podman to move its machine to WSL's systemd, keeping its volumes", "Podman.CLI", admin: false) is { } update
+                ? update with { Note = note, Commands = [.. update.Commands, PodmanAtLeast(podman, PodmanWithWslSystemd), .. commands] }
+                : null;
+        }
+
+        private const string SystemdCgroupsScript = "sudo -n mkdir -p /etc/containers/containers.conf.d"
+            + " && printf '# bit: on WSL 3, containers get memory limits only through systemd\\n[engine]\\ncgroup_manager = \\042systemd\\042\\n'"
+            + " | sudo -n tee /etc/containers/containers.conf.d/999-wsl3-systemd-cgroups.conf >/dev/null";
+
+        private static readonly string WslSystemdScript = string.Join("; ",
+            "set -e",
+            $"keep={LegacySystemdFolder}",
+            "mkdir -p $keep",
+            "for f in /etc/wsl.conf /root/bootstrap; do if [ -f $f ] && [ ! -e $keep/${f##*/} ]; then cp -p $f $keep/; fi; done",
+            "for f in /usr/local/bin/enterns /etc/profile.d/enterns.sh; do if [ -e $f ]; then mv -f $f $keep/; fi; done",
+            "touch /etc/wsl.conf",
+            "{ printf '[boot]\\nsystemd=true\\n\\n'; awk '/^[[:space:]]*\\[/ { skip = $0 ~ /^[[:space:]]*\\[boot\\][[:space:]]*$/ } !skip' /etc/wsl.conf; } > /etc/wsl.conf.bit",
+            "grep -q '^[[:space:]]*\\[user\\]' /etc/wsl.conf.bit || printf '\\n[user]\\ndefault=user\\n' >> /etc/wsl.conf.bit",
+            "mv -f /etc/wsl.conf.bit /etc/wsl.conf",
+            "printf '#!/bin/bash\\ntimeout 60 systemctl is-system-running --wait >/dev/null 2>&1 || true\\nnohup sleep infinity </dev/null >/dev/null 2>&1 &\\nsleep 0.1\\n' > /root/bootstrap",
+            "chmod 755 /root/bootstrap");
+
+        private static ProcessSpec PodmanAtLeast(string podman, Version minimum) => new()
+        {
+            FileName = "powershell.exe",
+            Arguments = ["-NoProfile", "-NonInteractive", "-Command", $"$found = & '{podman.Replace("'", "''", StringComparison.Ordinal)}' --version | Out-String; if ($found -match '(\\d+\\.\\d+)' -and [version]$Matches[1] -ge [version]'{minimum.Major}.{minimum.Minor}') {{ exit 0 }}; Write-Output 'Podman is still older than {minimum.Major}.{minimum.Minor} after the update.'; exit 1"],
+            Timeout = TimeSpan.FromMinutes(1)
+        };
 
         private ToolAction StartDockerDesktop(ToolContext context, ProcessSpec start) => new()
         {

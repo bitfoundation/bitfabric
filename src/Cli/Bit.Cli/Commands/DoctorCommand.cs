@@ -97,6 +97,7 @@ public static class DoctorCommand
                     ToolState.Installed => check.Status.Version ?? "yes",
                     ToolState.NotRunning => "not running",
                     ToolState.Outdated => $"{check.Status.Version} (too old)",
+                    ToolState.NeedsRepair => check.Status.Detail ?? "needs a repair",
                     _ => "no"
                 };
 

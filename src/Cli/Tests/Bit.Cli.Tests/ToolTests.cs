@@ -1,4 +1,5 @@
 ﻿using Bit.Cli.Infrastructure;
+using Bit.Cli.Projects;
 using Bit.Cli.Templates;
 using Bit.Cli.Tests.Infrastructure;
 using Bit.Cli.Tools;
@@ -406,6 +407,160 @@ public class ToolTests
         host.Runner.On("podman", "machine inspect", 0, "[{}]");
         var stopped = (await CheckAsync(host, new ToolNeeds { Aspire = true })).Single(c => c.Tool.Id == "docker");
         CollectionAssert.AreEqual(new[] { "machine", "start" }, stopped.Action!.Commands[^1].Arguments.ToArray());
+    }
+
+    [TestMethod]
+    public async Task PodmanMachineWithoutMemoryLimits_Should_MoveToWslSystemdKeepingItsVolumes()
+    {
+        using var host = PodmanOnWindows("6.2.0", "cgroupfs []");
+        var docker = (await CheckAsync(host, new ToolNeeds { Aspire = true, ContainersRequired = true })).Single(c => c.Tool.Id == "docker");
+
+        Assert.AreEqual(ToolState.NeedsRepair, docker.Status.State, "WSL 3 gives a machine Podman 6.1 created no memory controller, so PostgreSQL with --memory-reservation doesn't start.");
+        Assert.AreEqual("Podman 6.2.0", docker.Status.Version);
+        Assert.AreEqual("Podman's machine gives containers no memory limits, which the database needs", docker.Status.Detail);
+        Assert.IsTrue(docker.Needed);
+
+        var action = docker.Action!;
+        Assert.AreEqual("Move Podman's machine to WSL's systemd, keeping its volumes", action.Title);
+        Assert.AreEqual(Elevation.None, action.Elevation);
+        Assert.AreEqual("its old setup files are in /root/podman-legacy-systemd", action.Note);
+        StringAssert.StartsWith(NewWorkflow.DescribeTool(docker), "Move Podman's machine to WSL's systemd, keeping its volumes (Podman's machine gives containers no memory limits, which the database needs): ");
+
+        var commands = action.Commands.Select(c => $"{Path.GetFileNameWithoutExtension(c.FileName)} {string.Join(' ', c.Arguments.Take(4))}").ToArray();
+        CollectionAssert.AreEqual(new[]
+        {
+            "podman machine ssh podman-machine-default sudo -n dnf -y -q upgrade podman crun containers-common",
+            "podman machine ssh podman-machine-default " + action.Commands[1].Arguments[3],
+            "podman machine stop podman-machine-default",
+            "wsl -d podman-machine-default -u root",
+            "wsl --terminate podman-machine-default",
+            "podman machine start podman-machine-default"
+        }, commands, "Podman in the machine is updated while it runs, and the machine is changed while it's stopped.");
+
+        StringAssert.Contains(action.Commands[1].Arguments[3], @"cgroup_manager = \042systemd\042");
+        StringAssert.Contains(action.Commands[1].Arguments[3], "/etc/containers/containers.conf.d/999-wsl3-systemd-cgroups.conf", "It overrides the image's cgroupfs setting in /usr/share/containers.");
+
+        CollectionAssert.AreEqual(new[] { "-d", "podman-machine-default", "-u", "root", "--exec", "sh", "-c" }, action.Commands[3].Arguments.SkipLast(1).ToArray());
+        var script = action.Commands[3].Arguments[^1];
+        StringAssert.Contains(script, "keep=/root/podman-legacy-systemd");
+        StringAssert.Contains(script, "for f in /usr/local/bin/enterns /etc/profile.d/enterns.sh; do if [ -e $f ]; then mv -f $f $keep/; fi; done", "Without enterns, Podman 6.2 treats the machine as one on WSL's systemd.");
+        StringAssert.Contains(script, @"printf '[boot]\nsystemd=true\n\n'");
+        StringAssert.Contains(script, "nohup sleep infinity", "Without the keep-alive, WSL idles the machine and Podman loses its connection.");
+        Assert.IsFalse(script.Contains('"', StringComparison.Ordinal), "The script reaches sh through wsl.exe's command line.");
+        Assert.AreEqual("1", action.Commands[3].Environment!["WSL_UTF8"]);
+
+        Assert.IsFalse(action.Commands.Any(c => c.Arguments.Any(a => a is "rm" or "init" or "reset" or "--unregister")), "A new machine would start without the volumes, other projects' data among them.");
+    }
+
+    [TestMethod]
+    public async Task PodmanMachineWithMemoryLimits_Should_BeLeftAlone()
+    {
+        using var host = PodmanOnWindows("6.2.0", "systemd [cpu io memory pids]");
+
+        var docker = (await CheckAsync(host, new ToolNeeds { Aspire = true })).Single(c => c.Tool.Id == "docker");
+
+        Assert.AreEqual(ToolState.Installed, docker.Status.State);
+        Assert.AreEqual("Podman 6.2.0", docker.Status.Version);
+        Assert.IsNull(docker.Action);
+        Assert.IsFalse(host.Runner.Calls.Any(c => c.Arguments is ["machine", "inspect", ..] or ["-d", ..]), "A machine that gives memory limits needs no more questions.");
+
+        using var linux = new TestHost(HostOs.Linux);
+        AllInstalled(linux.Runner);
+        linux.Runner.NotFound("docker");
+        linux.Runner.Executables["podman"] = "/usr/bin/podman";
+        linux.Runner.On("podman", "--version", 0, "podman version 5.4.2");
+        linux.Runner.On("podman", "info", 0, "cgroupfs []");
+
+        Assert.AreEqual(ToolState.Installed, (await CheckAsync(linux, new ToolNeeds { Aspire = true })).Single(c => c.Tool.Id == "docker").Status.State, "Only Podman's WSL machine is checked.");
+    }
+
+    [TestMethod]
+    public async Task PodmanMachineOnSystemdWithoutMemoryLimits_Should_BeMovedOnlyWhenItsTheOlderKind()
+    {
+        using var host = PodmanOnWindows("6.2.0", "systemd []", machine: "dev");
+        host.Runner.On("wsl", "-d podman-dev --exec test -e /usr/local/bin/enterns", 0);
+
+        var older = (await CheckAsync(host, new ToolNeeds { Aspire = true })).Single(c => c.Tool.Id == "docker");
+        Assert.AreEqual("dev", older.Status.Target);
+        CollectionAssert.AreEqual(new[] { "machine", "stop", "dev" }, older.Action!.Commands[2].Arguments.ToArray());
+        Assert.AreEqual("podman-dev", older.Action.Commands[3].Arguments[1], "Podman puts podman- in front of the name of the machine's WSL distribution.");
+
+        host.Runner.On("wsl", "-d podman-dev --exec test -e /usr/local/bin/enterns", 1);
+        var needs = new ToolNeeds { Aspire = true };
+        var unknown = (await CheckAsync(host, needs)).Single(c => c.Tool.Id == "docker");
+        Assert.AreEqual(ToolState.NeedsRepair, unknown.Status.State);
+        Assert.IsNull(unknown.Action, "bit knows the repair only for a machine Podman 6.1 or older created.");
+        Assert.AreEqual("https://github.com/podman-container-tools/podman/issues/29749", unknown.Manual);
+
+        var steps = new StepRunner(host.Services);
+        await new ToolInstaller(host.Services, steps).InstallAsync([unknown], new ToolContext(host.Environment, host.Runner, needs, PackageManagers.Detect(host.Environment, host.Runner)), CancellationToken.None);
+        Assert.AreEqual("Fix Docker or Podman yourself", steps.Reports.Single().Result.Title);
+    }
+
+    [TestMethod]
+    public async Task OlderPodman_Should_BeUpdatedBeforeItsMachineMoves()
+    {
+        using var host = PodmanOnWindows("6.1.4", "cgroupfs []");
+        host.Runner.Executables["winget"] = @"C:\winget.exe";
+
+        var action = (await CheckAsync(host, new ToolNeeds { Aspire = true })).Single(c => c.Tool.Id == "docker").Action!;
+
+        Assert.AreEqual("Update Podman to move its machine to WSL's systemd, keeping its volumes", action.Title);
+        CollectionAssert.IsSubsetOf(new[] { "install", "--id", "Podman.CLI", "--silent" }, action.Commands[0].Arguments.ToArray());
+        Assert.AreEqual("powershell.exe", action.Commands[1].FileName);
+        StringAssert.Contains(action.Commands[1].Arguments[^1], "-ge [version]'6.2'", "Podman 6.1 doesn't know a machine on WSL's systemd.");
+        CollectionAssert.AreEqual(new[] { "machine", "ssh", "podman-machine-default", "sudo -n dnf -y -q upgrade podman crun containers-common" }, action.Commands[2].Arguments.ToArray());
+        Assert.HasCount(8, action.Commands);
+        Assert.AreEqual("its old setup files are in /root/podman-legacy-systemd", action.Note);
+
+        host.Runner.Executables.Remove("winget");
+        Assert.IsNull((await CheckAsync(host, new ToolNeeds { Aspire = true })).Single(c => c.Tool.Id == "docker").Action);
+    }
+
+    [TestMethod]
+    public async Task MovedPodmanMachine_Should_SayItKeptTheOldFiles()
+    {
+        using var host = PodmanOnWindows("6.2.0", "cgroupfs []");
+        var needs = new ToolNeeds { Aspire = true, ContainersRequired = true };
+        var docker = (await CheckAsync(host, needs)).Single(c => c.Tool.Id == "docker");
+        host.Runner.On("podman", "machine start", _ =>
+        {
+            host.Runner.On("podman", "info", 0, "systemd [cpu io memory pids]");
+            return new ProcessResult { ExitCode = 0 };
+        });
+
+        var steps = new StepRunner(host.Services);
+        await new ToolInstaller(host.Services, steps).InstallAsync([docker], new ToolContext(host.Environment, host.Runner, needs, PackageManagers.Detect(host.Environment, host.Runner)), CancellationToken.None);
+
+        var result = steps.Reports.Single(r => r.Id == "docker").Result;
+        Assert.AreEqual(StepStatus.Succeeded, result.Status);
+        Assert.AreEqual("Moved Podman's machine to WSL's systemd, keeping its volumes", result.Title);
+        Assert.AreEqual("its old setup files are in /root/podman-legacy-systemd", result.Detail);
+
+        host.Runner.On("podman", "info", 0, "cgroupfs []");
+        host.Runner.On("podman", "machine start", 0);
+        steps = new StepRunner(host.Services);
+        await new ToolInstaller(host.Services, steps).InstallAsync([docker], new ToolContext(host.Environment, host.Runner, needs, PackageManagers.Detect(host.Environment, host.Runner)), CancellationToken.None);
+
+        result = steps.Reports.Single(r => r.Id == "docker").Result;
+        Assert.AreEqual(StepStatus.Warning, result.Status);
+        Assert.AreEqual("it still needs a repair", result.Detail);
+        Assert.AreEqual("Podman's machine gives containers no memory limits, which the database needs", result.Hint);
+    }
+
+    private static TestHost PodmanOnWindows(string version, string cgroups, string machine = "podman-machine-default")
+    {
+        var host = new TestHost(HostOs.Windows);
+        AllInstalled(host.Runner);
+        host.Runner.NotFound("docker");
+        host.Runner.Executables["podman"] = "podman";
+        host.Runner.On("podman", "--version", 0, $"podman version {version}");
+        host.Runner.On("podman", "info --format", 0, cgroups);
+        host.Runner.On("podman", "machine inspect", 0, machine);
+        host.Runner.On("wsl", $"-d {WslName(machine)} --exec test", 1);
+        return host;
+
+        static string WslName(string machine) => machine.StartsWith("podman", StringComparison.Ordinal) ? machine : "podman-" + machine;
     }
 
     [TestMethod]
