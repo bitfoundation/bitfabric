@@ -81,6 +81,12 @@ jobs:
     - name: Check that the api still works for the app versions it supports
       run: bit api check
 
+    # A merge into main deploys Production, whose build fails when the api changed without a new version and its document
+    # (bit api release). Checked here too, so a pull request into main fails before its merge rather than its deployment.
+    - name: Check that the api is released, as Production requires
+      if: github.base_ref == 'main' || github.ref == 'refs/heads/main'
+      run: bit api check --release --no-build
+
     - name: Test
       id: test
       working-directory: src/Fabric/src/Tests
