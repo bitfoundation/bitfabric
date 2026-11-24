@@ -1,0 +1,135 @@
+name: cd-demos
+
+# Builds every demo in one run, from main: the demos part of bitfoundation/bitplatform's all.apps.cd.yml. Only the
+# builds run here, on GitHub's own runners, which cost nothing in this public repository; each one also publishes what
+# isn't a server site (the static sites, the Windows apps' updates, the Android and iOS apps to their stores' test
+# tracks). When the run ends, cd-fabric-dispatch.yml starts bitfabric-internal's cd-demos, whose jobs on the demos' own
+# server put each site this run built in place. The Demos environment, which holds the builds' keys, lets only main use it.
+
+on:
+  workflow_dispatch:
+    inputs:
+      server:
+        description: Server web + api
+        type: boolean
+        default: true
+      wasm:
+        description: Blazor WASM standalone
+        type: boolean
+        default: true
+      windows:
+        description: Windows apps
+        type: boolean
+        default: true
+      android:
+        description: Android apps
+        type: boolean
+        default: true
+      ios:
+        description: iOS apps
+        type: boolean
+        default: true
+      prerelease_packages:
+        description: Bit packages of bitfoundation/bitplatform's latest CD Prerelease nuget packages run instead of nuget.org (every demo)
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      server:
+        type: boolean
+        default: true
+      wasm:
+        type: boolean
+        default: true
+      windows:
+        type: boolean
+        default: true
+      android:
+        type: boolean
+        default: true
+      ios:
+        type: boolean
+        default: true
+      prerelease_packages:
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+
+  sales_module_demo:
+    name: sales module demo
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+      attestations: write
+    uses: ./.github/workflows/cd-demo-sales.yml
+    secrets: inherit
+    with:
+      server: ${{ inputs.server }}
+      windows: ${{ inputs.windows }}
+      prerelease_packages: ${{ inputs.prerelease_packages }}
+
+  admin_sample:
+    name: admin sample
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+      attestations: write
+    uses: ./.github/workflows/cd-demo-adminpanel.yml
+    secrets: inherit
+    with:
+      server: ${{ inputs.server }}
+      wasm: ${{ inputs.wasm }}
+      windows: ${{ inputs.windows }}
+      android: ${{ inputs.android }}
+      ios: ${{ inputs.ios }}
+      prerelease_packages: ${{ inputs.prerelease_packages }}
+
+  workbench_demo:
+    name: workbench demo
+    if: inputs.server
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+      attestations: write
+    uses: ./.github/workflows/cd-demo-workbench.yml
+    secrets: inherit
+    with:
+      prerelease_packages: ${{ inputs.prerelease_packages }}
+
+  landingpage_demo:
+    name: landing page demo
+    if: inputs.server
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+      attestations: write
+    uses: ./.github/workflows/cd-demo-landingpage.yml
+    secrets: inherit
+    with:
+      prerelease_packages: ${{ inputs.prerelease_packages }}
+
+  todo_sample:
+    name: todo sample
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+      attestations: write
+    uses: ./.github/workflows/cd-demo-todo.yml
+    secrets: inherit
+    with:
+      server: ${{ inputs.server }}
+      wasm: ${{ inputs.wasm }}
+      windows: ${{ inputs.windows }}
+      android: ${{ inputs.android }}
+      ios: ${{ inputs.ios }}
+      prerelease_packages: ${{ inputs.prerelease_packages }}

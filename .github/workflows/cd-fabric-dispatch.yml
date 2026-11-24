@@ -1,57 +1,74 @@
 name: cd-fabric-dispatch
 
-# Production deploys by itself after each merge into main: once ci-fabric has passed on that push, this starts
-# cd-fabric-production.yml in the private bitfoundation/bitfabric-internal, where the deployment, its runner and its
-# secrets live. Its token can only start workflows there. Pull requests never run it: a workflow_run workflow always runs
-# this file as it is on main, and the job below takes only pushes to this repository's main.
+# Starts a build's deployment in the private bitfoundation/bitfabric-internal, where the servers, their runners and their
+# secrets live. Here, on GitHub's own runners, cd-fabric-test and cd-fabric-production build bit Fabric, and cd-demos (or
+# one demo's workflow) builds the demos. When one ends, this starts bitfabric-internal's workflow of the same name (the
+# demos' cd-demos) with the run's id; that workflow checks that the run is this repository's own before it takes its
+# artifacts and images. The token can only start workflows there.
+# Pull requests never run it: a workflow_run workflow always runs this file as it is on main, and the job below takes only
+# runs of this repository's own branches, started by hand or by a push.
+
 on:
   workflow_run:
-    workflows: [ ci-fabric ]
+    workflows: [ cd-fabric-test, cd-fabric-production, cd-demos, cd-demo-todo, cd-demo-adminpanel, cd-demo-sales, cd-demo-landingpage, cd-demo-workbench ]
     types: [ completed ]
-    branches: [ main ]
 
 permissions:
   contents: read
-
-concurrency:
-  group: cd-fabric-dispatch
-  cancel-in-progress: false
+  actions: read
 
 jobs:
   dispatch:
-    name: start Production's deployment
+    name: start the deployment
     if: >-
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      github.event.workflow_run.head_repository.full_name == github.repository
+      github.event.workflow_run.conclusion != 'cancelled' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      contains(fromJSON('["workflow_dispatch", "workflow_run", "push"]'), github.event.workflow_run.event)
     runs-on: ubuntu-26.04
     timeout-minutes: 5
-    # The environment holds BITFABRIC_DISPATCH_TOKEN and lets only main use it.
+    # The environment holds BITFABRIC_DISPATCH_TOKEN and lets only main use it, which a workflow_run workflow runs on.
     environment: Production
     steps:
 
-      - name: Checkout source code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-          fetch-depth: 2
-          persist-credentials: false
-
-      # Only a change to what runs on the server or in the apps is deployed: a change to the tests, the Workbench or the
-      # docs alone isn't. Pull requests are squash-merged, so the push is one commit.
-      - name: Start cd-fabric-production in bitfabric-internal
+      - name: Start the deployment in bitfabric-internal
         env:
           GH_TOKEN: ${{ secrets.BITFABRIC_DISPATCH_TOKEN }}
-          SHA: ${{ github.event.workflow_run.head_sha }}
+          RUNS_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          WORKFLOW: ${{ github.event.workflow_run.name }}
         run: |
-          if ! git diff --name-only HEAD~1 HEAD | grep -qE '^src/Fabric/src/(Shared|Server|Client)/|^src/Fabric/src/Directory\.(Build|Packages)\.props$'; then
-            echo "Nothing that runs on the server or in the apps changed in $SHA: Production isn't deployed." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
+          # A job of a called workflow is named "<caller's job> / <job>".
+          jobs="$(GH_TOKEN="$RUNS_TOKEN" gh api "repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID/jobs?per_page=100" --paginate --jq '.jobs[] | "\(.name)\t\(.conclusion)"')"
+          conclusion() {
+            printf '%s\n' "$jobs" | awk -F '\t' -v job="$1" '{
+              n = $1
+              if (n == job || (length(n) > length(job) + 3 && substr(n, length(n) - length(job) - 2) == " / " job)) { print $2; exit }
+            }'
+          }
+
+          case "$WORKFLOW" in
+            cd-fabric-test | cd-fabric-production)
+              # The server's images and the tests decide it. The build uploads the Windows app itself, and the server is
+              # deployed even when that failed.
+              server="$(conclusion 'build server')"
+              ci="$(conclusion 'ci')"
+              if [ "$server" != success ] || { [ "$ci" != success ] && [ "$ci" != skipped ]; }; then
+                echo "Run $RUN_ID has nothing to deploy: build server ${server:-not run}, ci ${ci:-not run}." >> "$GITHUB_STEP_SUMMARY"
+                exit 0
+              fi
+              target="$WORKFLOW.yml" ;;
+            cd-demo*)
+              # Each demo site whose build passed is deployed: the deployment finds them among the run's artifacts.
+              target=cd-demos.yml ;;
+            *)
+              echo "::error::$WORKFLOW has no deployment."
+              exit 1 ;;
+          esac
+
           if [ -z "$GH_TOKEN" ]; then
-            echo "::warning::BITFABRIC_DISPATCH_TOKEN isn't set, so Production isn't deployed by itself. Deploy it by hand: gh workflow run cd-fabric-production.yml --repo bitfoundation/bitfabric-internal -f ref=$SHA"
+            echo "::warning::BITFABRIC_DISPATCH_TOKEN isn't set, so run $RUN_ID isn't deployed. Deploy it by hand: gh workflow run $target --repo bitfoundation/bitfabric-internal -f run_id=$RUN_ID"
             exit 0
           fi
           # --ref spares the token a read of that repository's default branch, which it may not do: it can only start workflows.
-          gh workflow run cd-fabric-production.yml --repo bitfoundation/bitfabric-internal --ref main -f ref="$SHA"
-          echo "Started Production's deployment of $SHA." >> "$GITHUB_STEP_SUMMARY"
+          gh workflow run "$target" --repo bitfoundation/bitfabric-internal --ref main -f run_id="$RUN_ID"
+          echo "Started bitfabric-internal's $target for run $RUN_ID of $WORKFLOW." >> "$GITHUB_STEP_SUMMARY"
