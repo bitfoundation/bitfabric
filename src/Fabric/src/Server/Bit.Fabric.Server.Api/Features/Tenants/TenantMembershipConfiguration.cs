@@ -31,7 +31,7 @@ public partial class TenantMembershipConfiguration : IEntityTypeConfiguration<Te
             AcceptedOn = new DateTimeOffset(new DateOnly(2023, 1, 1), default, default)
         });
 
-        // store-user@bitplatform.dev is an accepted member of the default store tenant, so a tenant gets selected for her
+        // store-user@bitfabric.co is an accepted member of the default store tenant, so a tenant gets selected for her
         // at sign-in and her demo user-group's (tenant-scoped) feature claims flow into her token (See IdentityController.GetTenantId).
         builder.HasData(new TenantMembership
         {

@@ -43,7 +43,7 @@ public partial class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(ul => ul.UserId);
 
         const string userName = "test";
-        const string email = "test@bitplatform.dev";
+        const string email = "test@bitfabric.co";
 
         builder.HasData([new User
         {
@@ -66,7 +66,7 @@ public partial class UserConfiguration : IEntityTypeConfiguration<User>
         }]);
 
         const string storeAdminUserName = "store-admin";
-        const string storeAdminEmail = "store-admin@bitplatform.dev";
+        const string storeAdminEmail = "store-admin@bitfabric.co";
 
         // The default store tenant's admin (See TenantMembershipConfiguration and UserRoleConfiguration).
         builder.HasData([new User
@@ -88,7 +88,7 @@ public partial class UserConfiguration : IEntityTypeConfiguration<User>
         }]);
 
         const string storeUserUserName = "store-user";
-        const string storeUserEmail = "store-user@bitplatform.dev";
+        const string storeUserEmail = "store-user@bitfabric.co";
 
         // A regular (non-admin) member of the default store tenant, assigned to the demo user-group.
         // (See UserRoleConfiguration and TenantMembershipConfiguration).
