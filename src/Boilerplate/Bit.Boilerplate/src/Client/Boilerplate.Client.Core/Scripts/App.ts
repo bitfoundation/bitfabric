@@ -14,8 +14,9 @@ export class App {
         }
     }
 
-    public static showDiagnostic() {
-        return App.jsBridgeObj?.invokeMethodAsync('ShowDiagnostic');
+    /** Opens BevTools on the app's own panel, or on `panel`: a panel's id, optionally followed by a filter ('logs level:error'). */
+    public static showDevTools(panel?: string) {
+        return App.jsBridgeObj?.invokeMethodAsync('ShowDevTools', panel ?? null);
     }
 
     public static publishMessage(message: string, payload: unknown) {

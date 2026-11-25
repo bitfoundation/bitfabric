@@ -34,6 +34,24 @@
 
                 <BitLink Href="@PageUrls.Home">@Localizer[nameof(AppStrings.GoToHomePage)]</BitLink>
             }
+            else if (twoFactorRequired)
+            {
+                @* Not the generic error above: this one has a way out, and the user takes it from here, then comes back to
+                   this same request - the client is still waiting on it. *@
+                <BitIcon IconName="@BitIconName.Lock" Size="BitSize.Large" Color="BitColor.Warning" />
+
+                <BitText Typography="BitTypography.H5" Align="BitTextAlign.Center">
+                    @Localizer[nameof(AppStrings.OAuthConsentTwoFactorRequiredTitle)]
+                </BitText>
+
+                <BitText Typography="BitTypography.Body1" Align="BitTextAlign.Center" Color="BitColor.SecondaryForeground">
+                    @Localizer[nameof(AppStrings.OAuthConsentTwoFactorRequiredMessage)]
+                </BitText>
+
+                <BitButton Href="@GetTurnOnTwoFactorUrl()" IconName="@BitIconName.Permissions">
+                    @Localizer[nameof(AppStrings.OAuthConsentTurnOnTwoFactor)]
+                </BitButton>
+            }
             else if (leftFor is not null)
             {
                 @* Hybrid only: the result went to another app, so this page cannot navigate away and would otherwise

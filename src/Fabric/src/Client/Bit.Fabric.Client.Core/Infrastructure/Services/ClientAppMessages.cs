@@ -35,9 +35,11 @@ public partial class ClientAppMessages
     public const string CLOSE_NAV_PANEL = nameof(CLOSE_NAV_PANEL);
 
     /// <summary>
-    /// A publisher that sends this message announces that the subscriber should show the diagnostic modal.
+    /// A publisher that sends this message announces that the subscriber should open bit BevTools, the app's in-app dev
+    /// tools (See AppDevTools). The payload, when given, is the panel to open it on, optionally followed by a space and a
+    /// filter for that panel (<c>logs level:error</c>); without one it opens on the app's own panel.
     /// </summary>
-    public const string SHOW_DIAGNOSTIC_MODAL = nameof(SHOW_DIAGNOSTIC_MODAL);
+    public const string SHOW_DEV_TOOLS = nameof(SHOW_DEV_TOOLS);
 
 
 

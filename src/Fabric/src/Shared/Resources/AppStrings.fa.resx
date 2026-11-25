@@ -11372,4 +11372,22 @@
   <data name="AppHomeSeeCli" xml:space="preserve">
     <value>bit CLI چه می‌کند</value>
   </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>ورود دو مرحله‌ای لازم است</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>فقط حسابی که با ورود دو مرحله‌ای وارد می‌شود می‌تواند به این برنامه اجازه بدهد. آن را روشن کنید و دوباره با آن وارد شوید تا به همین‌جا برگردید و کار را تمام کنید.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>روشن کردن ورود دو مرحله‌ای</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>ورود دو مرحله‌ای روشن است. کدهای بازیابی را نگه دارید، بعد دوباره با آن وارد شوید تا به جایی که بودید برگردید.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>دوباره وارد شوید</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>ورود دو مرحله‌ای روشن است و با آن وارد شده‌اید. می‌توانید به جایی که بودید برگردید.</value>
+  </data>
 </root>
