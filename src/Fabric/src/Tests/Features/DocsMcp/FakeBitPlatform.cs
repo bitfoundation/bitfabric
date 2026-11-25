@@ -54,6 +54,28 @@ public sealed class FakeBitPlatform : IAsyncDisposable
     /// </summary>
     public ConcurrentQueue<string> Tags { get; } = new(["v-10.6.0", "v-10.7.0", "v-11.0.0-pre-01", "v-11.0.0-pre-23", "v-11.0.0-pre-24"]);
 
+    /// <summary>
+    /// The GitHub releases of bitplatform, one for each stable version, and of bitfabric, one for each version from
+    /// 11.0.0-pre-24 on; with a draft that doesn't count. A test publishes one by adding it.
+    /// </summary>
+    public ConcurrentQueue<Release> Releases { get; } = new(
+    [
+        new("bitplatform", "v-10.8.0", "2026-11-02T00:00:00Z", "A draft.", Draft: true),
+        new("bitplatform", "v-10.7.0", "2026-10-25T00:00:00Z", "BitDataGrid exports to Excel."),
+        new("bitplatform", "v-10.6.0", "2026-09-13T00:00:00Z", "The first release with MCP servers."),
+        new("bitfabric", "v-11.0.0-pre-24", "2026-11-24T00:00:00Z", "bit Boilerplate and bit CLI move to bitfabric.", Prerelease: true)
+    ]);
+
+    /// <summary>The date of the commit each tag names, as GitHub's commits list starting at it gives it. A tag not here has no commit.</summary>
+    public ConcurrentDictionary<string, string> TagDates { get; } = new(StringComparer.Ordinal)
+    {
+        ["v-11.0.0-pre-01"] = "2026-10-27T10:00:00Z",
+        ["v-11.0.0-pre-23"] = "2026-11-19T16:11:00Z"
+    };
+
+    /// <summary>A release as GitHub lists it, of bitplatform or bitfabric, for a tag such as v-11.0.0-pre-24.</summary>
+    public sealed record Release(string Repository, string Tag, string PublishedAt, string Notes, bool Draft = false, bool Prerelease = false);
+
     public async Task Start(CancellationToken cancellationToken)
     {
         var builder = WebApplication.CreateSlimBuilder();
@@ -119,8 +141,30 @@ public sealed class FakeBitPlatform : IAsyncDisposable
         if (Down.ContainsKey(uri.Host))
             return new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { RequestMessage = request };
 
-        if (uri.Host is "api.github.com" && uri.AbsolutePath is "/repos/bitfoundation/bitplatform/releases")
-            return Content(request, Encoding.UTF8.GetBytes(Releases), "application/json");
+        if (uri.Host is "api.github.com" && uri.Segments is [_, "repos/", "bitfoundation/", var releasesOf, "releases"])
+        {
+            var listed = new JsonArray([.. Releases.Where(release => $"{release.Repository}/" == releasesOf).Select(release => (JsonNode)new JsonObject
+            {
+                ["tag_name"] = release.Tag,
+                ["draft"] = release.Draft,
+                ["prerelease"] = release.Prerelease,
+                ["html_url"] = $"https://github.com/bitfoundation/{release.Repository}/releases/tag/{release.Tag}",
+                ["published_at"] = release.PublishedAt,
+                ["body"] = release.Notes
+            })]);
+
+            return Content(request, Encoding.UTF8.GetBytes(listed.ToJsonString()), "application/json");
+        }
+
+        // The commits list starting at a tag, one commit a page.
+        if (uri.Host is "api.github.com" && uri.AbsolutePath is "/repos/bitfoundation/bitplatform/commits")
+        {
+            var sha = System.Web.HttpUtility.ParseQueryString(uri.Query)["sha"] ?? "";
+
+            return TagDates.TryGetValue(sha, out var date)
+                ? Content(request, Encoding.UTF8.GetBytes(new JsonArray(new JsonObject { ["commit"] = new JsonObject { ["committer"] = new JsonObject { ["date"] = date } } }).ToJsonString()), "application/json")
+                : new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request };
+        }
 
         // Every tag that starts with v-, in one page and in the order GitHub lists them: by name, so v-11.0.0 comes before v-11.0.0-pre-24.
         if (uri.Host is "api.github.com" && uri.AbsolutePath is "/repos/bitfoundation/bitplatform/git/matching-refs/tags/v-")
@@ -154,16 +198,6 @@ public sealed class FakeBitPlatform : IAsyncDisposable
 
         throw new InvalidOperationException($"The tests reach nothing on the internet, and {uri} has no stand-in.");
     }
-
-    /// <summary>The release list as GitHub's api returns it, with a prerelease and a draft that don't count.</summary>
-    private const string Releases = """
-        [
-            { "tag_name": "v-11.0.0-pre-01", "draft": false, "prerelease": true, "html_url": "https://github.com/bitfoundation/bitplatform/releases/tag/v-11.0.0-pre-01", "published_at": "2026-11-01T00:00:00Z", "body": "A prerelease." },
-            { "tag_name": "v-10.8.0", "draft": true, "prerelease": false, "html_url": "https://github.com/bitfoundation/bitplatform/releases/tag/v-10.8.0", "published_at": "2026-11-02T00:00:00Z", "body": "A draft." },
-            { "tag_name": "v-10.7.0", "draft": false, "prerelease": false, "html_url": "https://github.com/bitfoundation/bitplatform/releases/tag/v-10.7.0", "published_at": "2026-10-25T00:00:00Z", "body": "BitDataGrid exports to Excel." },
-            { "tag_name": "v-10.6.0", "draft": false, "prerelease": false, "html_url": "https://github.com/bitfoundation/bitplatform/releases/tag/v-10.6.0", "published_at": "2026-09-13T00:00:00Z", "body": "The first release with MCP servers." }
-        ]
-        """;
 
     /// <summary>
     /// codebase-memory's release: checksums.txt, and an archive per platform holding a stand-in executable - a few bytes no

@@ -65,7 +65,7 @@ public partial class DocsMcpTests
         Assert.AreEqual("riok/mapperly answers How?.", await Call(mcp, "AskGitHubRepository", new() { ["repoName"] = "riok/mapperly", ["question"] = "How?" }));
 
         var releases = await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "10.6.0" });
-        Assert.StartsWith("10.6.0 is behind: 1 newer release, the newest being 10.7.0", releases, "The prerelease and the draft don't count.");
+        Assert.StartsWith("10.6.0 is behind: 4 newer versions, the newest being 11.0.0-pre-24", releases);
         Assert.Contains("BitDataGrid exports to Excel.", releases);
 
         Assert.AreEqual("The report reached the bit platform team. Tell the user it was sent.",
@@ -84,19 +84,69 @@ public partial class DocsMcpTests
         Assert.HasCount(1, sender.Sent, "A report without its text isn't sent.");
     }
 
+    /// <summary>
+    /// Every tag of bitplatform newer than the project's version counts, prereleases included, newest first. A version's
+    /// notes are those of its GitHub release in bitfabric (bit Boilerplate and bit CLI, from 11.0.0-pre-24 on) or bitplatform
+    /// (a stable version), and a version with neither is listed by its tag and the date of its commit.
+    /// </summary>
     [TestMethod]
-    public async Task TheReleasesTool_Should_CheckTheVersionTheAddressNames()
+    public async Task TheReleasesTool_Should_CountEveryNewerVersion_PrereleasesIncluded()
     {
         await using var platform = new FakeBitPlatform();
         await using var server = await StartServer(platform);
+        await using var mcp = await Connect(server, "v=11.0.0-pre-24");
 
-        await using (var current = await Connect(server, "v=10.7.0"))
-        {
-            Assert.StartsWith("10.7.0 is up to date", await Call(current, "GetBitPlatformReleases"), "Without a version argument, the one ?v= names is checked.");
-        }
+        Assert.AreEqual("11.0.0-pre-24 is up to date: the newest version is 11.0.0-pre-24, published 2026-11-24, https://github.com/bitfoundation/bitfabric/releases/tag/v-11.0.0-pre-24",
+            await Call(mcp, "GetBitPlatformReleases"), "Without a version argument, the one ?v= names is checked.");
 
-        await using var older = await Connect(server, "v=10.6.0");
-        Assert.StartsWith("10.6.0 is behind", await Call(older, "GetBitPlatformReleases"));
+        var behind = await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "11.0.0-pre-22" });
+        Assert.StartsWith("11.0.0-pre-22 is behind: 2 newer versions, the newest being 11.0.0-pre-24, published 2026-11-24.", behind);
+        Assert.Contains("# 11.0.0-pre-24 of bit Boilerplate and bit CLI, published 2026-11-24, https://github.com/bitfoundation/bitfabric/releases/tag/v-11.0.0-pre-24", behind);
+        Assert.Contains("bit Boilerplate and bit CLI move to bitfabric.", behind);
+        Assert.Contains("11.0.0-pre-23, dated 2026-11-19: no release notes, https://github.com/bitfoundation/bitplatform/releases/tag/v-11.0.0-pre-23", behind);
+        Assert.IsLessThan(behind.IndexOf("11.0.0-pre-23, dated", StringComparison.Ordinal), behind.IndexOf("# 11.0.0-pre-24", StringComparison.Ordinal), "Newest first.");
+
+        // A stable version is behind every prerelease since, and may be passed as its tag.
+        var stable = await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "v-10.7.0" });
+        Assert.StartsWith("v-10.7.0 is behind: 3 newer versions, the newest being 11.0.0-pre-24", stable);
+        Assert.Contains("11.0.0-pre-01, dated 2026-10-27: no release notes", stable);
+        Assert.DoesNotContain("BitDataGrid exports to Excel.", stable, "Only the versions newer than the project's.");
+
+        var older = await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "10.6.0" });
+        Assert.StartsWith("10.6.0 is behind: 4 newer versions", older);
+        Assert.Contains("# 10.7.0, published 2026-10-25, https://github.com/bitfoundation/bitplatform/releases/tag/v-10.7.0", older);
+        Assert.DoesNotContain("A draft.", older);
+
+        // A version no tag names still gets an answer, with or without its prerelease part.
+        Assert.StartsWith("10.6.5 is behind: 4 newer versions", await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "10.6.5" }));
+        Assert.StartsWith("11.0.0-pre-99 is up to date: no version is newer", await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "11.0.0-pre-99" }));
+        Assert.StartsWith("11.0.0 is up to date: no version is newer", await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "11.0.0" }), "A stable version comes after every prerelease of it.");
+
+        var refused = await mcp.CallToolAsync("GetBitPlatformReleases", new Dictionary<string, object?> { ["version"] = "11.0" }, cancellationToken: TestContext.CancellationToken);
+        Assert.IsTrue(refused.IsError);
+        Assert.StartsWith("11.0 is not a bit platform version", Text(refused));
+    }
+
+    /// <summary>A stable version has a release in both repositories: bitplatform's notes come first, then bitfabric's.</summary>
+    [TestMethod]
+    public async Task TheReleasesTool_Should_ShowBothRepositoriesNotes_OfAStableVersion()
+    {
+        await using var platform = new FakeBitPlatform();
+        platform.Tags.Enqueue("v-11.0.0");
+        platform.Releases.Enqueue(new("bitplatform", "v-11.0.0", "2026-12-01T00:00:00Z", "Every library on .NET 11."));
+        platform.Releases.Enqueue(new("bitfabric", "v-11.0.0", "2026-12-01T00:00:00Z", "The template on .NET 11."));
+
+        await using var server = await StartServer(platform);
+        await using var mcp = await Connect(server, "v=11.0.0-pre-24");
+
+        var answer = await Call(mcp, "GetBitPlatformReleases");
+        Assert.StartsWith("11.0.0-pre-24 is behind: 1 newer version, the newest being 11.0.0, published 2026-12-01.", answer, "A stable version comes after every prerelease of it.");
+        Assert.Contains("# 11.0.0, published 2026-12-01, https://github.com/bitfoundation/bitplatform/releases/tag/v-11.0.0", answer);
+        Assert.Contains("# 11.0.0 of bit Boilerplate and bit CLI, published 2026-12-01, https://github.com/bitfoundation/bitfabric/releases/tag/v-11.0.0", answer);
+
+        var bitPlatformNotes = answer.IndexOf("Every library on .NET 11.", StringComparison.Ordinal);
+        Assert.IsGreaterThan(0, bitPlatformNotes);
+        Assert.IsGreaterThan(bitPlatformNotes, answer.IndexOf("The template on .NET 11.", StringComparison.Ordinal), "bitplatform's notes, then bitfabric's.");
     }
 
     /// <summary>
@@ -144,7 +194,7 @@ public partial class DocsMcpTests
             await using (var older = await Connect(server, "v=10.7.0"))
             {
                 Assert.Contains("Its source code tools read 11.0.0-pre-24, the newest bit platform code, whatever v this connection names.", older.ServerInstructions!);
-                Assert.StartsWith("10.7.0 is up to date", await Call(older, "GetBitPlatformReleases"), "The releases tool still checks the version ?v= names.");
+                Assert.StartsWith("10.7.0 is behind", await Call(older, "GetBitPlatformReleases"), "The releases tool still checks the version ?v= names.");
             }
 
             // 11.0.0 is tagged in both repositories.

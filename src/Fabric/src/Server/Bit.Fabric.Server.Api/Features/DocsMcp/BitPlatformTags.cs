@@ -1,95 +1,77 @@
-using System.Text.Json.Nodes;
+using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
 namespace Bit.Fabric.Server.Api.Features.DocsMcp;
 
 /// <summary>
-/// The newest version tag of bitfoundation/bitplatform, a prerelease included, read from its git refs on GitHub and kept
-/// for a quarter of an hour: the code the source code index serves (See DocsMcpCodeIndexer). GitHub has a release for a
-/// stable version alone, so a prerelease is found among the tags, not among the releases <see cref="BitPlatformReleases"/> reads.
+/// The version tags of bitfoundation/bitplatform, prereleases included, read from its git refs on GitHub and kept for a
+/// quarter of an hour: the newest is the code the source code index serves (See DocsMcpCodeIndexer), and every one newer
+/// than a project's is a version the GetBitPlatformReleases tool counts. A prerelease is a tag alone in bitplatform, which
+/// publishes a GitHub release for a stable version only (See <see cref="BitPlatformReleases"/>).
 /// </summary>
 public class BitPlatformTags(IHttpClientFactory httpClientFactory, TimeProvider timeProvider, ILogger<BitPlatformTags> logger)
 {
-    /// <summary>Every tag that starts with v-, in one answer today; a Link header's next page is followed should GitHub page it.</summary>
+    /// <summary>Every tag that starts with v-, in one page today.</summary>
     private const string TagsUrl = "https://api.github.com/repos/bitfoundation/bitplatform/git/matching-refs/tags/v-";
 
-    private static readonly TimeSpan cacheLifetime = TimeSpan.FromMinutes(15);
+    private const string CommitsUrl = "https://api.github.com/repos/bitfoundation/bitplatform/commits";
 
-    /// <summary>A read that failed is retried this much later rather than on every call in between.</summary>
-    private static readonly TimeSpan failedReadLifetime = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan failedDateLifetime = TimeSpan.FromMinutes(1);
 
-    /// <summary>Bounds the pages followed, so a Link header that never ends can't hold the read.</summary>
-    private const int MaxPages = 20;
+    private readonly GitHubCache<BitPlatformTag[]> tags = new(timeProvider, logger, "the bit platform tags", cancellationToken => Read(httpClientFactory, cancellationToken));
 
-    private readonly SemaphoreSlim sync = new(1, 1);
+    /// <summary>The date of each tag asked for, read once: a tag never moves.</summary>
+    private readonly ConcurrentDictionary<string, DateTimeOffset> dates = new(StringComparer.Ordinal);
 
-    private BitPlatformTag? newest;
+    /// <summary>After a date GitHub didn't give, no other is asked for until then.</summary>
+    private DateTimeOffset datesFailedUntil;
 
-    private DateTimeOffset expiresAt;
+    /// <summary>Newest first. Null when GitHub could not be read and nothing was read before.</summary>
+    public Task<BitPlatformTag[]?> GetTags(CancellationToken cancellationToken) => tags.Get(cancellationToken);
 
     /// <summary>Null when GitHub could not be read and nothing was read before.</summary>
-    public async Task<BitPlatformTag?> GetNewest(CancellationToken cancellationToken)
-    {
-        if (timeProvider.GetUtcNow() < expiresAt) return newest;
+    public async Task<BitPlatformTag?> GetNewest(CancellationToken cancellationToken) => (await GetTags(cancellationToken))?.FirstOrDefault();
 
-        await sync.WaitAsync(cancellationToken);
+    /// <summary>
+    /// The date of the commit <paramref name="tag"/> names, for a version no GitHub release dates. A request of its own for
+    /// each tag, kept for good, so a caller asks for a few at most. Null when GitHub could not be read.
+    /// </summary>
+    public async Task<DateTimeOffset?> GetDate(BitPlatformTag tag, CancellationToken cancellationToken)
+    {
+        if (dates.TryGetValue(tag.Tag, out var known)) return known;
+
+        if (timeProvider.GetUtcNow() < datesFailedUntil) return null;
 
         try
         {
-            if (timeProvider.GetUtcNow() < expiresAt) return newest;
-
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeout.CancelAfter(TimeSpan.FromSeconds(30));
 
-            var http = httpClientFactory.CreateClient(DocsMcpHttp.ClientName);
-            List<BitPlatformTag> tags = [];
-            string? url = TagsUrl;
+            var commits = await GitHubApi.Read(httpClientFactory, $"{CommitsUrl}?sha={Uri.EscapeDataString(tag.Tag)}&per_page=1", timeout.Token);
+            var date = DateTimeOffset.Parse(commits[0]!["commit"]!["committer"]!["date"]!.GetValue<string>(), CultureInfo.InvariantCulture);
 
-            for (var page = 0; url is not null && page < MaxPages; page++)
-            {
-                using var request = new HttpRequestMessage(HttpMethod.Get, url);
-                request.Headers.Accept.ParseAdd("application/vnd.github+json");
-
-                using var response = await http.SendAsync(request, timeout.Token);
-                response.EnsureSuccessStatusCode();
-
-                var refs = JsonNode.Parse(await response.Content.ReadAsStringAsync(timeout.Token))!.AsArray();
-
-                // Each ref is named refs/tags/<tag>.
-                tags.AddRange(refs.Select(gitRef => gitRef!["ref"]!.GetValue<string>())
-                                  .Select(name => BitPlatformTag.TryParse(name[(name.LastIndexOf('/') + 1)..]))
-                                  .OfType<BitPlatformTag>());
-
-                url = NextPage(response);
-            }
-
-            newest = tags.Max() ?? throw new InvalidOperationException("GitHub listed no version tag of bitfoundation/bitplatform.");
-
-            expiresAt = timeProvider.GetUtcNow() + cacheLifetime;
+            return dates[tag.Tag] = date;
         }
         catch (Exception exp) when (cancellationToken.IsCancellationRequested is false)
         {
-            logger.LogError(exp, "Reading the bit platform tags from GitHub failed.");
+            logger.LogWarning(exp, "Reading the date of {Tag} from GitHub failed.", tag.Tag);
 
-            expiresAt = timeProvider.GetUtcNow() + failedReadLifetime;
+            datesFailedUntil = timeProvider.GetUtcNow() + failedDateLifetime;
+            return null;
         }
-        finally
-        {
-            sync.Release();
-        }
-
-        return newest;
     }
 
-    /// <summary>The address of the next page a Link header names, as GitHub pages its lists: &lt;url&gt;; rel="next".</summary>
-    private static string? NextPage(HttpResponseMessage response)
-        => response.Headers.TryGetValues("Link", out var links)
-            ? links.SelectMany(link => link.Split(','))
-                   .Select(link => link.Split(';', StringSplitOptions.TrimEntries))
-                   .Where(parts => parts.Length > 1 && parts.Skip(1).Contains("rel=\"next\""))
-                   .Select(parts => parts[0].TrimStart('<').TrimEnd('>'))
-                   .FirstOrDefault()
-            : null;
+    private static async Task<BitPlatformTag[]> Read(IHttpClientFactory httpClientFactory, CancellationToken cancellationToken)
+    {
+        // Each ref is named refs/tags/<tag>.
+        BitPlatformTag[] read = [.. (await GitHubApi.ReadList(httpClientFactory, TagsUrl, cancellationToken))
+                                    .Select(gitRef => gitRef["ref"]!.GetValue<string>())
+                                    .Select(name => BitPlatformTag.TryParse(name[(name.LastIndexOf('/') + 1)..]))
+                                    .OfType<BitPlatformTag>()
+                                    .OrderDescending()];
+
+        return read.Length > 0 ? read : throw new InvalidOperationException("GitHub listed no version tag of bitfoundation/bitplatform.");
+    }
 }
 
 /// <summary>A version tag of bitfoundation/bitplatform, such as v-11.0.0-pre-24 or v-11.0.0.</summary>

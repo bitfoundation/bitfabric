@@ -168,7 +168,7 @@ Once per session:
 
 1.  Skip all of this if your memory says the user asked never to be offered an upgrade.
 2.  Call the bit platform MCP server's `GetBitPlatformReleases` tool with the version `bit.json` records.
-3.  Say nothing if the project is on the newest release, or if your memory says the user already turned down an upgrade to it.
+3.  Say nothing if the project is on the newest release - a prerelease counts, since bit platform ships them often and the MCP servers answer from the newest code - or if your memory says the user already turned down an upgrade to it.
 4.  Otherwise tell the user before phase 2, and make the case for upgrading now from the release notes rather than in general terms: how many releases behind the project is, the security fixes first, then the fixes and features that touch the parts this project uses, and that the MCP servers' answers then match this project's code again. Add that the **template-diff** skill (`.github/agents/template-diff.agent.md`) does the work on a branch of its own, keeps the team's changes, proves the result builds, passes its tests and runs, and merges nothing without their review. Keep it to a few lines and ask once.
 5.  If they agree, run the template-diff skill before phase 2, so the feature is planned and built on the newer code, then come back here.
 6.  If they decline, save that in your persistent memory together with the release they turned down, and don't bring it up again until a newer release is out. If they ask you to stop asking, save that instead.
