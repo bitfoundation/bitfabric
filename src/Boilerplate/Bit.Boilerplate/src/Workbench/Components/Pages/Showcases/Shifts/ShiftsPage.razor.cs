@@ -34,7 +34,7 @@ public partial class ShiftsPage
     private IReadOnlyList<BitFullCalendarColorOption> roles = [];
     private List<BitDropdownItem<string>> staffFilterItems = [];
     private List<BitDropdownItem<ShiftRole>> roleFilterItems = [];
-    private BitFullCalendarTexts texts = new();
+    private BitFullCalendarStrings texts = new();
     // Shifts stay within opening hours and may not overlap.
     private readonly BitFullCalendarSettings settings = new()
     {
@@ -252,11 +252,11 @@ public partial class ShiftsPage
     }
 
     /// <summary>The calendar's texts from the Calendar resources; a text without a resource keeps the calendar's own.</summary>
-    private BitFullCalendarTexts CreateTexts()
+    private BitFullCalendarStrings CreateTexts()
     {
-        var calendarTexts = new BitFullCalendarTexts();
+        var calendarTexts = new BitFullCalendarStrings();
 
-        foreach (var property in typeof(BitFullCalendarTexts).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.PropertyType == typeof(string) && p.CanWrite))
+        foreach (var property in typeof(BitFullCalendarStrings).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.PropertyType == typeof(string) && p.CanWrite))
         {
             var text = Localizer[$"Calendar{property.Name}"];
 
