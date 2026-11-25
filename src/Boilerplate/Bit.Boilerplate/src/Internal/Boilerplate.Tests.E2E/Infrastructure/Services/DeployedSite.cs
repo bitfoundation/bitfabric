@@ -1,7 +1,7 @@
 namespace Boilerplate.Tests.E2E.Infrastructure.Services;
 
 /// <summary>
-/// The demos are IIS sites on this machine (See .github/actions/deploy-to-server), published out of process, so
+/// The demos are IIS sites on this machine (See .github/actions/deploy-demo-to-iis), published out of process, so
 /// stopping one drops whatever it held in memory - an exhausted rate limit window, a warm cache.
 /// </summary>
 public static class DeployedSite
