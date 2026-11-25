@@ -11240,6 +11240,9 @@
   <data name="CliRefRun" xml:space="preserve">
     <value>پروژه را build و اجرا می‌کند: وب‌سایت و سرورش، یا اپ Android، iOS، macOS یا Windows.</value>
   </data>
+  <data name="CliRefCodespace" xml:space="preserve">
+    <value>پروژه را روی GitHub Codespaces اجرا می‌کند، در codespace همان branch که دوباره به کارش می‌گیرد و فقط وقتی نباشد آن را می‌سازد، و نشانی‌های اپ روی همین کامپیوتر کار می‌کنند.</value>
+  </data>
   <data name="CliRefDiff" xml:space="preserve">
     <value>نشان می‌دهد نقطهٔ شروع پروژه بین دو نسخه چه تغییری کرده، در قالب یک commit که AI شما به پروژه‌تان می‌آورد.</value>
   </data>
@@ -11256,7 +11259,7 @@
     <value>نام پروژه را هر جا که آمده عوض می‌کند: فایل‌ها، پوشه‌ها، کد، پایگاه‌داده و id اپ.</value>
   </data>
   <data name="CliRefRemove" xml:space="preserve">
-    <value>پوشه‌ای را برای همیشه پاک می‌کند، پس از بستن اپ‌هایی که فایل‌هایش را در دست دارند.</value>
+    <value>پوشه‌ای را حداکثر در ۱۰ ثانیه برای همیشه پاک می‌کند و اپ‌هایی را که فایل‌هایش را در دست دارند می‌بندد.</value>
   </data>
   <data name="CliRefMigration" xml:space="preserve">
     <value>migrationهای پایگاه‌داده را اضافه و حذف می‌کند و آن‌ها را برای پایگاه‌دادهٔ روی سرورتان بسته‌بندی می‌کند.</value>
