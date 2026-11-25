@@ -120,7 +120,7 @@ public partial class CultureInfoManager
         cultureInfo.DateTimeFormat.AMDesignator = "ق.ظ";
         cultureInfo.DateTimeFormat.PMDesignator = "ب.ظ";
         cultureInfo.DateTimeFormat.ShortDatePattern = "yyyy/MM/dd";
-        cultureInfo.DateTimeFormat.LongDatePattern = "yyyy MMMM d, dddd";
+        cultureInfo.DateTimeFormat.LongDatePattern = "yyyy MMMM d، dddd";
         cultureInfo.DateTimeFormat.AbbreviatedDayNames =
         [
             "ی", "د", "س", "چ", "پ", "ج", "ش"

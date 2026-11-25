@@ -6014,7 +6014,7 @@
     <value>بررسی‌شده در {0}</value>
   </data>
   <data name="MonitoringDeployedAt" xml:space="preserve">
-    <value>Deploy شده در {0}</value>
+    <value>در {0} Deploy شد</value>
   </data>
   <data name="MonitoringOpenTheApp" xml:space="preserve">
     <value>باز کردن اپ</value>

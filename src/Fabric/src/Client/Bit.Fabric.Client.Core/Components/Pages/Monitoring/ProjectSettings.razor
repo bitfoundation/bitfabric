@@ -22,7 +22,7 @@
                 <div>
                     <dt>@Localizer[nameof(AppStrings.MonitoringRunning)]</dt>
                     <dd>
-                        <span class="ltr app-latin-digits">@(Details.ApplicationVersion ?? "—")</span>
+                        <bdi class="ltr app-latin-digits">@(Details.ApplicationVersion ?? "—")</bdi>
                         @if (Details.LastDeployedAt is { } deployedAt)
                         {
                             <text>@Dot@Localizer[nameof(AppStrings.MonitoringDeployedAt), LocalTime(deployedAt)]</text>
