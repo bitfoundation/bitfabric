@@ -48,6 +48,9 @@ public sealed class FakeCustomerApp
     /// <summary>The home page comes from a cache that ignores the query string.</summary>
     public bool CachesIgnoringQueryString { get; set; }
 
+    /// <summary>The page its root sends a visitor to, as an app made from the template sends <c>/</c> to the culture's.</summary>
+    public string Landing { get; set; } = "/en-US/";
+
     public bool RefusesRefresh { get; set; }
 
     /// <summary>How long it takes to answer anything, as a slow app does.</summary>
@@ -288,9 +291,11 @@ public sealed class FakeCustomerApp
             ("GET", "/healthz/v1") when origin == Server => request.Headers.Authorization?.Parameter is { } token && token == AccessToken
                 ? HealthReport()
                 : new HttpResponseMessage(HttpStatusCode.Unauthorized),
-            // An app made from the template sends its root to the culture's (See MonitoringHttp.GetFollowingSameOriginRedirects).
-            ("GET", "/") => new HttpResponseMessage(HttpStatusCode.Found) { Headers = { Location = new Uri($"/en-US/{url.Query}", UriKind.Relative) } },
-            ("GET", "/en-US/" or "/health") => Home(),
+            // An app made from the template sends its root to the culture's (See ProjectProber.TimeFrontDoor).
+            ("GET", "/") => new HttpResponseMessage(HttpStatusCode.Found) { Headers = { Location = new Uri($"{Landing}{url.Query}", UriKind.Relative) } },
+            ("GET", var path) when path == Landing || path is "/health" => Home(),
+            // One it no longer lands on sends the visitor on, as after the app's default culture changed.
+            ("GET", "/en-US/") => new HttpResponseMessage(HttpStatusCode.Found) { Headers = { Location = new Uri($"{Landing}{url.Query}", UriKind.Relative) } },
             ("GET", "/robots.txt") when origin == Address && RobotsTxt is not null => Text(RobotsTxt, "text/plain"),
             ("GET", "/sitemap.xml") when origin == Address && Sitemap is not null => Text(Sitemap, "application/xml"),
             ("GET", "/sitemap_index.xml") when origin == Address && SitemapIndex is not null => Text(SitemapIndex, "application/xml"),

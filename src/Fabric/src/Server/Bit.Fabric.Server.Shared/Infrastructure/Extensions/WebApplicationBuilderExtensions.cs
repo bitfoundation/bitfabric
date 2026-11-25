@@ -149,6 +149,11 @@ public static class WebApplicationBuilderExtensions
                         EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13
                     };
                 });
+
+                // The handler renews its own connections (PooledConnectionLifetime above), so the factory keeps it for good
+                // instead of replacing it, and with it every open connection, every 2 minutes:
+                // https://learn.microsoft.com/dotnet/core/extensions/httpclient-factory#using-ihttpclientfactory-together-with-socketshttphandler
+                http.SetHandlerLifetime(Timeout.InfiniteTimeSpan);
             });
 
             return builder;

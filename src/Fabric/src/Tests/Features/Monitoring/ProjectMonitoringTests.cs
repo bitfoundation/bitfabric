@@ -301,6 +301,51 @@ public partial class ProjectMonitoringTests
     }
 
     [TestMethod]
+    public async Task ARound_Should_TimeOneRequest_ThePageTheHomePageLandsOn()
+    {
+        var customerApp = new FakeCustomerApp();
+        await using var server = await StartServer(customerApp);
+        await using var client = await SignInWithATeamOfTheirOwn(server);
+        var projects = client.GetController<IProjectsController>();
+        var project = await Connect(projects, customerApp, "customer.example");
+
+        string[] HomePages() => [.. customerApp.Requested.Where(url => url is "https://customer.example/" or "https://customer.example/en-US/" or "https://customer.example/fa-IR/")];
+
+        // The first round followed / to /en-US/; the next asks for /en-US/ straight away.
+        customerApp.Requested.Clear();
+        await Probe(server, project.Id);
+        Assert.AreSequenceEqual(new[] { "https://customer.example/en-US/" }, HomePages());
+
+        // The app lands somewhere else now: that round follows it and times the request after it, and the next asks for the new page.
+        customerApp.Landing = "/fa-IR/";
+        customerApp.Requested.Clear();
+        await Probe(server, project.Id);
+        Assert.AreSequenceEqual(new[] { "https://customer.example/en-US/", "https://customer.example/fa-IR/" }, HomePages());
+
+        customerApp.Requested.Clear();
+        await Probe(server, project.Id);
+        Assert.AreSequenceEqual(new[] { "https://customer.example/fa-IR/" }, HomePages());
+
+        await using var scope = server.ApiApp.Services.CreateAsyncScope();
+        var rounds = await scope.ServiceProvider.GetRequiredService<AppDbContext>().ProjectProbes.IgnoreQueryFilters()
+            .Where(probe => probe.ProjectId == project.Id).ToListAsync(TestContext.CancellationToken);
+        Assert.IsTrue(rounds.All(round => round.ResponseMs is not null), "Every round timed the page, the one that was redirected too.");
+    }
+
+    [TestMethod, TestCategory("UnitTest")]
+    public void ARoundsMoment_Should_BeTheProjectsOwn_WithinTheSpread()
+    {
+        var spread = TimeSpan.FromSeconds(30);
+        var projectIds = Enumerable.Range(0, 300).Select(_ => Guid.CreateVersion7()).ToArray();
+        var moments = projectIds.Select(id => ProjectProbeJobRunner.OffsetOf(id, spread)).ToArray();
+
+        Assert.IsTrue(moments.All(moment => moment >= TimeSpan.Zero && moment < spread), "Each within the spread.");
+        Assert.AreSequenceEqual(moments, projectIds.Select(id => ProjectProbeJobRunner.OffsetOf(id, spread)).ToArray(), "The same moment every minute.");
+        Assert.IsGreaterThan(25, moments.Select(moment => (int)moment.TotalSeconds).Distinct().Count(), "Spread over the half minute, ids made in the same millisecond included.");
+        Assert.AreEqual(TimeSpan.Zero, ProjectProbeJobRunner.OffsetOf(projectIds[0], TimeSpan.Zero), "No spread: all at once, as before.");
+    }
+
+    [TestMethod]
     public async Task ACacheThatIgnoresTheQueryString_Should_BeReported()
     {
         var customerApp = new FakeCustomerApp { CachesIgnoringQueryString = true };

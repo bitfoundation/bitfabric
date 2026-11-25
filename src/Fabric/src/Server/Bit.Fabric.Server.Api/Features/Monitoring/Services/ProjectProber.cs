@@ -6,6 +6,7 @@ using Bit.Fabric.Shared.Features.Diagnostic;
 using Bit.Fabric.Shared.Features.Monitoring;
 using Bit.Fabric.Shared.Features.Monitoring.Dtos;
 using Medallion.Threading;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Bit.Fabric.Server.Api.Features.Monitoring.Services;
 
@@ -32,6 +33,7 @@ public partial class ProjectProber
     [AutoInject] private StatusPageService statusPages = default!;
     [AutoInject] private ProjectScanScheduler scanScheduler = default!;
     [AutoInject] private ProjectIcons icons = default!;
+    [AutoInject] private ProjectLandings landings = default!;
     [AutoInject] private ServerApiSettings settings = default!;
     [AutoInject] private TimeProvider timeProvider = default!;
     [AutoInject] private DistributedLockFactory distributedLockFactory = default!;
@@ -206,32 +208,55 @@ public partial class ProjectProber
     /// <summary>
     /// How long a visitor waits for the home page, asked for with a query string no one else uses, so any cache has to
     /// miss; an answer that still says it came from one means that cache ignores the query string. A static front end
-    /// says nothing about the app, so its server's <c>/health</c> is timed instead.
+    /// says nothing about the app, so its server's <c>/health</c> is timed instead. One request is timed: the page the front
+    /// door lands on (See ProjectLandings). A round that is redirected within the app, as the template sends <c>/</c> to
+    /// <c>/en-US/</c>, follows it and times only the last request, and later rounds ask for that page straight away.
     /// </summary>
     private async Task TimeFrontDoor(Project project, ProjectProbe probe, CancellationToken cancellationToken)
     {
-        var url = project.HasStaticFrontEnd
-            ? FrontDoorOf(project)
-            : $"{FrontDoorOf(project)}?bf={Guid.NewGuid():N}";
+        var uri = new Uri(landings.AddressOf(project));
 
         try
         {
             var http = httpClientFactory.CreateClient(MonitoringHttp.ClientName);
-            var stopwatch = Stopwatch.StartNew();
-            // Redirects within the app count, as they do for a visitor: the template's sends / to /en-US/.
-            using var response = await http.GetFollowingSameOriginRedirects(url, cancellationToken);
-            probe.ResponseMs = (int)stopwatch.ElapsedMilliseconds;
 
-            probe.HasCacheWarning = project.HasStaticFrontEnd is false
-                && (response.Headers.Age is not null
-                    || IsHit(response, "cf-cache-status")
-                    || IsHit(response, "X-Cache"));
+            for (var redirects = 0; ; redirects++)
+            {
+                var asked = project.HasStaticFrontEnd ? uri : PastAnyCache(uri);
+                var stopwatch = Stopwatch.StartNew();
+                using var response = await http.GetAsync(asked, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+                var elapsed = (int)stopwatch.ElapsedMilliseconds;
+
+                if (redirects < MonitoringHttp.MaxRedirects && MonitoringHttp.SameOriginRedirect(asked, response) is { } next)
+                {
+                    uri = next;
+                    continue;
+                }
+
+                probe.ResponseMs = elapsed;
+                probe.HasCacheWarning = project.HasStaticFrontEnd is false
+                    && (response.Headers.Age is not null
+                        || IsHit(response, "cf-cache-status")
+                        || IsHit(response, "X-Cache"));
+
+                landings.Learn(project, uri);
+                return;
+            }
         }
         catch (Exception exp) when (exp is HttpRequestException or TaskCanceledException)
         {
             // The report says what's wrong; a front door that doesn't answer leaves the time empty.
-            logger.LogInformation("{Url} didn't answer: {Reason}", url, exp.Message);
+            logger.LogInformation("{Url} didn't answer: {Reason}", uri, exp.Message);
         }
+    }
+
+    /// <summary>The address with a <c>bf</c> query no one else uses, a new one for every request, so any cache that honors the query string misses.</summary>
+    private static Uri PastAnyCache(Uri uri)
+    {
+        var query = QueryHelpers.ParseQuery(uri.Query);
+        query["bf"] = Guid.NewGuid().ToString("N");
+
+        return new Uri(QueryHelpers.AddQueryString(uri.GetLeftPart(UriPartial.Path), query));
     }
 
     /// <summary>
@@ -272,6 +297,8 @@ public partial class ProjectProber
                 // The resource the token was issued for, so the request always matches its audience.
                 using var request = new HttpRequestMessage(HttpMethod.Get, $"{connection.Resource!.TrimEnd('/')}/v1");
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                // A request built by hand starts at HTTP/1.1; this one goes as the home page's does.
+                (request.Version, request.VersionPolicy) = (http.DefaultRequestVersion, http.DefaultVersionPolicy);
 
                 using var response = await http.SendAsync(request, cancellationToken);
                 probe.ReportMs = (int)stopwatch.ElapsedMilliseconds;
