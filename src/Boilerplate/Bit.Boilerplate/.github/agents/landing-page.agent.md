@@ -74,6 +74,9 @@ Paths below are relative to `src/LandingPage/Boilerplate.LandingPage.Client/` un
 - **The samples' companies, people, ratings and quotes are fictional.** Before launch, replace every one of them on
   the sample that stays with the product's real ones from the user, and never invent a review, a rating, a customer,
   an award or a legal statement.
+- **A changed fact changes everywhere it shows.** A date, a price or a place is also in words that only imply it,
+  such as "Questions before January?": search every language's texts for the old month, day and year apart, not
+  only for the whole date.
 
 ## 3. Run it
 
