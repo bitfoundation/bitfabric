@@ -142,6 +142,13 @@ public partial class StatusPageNotice
         _ => BitIconName.Repair
     };
 
+    private BitColor IconColor => notice?.Kind switch
+    {
+        StatusNoticeKind.Outage => BitColor.Error,
+        StatusNoticeKind.PartialOutage => BitColor.Warning,
+        _ => BitColor.Primary
+    };
+
     private string Title => notice?.Title ?? (notice?.Kind is StatusNoticeKind.Maintenance
         ? Localizer[nameof(AppStrings.StatusNoticeMaintenanceTitle)]
         : Localizer[nameof(AppStrings.StatusNoticeIncidentTitle)]);
