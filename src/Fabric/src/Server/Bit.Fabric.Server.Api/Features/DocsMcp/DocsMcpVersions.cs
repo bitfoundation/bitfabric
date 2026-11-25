@@ -26,7 +26,7 @@ public sealed class DocsMcpVersions(ServerApiSettings settings)
     /// <summary>Names the version the source code tools read, for the server instructions.</summary>
     public string Describe()
         => Served is { } served
-            ? $"Its source code tools read {served.Name}, the newest bit platform code."
+            ? $"Its source code tools read {served.Name}, the newest bit platform tag indexed so far."
             : $"Its source code tools don't answer for now: {Unavailable}. Every other tool does.";
 
     /// <summary>Serves <paramref name="version"/> in place of the one served before, as DocsMcpCodeIndexer finishes indexing it.</summary>

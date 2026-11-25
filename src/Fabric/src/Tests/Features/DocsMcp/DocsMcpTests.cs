@@ -207,7 +207,7 @@ public partial class DocsMcpTests
 
             await using (var mcp = await Connect(server))
             {
-                Assert.Contains("Its source code tools read 11.0.0-pre-24, the newest bit platform code.", mcp.ServerInstructions!);
+                Assert.Contains("Its source code tools read 11.0.0-pre-24, the newest bit platform tag indexed so far.", mcp.ServerInstructions!);
             }
 
             // 11.0.0 is tagged in both repositories.
@@ -222,7 +222,7 @@ public partial class DocsMcpTests
 
             await using (var mcp = await Connect(server))
             {
-                Assert.Contains("Its source code tools read 11.0.0, the newest bit platform code.", mcp.ServerInstructions!);
+                Assert.Contains("Its source code tools read 11.0.0, the newest bit platform tag indexed so far.", mcp.ServerInstructions!);
             }
 
             using (var served = JsonDocument.Parse(await server.CreateRawHttpClient().GetStringAsync(new Uri(server.ApiAppAddress, "docs-mcp/versions"), TestContext.CancellationToken)))

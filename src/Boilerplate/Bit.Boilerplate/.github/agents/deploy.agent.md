@@ -35,7 +35,9 @@ domain and the services of section 5. Then go through the steps with them.
   which pulls those images and brings them up with Docker Compose, next to the containers the AppHost models. The VM
   holds Docker and the runner, and no SDK or source code: the job that has the source never reaches the server, and
   the one that reaches the server builds nothing.
-- If the user wants to deploy to Azure, AWS or Kubernetes instead, that is supported too, through .NET Aspire.
+- If the user wants to deploy to Azure, AWS or Kubernetes instead, that is supported too, through .NET Aspire. The steps
+  here are for the VM: for those, follow Aspire's own deployment guide for that target on aspire.dev, which the Aspire MCP
+  server's docs tools read (such as `aspire deploy` to Azure Container Apps, or Helm charts for Kubernetes).
 <!--#if (cloudflare == true)-->
 - **Nothing reaches the VM from outside.** The runner pulls its jobs from GitHub and cloudflared dials out to
   Cloudflare, so every inbound port on the VM stays closed. Visitors reach the app on the user's domain through a
