@@ -12,20 +12,20 @@
         <section class="panel" aria-labelledby="connection-title">
             <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="connection-title">@Localizer[nameof(AppStrings.MonitoringTheConnection)]</BitText>
             <dl class="facts">
-                <div><dt>@Localizer[nameof(AppStrings.MonitoringApprovedBy)]</dt><dd>@(settings.ApprovedBy ?? "—")</dd></div>
+                <div><dt>@Localizer[nameof(AppStrings.MonitoringApprovedBy)]</dt><dd class="app-latin-digits">@(settings.ApprovedBy ?? "—")</dd></div>
                 @if (settings.ApprovedOn is { } approvedOn)
                 {
                     <div><dt>@Localizer[nameof(AppStrings.MonitoringApprovedOn)]</dt><dd>@LocalTime(approvedOn)</dd></div>
                 }
-                <div><dt>@Localizer[nameof(AppStrings.MonitoringReads)]</dt><dd><span class="ltr">@settings.Reads</span> @Localizer[nameof(AppStrings.MonitoringAndNothingElse)]</dd></div>
-                <div><dt>@Localizer[nameof(AppStrings.MonitoringMadeWith)]</dt><dd>@(project.TemplateVersion is { } version ? $"bit platform {version}" : "—")</dd></div>
+                <div><dt>@Localizer[nameof(AppStrings.MonitoringReads)]</dt><dd><span class="ltr app-latin-digits">@settings.Reads</span> @Localizer[nameof(AppStrings.MonitoringAndNothingElse)]</dd></div>
+                <div><dt>@Localizer[nameof(AppStrings.MonitoringMadeWith)]</dt><dd><span class="ltr app-latin-digits">@(project.TemplateVersion is { } version ? $"bit platform {version}" : "—")</span></dd></div>
                 <div>
                     <dt>@Localizer[nameof(AppStrings.MonitoringRunning)]</dt>
                     <dd>
-                        <span class="ltr">@(Details.ApplicationVersion ?? "—")</span>
+                        <span class="ltr app-latin-digits">@(Details.ApplicationVersion ?? "—")</span>
                         @if (Details.LastDeployedAt is { } deployedAt)
                         {
-                            <text> · @Localizer[nameof(AppStrings.MonitoringDeployedAt), LocalTime(deployedAt)]</text>
+                            <text>@Dot@Localizer[nameof(AppStrings.MonitoringDeployedAt), LocalTime(deployedAt)]</text>
                         }
                     </dd>
                 </div>

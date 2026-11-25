@@ -71,7 +71,7 @@
                             @if (client.RedirectUris.Any())
                             {
                                 <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground" NoWrap Monospace Dir="BitDir.Ltr">
-                                    @Localizer[nameof(AppStrings.OAuthClientRedirectUris)] @string.Join(" · ", client.RedirectUris)
+                                    @Localizer[nameof(AppStrings.OAuthClientRedirectUris)] <span class="app-latin-digits">@string.Join(" · ", client.RedirectUris)</span>
                                 </BitText>
                             }
 

@@ -91,14 +91,14 @@
                         @Localizer[nameof(AppStrings.MonitoringSince), LocalTime(incident.StartedAt, "g")]
                         @if (ComponentNames(incident) is { Length: > 0 } names)
                         {
-                            <text> · @names</text>
+                            <text>@Dot@names</text>
                         }
                     </BitText>
                     <ol class="updates">
                         @foreach (var update in incident.Updates)
                         {
                             <li>
-                                <strong>@PhaseText(update.Phase)</strong> · <time datetime="@update.At.ToString("o")">@LocalTime(update.At, "t")</time>
+                                <strong>@PhaseText(update.Phase)</strong>@Dot<time datetime="@update.At.ToString("o")">@LocalTime(update.At, "t")</time>
                                 @* In its own direction, as one not written in the visitor's language comes in the page's main one. *@
                                 <p lang="@(update.IsFallback ? status.Languages.FirstOrDefault() : null)" dir="auto">@update.Text</p>
                             </li>
@@ -193,14 +193,14 @@
                                         <strong>@incident.Title</strong>
                                         @if (incident.Kind is ProjectIncidentKind.Incident)
                                         {
-                                            <span class="muted"> · @LocalTime(incident.StartedAt, "t") · @Duration(incident)</span>
+                                            <span class="muted">@Dot@LocalTime(incident.StartedAt, "t")@Dot@Duration(incident)</span>
                                         }
                                     </summary>
                                     <ol class="updates">
                                         @foreach (var update in incident.Updates)
                                         {
                                             <li>
-                                                <strong>@PhaseText(update.Phase)</strong> · <time datetime="@update.At.ToString("o")">@LocalTime(update.At, "g")</time>
+                                                <strong>@PhaseText(update.Phase)</strong>@Dot<time datetime="@update.At.ToString("o")">@LocalTime(update.At, "g")</time>
                                                 <p lang="@(update.IsFallback ? status.Languages.FirstOrDefault() : null)" dir="auto">@update.Text</p>
                                             </li>
                                         }

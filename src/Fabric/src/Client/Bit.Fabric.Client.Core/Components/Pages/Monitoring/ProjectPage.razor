@@ -42,10 +42,10 @@
             <div class="head-text">
                 <BitText Typography="BitTypography.H5" Element="h2">@project.Name</BitText>
                 <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="head-meta">
-                    <span class="ltr">@Host(project.Address)</span>
+                    <span class="ltr app-latin-digits">@Host(project.Address)</span>
                     @if (project.ServerAddress is not null && project.ServerAddress != project.Address)
                     {
-                        <span>· @Localizer[nameof(AppStrings.MonitoringServerLabel)] <span class="ltr">@Host(project.ServerAddress)</span></span>
+                        <span>· @Localizer[nameof(AppStrings.MonitoringServerLabel)] <span class="ltr app-latin-digits">@Host(project.ServerAddress)</span></span>
                     }
                     @if (details.Regions.Length > 0)
                     {
