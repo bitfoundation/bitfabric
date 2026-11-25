@@ -4,7 +4,10 @@ namespace Bit.Fabric.Server.Api.Features.DocsMcp;
 /// What the address an agent connected with asks of /docs-mcp: <c>docs-mcp?v=10.7.0&amp;libraries=all&amp;project=...</c>. Read
 /// once per session (See DocsMcpServer.ConfigureSession), since every request of a session carries the same address.
 /// </summary>
-/// <param name="RequestedVersion">The release the source code tools read (v), as a project's bit.json records it.</param>
+/// <param name="RequestedVersion">
+/// The version the project is on (v), as its bit.json records it: what GetBitPlatformReleases checks when a call names
+/// none, and what a feedback report is stamped with. The source code tools read the newest code whatever it names.
+/// </param>
 /// <param name="EveryLibrary">Whether every bit library's tools are listed (libraries=all), or BlazorUI's and Butil's alone.</param>
 /// <param name="ProjectId">The project the agent works on (project), which <see cref="IDocsMcpAccess"/> decides on.</param>
 /// <param name="CallerAddress">Where the connection came from, which the feedback tool's limit is counted by.</param>

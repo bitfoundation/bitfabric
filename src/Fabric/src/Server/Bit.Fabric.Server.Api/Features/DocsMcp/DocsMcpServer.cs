@@ -36,7 +36,7 @@ public class DocsMcpServer(DocsMcpProxy proxy, DocsMcpVersions versions, DocsMcp
     private string Instructions(DocsMcpConnection connection)
         => $"Provides the bit {BitLibraries.Names(BitLibraries.Listed)} documentation tools{(connection.EveryLibrary ? $", those of every other bit library ({BitLibraries.Names(BitLibraries.OnRequest)})" : "")}, a source code index of the bitfoundation/bitplatform repository and the tools of the other MCP servers the bit platform team develops against. "
            + (connection.EveryLibrary ? "" : $"Every other bit library - {BitLibraries.Names(BitLibraries.OnRequest)} - has an MCP server of its own at https://<name in lowercase>.bitplatform.dev/mcp, such as https://bmotion.bitplatform.dev/mcp: plain HTTP with no sign-in, so when one is not in your MCP configuration, send its JSON-RPC requests (tools/list, then tools/call) to that address directly, or connect to this endpoint with libraries=all to get their tools here. ")
-           + $"Each library's tools answer from its newest documentation. {versions.Describe(connection.RequestedVersion)}";
+           + $"Each library's tools answer from its newest documentation. {versions.Describe()}";
 
     /// <param name="connection">The address the agent connected with.</param>
     /// <param name="requestServices">The request's own scope, which the access check and the feedback tool's email are resolved from.</param>
@@ -53,7 +53,7 @@ public class DocsMcpServer(DocsMcpProxy proxy, DocsMcpVersions versions, DocsMcp
         {
             DocsMcpFeedbackTool.ToolName => await feedbackTool.Call(request, connection, requestServices, cancellationToken),
             DocsMcpReleasesTool.ToolName => await releasesTool.Call(request, connection.RequestedVersion, cancellationToken),
-            _ => await proxy.CallTool(request.Name, request.Arguments, versions.Resolve(connection.RequestedVersion), cancellationToken)
+            _ => await proxy.CallTool(request.Name, request.Arguments, versions.Served, cancellationToken)
         };
     }
 }
