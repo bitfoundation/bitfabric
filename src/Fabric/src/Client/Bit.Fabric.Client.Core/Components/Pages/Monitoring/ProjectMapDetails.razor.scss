@@ -74,3 +74,12 @@
     background: var(--tone);
     border-radius: 50%;
 }
+
+// The app's own words, often English in a Persian page, keep their direction (Dir="BitDir.Auto") and the panel's alignment
+.map-details[dir=rtl] ::deep .report-text {
+    text-align: right;
+}
+
+.map-details[dir=ltr] ::deep .report-text {
+    text-align: left;
+}

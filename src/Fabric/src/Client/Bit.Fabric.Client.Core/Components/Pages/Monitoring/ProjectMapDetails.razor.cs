@@ -24,6 +24,8 @@ public partial class ProjectMapDetails
 
     [Parameter] public EventCallback<string> OnOpenTab { get; set; }
 
+    [CascadingParameter] public BitDir? CurrentDir { get; set; }
+
     private int Count(ProjectMapPartTone tone) => Parts.Count(part => ProjectMapTones.ToneOf(part) == tone);
 
     private (string Label, int? Ms)[] Stats(ProjectMapPartDto part) =>

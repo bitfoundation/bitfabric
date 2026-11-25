@@ -31,10 +31,10 @@ else
                     @foreach (var group in Groups)
                     {
                         <BitStack Gap="0.25rem">
-                            <BitText Typography="BitTypography.Subtitle2" Foreground="BitColorKind.Secondary">@Localizer[ProjectChecks.TitleOf(group.Key)]</BitText>
+                            <BitText Typography="BitTypography.Subtitle2" Foreground="BitColorKind.Secondary"><bdi>@Localizer[ProjectChecks.TitleOf(group.Key)]</bdi></BitText>
                             @foreach (var part in group)
                             {
-                                <BitButton Variant="BitVariant.Text" IconName="@(part.IconName ?? BitIconName.Puzzle)" OnClick="WrapHandled(() => Select(part.Key))">@ProjectMapTones.TitleOf(part)</BitButton>
+                                <BitButton Variant="BitVariant.Text" IconName="@(part.IconName ?? BitIconName.Puzzle)" OnClick="WrapHandled(() => Select(part.Key))"><bdi>@ProjectMapTones.TitleOf(part)</bdi></BitButton>
                             }
                         </BitStack>
                     }

@@ -106,7 +106,6 @@
 .pmv-group-title {
     flex: 1;
     min-width: 0;
-    text-align: start;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -185,6 +184,22 @@
     color: $bit-color-error-text;
     background: $bit-color-error;
     border-radius: 999px;
+}
+
+// A name in another language keeps its own direction (dir="auto"), so an English one in a Persian page ends with its own
+// period and ellipsis, and still sits beside its icon, on the side the page starts from
+.pmv-group[dir=rtl] {
+    .pmv-group-title,
+    .pmv-part-title {
+        text-align: right;
+    }
+}
+
+.pmv-group[dir=ltr] {
+    .pmv-group-title,
+    .pmv-part-title {
+        text-align: left;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

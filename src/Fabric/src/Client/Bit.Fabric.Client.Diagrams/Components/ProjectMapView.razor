@@ -41,7 +41,7 @@
                         <span class="pmv-app-ring" aria-hidden="true">
                             <BitIcon IconName="@ToneIcon(app.AppTone)" Color="ToneColor(app.AppTone)" />
                         </span>
-                        <strong class="pmv-app-title">@app.AppTitle</strong>
+                        <strong class="pmv-app-title" dir="auto">@app.AppTitle</strong>
                         @if (app.AppSubtitle is not null)
                         {
                             <span class="pmv-app-subtitle app-latin-digits" dir="ltr">@app.AppSubtitle</span>
@@ -57,7 +57,7 @@
                     <div class="pmv-group @ToneClass(group.Tone)" dir="@TextDir">
                         <div class="pmv-group-head">
                             <BitIcon IconName="@group.Icon" Size="BitSize.Small" Class="pmv-group-icon" />
-                            <span class="pmv-group-title">@group.Title</span>
+                            <span class="pmv-group-title" dir="auto">@group.Title</span>
                             <span class="pmv-dot @ToneClass(group.Tone)" aria-hidden="true"></span>
                         </div>
                         @foreach (var part in group.Parts)
@@ -71,7 +71,7 @@
                                 {
                                     <BitIcon IconName="@part.Icon" Size="BitSize.Small" Class="pmv-part-icon" />
                                 }
-                                <span class="pmv-part-title">@part.Title</span>
+                                <span class="pmv-part-title" dir="auto">@part.Title</span>
                                 @if (part.Flag is not null)
                                 {
                                     <span class="pmv-flag">@part.Flag</span>

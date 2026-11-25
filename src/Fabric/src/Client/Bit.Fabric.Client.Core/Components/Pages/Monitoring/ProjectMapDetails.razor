@@ -1,6 +1,6 @@
 @inherits AppComponentBase
 
-<div class="map-details">
+<div class="map-details" dir="@(CurrentDir is BitDir.Rtl ? "rtl" : "ltr")">
     @if (Part is { } part)
     {
         var tone = ProjectMapTones.ToneOf(part);
@@ -11,8 +11,8 @@
                     <BitIcon IconName="@(part.IconName ?? BitIconName.Puzzle)" />
                 </span>
                 <BitStack Gap="0.125rem" FitHeight>
-                    <BitText Typography="BitTypography.H6" Element="h3">@ProjectMapTones.TitleOf(part)</BitText>
-                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[ProjectChecks.TitleOf(ProjectChecks.GroupOf(part.Category))]</BitText>
+                    <BitText Typography="BitTypography.H6" Element="h3" Dir="BitDir.Auto" Class="report-text">@ProjectMapTones.TitleOf(part)</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Dir="BitDir.Auto" Class="report-text">@Localizer[ProjectChecks.TitleOf(ProjectChecks.GroupOf(part.Category))]</BitText>
                 </BitStack>
             </BitStack>
 
@@ -26,7 +26,7 @@
 
             @if (string.IsNullOrWhiteSpace(part.About) is false)
             {
-                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@part.About</BitText>
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Dir="BitDir.Auto" Class="report-text">@part.About</BitText>
             }
 
             @if (part.IsNotConfigured is false)
