@@ -76,15 +76,8 @@ public class CodebaseMemoryCli(IHttpClientFactory httpClientFactory, ServerApiSe
     /// </summary>
     public virtual async Task<string?> Index(string sourcesPath, CancellationToken cancellationToken)
     {
-        var startInfo = new ProcessStartInfo(ExecutablePath!) { ArgumentList = { "cli", "index_repository", "--repo-path", sourcesPath } };
-
-        foreach (var (name, value) in Environment)
-        {
-            startInfo.Environment[name] = value;
-        }
-
         var timeout = TimeSpan.FromMinutes(20);
-        var result = await ProcessRunner.Run(startInfo, timeout, cancellationToken);
+        var result = await Run(["index_repository", "--repo-path", sourcesPath], timeout, cancellationToken);
 
         if (result.Succeeded is false)
         {
@@ -104,6 +97,58 @@ public class CodebaseMemoryCli(IHttpClientFactory httpClientFactory, ServerApiSe
         }
 
         return projectName;
+    }
+
+    /// <summary>
+    /// The projects codebase-memory keeps an index of in this server's data directory, by the name <see cref="Index"/>
+    /// returned for each. Null when it couldn't list them.
+    /// </summary>
+    public virtual async Task<string[]?> ListProjects(CancellationToken cancellationToken)
+    {
+        var result = await Run(["--quiet", "list_projects", "--format", "json", "--limit", "500"], TimeSpan.FromMinutes(2), cancellationToken);
+
+        using var listed = result.Succeeded ? OutermostJson(result.Output) : null;
+
+        if (listed is null || listed.RootElement.TryGetProperty("projects", out var projects) is false || projects.ValueKind is not JsonValueKind.Array)
+        {
+            logger.LogWarning("Listing the projects codebase-memory has indexed failed: {Diagnostics}", result.Succeeded ? result.Output : result.Diagnostics);
+            return null;
+        }
+
+        return [.. projects.EnumerateArray()
+            .Select(project => project.TryGetProperty("name", out var name) ? name.GetString() : null)
+            .OfType<string>()];
+    }
+
+    /// <summary>Deletes the index codebase-memory keeps of one project. False when it couldn't.</summary>
+    public virtual async Task<bool> DeleteProject(string project, CancellationToken cancellationToken)
+    {
+        var result = await Run(["--quiet", "delete_project", "--project", project], TimeSpan.FromMinutes(2), cancellationToken);
+
+        if (result.Succeeded is false)
+        {
+            logger.LogWarning("Deleting the codebase-memory index of {Project} failed: {Diagnostics}", project, result.Diagnostics);
+        }
+
+        return result.Succeeded;
+    }
+
+    /// <summary>Runs one command of the command line in its cli mode, on this server's own data directory.</summary>
+    private Task<ProcessResult> Run(string[] arguments, TimeSpan timeout, CancellationToken cancellationToken)
+    {
+        var startInfo = new ProcessStartInfo(ExecutablePath!) { ArgumentList = { "cli" } };
+
+        foreach (var argument in arguments)
+        {
+            startInfo.ArgumentList.Add(argument);
+        }
+
+        foreach (var (name, value) in Environment)
+        {
+            startInfo.Environment[name] = value;
+        }
+
+        return ProcessRunner.Run(startInfo, timeout, cancellationToken);
     }
 
     private async Task Install(CliPlatform platform, string executablePath, CancellationToken cancellationToken)

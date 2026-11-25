@@ -3,7 +3,7 @@ namespace Bit.Fabric.Server.Api.Features.DocsMcp.CodeIndex;
 /// <summary>
 /// Keeps an index of the newest bit platform code: the newest tag of bitfoundation/bitplatform, a prerelease included, which
 /// every source code tool call of /docs-mcp reads, whatever ?v= it names. A newer tag replaces it once it is indexed, and the
-/// sources of the one it replaces are deleted. Runs in the background: startup never waits for it, a tag that can't be
+/// sources and index of the one it replaces are deleted. Runs in the background: startup never waits for it, a tag that can't be
 /// prepared leaves the one served before answering and is tried again later, and without
 /// <see cref="DocsMcpCodeIndexOptions.DataDirectoryPath"/> it does nothing at all.
 /// <para>
@@ -98,6 +98,7 @@ public class DocsMcpCodeIndexer(ServerApiSettings settings,
         }
 
         RemoveSourcesOtherThan(versions.Served!);
+        await RemoveIndexesOtherThan(versions.Served!, cancellationToken);
 
         return true;
     }
@@ -106,8 +107,7 @@ public class DocsMcpCodeIndexer(ServerApiSettings settings,
 
     /// <summary>
     /// Deletes the sources of every tag but the served one's: the one it replaced, and any an earlier run of the app left
-    /// behind. Every pass, so one that couldn't be deleted is tried again on the next. The index codebase-memory stored for
-    /// each stays in its own data, as <see cref="CodebaseMemoryCli"/> has no way to delete one.
+    /// behind. Every pass, so one that couldn't be deleted is tried again on the next.
     /// </summary>
     private void RemoveSourcesOtherThan(DocsMcpVersion served)
     {
@@ -126,6 +126,25 @@ public class DocsMcpCodeIndexer(ServerApiSettings settings,
             catch (Exception exp) when (exp is IOException or UnauthorizedAccessException)
             {
                 logger.LogWarning(exp, "Deleting {Directory} failed, retrying on the next pass.", directory);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Deletes codebase-memory's index of every project but the served one: the tag it replaced, and any an earlier run of
+    /// the app left behind, such as the releases it read before it served the newest code only. The data directory is this
+    /// server's alone, so every other project in it is one of those. Every pass, so one that couldn't be deleted is tried
+    /// again on the next.
+    /// </summary>
+    private async Task RemoveIndexesOtherThan(DocsMcpVersion served, CancellationToken cancellationToken)
+    {
+        if (await codebaseMemory.ListProjects(cancellationToken) is not { } projects) return;
+
+        foreach (var project in projects.Where(project => project != served.CodebaseMemoryProject))
+        {
+            if (await codebaseMemory.DeleteProject(project, cancellationToken))
+            {
+                logger.LogInformation("The index of {Project}, which the source code tools of /docs-mcp no longer read, is deleted.", project);
             }
         }
     }

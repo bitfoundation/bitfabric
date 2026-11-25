@@ -170,7 +170,16 @@ public partial class DocsMcpTests
             // Indexing is codebase-memory's own: what is under test is which tag gets indexed and served.
             var codebaseMemory = A.Fake<CodebaseMemoryCli>(options => options.WithArgumentsForConstructor([A.Fake<IHttpClientFactory>(), new Server.Api.ServerApiSettings(), NullLogger<CodebaseMemoryCli>.Instance]));
             A.CallTo(() => codebaseMemory.EnsureInstalled(A<CancellationToken>._)).Returns((string?)null);
-            A.CallTo(() => codebaseMemory.Index(A<string>._, A<CancellationToken>._)).ReturnsLazily((string sourcesPath, CancellationToken _) => (string?)$"project-{Path.GetFileName(sourcesPath)}");
+            // It holds what it indexed, and the indexes of releases an earlier run of the server read.
+            var indexed = new ConcurrentDictionary<string, bool>([new("project-v-10.7.0", true), new("project-v-10.6.2", true)]);
+            A.CallTo(() => codebaseMemory.Index(A<string>._, A<CancellationToken>._)).ReturnsLazily((string sourcesPath, CancellationToken _) =>
+            {
+                var project = $"project-{Path.GetFileName(sourcesPath)}";
+                indexed[project] = true;
+                return (string?)project;
+            });
+            A.CallTo(() => codebaseMemory.ListProjects(A<CancellationToken>._)).ReturnsLazily(() => (string[]?)[.. indexed.Keys]);
+            A.CallTo(() => codebaseMemory.DeleteProject(A<string>._, A<CancellationToken>._)).ReturnsLazily((string project, CancellationToken cancellationToken) => indexed.TryRemove(project, out _));
 
             await using var server = await StartServer(platform, configureServices: services =>
             {
@@ -189,6 +198,8 @@ public partial class DocsMcpTests
             await Until(() => versions.Served is not null);
             Assert.AreEqual("11.0.0-pre-24", versions.Served!.Name, "The newest tag is a prerelease, which has no GitHub release.");
             Assert.AreEqual("project-v-11.0.0-pre-24", versions.Served.CodebaseMemoryProject);
+            await Until(() => indexed.Count is 1);
+            Assert.AreSequenceEqual(new[] { "project-v-11.0.0-pre-24" }, indexed.Keys.ToArray(), "The indexes of the releases read before are deleted.");
             Assert.AreEqual("// The template of 11.0.0-pre-24", File.ReadAllText(Path.Combine(preSources, "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs")));
 
             await using (var older = await Connect(server, "v=10.7.0"))
@@ -202,8 +213,9 @@ public partial class DocsMcpTests
             platform.Tags.Enqueue("v-11.0.0");
             clock.Ahead = TimeSpan.FromMinutes(20);
 
-            await Until(() => versions.Served?.Name is "11.0.0" && Directory.Exists(preSources) is false);
+            await Until(() => versions.Served?.Name is "11.0.0" && Directory.Exists(preSources) is false && indexed.ContainsKey("project-v-11.0.0-pre-24") is false);
             Assert.IsFalse(File.Exists($"{preSources}.extracted"), "Nothing of the tag it replaced is left behind.");
+            Assert.AreSequenceEqual(new[] { "project-v-11.0.0" }, indexed.Keys.ToArray(), "Nor its index.");
             Assert.AreSequenceEqual(new[] { "v-11.0.0" }, Directory.EnumerateDirectories(sourcesDirectory).Select(Path.GetFileName).ToArray());
 
             await using (var asBefore = await Connect(server, "v=11.0.0-pre-24"))
