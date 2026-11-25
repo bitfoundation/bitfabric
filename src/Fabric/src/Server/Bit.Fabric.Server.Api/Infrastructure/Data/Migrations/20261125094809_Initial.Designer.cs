@@ -12,15 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bit.Fabric.Server.Api.Infrastructure.Data.Migrations;
 
 [DbContext(typeof(AppDbContext))]
-[Migration("20261123220445_AddLibraryDocsToAssistantPrompt")]
-partial class _20261123220445_AddLibraryDocsToAssistantPrompt
+[Migration("20261125094809_Initial")]
+partial class _20261125094809_Initial
 {
     /// <inheritdoc />
     protected override void BuildTargetModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
-            .HasAnnotation("ProductVersion", "11.0.0-rc.3.26522.148")
+            .HasAnnotation("ProductVersion", "11.0.0")
             .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
         NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -332,14 +332,14 @@ partial class _20261123220445_AddLibraryDocsToAssistantPrompt
                         BirthDate = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         ConcurrencyStamp = "315e1a26-5b3a-4544-8e91-2760cd28e231",
                         CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                        Email = "test@bitplatform.dev",
+                        Email = "test@bitfabric.co",
                         EmailConfirmed = true,
                         EmailTokenRequestedOn = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         FullName = "Bit.Fabric test account",
                         Gender = 0,
                         HasProfileImage = false,
                         LockoutEnabled = true,
-                        NormalizedEmail = "TEST@BITPLATFORM.DEV",
+                        NormalizedEmail = "TEST@BITFABRIC.CO",
                         NormalizedUserName = "TEST",
                         PasswordHash = "AQAAAAIAAYagAAAAEBK7Er86aEFNjxeC4LeiVtD3p/Qm8ZfvfYN/6jbyermwDMsN+ms0mRyMlFSF7IkZRQ==",
                         PhoneNumber = "+31684207362",
@@ -355,14 +355,14 @@ partial class _20261123220445_AddLibraryDocsToAssistantPrompt
                         BirthDate = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         ConcurrencyStamp = "425e1a26-5b3a-4544-8e91-2760cd28e230",
                         CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                        Email = "store-admin@bitplatform.dev",
+                        Email = "store-admin@bitfabric.co",
                         EmailConfirmed = true,
                         EmailTokenRequestedOn = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         FullName = "Store tenant admin",
                         Gender = 0,
                         HasProfileImage = false,
                         LockoutEnabled = true,
-                        NormalizedEmail = "STORE-ADMIN@BITPLATFORM.DEV",
+                        NormalizedEmail = "STORE-ADMIN@BITFABRIC.CO",
                         NormalizedUserName = "STORE-ADMIN",
                         PasswordHash = "AQAAAAIAAYagAAAAEBK7Er86aEFNjxeC4LeiVtD3p/Qm8ZfvfYN/6jbyermwDMsN+ms0mRyMlFSF7IkZRQ==",
                         PhoneNumberConfirmed = false,
@@ -377,14 +377,14 @@ partial class _20261123220445_AddLibraryDocsToAssistantPrompt
                         BirthDate = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         ConcurrencyStamp = "435e1a26-5b3a-4544-8e91-2760cd28e229",
                         CreatedOn = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                        Email = "store-user@bitplatform.dev",
+                        Email = "store-user@bitfabric.co",
                         EmailConfirmed = true,
                         EmailTokenRequestedOn = new DateTimeOffset(new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                         FullName = "Store tenant user",
                         Gender = 0,
                         HasProfileImage = false,
                         LockoutEnabled = true,
-                        NormalizedEmail = "STORE-USER@BITPLATFORM.DEV",
+                        NormalizedEmail = "STORE-USER@BITFABRIC.CO",
                         NormalizedUserName = "STORE-USER",
                         PasswordHash = "AQAAAAIAAYagAAAAEBK7Er86aEFNjxeC4LeiVtD3p/Qm8ZfvfYN/6jbyermwDMsN+ms0mRyMlFSF7IkZRQ==",
                         PhoneNumberConfirmed = false,
@@ -742,6 +742,113 @@ partial class _20261123220445_AddLibraryDocsToAssistantPrompt
                 b.HasIndex("ClientId");
 
                 b.ToTable("OAuthGrants");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.IssuedLicense", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<string>("ClaimCodeHash")
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<DateTimeOffset?>("ClaimExpiresOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("ClaimedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Document")
+                    .IsRequired()
+                    .HasMaxLength(2000)
+                    .HasColumnType("character varying(2000)");
+
+                b.Property<DateTimeOffset>("ExpiresOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("FirstCommit")
+                    .IsRequired()
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<DateTimeOffset>("IssuedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Plan")
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .HasColumnType("character varying(20)");
+
+                b.Property<Guid>("ProjectId")
+                    .HasColumnType("uuid");
+
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
+
+                b.Property<uint>("Version")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
+
+                b.HasKey("Id");
+
+                b.HasIndex("ClaimCodeHash")
+                    .HasFilter("\"ClaimedOn\" IS NULL");
+
+                b.HasIndex("UserId");
+
+                b.HasIndex("ProjectId", "ExpiresOn");
+
+                b.ToTable("IssuedLicenses");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
+            {
+                b.Property<Guid>("Id")
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<DateTimeOffset>("CreatedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("FirstCommit")
+                    .IsRequired()
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
+
+                b.Property<DateTimeOffset?>("TrialExpiresOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<DateTimeOffset?>("TrialIssuedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("TrialLicense")
+                    .HasMaxLength(2000)
+                    .HasColumnType("character varying(2000)");
+
+                b.Property<Guid?>("UserId")
+                    .HasColumnType("uuid");
+
+                b.Property<uint>("Version")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
+
+                b.HasKey("Id");
+
+                b.HasIndex("UserId");
+
+                b.ToTable("LicensedProjects");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>
@@ -2306,6 +2413,35 @@ partial class _20261123220445_AddLibraryDocsToAssistantPrompt
                 b.Navigation("UserSession");
             });
 
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.IssuedLicense", b =>
+            {
+                b.HasOne("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", "Project")
+                    .WithMany("Licenses")
+                    .HasForeignKey("ProjectId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Project");
+
+                b.Navigation("User");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
+            {
+                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                b.Navigation("User");
+            });
+
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>
             {
                 b.HasOne("Bit.Fabric.Server.Api.Features.Tenants.Tenant", "Tenant")
@@ -3073,6 +3209,11 @@ partial class _20261123220445_AddLibraryDocsToAssistantPrompt
                 b.Navigation("OAuthGrant");
 
                 b.Navigation("PushNotificationSubscription");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
+            {
+                b.Navigation("Licenses");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>
