@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.WebUtilities;
 using OtpNet;
+using Boilerplate.Shared.Features.Identity.Dtos;
 using Boilerplate.Shared.Features.Identity.OAuth;
 
 namespace Boilerplate.Tests.Features.Identity.OAuth;
@@ -29,9 +30,9 @@ public partial class OAuthConsentTwoFactorUITests : AppPageTest
         }).Start(TestContext.CancellationToken);
 
         // The account and its g-admin role first, so the browser's sign-in below already carries System.DevMcp.
-        await using var client = server.CreateAppClient();
-        var (email, userId) = await TestAccountUtils.CreateAndSignIn(client, TestContext.CancellationToken);
-        await using var grant = await TestAccountUtils.MakeGlobalAdmin(client, userId, TestContext.CancellationToken);
+        var email = await CreateConfirmedAccount(server);
+        var userId = await TestAccountUtils.ReadUserId(server, email, TestContext.CancellationToken);
+        await using var grant = await GrantGlobalAdmin(server, userId);
 
         await MagicLinkSignInUtils.SignInAgainViaMagicLinkOtp(Page, server, email, TestContext.CancellationToken);
 
@@ -84,6 +85,47 @@ public partial class OAuthConsentTwoFactorUITests : AppPageTest
             // The issuer is the api the page calls (See GetIssuer).
             ["resource"] = $"{server.ApiAppAddress.ToString().TrimEnd('/')}/dev-mcp"
         });
+    }
+
+    /// <summary>
+    /// A new, confirmed account, through the api the sign in and confirm pages call: an AppClient can't share a server a
+    /// browser drives.
+    /// </summary>
+    private async Task<string> CreateConfirmedAccount(AppTestServer server)
+    {
+        var email = MagicLinkSignInUtils.NewTestEmail();
+
+        using var api = server.CreateRawHttpClient();
+        // The origin the api builds the e-mailed link for.
+        api.DefaultRequestHeaders.Add("X-Origin", server.WebAppAddress.ToString());
+
+        // An unknown e-mail auto-provisions the account and mails its confirmation code; the answer says it isn't
+        // confirmed yet, which is expected here.
+        using (await api.PostAsJsonAsync("api/v1/Identity/SendOtp", new IdentityRequestDto { Email = email }, TestContext.CancellationToken)) { }
+
+        var captured = await server.WaitForCapturedEmail(email, e => e.Kind is CapturedEmailKind.EmailToken, TestContext.CancellationToken);
+
+        using var confirmed = await api.PostAsJsonAsync("api/v1/Identity/ConfirmEmail", new ConfirmEmailRequestDto { Email = email, Token = captured.Token }, TestContext.CancellationToken);
+        confirmed.EnsureSuccessStatusCode();
+
+        return email;
+    }
+
+    /// <summary>
+    /// The seeded g-admin role, which holds System.DevMcp, written directly as <see cref="TestAccountUtils.MakeGlobalAdmin"/>
+    /// does; disposing the handle revokes it.
+    /// </summary>
+    private async Task<TestAccountUtils.GlobalAdminGrant> GrantGlobalAdmin(AppTestServer server, Guid userId)
+    {
+        await using var scope = server.ApiApp.Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        var globalAdminRoleId = await dbContext.Roles.Where(r => r.Name == AppRoles.GlobalAdmin).Select(r => r.Id).SingleAsync(TestContext.CancellationToken);
+
+        await dbContext.UserRoles.AddAsync(new UserRole { UserId = userId, RoleId = globalAdminRoleId }, TestContext.CancellationToken);
+        await dbContext.SaveChangesAsync(TestContext.CancellationToken);
+
+        return new TestAccountUtils.GlobalAdminGrant(server, userId);
     }
 
     private static string ComputeTotp(string base32Secret) => new Totp(Base32Encoding.ToBytes(base32Secret)).ComputeTotp();
