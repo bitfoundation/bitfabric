@@ -58,7 +58,7 @@ public partial class ExtrasSection
     private BitChartOptions lineOptions = new();
     private BitChartOptions doughnutOptions = new();
     private List<BitFullCalendarEvent> calendarEvents = [];
-    private BitFullCalendarTexts calendarTexts = new();
+    private BitFullCalendarStrings calendarTexts = new();
     private List<BitMapMarker> mapMarkers = [];
     private List<BitNavItem> openNavItems = [];
     private List<BitNavItem> railNavItems = [];
@@ -68,7 +68,7 @@ public partial class ExtrasSection
     private string richText = string.Empty;
     private BitResourceTimelineConfig[] schedules = [];
     private BitResourceTimelineOptions timelineOptions = new();
-    private BitResourceTimelineTexts timelineTexts = new();
+    private BitResourceTimelineStrings timelineTexts = new();
     private BitErrorBoundary? failedBoundary;
     private bool isPhone;
     // The calendar view the user picked; until then the default for the screen.
@@ -443,11 +443,11 @@ public partial class ExtrasSection
     }
 
     /// <summary>The calendar's texts from the Calendar resources the shift planner uses; a text without one keeps the calendar's own.</summary>
-    private BitFullCalendarTexts CreateCalendarTexts()
+    private BitFullCalendarStrings CreateCalendarTexts()
     {
-        var texts = new BitFullCalendarTexts();
+        var texts = new BitFullCalendarStrings();
 
-        foreach (var property in typeof(BitFullCalendarTexts).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.PropertyType == typeof(string) && p.CanWrite))
+        foreach (var property in typeof(BitFullCalendarStrings).GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.PropertyType == typeof(string) && p.CanWrite))
         {
             var text = Localizer[$"Calendar{property.Name}"];
 
@@ -492,7 +492,7 @@ public partial class ExtrasSection
                         ResourceId = nameKey,
                         StartTime = monday.AddDays(day).AddHours(start),
                         EndTime = monday.AddDays(day).AddHours(end),
-                        TextAbove = Localizer[shiftKey]
+                        Texts = new() { TopCenter = Localizer[shiftKey].Value }
                     });
                 }
             }
