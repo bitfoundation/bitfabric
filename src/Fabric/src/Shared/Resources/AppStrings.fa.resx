@@ -11372,4 +11372,34 @@
   <data name="AppHomeSeeCli" xml:space="preserve">
     <value>bit CLI چه می‌کند</value>
   </data>
+  <data name="AppHomeDayOneStatusNotice" xml:space="preserve">
+    <value>وقتی چیزی خراب شود، به کاربران خبر می‌دهد</value>
+  </data>
+  <data name="AppHomeDayOneStatusNoticeText" xml:space="preserve">
+    <value>وقتی ورود یا پرداخت از کار بیفتد، اپ به کاربرانش می‌گوید چه شده و تیم دارد درستش می‌کند.</value>
+  </data>
+  <data name="AppHomeStatusNoticeLead" xml:space="preserve">
+    <value>اپ صفحهٔ وضعیتش را می‌خواند و وقتی مشکلی هست، همان‌جا در اپ به کاربرانش می‌گوید.</value>
+  </data>
+  <data name="AppHomeStatusNoticeWhenTerm" xml:space="preserve">
+    <value>کی می‌پرسد</value>
+  </data>
+  <data name="AppHomeStatusNoticeWhen" xml:space="preserve">
+    <value>چند ثانیه بعد از باز شدن اپ، وقتی بعد از مدتی به آن برمی‌گردند، و وقتی درخواستی به سرور شما شکست بخورد؛ مدام نمی‌پرسد</value>
+  </data>
+  <data name="AppHomeStatusNoticeShowsTerm" xml:space="preserve">
+    <value>چه نشان می‌دهد</value>
+  </data>
+  <data name="AppHomeStatusNoticeShows" xml:space="preserve">
+    <value>چه خراب شده، آخرین خبر و اینکه رفعش به کجا رسیده، یا نگهداری برنامه‌ریزی‌شده از یک روز قبل، با دکمهٔ بستن</value>
+  </data>
+  <data name="AppHomeStatusNoticeWhereTerm" xml:space="preserve">
+    <value>کجا</value>
+  </data>
+  <data name="AppHomeStatusNoticeWhere" xml:space="preserve">
+    <value>روی وب و در اپ‌های Android، iOS و Windows، به زبان هر کاربر</value>
+  </data>
+  <data name="AppHomeStatusNoticeAfter" xml:space="preserve">
+    <value>صفحهٔ وضعیت پروژه‌تان در bit Fabric را می‌خواند، یا هر صفحهٔ وضعیت سازگار با Statuspage.</value>
+  </data>
 </root>

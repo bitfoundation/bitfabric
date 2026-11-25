@@ -140,7 +140,7 @@ public partial class HomePageSeoTests
             Assert.AreEqual("89263723", kvk.GetProperty("value").GetString());
 
             var software = graph[2];
-            Assert.HasCount(8, software.GetProperty("featureList").EnumerateArray().ToArray(), "The features are the page's eight day-one cards.");
+            Assert.HasCount(9, software.GetProperty("featureList").EnumerateArray().ToArray(), "The features are the page's nine day-one cards.");
             Assert.AreEqual(culture, graph[3].GetProperty("inLanguage").GetString());
         }
     }
