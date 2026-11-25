@@ -6,8 +6,9 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring.Services;
 /// <summary>
 /// The page each project's front door lands on, such as <c>/en-US/</c> for the template's <c>/</c>, as the last round found
 /// it. Later rounds, here and on the bitplatform Network, ask for that page straight away, so a round times one request
-/// (bitfabric-internal/specs/monitoring.md, Response time); a round that is sent somewhere else again learns the new page.
-/// It lives in memory: after a restart, the first round of each project finds it again.
+/// (bitfabric-internal/specs/monitoring.md, Response time); a round that is sent somewhere else again learns the new page,
+/// and after the app deploys, the next round starts again from its front door. It lives in memory: after a restart, the
+/// first round of each project finds it again.
 /// </summary>
 public class ProjectLandings
 {
@@ -23,4 +24,7 @@ public class ProjectLandings
     }
 
     public void Learn(Project project, Uri landing) => landings[project.Id] = (ProjectProber.FrontDoorOf(project), landing.GetLeftPart(UriPartial.Path));
+
+    /// <summary>The next round starts from the front door again.</summary>
+    public void Forget(Project project) => landings.TryRemove(project.Id, out _);
 }

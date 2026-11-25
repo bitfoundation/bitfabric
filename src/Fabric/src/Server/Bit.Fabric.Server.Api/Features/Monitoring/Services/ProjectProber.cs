@@ -91,6 +91,12 @@ public partial class ProjectProber
             deployed = await RecordStart(project, probe, cancellationToken);
         }
 
+        if (deployed)
+        {
+            // A new build may land its front door on another page, while the old one still answers.
+            landings.Forget(project);
+        }
+
         var change = await incidentTracker.Track(project, probe, cancellationToken);
 
         project.LastCheckedAt = probe.At;

@@ -310,7 +310,7 @@ public partial class ProjectMonitoringTests
         var project = await Connect(projects, customerApp, "customer.example");
 
         // The server's time is asked for past any cache (?bf=), then the page as a visitor asks for it.
-        string[] HomePages() => [.. customerApp.Requested.Where(url => url is "https://customer.example/" or "https://customer.example/en-US/" or "https://customer.example/fa-IR/")];
+        string[] HomePages() => [.. customerApp.Requested.Where(url => url is "https://customer.example/" or "https://customer.example/en-US/" or "https://customer.example/fa-IR/" or "https://customer.example/nl-NL/")];
         string[] Kinds() => [.. customerApp.HomeRequested.Select(url => $"{url.AbsolutePath}{(QueryHelpers.ParseQuery(url.Query).ContainsKey("bf") ? " past the cache" : "")}")];
 
         // The first round followed / to /en-US/; the next asks for /en-US/ straight away.
@@ -329,6 +329,19 @@ public partial class ProjectMonitoringTests
         customerApp.Requested.Clear();
         await Probe(server, project.Id);
         Assert.AreSequenceEqual(new[] { "https://customer.example/fa-IR/", "https://customer.example/fa-IR/" }, HomePages());
+
+        // A new build lands on another page while the old one still answers: the round after the deployment starts from the front door again.
+        customerApp.Pages["/fa-IR/"] = "<html><body>The page it used to land on</body></html>";
+        customerApp.Landing = "/nl-NL/";
+        customerApp.Report.ApplicationVersion = "1.0.1+bbbb222";
+        customerApp.Report.StartedAt = DateTimeOffset.UtcNow.AddMinutes(-2);
+        customerApp.Requested.Clear();
+        await Probe(server, project.Id);
+        Assert.AreSequenceEqual(new[] { "https://customer.example/fa-IR/", "https://customer.example/fa-IR/" }, HomePages(), "The round that sees the deployment still asks for the page it knew.");
+
+        customerApp.Requested.Clear();
+        await Probe(server, project.Id);
+        Assert.AreSequenceEqual(new[] { "https://customer.example/", "https://customer.example/nl-NL/", "https://customer.example/nl-NL/" }, HomePages());
 
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
         var rounds = await scope.ServiceProvider.GetRequiredService<AppDbContext>().ProjectProbes.IgnoreQueryFilters()
