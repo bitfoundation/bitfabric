@@ -108,6 +108,12 @@
             <BitPivotItem Key="@OverviewTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringOverview)]" IconName="@BitIconName.Health">
                 <ProjectOverview Details="details" />
             </BitPivotItem>
+            <BitPivotItem Key="@MapTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringAppMap)]" IconName="@BitIconName.Relationship">
+                @if (SelectedTab == MapTab)
+                {
+                    <ProjectMap Project="project" OnOpenTab="WrapHandled<string>(OpenTab)" />
+                }
+            </BitPivotItem>
             <BitPivotItem Key="@HistoryTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringHistory)]" IconName="@BitIconName.History">
                 @if (SelectedTab == HistoryTab)
                 {

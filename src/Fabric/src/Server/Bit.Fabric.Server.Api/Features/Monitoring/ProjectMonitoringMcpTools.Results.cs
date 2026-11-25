@@ -61,6 +61,34 @@ public partial class ProjectMonitoringMcpTools
     public sealed record PartGroup(string Category, Part[] Parts);
 
     /// <summary>
+    /// <c>CheckedAt</c>: When the newest health report was read.<br/>
+    /// <c>HomePageMs</c>: How long the app's own page took in that round.
+    /// </summary>
+    public sealed record ApplicationMap(ProjectRef Project, DateTimeOffset? CheckedAt, int? HomePageMs, MapGroup[] Parts);
+
+    public sealed record MapGroup(string Category, MapPart[] Parts);
+
+    /// <summary>
+    /// <c>Since</c>: Since when the part has been in this status.<br/>
+    /// <c>LastRunAt</c>: When the app last really ran it; earlier than the round for a result the app reuses.<br/>
+    /// <c>LastMs</c>: How long that run took.<br/>
+    /// <c>TypicalMsLast24Hours</c>, <c>SlowestMsLast24Hours</c>: The average and the slowest of its timed runs.<br/>
+    /// <c>RoundsLast24Hours</c>, <c>ProblemRoundsLast24Hours</c>: The rounds that looked at it, and those that found it failing or degraded.<br/>
+    /// <c>OngoingIncidentId</c>: The incident about it that is still going on, for GetIncidents.
+    /// </summary>
+    public sealed record MapPart(string? Key,
+        string Title,
+        string Status,
+        DateTimeOffset? Since,
+        DateTimeOffset? LastRunAt,
+        int? LastMs,
+        int? TypicalMsLast24Hours,
+        int? SlowestMsLast24Hours,
+        int RoundsLast24Hours,
+        int ProblemRoundsLast24Hours,
+        Guid? OngoingIncidentId);
+
+    /// <summary>
     /// <c>Message</c>: The app's own words about the part, such as why it fails.<br/>
     /// <c>Proves</c>: What a pass proves, in the app's words.<br/>
     /// <c>MeasuredAt</c>: When a result the app reuses was really measured; left out for one measured in the last round.<br/>

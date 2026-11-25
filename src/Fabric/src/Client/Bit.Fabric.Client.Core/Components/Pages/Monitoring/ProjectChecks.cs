@@ -27,8 +27,11 @@ public static class ProjectChecks
     ];
 
     /// <summary>The group a part shows in: its category, or "Other" for a part without one.</summary>
-    public static string GroupOf(ProjectCheckDto check)
-        => string.IsNullOrWhiteSpace(check.Category) ? "Other" : check.Category.Trim();
+    public static string GroupOf(ProjectCheckDto check) => GroupOf(check.Category);
+
+    /// <summary>The group a category shows in: itself, or "Other" for none.</summary>
+    public static string GroupOf(string? category)
+        => string.IsNullOrWhiteSpace(category) ? "Other" : category.Trim();
 
     /// <summary>The <see cref="AppStrings"/> key a group shows with; a category the app made up shows as it is.</summary>
     public static string TitleOf(string group)

@@ -1,0 +1,22 @@
+@import '_monitoring.scss';
+
+// The map takes the room it needs, the picked part's details beside it on wide screens
+.map-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 1.25rem;
+    align-items: start;
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.map-canvas {
+    min-width: 0;
+}
+
+::deep .map-panel {
+    position: sticky;
+    top: 1rem;
+}

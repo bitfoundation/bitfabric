@@ -11372,4 +11372,40 @@
   <data name="AppHomeSeeCli" xml:space="preserve">
     <value>bit CLI چه می‌کند</value>
   </data>
+  <data name="MonitoringAppMap" xml:space="preserve">
+    <value>نقشهٔ اپ</value>
+  </data>
+  <data name="MonitoringAppMapAria" xml:space="preserve">
+    <value>{0} با چه چیزهایی کار می‌کند و هر بخش چه حالی دارد</value>
+  </data>
+  <data name="MonitoringAppMapPick" xml:space="preserve">
+    <value>یک بخش را روی نقشه انتخاب کنید تا ببینید چطور کار کرده است.</value>
+  </data>
+  <data name="MonitoringAppMapLastRun" xml:space="preserve">
+    <value>آخرین اجرا</value>
+  </data>
+  <data name="MonitoringAppMapTypical" xml:space="preserve">
+    <value>معمول</value>
+  </data>
+  <data name="MonitoringAppMapSlowest" xml:space="preserve">
+    <value>کندترین</value>
+  </data>
+  <data name="MonitoringAppMapLast24Hours" xml:space="preserve">
+    <value>۲۴ ساعت گذشته</value>
+  </data>
+  <data name="MonitoringAppMapTrouble" xml:space="preserve">
+    <value>در {0} بررسی از {1} بررسی مشکل داشت</value>
+  </data>
+  <data name="MonitoringAppMapNoTrouble" xml:space="preserve">
+    <value>در {0} بررسی مشکلی نداشت</value>
+  </data>
+  <data name="MonitoringAppMapRan" xml:space="preserve">
+    <value>آخرین اجرا: {0}</value>
+  </data>
+  <data name="MonitoringAppMapIncident" xml:space="preserve">
+    <value>رخداد</value>
+  </data>
+  <data name="MonitoringAppMapHomePage" xml:space="preserve">
+    <value>صفحهٔ اصلی {0}</value>
+  </data>
 </root>

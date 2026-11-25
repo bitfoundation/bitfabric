@@ -130,6 +130,41 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
             checkedFrom));
     }
 
+    [McpServerTool(Name = nameof(GetApplicationMap), Title = "Show a project's application map", ReadOnly = true, OpenWorld = false)]
+    [Description("Shows what an app depends on and talks to, as its Application map tab draws it: every part its last health report names (its database, cache, file storage, email, SMS, push, AI services, sign-in providers and the like, by the app's own names), grouped by category, each with its status (Healthy, Degraded, Unhealthy, or NotConfigured: its settings are missing, a setup finding rather than an outage), since when, when the app last really ran it, how long that took, its typical (average) and slowest time over the last 24 hours in milliseconds, how many of the last 24 hours' rounds found it failing or degraded, and the ongoing incident about it. Call it for questions such as \"what does my app depend on?\" or \"which of my app's services is slow?\".")]
+    public async Task<JsonElement> GetApplicationMap([Description(ProjectParameter)] string project, CancellationToken cancellationToken = default)
+    {
+        if (await Refusal() is { } refusal)
+            return Result(refusal);
+
+        var (found, problem) = await FindProject(project, cancellationToken);
+        if (found is null)
+            return Result(problem!);
+
+        var map = await projectsService.GetMap(found.Id, cancellationToken);
+
+        // The worst group first, and in each the worst part first, as GetProject ranks them.
+        MapGroup[] groups = [.. map.Parts
+            .Select(part => (Category: string.IsNullOrWhiteSpace(part.Category) ? "Other" : part.Category.Trim(),
+                             Part: new MapPart(part.Key,
+                                               part.Title ?? part.Key ?? "",
+                                               part.IsNotConfigured ? NotConfigured : $"{part.Status}",
+                                               part.Since,
+                                               part.CheckedAt,
+                                               part.LastMs,
+                                               part.TypicalMs,
+                                               part.SlowestMs,
+                                               part.Rounds,
+                                               part.ProblemRounds,
+                                               part.OngoingIncidentId)))
+            .GroupBy(entry => entry.Category, entry => entry.Part)
+            .OrderBy(group => group.Min(part => StatusRank(part.Status)))
+            .ThenBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
+            .Select(group => new MapGroup(group.Key, [.. group.OrderBy(part => StatusRank(part.Status)).ThenBy(part => part.Title, StringComparer.OrdinalIgnoreCase)]))];
+
+        return Result(new ApplicationMap(new ProjectRef(found.Id, found.Name), map.CheckedAt, map.HomePageMs, groups));
+    }
+
     [McpServerTool(Name = nameof(GetIncidents), Title = "List incidents", ReadOnly = true, OpenWorld = false)]
     [Description("Lists incidents, ongoing ones first, then the newest: what broke, its impact (Down, or Degraded when some parts failed while the app worked), when it began and ended and how long it took, the parts it was about by the app's own names, whether a deployment shortly before it is its likely cause, whether it happened during maintenance, who acknowledged it, the story of its updates, who was alerted and whether each alert arrived, and once it is over a prompt for the team's AI agent to find the cause in the app's logs. Incidents bit Fabric opened from the checks close by themselves once the checks pass again.")]
     public async Task<JsonElement> GetIncidents(

@@ -29,7 +29,7 @@ public partial class ProjectOpsHost
     private bool isPressed;
 
     /// <summary>The project page's tabs, as its address names them (See ProjectPage), Overview first.</summary>
-    public static readonly string[] Tabs = ["overview", "history", "incidents", "performance", "scans", "sla", "locations", "status", "alerts", "settings"];
+    public static readonly string[] Tabs = ["overview", "map", "history", "incidents", "performance", "scans", "sla", "locations", "status", "alerts", "settings"];
 
     /// <summary>The picked project, or Your app; a project the view added on the add page counts too, while the view lasts.</summary>
     private Guid ProjectId => (World.Find(Scenario.GetSwitch(ProjectSwitch) ?? DefaultProject) ?? World.Find(DefaultProject))?.Id ?? Guid.Empty;

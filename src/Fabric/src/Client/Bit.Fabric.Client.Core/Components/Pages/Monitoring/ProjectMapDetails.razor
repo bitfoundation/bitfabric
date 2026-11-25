@@ -1,0 +1,91 @@
+@inherits AppComponentBase
+
+<div class="map-details">
+    @if (Part is { } part)
+    {
+        var tone = ProjectMapTones.ToneOf(part);
+
+        <BitStack Gap="1rem">
+            <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.75rem">
+                <span class="badge @ProjectMapTones.ClassOf(tone)">
+                    <BitIcon IconName="@(part.IconName ?? BitIconName.Puzzle)" />
+                </span>
+                <BitStack Gap="0.125rem" FitHeight>
+                    <BitText Typography="BitTypography.H6" Element="h3">@ProjectMapTones.TitleOf(part)</BitText>
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[ProjectChecks.TitleOf(ProjectChecks.GroupOf(part.Category))]</BitText>
+                </BitStack>
+            </BitStack>
+
+            <BitStack Horizontal Wrap Gap="0.5rem" VerticalAlign="BitAlignment.Center">
+                <BitTag Size="BitSize.Small" Variant="BitVariant.Fill" Color="ProjectMapTones.ColorOf(tone)" IconName="@ProjectMapTones.IconOf(tone)" Text="@StatusText(tone)" />
+                @if (part.Since is { } since && part.IsNotConfigured is false)
+                {
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Title="@LocalTime(since, "F")">@Localizer[nameof(AppStrings.MonitoringSince), LocalTime(since, "g")]</BitText>
+                }
+            </BitStack>
+
+            @if (string.IsNullOrWhiteSpace(part.About) is false)
+            {
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@part.About</BitText>
+            }
+
+            @if (part.IsNotConfigured is false)
+            {
+                <div class="stats">
+                    @foreach (var (label, ms) in Stats(part))
+                    {
+                        <div class="stat">
+                            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@label</BitText>
+                            <BitText Typography="BitTypography.H6" Element="span">@(Ms(ms) ?? "—")</BitText>
+                        </div>
+                    }
+                </div>
+
+                <BitStack Gap="0.25rem">
+                    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringAppMapLast24Hours)]</BitText>
+                    <BitText Typography="BitTypography.Body2">@TroubleText(part)</BitText>
+                    @if (part.CheckedAt is { } ranAt)
+                    {
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Title="@LocalTime(ranAt, "F")">@Localizer[nameof(AppStrings.MonitoringAppMapRan), Ago(ranAt)]</BitText>
+                    }
+                </BitStack>
+            }
+
+            <BitStack Horizontal Wrap Gap="0.5rem">
+                @if (part.OngoingIncidentId is not null)
+                {
+                    <BitButton Size="BitSize.Small" Color="BitColor.Error" IconName="@BitIconName.WarningSolid" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(ProjectMapDetails.IncidentsTab))">@Localizer[nameof(AppStrings.MonitoringOpenTheIncident)]</BitButton>
+                }
+                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.History" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(ProjectMapDetails.HistoryTab))">@Localizer[nameof(AppStrings.MonitoringHistory)]</BitButton>
+                @if (part.IsNotConfigured is false)
+                {
+                    <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.SpeedHigh" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(ProjectMapDetails.PerformanceTab))">@Localizer[nameof(AppStrings.AppHomePerformance)]</BitButton>
+                }
+            </BitStack>
+        </BitStack>
+    }
+    else
+    {
+        <BitStack Gap="1rem">
+            <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.75rem">
+                <span class="badge @ProjectMapTones.ClassOf(AppTone)">
+                    <BitIcon IconName="@BitIconName.Relationship" />
+                </span>
+                <BitText Typography="BitTypography.H6" Element="h3">@Localizer[nameof(AppStrings.MonitoringPartsWork), Count(ProjectMapPartTone.Healthy), Parts.Count(p => p.IsNotConfigured is false)]</BitText>
+            </BitStack>
+            <div class="legend">
+                @foreach (var tone in Tones)
+                {
+                    var count = Count(tone);
+                    @if (count > 0)
+                    {
+                        <span class="legend-item @ProjectMapTones.ClassOf(tone)">
+                            <span class="legend-dot" aria-hidden="true"></span>@Localizer[nameof(AppStrings.MonitoringLabelWithCount), StatusText(tone), count]
+                        </span>
+                    }
+                }
+            </div>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringAppMapPick)]</BitText>
+        </BitStack>
+    }
+</div>

@@ -1,0 +1,76 @@
+@import '_monitoring.scss';
+
+.map-details {
+    .tone-healthy {
+        --tone: #{$bit-color-success};
+        --tone-text: #{$bit-color-success-foreground};
+    }
+
+    .tone-degraded {
+        --tone: #{$bit-color-warning};
+        --tone-text: #{$bit-color-warning-foreground};
+    }
+
+    .tone-failing {
+        --tone: #{$bit-color-error};
+        --tone-text: #{$bit-color-error-foreground};
+    }
+
+    .tone-notconfigured {
+        --tone: #{$bit-color-info};
+        --tone-text: #{$bit-color-info-foreground};
+    }
+
+    .tone-neutral {
+        --tone: #{$bit-color-neutrals-gray60};
+        --tone-text: #{$bit-color-foreground-secondary};
+    }
+}
+
+.badge {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.125rem;
+    color: var(--tone-text);
+    background: color-mix(in srgb, var(--tone) 14%, transparent);
+    border-radius: 50%;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .5rem;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: .125rem;
+    padding: .625rem .75rem;
+    background: $bit-color-background-secondary;
+    border-radius: $bit-shape-radius-control;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: .375rem;
+    font-size: .8125rem;
+    color: $bit-color-foreground-secondary;
+}
+
+.legend-dot {
+    width: .5rem;
+    height: .5rem;
+    background: var(--tone);
+    border-radius: 50%;
+}

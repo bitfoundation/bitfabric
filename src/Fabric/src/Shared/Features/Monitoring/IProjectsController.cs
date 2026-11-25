@@ -29,6 +29,10 @@ public interface IProjectsController : IAppController
     [HttpGet("{id}")]
     Task<ProjectDetailsDto> GetProject(Guid id, CancellationToken cancellationToken);
 
+    /// <summary>The project's application map: every part its last report names, with how it's doing now and over 24 hours.</summary>
+    [HttpGet("{id}")]
+    Task<ProjectMapDto> GetMap(Guid id, CancellationToken cancellationToken);
+
     /// <summary>How long each part took over a span of time: every round when zoomed in, the 15 minute rollups beyond.</summary>
     [HttpPost]
     Task<ProjectPerformanceDto> GetPerformance(ProjectPerformanceRequestDto request, CancellationToken cancellationToken);

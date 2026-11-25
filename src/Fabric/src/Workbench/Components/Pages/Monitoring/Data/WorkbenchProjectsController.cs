@@ -55,6 +55,10 @@ public sealed class WorkbenchProjectsController(WorkbenchScenarioState scenarioS
         return details;
     }
 
+    public Task<ProjectMapDto> GetMap(Guid id, CancellationToken cancellationToken)
+        => Load<ProjectMapDto>("map", () => MonitoringReads.Map(World.Get(id), World.Now),
+            () => throw new ResourceNotFoundException(AppStrings.ResourceNotFoundException), cancellationToken);
+
     public Task<ProjectPerformanceDto> GetPerformance(ProjectPerformanceRequestDto request, CancellationToken cancellationToken)
         => Load("performance", () => MonitoringReads.Performance(World.Get(request.ProjectId), request, World.Now), () => new ProjectPerformanceDto { StepMinutes = request.StepMinutes }, cancellationToken);
 

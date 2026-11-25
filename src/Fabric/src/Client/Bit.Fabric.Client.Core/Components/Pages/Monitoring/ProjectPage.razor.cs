@@ -21,6 +21,7 @@ public partial class ProjectPage
     [Parameter, SupplyParameterFromQuery(Name = "tab")] public string? Tab { get; set; }
 
     private const string OverviewTab = "overview";
+    private const string MapTab = "map";
     private const string HistoryTab = "history";
     private const string IncidentsTab = "incidents";
     private const string PerformanceTab = "performance";
@@ -31,7 +32,7 @@ public partial class ProjectPage
     private const string StatusTab = "status";
     private const string SettingsTab = "settings";
 
-    private static readonly string[] tabs = [OverviewTab, HistoryTab, IncidentsTab, PerformanceTab, ScansTab, SlaTab, LocationsTab, StatusTab, AlertsTab, SettingsTab];
+    private static readonly string[] tabs = [OverviewTab, MapTab, HistoryTab, IncidentsTab, PerformanceTab, ScansTab, SlaTab, LocationsTab, StatusTab, AlertsTab, SettingsTab];
 
     private string SelectedTab => tabs.Contains(Tab) ? Tab! : OverviewTab;
 
