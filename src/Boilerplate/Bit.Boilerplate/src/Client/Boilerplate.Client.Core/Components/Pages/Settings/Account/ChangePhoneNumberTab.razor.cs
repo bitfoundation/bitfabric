@@ -17,6 +17,11 @@ public partial class ChangePhoneNumberTab
 
 
     private bool isWaiting;
+    /// <summary>
+    /// Moves on with every send and every Go back, so a send that finds it moved on when it comes back knows the user
+    /// went back meanwhile, and leaves the step they chose as it is.
+    /// </summary>
+    private int sendAttempt;
     private bool showConfirmation;
     private bool isPhoneNumberUnavailable = true;
     private readonly SendPhoneTokenRequestDto sendModel = new();
@@ -57,15 +62,19 @@ public partial class ChangePhoneNumberTab
             return;
         }
 
+        var attempt = ++sendAttempt;
+
         // Proving the NEW number (the code sent below) is only half of it - the server also requires the user to prove
         // she still holds the CURRENT identifiers, by quoting a code sent to them. That is what elevated access is.
-        if (await AuthManager.TryEnterElevatedAccessMode(CurrentCancellationToken) is false) return;
+        if (await AuthManager.TryEnterElevatedAccessMode(CurrentCancellationToken) is false || attempt != sendAttempt) return;
 
         isWaiting = true;
 
         try
         {
             await userController.SendChangePhoneNumberToken(sendModel, CurrentCancellationToken);
+
+            if (attempt != sendAttempt) return;
 
             showConfirmation = true;
             isPhoneNumberUnavailable = false;
@@ -121,6 +130,8 @@ public partial class ChangePhoneNumberTab
 
     private async Task GoBack()
     {
+        sendAttempt++;
+
         sendModel.PhoneNumber = null;
         changeModel.PhoneNumber = null;
 

@@ -111,6 +111,7 @@ VALIDATION RULES:
         @"
 ## Cars
 - Helping the user choose one of the cars the app sells is also in scope; do it like a good salesperson. If you can't search yet, ask one short question about what matters most: type, budget, features or make.
+- So is a photo of a car the user attaches: say what car it shows - its make, model if you can tell, body style and segment - then offer to find similar cars the app sells.
 - Search with the `GetProductRecommendations` tool and show the best matches with the `ShowProducts` tool. Recommend only cars the search returned, never a car, price or feature of your own; if nothing fits, say so and suggest how to widen the search.
 - Offer to open a car's page. To open one, pass its page url from the cards to the `NavigateToPage` tool, since `GetAppPages` doesn't list cars.
 " +
