@@ -3,6 +3,7 @@ using System.Formats.Tar;
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Nodes;
 using Bit.Fabric.Server.Api.Features.DocsMcp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,8 +15,8 @@ namespace Bit.Fabric.Tests.Features.DocsMcp;
 
 /// <summary>
 /// The far side of /docs-mcp, as it meets it over the network: every bit library's documentation server, Microsoft Learn's
-/// and DeepWiki's MCP servers - real MCP servers, run in this process on a loopback port - and GitHub's releases, the
-/// archives of their sources and codebase-memory's downloads. Its <see cref="Handler"/> sits in the DocsMcp http client's
+/// and DeepWiki's MCP servers - real MCP servers, run in this process on a loopback port - and GitHub's releases and tags,
+/// the archives of their sources and codebase-memory's downloads. Its <see cref="Handler"/> sits in the DocsMcp http client's
 /// pipeline and answers every request itself, so no test reaches the internet: anything it doesn't stand in for fails.
 /// </summary>
 public sealed class FakeBitPlatform : IAsyncDisposable
@@ -45,7 +46,13 @@ public sealed class FakeBitPlatform : IAsyncDisposable
     /// The archive GitHub serves for a tag, keyed by repository and tag ("bitplatform/v-10.7.0"), each file by its path in
     /// the repository. An archive not here is a tag that doesn't exist.
     /// </summary>
-    public Dictionary<string, Dictionary<string, string>> Archives { get; } = new(StringComparer.Ordinal);
+    public ConcurrentDictionary<string, Dictionary<string, string>> Archives { get; } = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// The version tags of bitfoundation/bitplatform: its releases' and its prereleases', which have no release. A test
+    /// pushes one by adding it.
+    /// </summary>
+    public ConcurrentQueue<string> Tags { get; } = new(["v-10.6.0", "v-10.7.0", "v-11.0.0-pre-01", "v-11.0.0-pre-23", "v-11.0.0-pre-24"]);
 
     public async Task Start(CancellationToken cancellationToken)
     {
@@ -114,6 +121,18 @@ public sealed class FakeBitPlatform : IAsyncDisposable
 
         if (uri.Host is "api.github.com" && uri.AbsolutePath is "/repos/bitfoundation/bitplatform/releases")
             return Content(request, Encoding.UTF8.GetBytes(Releases), "application/json");
+
+        // Every tag that starts with v-, in one page and in the order GitHub lists them: by name, so v-11.0.0 comes before v-11.0.0-pre-24.
+        if (uri.Host is "api.github.com" && uri.AbsolutePath is "/repos/bitfoundation/bitplatform/git/matching-refs/tags/v-")
+        {
+            var refs = new JsonArray([.. Tags.Order(StringComparer.Ordinal).Select(tag => (JsonNode)new JsonObject
+            {
+                ["ref"] = $"refs/tags/{tag}",
+                ["object"] = new JsonObject { ["type"] = "commit" }
+            })]);
+
+            return Content(request, Encoding.UTF8.GetBytes(refs.ToJsonString()), "application/json");
+        }
 
         // /bitfoundation/<repository>/tar.gz/refs/tags/<tag>, every file under one top folder, as GitHub's archives have them.
         if (uri.Host is "codeload.github.com" && uri.Segments is [_, "bitfoundation/", var repository, "tar.gz/", "refs/", "tags/", var tag])

@@ -20,6 +20,7 @@ public static class DocsMcpHttp
         services.AddSingleton<DocsMcpFeedbackTool>();
         services.AddSingleton<DocsMcpReleasesTool>();
         services.AddSingleton<BitPlatformReleases>();
+        services.AddSingleton<BitPlatformTags>();
         services.AddSingleton<BitPlatformSources>();
         services.AddSingleton<CodebaseMemoryCli>();
         services.AddHostedService<DocsMcpCodeIndexer>();
@@ -46,11 +47,12 @@ public static class DocsMcpHttp
         // Public: the documentation needs no sign-in. Whether a project's license covers it is IDocsMcpAccess's to say.
         app.MapMcp(DocsMcpServer.Path);
 
-        // The releases ?v= picks the source code of, newest first. Anything else, and no v at all, is answered by the newest.
+        // The version the source code tools read, whatever ?v= names: the newest bit platform tag, once it is indexed, and
+        // so one entry at most.
         app.MapGet($"{DocsMcpServer.Path}/versions", (DocsMcpVersions versions) => Results.Text(new JsonObject
         {
-            ["latest"] = versions.Latest?.Name,
-            ["versions"] = new JsonArray([.. versions.Served.Select(version => (JsonNode)new JsonObject { ["name"] = version.Name, ["tag"] = version.Release.Tag })])
+            ["latest"] = versions.Served?.Name,
+            ["versions"] = versions.Served is { } served ? new JsonArray(new JsonObject { ["name"] = served.Name, ["tag"] = served.Tag.Tag }) : new JsonArray()
         }.ToJsonString(), "application/json")).ExcludeFromDescription();
     }
 }

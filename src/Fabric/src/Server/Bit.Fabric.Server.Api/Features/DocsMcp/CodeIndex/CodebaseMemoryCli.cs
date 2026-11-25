@@ -6,8 +6,8 @@ using System.Security.Cryptography;
 namespace Bit.Fabric.Server.Api.Features.DocsMcp.CodeIndex;
 
 /// <summary>
-/// The codebase-memory command line (https://github.com/DeusData/codebase-memory-mcp), which indexes the sources of each
-/// served release into one data directory. DocsMcpProxy runs the same executable as a stdio MCP server over those indexes.
+/// The codebase-memory command line (https://github.com/DeusData/codebase-memory-mcp), which indexes the sources of the
+/// version served into one data directory. DocsMcpProxy runs the same executable as a stdio MCP server over that index.
 /// <para>
 /// It installs itself: the release <see cref="DocsMcpCodeIndexOptions.CliVersion"/> names is downloaded from GitHub for this
 /// machine, checked against the checksums published with it, and kept in the data directory, so the api's container image
@@ -34,7 +34,7 @@ public class CodebaseMemoryCli(IHttpClientFactory httpClientFactory, ServerApiSe
     };
 
     /// <returns>Null once the executable is there; otherwise why it isn't, worded to follow "the source code index is not available:".</returns>
-    public async Task<string?> EnsureInstalled(CancellationToken cancellationToken)
+    public virtual async Task<string?> EnsureInstalled(CancellationToken cancellationToken)
     {
         if (ExecutablePath is not null) return null;
 
@@ -70,11 +70,11 @@ public class CodebaseMemoryCli(IHttpClientFactory httpClientFactory, ServerApiSe
     }
 
     /// <summary>
-    /// Indexes one release's sources and returns the name codebase-memory stored it under, which the proxy sends as the
-    /// project argument of every source tool call. Null when the indexer failed. A first index of a release takes a
+    /// Indexes one version's sources and returns the name codebase-memory stored it under, which the proxy sends as the
+    /// project argument of every source tool call. Null when the indexer failed. A first index of a version takes a
     /// minute or two; a later run of the same directory reuses the persisted one.
     /// </summary>
-    public async Task<string?> Index(string sourcesPath, CancellationToken cancellationToken)
+    public virtual async Task<string?> Index(string sourcesPath, CancellationToken cancellationToken)
     {
         var startInfo = new ProcessStartInfo(ExecutablePath!) { ArgumentList = { "cli", "index_repository", "--repo-path", sourcesPath } };
 

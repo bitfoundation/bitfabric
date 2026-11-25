@@ -4,23 +4,23 @@ using System.IO.Compression;
 namespace Bit.Fabric.Server.Api.Features.DocsMcp.CodeIndex;
 
 /// <summary>
-/// The sources of one bit platform release, read from the archives GitHub serves for its tag: no git, no clone, only the
+/// The sources of one bit platform version, read from the archives GitHub serves for its tag: no git, no clone, only the
 /// parts that get indexed written to disk. They come from bitfoundation/bitplatform, and from <see cref="TemplateMovedIn"/>
 /// on the project template comes from bitfoundation/bitfabric, under the same tag.
 /// </summary>
 public class BitPlatformSources(IHttpClientFactory httpClientFactory, ILogger<BitPlatformSources> logger)
 {
     /// <summary>
-    /// Where the bit Boilerplate project template is in the index of every release, wherever its repository keeps it, so a
-    /// search narrowed to it (path_filter src/Templates) reads the same for every release.
+    /// Where the bit Boilerplate project template is in the index of every version, wherever its repository keeps it, so a
+    /// search narrowed to it (path_filter src/Templates) reads the same for every version.
     /// </summary>
     internal const string TemplatePath = "src/Templates/Boilerplate/Bit.Boilerplate/";
 
     /// <summary>
     /// The template and bit CLI left bitfoundation/bitplatform for bitfoundation/bitfabric after 11.0.0-pre-23, so the first
-    /// stable release that has the template in bitfabric's tag and not in bitplatform's is 11.0.0.
+    /// tag that has the template in bitfabric's tag and not in bitplatform's is 11.0.0-pre-24.
     /// </summary>
-    internal static readonly Version TemplateMovedIn = new(11, 0, 0);
+    internal static readonly BitPlatformTag TemplateMovedIn = BitPlatformTag.TryParse("v-11.0.0-pre-24")!;
 
     /// <summary>
     /// The parts of bitfoundation/bitplatform that get indexed, and so the only code the source tools reach besides the
@@ -38,13 +38,13 @@ public class BitPlatformSources(IHttpClientFactory httpClientFactory, ILogger<Bi
     ];
 
     /// <summary>
-    /// The archives a release is read from, each with the folders taken out of it and where each lands in the index.
+    /// The archives a version is read from, each with the folders taken out of it and where each lands in the index.
     /// </summary>
-    internal static SourceArchive[] ArchivesOf(BitPlatformRelease release)
+    internal static SourceArchive[] ArchivesOf(BitPlatformTag tag)
     {
         var bitPlatform = bitPlatformPaths.ToDictionary(path => path, path => path);
 
-        if (release.Number < TemplateMovedIn)
+        if (tag.CompareTo(TemplateMovedIn) < 0)
         {
             bitPlatform[TemplatePath] = TemplatePath;
             return [new("bitplatform", bitPlatform)];
@@ -54,15 +54,13 @@ public class BitPlatformSources(IHttpClientFactory httpClientFactory, ILogger<Bi
     }
 
     /// <summary>
-    /// Writes the indexed parts of <paramref name="release"/> into <paramref name="directory"/>, unless an earlier run
-    /// finished doing so: a release's tag never moves, so what was extracted once stays right.
+    /// Writes the indexed parts of <paramref name="tag"/> into <paramref name="directory"/>, unless an earlier run finished
+    /// doing so: a tag never moves, so what was extracted once stays right.
     /// </summary>
     /// <returns>Whether the directory holds them now.</returns>
-    public async Task<bool> Ensure(BitPlatformRelease release, string directory, CancellationToken cancellationToken)
+    public async Task<bool> Ensure(BitPlatformTag tag, string directory, CancellationToken cancellationToken)
     {
-        // Next to the directory rather than in it, so the index never reads it. Written last, so an interrupted extraction
-        // is never taken for a finished one.
-        var marker = $"{directory}.extracted";
+        var marker = MarkerOf(directory);
 
         if (File.Exists(marker)) return true;
 
@@ -75,30 +73,50 @@ public class BitPlatformSources(IHttpClientFactory httpClientFactory, ILogger<Bi
 
             var root = Directory.CreateDirectory(directory).FullName + Path.DirectorySeparatorChar;
 
-            foreach (var archive in ArchivesOf(release))
+            foreach (var archive in ArchivesOf(tag))
             {
-                var written = await Extract(archive, release.Tag, root, cancellationToken);
+                var written = await Extract(archive, tag.Tag, root, cancellationToken);
 
                 // A repository whose tag doesn't hold what it should is left for the next attempt rather than indexed without it.
                 if (written is 0)
                 {
-                    logger.LogError("The {Repository} archive of {Tag} holds none of the indexed paths.", archive.Repository, release.Tag);
+                    logger.LogError("The {Repository} archive of {Tag} holds none of the indexed paths.", archive.Repository, tag.Tag);
                     return false;
                 }
 
-                logger.LogInformation("{FileCount} files of the {Repository} archive of {Tag} are extracted into {Directory}.", written, archive.Repository, release.Tag, directory);
+                logger.LogInformation("{FileCount} files of the {Repository} archive of {Tag} are extracted into {Directory}.", written, archive.Repository, tag.Tag, directory);
             }
 
-            await File.WriteAllTextAsync(marker, release.Tag, cancellationToken);
+            await File.WriteAllTextAsync(marker, tag.Tag, cancellationToken);
 
             return true;
         }
         catch (Exception exp) when (cancellationToken.IsCancellationRequested is false)
         {
-            logger.LogError(exp, "Extracting the sources of {Tag} into {Directory} failed.", release.Tag, directory);
+            logger.LogError(exp, "Extracting the sources of {Tag} into {Directory} failed.", tag.Tag, directory);
             return false;
         }
     }
+
+    /// <summary>
+    /// Deletes what <see cref="Ensure"/> wrote into <paramref name="directory"/>, its marker first, so a directory deleted
+    /// halfway is never taken for an extracted one.
+    /// </summary>
+    public void Remove(string directory)
+    {
+        File.Delete(MarkerOf(directory));
+
+        if (Directory.Exists(directory))
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// Next to the directory rather than in it, so the index never reads it. Written last, so an interrupted extraction is
+    /// never taken for a finished one.
+    /// </summary>
+    private static string MarkerOf(string directory) => $"{directory}.extracted";
 
     /// <returns>How many files it wrote.</returns>
     private async Task<int> Extract(SourceArchive archive, string tag, string root, CancellationToken cancellationToken)

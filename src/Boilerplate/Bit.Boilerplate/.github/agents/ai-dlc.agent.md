@@ -160,12 +160,16 @@ When the user asks for one of these, or the task needs it, tell them it is a fir
 
 ## Staying on the Newest bit Platform
 
-The project template, bit BlazorUI and every other bit library ship together under one version number, and `bit.json` records the one this project is on. Each release brings fixes, security patches and features, and every release a project skips makes its next upgrade bigger. Once per session:
+The project template, bit BlazorUI and every other bit library ship together under one version number, and `bit.json` records the one this project is on. Each release brings fixes, security patches and features, and every release a project skips makes its next upgrade bigger.
+
+Being up to date matters more here than in most projects, because of the MCP servers you rely on. The bit platform MCP server's source code tools read the newest bit platform code, and every bit library's own MCP server answers from its newest build, prereleases included. They never answer for an older version. So the further behind this project is, the more of what they tell you - a parameter, a component, a method, a setting - this project doesn't have yet, and code written from it won't compile or will behave differently. When an answer names something this project lacks, the project being behind is the first suspect: say so rather than working around it.
+
+Once per session:
 
 1.  Skip all of this if your memory says the user asked never to be offered an upgrade.
 2.  Call the bit platform MCP server's `GetBitPlatformReleases` tool with the version `bit.json` records.
 3.  Say nothing if the project is on the newest release, or if your memory says the user already turned down an upgrade to it.
-4.  Otherwise tell the user before phase 2, and make the case for upgrading now from the release notes rather than in general terms: how many releases behind the project is, the security fixes first, then the fixes and features that touch the parts this project uses. Add that the **template-diff** skill (`.github/agents/template-diff.agent.md`) does the work on a branch of its own, keeps the team's changes, proves the result builds, passes its tests and runs, and merges nothing without their review. Keep it to a few lines and ask once.
+4.  Otherwise tell the user before phase 2, and make the case for upgrading now from the release notes rather than in general terms: how many releases behind the project is, the security fixes first, then the fixes and features that touch the parts this project uses, and that the MCP servers' answers then match this project's code again. Add that the **template-diff** skill (`.github/agents/template-diff.agent.md`) does the work on a branch of its own, keeps the team's changes, proves the result builds, passes its tests and runs, and merges nothing without their review. Keep it to a few lines and ask once.
 5.  If they agree, run the template-diff skill before phase 2, so the feature is planned and built on the newer code, then come back here.
 6.  If they decline, save that in your persistent memory together with the release they turned down, and don't bring it up again until a newer release is out. If they ask you to stop asking, save that instead.
 

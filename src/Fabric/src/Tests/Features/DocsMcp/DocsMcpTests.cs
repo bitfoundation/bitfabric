@@ -85,7 +85,7 @@ public partial class DocsMcpTests
     }
 
     [TestMethod]
-    public async Task TheRelease_Should_BeTheOneTheAddressNames()
+    public async Task TheReleasesTool_Should_CheckTheVersionTheAddressNames()
     {
         await using var platform = new FakeBitPlatform();
         await using var server = await StartServer(platform);
@@ -97,70 +97,140 @@ public partial class DocsMcpTests
 
         await using var older = await Connect(server, "v=10.6.0");
         Assert.StartsWith("10.6.0 is behind", await Call(older, "GetBitPlatformReleases"));
-
-        // The source code tools read the release ?v= names, the newest when it names none or one not served.
-        var versions = new DocsMcpVersions(new() { DocsMcp = new() { CodeIndex = new() { DataDirectoryPath = "anywhere" } } });
-        Assert.IsNull(versions.Resolve("10.7.0"));
-        Assert.Contains("still being built", versions.Describe("10.7.0"));
-
-        versions.Add(new(Release("10.6.0"), "sources/v-10.6.0", "project-10.6.0"));
-        versions.Add(new(Release("10.7.0"), "sources/v-10.7.0", "project-10.7.0"));
-
-        Assert.AreEqual("10.6.0", versions.Resolve("10.6.0")!.Name);
-        Assert.AreEqual("10.7.0", versions.Resolve(null)!.Name);
-        Assert.AreEqual("10.7.0", versions.Resolve("11.0.0")!.Name);
-        Assert.Contains("asked for release 11.0.0, which this endpoint's source code index does not hold", versions.Describe("11.0.0"));
-        Assert.Contains("read release 10.6.0, the one this connection asked for", versions.Describe("10.6.0"));
     }
 
     /// <summary>
-    /// A release's sources come from GitHub's archives of its tag: the project template from bitfabric's from 11.0.0 on and
-    /// from bitplatform's before, at the same path in the index either way - the template's scaffold-entity skill narrows
-    /// its searches to src/Templates - and nothing else of either repository, nor a file that would land outside the
-    /// release's folder.
+    /// The source code tools read the newest tag of bitplatform, a prerelease included, whatever ?v= a connection names,
+    /// with the template from bitfabric's tag of the same name. A newer tag replaces it once it is indexed, deleting the
+    /// sources of the one it replaced; one that can't be prepared yet leaves the one served answering.
     /// </summary>
     [TestMethod]
-    public async Task ARelease_Should_BeExtracted_WithTheTemplateWhereverItLives()
+    public async Task TheSourceCodeTools_Should_ReadTheNewestTag_WhateverTheAddressNames()
+    {
+        var dataDirectory = Directory.CreateTempSubdirectory("docs-mcp-");
+
+        try
+        {
+            await using var platform = new FakeBitPlatform();
+            AddArchives(platform, "v-11.0.0-pre-24");
+
+            // GitHub's tags are kept for a quarter of an hour, which this clock moves past.
+            var clock = new MovableClock();
+
+            // Indexing is codebase-memory's own: what is under test is which tag gets indexed and served.
+            var codebaseMemory = A.Fake<CodebaseMemoryCli>(options => options.WithArgumentsForConstructor([A.Fake<IHttpClientFactory>(), new Server.Api.ServerApiSettings(), NullLogger<CodebaseMemoryCli>.Instance]));
+            A.CallTo(() => codebaseMemory.EnsureInstalled(A<CancellationToken>._)).Returns((string?)null);
+            A.CallTo(() => codebaseMemory.Index(A<string>._, A<CancellationToken>._)).ReturnsLazily((string sourcesPath, CancellationToken _) => (string?)$"project-{Path.GetFileName(sourcesPath)}");
+
+            await using var server = await StartServer(platform, configureServices: services =>
+            {
+                services.Replace(ServiceDescriptor.Singleton(codebaseMemory));
+                services.Replace(ServiceDescriptor.Singleton(serviceProvider => new BitPlatformTags(serviceProvider.GetRequiredService<IHttpClientFactory>(), clock, NullLogger<BitPlatformTags>.Instance)));
+            }, configure: configuration =>
+            {
+                configuration["DocsMcp:CodeIndex:DataDirectoryPath"] = dataDirectory.FullName;
+                configuration["DocsMcp:CodeIndex:RefreshInterval"] = "00:00:00.100";
+            });
+
+            var versions = server.ApiApp.Services.GetRequiredService<DocsMcpVersions>();
+            var sourcesDirectory = Path.Combine(dataDirectory.FullName, "sources");
+            var preSources = Path.Combine(sourcesDirectory, "v-11.0.0-pre-24");
+
+            await Until(() => versions.Served is not null);
+            Assert.AreEqual("11.0.0-pre-24", versions.Served!.Name, "The newest tag is a prerelease, which has no GitHub release.");
+            Assert.AreEqual("project-v-11.0.0-pre-24", versions.Served.CodebaseMemoryProject);
+            Assert.AreEqual("// The template of 11.0.0-pre-24", File.ReadAllText(Path.Combine(preSources, "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs")));
+
+            await using (var older = await Connect(server, "v=10.7.0"))
+            {
+                Assert.Contains("Its source code tools read 11.0.0-pre-24, the newest bit platform code, whatever v this connection names.", older.ServerInstructions!);
+                Assert.StartsWith("10.7.0 is up to date", await Call(older, "GetBitPlatformReleases"), "The releases tool still checks the version ?v= names.");
+            }
+
+            // 11.0.0 is tagged in both repositories.
+            AddArchives(platform, "v-11.0.0");
+            platform.Tags.Enqueue("v-11.0.0");
+            clock.Ahead = TimeSpan.FromMinutes(20);
+
+            await Until(() => versions.Served?.Name is "11.0.0" && Directory.Exists(preSources) is false);
+            Assert.IsFalse(File.Exists($"{preSources}.extracted"), "Nothing of the tag it replaced is left behind.");
+            Assert.AreSequenceEqual(new[] { "v-11.0.0" }, Directory.EnumerateDirectories(sourcesDirectory).Select(Path.GetFileName).ToArray());
+
+            await using (var asBefore = await Connect(server, "v=11.0.0-pre-24"))
+            {
+                Assert.Contains("Its source code tools read 11.0.0, the newest bit platform code, whatever v this connection names.", asBefore.ServerInstructions!);
+            }
+
+            using (var served = JsonDocument.Parse(await server.CreateRawHttpClient().GetStringAsync(new Uri(server.ApiAppAddress, "docs-mcp/versions"), TestContext.CancellationToken)))
+            {
+                Assert.AreEqual("11.0.0", served.RootElement.GetProperty("latest").GetString());
+                Assert.AreEqual(1, served.RootElement.GetProperty("versions").GetArrayLength());
+            }
+
+            // Tagged in bitplatform but not yet in bitfabric: tried, and left for a later attempt.
+            platform.Archives["bitplatform/v-11.0.1-pre-01"] = platform.Archives["bitplatform/v-11.0.0"];
+            var archivesRead = platform.Requested.Count(host => host is "codeload.github.com");
+            platform.Tags.Enqueue("v-11.0.1-pre-01");
+            clock.Ahead = TimeSpan.FromMinutes(40);
+
+            await Until(() => platform.Requested.Count(host => host is "codeload.github.com") >= archivesRead + 2);
+            Assert.AreEqual("11.0.0", versions.Served!.Name);
+            Assert.IsTrue(File.Exists(Path.Combine(sourcesDirectory, "v-11.0.0.extracted")));
+        }
+        finally
+        {
+            dataDirectory.Delete(recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// A tag's sources come from GitHub's archives of it: the project template from bitfabric's from 11.0.0-pre-24 on and
+    /// from bitplatform's before, at the same path in the index either way - the template's scaffold-entity skill narrows
+    /// its searches to src/Templates - and nothing else of either repository, nor a file that would land outside the
+    /// tag's folder.
+    /// </summary>
+    [TestMethod]
+    public async Task ATag_Should_BeExtracted_WithTheTemplateWhereverItLives()
     {
         await using var platform = new FakeBitPlatform();
-        platform.Archives["bitplatform/v-10.7.0"] = new()
+        platform.Archives["bitplatform/v-11.0.0-pre-23"] = new()
         {
             ["src/Websites/Platform/Startup.cs"] = "class Startup { }",
-            ["src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs"] = "// The template of 10.7.0",
+            ["src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs"] = "// The template of 11.0.0-pre-23",
             ["src/BlazorUI/Bit.BlazorUI/BitButton.cs"] = "class BitButton { }",
             ["src/Websites/../../../outside.cs"] = "class Outside { }"
         };
-        platform.Archives["bitplatform/v-11.0.0"] = new()
+        platform.Archives["bitplatform/v-11.0.0-pre-24"] = new()
         {
             ["src/Websites/Platform/Startup.cs"] = "class Startup { }",
             ["src/BlazorUI/Bit.BlazorUI/BitButton.cs"] = "class BitButton { }"
         };
-        platform.Archives["bitfabric/v-11.0.0"] = new()
+        platform.Archives["bitfabric/v-11.0.0-pre-24"] = new()
         {
-            ["src/Boilerplate/Bit.Boilerplate/src/Program.cs"] = "// The template of 11.0.0",
+            ["src/Boilerplate/Bit.Boilerplate/src/Program.cs"] = "// The template of 11.0.0-pre-24",
             ["src/Cli/Program.cs"] = "// bit CLI",
             ["src/Fabric/src/Server/Program.cs"] = "// bit Fabric"
         };
-        platform.Archives["bitplatform/v-11.1.0"] = platform.Archives["bitplatform/v-11.0.0"];
+        platform.Archives["bitplatform/v-11.0.0"] = platform.Archives["bitplatform/v-11.0.0-pre-24"];
 
         var sources = new BitPlatformSources(HttpClientFactoryOf(platform), NullLogger<BitPlatformSources>.Instance);
         var directory = Directory.CreateTempSubdirectory("docs-mcp-sources-");
 
         try
         {
-            var older = Path.Combine(directory.FullName, "v-10.7.0");
-            Assert.IsTrue(await sources.Ensure(Release("10.7.0"), older, TestContext.CancellationToken));
+            var older = Path.Combine(directory.FullName, "v-11.0.0-pre-23");
+            Assert.IsTrue(await sources.Ensure(Tag("v-11.0.0-pre-23"), older, TestContext.CancellationToken));
             Assert.AreSequenceEqual(new[] { "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs", "src/Websites/Platform/Startup.cs" }, FilesUnder(older));
             Assert.IsFalse(File.Exists(Path.Combine(directory.FullName, "outside.cs")));
 
-            var newer = Path.Combine(directory.FullName, "v-11.0.0");
-            Assert.IsTrue(await sources.Ensure(Release("11.0.0"), newer, TestContext.CancellationToken));
+            var newer = Path.Combine(directory.FullName, "v-11.0.0-pre-24");
+            Assert.IsTrue(await sources.Ensure(Tag("v-11.0.0-pre-24"), newer, TestContext.CancellationToken));
             Assert.AreSequenceEqual(new[] { "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs", "src/Websites/Platform/Startup.cs" }, FilesUnder(newer));
-            Assert.AreEqual("// The template of 11.0.0", File.ReadAllText(Path.Combine(newer, "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs")));
+            Assert.AreEqual("// The template of 11.0.0-pre-24", File.ReadAllText(Path.Combine(newer, "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs")));
 
-            // Without its bitfabric tag yet, a release is left for a later attempt rather than indexed without the template.
-            Assert.IsFalse(await sources.Ensure(Release("11.1.0"), Path.Combine(directory.FullName, "v-11.1.0"), TestContext.CancellationToken));
-            Assert.IsFalse(File.Exists(Path.Combine(directory.FullName, "v-11.1.0.extracted")));
+            // Without its bitfabric tag yet, a tag is left for a later attempt rather than indexed without the template.
+            Assert.IsFalse(await sources.Ensure(Tag("v-11.0.0"), Path.Combine(directory.FullName, "v-11.0.0"), TestContext.CancellationToken));
+            Assert.IsFalse(File.Exists(Path.Combine(directory.FullName, "v-11.0.0.extracted")));
         }
         finally
         {
@@ -205,8 +275,34 @@ public partial class DocsMcpTests
         }
     }
 
-    private static BitPlatformRelease Release(string name)
-        => new(Version.Parse(name), $"v-{name}", $"https://github.com/bitfoundation/bitplatform/releases/tag/v-{name}", DateTimeOffset.UtcNow, "");
+    private static BitPlatformTag Tag(string tag) => BitPlatformTag.TryParse(tag)!;
+
+    /// <summary>GitHub's archives of <paramref name="tag"/> in both repositories, the template in bitfabric's.</summary>
+    private static void AddArchives(FakeBitPlatform platform, string tag)
+    {
+        platform.Archives[$"bitplatform/{tag}"] = new() { ["src/Websites/Platform/Startup.cs"] = "class Startup { }" };
+        platform.Archives[$"bitfabric/{tag}"] = new() { ["src/Boilerplate/Bit.Boilerplate/src/Program.cs"] = $"// The template of {Tag(tag).Name}" };
+    }
+
+    /// <summary>Waits for what the index does in the background, half a minute at most.</summary>
+    private async Task Until(Func<bool> condition)
+    {
+        using var deadline = CancellationTokenSource.CreateLinkedTokenSource(TestContext.CancellationToken);
+        deadline.CancelAfter(TimeSpan.FromSeconds(30));
+
+        while (condition() is false)
+        {
+            await Task.Delay(100, deadline.Token);
+        }
+    }
+
+    /// <summary>The system's clock, read <see cref="Ahead"/> of it. Its timers keep real time.</summary>
+    private sealed class MovableClock : TimeProvider
+    {
+        public TimeSpan Ahead { get; set; }
+
+        public override DateTimeOffset GetUtcNow() => base.GetUtcNow() + Ahead;
+    }
 
     private static string[] FilesUnder(string directory)
         => [.. Directory.EnumerateFiles(directory, "*", SearchOption.AllDirectories).Select(file => Path.GetRelativePath(directory, file).Replace(Path.DirectorySeparatorChar, '/')).Order(StringComparer.Ordinal)];

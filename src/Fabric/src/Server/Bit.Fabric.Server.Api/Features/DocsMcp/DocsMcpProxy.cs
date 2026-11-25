@@ -52,12 +52,12 @@ public class DocsMcpProxy(IHttpClientFactory httpClientFactory,
     /// Ends the description of every source code tool: an agent may also have a codebase-memory server of its own, which
     /// answers about its own project.
     /// </summary>
-    private static readonly string bitPlatformSourceScope = $"It reads the bit platform's source code at the release this connection asked for (the v query of this endpoint, the newest release when it names none or one not served yet, as the server instructions say), never the caller's own workspace, not even a project created from a bit template. It holds the bit Boilerplate project template (src/Templates/Boilerplate/Bit.Boilerplate, which bitfoundation/bitfabric keeps from 11.0.0 on), and of the bitfoundation/bitplatform GitHub repository the bit platform websites, the build time projects and one bit library, BlazorES2019 (src/Toolings/BlazorES2019), but none of the other bit libraries: {BitLibraries.Names(BitLibraries.All)} each answer for themselves through their own tools, {ListedLibrariesTools} on this server and every other library's on its own server at https://<name>.bitplatform.dev/mcp, so a question about {BitLibraries.List(BitLibraries.All.Select(library => library.Topic), "or")} goes to those rather than to a search here.";
+    private static readonly string bitPlatformSourceScope = $"It reads the newest bit platform code - the newest tag of bitfoundation/bitplatform, a prerelease included, which the server instructions name - whatever release this connection asked for (the v query of this endpoint), and never the caller's own workspace, not even a project created from a bit template. It holds the bit Boilerplate project template (src/Templates/Boilerplate/Bit.Boilerplate, src/Boilerplate/Bit.Boilerplate of the bitfoundation/bitfabric GitHub repository), and of the bitfoundation/bitplatform GitHub repository the bit platform websites, the build time projects and one bit library, BlazorES2019 (src/Toolings/BlazorES2019), but none of the other bit libraries: {BitLibraries.Names(BitLibraries.All)} each answer for themselves through their own tools, {ListedLibrariesTools} on this server and every other library's on its own server at https://<name>.bitplatform.dev/mcp, so a question about {BitLibraries.List(BitLibraries.All.Select(library => library.Topic), "or")} goes to those rather than to a search here.";
 
     /// <summary>
     /// Only three read tools are exposed: trace_path binds calls by bare method name, which misleads across this monorepo,
-    /// and get_architecture only counts nodes. Each has a stand-in schema of its main arguments, listed while no release is
-    /// indexed: the tool is there to call, and its answer says why it can't answer yet.
+    /// and get_architecture only counts nodes. Each has a stand-in schema of its main arguments, listed while no version is
+    /// served: the tool is there to call, and its answer says why it can't answer yet.
     /// </summary>
     private static readonly ExposedTool[] codeIndexTools =
     [
@@ -93,7 +93,7 @@ public class DocsMcpProxy(IHttpClientFactory httpClientFactory,
     /// <summary>
     /// In the order their tools are listed. The source code index's tools take a project argument naming the index to
     /// answer from, a deployment detail no caller should have to know: it is stripped from the listed schemas and filled in
-    /// from the release the caller connected with on the way through. Renamed, as a developer's own codebase-memory server
+    /// with the version served on the way through. Renamed, as a developer's own codebase-memory server
     /// answers about their project under the original names.
     /// </summary>
     private readonly Upstream[] upstreams =
@@ -146,7 +146,7 @@ public class DocsMcpProxy(IHttpClientFactory httpClientFactory,
                 return DocsMcpToolResults.Failed($"The source code index is not available: {versions.Unavailable}. Read the code on https://github.com/bitfoundation/bitplatform instead.");
 
             // Stripped from the listed schema, so it is filled in here - overwriting any value a caller sends anyway, since
-            // the release they connected with decides which index answers.
+            // the version served is the one index that answers.
             arguments = new Dictionary<string, JsonElement>(arguments ?? new Dictionary<string, JsonElement>())
             {
                 ["project"] = JsonSerializer.SerializeToElement(version.CodebaseMemoryProject)
@@ -255,7 +255,7 @@ public class DocsMcpProxy(IHttpClientFactory httpClientFactory,
 
             // A retry after a failed refresh lists only the servers that failed: the tools of the others are as current as
             // the last full refresh, and listing every server again would put all of their round trips in front of a
-            // caller every minute for as long as one of them stays down. A new release served lists the index again.
+            // caller every minute for as long as one of them stays down. A new version served lists the index again.
             var isFullRefresh = current.Generation != versions.Generation || timeProvider.GetUtcNow() >= current.RefreshedAt + toolsCacheLifetime;
             Dictionary<Upstream, IReadOnlyList<Tool>> listed = isFullRefresh ? [] : current.ToolsPerUpstream;
 
@@ -314,7 +314,7 @@ public class DocsMcpProxy(IHttpClientFactory httpClientFactory,
     private async Task<IReadOnlyList<Tool>?> ListTools(Upstream upstream, CancellationToken cancellationToken)
     {
         // Nothing to run the index's tools over yet, so they are listed as their stand-ins (See codeIndexTools).
-        if (upstream.IsCodeIndex && versions.Latest is null)
+        if (upstream.IsCodeIndex && versions.Served is null)
             return [.. codeIndexTools.Select(exposedTool => ReadOnly(new Tool { Name = exposedTool.ExposedName, Description = exposedTool.Description, InputSchema = exposedTool.StandInSchema!.Value }))];
 
         try
@@ -444,11 +444,11 @@ public class DocsMcpProxy(IHttpClientFactory httpClientFactory,
                 : new StdioClientTransport(new()
                 {
                     Name = upstream.Name,
-                    // Installed before the first release was indexed, which is what lists the index's tools at all.
+                    // Installed before the first version was indexed, which is what lists the index's tools at all.
                     Command = codebaseMemory.ExecutablePath!,
                     // The data directory the indexes were built in, which no other client on this machine holds.
                     EnvironmentVariables = codebaseMemory.Environment,
-                    // Nothing to watch: every indexed release sits on a tag and never moves.
+                    // Nothing to watch: the version served sits on a tag and never moves.
                     WorkingDirectory = settings.DocsMcp.CodeIndex.DataDirectoryPath
                 }, loggerFactory);
 

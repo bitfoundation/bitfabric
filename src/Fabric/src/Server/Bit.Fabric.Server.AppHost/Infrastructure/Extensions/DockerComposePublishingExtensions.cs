@@ -143,11 +143,11 @@ public static class DockerComposePublishingExtensions
                 });
 
             // The source code index of the api's /docs-mcp (See DocsMcpCodeIndexer): the codebase-memory command line it
-            // installs, the sources of every served bit platform release and their index - a few GB at most, and minutes of
-            // work a release - kept across deployments on a volume of their own. It is mounted over /home/app, the home of the
-            // aspnet image's app user, which nothing else of the app uses: Docker fills a new volume with what the image holds
-            // at its target, ownership included, so the app, which runs as that user, can write to it. Nothing else is needed
-            // on the server or in the image: no git (each release is read from GitHub's archive of its tag) and no Node.js.
+            // installs, the sources of the newest bit platform tag and their index - minutes of work a tag - kept across
+            // deployments on a volume of their own. It is mounted over /home/app, the home of the aspnet image's app user,
+            // which nothing else of the app uses: Docker fills a new volume with what the image holds at its target,
+            // ownership included, so the app, which runs as that user, can write to it. Nothing else is needed on the server
+            // or in the image: no git (a tag's sources are read from GitHub's archive of it) and no Node.js.
             apiProject.WithEnvironment("DocsMcp__CodeIndex__DataDirectoryPath", "/home/app/docs-mcp")
                 .PublishAsDockerComposeService((_, service) =>
                 {

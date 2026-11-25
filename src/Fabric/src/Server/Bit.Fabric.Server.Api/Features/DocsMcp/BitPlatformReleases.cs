@@ -5,8 +5,9 @@ namespace Bit.Fabric.Server.Api.Features.DocsMcp;
 
 /// <summary>
 /// The stable releases of bitfoundation/bitplatform, read from its GitHub releases and kept for a quarter of an hour: what
-/// the GetBitPlatformReleases tool compares a version against, and what the source code index serves (See
-/// DocsMcpCodeIndexer). Every library, the project template and its tools ship together under one version number.
+/// the GetBitPlatformReleases tool compares a version against. Every library, the project template and its tools ship
+/// together under one version number. The source code index reads the newest tag instead, a prerelease included (See
+/// <see cref="BitPlatformTags"/>).
 /// </summary>
 public partial class BitPlatformReleases(IHttpClientFactory httpClientFactory, TimeProvider timeProvider, ILogger<BitPlatformReleases> logger)
 {
@@ -17,7 +18,7 @@ public partial class BitPlatformReleases(IHttpClientFactory httpClientFactory, T
     /// <summary>A read that failed is retried this much later rather than on every call in between.</summary>
     private static readonly TimeSpan failedReadLifetime = TimeSpan.FromMinutes(1);
 
-    /// <summary>Release tags only: v-1.6.2-pre-01 and the like are prereleases, which nothing here serves.</summary>
+    /// <summary>Release tags only: v-1.6.2-pre-01 and the like are prereleases, which the releases tool doesn't count.</summary>
     [GeneratedRegex(@"^v-(?<version>\d+\.\d+\.\d+)$")]
     private static partial Regex ReleaseTagRegex();
 
@@ -82,7 +83,7 @@ public partial class BitPlatformReleases(IHttpClientFactory httpClientFactory, T
 /// <param name="Notes">Its release notes, in Markdown.</param>
 public sealed record BitPlatformRelease(Version Number, string Tag, string Url, DateTimeOffset PublishedAt, string Notes)
 {
-    /// <summary>The three part version a caller passes as ?v=, such as 10.7.0.</summary>
+    /// <summary>The three part version, such as 10.7.0.</summary>
     public string Name { get; } = Number.ToString(3);
 
     public string PublishedOn => PublishedAt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);

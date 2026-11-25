@@ -1,25 +1,26 @@
 namespace Bit.Fabric.Server.Api.Features.DocsMcp.CodeIndex;
 
 /// <summary>
-/// Keeps an index of every stable release of bitfoundation/bitplatform from <see cref="DocsMcpCodeIndexOptions.MinimumVersion"/>
-/// on, so /docs-mcp?v=10.7.0 answers with the code of 10.7.0. Runs in the background: startup never waits for it, a release
-/// that can't be prepared is only left out and tried again later, and without
+/// Keeps an index of the newest bit platform code: the newest tag of bitfoundation/bitplatform, a prerelease included, which
+/// every source code tool call of /docs-mcp reads, whatever ?v= it names. A newer tag replaces it once it is indexed, and the
+/// sources of the one it replaces are deleted. Runs in the background: startup never waits for it, a tag that can't be
+/// prepared leaves the one served before answering and is tried again later, and without
 /// <see cref="DocsMcpCodeIndexOptions.DataDirectoryPath"/> it does nothing at all.
 /// <para>
-/// The data directory holds <c>cli/&lt;version&gt;/</c> (the installed command line), <c>sources/&lt;tag&gt;/</c> (each
-/// release's indexed sources) and <c>index/</c> (codebase-memory's own data). In the published Docker Compose project it is
-/// the api's <c>docs-mcp</c> volume, so a deployment keeps them (See DockerComposePublishingExtensions).
+/// The data directory holds <c>cli/&lt;version&gt;/</c> (the installed command line), <c>sources/&lt;tag&gt;/</c> (the
+/// served tag's indexed sources) and <c>index/</c> (codebase-memory's own data). In the published Docker Compose project it
+/// is the api's <c>docs-mcp</c> volume, so a deployment keeps them (See DockerComposePublishingExtensions).
 /// </para>
 /// </summary>
 public class DocsMcpCodeIndexer(ServerApiSettings settings,
-    BitPlatformReleases bitPlatformReleases,
+    BitPlatformTags bitPlatformTags,
     BitPlatformSources sources,
     CodebaseMemoryCli codebaseMemory,
     DocsMcpVersions versions,
     TimeProvider timeProvider,
     ILogger<DocsMcpCodeIndexer> logger) : BackgroundService
 {
-    /// <summary>How soon a release that could not be prepared, or a command line that could not be installed, is tried again.</summary>
+    /// <summary>How soon a tag that could not be prepared, or a command line that could not be installed, is tried again.</summary>
     private static readonly TimeSpan retryInterval = TimeSpan.FromMinutes(15);
 
     private DocsMcpCodeIndexOptions Options => settings.DocsMcp.CodeIndex;
@@ -49,7 +50,7 @@ public class DocsMcpCodeIndexer(ServerApiSettings settings,
 
     /// <summary>
     /// <see cref="Refresh"/>, with a pass that throws logged and counted as a failed one: thrown out of the loop above, it
-    /// would end it, leaving the source code tools without a release until the app restarts.
+    /// would end it, and no newer tag would be served until the app restarts.
     /// </summary>
     private async Task<bool> TryRefresh(CancellationToken cancellationToken)
     {
@@ -64,7 +65,7 @@ public class DocsMcpCodeIndexer(ServerApiSettings settings,
         }
     }
 
-    /// <returns>Whether every release at or above the minimum is served now.</returns>
+    /// <returns>Whether the newest tag is served now.</returns>
     private async Task<bool> Refresh(CancellationToken cancellationToken)
     {
         if (await codebaseMemory.EnsureInstalled(cancellationToken) is { } problem)
@@ -73,40 +74,59 @@ public class DocsMcpCodeIndexer(ServerApiSettings settings,
             return false;
         }
 
-        if (await bitPlatformReleases.GetReleases(cancellationToken) is not { } releases)
+        if (await bitPlatformTags.GetNewest(cancellationToken) is not { } newest)
         {
-            versions.ReportProblem("the bit platform releases could not be read from GitHub; retry in a few minutes");
+            versions.ReportProblem("the bit platform tags could not be read from GitHub; retry in a few minutes");
             return false;
         }
 
-        // Three parts, since a configured 10.6 would otherwise carry a -1 build that no release can match.
-        var minimum = Version.TryParse(Options.MinimumVersion, out var parsed) ? new Version(parsed.Major, parsed.Minor, Math.Max(parsed.Build, 0)) : new Version(10, 6, 0);
-
-        var complete = true;
-
-        // Newest first, so the release a caller that names none gets is the first one to come up.
-        foreach (var release in releases.Where(release => release.Number >= minimum))
+        if (versions.Served?.Name != newest.Name)
         {
-            if (versions.Served.Any(served => served.Name == release.Name)) continue;
+            var sourcesPath = Path.Combine(SourcesDirectory, newest.Tag);
 
-            var sourcesPath = Path.Combine(Options.DataDirectoryPath!, "sources", release.Tag);
-
-            if (await sources.Ensure(release, sourcesPath, cancellationToken) is false || await codebaseMemory.Index(sourcesPath, cancellationToken) is not { } project)
+            if (await sources.Ensure(newest, sourcesPath, cancellationToken) is false || await codebaseMemory.Index(sourcesPath, cancellationToken) is not { } project)
             {
-                complete = false;
-                continue;
+                versions.ReportProblem($"{newest.Name}, the newest bit platform code, could not be indexed yet; retry later");
+                return false;
             }
 
-            versions.Add(new(release, sourcesPath, project));
+            var replaced = versions.Served;
 
-            logger.LogInformation("The source code tools of /docs-mcp serve release {VersionName}.", release.Name);
+            versions.Serve(new(newest, sourcesPath, project));
+
+            logger.LogInformation("The source code tools of /docs-mcp read {VersionName} now, in place of {ReplacedVersionName}.", newest.Name, replaced?.Name ?? "nothing");
         }
 
-        if (versions.Served.Count is 0)
+        RemoveSourcesOtherThan(versions.Served!);
+
+        return true;
+    }
+
+    private string SourcesDirectory => Path.Combine(Options.DataDirectoryPath!, "sources");
+
+    /// <summary>
+    /// Deletes the sources of every tag but the served one's: the one it replaced, and any an earlier run of the app left
+    /// behind. Every pass, so one that couldn't be deleted is tried again on the next. The index codebase-memory stored for
+    /// each stays in its own data, as <see cref="CodebaseMemoryCli"/> has no way to delete one.
+    /// </summary>
+    private void RemoveSourcesOtherThan(DocsMcpVersion served)
+    {
+        if (Directory.Exists(SourcesDirectory) is false) return;
+
+        foreach (var directory in Directory.EnumerateDirectories(SourcesDirectory))
         {
-            versions.ReportProblem("no release could be indexed yet; retry later");
-        }
+            if (Path.GetFileName(directory) == served.Tag.Tag) continue;
 
-        return complete;
+            try
+            {
+                sources.Remove(directory);
+
+                logger.LogInformation("The sources of {Tag}, which the source code tools of /docs-mcp no longer read, are deleted.", Path.GetFileName(directory));
+            }
+            catch (Exception exp) when (exp is IOException or UnauthorizedAccessException)
+            {
+                logger.LogWarning(exp, "Deleting {Directory} failed, retrying on the next pass.", directory);
+            }
+        }
     }
 }
