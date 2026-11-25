@@ -159,7 +159,7 @@
                                  ViewChanged="ShowCalendarView"
                                  DefaultDate="ThemeSamples.Today.Date"
                                  Settings="calendarSettings"
-                                 Texts="calendarTexts"
+                                 Strings="calendarTexts"
                                  TimeProvider="sampleClock"
                                  HideFilters
                                  HideSettings />
@@ -358,17 +358,17 @@
     <ComponentStates Name="BitResourceTimeline" Full>
         <StateSample NameKey="@nameof(WorkbenchStrings.ThemeStateDefault)">
             <div class="timeline-box">
-                <BitResourceTimeline Config="schedules[0]" Options="timelineOptions" Texts="timelineTexts" AriaLabel="@ScheduleLabel" />
+                <BitResourceTimeline Config="schedules[0]" Options="timelineOptions" Strings="timelineTexts" AriaLabel="@ScheduleLabel" />
             </div>
         </StateSample>
         <StateSample NameKey="@nameof(WorkbenchStrings.ThemeStateLoading)">
             <div class="timeline-box">
-                <BitResourceTimeline Config="schedules[1]" Options="timelineOptions" Texts="timelineTexts" AriaLabel="@ScheduleLabel" LoadAllocationsAsync="LoadShiftsForever" />
+                <BitResourceTimeline Config="schedules[1]" Options="timelineOptions" Strings="timelineTexts" AriaLabel="@ScheduleLabel" LoadAllocationsAsync="LoadShiftsForever" />
             </div>
         </StateSample>
         <StateSample NameKey="@nameof(WorkbenchStrings.ThemeDisabled)">
             <div class="timeline-box">
-                <BitResourceTimeline Config="schedules[2]" Options="timelineOptions" Texts="timelineTexts" AriaLabel="@ScheduleLabel" Disabled />
+                <BitResourceTimeline Config="schedules[2]" Options="timelineOptions" Strings="timelineTexts" AriaLabel="@ScheduleLabel" Disabled />
             </div>
         </StateSample>
     </ComponentStates>
