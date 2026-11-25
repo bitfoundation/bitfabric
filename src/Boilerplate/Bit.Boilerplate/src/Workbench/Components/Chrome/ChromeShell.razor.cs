@@ -172,7 +172,6 @@ public partial class ChromeShell
         var manageRoles = await AuthorizationService.IsAuthorized(authUser, AppFeatures.Management.Roles_Manage);
         var manageUsers = await AuthorizationService.IsAuthorized(authUser, AppFeatures.Management.Users_Manage);
         var manageOAuthClients = await AuthorizationService.IsAuthorized(authUser, AppFeatures.System.OAuthClients_Manage);
-        var viewOperations = await AuthorizationService.IsAuthorized(authUser, AppFeatures.System.Operations_View);
 
         //#if (signalR == true)
         var manageAiPrompt = await AuthorizationService.IsAuthorized(authUser, AppFeatures.Management.SystemPrompts_Write);
@@ -190,7 +189,7 @@ public partial class ChromeShell
         var manageTenantsGlobally = await AuthorizationService.IsAuthorized(authUser, AppFeatures.Management.Tenants_Manage_Global);
         //#endif
 
-        if (manageRoles || manageUsers || manageOAuthClients || viewOperations
+        if (manageRoles || manageUsers || manageOAuthClients
             //#if (signalR == true)
             || manageAiPrompt
             //#endif
@@ -221,11 +220,6 @@ public partial class ChromeShell
             if (manageOAuthClients)
             {
                 managementItem.ChildItems.Add(new() { Text = AppLocalizer[nameof(AppStrings.OAuthClients)], IconName = BitIconName.PlugConnected, Url = "#oauth-clients" });
-            }
-
-            if (viewOperations)
-            {
-                managementItem.ChildItems.Add(new() { Text = AppLocalizer[nameof(AppStrings.Operations)], IconName = BitIconName.ServerProcesses, Url = "#operations" });
             }
 
             //#if (signalR == true)

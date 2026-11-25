@@ -6266,10 +6266,10 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <value>Jeder konfigurierte Teil hat bestanden. Konfiguriere die als „Nicht konfiguriert“ markierten Teile in deiner App oder entferne den Code, der sie verwendet.</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>Deine App antwortet, aber die Funktionen hinter den Teilen unten können langsam sein oder fehlschlagen. Die Fehlerdetails bleiben in deiner App: Ihre Seite „Betrieb“ zeigt sie.</value>
+    <value>Deine App antwortet, aber die Funktionen hinter den Teilen unten können langsam sein oder fehlschlagen. Die Fehlerdetails bleiben in deiner App.</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>Die Funktionen hinter den fehlerhaften Teilen funktionieren nicht. Die Fehlerdetails bleiben in deiner App: Ihre Seite „Betrieb“ zeigt sie.</value>
+    <value>Die Funktionen hinter den fehlerhaften Teilen funktionieren nicht. Die Fehlerdetails bleiben in deiner App.</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>gerade eben</value>
@@ -6542,7 +6542,7 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <value>Läuft</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>Die Freigabe funktioniert nicht mehr, wenn sich das Passwort dieser Person ändert oder sie den Zugriff auf die Seite „Betrieb“ deiner App verliert. Du bekommst dann einen Alarm, und jede Person in deinem Team mit diesem Zugriff kann sie neu verbinden.</value>
+    <value>Die Freigabe funktioniert nicht mehr, wenn sich das Passwort dieser Person ändert oder sie die Berechtigung verliert, den Zustandsbericht deiner App zu sehen. Du bekommst dann einen Alarm, und jede Person in deinem Team mit dieser Berechtigung kann sie neu verbinden.</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>Das Projekt</value>
@@ -6605,7 +6605,7 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <value>bit Fabric kann den Zustand von {0} nicht mehr lesen</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>Jemand mit Zugriff auf die Seite „Betrieb“ der App muss sie neu verbinden.</value>
+    <value>Jemand, der den Zustandsbericht der App sehen darf, muss sie neu verbinden.</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>Ein Testalarm für {0}</value>

@@ -6266,10 +6266,10 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
     <value>Toutes les parties configurées ont réussi. Configurez dans votre application celles marquées « Non configuré », ou supprimez le code qui les utilise.</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>Votre application répond, mais les fonctionnalités qui reposent sur les parties ci-dessous peuvent être lentes ou échouer. Le détail des erreurs reste dans votre application : sa page Opérations les affiche.</value>
+    <value>Votre application répond, mais les fonctionnalités qui reposent sur les parties ci-dessous peuvent être lentes ou échouer. Le détail des erreurs reste dans votre application.</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>Les fonctionnalités qui reposent sur les parties en échec ne fonctionnent pas. Le détail des erreurs reste dans votre application : sa page Opérations les affiche.</value>
+    <value>Les fonctionnalités qui reposent sur les parties en échec ne fonctionnent pas. Le détail des erreurs reste dans votre application.</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>à l'instant</value>
@@ -6542,7 +6542,7 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
     <value>En cours d'exécution</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>L'approbation cesse de fonctionner si le mot de passe de cette personne change ou si elle perd l'accès à la page Opérations de votre application. Vous recevrez une alerte, et toute personne de votre équipe disposant de cet accès pourra la reconnecter.</value>
+    <value>L'approbation cesse de fonctionner si le mot de passe de cette personne change ou si elle perd l'autorisation de voir le rapport de santé de votre application. Vous recevrez une alerte, et toute personne de votre équipe disposant de cette autorisation pourra la reconnecter.</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>Le projet</value>
@@ -6605,7 +6605,7 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
     <value>bit Fabric ne peut plus lire l'état de santé de {0}</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>Une personne ayant accès à sa page Opérations doit la reconnecter.</value>
+    <value>Une personne autorisée à voir son rapport de santé doit la reconnecter.</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>Une alerte de test pour {0}</value>

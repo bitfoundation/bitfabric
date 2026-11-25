@@ -6272,10 +6272,10 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Every configured part passed. Configure the ones marked Not configured in your app, or remove the code that uses them.</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>Your app answers, but the features behind the parts below may be slow or fail. The error details stay in your app: its Operations page shows them.</value>
+    <value>Your app answers, but the features behind the parts below may be slow or fail. The error details stay in your app.</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>The features behind the failing parts don't work. The error details stay in your app: its Operations page shows them.</value>
+    <value>The features behind the failing parts don't work. The error details stay in your app.</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>just now</value>
@@ -6554,7 +6554,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Running</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>The approval stops working if that person's password changes or they lose access to your app's Operations page. You'll get an alert, and anyone in your team with that access can reconnect it.</value>
+    <value>The approval stops working if that person's password changes or they lose permission to see your app's health report. You'll get an alert, and anyone in your team with that permission can reconnect it.</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>The project</value>
@@ -6617,7 +6617,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>bit Fabric can't read {0}'s health anymore</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>Someone with access to its Operations page has to reconnect it.</value>
+    <value>Someone allowed to see its health report has to reconnect it.</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>A test alert for {0}</value>
@@ -8483,7 +8483,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Your app refused bit Fabric's approval.</value>
   </data>
   <data name="MonitoringConnectionApproverLostAccess" xml:space="preserve">
-    <value>The person who approved bit Fabric no longer has access to your app's Operations page.</value>
+    <value>The person who approved bit Fabric no longer has permission to see your app's health report.</value>
   </data>
   <data name="MonitoringConnectionRenewRefused" xml:space="preserve">
     <value>Your app refused to renew bit Fabric's approval ({0}).</value>

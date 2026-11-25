@@ -6266,10 +6266,10 @@
     <value>اجتاز كل جزء مُهيّأ فحصه. هيّئ الأجزاء المعلَّمة بـ «غير مُهيّأ» في تطبيقك، أو احذف الشيفرة التي تستخدمها.</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>تطبيقك يستجيب، لكن الميزات المعتمدة على الأجزاء أدناه قد تكون بطيئة أو تتعطل. تبقى تفاصيل الأخطاء في تطبيقك: تعرضها صفحة «العمليات» فيه.</value>
+    <value>تطبيقك يستجيب، لكن الميزات المعتمدة على الأجزاء أدناه قد تكون بطيئة أو تتعطل. تبقى تفاصيل الأخطاء في تطبيقك.</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>الميزات المعتمدة على الأجزاء المعطّلة لا تعمل. تبقى تفاصيل الأخطاء في تطبيقك: تعرضها صفحة «العمليات» فيه.</value>
+    <value>الميزات المعتمدة على الأجزاء المعطّلة لا تعمل. تبقى تفاصيل الأخطاء في تطبيقك.</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>الآن</value>
@@ -6542,7 +6542,7 @@
     <value>قيد التشغيل</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>تتوقف الموافقة عن العمل إذا تغيّرت كلمة مرور ذلك الشخص أو فقد صلاحية الوصول إلى صفحة «العمليات» في تطبيقك. سيصلك تنبيه، ويمكن لأي شخص في فريقك لديه تلك الصلاحية إعادة ربطه.</value>
+    <value>تتوقف الموافقة عن العمل إذا تغيّرت كلمة مرور ذلك الشخص أو فقد صلاحية الاطلاع على تقرير حالة تطبيقك. سيصلك تنبيه، ويمكن لأي شخص في فريقك لديه تلك الصلاحية إعادة ربطه.</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>المشروع</value>
@@ -6605,7 +6605,7 @@
     <value>لم يعد bit Fabric قادرًا على قراءة حالة {0}</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>يجب على شخص لديه صلاحية الوصول إلى صفحة «العمليات» فيه إعادة ربطه.</value>
+    <value>يجب على شخص مسموح له بالاطلاع على تقرير حالته إعادة ربطه.</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>تنبيه تجريبي لـ {0}</value>

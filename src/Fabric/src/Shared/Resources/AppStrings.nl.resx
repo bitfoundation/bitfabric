@@ -6266,10 +6266,10 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <value>Elk geconfigureerd onderdeel is geslaagd. Configureer de onderdelen die als Niet geconfigureerd zijn gemarkeerd in je app, of verwijder de code die ze gebruikt.</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>Je app antwoordt, maar de functies achter de onderdelen hieronder kunnen traag zijn of mislukken. De foutdetails blijven in je app: de pagina Beheer daarin toont ze.</value>
+    <value>Je app antwoordt, maar de functies achter de onderdelen hieronder kunnen traag zijn of mislukken. De foutdetails blijven in je app.</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>De functies achter de falende onderdelen werken niet. De foutdetails blijven in je app: de pagina Beheer daarin toont ze.</value>
+    <value>De functies achter de falende onderdelen werken niet. De foutdetails blijven in je app.</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>zojuist</value>
@@ -6542,7 +6542,7 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <value>Draait</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>De goedkeuring werkt niet meer als het wachtwoord van die persoon verandert of als die persoon geen toegang meer heeft tot de pagina Beheer van je app. Je krijgt dan een melding, en iedereen in je team met die toegang kan opnieuw verbinden.</value>
+    <value>De goedkeuring werkt niet meer als het wachtwoord van die persoon verandert of als die persoon geen toestemming meer heeft om het statusrapport van je app te zien. Je krijgt dan een melding, en iedereen in je team met die toestemming kan opnieuw verbinden.</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>Het project</value>
@@ -6605,7 +6605,7 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <value>bit Fabric kan de status van {0} niet meer lezen</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>Iemand met toegang tot de pagina Beheer van de app moet opnieuw verbinden.</value>
+    <value>Iemand die het statusrapport van de app mag zien, moet opnieuw verbinden.</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>Een testmelding voor {0}</value>

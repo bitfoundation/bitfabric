@@ -7,7 +7,7 @@ public record HealthCheckDescription(string Title, string? IconName = null, stri
 
 /// <summary>
 /// What /healthz reports as each check's title, icon and about (See HealthReportEntryDto.Title), by registration name,
-/// so the Operations page and a monitor show a check the way the app names it. The template's own checks are described
+/// so a monitor shows a check the way the app names it. The template's own checks are described
 /// here; describe one of your own next to its registration, e.g.
 /// <c>.AddCheck&lt;PaymentGatewayHealthCheck&gt;("paymentGateway", tags: [HealthCheckCategories.Integrations]).Describe("paymentGateway", "Payment gateway", "Money", "Authorizes and voids a one cent payment.")</c>.
 /// A check described nowhere is reported under its registration name, with its category's icon.

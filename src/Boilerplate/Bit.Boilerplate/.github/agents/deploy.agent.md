@@ -537,7 +537,8 @@ have taken requests, so a failure from then on leaves the database ahead and und
   (section 5), or, for a service they don't want, remove the code that uses it.
 <!--#if (signalR == true)-->
 - A deployment isn't finished because `/alive` and `/health` answer. Sign in on the public address and try what depends
-  on the api's real address: the AI chat and a voice call, the Operations page, and signing out and back in.
+  on the api's real address: the AI chat and a voice call, the Hangfire dashboard at `/hangfire`, and signing out and
+  back in.
 <!--#endif-->
 - Check the landing page at its address too: a page in each language, the waitlist form and `/sitemap.xml`. Before
   launch, tell the user that its waitlist is kept in memory until it gets a home of its own, as the **landing-page**

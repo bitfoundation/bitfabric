@@ -124,7 +124,7 @@ public class SideMenuUITests : AppViewPageTest
 
         await Press(SideMenuGroup(AppStrings.Management));
 
-        foreach (var title in new[] { AppStrings.UserGroups, AppStrings.Users, AppStrings.OAuthClients, AppStrings.Operations })
+        foreach (var title in new[] { AppStrings.UserGroups, AppStrings.Users, AppStrings.OAuthClients })
         {
             await Expect(SideMenuLink(title)).ToBeVisibleAsync();
         }
@@ -152,7 +152,7 @@ public class SideMenuUITests : AppViewPageTest
             await Expect(SideMenuLink(title)).ToBeVisibleAsync();
         }
 
-        foreach (var title in new[] { AppStrings.OAuthClients, AppStrings.Operations, AppStrings.ManageAllTenants })
+        foreach (var title in new[] { AppStrings.OAuthClients, AppStrings.ManageAllTenants })
         {
             await Expect(SideMenuLink(title)).ToHaveCountAsync(0);
         }

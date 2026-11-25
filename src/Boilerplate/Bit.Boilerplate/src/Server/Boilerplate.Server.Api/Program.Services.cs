@@ -1034,8 +1034,8 @@ public static partial class Program
         ServerApiSettings appSettings = new();
         configuration.Bind(appSettings);
 
-        // Every check carries one of HealthCheckCategories as a tag, which /healthz reports as the entry's category: the
-        // Operations page and a monitor group a check they don't know by it. Give a check of your own one too.
+        // Every check carries one of HealthCheckCategories as a tag, which /healthz reports as the entry's category: a
+        // monitor groups a check it doesn't know by it. Give a check of your own one too.
         var healthChecksBuilder = builder.AddDefaultHealthChecks()
             .AddDbContextCheck<AppDbContext>(tags: [HealthCheckCategories.Platform])
             .AddHangfire(setup => setup.MinimumAvailableServers = 1, tags: [HealthCheckCategories.Platform])
