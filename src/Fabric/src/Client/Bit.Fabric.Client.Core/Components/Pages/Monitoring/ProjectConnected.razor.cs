@@ -89,7 +89,12 @@ public partial class ProjectConnected
 
             (string, bool?, string) germany = details.CheckedAt is null
                 ? (Localizer[nameof(AppStrings.MonitoringLocationGermany)], null, checking)
-                : (Localizer[nameof(AppStrings.MonitoringLocationGermany)], true, details.HomePageMs is { } ms ? Localizer[nameof(AppStrings.AppHomeMs), ms] : Localizer[nameof(AppStrings.MonitoringReportRead)]);
+                : (Localizer[nameof(AppStrings.MonitoringLocationGermany)], true, (details.HomePageMs, details.HomePageVisitorMs) switch
+                {
+                    ({ } ms, { } visitorMs) => Localizer[nameof(AppStrings.MonitoringConnectedVisitorsAndServer), Localizer[nameof(AppStrings.AppHomeMs), visitorMs], Localizer[nameof(AppStrings.AppHomeMs), ms]],
+                    ({ } ms, null) => Localizer[nameof(AppStrings.AppHomeMs), ms],
+                    _ => Localizer[nameof(AppStrings.MonitoringReportRead)]
+                });
 
             return
             [

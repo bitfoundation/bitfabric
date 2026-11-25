@@ -309,27 +309,69 @@ public partial class ProjectMonitoringTests
         var projects = client.GetController<IProjectsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
+        // The server's time is asked for past any cache (?bf=), then the page as a visitor asks for it.
         string[] HomePages() => [.. customerApp.Requested.Where(url => url is "https://customer.example/" or "https://customer.example/en-US/" or "https://customer.example/fa-IR/")];
+        string[] Kinds() => [.. customerApp.HomeRequested.Select(url => $"{url.AbsolutePath}{(QueryHelpers.ParseQuery(url.Query).ContainsKey("bf") ? " past the cache" : "")}")];
 
         // The first round followed / to /en-US/; the next asks for /en-US/ straight away.
         customerApp.Requested.Clear();
+        customerApp.HomeRequested.Clear();
         await Probe(server, project.Id);
-        Assert.AreSequenceEqual(new[] { "https://customer.example/en-US/" }, HomePages());
+        Assert.AreSequenceEqual(new[] { "https://customer.example/en-US/", "https://customer.example/en-US/" }, HomePages());
+        Assert.AreSequenceEqual(new[] { "/en-US/ past the cache", "/en-US/" }, Kinds());
 
         // The app lands somewhere else now: that round follows it and times the request after it, and the next asks for the new page.
         customerApp.Landing = "/fa-IR/";
         customerApp.Requested.Clear();
         await Probe(server, project.Id);
-        Assert.AreSequenceEqual(new[] { "https://customer.example/en-US/", "https://customer.example/fa-IR/" }, HomePages());
+        Assert.AreSequenceEqual(new[] { "https://customer.example/en-US/", "https://customer.example/fa-IR/", "https://customer.example/fa-IR/" }, HomePages());
 
         customerApp.Requested.Clear();
         await Probe(server, project.Id);
-        Assert.AreSequenceEqual(new[] { "https://customer.example/fa-IR/" }, HomePages());
+        Assert.AreSequenceEqual(new[] { "https://customer.example/fa-IR/", "https://customer.example/fa-IR/" }, HomePages());
 
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
         var rounds = await scope.ServiceProvider.GetRequiredService<AppDbContext>().ProjectProbes.IgnoreQueryFilters()
             .Where(probe => probe.ProjectId == project.Id).ToListAsync(TestContext.CancellationToken);
         Assert.IsTrue(rounds.All(round => round.ResponseMs is not null), "Every round timed the page, the one that was redirected too.");
+    }
+
+    [TestMethod]
+    public async Task ACacheInFrontOfTheApp_Should_GiveTwoNumbers_WhatVisitorsWaitFor_AndTheServersOwn()
+    {
+        var customerApp = new FakeCustomerApp { CachesHomePage = true };
+        await using var server = await StartServer(customerApp);
+        await using var client = await SignInWithATeamOfTheirOwn(server);
+        var projects = client.GetController<IProjectsController>();
+        var project = await Connect(projects, customerApp, "customer.example");
+        await Probe(server, project.Id);
+
+        var shown = (await projects.GetProjects(null, TestContext.CancellationToken)).Single();
+        Assert.IsNotNull(shown.MedianMs, "The server's own time, past the cache.");
+        Assert.IsNotNull(shown.MedianVisitorMs, "What a visitor waits for, through the cache.");
+        Assert.IsNotNull((await projects.GetProject(project.Id, TestContext.CancellationToken)).HomePageVisitorMs);
+
+        var performance = await projects.GetPerformance(new() { ProjectId = project.Id, From = DateTimeOffset.UtcNow.AddHours(-1), To = DateTimeOffset.UtcNow.AddMinutes(1), StepMinutes = 1 }, TestContext.CancellationToken);
+        Assert.Contains(series => series.Key == ProjectRollupKeys.HomePageForVisitors && series.Points.Length > 0, performance.Series);
+
+        var statusPages = client.GetController<IStatusPagesController>();
+        var page = await statusPages.GetStatusPage(project.Id, TestContext.CancellationToken);
+        (page.IsPublished, page.ShowsResponseTime) = (true, true);
+        page = await statusPages.SaveStatusPage(page, TestContext.CancellationToken);
+        await using var visitor = server.CreateAppClient();
+        var status = await visitor.GetController<IPublicStatusController>().Get(page.Slug!, "en-US", TestContext.CancellationToken);
+        Assert.IsNotNull(status.MedianResponseMs);
+        Assert.IsNotNull(status.MedianVisitorMs);
+
+        // Without a cache the two would be one number, so there is one.
+        customerApp.CachesHomePage = false;
+        await using var scope = server.ApiApp.Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await dbContext.ProjectProbes.IgnoreQueryFilters().Where(probe => probe.ProjectId == project.Id).ExecuteDeleteAsync(TestContext.CancellationToken);
+        await Probe(server, project.Id);
+        shown = (await projects.GetProjects(null, TestContext.CancellationToken)).Single();
+        Assert.IsNotNull(shown.MedianMs);
+        Assert.IsNull(shown.MedianVisitorMs);
     }
 
     [TestMethod, TestCategory("UnitTest")]

@@ -51,6 +51,12 @@ public sealed class FakeCustomerApp
     /// <summary>The page its root sends a visitor to, as an app made from the template sends <c>/</c> to the culture's.</summary>
     public string Landing { get; set; } = "/en-US/";
 
+    /// <summary>A cache in front of it, such as Cloudflare's, answers its home page unless the query string is new to it.</summary>
+    public bool CachesHomePage { get; set; }
+
+    /// <summary>Every home page it was asked for, with its query string, in order.</summary>
+    public List<Uri> HomeRequested { get; } = [];
+
     public bool RefusesRefresh { get; set; }
 
     /// <summary>How long it takes to answer anything, as a slow app does.</summary>
@@ -293,7 +299,7 @@ public sealed class FakeCustomerApp
                 : new HttpResponseMessage(HttpStatusCode.Unauthorized),
             // An app made from the template sends its root to the culture's (See ProjectProber.TimeFrontDoor).
             ("GET", "/") => new HttpResponseMessage(HttpStatusCode.Found) { Headers = { Location = new Uri($"{Landing}{url.Query}", UriKind.Relative) } },
-            ("GET", var path) when path == Landing || path is "/health" => Home(),
+            ("GET", var path) when path == Landing || path is "/health" => Home(url),
             // One it no longer lands on sends the visitor on, as after the app's default culture changed.
             ("GET", "/en-US/") => new HttpResponseMessage(HttpStatusCode.Found) { Headers = { Location = new Uri($"{Landing}{url.Query}", UriKind.Relative) } },
             ("GET", "/robots.txt") when origin == Address && RobotsTxt is not null => Text(RobotsTxt, "text/plain"),
@@ -348,9 +354,19 @@ public sealed class FakeCustomerApp
         };
     }
 
-    private HttpResponseMessage Home()
+    private HttpResponseMessage Home(Uri? url = null)
     {
         var response = Text(HomeHtml, "text/html");
+
+        if (url is not null && url.AbsolutePath != "/health")
+        {
+            lock (HomeRequested) HomeRequested.Add(url);
+
+            if (CachesHomePage)
+            {
+                response.Headers.TryAddWithoutValidation("cf-cache-status", QueryHelpers.ParseQuery(url.Query).ContainsKey("bf") ? "MISS" : "HIT");
+            }
+        }
 
         foreach (var (name, value) in HomeHeaders)
         {

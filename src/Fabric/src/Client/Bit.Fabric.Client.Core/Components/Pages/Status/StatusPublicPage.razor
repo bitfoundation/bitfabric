@@ -166,10 +166,18 @@
                     <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringUptime90Days)]</BitText>
                     <BitText Typography="BitTypography.H5" Element="span" Numeric>@Percent(StatusDays.UptimeOf(appDays))</BitText>
                 </div>
+                @* What visitors wait for through the app's cache first, when one answers; then the server's own time. *@
+                @if (status.MedianVisitorMs is { } visitorMs)
+                {
+                    <div class="number">
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringTypicalForVisitors)]</BitText>
+                        <BitText Typography="BitTypography.H5" Element="span" Numeric>@Localizer[nameof(AppStrings.AppHomeMs), visitorMs]</BitText>
+                    </div>
+                }
                 @if (status.MedianResponseMs is { } medianMs)
                 {
                     <div class="number">
-                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringTypicalResponseTime)]</BitText>
+                        <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@(status.MedianVisitorMs is null ? Localizer[nameof(AppStrings.MonitoringTypicalResponseTime)] : Localizer[nameof(AppStrings.MonitoringTypicalServerTime)])</BitText>
                         <BitText Typography="BitTypography.H5" Element="span" Numeric>@Localizer[nameof(AppStrings.AppHomeMs), medianMs]</BitText>
                     </div>
                 }

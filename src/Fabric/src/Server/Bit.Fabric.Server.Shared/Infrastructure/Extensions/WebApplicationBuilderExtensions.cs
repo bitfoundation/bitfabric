@@ -174,6 +174,12 @@ public static class WebApplicationBuilderExtensions
                 options.AddTraceSources("Experimental.Microsoft.Extensions.AI", "SmsBridge", FusionCacheDiagnostics.ActivitySourceName)
                     .AddMeters("Experimental.Microsoft.Extensions.AI", FusionCacheDiagnostics.MeterName);
 
+                // How an outgoing request's connection came about: the wait for one, its setup, and in it the DNS lookup, the
+                // socket's connect and the TLS handshake, each a span (https://learn.microsoft.com/dotnet/fundamentals/networking/telemetry/tracing).
+                // A monitoring round that stalls then shows which of them took the time.
+                options.AddTraceSources("Experimental.System.Net.Http.Connections", "Experimental.System.Net.NameResolution",
+                    "Experimental.System.Net.Sockets", "Experimental.System.Net.Security");
+
                 options.Traces.IgnoredActivityNames.Add("Microsoft.AspNetCore.Components.HandleEvent");
 
                 options.AddProcessor(new AppBelemetryProcessor(builder.Environment));

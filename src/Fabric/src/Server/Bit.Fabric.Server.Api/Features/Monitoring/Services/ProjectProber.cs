@@ -78,6 +78,7 @@ public partial class ProjectProber
         };
 
         await TimeFrontDoor(project, probe, cancellationToken);
+        await TimeForVisitors(project, probe, cancellationToken);
         await ReadReport(project, probe, cancellationToken);
 
         await dbContext.ProjectProbes.AddAsync(probe, cancellationToken);
@@ -182,6 +183,11 @@ public partial class ProjectProber
             HomePagePart(probe)
         ];
 
+        if (probe.VisitorMs is { } visitorMs)
+        {
+            parts.Add(Part(probe, ProjectRollup.HomePageForVisitorsKey, false, false, visitorMs));
+        }
+
         // A refused token reads nothing, so it is no evidence either way.
         if (probe.Outcome is not ProjectProbeOutcome.Unauthorized)
         {
@@ -247,6 +253,38 @@ public partial class ProjectProber
         {
             // The report says what's wrong; a front door that doesn't answer leaves the time empty.
             logger.LogInformation("{Url} didn't answer: {Reason}", uri, exp.Message);
+        }
+    }
+
+    /// <summary>
+    /// What a visitor waits for, through whatever cache is in front of the app, such as Cloudflare's: the same page asked
+    /// for as a visitor asks for it, without the query string that gets past the cache. Only an answer a cache gave counts,
+    /// since otherwise it is the server's time again, so the pages show one number (bitfabric-internal/specs/monitoring.md,
+    /// Response time). A static front end's server's <c>/health</c> has no cache to look at.
+    /// </summary>
+    private async Task TimeForVisitors(Project project, ProjectProbe probe, CancellationToken cancellationToken)
+    {
+        if (project.HasStaticFrontEnd || probe.ResponseMs is null)
+            return;
+
+        var url = landings.AddressOf(project);
+
+        try
+        {
+            var http = httpClientFactory.CreateClient(MonitoringHttp.ClientName);
+            var stopwatch = Stopwatch.StartNew();
+            using var response = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var elapsed = (int)stopwatch.ElapsedMilliseconds;
+
+            if (response.IsSuccessStatusCode && (IsHit(response, "cf-cache-status") || IsHit(response, "X-Cache") || response.Headers.Age is not null))
+            {
+                probe.VisitorMs = elapsed;
+            }
+        }
+        catch (Exception exp) when (exp is HttpRequestException or TaskCanceledException)
+        {
+            // The server's time already says whether the page answers.
+            logger.LogInformation("{Url} didn't answer as a visitor asks for it: {Reason}", url, exp.Message);
         }
     }
 

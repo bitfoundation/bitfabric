@@ -6934,6 +6934,27 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="MonitoringTypicalResponseTime" xml:space="preserve">
     <value>Typical response time</value>
   </data>
+  <data name="MonitoringForVisitors" xml:space="preserve">
+    <value>For visitors</value>
+  </data>
+  <data name="MonitoringForVisitorsHelp" xml:space="preserve">
+    <value>The home page as visitors get it, through the cache in front of your app.</value>
+  </data>
+  <data name="MonitoringServerTime" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="MonitoringHomePageForVisitors" xml:space="preserve">
+    <value>Home page for visitors</value>
+  </data>
+  <data name="MonitoringTypicalForVisitors" xml:space="preserve">
+    <value>Typical for visitors</value>
+  </data>
+  <data name="MonitoringTypicalServerTime" xml:space="preserve">
+    <value>Typical server time</value>
+  </data>
+  <data name="MonitoringConnectedVisitorsAndServer" xml:space="preserve">
+    <value>{0} for visitors ({1} server)</value>
+  </data>
   <data name="MonitoringPastIncidents" xml:space="preserve">
     <value>Past incidents</value>
   </data>
