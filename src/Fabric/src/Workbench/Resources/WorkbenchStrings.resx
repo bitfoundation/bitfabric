@@ -1894,7 +1894,7 @@
         <value>Add this view</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Open the board</value>
+        <value>Open the flow</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Open in the Workbench</value>
@@ -4569,33 +4569,6 @@
     <data name="HomeCardCustomizeText" xml:space="preserve">
         <value>Ask your agent to add the tools, devices and states your team needs.</value>
     </data>
-    <data name="CategoryExplainers" xml:space="preserve">
-        <value>Explainers</value>
-    </data>
-    <data name="HomeExplainersTitle" xml:space="preserve">
-        <value>Explainers</value>
-    </data>
-    <data name="HomeExplainersSubtitle" xml:space="preserve">
-        <value>Ask your agent to explain something, and it builds a page here instead of a wall of text, with your app's own components and theme.</value>
-    </data>
-    <data name="HomeExplainersPointDiagram" xml:space="preserve">
-        <value>An architecture or a flow, drawn</value>
-    </data>
-    <data name="HomeExplainersPointCompare" xml:space="preserve">
-        <value>Options compared side by side</value>
-    </data>
-    <data name="HomeExplainersPointReport" xml:space="preserve">
-        <value>A plan or a report to come back to</value>
-    </data>
-    <data name="HomeExplainersPointComment" xml:space="preserve">
-        <value>Light and dark, any device, and your comments on it</value>
-    </data>
-    <data name="HomeExplainersPrompt" xml:space="preserve">
-        <value>Explain how a pull request reaches Production, as a page in the workbench.</value>
-    </data>
-    <data name="HomeExplainersEmpty" xml:space="preserve">
-        <value>No explainers yet. Ask your agent for one, and its page shows up here.</value>
-    </data>
     <data name="ProgressEmptyText" xml:space="preserve">
         <value>No task yet. When an agent works on something long, like a deployment or a new feature, its steps and its questions for you show up here.</value>
     </data>
@@ -4604,5 +4577,41 @@
     </data>
     <data name="ProgressNoTask" xml:space="preserve">
         <value>No task yet</value>
+    </data>
+    <data name="Boards" xml:space="preserve">
+        <value>Boards</value>
+    </data>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>What your agent shows you as a page instead of a long answer: a flow drawn, options side by side, numbers to try.</value>
+    </data>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>Make a board of how bit Fabric's monitoring works.</value>
+    </data>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>No boards yet. Ask your agent for one, and it shows up here.</value>
+    </data>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>There's no board at this address.</value>
+    </data>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>Boards, not walls of text</value>
+    </data>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>Ask your agent to explain something, and it builds a board here instead of a long answer, with the app's own components and theme.</value>
+    </data>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>A flow or an architecture, drawn and moving</value>
+    </data>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>Options side by side, at a glance</value>
+    </data>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>Numbers you can try, like a calculator</value>
+    </data>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>Light and dark, on any screen</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>Open the boards</value>
     </data>
 </root>

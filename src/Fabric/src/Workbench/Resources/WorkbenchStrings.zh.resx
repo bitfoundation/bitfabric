@@ -1894,7 +1894,7 @@
         <value>添加此视图</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>打开画板</value>
+        <value>打开流程</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>在工作台中打开</value>

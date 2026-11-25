@@ -1894,7 +1894,7 @@
         <value>Ajouter cette vue</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Ouvrir le tableau</value>
+        <value>Ouvrir le parcours</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Ouvrir dans l’établi</value>

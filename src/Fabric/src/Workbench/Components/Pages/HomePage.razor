@@ -166,42 +166,40 @@
         </div>
     </section>
 
-    @* What an agent explains as a page here instead of in the chat: the points, a prompt to try, and the catalog's explainers, or how to get the first one. *@
-    <section id="explainers" class="section explainers">
-        <div class="explainers-grid">
-            <div class="explainers-text">
-                <h2>@Localizer[nameof(WorkbenchStrings.HomeExplainersTitle)]</h2>
-                <p>@Localizer[nameof(WorkbenchStrings.HomeExplainersSubtitle)]</p>
+    @* What an agent shows as a board instead of telling it in the chat: the points, a prompt to try, and the boards, or how to get the first one. *@
+    <section id="boards" class="section boards">
+        <div class="boards-grid">
+            <div class="boards-text">
+                <h2>@Localizer[nameof(WorkbenchStrings.HomeBoardsTitle)]</h2>
+                <p>@Localizer[nameof(WorkbenchStrings.HomeBoardsSubtitle)]</p>
                 <ul class="agents-points">
-                    @foreach (var point in explainerPoints)
+                    @foreach (var point in boardPoints)
                     {
                         <li><span class="point-icon"><BitIcon IconName="@point.IconName" Size="BitSize.Small" /></span>@Localizer[point.TextKey]</li>
                     }
                 </ul>
-                <figure class="prompt explainers-prompt">
+                <figure class="prompt boards-prompt">
                     <figcaption class="prompt-label"><BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.HomeCtaPromptLabel)]</figcaption>
-                    <blockquote class="prompt-text">@Localizer[nameof(WorkbenchStrings.HomeExplainersPrompt)]</blockquote>
+                    <blockquote class="prompt-text">@Localizer[nameof(WorkbenchStrings.BoardsPrompt)]</blockquote>
                 </figure>
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.ViewDashboard" Href="@WorkbenchUrls.Boards" Class="boards-open">@Localizer[nameof(WorkbenchStrings.HomeBoardsOpen)]</BitButton>
             </div>
-            <div class="explainers-cards">
-                @if (Explainers.Count == 0)
+            <div class="boards-cards">
+                @if (WorkbenchBoardCatalog.Boards.Count == 0)
                 {
-                    <div class="explainers-empty">
+                    <div class="boards-empty">
                         <BitIcon IconName="@BitIconName.Lightbulb" Color="BitColor.Primary" />
-                        <span>@Localizer[nameof(WorkbenchStrings.HomeExplainersEmpty)]</span>
+                        <span>@Localizer[nameof(WorkbenchStrings.BoardsEmpty)]</span>
                     </div>
                 }
-                @foreach (var entry in Explainers.Take(3))
+                @foreach (var board in WorkbenchBoardCatalog.Boards.Take(3))
                 {
                     <Bmotion Preset="BmotionPresets.Reveal(distance: 24)" WhileHover="Bm.To(y: -6)">
-                        <a class="page-card explainer-card" href="@ExplainerUrl(entry)">
-                            <span class="thumbnail">
-                                <img class="light-only" data-thumbnail="@($"api/thumbnails/{entry.Key}")" alt="" />
-                                <img class="dark-only" data-thumbnail="@($"api/thumbnails/{entry.Key}?theme=Dark")" alt="" />
-                            </span>
-                            <span class="page-body">
-                                <span class="page-title"><BitIcon IconName="@entry.IconName" Color="BitColor.Primary" /> @Localizer[entry.TitleKey]</span>
-                                <span class="page-description">@Localizer[entry.DescriptionKey]</span>
+                        <a class="board-card tone-@board.Tone" href="@WorkbenchUrls.Board(board.Id)">
+                            <span class="board-art" aria-hidden="true"><span class="board-icon"><BitIcon IconName="@board.IconName" /></span></span>
+                            <span class="board-body">
+                                <span class="board-title">@Localizer[board.TitleKey]</span>
+                                <span class="board-summary">@Localizer[board.SummaryKey]</span>
                             </span>
                         </a>
                     </Bmotion>

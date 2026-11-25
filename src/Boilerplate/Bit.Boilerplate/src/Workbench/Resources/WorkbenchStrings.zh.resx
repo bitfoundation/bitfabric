@@ -2611,7 +2611,7 @@
         <value>添加此视图</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>打开画板</value>
+        <value>打开流程</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>在工作台中打开</value>
@@ -5456,49 +5456,241 @@
 | 在 Test 上午夜之后退款 | 在正确的日期 |
 | 合并后的 Production | 已更新 |</value>
     </data>
-    <data name="CategoryExplainers" xml:space="preserve">
-        <value>讲解页</value>
+    <data name="Boards" xml:space="preserve">
+        <value>展板</value>
     </data>
-    <data name="CiCdExplainerTitle" xml:space="preserve">
-        <value>这个应用如何交付</value>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>您的智能体不再给出长篇回答，而是用页面展示给您：画出来的流程、并排的选项、可以试算的数字。</value>
     </data>
-    <data name="CiCdExplainerDescription" xml:space="preserve">
-        <value>一个讲解页示例：以图表、卡片和时间线展示本项目的 GitHub Actions 工作流，说明每个作业在哪里运行、读取哪些机密，内容随项目创建时选择的选项而定。</value>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>做一个展板，展示我们的应用是如何部署的。</value>
     </data>
-    <data name="CiCdExplainerCaption" xml:space="preserve">
-        <value>看看您的应用如何交付</value>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>还没有展板。请您的智能体做一个，它就会出现在这里。</value>
     </data>
-    <data name="PaymentsExplainerTitle" xml:space="preserve">
-        <value>支付方式对比</value>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>这个地址没有展板。</value>
     </data>
-    <data name="PaymentsExplainerDescription" xml:space="preserve">
-        <value>一个讲解页示例：网页支付服务商的费用，以及 Google Play 和 App Store 对应用内购买、订阅和指向您网站的链接收取什么、允许什么，截至 2026 年 11 月。</value>
+    <data name="DeployBoardTitle" xml:space="preserve">
+        <value>这个项目如何交付</value>
     </data>
-    <data name="PaymentsExplainerCaption" xml:space="preserve">
-        <value>权衡您的支付选择</value>
+    <data name="DeployBoardSummary" xml:space="preserve">
+        <value>从您的更改到您的用户，为本项目绘制。</value>
     </data>
-    <data name="HomeExplainersTitle" xml:space="preserve">
-        <value>讲解页</value>
+    <data name="PaymentsBoardTitle" xml:space="preserve">
+        <value>收款</value>
     </data>
-    <data name="HomeExplainersSubtitle" xml:space="preserve">
-        <value>请您的智能体讲解某件事，它会在这里搭建一个页面，而不是一大段文字，并使用您应用自己的组件和主题。</value>
+    <data name="PaymentsBoardSummary" xml:space="preserve">
+        <value>每笔销售中谁拿走多少，网页上与应用商店里。</value>
     </data>
-    <data name="HomeExplainersPointDiagram" xml:space="preserve">
-        <value>把架构或流程画出来</value>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>用展板，而不是大段文字</value>
     </data>
-    <data name="HomeExplainersPointCompare" xml:space="preserve">
-        <value>并排比较各个选项</value>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>请您的智能体讲解某件事，它会在这里搭建一个展板，而不是长篇回答，并使用您应用自己的组件和主题。</value>
     </data>
-    <data name="HomeExplainersPointReport" xml:space="preserve">
-        <value>可以随时回看的计划或报告</value>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>流程或架构，画出来并动起来</value>
     </data>
-    <data name="HomeExplainersPointComment" xml:space="preserve">
-        <value>浅色与深色、任意设备，还能直接评论</value>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>选项并排，一目了然</value>
     </data>
-    <data name="HomeExplainersPrompt" xml:space="preserve">
-        <value>用工作台中的一个页面，讲解我们的应用是如何部署的。</value>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>可以试算的数字，就像计算器</value>
     </data>
-    <data name="HomeExplainersEmpty" xml:space="preserve">
-        <value>还没有讲解页。请您的智能体做一个，它的页面就会出现在这里。</value>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>浅色与深色，任何屏幕</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>打开展板</value>
+    </data>
+    <data name="DeployLead" xml:space="preserve">
+        <value>您发送更改。GitHub 负责测试和打包。您的服务器只运行结果。</value>
+    </data>
+    <data name="DeployNote" xml:space="preserve">
+        <value>示例展板，并非全部细节</value>
+    </data>
+    <data name="DeploySources" xml:space="preserve">
+        <value>读取自项目自己的文件</value>
+    </data>
+    <data name="DeployNumberBuilds" xml:space="preserve">
+        <value>次构建在您的服务器上</value>
+    </data>
+    <data name="DeployNumberDoors" xml:space="preserve">
+        <value>扇门在您的服务器上敞开</value>
+    </data>
+    <data name="DeployNumberDoorsCaddy" xml:space="preserve">
+        <value>扇门敞开，都用于网站</value>
+    </data>
+    <data name="DeployNumberTested" xml:space="preserve">
+        <value>的更新先经过测试</value>
+    </data>
+    <data name="DeployNumberCopies" xml:space="preserve">
+        <value>份应用副本：一份试用，一份上线</value>
+    </data>
+    <data name="DeployPlaceYou" xml:space="preserve">
+        <value>您</value>
+    </data>
+    <data name="DeployPlaceGitHub" xml:space="preserve">
+        <value>GitHub</value>
+    </data>
+    <data name="DeployPlaceServer" xml:space="preserve">
+        <value>您的服务器</value>
+    </data>
+    <data name="DeployPlaceOnline" xml:space="preserve">
+        <value>线上</value>
+    </data>
+    <data name="DeployStopChanges" xml:space="preserve">
+        <value>您的更改</value>
+    </data>
+    <data name="DeployStopChangesNote" xml:space="preserve">
+        <value>可从任意分支发送</value>
+    </data>
+    <data name="DeployStopTested" xml:space="preserve">
+        <value>自动测试</value>
+    </data>
+    <data name="DeployStopTestedNote" xml:space="preserve">
+        <value>在 GitHub 上构建并检查</value>
+    </data>
+    <data name="DeployStopPackaged" xml:space="preserve">
+        <value>已打包</value>
+    </data>
+    <data name="DeployStopPackagedNote" xml:space="preserve">
+        <value>可以安装</value>
+    </data>
+    <data name="DeployStopLive" xml:space="preserve">
+        <value>已切换</value>
+    </data>
+    <data name="DeployStopLiveNote" xml:space="preserve">
+        <value>您的服务器切换到新版本</value>
+    </data>
+    <data name="DeployStopSafe" xml:space="preserve">
+        <value>安全访问</value>
+    </data>
+    <data name="DeployStopSafeNote" xml:space="preserve">
+        <value>不留任何敞开的门</value>
+    </data>
+    <data name="DeployStopSafeCaddyNote" xml:space="preserve">
+        <value>通过安全连接</value>
+    </data>
+    <data name="DeployStopUsers" xml:space="preserve">
+        <value>您的用户</value>
+    </data>
+    <data name="DeployStopUsersNote" xml:space="preserve">
+        <value>用上新版本</value>
+    </data>
+    <data name="DeployStopApps" xml:space="preserve">
+        <value>您的应用</value>
+    </data>
+    <data name="DeployStopAppsNote" xml:space="preserve">
+        <value>可以下载</value>
+    </data>
+    <data name="DeployCopiesTitle" xml:space="preserve">
+        <value>应用的两份副本：一份试用，一份上线</value>
+    </data>
+    <data name="DeployTestName" xml:space="preserve">
+        <value>测试版</value>
+    </data>
+    <data name="DeployTestFrom" xml:space="preserve">
+        <value>任何您想试用的版本</value>
+    </data>
+    <data name="DeployTestWhen" xml:space="preserve">
+        <value>随时按需</value>
+    </data>
+    <data name="DeployLiveName" xml:space="preserve">
+        <value>正式版</value>
+    </data>
+    <data name="DeployLiveFrom" xml:space="preserve">
+        <value>主版本</value>
+    </data>
+    <data name="DeployLiveWhen" xml:space="preserve">
+        <value>每次有更改被接受时</value>
+    </data>
+    <data name="DeployServerTitle" xml:space="preserve">
+        <value>不停机：新版本在旧版本旁边启动</value>
+    </data>
+    <data name="DeployServerKicker" xml:space="preserve">
+        <value>在新版本就绪之前，访客继续使用旧版本。</value>
+    </data>
+    <data name="DeployServerBar" xml:space="preserve">
+        <value>您的服务器 · {0} 个应用，{1} 个服务</value>
+    </data>
+    <data name="DeployReplaced" xml:space="preserve">
+        <value>被替换</value>
+    </data>
+    <data name="DeployKept" xml:space="preserve">
+        <value>持续运行</value>
+    </data>
+    <data name="DeployStateLive" xml:space="preserve">
+        <value>运行中</value>
+    </data>
+    <data name="DeployStateStarting" xml:space="preserve">
+        <value>启动中</value>
+    </data>
+    <data name="DeployStateReady" xml:space="preserve">
+        <value>就绪</value>
+    </data>
+    <data name="DeployBoxWebApp" xml:space="preserve">
+        <value>Web 应用</value>
+    </data>
+    <data name="DeployBoxLandingPage" xml:space="preserve">
+        <value>落地页</value>
+    </data>
+    <data name="DeployBoxCache" xml:space="preserve">
+        <value>缓存 (Redis)</value>
+    </data>
+    <data name="DeployBoxStorage" xml:space="preserve">
+        <value>存储 (Redis)</value>
+    </data>
+    <data name="DeployBoxFiles" xml:space="preserve">
+        <value>文件</value>
+    </data>
+    <data name="DeployStepDownload" xml:space="preserve">
+        <value>下载</value>
+    </data>
+    <data name="DeployStepSettings" xml:space="preserve">
+        <value>设置</value>
+    </data>
+    <data name="DeployStepData" xml:space="preserve">
+        <value>更新数据</value>
+    </data>
+    <data name="DeployStepStart" xml:space="preserve">
+        <value>启动</value>
+    </data>
+    <data name="DeployStepSwitch" xml:space="preserve">
+        <value>切换</value>
+    </data>
+    <data name="DeployStepCheck" xml:space="preserve">
+        <value>检查</value>
+    </data>
+    <data name="DeployStepRefresh" xml:space="preserve">
+        <value>刷新缓存</value>
+    </data>
+    <data name="DeployAppsTitle" xml:space="preserve">
+        <value>手机和桌面应用来自同一次更新</value>
+    </data>
+    <data name="DeployAppWindows" xml:space="preserve">
+        <value>能自动更新的安装程序</value>
+    </data>
+    <data name="DeployAppAndroid" xml:space="preserve">
+        <value>可上架 Google Play</value>
+    </data>
+    <data name="DeployAppIos" xml:space="preserve">
+        <value>可上架 App Store，无需 Mac</value>
+    </data>
+    <data name="DeployAppOff" xml:space="preserve">
+        <value>发布前保持关闭</value>
+    </data>
+    <data name="DeploySettingsTitle" xml:space="preserve">
+        <value>每份副本需要的 {0} 项设置</value>
+    </data>
+    <data name="DeploySettingsKicker" xml:space="preserve">
+        <value>bit pipeline 会替您填好</value>
+    </data>
+    <data name="DeploySecret" xml:space="preserve">
+        <value>机密</value>
+    </data>
+    <data name="DeploySetting" xml:space="preserve">
+        <value>设置</value>
     </data>
 </root>

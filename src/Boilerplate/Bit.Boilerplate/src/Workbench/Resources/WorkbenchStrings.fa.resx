@@ -2611,7 +2611,7 @@
         <value>افزودن این نما</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>باز کردن تابلو</value>
+        <value>باز کردن مسیر</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>باز کردن در میز کار</value>
@@ -5456,49 +5456,241 @@
 | بازپرداخت بعد از نیمه‌شب روی Test | در روز درست |
 | Production بعد از merge | به‌روز شد |</value>
     </data>
-    <data name="CategoryExplainers" xml:space="preserve">
-        <value>صفحه‌های توضیحی</value>
+    <data name="Boards" xml:space="preserve">
+        <value>تابلوها</value>
     </data>
-    <data name="CiCdExplainerTitle" xml:space="preserve">
-        <value>این اپ چطور منتشر می‌شود</value>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>آنچه عاملتان به‌جای یک جواب طولانی، به شکل یک صفحه نشانتان می‌دهد: یک جریان کشیده‌شده، گزینه‌ها کنار هم، و عددهایی برای امتحان کردن.</value>
     </data>
-    <data name="CiCdExplainerDescription" xml:space="preserve">
-        <value>نمونه‌ای از یک صفحه توضیحی: workflowهای GitHub Actions این پروژه به شکل نمودار، کارت و خط زمانی، با اینکه هر job کجا اجرا می‌شود و کدام secretها را می‌خواند، مطابق گزینه‌هایی که پروژه با آن‌ها ساخته شده است.</value>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>یک تابلو بساز که نشان دهد اپ ما چطور منتشر می‌شود.</value>
     </data>
-    <data name="CiCdExplainerCaption" xml:space="preserve">
-        <value>ببینید اپ شما چطور منتشر می‌شود</value>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>هنوز تابلویی نیست. از عاملتان یکی بخواهید تا اینجا ظاهر شود.</value>
     </data>
-    <data name="PaymentsExplainerTitle" xml:space="preserve">
-        <value>مقایسه روش‌های پرداخت</value>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>در این نشانی تابلویی نیست.</value>
     </data>
-    <data name="PaymentsExplainerDescription" xml:space="preserve">
-        <value>نمونه‌ای از یک صفحه توضیحی: کارمزد درگاه‌های پرداخت وب، و اینکه Google Play و App Store برای خرید درون‌برنامه‌ای، اشتراک و لینک به وب‌سایت شما چه می‌گیرند و چه اجازه می‌دهند، تا نوامبر 2026.</value>
+    <data name="DeployBoardTitle" xml:space="preserve">
+        <value>این پروژه چطور منتشر می‌شود</value>
     </data>
-    <data name="PaymentsExplainerCaption" xml:space="preserve">
-        <value>گزینه‌های پرداختتان را بسنجید</value>
+    <data name="DeployBoardSummary" xml:space="preserve">
+        <value>از تغییرات شما تا کاربرانتان، کشیده‌شده برای همین پروژه.</value>
     </data>
-    <data name="HomeExplainersTitle" xml:space="preserve">
-        <value>صفحه‌های توضیحی</value>
+    <data name="PaymentsBoardTitle" xml:space="preserve">
+        <value>دریافت پرداخت</value>
     </data>
-    <data name="HomeExplainersSubtitle" xml:space="preserve">
-        <value>از عاملتان بخواهید چیزی را توضیح دهد تا به‌جای یک دیوار متن، اینجا یک صفحه بسازد، با کامپوننت‌ها و تم خود اپ شما.</value>
+    <data name="PaymentsBoardSummary" xml:space="preserve">
+        <value>از هر فروش، روی وب و در فروشگاه‌ها، چه کسی چقدر برمی‌دارد.</value>
     </data>
-    <data name="HomeExplainersPointDiagram" xml:space="preserve">
-        <value>یک معماری یا یک جریان، به شکل نمودار</value>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>تابلو، به‌جای دیوار متن</value>
     </data>
-    <data name="HomeExplainersPointCompare" xml:space="preserve">
-        <value>گزینه‌ها، کنار هم مقایسه‌شده</value>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>از عاملتان بخواهید چیزی را توضیح دهد تا به‌جای یک جواب طولانی، اینجا یک تابلو بسازد، با کامپوننت‌ها و تم خود اپتان.</value>
     </data>
-    <data name="HomeExplainersPointReport" xml:space="preserve">
-        <value>یک برنامه یا گزارش که می‌توانید به آن برگردید</value>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>یک جریان یا معماری، کشیده‌شده و در حرکت</value>
     </data>
-    <data name="HomeExplainersPointComment" xml:space="preserve">
-        <value>روشن و تیره، روی هر دستگاه، با نظرهای شما روی آن</value>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>گزینه‌ها کنار هم، در یک نگاه</value>
     </data>
-    <data name="HomeExplainersPrompt" xml:space="preserve">
-        <value>توضیح بده اپ ما چطور مستقر می‌شود، به شکل یک صفحه در میز کار.</value>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>عددهایی که می‌شود امتحانشان کرد، مثل یک ماشین‌حساب</value>
     </data>
-    <data name="HomeExplainersEmpty" xml:space="preserve">
-        <value>هنوز صفحه توضیحی‌ای نیست. از عاملتان یکی بخواهید تا صفحه‌اش اینجا ظاهر شود.</value>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>روشن و تیره، روی هر صفحه‌نمایشی</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>باز کردن تابلوها</value>
+    </data>
+    <data name="DeployLead" xml:space="preserve">
+        <value>شما تغییراتتان را می‌فرستید. GitHub آن‌ها را آزمایش و بسته‌بندی می‌کند. سرور شما فقط نتیجه را اجرا می‌کند.</value>
+    </data>
+    <data name="DeployNote" xml:space="preserve">
+        <value>یک تابلوی نمونه، نه همه‌ی ماجرا</value>
+    </data>
+    <data name="DeploySources" xml:space="preserve">
+        <value>خوانده‌شده از فایل‌های خود پروژه</value>
+    </data>
+    <data name="DeployNumberBuilds" xml:space="preserve">
+        <value>ساخت روی سرور شما</value>
+    </data>
+    <data name="DeployNumberDoors" xml:space="preserve">
+        <value>در باز روی سرور شما</value>
+    </data>
+    <data name="DeployNumberDoorsCaddy" xml:space="preserve">
+        <value>در باز، هر دو برای وب‌سایت</value>
+    </data>
+    <data name="DeployNumberTested" xml:space="preserve">
+        <value>از به‌روزرسانی‌ها اول آزمایش می‌شوند</value>
+    </data>
+    <data name="DeployNumberCopies" xml:space="preserve">
+        <value>نسخه از اپ شما: یکی برای امتحان، یکی برای کاربران</value>
+    </data>
+    <data name="DeployPlaceYou" xml:space="preserve">
+        <value>شما</value>
+    </data>
+    <data name="DeployPlaceGitHub" xml:space="preserve">
+        <value>GitHub</value>
+    </data>
+    <data name="DeployPlaceServer" xml:space="preserve">
+        <value>سرور شما</value>
+    </data>
+    <data name="DeployPlaceOnline" xml:space="preserve">
+        <value>آنلاین</value>
+    </data>
+    <data name="DeployStopChanges" xml:space="preserve">
+        <value>تغییرات شما</value>
+    </data>
+    <data name="DeployStopChangesNote" xml:space="preserve">
+        <value>از هر شاخه‌ای فرستاده می‌شود</value>
+    </data>
+    <data name="DeployStopTested" xml:space="preserve">
+        <value>آزمایش خودکار</value>
+    </data>
+    <data name="DeployStopTestedNote" xml:space="preserve">
+        <value>روی GitHub ساخته و بررسی می‌شود</value>
+    </data>
+    <data name="DeployStopPackaged" xml:space="preserve">
+        <value>بسته‌بندی‌شده</value>
+    </data>
+    <data name="DeployStopPackagedNote" xml:space="preserve">
+        <value>آماده‌ی نصب</value>
+    </data>
+    <data name="DeployStopLive" xml:space="preserve">
+        <value>جایگزین شد</value>
+    </data>
+    <data name="DeployStopLiveNote" xml:space="preserve">
+        <value>سرور شما به نسخه‌ی تازه می‌رود</value>
+    </data>
+    <data name="DeployStopSafe" xml:space="preserve">
+        <value>دسترسی امن</value>
+    </data>
+    <data name="DeployStopSafeNote" xml:space="preserve">
+        <value>هیچ دری باز نمی‌ماند</value>
+    </data>
+    <data name="DeployStopSafeCaddyNote" xml:space="preserve">
+        <value>فقط با اتصال امن</value>
+    </data>
+    <data name="DeployStopUsers" xml:space="preserve">
+        <value>کاربران شما</value>
+    </data>
+    <data name="DeployStopUsersNote" xml:space="preserve">
+        <value>روی نسخه‌ی تازه</value>
+    </data>
+    <data name="DeployStopApps" xml:space="preserve">
+        <value>اپ‌های شما</value>
+    </data>
+    <data name="DeployStopAppsNote" xml:space="preserve">
+        <value>آماده‌ی دانلود</value>
+    </data>
+    <data name="DeployCopiesTitle" xml:space="preserve">
+        <value>دو نسخه از اپ شما: یکی برای امتحان، یکی برای کاربران</value>
+    </data>
+    <data name="DeployTestName" xml:space="preserve">
+        <value>آزمایشی</value>
+    </data>
+    <data name="DeployTestFrom" xml:space="preserve">
+        <value>هر نسخه‌ای که بخواهید امتحان کنید</value>
+    </data>
+    <data name="DeployTestWhen" xml:space="preserve">
+        <value>هر وقت بخواهید</value>
+    </data>
+    <data name="DeployLiveName" xml:space="preserve">
+        <value>اصلی</value>
+    </data>
+    <data name="DeployLiveFrom" xml:space="preserve">
+        <value>نسخه‌ی اصلی</value>
+    </data>
+    <data name="DeployLiveWhen" xml:space="preserve">
+        <value>هر بار که تغییری در آن پذیرفته شود</value>
+    </data>
+    <data name="DeployServerTitle" xml:space="preserve">
+        <value>بدون وقفه: نسخه‌ی تازه کنار نسخه‌ی قبلی بالا می‌آید</value>
+    </data>
+    <data name="DeployServerKicker" xml:space="preserve">
+        <value>کاربران تا آماده شدن نسخه‌ی تازه با نسخه‌ی قبلی کار می‌کنند.</value>
+    </data>
+    <data name="DeployServerBar" xml:space="preserve">
+        <value>سرور شما، {0} اپ و {1} سرویس</value>
+    </data>
+    <data name="DeployReplaced" xml:space="preserve">
+        <value>جایگزین می‌شود</value>
+    </data>
+    <data name="DeployKept" xml:space="preserve">
+        <value>روشن می‌ماند</value>
+    </data>
+    <data name="DeployStateLive" xml:space="preserve">
+        <value>فعال</value>
+    </data>
+    <data name="DeployStateStarting" xml:space="preserve">
+        <value>در حال شروع</value>
+    </data>
+    <data name="DeployStateReady" xml:space="preserve">
+        <value>آماده</value>
+    </data>
+    <data name="DeployBoxWebApp" xml:space="preserve">
+        <value>اپ وب</value>
+    </data>
+    <data name="DeployBoxLandingPage" xml:space="preserve">
+        <value>صفحه‌ی معرفی</value>
+    </data>
+    <data name="DeployBoxCache" xml:space="preserve">
+        <value>کش (Redis)</value>
+    </data>
+    <data name="DeployBoxStorage" xml:space="preserve">
+        <value>ذخیره (Redis)</value>
+    </data>
+    <data name="DeployBoxFiles" xml:space="preserve">
+        <value>فایل‌ها</value>
+    </data>
+    <data name="DeployStepDownload" xml:space="preserve">
+        <value>دریافت</value>
+    </data>
+    <data name="DeployStepSettings" xml:space="preserve">
+        <value>تنظیمات</value>
+    </data>
+    <data name="DeployStepData" xml:space="preserve">
+        <value>به‌روزرسانی داده‌ها</value>
+    </data>
+    <data name="DeployStepStart" xml:space="preserve">
+        <value>شروع</value>
+    </data>
+    <data name="DeployStepSwitch" xml:space="preserve">
+        <value>جابه‌جایی</value>
+    </data>
+    <data name="DeployStepCheck" xml:space="preserve">
+        <value>بررسی</value>
+    </data>
+    <data name="DeployStepRefresh" xml:space="preserve">
+        <value>تازه‌سازی کش</value>
+    </data>
+    <data name="DeployAppsTitle" xml:space="preserve">
+        <value>اپ‌های موبایل و دسکتاپ هم از همین به‌روزرسانی می‌آیند</value>
+    </data>
+    <data name="DeployAppWindows" xml:space="preserve">
+        <value>نصب‌کننده‌ای که خودش به‌روز می‌شود</value>
+    </data>
+    <data name="DeployAppAndroid" xml:space="preserve">
+        <value>آماده برای Google Play</value>
+    </data>
+    <data name="DeployAppIos" xml:space="preserve">
+        <value>آماده برای App Store، بدون نیاز به Mac</value>
+    </data>
+    <data name="DeployAppOff" xml:space="preserve">
+        <value>تا منتشرش نکنید خاموش است</value>
+    </data>
+    <data name="DeploySettingsTitle" xml:space="preserve">
+        <value>{0} تنظیمی که هر نسخه لازم دارد</value>
+    </data>
+    <data name="DeploySettingsKicker" xml:space="preserve">
+        <value>bit pipeline آن‌ها را برایتان پر می‌کند</value>
+    </data>
+    <data name="DeploySecret" xml:space="preserve">
+        <value>محرمانه</value>
+    </data>
+    <data name="DeploySetting" xml:space="preserve">
+        <value>تنظیم</value>
     </data>
 </root>

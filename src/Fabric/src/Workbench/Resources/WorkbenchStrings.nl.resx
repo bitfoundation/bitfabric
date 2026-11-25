@@ -1894,7 +1894,7 @@
         <value>Deze weergave toevoegen</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Het bord openen</value>
+        <value>De flow openen</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Openen in de werkbank</value>

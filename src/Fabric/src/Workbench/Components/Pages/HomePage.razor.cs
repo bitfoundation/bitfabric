@@ -2,7 +2,7 @@ namespace Bit.Fabric.Workbench.Components.Pages;
 
 /// <summary>
 /// The Workbench's landing page: who it is for, in one big card (mostly the AI agent, then you) and small cards for the rest, the
-/// agents' long tasks, the explainers they build, how to use it, the catalog of pages with their review status, and the flows.
+/// agents' long tasks, the boards they build, how to use it, the catalog of pages with their review status, and the flows.
 /// </summary>
 public partial class HomePage
 {
@@ -37,13 +37,13 @@ public partial class HomePage
         (BitIconName.Repair, nameof(WorkbenchStrings.HomeCardCustomizeTitle), nameof(WorkbenchStrings.HomeCardCustomizeText))
     ];
 
-    // What an agent can explain as a page here instead of in the chat.
-    private static readonly (string IconName, string TextKey)[] explainerPoints =
+    // What an agent can show as a board instead of telling it in the chat.
+    private static readonly (string IconName, string TextKey)[] boardPoints =
     [
-        (BitIconName.Flow, nameof(WorkbenchStrings.HomeExplainersPointDiagram)),
-        (BitIconName.Split, nameof(WorkbenchStrings.HomeExplainersPointCompare)),
-        (BitIconName.ReportDocument, nameof(WorkbenchStrings.HomeExplainersPointReport)),
-        (BitIconName.Comment, nameof(WorkbenchStrings.HomeExplainersPointComment))
+        (BitIconName.Flow, nameof(WorkbenchStrings.HomeBoardsPointDiagram)),
+        (BitIconName.Split, nameof(WorkbenchStrings.HomeBoardsPointCompare)),
+        (BitIconName.Calculator, nameof(WorkbenchStrings.HomeBoardsPointTry)),
+        (BitIconName.Devices3, nameof(WorkbenchStrings.HomeBoardsPointAnywhere))
     ];
 
     private static readonly (string TitleKey, string TextKey)[] steps =
@@ -68,12 +68,6 @@ public partial class HomePage
 
     /// <summary>The page the hero shows on the phone: the settings, or another page of the catalog.</summary>
     private static WorkbenchPageInfo? PhonePage => WorkbenchPageCatalog.Find("settings") ?? WorkbenchPageCatalog.Pages.FirstOrDefault(p => p.Key != HeroPage?.Key) ?? HeroPage;
-
-    /// <summary>The pages an agent built to explain something (the explainer skill), in the catalog's order.</summary>
-    private static IReadOnlyList<WorkbenchPageInfo> Explainers => [.. WorkbenchPageCatalog.Pages.Where(p => p.CategoryKey == nameof(WorkbenchStrings.CategoryExplainers))];
-
-    /// <summary>An explainer opens on a laptop, as it is read more than it is tried on a phone.</summary>
-    private static string ExplainerUrl(WorkbenchPageInfo page) => $"{WorkbenchUrls.Workbench(page.Key)}?device=laptop-hidpi";
 
     /// <summary>The catalog's pages by category, in the catalog's order, as the Pages pane groups them.</summary>
     private static IEnumerable<IGrouping<string, WorkbenchPageInfo>> PageGroups => WorkbenchPageCatalog.Pages.GroupBy(p => p.CategoryKey);

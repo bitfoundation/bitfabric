@@ -2611,7 +2611,7 @@
         <value>Add this view</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Open the board</value>
+        <value>Open the flow</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Open in the Workbench</value>
@@ -5456,49 +5456,241 @@
 | A refund after midnight on Test | On the right day |
 | Production after the merge | Updated |</value>
     </data>
-    <data name="CategoryExplainers" xml:space="preserve">
-        <value>Explainers</value>
+    <data name="Boards" xml:space="preserve">
+        <value>Boards</value>
     </data>
-    <data name="CiCdExplainerTitle" xml:space="preserve">
-        <value>How this app ships</value>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>What your agent shows you as a page instead of a long answer: a flow drawn, options side by side, numbers to try.</value>
     </data>
-    <data name="CiCdExplainerDescription" xml:space="preserve">
-        <value>An example explainer: this project's GitHub Actions workflows as a diagram, cards and a timeline, with where each job runs and which secrets it reads, for the options the project was created with.</value>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>Make a board of how our app gets deployed.</value>
     </data>
-    <data name="CiCdExplainerCaption" xml:space="preserve">
-        <value>See how your app ships</value>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>No boards yet. Ask your agent for one, and it shows up here.</value>
     </data>
-    <data name="PaymentsExplainerTitle" xml:space="preserve">
-        <value>Payment options compared</value>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>There's no board at this address.</value>
     </data>
-    <data name="PaymentsExplainerDescription" xml:space="preserve">
-        <value>An example explainer: web payment providers' fees, and what Google Play and the App Store take and allow for in-app purchases, subscriptions and links to your website, as of November 2026.</value>
+    <data name="DeployBoardTitle" xml:space="preserve">
+        <value>How this project ships</value>
     </data>
-    <data name="PaymentsExplainerCaption" xml:space="preserve">
-        <value>Weigh your payment options</value>
+    <data name="DeployBoardSummary" xml:space="preserve">
+        <value>From your changes to your users, drawn for this project.</value>
     </data>
-    <data name="HomeExplainersTitle" xml:space="preserve">
-        <value>Explainers</value>
+    <data name="PaymentsBoardTitle" xml:space="preserve">
+        <value>Taking payments</value>
     </data>
-    <data name="HomeExplainersSubtitle" xml:space="preserve">
-        <value>Ask your agent to explain something, and it builds a page here instead of a wall of text, with your app's own components and theme.</value>
+    <data name="PaymentsBoardSummary" xml:space="preserve">
+        <value>Who keeps what from a sale, on the web and in the stores.</value>
     </data>
-    <data name="HomeExplainersPointDiagram" xml:space="preserve">
-        <value>An architecture or a flow, drawn</value>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>Boards, not walls of text</value>
     </data>
-    <data name="HomeExplainersPointCompare" xml:space="preserve">
-        <value>Options compared side by side</value>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>Ask your agent to explain something, and it builds a board here instead of a long answer, with your app's own components and theme.</value>
     </data>
-    <data name="HomeExplainersPointReport" xml:space="preserve">
-        <value>A plan or a report to come back to</value>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>A flow or an architecture, drawn and moving</value>
     </data>
-    <data name="HomeExplainersPointComment" xml:space="preserve">
-        <value>Light and dark, any device, and your comments on it</value>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>Options side by side, at a glance</value>
     </data>
-    <data name="HomeExplainersPrompt" xml:space="preserve">
-        <value>Explain how our app gets deployed, as a page in the workbench.</value>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>Numbers you can try, like a calculator</value>
     </data>
-    <data name="HomeExplainersEmpty" xml:space="preserve">
-        <value>No explainers yet. Ask your agent for one, and its page shows up here.</value>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>Light and dark, on any screen</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>Open the boards</value>
+    </data>
+    <data name="DeployLead" xml:space="preserve">
+        <value>You send your changes. GitHub tests and packages them. Your server only runs the result.</value>
+    </data>
+    <data name="DeployNote" xml:space="preserve">
+        <value>An example board, not the whole story</value>
+    </data>
+    <data name="DeploySources" xml:space="preserve">
+        <value>Read from the project's own files</value>
+    </data>
+    <data name="DeployNumberBuilds" xml:space="preserve">
+        <value>builds on your server</value>
+    </data>
+    <data name="DeployNumberDoors" xml:space="preserve">
+        <value>doors left open on your server</value>
+    </data>
+    <data name="DeployNumberDoorsCaddy" xml:space="preserve">
+        <value>doors open, both for the website</value>
+    </data>
+    <data name="DeployNumberTested" xml:space="preserve">
+        <value>of updates tested first</value>
+    </data>
+    <data name="DeployNumberCopies" xml:space="preserve">
+        <value>copies of your app: one to try, one live</value>
+    </data>
+    <data name="DeployPlaceYou" xml:space="preserve">
+        <value>You</value>
+    </data>
+    <data name="DeployPlaceGitHub" xml:space="preserve">
+        <value>GitHub</value>
+    </data>
+    <data name="DeployPlaceServer" xml:space="preserve">
+        <value>Your server</value>
+    </data>
+    <data name="DeployPlaceOnline" xml:space="preserve">
+        <value>Online</value>
+    </data>
+    <data name="DeployStopChanges" xml:space="preserve">
+        <value>Your changes</value>
+    </data>
+    <data name="DeployStopChangesNote" xml:space="preserve">
+        <value>Sent from any branch</value>
+    </data>
+    <data name="DeployStopTested" xml:space="preserve">
+        <value>Tested automatically</value>
+    </data>
+    <data name="DeployStopTestedNote" xml:space="preserve">
+        <value>Built and checked on GitHub</value>
+    </data>
+    <data name="DeployStopPackaged" xml:space="preserve">
+        <value>Packaged</value>
+    </data>
+    <data name="DeployStopPackagedNote" xml:space="preserve">
+        <value>Ready to install</value>
+    </data>
+    <data name="DeployStopLive" xml:space="preserve">
+        <value>Switched over</value>
+    </data>
+    <data name="DeployStopLiveNote" xml:space="preserve">
+        <value>Your server switches to the new version</value>
+    </data>
+    <data name="DeployStopSafe" xml:space="preserve">
+        <value>Reachable safely</value>
+    </data>
+    <data name="DeployStopSafeNote" xml:space="preserve">
+        <value>Nothing left open</value>
+    </data>
+    <data name="DeployStopSafeCaddyNote" xml:space="preserve">
+        <value>Over a secure connection</value>
+    </data>
+    <data name="DeployStopUsers" xml:space="preserve">
+        <value>Your users</value>
+    </data>
+    <data name="DeployStopUsersNote" xml:space="preserve">
+        <value>On the new version</value>
+    </data>
+    <data name="DeployStopApps" xml:space="preserve">
+        <value>Your apps</value>
+    </data>
+    <data name="DeployStopAppsNote" xml:space="preserve">
+        <value>Ready to download</value>
+    </data>
+    <data name="DeployCopiesTitle" xml:space="preserve">
+        <value>Two copies of your app: one to try, one live</value>
+    </data>
+    <data name="DeployTestName" xml:space="preserve">
+        <value>Test</value>
+    </data>
+    <data name="DeployTestFrom" xml:space="preserve">
+        <value>Any version you want to try</value>
+    </data>
+    <data name="DeployTestWhen" xml:space="preserve">
+        <value>Whenever you ask for it</value>
+    </data>
+    <data name="DeployLiveName" xml:space="preserve">
+        <value>Live</value>
+    </data>
+    <data name="DeployLiveFrom" xml:space="preserve">
+        <value>The main version</value>
+    </data>
+    <data name="DeployLiveWhen" xml:space="preserve">
+        <value>Each time a change is accepted into it</value>
+    </data>
+    <data name="DeployServerTitle" xml:space="preserve">
+        <value>No downtime: the new version starts beside the old one</value>
+    </data>
+    <data name="DeployServerKicker" xml:space="preserve">
+        <value>Visitors keep using the old one until the new one is ready.</value>
+    </data>
+    <data name="DeployServerBar" xml:space="preserve">
+        <value>your server · {0} apps, {1} services</value>
+    </data>
+    <data name="DeployReplaced" xml:space="preserve">
+        <value>Replaced</value>
+    </data>
+    <data name="DeployKept" xml:space="preserve">
+        <value>Kept running</value>
+    </data>
+    <data name="DeployStateLive" xml:space="preserve">
+        <value>live</value>
+    </data>
+    <data name="DeployStateStarting" xml:space="preserve">
+        <value>starting</value>
+    </data>
+    <data name="DeployStateReady" xml:space="preserve">
+        <value>ready</value>
+    </data>
+    <data name="DeployBoxWebApp" xml:space="preserve">
+        <value>Web app</value>
+    </data>
+    <data name="DeployBoxLandingPage" xml:space="preserve">
+        <value>Landing page</value>
+    </data>
+    <data name="DeployBoxCache" xml:space="preserve">
+        <value>Cache (Redis)</value>
+    </data>
+    <data name="DeployBoxStorage" xml:space="preserve">
+        <value>Storage (Redis)</value>
+    </data>
+    <data name="DeployBoxFiles" xml:space="preserve">
+        <value>Files</value>
+    </data>
+    <data name="DeployStepDownload" xml:space="preserve">
+        <value>Download</value>
+    </data>
+    <data name="DeployStepSettings" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="DeployStepData" xml:space="preserve">
+        <value>Update data</value>
+    </data>
+    <data name="DeployStepStart" xml:space="preserve">
+        <value>Start</value>
+    </data>
+    <data name="DeployStepSwitch" xml:space="preserve">
+        <value>Switch</value>
+    </data>
+    <data name="DeployStepCheck" xml:space="preserve">
+        <value>Check</value>
+    </data>
+    <data name="DeployStepRefresh" xml:space="preserve">
+        <value>Refresh cache</value>
+    </data>
+    <data name="DeployAppsTitle" xml:space="preserve">
+        <value>The phone and desktop apps come from the same update</value>
+    </data>
+    <data name="DeployAppWindows" xml:space="preserve">
+        <value>An installer that updates itself</value>
+    </data>
+    <data name="DeployAppAndroid" xml:space="preserve">
+        <value>Ready for Google Play</value>
+    </data>
+    <data name="DeployAppIos" xml:space="preserve">
+        <value>Ready for the App Store, no Mac needed</value>
+    </data>
+    <data name="DeployAppOff" xml:space="preserve">
+        <value>Off until you publish it</value>
+    </data>
+    <data name="DeploySettingsTitle" xml:space="preserve">
+        <value>The {0} settings each copy needs</value>
+    </data>
+    <data name="DeploySettingsKicker" xml:space="preserve">
+        <value>bit pipeline fills them in for you</value>
+    </data>
+    <data name="DeploySecret" xml:space="preserve">
+        <value>Secret</value>
+    </data>
+    <data name="DeploySetting" xml:space="preserve">
+        <value>Setting</value>
     </data>
 </root>

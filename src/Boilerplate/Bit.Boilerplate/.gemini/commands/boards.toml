@@ -1,0 +1,9 @@
+description = "Show something as a board in the Workbench instead of a long answer in the chat: how a part of the project works, options side by side, a plan or a report, visual first and in few words, then hand over its address."
+
+prompt = """
+Follow these instructions exactly:
+
+@{.github/agents/boards.agent.md}
+
+What to show: {{args}}
+"""

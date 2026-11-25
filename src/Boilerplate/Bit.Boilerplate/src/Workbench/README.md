@@ -38,10 +38,11 @@ Chromium when it is installed, otherwise Microsoft Edge or Google Chrome. To ins
   or Arabic reads right to left, English terms and all. A new question plays a sound, unless the Workbench is muted, and
   the tab's title counts what waits for you. With no task yet, and for anyone who isn't at this computer, it shows three
   samples that can be tried.
-- **Explainers**: pages your agent builds when something is easier to see than to read, such as how this project is built
-  and deployed or payment providers compared side by side, with the app's own components and theme, in light and dark and
-  on every device. Two examples come with it; ask your agent to explain something, and its page shows up under
-  Explainers, at an address you can comment on and come back to. Its `explainer` skill builds them.
+- **Boards**: a section of their own, next to Pages, Flows and Progress, where your agent shows you something instead of
+  a long answer in the chat, such as payment providers compared side by side or how this project ships, visual first and
+  in few words, with the app's own components and theme, in light and dark and on every device. Two examples come with
+  it; ask your agent to show you something, and its board shows up under Boards, at an address you can come back to. Its
+  `boards` skill builds them.
 - **Dictation**: the microphone next to a comment, a reply, an answer or a message turns speech into text, with the
   browser's own speech recognition, in the language its menu picks.
 - **`/workbench/<page>`**: one page with its tools. Pick the device, its orientation and frame, the data state

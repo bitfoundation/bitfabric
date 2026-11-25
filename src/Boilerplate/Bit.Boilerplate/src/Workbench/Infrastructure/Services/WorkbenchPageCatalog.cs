@@ -226,30 +226,6 @@ public static class WorkbenchPageCatalog
                     new("first-visit", nameof(WorkbenchStrings.LandingConsentFirstVisit))
                 ])
             ]
-        },
-        // Explainers: what an agent explains as a page instead of in the chat (the explainer skill). These two are examples,
-        // a document each with no app shell around it.
-        new("ci-cd",
-            nameof(WorkbenchStrings.CiCdExplainerTitle),
-            nameof(WorkbenchStrings.CiCdExplainerDescription),
-            BitIconName.Flow,
-            typeof(CiCdExplainerPage),
-            nameof(WorkbenchStrings.CategoryExplainers),
-            ["BitTimeline", "BitCard", "BitSearchBox", "BitChoiceGroup"],
-            nameof(WorkbenchStrings.CiCdExplainerCaption))
-        {
-            HasAppShell = false
-        },
-        new("payments",
-            nameof(WorkbenchStrings.PaymentsExplainerTitle),
-            nameof(WorkbenchStrings.PaymentsExplainerDescription),
-            BitIconName.PaymentCard,
-            typeof(PaymentsExplainerPage),
-            nameof(WorkbenchStrings.CategoryExplainers),
-            ["BitSlider", "BitPivot", "BitCard", "BitTag"],
-            nameof(WorkbenchStrings.PaymentsExplainerCaption))
-        {
-            HasAppShell = false
         }
     ];
 

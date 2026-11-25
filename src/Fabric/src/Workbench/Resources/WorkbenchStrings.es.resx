@@ -1894,7 +1894,7 @@
         <value>Añadir esta vista</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Abrir el tablero</value>
+        <value>Abrir el flujo</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Abrir en el banco de trabajo</value>

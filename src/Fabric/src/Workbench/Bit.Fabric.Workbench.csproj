@@ -50,7 +50,7 @@
         <Using Include="Bit.Fabric.Workbench.Components.Chrome" />
         <Using Include="Bit.Fabric.Workbench.Components.Preview" />
         <Using Include="Bit.Fabric.Workbench.Components.Progress" />
-        <Using Include="Bit.Fabric.Workbench.Components.Explainers" />
+        <Using Include="Bit.Fabric.Workbench.Components.Boards" />
         <Using Include="Bit.Fabric.Workbench.Components.Pages.AppPages" />
         <Using Include="Bit.Fabric.Workbench.Components.Pages.AppPages.Settings" />
         <Using Include="Bit.Fabric.Workbench.Components.Pages.AppPages.Settings.Data" />

@@ -128,8 +128,7 @@ public class HomePageUITests : WorkbenchPageTest
     {
         await OpenHome();
 
-        // The catalog's cards; the explainers section above it shows some of the same pages again.
-        var cards = Page.Locator("section#pages a.page-card");
+        var cards = Page.Locator("a.page-card");
 
         await Expect(cards).ToHaveCountAsync(WorkbenchPageCatalog.Pages.Count);
 

@@ -389,8 +389,8 @@
     border: 1px dashed $bit-color-border-secondary;
 }
 
-// The explainers: the promise and a prompt on one side, the explainers themselves (or how to get one) on the other.
-.explainers-grid {
+// The boards: the promise and a prompt on one side, the boards themselves (or how to get one) on the other.
+.boards-grid {
     gap: 2.5rem;
     display: grid;
     padding: 2.5rem;
@@ -409,7 +409,7 @@
     }
 }
 
-.explainers-text {
+.boards-text {
     h2 {
         margin: 0 0 0.75rem;
         font-size: 2rem;
@@ -425,22 +425,82 @@
     }
 }
 
-.explainers-prompt {
+.boards-prompt {
     padding: 1.25rem;
     box-shadow: none;
+    margin-bottom: 1.25rem;
 }
 
-.explainers-cards {
+::deep .boards-open {
+    margin-top: 0.5rem;
+}
+
+.boards-cards {
     gap: 1rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
 }
 
-.explainer-card .thumbnail {
-    aspect-ratio: 16 / 9;
+.board-card {
+    --tone: #{$bit-color-primary};
+    --tone-dark: #{$bit-color-primary-dark};
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+    text-decoration: none;
+    flex-direction: column;
+    border-radius: 18px;
+    color: $bit-color-foreground-primary;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+
+    &.tone-success {
+        --tone: #{$bit-color-success};
+        --tone-dark: #{$bit-color-success-dark};
+    }
 }
 
-.explainers-empty {
+.board-art {
+    height: 8rem;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(80% 120% at 30% 0%, color-mix(in srgb, var(--tone) 32%, transparent), transparent 70%),
+                linear-gradient(140deg, color-mix(in srgb, var(--tone) 16%, #{$bit-color-background-primary}), color-mix(in srgb, var(--tone-dark) 22%, #{$bit-color-background-primary}));
+}
+
+.board-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1.5rem;
+    --bit-Icon-color: #{$bit-color-neutrals-white};
+    width: 3.5rem;
+    height: 3.5rem;
+    display: grid;
+    font-size: 1.5rem;
+    place-items: center;
+    border-radius: 1.125rem;
+    color: $bit-color-neutrals-white;
+    background: linear-gradient(140deg, var(--tone), var(--tone-dark));
+    box-shadow: 0 0.75rem 1.5rem -0.75rem color-mix(in srgb, var(--tone) 70%, transparent);
+}
+
+.board-body {
+    gap: 0.25rem;
+    display: flex;
+    padding: 1rem 1.125rem 1.25rem;
+    flex-direction: column;
+}
+
+.board-title {
+    font-weight: 700;
+}
+
+.board-summary {
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: $bit-color-foreground-secondary;
+}
+
+.boards-empty {
     gap: 0.75rem;
     display: flex;
     padding: 1.5rem;

@@ -1894,7 +1894,7 @@
         <value>افزودن این نما</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>باز کردن تابلو</value>
+        <value>باز کردن مسیر</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>باز کردن در میز کار</value>
@@ -4569,33 +4569,6 @@
     <data name="HomeCardCustomizeText" xml:space="preserve">
         <value>از عامل‌تان بخواهید ابزارها، دستگاه‌ها و حالت‌هایی را که تیمتان لازم دارد اضافه کند.</value>
     </data>
-    <data name="CategoryExplainers" xml:space="preserve">
-        <value>صفحه‌های توضیحی</value>
-    </data>
-    <data name="HomeExplainersTitle" xml:space="preserve">
-        <value>صفحه‌های توضیحی</value>
-    </data>
-    <data name="HomeExplainersSubtitle" xml:space="preserve">
-        <value>از عاملتان بخواهید چیزی را توضیح دهد تا به‌جای یک دیوار متن، اینجا یک صفحه بسازد، با کامپوننت‌ها و تم خود اپ شما.</value>
-    </data>
-    <data name="HomeExplainersPointDiagram" xml:space="preserve">
-        <value>یک معماری یا یک جریان، به شکل نمودار</value>
-    </data>
-    <data name="HomeExplainersPointCompare" xml:space="preserve">
-        <value>گزینه‌ها، کنار هم مقایسه‌شده</value>
-    </data>
-    <data name="HomeExplainersPointReport" xml:space="preserve">
-        <value>یک برنامه یا گزارش که می‌توانید به آن برگردید</value>
-    </data>
-    <data name="HomeExplainersPointComment" xml:space="preserve">
-        <value>روشن و تیره، روی هر دستگاه، با نظرهای شما روی آن</value>
-    </data>
-    <data name="HomeExplainersPrompt" xml:space="preserve">
-        <value>توضیح بده یک pull request چطور به Production می‌رسد، به شکل یک صفحه در میز کار.</value>
-    </data>
-    <data name="HomeExplainersEmpty" xml:space="preserve">
-        <value>هنوز صفحه توضیحی‌ای نیست. از عاملتان یکی بخواهید تا صفحه‌اش اینجا ظاهر شود.</value>
-    </data>
     <data name="ProgressEmptyText" xml:space="preserve">
         <value>هنوز کاری نیست. وقتی عاملی روی کار طولانی‌ای مثل یک استقرار یا یک قابلیت جدید کار کند، مرحله‌ها و سؤال‌هایش از شما اینجا نشان داده می‌شود.</value>
     </data>
@@ -4604,5 +4577,41 @@
     </data>
     <data name="ProgressNoTask" xml:space="preserve">
         <value>هنوز کاری نیست</value>
+    </data>
+    <data name="Boards" xml:space="preserve">
+        <value>تابلوها</value>
+    </data>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>آنچه عاملتان به‌جای یک جواب طولانی، به شکل یک صفحه نشانتان می‌دهد: یک جریان کشیده‌شده، گزینه‌ها کنار هم، و عددهایی برای امتحان کردن.</value>
+    </data>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>یک تابلو بساز که نشان دهد مانیتورینگ bit Fabric چطور کار می‌کند.</value>
+    </data>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>هنوز تابلویی نیست. از عاملتان یکی بخواهید تا اینجا ظاهر شود.</value>
+    </data>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>در این نشانی تابلویی نیست.</value>
+    </data>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>تابلو، به‌جای دیوار متن</value>
+    </data>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>از عاملتان بخواهید چیزی را توضیح دهد تا به‌جای یک جواب طولانی، اینجا یک تابلو بسازد، با کامپوننت‌ها و تم خود اپ.</value>
+    </data>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>یک جریان یا معماری، کشیده‌شده و در حرکت</value>
+    </data>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>گزینه‌ها کنار هم، در یک نگاه</value>
+    </data>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>عددهایی که می‌شود امتحانشان کرد، مثل یک ماشین‌حساب</value>
+    </data>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>روشن و تیره، روی هر صفحه‌نمایشی</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>باز کردن تابلوها</value>
     </data>
 </root>
