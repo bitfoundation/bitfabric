@@ -413,7 +413,6 @@ provider outage does not take an otherwise healthy instance out of the load bala
   check is left out where mail is caught rather than delivered: the shared ethereal.email mailbox, or a loopback SMTP
   server such as Mailpit in development.
 - **`sms`**: fetches the Twilio account and requires it to be active.
-- **`keycloakIdentity`**: reads Keycloak's discovery document.
 - **`cloudflare`**: purges a cache tag nothing carries, through the same call content changes use.
 - **`entraId`**: reads the tenant's discovery document, then asks for an app-only token, sending the secret only to an
   https token endpoint on the authority's own origin. Only a token, `invalid_scope` or `invalid_resource` passes, so
@@ -451,7 +450,7 @@ Every AI check sends a real, minimal request through the same client the feature
 quota problem therefore shows up in the check the same way it would in the feature. Providers reject an invalid key
 (401) before they look at the rest of the request.
 
-In development, `sms`, `keycloakIdentity`,
+In development, `sms`,
 `cloudflare`,
 `entraId`, `appleSignIn`, `googleSignIn`, `gitHubSignIn`, `twitterSignIn`, `facebookSignIn`, `webPush`, `firebase`, `apns`,
 and the AI checks are registered only when their settings are present. In any other environment they are always

@@ -38,9 +38,9 @@ public partial class OperationsPage
         ("Social sign in", BitIconName.Signin,
             "Google, GitHub, X and Facebook only answer a user signing in, so their client secrets can't be verified.",
             "Sign in with each configured provider from the sign in page.", ManualTest.None),
-        ("Sign in with Apple and Keycloak", BitIconName.AuthenticatorApp,
-            "Apple checks the authorization code before the client secret, and Keycloak's secret is only used during a sign in.",
-            "Sign in with Apple and with Keycloak from the sign in page.", ManualTest.None),
+        ("Sign in with Apple", BitIconName.AuthenticatorApp,
+            "Apple checks the authorization code before the client secret.",
+            "Sign in with Apple from the sign in page.", ManualTest.None),
     ];
 
     private enum ManualTest { None, Push, Email, Sms }

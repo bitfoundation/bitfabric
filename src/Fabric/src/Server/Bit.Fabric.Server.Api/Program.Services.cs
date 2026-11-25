@@ -454,13 +454,6 @@ public static partial class Program
             c.BaseAddress = new Uri("https://api.cloudflare.com/client/v4/zones/");
         });
 
-        services.AddHttpClient("Keycloak", c =>
-        {
-            c.BaseAddress = new Uri(configuration["KEYCLOAK_HTTP"]
-                ?? configuration["Authentication:Keycloak:KeycloakUrl"]
-                ?? throw new InvalidOperationException("KEYCLOAK_HTTP configuration is required"));
-        });
-
         services.AddFido2(options =>
         {
 
@@ -750,41 +743,6 @@ public static partial class Program
             });
         }
 
-        var keycloakBaseUrl = configuration["KEYCLOAK_HTTP"]
-            ?? configuration["Authentication:Keycloak:KeycloakUrl"];
-
-        if (string.IsNullOrWhiteSpace(keycloakBaseUrl) is false)
-        {
-            // In order to have better understanding of Keycloak integration, checkout .docs/07- ASP.NET Core Identity - Authentication & Authorization.md
-            authenticationBuilder.AddOpenIdConnect("Keycloak", options =>
-            {
-                configuration.GetRequiredSection("Authentication:Keycloak").Bind(options);
-
-                var realm = configuration["Authentication:Keycloak:Realm"] ?? throw new InvalidOperationException("Authentication:Keycloak:Realm configuration is required");
-
-                options.Authority = $"{keycloakBaseUrl.TrimEnd('/')}/realms/{realm}";
-
-                options.ResponseType = "code";
-                options.ResponseMode = "query";
-
-                options.Scope.Clear();
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
-                options.Scope.Add("email");
-                options.Scope.Add("offline_access"); // To get refresh tokens
-
-                options.MapInboundClaims = true;
-                options.SaveTokens = true;
-
-                options.Prompt = "login"; // Force login every time
-
-                if (env.IsDevelopment())
-                {
-                    options.RequireHttpsMetadata = false;
-                }
-            });
-        }
-
         services.ConfigureHttpClientFactoryForExternalIdentityProviders();
     }
 
@@ -984,19 +942,6 @@ public static partial class Program
             healthChecksBuilder.AddCachedCheck("aspireDashboard", HealthCheckCategories.Integrations, sp => ActivatorUtilities.CreateInstance<AspireDashboardHealthCheck>(sp),
                 cacheDuration: TimeSpan.FromMinutes(1), timeout: TimeSpan.FromSeconds(10));
         }
-
-        var keycloakBaseUrl = configuration["KEYCLOAK_HTTP"] ?? configuration["Authentication:Keycloak:KeycloakUrl"];
-        AddCheckIfConfigured("keycloakIdentity", HealthCheckCategories.Identity, string.IsNullOrWhiteSpace(keycloakBaseUrl) is false, "Authentication:Keycloak", tags =>
-        {
-            var realm = configuration["Authentication:Keycloak:Realm"] ?? "dev";
-            healthChecksBuilder.AddUrlGroup(
-                new Uri($"{keycloakBaseUrl!.TrimEnd('/')}/realms/{realm}/.well-known/openid-configuration"),
-                name: "keycloakIdentity",
-                failureStatus: HealthStatus.Degraded,
-                tags: tags,
-                timeout: TimeSpan.FromSeconds(10),
-                configureClient: (_, client) => client.Timeout = TimeSpan.FromSeconds(10));
-        });
 
         // Each asks the provider's token endpoint with the app's own credentials, and a code that doesn't exist where one is needed.
         AddCachedCheckIfConfigured("googleSignIn", HealthCheckCategories.Identity, string.IsNullOrWhiteSpace(configuration["Authentication:Google:ClientId"]) is false, "Authentication:Google",

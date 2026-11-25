@@ -643,9 +643,6 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
   <data name="AppleSignInButtonText" xml:space="preserve">
     <value>Aanmelden met Apple</value>
   </data>
-  <data name="KeycloakSignInButtonText" xml:space="preserve">
-    <value>Aanmelden met Enterprise SSO</value>
-  </data>
   <data name="AzureEntraSignInButtonText" xml:space="preserve">
     <value>Aanmelden met Azure Entra</value>
   </data>

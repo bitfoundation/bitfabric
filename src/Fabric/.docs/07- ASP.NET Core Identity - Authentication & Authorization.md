@@ -12,8 +12,8 @@ tracking, a role + permission model, one-time tokens, external providers, and (o
 
 **Contents:** [Two ways in](#1-there-are-only-two-ways-in) · [Tokens & sessions](#2-tokens-and-sessions) ·
 [Authorization](#3-authorization) · [Multi-tenancy](#4-multi-tenancy) · [One-time tokens](#5-one-time-tokens) ·
-[External providers](#6-external-providers) · [Keycloak](#7-keycloak) ·
-[OAuth for other apps](#8-oauth-21-for-other-apps) · [Try it](#9-try-it-yourself)
+[External providers](#6-external-providers) · [OAuth for other apps](#7-oauth-21-for-other-apps) ·
+[Try it](#8-try-it-yourself)
 
 ---
 
@@ -67,7 +67,8 @@ A few properties worth knowing:
   [`AppCertificateService`](/src/Server/Bit.Fabric.Server.Api/Infrastructure/Services/AppCertificateService.cs);
   there is no signing secret in configuration. Generate your own before production - see
   [`AppCertificate.md`](/src/Server/Bit.Fabric.Server.Api/AppCertificate.md). The app refuses to start outside
-  Development while the shipped self-signed certificate is still in use.
+  Development while the shipped self-signed certificate is still in use. To let another service validate the
+  tokens, hand it the *public* key; the private key never leaves the API.
 - **The two token classes are not interchangeable.** The refresh token is issued under its own audience, and each
   validator accepts only its own. Without that they would differ solely in lifetime, and a stolen refresh token
   would work as an API credential for two weeks.
@@ -361,7 +362,7 @@ A few rules sit on top of the mechanism:
 
 ## 6. External providers
 
-Google, Microsoft/Entra, Apple, Facebook, GitHub, Twitter (X) and Keycloak are pre-wired. Each is enabled simply by
+Google, Microsoft/Entra, Apple, Facebook, GitHub and Twitter (X) are pre-wired. Each is enabled simply by
 filling in its client id and secret under the `Authentication` section of `appsettings.json` - a provider with no
 credentials is not registered and its button does not appear.
 
@@ -369,59 +370,21 @@ The flow is ordinary OAuth/OIDC, with a Bit.Fabric-specific ending:
 
 1. The user is redirected to the provider and comes back to the callback.
 2. The app looks for an existing link; failing that, it looks for a local account with the same email or phone.
-3. If nothing matches, a new user is created. Providers that manage their own roles (Keycloak) get no local role;
-   consumer providers get the demo role.
+3. If nothing matches, a new user is created, with the demo role.
 4. A magic link is generated and the user is signed in through the normal OTP path - so 2FA still applies.
 
 > ⚠️ **Before adding your own provider, check that it verifies email addresses.**
 > Step 2 attaches an incoming identity to an *existing* account purely on the identifier the provider asserts. That
 > is what makes "sign in with Google" reach the account you originally created with a password, and it is safe for
 > the providers shipped here, which only ever hand out addresses their owner has proven control of.
-> It is **not** safe for a provider whose users choose their own unverified address - a self-hosted Keycloak realm
+> It is **not** safe for a provider whose users choose their own unverified address - a self-hosted identity server
 > with self-registration, Entra with personal accounts, or any OIDC provider you add. There, anyone could claim
 > someone else's address and take over their account. In that case, require the provider's `email_verified` claim
 > before that fallback, or replace it with an explicit link-your-account flow.
 
 ---
 
-## 7. Keycloak
-
-Keycloak is included as a full identity server for development: with .NET Aspire enabled it starts automatically as
-a container, pre-loaded from
-[`dev-realm.json`](/src/Server/Bit.Fabric.Server.AppHost/Infrastructure/Realms/dev-realm.json) with demo accounts.
-
-| Username | Password | Group |
-|---|---|---|
-| test | 40918412 | `g-admin` |
-| store-admin | 40918412 | `t-admin`, used when multi-tenancy is enabled |
-| bob | bob | `demo` |
-| alice | alice | `demo` |
-
-The realm is imported only on the first run - see
-[its README](/src/Server/Bit.Fabric.Server.AppHost/Infrastructure/Realms/README.md) before editing it.
-
-**How it maps.** Keycloak **groups** become ASP.NET Core **roles**, and Keycloak **user attributes** become claims.
-Keycloak's own *roles* (which are a different concept) are not mapped. Tokens are still issued by the app, not by
-Keycloak - Keycloak authenticates, the app decides what the resulting token says.
-
-**Revalidation.** A user counts as Keycloak-backed when the deployment has Keycloak configured *and* a Keycloak
-refresh token is stored for them - not based on how they happened to sign in this time. Whenever a token is issued,
-that refresh token is exchanged for fresh claims; if Keycloak rejects it because the account was disabled or
-deleted, sign-in fails. This is *near*-real-time, not instant: while a previously fetched Keycloak access token is
-still valid it is reused without contacting the server.
-
-> **Keycloak is a trusted claims authority, by design.** Its groups become roles and its `features` attribute
-> becomes app permissions directly - so whoever administers the realm can grant application-level global admin.
-> That is the intended trade-off of federating identity. The exception is the per-session claims the server owns
-> (session id, privileged/elevated session, max privileged sessions, tenant): those are dropped from the copy, so a
-> realm attribute cannot forge an elevated session, raise its own device limit, or select a tenant.
-
-**Sharing tokens with other services.** Signing is already asymmetric, so hand another service the *public* key and
-let it validate normally. The private key never leaves the API.
-
----
-
-## 8. OAuth 2.1 for other apps
+## 7. OAuth 2.1 for other apps
 
 The app is also an OAuth 2.1 authorization server, so other apps can act on a user's behalf. What they may reach is
 [`OAuthResources`](/src/Server/Bit.Fabric.Server.Api/Features/Identity/OAuth/Services/OAuthResources.cs) - one row
@@ -431,7 +394,7 @@ for delegating access to other apps, not a full identity server - no OIDC, no `i
 
 ---
 
-## 9. Try it yourself
+## 8. Try it yourself
 
 Run the project and walk through these - it is faster than reading:
 

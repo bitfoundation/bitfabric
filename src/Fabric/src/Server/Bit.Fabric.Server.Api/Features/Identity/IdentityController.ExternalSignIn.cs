@@ -93,18 +93,9 @@ public partial class IdentityController
 
                 user.CreatedOn = TimeProvider.GetUtcNow();
 
-                if (info.LoginProvider is "Keycloak")
-                {
-                    // Roles are supposed to be managed through the key cloack provider.
-                    // The same decision can be made for other providers as well (e.g. AzureAD), if they support roles/claims management.
-                    await userManager.CreateAsync(user);
-                }
-                else
-                {
-                    // External sign-in providers like Google, Facebook, Twitter etc. are typically used for consumer sign-ups.
-                    // Therefore, we assign a role to these users by default.
-                    await userManager.CreateUserWithDemoRole(user);
-                }
+                // External sign-in providers like Google, Facebook, Twitter etc. are typically used for consumer sign-ups.
+                // Therefore, we assign a role to these users by default.
+                await userManager.CreateUserWithDemoRole(user);
             }
 
             if (isLinked is false)

@@ -643,9 +643,6 @@
   <data name="AppleSignInButtonText" xml:space="preserve">
     <value>使用 Apple 登录</value>
   </data>
-  <data name="KeycloakSignInButtonText" xml:space="preserve">
-    <value>使用企业SSO登录</value>
-  </data>
   <data name="AzureEntraSignInButtonText" xml:space="preserve">
     <value>使用 Azure Entra 登录</value>
   </data>
