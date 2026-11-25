@@ -17,6 +17,11 @@ public partial class ChangeEmailTab
 
 
     private bool isWaiting;
+    /// <summary>
+    /// Moves on with every send and every Go back, so a send that finds it moved on when it comes back knows the user
+    /// went back meanwhile, and leaves the step they chose as it is.
+    /// </summary>
+    private int sendAttempt;
     private bool showConfirmation;
     private bool isEmailUnavailable = true;
     private readonly ChangeEmailRequestDto changeModel = new();
@@ -57,15 +62,19 @@ public partial class ChangeEmailTab
             return;
         }
 
+        var attempt = ++sendAttempt;
+
         // Proving the NEW address (the code sent below) is only half of it - the server also requires the user to prove
         // she still holds the CURRENT one, by quoting a code sent to it. That is what elevated access is.
-        if (await AuthManager.TryEnterElevatedAccessMode(CurrentCancellationToken) is false) return;
+        if (await AuthManager.TryEnterElevatedAccessMode(CurrentCancellationToken) is false || attempt != sendAttempt) return;
 
         isWaiting = true;
 
         try
         {
             await userController.SendChangeEmailToken(sendModel, CurrentCancellationToken);
+
+            if (attempt != sendAttempt) return;
 
             showConfirmation = true;
             isEmailUnavailable = false;
@@ -117,6 +126,8 @@ public partial class ChangeEmailTab
 
     private async Task GoBack()
     {
+        sendAttempt++;
+
         sendModel.Email = null;
         changeModel.Email = null;
 
