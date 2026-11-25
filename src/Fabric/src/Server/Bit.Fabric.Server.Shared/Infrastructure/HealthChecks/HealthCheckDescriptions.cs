@@ -36,7 +36,6 @@ public class HealthCheckDescriptions : Dictionary<string, HealthCheckDescription
         this["apns"] = new("Apple push", "Ringer", "APNs accepts the credentials.");
         this["azureSignalR"] = new("Azure SignalR", "Streaming", "The service is healthy and accepts the access key.");
 
-        this["keycloakIdentity"] = new("Keycloak", "Permissions", "The realm's discovery document answers.");
         this["entraId"] = new("Microsoft Entra ID", "AuthenticatorApp", "The tenant answers and accepts the app's credentials.");
         this["appleSignIn"] = new("Sign in with Apple", "Signin", "The client secret can be signed and Apple answers.");
         this["googleSignIn"] = new("Sign in with Google", "Signin", "Google's token endpoint accepts the client id and secret.");

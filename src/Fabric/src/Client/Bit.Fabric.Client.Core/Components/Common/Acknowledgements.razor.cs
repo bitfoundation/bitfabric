@@ -67,7 +67,6 @@ public partial class Acknowledgements
         new("Microsoft Edge WebView2", "https://developer.microsoft.com/microsoft-edge/webview2", null, "BSD-3-Clause"),
         new("Oscore.Maui.AppStoreInfo", "https://github.com/oscoreio/Maui.AppStoreInfo", "https://github.com/oscoreio/Maui.AppStoreInfo", "MIT"),
         new("Plugin.Maui.AppRating", "https://github.com/FabriBertani/Plugin.Maui.AppRating", "https://github.com/FabriBertani/Plugin.Maui.AppRating", "MIT"),
-        new("Keycloak", "https://www.keycloak.org", "https://github.com/keycloak/keycloak", "Apache-2.0"),
         new(".NET Aspire Community Toolkit", "https://github.com/CommunityToolkit/Aspire", "https://github.com/CommunityToolkit/Aspire", "MIT"),
         new("Mailpit", "https://mailpit.axllent.org", "https://github.com/axllent/mailpit", "MIT"),
         new("RustFS", "https://rustfs.com", "https://github.com/rustfs/rustfs", "Apache-2.0"),

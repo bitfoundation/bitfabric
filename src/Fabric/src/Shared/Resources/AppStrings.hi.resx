@@ -643,9 +643,6 @@
   <data name="AppleSignInButtonText" xml:space="preserve">
     <value>Apple से साइन इन करें</value>
   </data>
-  <data name="KeycloakSignInButtonText" xml:space="preserve">
-    <value>एंटरप्राइज़ SSO से साइन इन करें</value>
-  </data>
   <data name="AzureEntraSignInButtonText" xml:space="preserve">
     <value>Azure Entra से साइन इन करें</value>
   </data>

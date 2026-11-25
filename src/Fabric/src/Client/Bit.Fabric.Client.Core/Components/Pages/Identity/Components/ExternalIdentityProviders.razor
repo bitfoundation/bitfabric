@@ -12,12 +12,6 @@
             }
             else
             {
-                @if (supportedProviders.Contains("Keycloak"))
-                {
-                    <ExternalSignInButton IsWaiting="IsWaiting" OnClick="WrapHandled(HandleKeycloak)" Title="@Localizer[nameof(AppStrings.KeycloakSignInButtonText)]">
-                        <KeycloakIcon />
-                    </ExternalSignInButton>
-                }
                 @if (supportedProviders.Contains("Google"))
                 {
                     <ExternalSignInButton IsWaiting="IsWaiting" OnClick="WrapHandled(HandleGoogle)" Title="@Localizer[nameof(AppStrings.GoogleSignInButtonText)]">

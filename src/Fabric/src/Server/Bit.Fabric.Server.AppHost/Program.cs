@@ -18,11 +18,7 @@ var postgresDatabase = builder.AddPostgreSQL();
 
 var s3Storage = builder.AddS3Storage();
 
-// Development only: its realm seeds accounts with well-known passwords, and a production Keycloak needs a hostname,
-// TLS and a database of its own (as published, `start --import-realm` exits with "Key material not provided").
-var keycloak = builder.ExecutionContext.IsRunMode ? builder.AddKeycloak() : null;
-
-// Development only, like Keycloak: a deployed server takes its embeddings from the OpenAI-compatible provider its
+// Development only: a deployed server takes its embeddings from the OpenAI-compatible provider its
 // settings name.
 var embedding = builder.ExecutionContext.IsRunMode ? builder.AddTextEmbeddingsInference() : null;
 
@@ -59,10 +55,6 @@ if (builder.ExecutionContext.IsRunMode)
 serverWebProject.WithReference(serverApiProject);
 serverApiProject.WithReference(postgresDatabase).WaitFor(postgresDatabase);
 serverApiProject.WithReference(s3Storage);
-if (keycloak is not null)
-{
-    serverApiProject.WithReference(keycloak);
-}
 if (embedding is not null)
 {
     serverApiProject.WithEnvironment("AI__HuggingFace__EmbeddingEndpoint", embedding.GetEndpoint("http"));

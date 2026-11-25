@@ -643,9 +643,6 @@
   <data name="AppleSignInButtonText" xml:space="preserve">
     <value>تسجيل الدخول بـ Apple</value>
   </data>
-  <data name="KeycloakSignInButtonText" xml:space="preserve">
-    <value>تسجيل الدخول بـ SSO المؤسسي</value>
-  </data>
   <data name="AzureEntraSignInButtonText" xml:space="preserve">
     <value>تسجيل الدخول بـ Azure Entra</value>
   </data>

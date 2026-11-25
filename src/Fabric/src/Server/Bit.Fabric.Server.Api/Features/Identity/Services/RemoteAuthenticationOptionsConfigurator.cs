@@ -116,14 +116,6 @@ public static class RemoteAuthenticationOptionsExtensions
 
             });
 
-            // Program.Services.cs also registers a "Keycloak" client (with its BaseAddress, which
-            // AppUserClaimsPrincipalFactory's relative POST depends on). AddHttpClient accumulates rather than
-            // replaces, so both configure actions run; this one exists so the scheme always has a named client.
-            services.AddHttpClient("Keycloak", httpClient =>
-            {
-
-            });
-
             services.AddHttpClient("AzureAD", httpClient =>
             {
 

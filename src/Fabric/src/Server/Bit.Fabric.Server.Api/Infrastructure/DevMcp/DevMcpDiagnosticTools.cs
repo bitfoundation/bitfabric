@@ -189,7 +189,6 @@ public partial class DevMcpDiagnosticTools
             Twitter = string.IsNullOrWhiteSpace(configuration["Authentication:Twitter:ConsumerKey"]) is false,
             Apple = string.IsNullOrWhiteSpace(configuration["Authentication:Apple:ClientId"]) is false,
             Facebook = string.IsNullOrWhiteSpace(configuration["Authentication:Facebook:AppId"]) is false,
-            Keycloak = string.IsNullOrWhiteSpace(configuration["KEYCLOAK_HTTP"] ?? configuration["Authentication:Keycloak:KeycloakUrl"]) is false,
             AzureAD = string.IsNullOrWhiteSpace(configuration["Authentication:AzureAD:ClientId"]) is false
         };
     }

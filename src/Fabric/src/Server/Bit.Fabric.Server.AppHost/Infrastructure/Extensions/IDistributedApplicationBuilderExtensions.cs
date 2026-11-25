@@ -7,27 +7,6 @@ public static class IDistributedApplicationBuilderExtensions
     extension(IDistributedApplicationBuilder builder)
     {
         /// <summary>
-        /// Adds a Keycloak identity server. In run mode the development realm of the <c>./Infrastructure/Realms</c>
-        /// folder is imported into it; that realm seeds accounts with well-known passwords, so it must never reach a
-        /// published application model.
-        /// https://aspire.dev/integrations/security/keycloak/
-        /// </summary>
-        public IResourceBuilder<KeycloakResource> AddKeycloak()
-        {
-            // No explicit host port: every other container here lets Aspire allocate one, and a fixed port cannot be
-            // held by two app hosts at once - which `aspire run` plus `dotnet test` on one machine already is.
-            var keycloak = builder.AddKeycloak("keycloak")
-                .WithDataVolume();
-
-            if (builder.ExecutionContext.IsRunMode)
-            {
-                keycloak.WithRealmImport("./Infrastructure/Realms");
-            }
-
-            return keycloak;
-        }
-
-        /// <summary>
         /// Adds a Redis instance configured for FusionCache hybrid caching (L2 cache) and SignalR backplane.
         /// No persistence is needed for this cache instance.
         /// </summary>

@@ -32,5 +32,4 @@ public partial class ExternalIdentityProviders
     private async Task HandleApple() => await OnClick.InvokeAsync("Apple");
     private async Task HandleAzureAD() => await OnClick.InvokeAsync("AzureAD");
     private async Task HandleFacebook() => await OnClick.InvokeAsync("Facebook");
-    private async Task HandleKeycloak() => await OnClick.InvokeAsync("Keycloak");
 }
