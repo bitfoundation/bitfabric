@@ -5456,4 +5456,49 @@
 | Återbetalning efter midnatt på Test | På rätt dag |
 | Production efter merge | Uppdaterad |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>Förklaringar</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>Så levereras den här appen</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>Ett exempel på en förklaring: projektets GitHub Actions-arbetsflöden som diagram, kort och tidslinje, med var varje jobb körs och vilka hemligheter det läser, efter de alternativ projektet skapades med.</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>Se hur din app levereras</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>Betalningsalternativ jämförda</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>Ett exempel på en förklaring: avgifterna hos betalleverantörer på webben, och vad Google Play och App Store tar och tillåter för köp i appen, prenumerationer och länkar till din webbplats, per november 2026.</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>Väg dina betalningsalternativ</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>Förklaringar</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>Be din agent förklara något, så bygger den en sida här i stället för en textvägg, med appens egna komponenter och tema.</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>En arkitektur eller ett flöde, ritat</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>Alternativ jämförda sida vid sida</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>En plan eller rapport att återvända till</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>Ljust och mörkt, på alla enheter, med dina kommentarer</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>Förklara hur vår app driftsätts, som en sida på arbetsbänken.</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>Inga förklaringar än. Be din agent om en, så dyker sidan upp här.</value>
+    </data>
 </root>

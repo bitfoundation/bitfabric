@@ -35,8 +35,11 @@ Chromium when it is installed, otherwise Microsoft Edge or Google Chrome. To ins
   is answered there with a click, a few words or your voice, a step of yours is marked done with a button, you can write
   to it, and remove a note or a line of its activity you don't need; it gets each one at once. A task written in Persian
   or Arabic reads right to left, English terms and all. A new question plays a sound, unless the Workbench is muted, and
-  the tab's title counts what waits for you. With no task yet, and for anyone who isn't at this computer, it shows three
-  samples that can be tried.
+  the tab's title counts what waits for you. Anyone who isn't at this computer sees no task there.
+- **Explainers**: pages your agent builds when something is easier to see than to read, such as how a part of bit Fabric
+  works or options compared side by side, with the app's own components and theme, in light and dark and on every device.
+  Ask your agent to explain something, and its page shows up under Explainers, at an address you can comment on and come
+  back to. Its `explainer` skill builds them.
 - **Dictation**: the microphone next to a comment, a reply, an answer or a message turns speech into text, with the
   browser's own speech recognition, in the language its menu picks.
 - **`/workbench/<page>`**: one page with its tools. Pick the device, its orientation and frame, the data state
@@ -101,8 +104,8 @@ changes the page, hot reload shows the change in your view, and it replies and t
 turned on in the Review tab it also shows a notification, on a phone too.
 
 The agents' tasks live in the same document. An agent starts one and keeps it current under `/api/progress`, and waits
-there for your answers. Only this machine, or a browser an invite link was opened in, sees the real tasks and answers
-them; anyone else sees the samples.
+there for your answers. Only this machine, or a browser an invite link was opened in, sees the tasks and answers them;
+anyone else sees none.
 
 Only this machine can talk to the agent, and only in dev mode. The review endpoints answer only those requests, so
 nobody reaches your agent without being at your computer.

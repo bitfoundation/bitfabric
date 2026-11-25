@@ -4161,15 +4161,6 @@
     <data name="ProgressTasks" xml:space="preserve">
         <value>المهام</value>
     </data>
-    <data name="ProgressSamplesTitle" xml:space="preserve">
-        <value>هذه أمثلة</value>
-    </data>
-    <data name="ProgressSamplesText" xml:space="preserve">
-        <value>تظهر مهام وكلائك هنا فور بدء إحداها. حتى ذلك الحين جرّب هذه: أجب عن سؤال، أو أنهِ خطوة، أو اكتب إلى الوكيل.</value>
-    </data>
-    <data name="ProgressSamplesVisitorText" xml:space="preserve">
-        <value>لا تظهر مهام الوكلاء الذين يعملون على منضدة العمل هذه إلا على الحاسوب الذي تعمل عليه. توضّح هذه الأمثلة ما ستراه هناك.</value>
-    </data>
     <data name="ProgressGroupNeedsYou" xml:space="preserve">
         <value>بحاجة إليك</value>
     </data>
@@ -4214,9 +4205,6 @@
     </data>
     <data name="ProgressUpdated" xml:space="preserve">
         <value>حُدّثت {0}</value>
-    </data>
-    <data name="ProgressSample" xml:space="preserve">
-        <value>مثال</value>
     </data>
     <data name="ProgressYourTurn" xml:space="preserve">
         <value>دورك</value>
@@ -4326,15 +4314,6 @@
     <data name="ProgressSent" xml:space="preserve">
         <value>أُرسلت إلى {0}.</value>
     </data>
-    <data name="ProgressSampleSentTitle" xml:space="preserve">
-        <value>هذا مثال</value>
-    </data>
-    <data name="ProgressSampleSent" xml:space="preserve">
-        <value>في مهمة حقيقية، يتلقى {0} هذا فورًا ويتابع.</value>
-    </data>
-    <data name="ProgressSampleSecret" xml:space="preserve">
-        <value>في مهمة حقيقية، يذهب إلى حيث يقول السؤال، ويتابع {0} دون أن يراه.</value>
-    </data>
     <data name="ProgressSecretToGitHubEnvironment" xml:space="preserve">
         <value>يذهب مباشرة إلى GitHub باسم {0}، سرًّا لبيئة {1}. لا يراه {2} أبدًا.</value>
     </data>
@@ -4443,189 +4422,6 @@
     <data name="TimeHoursAgo" xml:space="preserve">
         <value>قبل {0} س</value>
     </data>
-    <data name="SampleDeployTitle" xml:space="preserve">
-        <value>النشر إلى بيئتي الاختبار والإنتاج</value>
-    </data>
-    <data name="SampleDeploySummary" xml:space="preserve">
-        <value>تجهيز بيئتي الاختبار والإنتاج على خادمك الخاص، مع تشغيل التطبيق على نطاقك.</value>
-    </data>
-    <data name="SampleDeployStepServices" xml:space="preserve">
-        <value>تحديد الخدمات الخارجية التي يحتاجها التطبيق ومفاتيحها</value>
-    </data>
-    <data name="SampleDeployStepEnvironments" xml:space="preserve">
-        <value>إنشاء بيئتي الاختبار والإنتاج على GitHub</value>
-    </data>
-    <data name="SampleDeployStepServer" xml:space="preserve">
-        <value>الحصول على خادم Linux ومشاركة عنوانه</value>
-    </data>
-    <data name="SampleDeployStepToken" xml:space="preserve">
-        <value>إنشاء رمز API في Cloudflare</value>
-    </data>
-    <data name="SampleDeployStepTokenDetail" xml:space="preserve">
-        <value>في لوحة Cloudflare افتح My Profile ثم API Tokens، وأنشئ رمزًا يمكنه تعديل DNS وCloudflare Tunnel. ثم الصقه في الأسفل.</value>
-    </data>
-    <data name="SampleDeployStepRunner" xml:space="preserve">
-        <value>تثبيت Docker ومشغّل GitHub Actions على الخادم</value>
-    </data>
-    <data name="SampleDeployStepTunnel" xml:space="preserve">
-        <value>تقديم التطبيق على نطاقك عبر Cloudflare Tunnel</value>
-    </data>
-    <data name="SampleDeployStepFirst" xml:space="preserve">
-        <value>النشر إلى بيئة الاختبار ثم الإنتاج</value>
-    </data>
-    <data name="SampleDeployAskEmail" xml:space="preserve">
-        <value>ما الخدمة التي ترسل رسائل التطبيق الإلكترونية؟</value>
-    </data>
-    <data name="SampleDeployAskEmailDetail" xml:space="preserve">
-        <value>يرسل التطبيق رموز تسجيل الدخول وإعادة تعيين كلمات المرور بالبريد. يمكنك تغيير هذا لاحقًا.</value>
-    </data>
-    <data name="SampleDeployAskEmailOption1" xml:space="preserve">
-        <value>حساب مجاني لدى خدمة بريد إلكتروني</value>
-    </data>
-    <data name="SampleDeployAskEmailOption2" xml:space="preserve">
-        <value>خادم بريد شركتنا</value>
-    </data>
-    <data name="SampleDeployAskEmailOption3" xml:space="preserve">
-        <value>لا شيء الآن: أظهر الرسائل في السجلات</value>
-    </data>
-    <data name="SampleDeployAskSsh" xml:space="preserve">
-        <value>هل أغلق منفذ SSH على الخادم بعد أن يعمل النفق؟</value>
-    </data>
-    <data name="SampleDeployAskSshDetail" xml:space="preserve">
-        <value>ستظل تصل إلى الخادم عبر النفق وعبر لوحة الويب لدى مزوّدك.</value>
-    </data>
-    <data name="SampleDeployAskToken" xml:space="preserve">
-        <value>الصق رمز Cloudflare</value>
-    </data>
-    <data name="SampleDeployNoteSecrets" xml:space="preserve">
-        <value>لا توضع المفاتيح وكلمات المرور في أي محادثة. تلصقها هنا، فيذهب كلٌّ منها مباشرة إلى مكانه دون أن أراه.</value>
-    </data>
-    <data name="SampleDeployNoteOneServer" xml:space="preserve">
-        <value>خادم واحد للبيئتين، لتقليل التكلفة.</value>
-    </data>
-    <data name="SampleDeployLinkCloudflare" xml:space="preserve">
-        <value>لوحة Cloudflare</value>
-    </data>
-    <data name="SampleDeployFeed1" xml:space="preserve">
-        <value>يستخدم التطبيق 6 خدمات خارجية، 3 منها تحتاج مفاتيح من حساباتك الخاصة.</value>
-    </data>
-    <data name="SampleDeployFeed2" xml:space="preserve">
-        <value>الخادم جاهز على 203.0.113.24.</value>
-    </data>
-    <data name="SampleDeployFeed3" xml:space="preserve">
-        <value>سجّلت الدخول إلى الخادم بالمفتاح الذي أضفته، وأوقفت تسجيل الدخول بكلمة المرور.</value>
-    </data>
-    <data name="SampleDeployFeed4" xml:space="preserve">
-        <value>بانتظار رمز Cloudflare لإعداد النفق.</value>
-    </data>
-    <data name="SampleFeatureTitle" xml:space="preserve">
-        <value>ميزة جديدة: نقاط الولاء</value>
-    </data>
-    <data name="SampleFeatureSummary" xml:space="preserve">
-        <value>يكسب العملاء نقاطًا مع كل طلب وينفقونها عند الدفع. أبنيها الآن بعد أن وافقت على التصميم.</value>
-    </data>
-    <data name="SampleFeatureStepRequirements" xml:space="preserve">
-        <value>حسم المتطلبات وكتابتها في المواصفات</value>
-    </data>
-    <data name="SampleFeatureStepPlan" xml:space="preserve">
-        <value>تخطيط العمل في 6 مهام</value>
-    </data>
-    <data name="SampleFeatureStepDesign" xml:space="preserve">
-        <value>الموافقة على التصميم في منضدة العمل</value>
-    </data>
-    <data name="SampleFeatureStepLedger" xml:space="preserve">
-        <value>بناء سجل النقاط وواجهته البرمجية</value>
-    </data>
-    <data name="SampleFeatureStepCheckout" xml:space="preserve">
-        <value>إنفاق النقاط عند الدفع</value>
-    </data>
-    <data name="SampleFeatureStepTests" xml:space="preserve">
-        <value>اختبارات على الهواتف وأجهزة سطح المكتب</value>
-    </data>
-    <data name="SampleStepTryOnTest" xml:space="preserve">
-        <value>التجربة على بيئة الاختبار</value>
-    </data>
-    <data name="SampleFeatureAskWorth" xml:space="preserve">
-        <value>كم تساوي النقطة عند الدفع؟</value>
-    </data>
-    <data name="SampleFeatureAskWorthDetail" xml:space="preserve">
-        <value>سيُحفظ في الإعدادات، لتتمكن من تغييره لاحقًا.</value>
-    </data>
-    <data name="SampleFeatureAskWorthPlaceholder" xml:space="preserve">
-        <value>مثلًا: 100 نقطة = 1 دولار</value>
-    </data>
-    <data name="SampleFeatureAskOrders" xml:space="preserve">
-        <value>ما الطلبات التي تكسب نقاطًا؟</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption1" xml:space="preserve">
-        <value>الطلبات عبر الإنترنت</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption2" xml:space="preserve">
-        <value>الطلبات في المتجر</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption3" xml:space="preserve">
-        <value>الطلبات المدفوعة ببطاقة هدية</value>
-    </data>
-    <data name="SampleFeatureNoteExpiry" xml:space="preserve">
-        <value>تنتهي صلاحية النقاط بعد 12 شهرًا من كسبها.</value>
-    </data>
-    <data name="SampleFeatureNoteSpec" xml:space="preserve">
-        <value>كل ما تقرر حتى الآن موجود في مواصفات الميزة، مع الأسئلة التي ما زالت مفتوحة.</value>
-    </data>
-    <data name="SampleFeatureLinkDesign" xml:space="preserve">
-        <value>التصميم المعتمد</value>
-    </data>
-    <data name="SampleFeatureFeed1" xml:space="preserve">
-        <value>كتبت المتطلبات في المواصفات؛ بقيت 3 أسئلة لك.</value>
-    </data>
-    <data name="SampleFeatureFeed2" xml:space="preserve">
-        <value>يبدو جيدًا. صغّر شارة النقاط قليلًا.</value>
-    </data>
-    <data name="SampleFeatureFeed3" xml:space="preserve">
-        <value>صغّرت الشارة وبدأت البناء.</value>
-    </data>
-    <data name="SampleFeatureFeed4" xml:space="preserve">
-        <value>تمت إضافة السجل وترحيل قاعدة بياناته. أكتب واجهته البرمجية الآن.</value>
-    </data>
-    <data name="SampleFixTitle" xml:space="preserve">
-        <value>إصلاح: المبالغ المستردة مفقودة من تقرير المبيعات اليومي</value>
-    </data>
-    <data name="SampleFixSummary" xml:space="preserve">
-        <value>كانت المبالغ المستردة بعد منتصف الليل تُحسب في اليوم الخطأ. تم الإصلاح والتجربة على بيئة الاختبار والدمج.</value>
-    </data>
-    <data name="SampleFixStepLogs" xml:space="preserve">
-        <value>إيجاد السبب في سجلات الإنتاج</value>
-    </data>
-    <data name="SampleFixStepTest" xml:space="preserve">
-        <value>كتابة اختبار يفشل دون الإصلاح</value>
-    </data>
-    <data name="SampleFixStepFix" xml:space="preserve">
-        <value>حساب المبالغ المستردة بتوقيت المتجر نفسه</value>
-    </data>
-    <data name="SampleFixStepMerge" xml:space="preserve">
-        <value>الدمج، ما يحدّث بيئة الإنتاج</value>
-    </data>
-    <data name="SampleFixAskMerge" xml:space="preserve">
-        <value>هل أدمجه في main؟ هذا يحدّث بيئة الإنتاج.</value>
-    </data>
-    <data name="SampleFixNoteDone" xml:space="preserve">
-        <value>تعمل بيئة الإنتاج بالإصلاح. ويمنع الاختبار عودة الخطأ.</value>
-    </data>
-    <data name="SampleFixLinkPullRequest" xml:space="preserve">
-        <value>طلب الدمج</value>
-    </data>
-    <data name="SampleFixLinkTest" xml:space="preserve">
-        <value>بيئة الاختبار</value>
-    </data>
-    <data name="SampleFixFeed1" xml:space="preserve">
-        <value>وجدته: كان التقرير يستخدم توقيت الخادم لا توقيت المتجر.</value>
-    </data>
-    <data name="SampleFixFeed2" xml:space="preserve">
-        <value>على بيئة الاختبار الآن. جرّب استردادًا بعد منتصف الليل.</value>
-    </data>
-    <data name="SampleFixFeed3" xml:space="preserve">
-        <value>تم الدمج. بيئة الإنتاج محدّثة.</value>
-    </data>
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>تابع المهام الطويلة وأجب بنقرة</value>
     </data>
@@ -4633,7 +4429,7 @@
         <value>يحتاج النشر أو ميزة جديدة إلى خطوات كثيرة، وبعضها لا يقوم به إلا أنت. تعرض هنا كل محادثة مع وكيل ما أنجزته وما تبقى وما تحتاجه منك، فلا يضيع شيء في محادثة طويلة. والمفاتيح وكلمات المرور التي تلصقها هناك تذهب مباشرة إلى مكانها، لا عبر المحادثة أبدًا.</value>
     </data>
     <data name="TourProgressText" xml:space="preserve">
-        <value>يحتاج النشر أو ميزة جديدة إلى خطوات كثيرة، وبعضها لا يقوم به إلا أنت. تعرض هنا كل محادثة مع وكيل ما أنجزته وما تبقى وما تحتاجه منك. أجب بنقرة أو ببضع كلمات أو بصوتك، فيتابع فورًا. جرّب ذلك على الأمثلة.</value>
+        <value>يحتاج النشر أو ميزة جديدة إلى خطوات كثيرة، وبعضها لا يقوم به إلا أنت. تعرض هنا كل محادثة مع وكيل ما أنجزته وما تبقى وما تحتاجه منك. أجب بنقرة أو ببضع كلمات أو بصوتك، فيتابع فورًا.</value>
     </data>
     <data name="HomeFactAgent" xml:space="preserve">
         <value>تقدّم وكلائك وأسئلتهم في مكان واحد</value>
@@ -4667,17 +4463,6 @@
     </data>
     <data name="ProgressReport" xml:space="preserve">
         <value>التقرير</value>
-    </data>
-    <data name="SampleFixReport" xml:space="preserve">
-        <value>**السبب:** كان التقرير يجمع المبيعات حسب يوم الخادم الذي يعمل بتوقيت UTC، فكان الاسترداد الذي يتم بعد منتصف الليل في المتجر يُحسب في اليوم السابق.
-
-**الإصلاح:** تُحسب المبالغ المستردة الآن بالمنطقة الزمنية للمتجر نفسه، واختبار جديد ينفّذ استردادًا في الساعة 00:30 بتوقيت المتجر ويتحقق من اليوم الذي يظهر فيه.
-
-| الفحص | النتيجة |
-| --- | --- |
-| كل الاختبارات | نجحت |
-| استرداد بعد منتصف الليل على Test | في اليوم الصحيح |
-| Production بعد الدمج | محدَّث |</value>
     </data>
     <data name="PosNoDataYet" xml:space="preserve">
         <value>لا يوجد شيء بعد</value>

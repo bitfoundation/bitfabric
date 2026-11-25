@@ -5456,4 +5456,49 @@
 | Un remboursement après minuit sur Test | Le bon jour |
 | Production après le merge | À jour |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>Explications</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>Comment cette app est livrée</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>Un exemple d’explication : les workflows GitHub Actions de ce projet en diagramme, en cartes et en frise, avec la machine où tourne chaque job et les secrets qu’il lit, selon les options choisies à la création du projet.</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>Voyez comment votre app est livrée</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>Les options de paiement comparées</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>Un exemple d’explication : les frais des prestataires de paiement sur le web, et ce que Google Play et l’App Store prélèvent et autorisent pour les achats intégrés, les abonnements et les liens vers votre site, en novembre 2026.</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>Pesez vos options de paiement</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>Explications</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>Demandez à votre agent d’expliquer quelque chose : il construit ici une page plutôt qu’un mur de texte, avec les composants et le thème de votre app.</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>Une architecture ou un flux, dessinés</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>Des options comparées côte à côte</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>Un plan ou un rapport à retrouver</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>Clair et sombre, sur tout appareil, avec vos commentaires</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>Explique comment notre app est déployée, sous forme de page sur l’établi.</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>Pas encore d’explication. Demandez-en une à votre agent, et sa page apparaîtra ici.</value>
+    </data>
 </root>

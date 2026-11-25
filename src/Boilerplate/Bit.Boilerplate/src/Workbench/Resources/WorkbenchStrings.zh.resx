@@ -5456,4 +5456,49 @@
 | 在 Test 上午夜之后退款 | 在正确的日期 |
 | 合并后的 Production | 已更新 |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>讲解页</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>这个应用如何交付</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>一个讲解页示例：以图表、卡片和时间线展示本项目的 GitHub Actions 工作流，说明每个作业在哪里运行、读取哪些机密，内容随项目创建时选择的选项而定。</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>看看您的应用如何交付</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>支付方式对比</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>一个讲解页示例：网页支付服务商的费用，以及 Google Play 和 App Store 对应用内购买、订阅和指向您网站的链接收取什么、允许什么，截至 2026 年 11 月。</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>权衡您的支付选择</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>讲解页</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>请您的智能体讲解某件事，它会在这里搭建一个页面，而不是一大段文字，并使用您应用自己的组件和主题。</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>把架构或流程画出来</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>并排比较各个选项</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>可以随时回看的计划或报告</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>浅色与深色、任意设备，还能直接评论</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>用工作台中的一个页面，讲解我们的应用是如何部署的。</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>还没有讲解页。请您的智能体做一个，它的页面就会出现在这里。</value>
+    </data>
 </root>

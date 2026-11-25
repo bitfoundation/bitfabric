@@ -1,0 +1,34 @@
+@inherits WorkbenchComponentBase
+
+@* An explainer reads in the language it is written in, right to left for one that is, whatever language the view is in. *@
+<CascadingValue Value="dir">
+    <main class="explainer-page">
+        <article class="explainer" lang="@Language" dir="@(dir is BitDir.Rtl ? "rtl" : "ltr")">
+            <header class="explainer-head">
+                @if (Eyebrow is not null)
+                {
+                    <span class="explainer-eyebrow">
+                        <BitIcon IconName="@(IconName ?? BitIconName.Lightbulb)" Size="BitSize.Small" />
+                        @Eyebrow
+                    </span>
+                }
+                <BitText Element="h1" Typography="BitTypography.H3" Class="explainer-title">@Title</BitText>
+                @if (Lead is not null)
+                {
+                    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="explainer-lead">@Lead</BitText>
+                }
+                @if (Meta is not null)
+                {
+                    <span class="explainer-meta"><BitIcon IconName="@BitIconName.Calendar" Size="BitSize.Small" /> @Meta</span>
+                }
+            </header>
+
+            @if (Note is not null)
+            {
+                <div class="explainer-note">@Note</div>
+            }
+
+            @ChildContent
+        </article>
+    </main>
+</CascadingValue>

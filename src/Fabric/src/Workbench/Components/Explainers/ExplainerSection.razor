@@ -1,0 +1,12 @@
+@inherits WorkbenchComponentBase
+
+<section id="@Id" class="explainer-section" aria-labelledby="@TitleId">
+    <header class="explainer-section-head">
+        <BitText Element="h2" Typography="BitTypography.H5" Id="@TitleId" Class="explainer-section-title">@Title</BitText>
+        @if (Intro is not null)
+        {
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="explainer-section-intro">@Intro</BitText>
+        }
+    </header>
+    @ChildContent
+</section>

@@ -73,6 +73,8 @@ public static class IWorkbenchServiceCollectionExtensions
             services.AddBitBlexStore<AssistantStore>();
             services.AddBitBlexStore<ShiftsStore>();
             services.AddBitBlexStore<SettingsStore>();
+            services.AddBitBlexStore<CiCdExplainerStore>();
+            services.AddBitBlexStore<PaymentsExplainerStore>();
             services.AddBitBlexStore<WorkbenchDeviceStore>();
             services.AddScoped<IBlexStorage, WorkbenchStateStorage>();
             services.AddBitBlexPersistence();

@@ -1,8 +1,8 @@
 namespace Boilerplate.Workbench.Components.Pages;
 
 /// <summary>
-/// The Workbench's landing page: why it exists, the agents' long tasks, how to use it, the catalog of pages with their review
-/// status, and the flows.
+/// The Workbench's landing page: why it exists, the agents' long tasks, the explainers they build, how to use it, the catalog
+/// of pages with their review status, and the flows.
 /// </summary>
 public partial class HomePage
 {
@@ -33,6 +33,15 @@ public partial class HomePage
         (BitIconName.Repair, nameof(WorkbenchStrings.HomeWhyCustomizeTitle), nameof(WorkbenchStrings.HomeWhyCustomizeText))
     ];
 
+    // What an agent can explain as a page here instead of in the chat.
+    private static readonly (string IconName, string TextKey)[] explainerPoints =
+    [
+        (BitIconName.Flow, nameof(WorkbenchStrings.HomeExplainersPointDiagram)),
+        (BitIconName.Split, nameof(WorkbenchStrings.HomeExplainersPointCompare)),
+        (BitIconName.ReportDocument, nameof(WorkbenchStrings.HomeExplainersPointReport)),
+        (BitIconName.Comment, nameof(WorkbenchStrings.HomeExplainersPointComment))
+    ];
+
     private static readonly (string TitleKey, string TextKey)[] steps =
     [
         (nameof(WorkbenchStrings.HomeHowStep1Title), nameof(WorkbenchStrings.HomeHowStep1Text)),
@@ -55,6 +64,12 @@ public partial class HomePage
 
     /// <summary>The page the hero shows on the phone: the buildings map, or another page of the catalog.</summary>
     private static WorkbenchPageInfo? PhonePage => WorkbenchPageCatalog.Find("buildings") ?? WorkbenchPageCatalog.Pages.FirstOrDefault(p => p.Key != HeroPage?.Key) ?? HeroPage;
+
+    /// <summary>The pages an agent built to explain something (the explainer skill), in the catalog's order.</summary>
+    private static IReadOnlyList<WorkbenchPageInfo> Explainers => [.. WorkbenchPageCatalog.Pages.Where(p => p.CategoryKey == nameof(WorkbenchStrings.CategoryExplainers))];
+
+    /// <summary>An explainer opens on a laptop, as it is read more than it is tried on a phone.</summary>
+    private static string ExplainerUrl(WorkbenchPageInfo page) => $"{WorkbenchUrls.Workbench(page.Key)}?device=laptop-hidpi";
 
     /// <summary>The catalog's pages by category, in the catalog's order, as the Pages pane groups them.</summary>
     private static IEnumerable<IGrouping<string, WorkbenchPageInfo>> PageGroups => WorkbenchPageCatalog.Pages.GroupBy(p => p.CategoryKey);

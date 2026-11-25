@@ -5456,4 +5456,49 @@
 | A refund after midnight on Test | On the right day |
 | Production after the merge | Updated |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>Explainers</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>How this app ships</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>An example explainer: this project's GitHub Actions workflows as a diagram, cards and a timeline, with where each job runs and which secrets it reads, for the options the project was created with.</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>See how your app ships</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>Payment options compared</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>An example explainer: web payment providers' fees, and what Google Play and the App Store take and allow for in-app purchases, subscriptions and links to your website, as of November 2026.</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>Weigh your payment options</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>Explainers</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>Ask your agent to explain something, and it builds a page here instead of a wall of text, with your app's own components and theme.</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>An architecture or a flow, drawn</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>Options compared side by side</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>A plan or a report to come back to</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>Light and dark, any device, and your comments on it</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>Explain how our app gets deployed, as a page in the workbench.</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>No explainers yet. Ask your agent for one, and its page shows up here.</value>
+    </data>
 </root>

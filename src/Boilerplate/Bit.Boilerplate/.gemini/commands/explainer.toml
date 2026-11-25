@@ -1,0 +1,9 @@
+description = "Explain something as a page in the Workbench instead of a long answer in the chat: an architecture, a comparison of options, a plan or a report, with the app's own components and theme, then hand over its address."
+
+prompt = """
+Follow these instructions exactly:
+
+@{.github/agents/explainer.agent.md}
+
+What to explain: {{args}}
+"""

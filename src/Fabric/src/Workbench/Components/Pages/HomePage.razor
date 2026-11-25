@@ -118,7 +118,7 @@
         </div>
     </section>
 
-    @* The agents' long tasks as the Progress page lists them, or its samples until one starts. *@
+    @* The agents' long tasks as the Progress page lists them, or a line on what shows here until one starts. *@
     <section id="progress" class="section agents">
         <div class="agents-grid">
             <div class="agents-text">
@@ -138,7 +138,7 @@
                     }
                 </div>
             </div>
-            @* Who may see the real tasks waits for them, so the samples never flash by first. *@
+            @* Who may see the tasks waits for them, so the empty state never flashes by first. *@
             <div class="agents-tasks">
                 @if (reviewSession.IsOpen is false && reviewSession.CanSeeTasks && isOpenFailed)
                 {
@@ -149,9 +149,12 @@
                 {
                     <BitRingLoading />
                 }
-                else if (reviewSession.ShowsSampleTasks)
+                else if (reviewSession.ShownTasks.Count == 0)
                 {
-                    <span class="samples-badge"><BitIcon IconName="@BitIconName.Lightbulb" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.ProgressSamplesTitle)]</span>
+                    <div class="agents-empty">
+                        <BitIcon IconName="@BitIconName.TaskList" Color="BitColor.Primary" />
+                        <span>@Localizer[reviewSession.CanSeeTasks ? nameof(WorkbenchStrings.ProgressEmptyText) : nameof(WorkbenchStrings.ProgressVisitorText)]</span>
+                    </div>
                 }
                 @foreach (var task in reviewSession.IsOpen || reviewSession.CanSeeTasks is false ? reviewSession.ShownTasks.OrderByDescending(t => t.NeedsYouCount > 0).ThenBy(t => t.IsFinished).ThenByDescending(t => t.UpdatedAt).Take(3) : [])
                 {
@@ -163,6 +166,49 @@
         </div>
     </section>
 
+    @* What an agent explains as a page here instead of in the chat: the points, a prompt to try, and the catalog's explainers, or how to get the first one. *@
+    <section id="explainers" class="section explainers">
+        <div class="explainers-grid">
+            <div class="explainers-text">
+                <h2>@Localizer[nameof(WorkbenchStrings.HomeExplainersTitle)]</h2>
+                <p>@Localizer[nameof(WorkbenchStrings.HomeExplainersSubtitle)]</p>
+                <ul class="agents-points">
+                    @foreach (var point in explainerPoints)
+                    {
+                        <li><span class="point-icon"><BitIcon IconName="@point.IconName" Size="BitSize.Small" /></span>@Localizer[point.TextKey]</li>
+                    }
+                </ul>
+                <figure class="prompt explainers-prompt">
+                    <figcaption class="prompt-label"><BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.HomeCtaPromptLabel)]</figcaption>
+                    <blockquote class="prompt-text">@Localizer[nameof(WorkbenchStrings.HomeExplainersPrompt)]</blockquote>
+                </figure>
+            </div>
+            <div class="explainers-cards">
+                @if (Explainers.Count == 0)
+                {
+                    <div class="explainers-empty">
+                        <BitIcon IconName="@BitIconName.Lightbulb" Color="BitColor.Primary" />
+                        <span>@Localizer[nameof(WorkbenchStrings.HomeExplainersEmpty)]</span>
+                    </div>
+                }
+                @foreach (var entry in Explainers.Take(3))
+                {
+                    <Bmotion Preset="BmotionPresets.Reveal(distance: 24)" WhileHover="Bm.To(y: -6)">
+                        <a class="page-card explainer-card" href="@ExplainerUrl(entry)">
+                            <span class="thumbnail">
+                                <img class="light-only" data-thumbnail="@($"api/thumbnails/{entry.Key}")" alt="" />
+                                <img class="dark-only" data-thumbnail="@($"api/thumbnails/{entry.Key}?theme=Dark")" alt="" />
+                            </span>
+                            <span class="page-body">
+                                <span class="page-title"><BitIcon IconName="@entry.IconName" Color="BitColor.Primary" /> @Localizer[entry.TitleKey]</span>
+                                <span class="page-description">@Localizer[entry.DescriptionKey]</span>
+                            </span>
+                        </a>
+                    </Bmotion>
+                }
+            </div>
+        </div>
+    </section>
 
     <section class="section how">
         <div class="section-head">

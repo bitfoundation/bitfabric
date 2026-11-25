@@ -5456,4 +5456,49 @@
 | Test पर आधी रात के बाद रिफ़ंड | सही दिन में |
 | merge के बाद Production | अपडेट हो गया |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>एक्सप्लेनर</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>यह ऐप कैसे शिप होता है</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>एक उदाहरण एक्सप्लेनर: इस प्रोजेक्ट के GitHub Actions वर्कफ़्लो डायग्राम, कार्ड और टाइमलाइन के रूप में, कि हर जॉब कहाँ चलता है और कौन-से सीक्रेट पढ़ता है, उन विकल्पों के अनुसार जिनसे प्रोजेक्ट बनाया गया था।</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>देखें आपका ऐप कैसे शिप होता है</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>भुगतान विकल्पों की तुलना</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>एक उदाहरण एक्सप्लेनर: वेब पेमेंट प्रोवाइडरों की फ़ीस, और इन-ऐप ख़रीदारी, सब्सक्रिप्शन और आपकी वेबसाइट के लिंक पर Google Play और App Store क्या लेते हैं और किसकी अनुमति देते हैं, नवंबर 2026 तक।</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>अपने भुगतान विकल्पों को परखें</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>एक्सप्लेनर</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>अपने एजेंट से कुछ समझाने को कहें, और वह टेक्स्ट की दीवार के बजाय यहाँ एक पेज बनाता है, आपके ऐप के अपने कंपोनेंट और थीम के साथ।</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>कोई आर्किटेक्चर या फ़्लो, चित्र के रूप में</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>विकल्पों की आमने-सामने तुलना</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>कोई योजना या रिपोर्ट, जिस पर आप लौट सकें</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>लाइट और डार्क, हर डिवाइस पर, और उस पर आपकी टिप्पणियाँ</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>वर्कबेंच में एक पेज के रूप में समझाएँ कि हमारा ऐप कैसे डिप्लॉय होता है।</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>अभी कोई एक्सप्लेनर नहीं है। अपने एजेंट से एक माँगें, और उसका पेज यहाँ दिखेगा।</value>
+    </data>
 </root>

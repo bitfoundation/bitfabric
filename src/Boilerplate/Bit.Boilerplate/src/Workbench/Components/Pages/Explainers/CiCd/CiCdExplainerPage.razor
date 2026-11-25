@@ -1,0 +1,194 @@
+@inherits WorkbenchComponentBase
+
+<ExplainerArticle Eyebrow="Explainer · CI/CD" IconName="@BitIconName.Flow"
+                  Title="How Boilerplate is built and deployed"
+                  Lead="From a commit to the Test and Production sites: what each GitHub Actions workflow does, where its jobs run and which settings they read, for the options this project was created with."
+                  Meta="Read from the project's own workflows in .github/workflows">
+    <Note>
+        <BitMessage Color="BitColor.Primary" Variant="BitVariant.Outline" Tinted Multiline Title="An example of an explainer">
+            An AI agent builds a page like this in the Workbench when something is easier to see than to read, with the app's own components and theme. It is here to show what the Workbench can do, not to be a complete reference: the workflow files are the final word.
+        </BitMessage>
+    </Note>
+    <ChildContent>
+        <ExplainerSection Id="at-a-glance" Title="At a glance">
+            <div class="highlights">
+                @foreach (var highlight in CiCdPipeline.Highlights)
+                {
+                    <div class="highlight">
+                        <span class="highlight-icon"><BitIcon IconName="@highlight.IconName" /></span>
+                        <BitText Element="h3" Typography="BitTypography.Subtitle1" Class="highlight-title">@highlight.Title</BitText>
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@highlight.Text</BitText>
+                    </div>
+                }
+            </div>
+        </ExplainerSection>
+
+        <ExplainerSection Id="pipeline" Title="From a commit to a running site"
+                          Intro="Each column runs on a different machine, left to right, and nothing deploys or publishes until ci passes.">
+            <ol class="pipeline">
+                @for (var i = 0; i < CiCdPipeline.Stages.Length; i++)
+                {
+                    var stage = CiCdPipeline.Stages[i];
+                    var isLast = i == CiCdPipeline.Stages.Length - 1;
+                    <li class="stage @(stage.IsYourServer ? "on-your-server" : null)">
+                        <span class="stage-label"><BitIcon IconName="@stage.IconName" Size="BitSize.Small" /> @stage.Label</span>
+                        <div class="stage-nodes">
+                            @foreach (var node in stage.Nodes)
+                            {
+                                <div class="node @(node.IsOff ? "off" : null)">
+                                    <span class="node-title @(node.IsCode ? "code" : null)">@node.Title</span>
+                                    <span class="node-text">@node.Text</span>
+                                </div>
+                            }
+                        </div>
+                        @if (isLast is false)
+                        {
+                            <span class="stage-arrow" aria-hidden="true"><BitIcon IconName="@BitIconName.Forward" /></span>
+                        }
+                    </li>
+                }
+            </ol>
+        </ExplainerSection>
+
+        <ExplainerSection Id="workflows" Title="The workflow files"
+                          Intro="Two of them deploy, one checks, and one holds the jobs the two deployments share.">
+            <div class="workflows">
+                @foreach (var workflow in CiCdPipeline.Workflows)
+                {
+                    <BitCard Outlined NoShadow Background="BitColorKind.Primary" Border="BitColorKind.Tertiary" Class="workflow">
+                        <div class="workflow-head">
+                            <span class="workflow-icon"><BitIcon IconName="@workflow.IconName" /></span>
+                            <div class="workflow-names">
+                                <BitText Element="h3" Typography="BitTypography.Subtitle1" Class="workflow-file">@workflow.File</BitText>
+                                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@workflow.Starts</BitText>
+                            </div>
+                        </div>
+                        <BitText Typography="BitTypography.Body2">@workflow.Does</BitText>
+                        @if (workflow.Command is { } command)
+                        {
+                            <code class="command" dir="ltr">@command</code>
+                        }
+                    </BitCard>
+                }
+            </div>
+        </ExplainerSection>
+
+        <ExplainerSection Id="environments" Title="Test and Production"
+                          Intro="The same workflows deploy both. Each has a GitHub environment of its own, with its own secrets and variables.">
+            <div class="environments">
+                @foreach (var environment in CiCdPipeline.Environments)
+                {
+                    <BitCard Outlined NoShadow Background="BitColorKind.Primary" Border="BitColorKind.Tertiary" Class="environment">
+                        <div class="environment-head">
+                            <BitIcon IconName="@environment.IconName" Color="BitColor.Primary" />
+                            <BitText Element="h3" Typography="BitTypography.H6" Class="environment-name">@environment.Name</BitText>
+                        </div>
+                        <dl class="facts">
+                            @foreach (var fact in environment.Facts)
+                            {
+                                <div class="fact">
+                                    <dt>@fact.Label</dt>
+                                    <dd>
+                                        @if (fact.IsCode)
+                                        {
+                                            <code dir="ltr">@fact.Value</code>
+                                        }
+                                        else
+                                        {
+                                            @fact.Value
+                                        }
+                                    </dd>
+                                </div>
+                            }
+                        </dl>
+                    </BitCard>
+                }
+            </div>
+        </ExplainerSection>
+
+        <ExplainerSection Id="deployment" Title="What a server deployment does"
+                          Intro="@(CiCdPipeline.DeploySteps.Length > 0 ? "deploy_server runs these in order on your server. A step that fails stops the run, and the version that was running keeps serving." : null)">
+            @if (CiCdPipeline.DeploySteps.Length > 0)
+            {
+                <div class="deployment">
+                    <BitTimeline Items="deploySteps" Classes="@(new() { PrimaryText = "deploy-step-title", SecondaryText = "deploy-step-text" })" />
+                    <div class="cautions">
+                        @foreach (var caution in CiCdPipeline.Cautions)
+                        {
+                            <BitMessage Color="BitColor.Warning" Variant="BitVariant.Outline" Multiline IconName="@caution.IconName" Title="@caution.Title">@caution.Text</BitMessage>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <BitMessage Color="BitColor.Info" Multiline>
+                    This project has no .NET Aspire app host, so its CD builds the apps but doesn't deploy the server. Bring .NET Aspire in with the template-diff skill, and the deploy skill sets up the rest.
+                </BitMessage>
+            }
+        </ExplainerSection>
+
+        <ExplainerSection Id="jobs" Title="Where each job runs"
+                          Intro="@(CiCdPipeline.Jobs.Any(job => job.OnYourServer) ? JobsOnYourServer : JobsOnGitHub)">
+            <ul class="jobs">
+                @foreach (var job in CiCdPipeline.Jobs)
+                {
+                    <li class="job @(job.IsOff ? "off" : null)">
+                        <div class="job-name">
+                            <code dir="ltr">@job.Name</code>
+                            @if (job.IsOff)
+                            {
+                                <BitTag Text="Off until you ship it" Variant="BitVariant.Outline" Size="BitSize.Small" />
+                            }
+                        </div>
+                        <div class="job-runner">
+                            <BitTag Text="@job.Runner" IconName="@(job.OnYourServer ? BitIconName.Server : BitIconName.Cloud)"
+                                    Color="@(job.OnYourServer ? BitColor.Primary : BitColor.SecondaryBackground)" Variant="BitVariant.Fill" Size="BitSize.Small" />
+                        </div>
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="job-does">@job.Does</BitText>
+                    </li>
+                }
+            </ul>
+        </ExplainerSection>
+
+        <ExplainerSection Id="settings" Title="Secrets and variables"
+                          Intro="Each environment holds a value of its own for each of these. Run bit pipeline in the repository: it creates what it can, such as the certificate and the passwords, and asks for the rest.">
+            <div class="settings-tools">
+                <BitSearchBox Value="@store.SettingsSearch" ValueChanged="(string? text) => store.SearchSettings(text)" Immediate DebounceTime="200"
+                              Placeholder="Search the settings" AriaLabel="Search the settings" Class="settings-search" />
+                <BitChoiceGroup Items="kinds" Value="@(store.SettingsKind ?? AllKinds)" ValueChanged="(string? kind) => store.ShowSettings(kind)"
+                                Horizontal NoCircle Variant="BitVariant.Fill" AriaLabel="Show" Class="settings-kinds" />
+            </div>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="settings-count" aria-live="polite">
+                @(ShownSettings.Count == CiCdPipeline.Settings.Length ? $"{CiCdPipeline.Settings.Length} settings" : $"{ShownSettings.Count} of {CiCdPipeline.Settings.Length} settings")
+            </BitText>
+            @if (ShownSettings.Count == 0)
+            {
+                <BitMessage Color="BitColor.Info">No setting matches. Clear the search to see them all.</BitMessage>
+            }
+            else
+            {
+                <ul class="settings">
+                    @foreach (var setting in ShownSettings)
+                    {
+                        <li class="setting">
+                            <code class="setting-name" dir="ltr">@setting.Name</code>
+                            <span class="setting-tags">
+                                <BitTag Text="@(setting.Kind is CiCdSettingKind.Secret ? "Secret" : "Variable")"
+                                        IconName="@(setting.Kind is CiCdSettingKind.Secret ? BitIconName.Lock : BitIconName.Settings)"
+                                        Color="@(setting.Kind is CiCdSettingKind.Secret ? BitColor.Warning : BitColor.Info)" Variant="BitVariant.Outline" Size="BitSize.Small" />
+                                @if (setting.IsOptional)
+                                {
+                                    <BitTag Text="Optional" Variant="BitVariant.Text" Size="BitSize.Small" />
+                                }
+                            </span>
+                            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="setting-holds">@setting.Holds</BitText>
+                        </li>
+                    }
+                </ul>
+            }
+        </ExplainerSection>
+
+        <ExplainerSources Items="CiCdPipeline.Sources" Intro="Files of this repository; open them in your editor." />
+    </ChildContent>
+</ExplainerArticle>

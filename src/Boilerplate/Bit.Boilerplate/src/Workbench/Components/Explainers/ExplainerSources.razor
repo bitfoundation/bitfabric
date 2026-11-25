@@ -1,0 +1,29 @@
+@inherits WorkbenchComponentBase
+
+<footer class="explainer-sources" aria-labelledby="explainer-sources-title">
+    <BitText Element="h2" Typography="BitTypography.Subtitle1" Id="explainer-sources-title" Class="explainer-sources-title">@Title</BitText>
+    @if (Intro is not null)
+    {
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Intro</BitText>
+    }
+    <ul class="source-list">
+        @foreach (var source in Items)
+        {
+            <li class="source">
+                @if (source.Url is { } url)
+                {
+                    <BitLink Href="@url" Target="_blank" IconName="@BitIconName.OpenInNewWindow" Class="source-link">@source.Text</BitLink>
+                }
+                else
+                {
+                    @* A file of the repository, named as a path. *@
+                    <code class="source-path" dir="ltr">@source.Text</code>
+                }
+                @if (source.Note is { } note)
+                {
+                    <span class="source-note">@note</span>
+                }
+            </li>
+        }
+    </ul>
+</footer>

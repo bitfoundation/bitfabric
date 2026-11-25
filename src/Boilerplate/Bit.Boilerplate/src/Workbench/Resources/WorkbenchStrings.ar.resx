@@ -5456,4 +5456,49 @@
 | استرداد بعد منتصف الليل على Test | في اليوم الصحيح |
 | Production بعد الدمج | محدَّث |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>صفحات الشرح</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>كيف يُسلَّم هذا التطبيق</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>مثال على صفحة شرح: سير عمل GitHub Actions في هذا المشروع على هيئة مخطط وبطاقات وخط زمني، مع مكان تشغيل كل مهمة والأسرار التي تقرؤها، وفق الخيارات التي أُنشئ بها المشروع.</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>شاهد كيف يُسلَّم تطبيقك</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>مقارنة خيارات الدفع</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>مثال على صفحة شرح: رسوم مزوّدي الدفع على الويب، وما يأخذه Google Play وApp Store وما يسمحان به في المشتريات داخل التطبيق والاشتراكات والروابط إلى موقعك، حتى نوفمبر 2026.</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>وازن بين خيارات الدفع لديك</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>صفحات الشرح</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>اطلب من وكيلك شرح أمر ما، فيبني هنا صفحة بدل جدار من النص، بمكوّنات تطبيقك وسمته.</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>بنية أو تدفّق، مرسومان</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>خيارات تُقارَن جنبًا إلى جنب</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>خطة أو تقرير تعود إليه</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>فاتح وداكن، على أي جهاز، مع تعليقاتك عليه</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>اشرح كيف يُنشر تطبيقنا، في صفحة على منضدة العمل.</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>لا توجد صفحات شرح بعد. اطلب واحدة من وكيلك، وستظهر صفحتها هنا.</value>
+    </data>
 </root>

@@ -5456,4 +5456,49 @@
 | Un reembolso después de medianoche en Test | En el día correcto |
 | Production tras el merge | Actualizado |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>Explicaciones</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>Cómo se publica esta aplicación</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>Una explicación de ejemplo: los flujos de GitHub Actions de este proyecto como diagrama, tarjetas y línea de tiempo, con dónde se ejecuta cada trabajo y qué secretos lee, según las opciones con las que se creó el proyecto.</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>Descubre cómo se publica tu aplicación</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>Opciones de pago comparadas</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>Una explicación de ejemplo: las comisiones de los proveedores de pago en la web y lo que Google Play y la App Store cobran y permiten en compras dentro de la aplicación, suscripciones y enlaces a tu sitio web, a noviembre de 2026.</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>Sopesa tus opciones de pago</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>Explicaciones</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>Pide a tu agente que explique algo y construirá aquí una página en lugar de un muro de texto, con los componentes y el tema de tu aplicación.</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>Una arquitectura o un flujo, dibujados</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>Opciones comparadas lado a lado</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>Un plan o un informe al que volver</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>Claro y oscuro, en cualquier dispositivo, y tus comentarios en él</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>Explica cómo se despliega nuestra aplicación, como una página en el banco de trabajo.</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>Aún no hay explicaciones. Pídele una a tu agente y su página aparecerá aquí.</value>
+    </data>
 </root>

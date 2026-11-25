@@ -5456,4 +5456,49 @@
 | بازپرداخت بعد از نیمه‌شب روی Test | در روز درست |
 | Production بعد از merge | به‌روز شد |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>صفحه‌های توضیحی</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>این اپ چطور منتشر می‌شود</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>نمونه‌ای از یک صفحه توضیحی: workflowهای GitHub Actions این پروژه به شکل نمودار، کارت و خط زمانی، با اینکه هر job کجا اجرا می‌شود و کدام secretها را می‌خواند، مطابق گزینه‌هایی که پروژه با آن‌ها ساخته شده است.</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>ببینید اپ شما چطور منتشر می‌شود</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>مقایسه روش‌های پرداخت</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>نمونه‌ای از یک صفحه توضیحی: کارمزد درگاه‌های پرداخت وب، و اینکه Google Play و App Store برای خرید درون‌برنامه‌ای، اشتراک و لینک به وب‌سایت شما چه می‌گیرند و چه اجازه می‌دهند، تا نوامبر 2026.</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>گزینه‌های پرداختتان را بسنجید</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>صفحه‌های توضیحی</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>از عاملتان بخواهید چیزی را توضیح دهد تا به‌جای یک دیوار متن، اینجا یک صفحه بسازد، با کامپوننت‌ها و تم خود اپ شما.</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>یک معماری یا یک جریان، به شکل نمودار</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>گزینه‌ها، کنار هم مقایسه‌شده</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>یک برنامه یا گزارش که می‌توانید به آن برگردید</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>روشن و تیره، روی هر دستگاه، با نظرهای شما روی آن</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>توضیح بده اپ ما چطور مستقر می‌شود، به شکل یک صفحه در میز کار.</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>هنوز صفحه توضیحی‌ای نیست. از عاملتان یکی بخواهید تا صفحه‌اش اینجا ظاهر شود.</value>
+    </data>
 </root>

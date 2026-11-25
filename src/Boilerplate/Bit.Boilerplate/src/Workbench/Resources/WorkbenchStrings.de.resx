@@ -5456,4 +5456,49 @@
 | Rückerstattung nach Mitternacht auf Test | Am richtigen Tag |
 | Production nach dem Merge | Aktualisiert |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>Erklärseiten</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>So wird diese App ausgeliefert</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>Eine Beispiel-Erklärseite: die GitHub-Actions-Workflows dieses Projekts als Diagramm, Karten und Zeitleiste, mit dem Rechner, auf dem jeder Job läuft, und den Secrets, die er liest, passend zu den Optionen, mit denen das Projekt erstellt wurde.</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>So wird Ihre App ausgeliefert</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>Zahlungsoptionen im Vergleich</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>Eine Beispiel-Erklärseite: die Gebühren der Zahlungsanbieter im Web und was Google Play und der App Store bei In-App-Käufen, Abos und Links zu Ihrer Website verlangen und erlauben, Stand November 2026.</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>Wägen Sie Ihre Zahlungsoptionen ab</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>Erklärseiten</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>Bitten Sie Ihren Agenten, etwas zu erklären, und er baut hier eine Seite statt einer Textwand, mit den Komponenten und dem Theme Ihrer App.</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>Eine Architektur oder ein Ablauf, gezeichnet</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>Optionen direkt nebeneinander verglichen</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>Ein Plan oder Bericht, zu dem Sie zurückkehren können</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>Hell und dunkel, auf jedem Gerät, mit Ihren Kommentaren</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>Erkläre als Seite auf der Werkbank, wie unsere App bereitgestellt wird.</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>Noch keine Erklärseiten. Fragen Sie Ihren Agenten danach, und seine Seite erscheint hier.</value>
+    </data>
 </root>

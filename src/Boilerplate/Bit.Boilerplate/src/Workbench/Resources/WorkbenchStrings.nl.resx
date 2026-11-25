@@ -5456,4 +5456,49 @@
 | Terugbetaling na middernacht op Test | Op de juiste dag |
 | Production na de merge | Bijgewerkt |</value>
     </data>
+    <data name="CategoryExplainers" xml:space="preserve">
+        <value>Uitlegpagina's</value>
+    </data>
+    <data name="CiCdExplainerTitle" xml:space="preserve">
+        <value>Zo wordt deze app uitgerold</value>
+    </data>
+    <data name="CiCdExplainerDescription" xml:space="preserve">
+        <value>Een voorbeeld van een uitlegpagina: de GitHub Actions-workflows van dit project als diagram, kaarten en tijdlijn, met waar elke job draait en welke secrets hij leest, voor de opties waarmee het project is gemaakt.</value>
+    </data>
+    <data name="CiCdExplainerCaption" xml:space="preserve">
+        <value>Zie hoe je app wordt uitgerold</value>
+    </data>
+    <data name="PaymentsExplainerTitle" xml:space="preserve">
+        <value>Betaalopties vergeleken</value>
+    </data>
+    <data name="PaymentsExplainerDescription" xml:space="preserve">
+        <value>Een voorbeeld van een uitlegpagina: de kosten van betaalproviders op het web, en wat Google Play en de App Store vragen en toestaan bij in-app-aankopen, abonnementen en links naar je website, per november 2026.</value>
+    </data>
+    <data name="PaymentsExplainerCaption" xml:space="preserve">
+        <value>Weeg je betaalopties af</value>
+    </data>
+    <data name="HomeExplainersTitle" xml:space="preserve">
+        <value>Uitlegpagina's</value>
+    </data>
+    <data name="HomeExplainersSubtitle" xml:space="preserve">
+        <value>Vraag je agent iets uit te leggen, en hij bouwt hier een pagina in plaats van een muur van tekst, met de eigen componenten en het thema van je app.</value>
+    </data>
+    <data name="HomeExplainersPointDiagram" xml:space="preserve">
+        <value>Een architectuur of een flow, getekend</value>
+    </data>
+    <data name="HomeExplainersPointCompare" xml:space="preserve">
+        <value>Opties naast elkaar vergeleken</value>
+    </data>
+    <data name="HomeExplainersPointReport" xml:space="preserve">
+        <value>Een plan of rapport om op terug te komen</value>
+    </data>
+    <data name="HomeExplainersPointComment" xml:space="preserve">
+        <value>Licht en donker, op elk apparaat, met je opmerkingen erbij</value>
+    </data>
+    <data name="HomeExplainersPrompt" xml:space="preserve">
+        <value>Leg als pagina op de werkbank uit hoe onze app wordt uitgerold.</value>
+    </data>
+    <data name="HomeExplainersEmpty" xml:space="preserve">
+        <value>Nog geen uitlegpagina's. Vraag je agent erom, en zijn pagina verschijnt hier.</value>
+    </data>
 </root>

@@ -4161,15 +4161,6 @@
     <data name="ProgressTasks" xml:space="preserve">
         <value>Uppgifter</value>
     </data>
-    <data name="ProgressSamplesTitle" xml:space="preserve">
-        <value>Det här är exempel</value>
-    </data>
-    <data name="ProgressSamplesText" xml:space="preserve">
-        <value>Dina agenters uppgifter visas här så snart en startar. Tills dess kan du prova de här: svara på en fråga, bocka av ett steg eller skriv till agenten.</value>
-    </data>
-    <data name="ProgressSamplesVisitorText" xml:space="preserve">
-        <value>Uppgifterna för agenterna på den här arbetsbänken visas bara på datorn den körs på. De här exemplen visar vad du skulle se där.</value>
-    </data>
     <data name="ProgressGroupNeedsYou" xml:space="preserve">
         <value>Väntar på dig</value>
     </data>
@@ -4214,9 +4205,6 @@
     </data>
     <data name="ProgressUpdated" xml:space="preserve">
         <value>Uppdaterad {0}</value>
-    </data>
-    <data name="ProgressSample" xml:space="preserve">
-        <value>Exempel</value>
     </data>
     <data name="ProgressYourTurn" xml:space="preserve">
         <value>Din tur</value>
@@ -4326,15 +4314,6 @@
     <data name="ProgressSent" xml:space="preserve">
         <value>Skickat till {0}.</value>
     </data>
-    <data name="ProgressSampleSentTitle" xml:space="preserve">
-        <value>Det här är ett exempel</value>
-    </data>
-    <data name="ProgressSampleSent" xml:space="preserve">
-        <value>I en riktig uppgift får {0} det här direkt och fortsätter.</value>
-    </data>
-    <data name="ProgressSampleSecret" xml:space="preserve">
-        <value>I en riktig uppgift går den dit frågan säger, och {0} fortsätter utan att se den.</value>
-    </data>
     <data name="ProgressSecretToGitHubEnvironment" xml:space="preserve">
         <value>Den går direkt till GitHub som {0}, en secret i miljön {1}. {2} ser den aldrig.</value>
     </data>
@@ -4443,189 +4422,6 @@
     <data name="TimeHoursAgo" xml:space="preserve">
         <value>för {0} tim sedan</value>
     </data>
-    <data name="SampleDeployTitle" xml:space="preserve">
-        <value>Driftsätt till Test och Produktion</value>
-    </data>
-    <data name="SampleDeploySummary" xml:space="preserve">
-        <value>Sätter upp Test- och Produktionsmiljöerna på din egen server, med appen på din domän.</value>
-    </data>
-    <data name="SampleDeployStepServices" xml:space="preserve">
-        <value>Hitta de externa tjänster appen behöver och deras nycklar</value>
-    </data>
-    <data name="SampleDeployStepEnvironments" xml:space="preserve">
-        <value>Skapa Test- och Produktionsmiljöerna på GitHub</value>
-    </data>
-    <data name="SampleDeployStepServer" xml:space="preserve">
-        <value>Skaffa en Linux-server och dela dess adress</value>
-    </data>
-    <data name="SampleDeployStepToken" xml:space="preserve">
-        <value>Skapa en API-token i Cloudflare</value>
-    </data>
-    <data name="SampleDeployStepTokenDetail" xml:space="preserve">
-        <value>Öppna My Profile och sedan API Tokens i Cloudflares instrumentpanel och skapa en som kan ändra DNS och Cloudflare Tunnel. Klistra sedan in den nedan.</value>
-    </data>
-    <data name="SampleDeployStepRunner" xml:space="preserve">
-        <value>Installera Docker och GitHub Actions-runnern på servern</value>
-    </data>
-    <data name="SampleDeployStepTunnel" xml:space="preserve">
-        <value>Servera appen på din domän via en Cloudflare Tunnel</value>
-    </data>
-    <data name="SampleDeployStepFirst" xml:space="preserve">
-        <value>Driftsätt till Test, sedan till Produktion</value>
-    </data>
-    <data name="SampleDeployAskEmail" xml:space="preserve">
-        <value>Vilken tjänst ska skicka appens e-post?</value>
-    </data>
-    <data name="SampleDeployAskEmailDetail" xml:space="preserve">
-        <value>Appen mejlar inloggningskoder och lösenordsåterställningar. Du kan ändra det senare.</value>
-    </data>
-    <data name="SampleDeployAskEmailOption1" xml:space="preserve">
-        <value>Ett gratiskonto hos en e-posttjänst</value>
-    </data>
-    <data name="SampleDeployAskEmailOption2" xml:space="preserve">
-        <value>Vårt företags e-postserver</value>
-    </data>
-    <data name="SampleDeployAskEmailOption3" xml:space="preserve">
-        <value>Ingen just nu: visa e-posten i loggarna</value>
-    </data>
-    <data name="SampleDeployAskSsh" xml:space="preserve">
-        <value>Stänga serverns SSH-port när tunneln fungerar?</value>
-    </data>
-    <data name="SampleDeployAskSshDetail" xml:space="preserve">
-        <value>Du når fortfarande servern via tunneln och via leverantörens webbkonsol.</value>
-    </data>
-    <data name="SampleDeployAskToken" xml:space="preserve">
-        <value>Klistra in Cloudflare-token</value>
-    </data>
-    <data name="SampleDeployNoteSecrets" xml:space="preserve">
-        <value>Nycklar och lösenord hamnar aldrig i en chatt. Du klistrar in dem här, och var och en går direkt dit den ska utan att jag ser den.</value>
-    </data>
-    <data name="SampleDeployNoteOneServer" xml:space="preserve">
-        <value>En server för båda miljöerna, för att hålla nere kostnaden.</value>
-    </data>
-    <data name="SampleDeployLinkCloudflare" xml:space="preserve">
-        <value>Cloudflares instrumentpanel</value>
-    </data>
-    <data name="SampleDeployFeed1" xml:space="preserve">
-        <value>Appen använder 6 externa tjänster; 3 av dem behöver nycklar från dina egna konton.</value>
-    </data>
-    <data name="SampleDeployFeed2" xml:space="preserve">
-        <value>Servern är redo på 203.0.113.24.</value>
-    </data>
-    <data name="SampleDeployFeed3" xml:space="preserve">
-        <value>Loggade in på servern med nyckeln du lade till och stängde av inloggning med lösenord.</value>
-    </data>
-    <data name="SampleDeployFeed4" xml:space="preserve">
-        <value>Väntar på Cloudflare-token för att sätta upp tunneln.</value>
-    </data>
-    <data name="SampleFeatureTitle" xml:space="preserve">
-        <value>Ny funktion: lojalitetspoäng</value>
-    </data>
-    <data name="SampleFeatureSummary" xml:space="preserve">
-        <value>Kunder tjänar poäng på varje beställning och använder dem i kassan. Nu när du har godkänt designen byggs den.</value>
-    </data>
-    <data name="SampleFeatureStepRequirements" xml:space="preserve">
-        <value>Spika kraven och skriva in dem i specen</value>
-    </data>
-    <data name="SampleFeatureStepPlan" xml:space="preserve">
-        <value>Planera arbetet i 6 uppgifter</value>
-    </data>
-    <data name="SampleFeatureStepDesign" xml:space="preserve">
-        <value>Godkänn designen i arbetsbänken</value>
-    </data>
-    <data name="SampleFeatureStepLedger" xml:space="preserve">
-        <value>Bygga poängliggaren och dess API</value>
-    </data>
-    <data name="SampleFeatureStepCheckout" xml:space="preserve">
-        <value>Använda poäng i kassan</value>
-    </data>
-    <data name="SampleFeatureStepTests" xml:space="preserve">
-        <value>Tester på mobiler och datorer</value>
-    </data>
-    <data name="SampleStepTryOnTest" xml:space="preserve">
-        <value>Prova i Testmiljön</value>
-    </data>
-    <data name="SampleFeatureAskWorth" xml:space="preserve">
-        <value>Hur mycket är en poäng värd i kassan?</value>
-    </data>
-    <data name="SampleFeatureAskWorthDetail" xml:space="preserve">
-        <value>Det hamnar i inställningarna så att du kan ändra det senare.</value>
-    </data>
-    <data name="SampleFeatureAskWorthPlaceholder" xml:space="preserve">
-        <value>Till exempel: 100 poäng = 10 kr</value>
-    </data>
-    <data name="SampleFeatureAskOrders" xml:space="preserve">
-        <value>Vilka beställningar ger poäng?</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption1" xml:space="preserve">
-        <value>Onlinebeställningar</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption2" xml:space="preserve">
-        <value>Beställningar i butik</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption3" xml:space="preserve">
-        <value>Beställningar betalda med presentkort</value>
-    </data>
-    <data name="SampleFeatureNoteExpiry" xml:space="preserve">
-        <value>Poängen går ut 12 månader efter att de tjänats in.</value>
-    </data>
-    <data name="SampleFeatureNoteSpec" xml:space="preserve">
-        <value>Allt som har beslutats hittills finns i funktionens spec, tillsammans med de frågor som är öppna.</value>
-    </data>
-    <data name="SampleFeatureLinkDesign" xml:space="preserve">
-        <value>Godkänd design</value>
-    </data>
-    <data name="SampleFeatureFeed1" xml:space="preserve">
-        <value>Skrev in kraven i specen; 3 frågor återstår för dig.</value>
-    </data>
-    <data name="SampleFeatureFeed2" xml:space="preserve">
-        <value>Ser bra ut. Gör poängmärket lite mindre.</value>
-    </data>
-    <data name="SampleFeatureFeed3" xml:space="preserve">
-        <value>Gjorde märket mindre och började bygga.</value>
-    </data>
-    <data name="SampleFeatureFeed4" xml:space="preserve">
-        <value>Liggaren och dess databasmigrering är på plats. Skriver dess API nu.</value>
-    </data>
-    <data name="SampleFixTitle" xml:space="preserve">
-        <value>Fix: återbetalningar saknas i den dagliga försäljningsrapporten</value>
-    </data>
-    <data name="SampleFixSummary" xml:space="preserve">
-        <value>Återbetalningar efter midnatt räknades på fel dag. Fixat, provat i Test och sammanslaget.</value>
-    </data>
-    <data name="SampleFixStepLogs" xml:space="preserve">
-        <value>Hitta orsaken i Produktions loggar</value>
-    </data>
-    <data name="SampleFixStepTest" xml:space="preserve">
-        <value>Skriva ett test som misslyckas utan fixen</value>
-    </data>
-    <data name="SampleFixStepFix" xml:space="preserve">
-        <value>Räkna återbetalningar i butikens egen tidszon</value>
-    </data>
-    <data name="SampleFixStepMerge" xml:space="preserve">
-        <value>Slå ihop, vilket uppdaterar Produktion</value>
-    </data>
-    <data name="SampleFixAskMerge" xml:space="preserve">
-        <value>Slå ihop med main? Det uppdaterar Produktion.</value>
-    </data>
-    <data name="SampleFixNoteDone" xml:space="preserve">
-        <value>Produktion kör fixen. Testet hindrar felet från att komma tillbaka.</value>
-    </data>
-    <data name="SampleFixLinkPullRequest" xml:space="preserve">
-        <value>Pull request</value>
-    </data>
-    <data name="SampleFixLinkTest" xml:space="preserve">
-        <value>Testmiljö</value>
-    </data>
-    <data name="SampleFixFeed1" xml:space="preserve">
-        <value>Hittade det: rapporten använde serverns tidszon, inte butikens.</value>
-    </data>
-    <data name="SampleFixFeed2" xml:space="preserve">
-        <value>Finns i Test nu. Prova en återbetalning efter midnatt.</value>
-    </data>
-    <data name="SampleFixFeed3" xml:space="preserve">
-        <value>Sammanslaget. Produktion är uppdaterad.</value>
-    </data>
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>Följ långa uppgifter, svara med ett klick</value>
     </data>
@@ -4633,7 +4429,7 @@
         <value>En driftsättning eller en ny funktion kräver många steg, och vissa kan bara du ta. Varje agentchatt visar här vad som är gjort, vad som återstår och vad den behöver från dig, så att inget försvinner i en lång chatt. Nycklar och lösenord som du klistrar in där går direkt dit de ska, aldrig via chatten.</value>
     </data>
     <data name="TourProgressText" xml:space="preserve">
-        <value>En driftsättning eller en ny funktion kräver många steg, och vissa kan bara du ta. Varje agentchatt visar här vad som är gjort, vad som återstår och vad den behöver från dig. Svara med ett klick, några ord eller din röst, så fortsätter den direkt. Prova med exemplen.</value>
+        <value>En driftsättning eller en ny funktion kräver många steg, och vissa kan bara du ta. Varje agentchatt visar här vad som är gjort, vad som återstår och vad den behöver från dig. Svara med ett klick, några ord eller din röst, så fortsätter den direkt.</value>
     </data>
     <data name="HomeFactAgent" xml:space="preserve">
         <value>Dina agenters förlopp och frågor på ett ställe</value>
@@ -4667,17 +4463,6 @@
     </data>
     <data name="ProgressReport" xml:space="preserve">
         <value>Rapport</value>
-    </data>
-    <data name="SampleFixReport" xml:space="preserve">
-        <value>**Orsak:** rapporten delade upp försäljningen efter serverns dag, som går på UTC, så en återbetalning efter midnatt i butiken räknades på dagen innan.
-
-**Åtgärd:** återbetalningar räknas nu i butikens egen tidszon, och ett nytt test gör en återbetalning klockan 00:30 butikstid och kontrollerar vilken dag den hamnar på.
-
-| Kontroll | Resultat |
-| --- | --- |
-| Alla tester | Godkända |
-| Återbetalning efter midnatt på Test | På rätt dag |
-| Production efter merge | Uppdaterad |</value>
     </data>
     <data name="PosNoDataYet" xml:space="preserve">
         <value>Inget här än</value>

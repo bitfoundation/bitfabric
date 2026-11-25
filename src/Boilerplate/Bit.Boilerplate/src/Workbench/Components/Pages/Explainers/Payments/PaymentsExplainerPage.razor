@@ -1,0 +1,131 @@
+@inherits WorkbenchComponentBase
+
+<ExplainerArticle Eyebrow="Explainer · Payments" IconName="@BitIconName.PaymentCard"
+                  Title="Taking payments in your app"
+                  Lead="Which provider to use on the web, and what Google Play and the App Store ask of an app that sells inside them: their fees, and their rules on subscriptions and on paying outside the store."
+                  Meta="@($"Prices and rules as each provider published them on {PaymentsFacts.ReadOn}")">
+    <Note>
+        <BitMessage Color="BitColor.Primary" Variant="BitVariant.Outline" Tinted Multiline Title="An example of an explainer">
+            An AI agent builds a page like this in the Workbench when you weigh options, with the app's own components and theme. It is here to show what the Workbench can do, not to be a complete comparison: fees change, and your country, your volume and your contract change them too. Check each source before you decide.
+        </BitMessage>
+    </Note>
+    <ChildContent>
+        <ExplainerSection Id="short-answer" Title="The short answer"
+                          Intro="What you sell, and where the buyer pays for it, decides who you pay and how much.">
+            <div class="routes">
+                @foreach (var route in PaymentsFacts.Routes)
+                {
+                    <div class="route">
+                        <span class="route-icon"><BitIcon IconName="@route.IconName" /></span>
+                        <BitText Element="h3" Typography="BitTypography.Subtitle1" Class="route-title">@route.Title</BitText>
+                        <BitText Typography="BitTypography.Body2">@route.Rule</BitText>
+                        <span class="route-cost">@route.Cost</span>
+                    </div>
+                }
+            </div>
+        </ExplainerSection>
+
+        <ExplainerSection Id="one-sale" Title="What each one keeps from a sale"
+                          Intro="Move the price: a fixed fee weighs most on a small sale, a percentage on a large one.">
+            <div class="calculator">
+                <div class="calculator-controls">
+                    <BitSlider Label="Price" Min="1" Max="100" Step="1" ShowValue ValueFormat="€0"
+                               Value="store.Price" ValueChanged="(double price) => store.SetPrice(price)" Class="price" />
+                    <BitChoiceGroup Items="saleKinds" Value="@(store.IsSubscription ? SubscriptionKind : OneOffKind)"
+                                    ValueChanged="(string? kind) => store.SetSubscription(kind == SubscriptionKind)"
+                                    Horizontal NoCircle Variant="BitVariant.Fill" AriaLabel="Kind of sale" Class="sale-kind" />
+                </div>
+                <p class="calculator-summary" aria-live="polite">@Summary</p>
+                <ul class="fees">
+                    @foreach (var row in Rows)
+                    {
+                        <li class="fee @(row.Fee.IsStore ? "store" : null)">
+                            <div class="fee-name">
+                                <span class="fee-provider">@row.Fee.Name</span>
+                                <span class="fee-basis">@row.Fee.Basis</span>
+                            </div>
+                            <div class="fee-track" aria-hidden="true"><span class="fee-bar" style="width:@Width(row.Amount)"></span></div>
+                            <div class="fee-amounts">
+                                <strong>@Money(row.Amount)</strong>
+                                <span>@Share(row.Amount)</span>
+                                <span class="fee-keep">you keep @Money(Price - row.Amount)</span>
+                            </div>
+                        </li>
+                    }
+                </ul>
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="calculator-note">
+                    A sale in euros to a customer in the EU, by a small business that earns under $1M a year. Card fees change with the card, and the stores' with the country and your yearly earnings.
+                </BitText>
+            </div>
+        </ExplainerSection>
+
+        <ExplainerSection Id="providers" Title="Web payment providers"
+                          Intro="A payment processor moves the money and leaves the taxes to you. A merchant of record sells on your behalf, so the taxes are theirs, for a higher fee.">
+            <div class="providers">
+                @foreach (var provider in PaymentsFacts.Providers)
+                {
+                    <BitCard Outlined NoShadow Background="BitColorKind.Primary" Border="BitColorKind.Tertiary" Class="provider">
+                        <div class="provider-head">
+                            <BitText Element="h3" Typography="BitTypography.H6" Class="provider-name">@provider.Name</BitText>
+                            <BitTag Text="@provider.Kind" Size="BitSize.Small" Variant="@(provider.IsMerchantOfRecord ? BitVariant.Fill : BitVariant.Outline)"
+                                    Color="@(provider.IsMerchantOfRecord ? BitColor.Primary : BitColor.SecondaryBackground)" />
+                        </div>
+                        <dl class="provider-facts">
+                            <div class="provider-fact"><dt>Cards in the EU</dt><dd>@provider.EuCards</dd></div>
+                            <div class="provider-fact"><dt>Cards in the US</dt><dd>@provider.UsCards</dd></div>
+                            <div class="provider-fact"><dt>Subscriptions</dt><dd>@provider.Subscriptions</dd></div>
+                            <div class="provider-fact"><dt>VAT and sales tax</dt><dd>@provider.Taxes</dd></div>
+                            <div class="provider-fact"><dt>Good for</dt><dd>@provider.GoodFor</dd></div>
+                        </dl>
+                    </BitCard>
+                }
+            </div>
+        </ExplainerSection>
+
+        <ExplainerSection Id="stores" Title="Selling inside the store apps"
+                          Intro="Digital goods bought in an Android or iOS app pay the store, unless the buyer's country lets you take the payment yourself. Pick where your buyers are.">
+            <BitPivot SelectedKey="@(store.Region ?? PaymentsFacts.Regions[0].Key)" SelectedKeyChanged="(string? key) => store.PickRegion(key)" Class="regions">
+                @foreach (var region in PaymentsFacts.Regions)
+                {
+                    <BitPivotItem Key="@region.Key" HeaderText="@region.Name">
+                        <div class="region">
+                            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="region-covers">@region.Covers</BitText>
+                            <div class="rules">
+                                <div class="rules-head" aria-hidden="true">
+                                    <span></span>
+                                    <span><BitIcon IconName="@BitIconName.CellPhone" Size="BitSize.Small" /> Google Play</span>
+                                    <span><BitIcon IconName="@BitIconName.MobileSelected" Size="BitSize.Small" /> App Store</span>
+                                </div>
+                                @foreach (var rule in region.Rules)
+                                {
+                                    <div class="rule">
+                                        <BitText Element="h3" Typography="BitTypography.Subtitle2" Class="rule-topic">@rule.Topic</BitText>
+                                        <div class="rule-cell"><span class="rule-store">Google Play</span> @rule.GooglePlay</div>
+                                        <div class="rule-cell"><span class="rule-store">App Store</span> @rule.AppStore</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </BitPivotItem>
+                }
+            </BitPivot>
+        </ExplainerSection>
+
+        <ExplainerSection Id="before-you-decide" Title="Before you decide">
+            <div class="points">
+                @foreach (var point in PaymentsFacts.Points)
+                {
+                    <div class="point">
+                        <span class="point-icon"><BitIcon IconName="@point.IconName" /></span>
+                        <div class="point-body">
+                            <BitText Element="h3" Typography="BitTypography.Subtitle1" Class="point-title">@point.Title</BitText>
+                            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@point.Text</BitText>
+                        </div>
+                    </div>
+                }
+            </div>
+        </ExplainerSection>
+
+        <ExplainerSources Items="PaymentsFacts.Sources" Intro="@($"Each provider's own page, read on {PaymentsFacts.ReadOn}.")" />
+    </ChildContent>
+</ExplainerArticle>
