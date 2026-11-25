@@ -10,7 +10,7 @@ namespace Boilerplate.Server.Shared.Infrastructure.Services;
 
 /// <summary>
 /// The part of <see cref="DeploymentConfigurationDto"/> both server projects have. A standalone api and Server.Web are
-/// two processes with two configurations, so the operations page reads this from each of them.
+/// two processes with two configurations, so each of them answers for itself.
 /// </summary>
 public static class DeploymentConfigurationReader
 {

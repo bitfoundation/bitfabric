@@ -53,7 +53,7 @@ public class AppFeatures
         [Description("See and cut off the external applications users have authorized over OAuth.")]
         public const string OAuthClients_Manage = "2.3";
 
-        [Description("Open the operations page, and see every health check's status and failure details through /healthz.")]
+        [Description("See every health check's status and failure details through /healthz, and let a monitor read it over OAuth.")]
         public const string Operations_View = "2.4";
     }
 

@@ -6266,10 +6266,10 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <value>Alla konfigurerade delar klarade sig. Konfigurera de som är markerade Inte konfigurerad i din app, eller ta bort koden som använder dem.</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>Din app svarar, men funktionerna bakom delarna nedan kan vara långsamma eller misslyckas. Felinformationen stannar i din app: dess Drift-sida visar den.</value>
+    <value>Din app svarar, men funktionerna bakom delarna nedan kan vara långsamma eller misslyckas. Felinformationen stannar i din app.</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>Funktionerna som bygger på de delar som inte fungerar är ur funktion. Felinformationen stannar i din app: dess Drift-sida visar den.</value>
+    <value>Funktionerna som bygger på de delar som inte fungerar är ur funktion. Felinformationen stannar i din app.</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>nyss</value>
@@ -6542,7 +6542,7 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <value>Körs</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>Godkännandet slutar fungera om den personens lösenord ändras eller om personen förlorar åtkomsten till appens Drift-sida. Du får ett larm, och alla i ditt team med den åtkomsten kan ansluta igen.</value>
+    <value>Godkännandet slutar fungera om den personens lösenord ändras eller om personen förlorar behörigheten att se appens hälsorapport. Du får ett larm, och alla i ditt team med den behörigheten kan ansluta igen.</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>Projektet</value>
@@ -6605,7 +6605,7 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <value>bit Fabric kan inte längre läsa hälsan för {0}</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>Någon med åtkomst till dess Drift-sida måste ansluta den igen.</value>
+    <value>Någon som får se dess hälsorapport måste ansluta den igen.</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>Ett testlarm för {0}</value>

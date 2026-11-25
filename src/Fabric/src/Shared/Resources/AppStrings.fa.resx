@@ -6272,10 +6272,10 @@
     <value>همهٔ بخش‌های پیکربندی‌شده موفق بودند. بخش‌هایی را که «پیکربندی‌نشده» علامت خورده‌اند در اپ خود پیکربندی کنید، یا کدی را که از آن‌ها استفاده می‌کند حذف کنید.</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>اپ شما پاسخ می‌دهد، اما امکاناتی که به بخش‌های زیر وابسته‌اند ممکن است کند باشند یا کار نکنند. جزئیات خطاها در خود اپ شما می‌ماند و صفحهٔ Operations آن، آن‌ها را نشان می‌دهد.</value>
+    <value>اپ شما پاسخ می‌دهد، اما امکاناتی که به بخش‌های زیر وابسته‌اند ممکن است کند باشند یا کار نکنند. جزئیات خطاها در خود اپ شما می‌ماند.</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>امکاناتی که به بخش‌های ناموفق وابسته‌اند کار نمی‌کنند. جزئیات خطاها در خود اپ شما می‌ماند و صفحهٔ Operations آن، آن‌ها را نشان می‌دهد.</value>
+    <value>امکاناتی که به بخش‌های ناموفق وابسته‌اند کار نمی‌کنند. جزئیات خطاها در خود اپ شما می‌ماند.</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>همین الان</value>
@@ -6554,7 +6554,7 @@
     <value>نسخهٔ در حال اجرا</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>اگر رمز عبور آن فرد تغییر کند یا دسترسی‌اش به صفحهٔ Operations اپ شما از بین برود، این تأیید دیگر کار نمی‌کند. در این صورت هشداری دریافت می‌کنید و هر کسی در تیم شما که این دسترسی را دارد، می‌تواند آن را دوباره متصل کند.</value>
+    <value>اگر رمز عبور آن فرد تغییر کند یا اجازهٔ دیدن health report اپ شما را از دست بدهد، این تأیید دیگر کار نمی‌کند. در این صورت هشداری دریافت می‌کنید و هر کسی در تیم شما که این اجازه را دارد، می‌تواند آن را دوباره متصل کند.</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>پروژه</value>
@@ -6617,7 +6617,7 @@
     <value>bit Fabric دیگر نمی‌تواند سلامت {0} را بخواند</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>کسی که به صفحهٔ Operations آن دسترسی دارد، باید آن را دوباره متصل کند.</value>
+    <value>کسی که اجازهٔ دیدن health report آن را دارد، باید آن را دوباره متصل کند.</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>هشدار آزمایشی برای {0}</value>
@@ -8483,7 +8483,7 @@
     <value>اپ شما تأیید bit Fabric را نپذیرفت.</value>
   </data>
   <data name="MonitoringConnectionApproverLostAccess" xml:space="preserve">
-    <value>کسی که bit Fabric را تأیید کرده بود دیگر به صفحهٔ Operations اپ شما دسترسی ندارد.</value>
+    <value>کسی که bit Fabric را تأیید کرده بود دیگر اجازهٔ دیدن health report اپ شما را ندارد.</value>
   </data>
   <data name="MonitoringConnectionRenewRefused" xml:space="preserve">
     <value>اپ شما تمدید تأیید bit Fabric را نپذیرفت ({0}).</value>

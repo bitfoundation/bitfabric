@@ -4,7 +4,7 @@ using Boilerplate.Shared.Features.Diagnostic;
 
 namespace Boilerplate.Tests.Features.Diagnostics;
 
-/// <summary><c>GET /api/v1/Diagnostic/GetDeploymentConfiguration</c>, behind the operations page's Configuration section.</summary>
+/// <summary><c>GET /api/v1/Diagnostic/GetDeploymentConfiguration</c>: the deployment's settings no health check reports.</summary>
 [TestClass, TestCategory("IntegrationTest")]
 public partial class DeploymentConfigurationTests
 {

@@ -6266,10 +6266,10 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <value>Todas las partes configuradas pasaron. Configura en tu aplicación las marcadas como «Sin configurar», o quita el código que las usa.</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>Tu aplicación responde, pero las funciones que dependen de las partes de abajo pueden ir lentas o fallar. Los detalles de los errores se quedan en tu aplicación: su página Operaciones los muestra.</value>
+    <value>Tu aplicación responde, pero las funciones que dependen de las partes de abajo pueden ir lentas o fallar. Los detalles de los errores se quedan en tu aplicación.</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>Las funciones que dependen de las partes que fallan no funcionan. Los detalles de los errores se quedan en tu aplicación: su página Operaciones los muestra.</value>
+    <value>Las funciones que dependen de las partes que fallan no funcionan. Los detalles de los errores se quedan en tu aplicación.</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>ahora mismo</value>
@@ -6542,7 +6542,7 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <value>En ejecución</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>La aprobación deja de funcionar si cambia la contraseña de esa persona o si pierde el acceso a la página Operaciones de tu aplicación. Recibirás una alerta, y cualquiera de tu equipo con ese acceso puede volver a conectarla.</value>
+    <value>La aprobación deja de funcionar si cambia la contraseña de esa persona o si pierde el permiso para ver el informe de estado de tu aplicación. Recibirás una alerta, y cualquiera de tu equipo con ese permiso puede volver a conectarla.</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>El proyecto</value>
@@ -6605,7 +6605,7 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <value>bit Fabric ya no puede leer el estado de {0}</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>Alguien con acceso a su página Operaciones tiene que volver a conectarla.</value>
+    <value>Alguien con permiso para ver su informe de estado tiene que volver a conectarla.</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>Una alerta de prueba para {0}</value>

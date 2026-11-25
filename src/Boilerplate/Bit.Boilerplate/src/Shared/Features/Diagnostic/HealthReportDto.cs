@@ -1,8 +1,8 @@
 namespace Boilerplate.Shared.Features.Diagnostic;
 
 /// <summary>
-/// The body of /healthz (See MapAppHealthChecks). It keeps the HealthChecks UI format's names and adds what the
-/// health checks page needs on top: when the report was made, and each check's failure status and timeout. And which
+/// The body of /healthz (See MapAppHealthChecks). It keeps the HealthChecks UI format's names and adds what a
+/// monitor needs on top: when the report was made, and each check's failure status and timeout. And which
 /// build answered, on which instance, since when: a monitor that polls this marks a deployment where
 /// <see cref="ApplicationVersion"/> changes, and a restart where it stays and <see cref="StartedAt"/> moves.
 /// </summary>

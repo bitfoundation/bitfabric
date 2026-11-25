@@ -555,7 +555,7 @@ jobs:
             status="$(timeout 40 docker exec "$container" bash -c "exec 3<>/dev/tcp/127.0.0.1/8080 && printf 'GET /health HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && head -n 1 <&3" || true)"
             read -r _ code _ <<< "$status"
             if [[ "$code" != 200 ]]; then
-              echo "::warning::/health of the new $name answered ${code:-nothing}. The swap goes on. The health checks page, or GetHealth on dev-mcp for the api, says which check fails."
+              echo "::warning::/health of the new $name answered ${code:-nothing}. The swap goes on. /healthz, signed in with Operations_View, or GetHealth on dev-mcp for the api, says which check fails."
             fi
           done
 
@@ -651,7 +651,7 @@ jobs:
           for address in "$SERVER_ADDRESS" "$LANDING_PAGE_ADDRESS" ${SERVER_API_ADDRESS:+"$SERVER_API_ADDRESS"}; do
             status="$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 30 "${address%/}/health" || true)"
             if [[ "$status" != 200 ]]; then
-              echo "::warning::${address%/}/health answered $status. The health checks page, or GetHealth on dev-mcp for the api, says which check fails."
+              echo "::warning::${address%/}/health answered $status. /healthz, signed in with Operations_View, or GetHealth on dev-mcp for the api, says which check fails."
             fi
           done
           status="$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 30 --request POST --header 'Content-Type: application/x-protobuf' --data-binary '' "${LANDING_PAGE_ADDRESS%/}/v1/logs" || true)"

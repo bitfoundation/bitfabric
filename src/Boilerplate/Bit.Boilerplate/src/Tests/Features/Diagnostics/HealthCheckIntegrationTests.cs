@@ -219,7 +219,7 @@ public partial class HealthCheckIntegrationTests
 
     /// <summary>
     /// Each entry says what kind of dependency it watches, taken from the category tag it was registered with, so a
-    /// monitor and the Operations page can group a check they don't know by name, one of the app's own included. The
+    /// monitor can group a check it doesn't know by name, one of the app's own included. The
     /// JSON name is what such a monitor codes against.
     /// </summary>
     [TestMethod]
@@ -310,7 +310,7 @@ public partial class HealthCheckIntegrationTests
 
     /// <summary>
     /// A missing configuration reports Degraded like a slow dependency, so /healthz says which of the two an entry is (See
-    /// HealthReportEntryDto.IsNotConfigured): neither the Operations page nor a monitor has to read the description.
+    /// HealthReportEntryDto.IsNotConfigured): a monitor doesn't have to read the description.
     /// </summary>
     [TestMethod]
     public async Task DetailedReport_Should_TellAMissingConfiguration_FromADegradedDependency()
@@ -429,7 +429,7 @@ public partial class HealthCheckIntegrationTests
     /// </summary>
     /// <summary>
     /// The project's other sites in <c>HealthChecks:Websites</c>, given as one value the way a single environment or GitHub
-    /// variable carries them and as a list, each get a check of their own, so the Operations page shows a card for each, and
+    /// variable carries them and as a list, each get a check of their own, so /healthz reports an entry for each, and
     /// a site listed twice gets one. Each request carries a new <c>v</c> by default, which <c>/up</c> requires. Each one that
     /// failed says what went wrong. The checks run directly, as the detailed report needs an operator.
     /// </summary>

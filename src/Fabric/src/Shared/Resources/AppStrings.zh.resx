@@ -6266,10 +6266,10 @@
     <value>所有已配置的部分都通过了检查。请在您的应用中配置标记为“未配置”的部分，或删除使用它们的代码。</value>
   </data>
   <data name="MonitoringDegradedExplanation" xml:space="preserve">
-    <value>您的应用有响应，但依赖下方各部分的功能可能会变慢或失败。错误详情保留在您的应用中：可在其“运维”页面查看。</value>
+    <value>您的应用有响应，但依赖下方各部分的功能可能会变慢或失败。错误详情保留在您的应用中。</value>
   </data>
   <data name="MonitoringFailingExplanation" xml:space="preserve">
-    <value>依赖失败部分的功能无法使用。错误详情保留在您的应用中：可在其“运维”页面查看。</value>
+    <value>依赖失败部分的功能无法使用。错误详情保留在您的应用中。</value>
   </data>
   <data name="MonitoringJustNow" xml:space="preserve">
     <value>刚刚</value>
@@ -6542,7 +6542,7 @@
     <value>运行版本</value>
   </data>
   <data name="MonitoringApprovalStopsWorkingHelp" xml:space="preserve">
-    <value>如果此人的密码更改，或其失去对您应用“运维”页面的访问权限，此批准将失效。届时您会收到警报，团队中任何拥有该访问权限的人都可以重新连接。</value>
+    <value>如果此人的密码更改，或其失去查看您应用健康报告的权限，此批准将失效。届时您会收到警报，团队中任何拥有该权限的人都可以重新连接。</value>
   </data>
   <data name="MonitoringTheProject" xml:space="preserve">
     <value>项目</value>
@@ -6605,7 +6605,7 @@
     <value>bit Fabric 无法再读取 {0} 的健康状况</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
-    <value>需要由有权访问其“运维”页面的人重新连接。</value>
+    <value>需要由有权查看其健康报告的人重新连接。</value>
   </data>
   <data name="MonitoringTestAlertTitle" xml:space="preserve">
     <value>{0} 的测试警报</value>

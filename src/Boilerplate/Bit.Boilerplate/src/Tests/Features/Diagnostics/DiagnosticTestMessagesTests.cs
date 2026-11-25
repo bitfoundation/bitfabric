@@ -10,7 +10,7 @@ using Boilerplate.Shared.Features.PushNotification;
 namespace Boilerplate.Tests.Features.Diagnostics;
 
 /// <summary>
-/// The test messages the health checks page sends: to the caller's email, phone number and push subscription.
+/// The test messages IDiagnosticController sends: to the caller's email, phone number and push subscription.
 /// </summary>
 [TestClass, TestCategory("IntegrationTest")]
 public partial class DiagnosticTestMessagesTests

@@ -4,7 +4,7 @@ namespace Boilerplate.Tests.E2E.Features.Jobs;
 /// The Hangfire dashboard on every deployment that hosts one: /hangfire on each standalone API, and on Sales' web app
 /// (its API is integrated). HangfireDashboardAuthorizationFilter lets in whoever holds System.Jobs_Manage - which only
 /// the global admin role implies - and the user comes from the bearer handler, which also reads the access_token cookie:
-/// that cookie is how the app's diagnostic modal opens the dashboard in a browser tab.
+/// that cookie, which UpdateSession writes, is what signs a browser tab in on /hangfire.
 /// </summary>
 [TestClass, TestCategory(TestCategories.Api), Retry(2)]
 public partial class HangfireDashboardTests
