@@ -15,7 +15,7 @@ namespace Boilerplate.Tests.E2E.Features.StaticFiles;
 /// nothing asks for, is left out of this on purpose.
 /// </para>
 /// <para>
-/// The IIS sites are on this machine (See DeployedApps.DeploymentOfApi and .github/actions/deploy-to-server), so the
+/// The IIS sites are on this machine (See DeployedApps.DeploymentOfApi and .github/actions/deploy-demo-to-iis), so the
 /// published <c>.br</c> is read straight from the site folder and compared byte for byte with what the internet gets.
 /// </para>
 /// </summary>

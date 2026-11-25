@@ -1,4 +1,4 @@
-name: Deploy to server
+name: Deploy a demo to IIS
 description: Downloads a published server bundle, from this run or another one, and mirrors it into a site on the self-hosted runner, stopping and starting its app pool around the copy.
 
 # Server-owned files are never copied or deleted.
