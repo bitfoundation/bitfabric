@@ -954,6 +954,7 @@
                         "src/Tests/Features/Products/AddOrEditProductPageTests.cs",
                         "src/Tests/Features/Categories/AddOrEditCategoryModalTests.cs",
                         "src/Tests/Features/Ads/AdsServiceTests.cs",
+                        "src/Tests/Features/StatusPage/StatusPageNoticeTests.cs",
                         "src/Tests/Features/Configuration/ClientSettingsValidationTests.cs",
                         "src/Tests/Features/Configuration/HttpClientDefaultsTests.cs",
                         "src/Tests/Features/ForceUpdate/ForceUpdateTests.cs",

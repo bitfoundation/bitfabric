@@ -61,10 +61,10 @@ public partial class ContentSecurityPolicy
             connectSrc.Add($"{otlpEndpoint.Scheme}://{otlpEndpoint.Authority}");
         }
 
-        // --- Add the status page's script, which Server.Web's App.razor loads (See ClientWebSettings.StatusPageScriptUrl) ---
-        if (Uri.TryCreate(configuration["StatusPageScriptUrl"], UriKind.Absolute, out var statusPageScript) && statusPageScript.Scheme is ("https" or "http"))
+        // --- Add the status page StatusPageNotice reads (See ClientCoreSettings.StatusPageSummaryUrl) ---
+        if (Uri.TryCreate(settings.StatusPageSummaryUrl, UriKind.Absolute, out var statusPageSummary) && statusPageSummary.Scheme is "https" or "http")
         {
-            scriptSrc.Add($"{statusPageScript.Scheme}://{statusPageScript.Authority}");
+            connectSrc.Add($"{statusPageSummary.Scheme}://{statusPageSummary.Authority}");
         }
 
         //#if (captcha == "reCaptcha")

@@ -346,10 +346,16 @@ user holding `Operations_View` grants from a session that signed in with two fac
 To read the report yourself, open `/healthz` on the server signed in with `Operations_View`, or ask the environment's
 dev-mcp for `GetHealth`; the app's logs say what happened around a failure.
 
-bit Fabric also gives the app a public status page, with a script that shows a bar at the top of the app, linking to the
-page, only while something is wrong. Put the script's address in `StatusPageScriptUrl`, in Client.Web's
-`appsettings.json` or, for a deployment, in the environment's `SERVERWEB__STATUSPAGESCRIPTURL` variable: Server.Web's
-`App.razor` loads it, and the Content-Security-Policy allows its origin. Empty, as it ships, loads nothing.
+The app tells its own users when its status page reports a problem, on the web and in the Android, iOS and Windows apps
+alike. Put the address of the page's `summary.json` in `StatusPageSummaryUrl`, in Client.Core's `appsettings.json` or,
+for a deployment, in the environment's `STATUS_PAGE_SUMMARY_URL` variable, which the CD writes into every app it builds:
+bit Fabric's status page serves one at `https://api.bitfabric.co/api/v1/PublicStatus/Summary/<page>`, and other status
+page services in the same Atlassian Statuspage shape. [`StatusPageNotice`](/src/Client/Boilerplate.Client.Core/Components/Layout/StatusPageNotice.razor.cs)
+asks it five seconds after the app opens, off the startup path; again when the app comes back after five minutes or more
+in the background, and when a request to the app's own server fails; it doesn't poll. It shows an unresolved incident
+with its latest update and step, or a planned maintenance under way or starting within a day, with a link to the page,
+until the user closes it; a closed notice comes back only for a new incident or update. A summary that doesn't come back
+is logged as an error and shows nothing. The Content-Security-Policy allows its origin. Empty, as it ships, asks nothing.
 
 The **Hangfire dashboard** is at `/hangfire`, for a user who holds `AppFeatures.System.Jobs_Manage`, the claim
 [`HangfireDashboardAuthorizationFilter`](/src/Server/Boilerplate.Server.Api/Infrastructure/RequestPipeline/HangfireDashboardAuthorizationFilter.cs)

@@ -2248,4 +2248,49 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <value>Salir de la aplicación</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Algo no funciona en este momento</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Mantenimiento programado</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>El equipo ya lo sabe. No hace falta que lo informe.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Página de estado</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Investigando</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Causa encontrada</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Corrección aplicada</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Resuelto</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Empezó {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Empezó {0}, actualizado {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>ahora mismo</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>hace {0} min</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>hace {0} h</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>En curso hasta {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>De {0} a {1}</value>
+  </data>
 </root>

@@ -2248,4 +2248,49 @@
     <value>ऐप से बाहर निकलें</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>अभी कुछ ठीक से काम नहीं कर रहा है</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>निर्धारित रखरखाव</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>टीम को इसकी जानकारी है। रिपोर्ट करने की ज़रूरत नहीं है।</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>स्टेटस पेज</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>जाँच जारी है</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>कारण मिल गया</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>सुधार लागू किया गया</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>हल हो गया</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>{0} शुरू हुआ</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>{0} शुरू हुआ, {1} अपडेट हुआ</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>अभी</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} मिनट पहले</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} घंटे पहले</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>{0} तक जारी है</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} से {1} तक</value>
+  </data>
 </root>

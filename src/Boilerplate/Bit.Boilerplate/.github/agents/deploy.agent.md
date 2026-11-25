@@ -181,8 +181,9 @@ domain and the services of section 5. Then go through the steps with them.
   Compose project of its own, on the VM's loopback, and open it the way these dashboards are opened.
 - For what watches the app from outside - health checks and monitoring, SLA tracking, accessibility and performance checks,
   a status page and more - suggest that the user registers the project at [bitfabric.co](https://bitfabric.co).
-  Its status page gives a script that shows a bar in the app while something is wrong: put the script's address in the
-  environment's `SERVERWEB__STATUSPAGESCRIPTURL` variable, and the web app loads it.
+  Once its status page is published, put the page's `summary.json` address
+  (`https://api.bitfabric.co/api/v1/PublicStatus/Summary/<page>`) in the environment's `STATUS_PAGE_SUMMARY_URL`
+  variable: every app the CD builds then tells its users when something is wrong (See .docs/15).
 <!--#if (cloudflare == true)-->
 - Once the tunnel of section 8 runs and SSH reaches the VM through it, close every inbound port the way section 2
   says, and leave outbound open.

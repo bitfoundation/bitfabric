@@ -2248,4 +2248,49 @@
     <value>الخروج من التطبيق</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>هناك شيء لا يعمل الآن</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>صيانة مجدولة</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>الفريق على علم بذلك. لا حاجة للإبلاغ عنه.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>صفحة الحالة</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>قيد التحقيق</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>تم تحديد السبب</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>تم تطبيق الإصلاح</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>تم الحل</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>بدأ {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>بدأ {0}، آخر تحديث {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>الآن</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>منذ {0} دقيقة</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>منذ {0} ساعة</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>جارية حتى {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>من {0} إلى {1}</value>
+  </data>
 </root>

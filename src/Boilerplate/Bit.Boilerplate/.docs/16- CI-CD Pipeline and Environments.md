@@ -164,6 +164,7 @@ Apple for push notifications and Sign in with Apple, from which it stores their 
 | `SERVER_API_ADDRESS` | variable | The api's public address. Every app is built with it as `ServerAddress`, and the deployment stops if it is missing |
 <!--#endif-->
 | `APP_TITLE`, `APP_ID` | variable | The app's name and id. Each environment has an id and a name of its own, so the Test and Production apps install side by side. The version is `<Version>` in `src/Directory.Build.props`: the first release ships `0.0.1` and each later one raises it. Test's Android, iOS and Windows apps take the run's number as their build number, so each Test deployment installs as an update |
+| `STATUS_PAGE_SUMMARY_URL` | variable, optional | The `summary.json` of the app's status page, such as bit Fabric's. Every app is built with it as `StatusPageSummaryUrl` and tells its users when the page reports a problem (See .docs/15); without it the apps ask no status page |
 | `OPENAI_APIKEY` | secret, optional | The key `bit translate` fills missing translations with; without it a missing translation fails the deploy |
 <!--#if (aspire == true)-->
 | `SMTP_CONNECTION_STRING` | secret | The SMTP server the app and the landing page send email through |
@@ -232,7 +233,6 @@ server, so changing one setting changes it and nothing else:
 | `WebAppRender:PrerenderEnabled` | `SERVERWEB__WEBAPPRENDER__PRERENDERENABLED` | variable |
 | The second item of the `TrustedOrigins` array | `SERVERWEB__TRUSTEDORIGINS__1` | variable |
 <!--#endif-->
-| The web app's `StatusPageScriptUrl`, the script of its status page on bit Fabric | `SERVERWEB__STATUSPAGESCRIPTURL` | variable |
 | The landing page's `AI:OpenAI:ChatApiKey` | `LANDINGPAGE__AI__OPENAI__CHATAPIKEY` | secret |
 
 ```bash

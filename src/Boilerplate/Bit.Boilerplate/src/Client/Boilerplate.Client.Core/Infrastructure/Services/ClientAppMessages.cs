@@ -89,6 +89,12 @@ public partial class ClientAppMessages
     public const string IS_ONLINE_CHANGED = nameof(IS_ONLINE_CHANGED);
 
     /// <summary>
+    /// A publisher that publishes this message notifies that a request to the app's own server failed: it didn't answer,
+    /// or answered with a 5xx status.
+    /// </summary>
+    public const string SERVER_REQUEST_FAILED = nameof(SERVER_REQUEST_FAILED);
+
+    /// <summary>
     /// A publisher that publishes this message notifies that the page data has changed.
     /// </summary>
     public const string PAGE_DATA_CHANGED = nameof(PAGE_DATA_CHANGED);

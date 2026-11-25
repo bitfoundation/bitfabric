@@ -2248,4 +2248,49 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <value>App beenden</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Gerade funktioniert etwas nicht</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Geplante Wartung</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>Das Team weiß Bescheid. Sie müssen es nicht melden.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Statusseite</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Wird untersucht</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Ursache gefunden</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Behebung eingespielt</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Behoben</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Begonnen {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Begonnen {0}, aktualisiert {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>gerade eben</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>vor {0} Min.</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>vor {0} Std.</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>Läuft bis {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} bis {1}</value>
+  </data>
 </root>

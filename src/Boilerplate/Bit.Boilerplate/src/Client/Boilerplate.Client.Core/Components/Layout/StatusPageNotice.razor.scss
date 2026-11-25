@@ -1,0 +1,138 @@
+@import '../../Styles/abstracts/_media-queries.scss';
+@import '../../Styles/abstracts/_bit-css-variables.scss';
+
+// A card in the bottom-end corner; a sheet along the bottom on a phone.
+.status-notice {
+    --status-notice-color: #{$bit-color-error};
+    --status-notice-tint: #{$bit-color-error-tint};
+    position: fixed;
+    z-index: $bit-zindex-snackbar;
+    inset-inline-end: 1.5rem;
+    bottom: calc(1.5rem + #{$bit-env-inset-bottom});
+    width: min(25rem, calc(100vw - 1.5rem));
+    box-sizing: border-box;
+    overflow: hidden;
+    color: $bit-color-foreground-primary;
+    background-color: $bit-color-background-primary;
+    border-top: 0.25rem solid var(--status-notice-color);
+    border-radius: $bit-shape-radius-dialog;
+    box-shadow: $bit-box-shadow-dialog;
+    animation: status-notice-in $bit-motion-duration-long ease-out;
+
+    &.partial {
+        --status-notice-color: #{$bit-color-warning};
+        --status-notice-tint: #{$bit-color-warning-tint};
+    }
+
+    &.maintenance {
+        --status-notice-color: #{$bit-color-primary};
+        --status-notice-tint: #{$bit-color-primary-tint};
+    }
+
+    @include lt-sm {
+        inset-inline: 0;
+        bottom: 0;
+        width: auto;
+        padding-bottom: $bit-env-inset-bottom;
+        border-radius: $bit-shape-radius-sheet $bit-shape-radius-sheet 0 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}
+
+.body {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+    column-gap: 0.75rem;
+    padding: 1rem;
+
+    ::deep .title {
+        align-self: center;
+    }
+
+    ::deep .content {
+        grid-column: 1 / -1;
+        margin-top: 0.75rem;
+    }
+
+    ::deep .text {
+        display: -webkit-box;
+        flex-shrink: 0;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+    }
+
+    ::deep .known {
+        padding: 0.5rem 0.625rem;
+        border-radius: $bit-shape-radius-md;
+        background-color: $bit-color-background-secondary;
+    }
+
+    ::deep .actions {
+        margin-top: 0.25rem;
+    }
+}
+
+.icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.0625rem;
+    border-radius: $bit-shape-radius-full;
+    color: var(--status-notice-color);
+    background-color: var(--status-notice-tint);
+    box-shadow: 0 0 0 0.3125rem color-mix(in srgb, var(--status-notice-color) 14%, transparent);
+}
+
+.phases {
+    display: flex;
+    align-self: stretch;
+    gap: 0.25rem;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        flex: 1;
+        min-width: 0;
+    }
+
+    ::deep .label {
+        display: block;
+        margin-top: 0.3125rem;
+        line-height: 1.25;
+        text-wrap: balance;
+        color: $bit-color-foreground-secondary;
+    }
+
+    .now ::deep .label {
+        font-weight: 600;
+        color: $bit-color-foreground-primary;
+    }
+}
+
+.track {
+    display: block;
+    height: 0.25rem;
+    border-radius: $bit-shape-radius-progress;
+    background-color: $bit-color-border-tertiary;
+
+    .done & {
+        background-color: var(--status-notice-color);
+    }
+
+    .now & {
+        background: repeating-linear-gradient(-45deg, var(--status-notice-color) 0 0.375rem, color-mix(in srgb, var(--status-notice-color) 45%, transparent) 0.375rem 0.75rem);
+    }
+}
+
+@keyframes status-notice-in {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+}

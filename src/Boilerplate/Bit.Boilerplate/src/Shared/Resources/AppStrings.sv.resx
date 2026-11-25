@@ -2248,4 +2248,49 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <value>Avsluta appen</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Något fungerar inte just nu</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Planerat underhåll</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>Teamet känner till det. Du behöver inte rapportera det.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Statussida</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Undersöks</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Orsaken hittad</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Åtgärd tillämpad</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Löst</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Började {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Började {0}, uppdaterad {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>nyss</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>för {0} min sedan</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>för {0} tim sedan</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>Pågår till {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} till {1}</value>
+  </data>
 </root>

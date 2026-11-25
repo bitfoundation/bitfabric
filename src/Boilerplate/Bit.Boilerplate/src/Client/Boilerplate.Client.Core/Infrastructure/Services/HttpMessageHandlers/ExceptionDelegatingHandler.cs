@@ -95,6 +95,11 @@ public partial class ExceptionDelegatingHandler(PubSubService pubSubService,
                 if (isInternalRequest)
                 {
                     pubSubService.Publish(ClientAppMessages.IS_ONLINE_CHANGED, serverCommunicationSuccess);
+
+                    if (serverCommunicationSuccess is false || (int?)response?.StatusCode >= 500)
+                    {
+                        pubSubService.Publish(ClientAppMessages.SERVER_REQUEST_FAILED);
+                    }
                 }
             }
         }
