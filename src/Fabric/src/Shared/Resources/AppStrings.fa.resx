@@ -2312,7 +2312,7 @@
     <value>با چه چیزی شروع می‌شود</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>هر پروژه از قبل ثبت‌نام و ورود با Passkey و تأیید دومرحله‌ای، پروفایل، نقش‌ها و دسترسی‌ها، تنظیمات، ۱۱ زبان و تم روشن و تیره را دارد. علاوه بر این‌ها، می‌تواند با یک پنل ادمین یا یک فروشگاه آنلاین شروع شود.</value>
+    <value>هر پروژه از قبل ثبت‌نام و ورود با Passkey و تأیید دومرحله‌ای، پروفایل، نقش‌ها و دسترسی‌ها، تنظیمات، ۱۲ زبان و تم روشن و تیره را دارد. علاوه بر این‌ها، می‌تواند با یک پنل ادمین یا یک فروشگاه آنلاین شروع شود.</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>ابزاری برای کسب‌وکارها می‌سازید؟ با پنل ادمین شروع کنید و محصولاتش را به چیزهای خودتان تبدیل کنید. محصول می‌فروشید؟ با فروشگاه شروع کنید.</value>
@@ -2693,7 +2693,7 @@
     <value>Passkey و ورود دومرحله‌ای</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>۱۱ زبان، روشن و تیره</value>
+    <value>۱۲ زبان، روشن و تیره</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>صفحه‌های نمونه: فهرست کارها</value>
@@ -2720,7 +2720,7 @@
     <value>با چه چیزی شروع شود؟</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>هر پروژه از قبل یک Identity solution کامل، نقش‌ها و دسترسی‌ها، تنظیمات، ۱۱ زبان و تم روشن و تیره را دارد.</value>
+    <value>هر پروژه از قبل یک Identity solution کامل، نقش‌ها و دسترسی‌ها، تنظیمات، ۱۲ زبان و تم روشن و تیره را دارد.</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>فقط امکانات پایه</value>

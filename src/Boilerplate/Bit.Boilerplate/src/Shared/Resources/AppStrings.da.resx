@@ -1,0 +1,2251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- +:cnd:noEmit -->
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- .NET Validation messages -->
+  <data name="CompareAttribute_ValidationError" xml:space="preserve">
+    <value>'{0}' og '{1}' stemmer ikke overens.</value>
+  </data>
+  <data name="EmailAddressAttribute_ValidationError" xml:space="preserve">
+    <value>Feltet {0} er ikke en gyldig e-mailadresse.</value>
+  </data>
+  <data name="MaxLengthAttribute_InvalidMaxLength" xml:space="preserve">
+    <value>MaxLengthAttribute skal have en Length-værdi, der er større end nul. Brug MaxLength() uden parametre for at angive, at strengen eller arrayet kan have den maksimalt tilladte længde.</value>
+  </data>
+  <data name="MaxLengthAttribute_ValidationError" xml:space="preserve">
+    <value>Feltet {0} skal være af typen streng eller array med en maksimal længde på '{1}'.</value>
+  </data>
+  <data name="MinLengthAttribute_ValidationError" xml:space="preserve">
+    <value>Feltet {0} skal være af typen streng eller array med en minimumslængde på '{1}'.</value>
+  </data>
+  <data name="RangeAttribute_ValidationError" xml:space="preserve">
+    <value>Feltet {0} skal være mellem {1} og {2}.</value>
+  </data>
+  <data name="RequiredAttribute_ValidationError" xml:space="preserve">
+    <value>Feltet {0} er påkrævet.</value>
+  </data>
+  <data name="PhoneAttribute_ValidationError" xml:space="preserve">
+    <value>Feltet {0} er ikke et gyldigt telefonnummer.</value>
+  </data>
+  <!-- Exceptions -->
+  <data name="BadRequestException" xml:space="preserve">
+    <value>Ugyldig anmodning</value>
+  </data>
+  <data name="ConflictException" xml:space="preserve">
+    <value>Anmodningen kunne ikke behandles på grund af en konflikt i anmodningen</value>
+  </data>
+  <data name="NotAuthorizedPageTitle" xml:space="preserve">
+    <value>Ingen adgang</value>
+  </data>
+  <data name="ForbiddenException" xml:space="preserve">
+    <value>Adgang til den anmodede ressource er forbudt</value>
+  </data>
+  <data name="ResourceValidationException" xml:space="preserve">
+    <value>Anmodningens data er ikke gyldige</value>
+  </data>
+  <data name="RestException" xml:space="preserve">
+    <value>Der opstod en fejl under kommunikationen med serveren</value>
+  </data>
+  <data name="UnauthorizedException" xml:space="preserve">
+    <value>Din anmodning mangler gyldige godkendelsesoplysninger</value>
+  </data>
+  <data name="UnknownException" xml:space="preserve">
+    <value>Der er opstået en ukendt fejl</value>
+  </data>
+  <data name="ExternalSignInUnknownError" xml:space="preserve">
+    <value>Der er opstået en ukendt fejl under log-ind med en ekstern konto</value>
+  </data>
+  <data name="UpdateConcurrencyException" xml:space="preserve">
+    <value>Posten blev ændret af en anden bruger, efter at du hentede de oprindelige data. Handlingen blev annulleret.</value>
+  </data>
+  <data name="ResourceNotFoundException" xml:space="preserve">
+    <value>Ressourcen blev ikke fundet</value>
+  </data>
+  <data name="TooManyRequestsException" xml:space="preserve">
+    <value>For mange anmodninger</value>
+  </data>
+  <data name="TransientException" xml:space="preserve">
+    <value>Kan ikke oprette forbindelse til serveren.</value>
+  </data>
+  <!-- Bit.BlazorUI messages -->
+  <!-- Boilerplate strings -->
+  <data name="Active" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="Alphabetical" xml:space="preserve">
+    <value>A-Å</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Fuldført</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Dato</value>
+  </data>
+  <data name="SettingsPageTitle" xml:space="preserve">
+    <value>Indstillinger</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Indstillinger</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Mørk</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Lys</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Sprog</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Vælg sprog</value>
+  </data>
+  <data name="ProfileTitle" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="ProfileSubtitle" xml:space="preserve">
+    <value>Rediger dine profiloplysninger</value>
+  </data>
+  <data name="SuccessfulSendChangeEmailTokenMessage" xml:space="preserve">
+    <value>Koden til at skifte e-mail er sendt til dig</value>
+  </data>
+  <data name="SuccessfulSendChangePhoneNumberTokenMessage" xml:space="preserve">
+    <value>Koden til at skifte telefonnummer er sendt til dig</value>
+  </data>
+  <data name="SuccessfulSendTokenMessage" xml:space="preserve">
+    <value>Koden er sendt til dig</value>
+  </data>
+  <data name="SessionsTitle" xml:space="preserve">
+    <value>Sessioner</value>
+  </data>
+  <data name="SessionsSubtitle" xml:space="preserve">
+    <value>Dine aktive sessioner på tværs af flere enheder</value>
+  </data>
+  <data name="CurrentSession" xml:space="preserve">
+    <value>Aktuel session</value>
+  </data>
+  <data name="PrivilegedDeviceLimitMessage" xml:space="preserve">
+    <value>Du har brugt {1} af de {0} enheder, der giver adgang til alle funktioner.
+Når du har nået {0}, vil yderligere log-ind have begrænsede funktioner.</value>
+  </data>
+  <data name="OtherSessions" xml:space="preserve">
+    <value>Andre sessioner</value>
+  </data>
+  <data name="TryRemovingOtherSessions" xml:space="preserve">
+    <value>Prøv at fjerne andre sessioner</value>
+  </data>
+  <data name="RemoveSessionSuccessMessage" xml:space="preserve">
+    <value>Sessionen er fjernet</value>
+  </data>
+  <data name="NotFoundPageTitle" xml:space="preserve">
+    <value>404</value>
+  </data>
+  <data name="NotFoundText" xml:space="preserve">
+    <value>Der er ikke noget her.</value>
+  </data>
+  <data name="UpdateWebViewThroughGooglePlay" xml:space="preserve">
+    <value>Opdater WebView via Google Play.</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+    <!-- Identity pages -->
+    <data name="Close" xml:space="preserve">
+    <value>Luk</value>
+  </data>
+    <data name="SignInWithPasskeyButtonText" xml:space="preserve">
+    <value>Log ind med en adgangsnøgle</value>
+  </data>
+    <data name="OpenGmail" xml:space="preserve">
+    <value>Åbn Gmail</value>
+  </data>
+    <data name="OpenOutlook" xml:space="preserve">
+    <value>Åbn Outlook</value>
+  </data>
+    <data name="AgreeToTermsMessage" xml:space="preserve">
+    <value>Ved at oprette en konto accepterer du vores</value>
+  </data>
+  <!--#if (signalR == true) -->
+  <data name="SystemPromptsTitle" xml:space="preserve">
+    <value>Systemprompts</value>
+  </data>
+  <data name="SystemPromptsSubTitle" xml:space="preserve">
+    <value>Se chatbottens systemprompts her.</value>
+  </data>
+  <data name="PromptKindSupport" xml:space="preserve">
+    <value>Support</value>
+  </data>
+  <data name="PromptKindAnalyzeProductImage" xml:space="preserve">
+    <value>Analysér produktbillede</value>
+  </data>
+  <data name="PushNotificationJob" xml:space="preserve">
+    <value>Pushnotifikationsjob</value>
+  </data>
+  <!--#endif-->
+  <!--#if (offlineDb == true) -->
+  <data name="OfflineTodoTitle" xml:space="preserve">
+    <value>Opgaver (offline)</value>
+  </data>
+  <data name="SyncPushFailed" xml:space="preserve">
+    <value>Det mislykkedes at sende ændringer til serveren</value>
+  </data>
+  <data name="SyncPullFailed" xml:space="preserve">
+    <value>Det mislykkedes at hente ændringer fra serveren</value>
+  </data>
+  <data name="SyncPushSuccess" xml:space="preserve">
+    <value>Sendte {0} ændringer til serveren</value>
+  </data>
+  <!--#endif-->
+  <data name="FullName" xml:space="preserve">
+    <value>Fulde navn</value>
+  </data>
+  <data name="TermsPageTitle" xml:space="preserve">
+    <value>Vilkår</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>Vilkår</value>
+  </data>
+  <data name="ProfileUpdatedSuccessfullyMessage" xml:space="preserve">
+    <value>Profilen er opdateret.</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Bekræft adgangskode</value>
+  </data>
+  <data name="ConfirmNewPassword" xml:space="preserve">
+    <value>Bekræft ny adgangskode</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="NewEmail" xml:space="preserve">
+    <value>Ny e-mail</value>
+  </data>
+  <data name="NewEmailPlaceholder" xml:space="preserve">
+    <value>Indtast ny e-mail</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Telefonnummer</value>
+  </data>
+  <data name="NewPhoneNumber" xml:space="preserve">
+    <value>Nyt telefonnummer</value>
+  </data>
+  <data name="NewPhoneNumberPlaceholder" xml:space="preserve">
+    <value>Indtast nyt telefonnummer</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Tilbage</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Adgangskode</value>
+  </data>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Indtast adgangskode</value>
+  </data>
+  <data name="ImageCouldNotBeFound" xml:space="preserve">
+    <value>Billedet blev ikke fundet</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Fejl</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Køn</value>
+  </data>
+  <data name="BirthDate" xml:space="preserve">
+    <value>Fødselsdato</value>
+  </data>
+  <data name="BirthDateInFuture" xml:space="preserve">
+    <value>Fødselsdatoen kan ikke ligge i fremtiden.</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Brugernavn</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Navn</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beskrivelse</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Pris</value>
+  </data>
+  <data name="EitherProvideEmailOrPhoneNumber" xml:space="preserve">
+    <value>Angiv enten e-mail eller telefonnummer.</value>
+  </data>
+  <data name="EitherProvideUserNameOrEmailOrPhoneNumber" xml:space="preserve">
+    <value>Angiv enten brugernavn, e-mail eller telefonnummer.</value>
+  </data>
+  <data name="YouNeedToSignIn" xml:space="preserve">
+    <value>Du skal være logget ind for at fortsætte.</value>
+  </data>
+  <data name="InvalidUserCredentials" xml:space="preserve">
+    <value>Ugyldige loginoplysninger</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titel</value>
+  </data>
+  <data name="AreYouSureWannaDelete" xml:space="preserve">
+    <value>Er du sikker på, at du vil slette {0}?</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Forside</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Opdater</value>
+  </data>
+  <data name="Recover" xml:space="preserve">
+    <value>Gendan</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Ups, noget gik galt...</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Tilbage til forsiden</value>
+  </data>
+  <data name="UserLockedOut" xml:space="preserve">
+    <value>Brugeren er låst ude. Prøv igen om {0}</value>
+  </data>
+  <data name="UserIsNotConfirmed" xml:space="preserve">
+    <value>Brugeren er ikke bekræftet.</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Brugeren findes ikke.</value>
+  </data>
+  <data name="DuplicateEmailOrPhoneNumber" xml:space="preserve">
+    <value>Denne e-mail eller dette telefonnummer er allerede i brug.</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Tilføj</value>
+  </data>
+  <data name="Token" xml:space="preserve">
+    <value>Kode</value>
+  </data>
+  <data name="InvalidToken" xml:space="preserve">
+    <value>Ugyldig kode.</value>
+  </data>
+  <data name="ExpiredToken" xml:space="preserve">
+    <value>Koden er udløbet.</value>
+  </data>
+  <data name="SignInMessageInSignUp" xml:space="preserve">
+    <value>Har du allerede en konto?</value>
+  </data>
+  <data name="ConfirmMessageInProfile" xml:space="preserve">
+    <value>Har du allerede en kode?</value>
+  </data>
+  <data name="ConfirmEmailHeaderText" xml:space="preserve">
+    <value>E-mailadresse</value>
+  </data>
+  <data name="ConfirmEmailSubtitle" xml:space="preserve">
+    <value>Vi har sendt en bekræftelseskode til din e-mailadresse.</value>
+  </data>
+  <data name="ConfirmPageTitle" xml:space="preserve">
+    <value>Bekræft</value>
+  </data>
+  <data name="ConfirmTitle" xml:space="preserve">
+    <value>Bekræft din konto</value>
+  </data>
+  <data name="ConfirmEmailMessage" xml:space="preserve">
+    <value>Bekræft din e-mail ved at indtaste koden her.</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Indtast e-mailadresse</value>
+  </data>
+  <data name="EmailToken" xml:space="preserve">
+    <value>Kode</value>
+  </data>
+  <data name="EmailTokenConfirmButtonText" xml:space="preserve">
+    <value>Bekræft e-mailadresse</value>
+  </data>
+  <data name="EmailConfirmationSuccessTitle" xml:space="preserve">
+    <value>Din e-mailadresse ({0}) er blevet bekræftet.</value>
+  </data>
+  <data name="EmailConfirmationSuccessMessage" xml:space="preserve">
+    <value>Du kan nu logge ind med din konto.</value>
+  </data>
+  <data name="ConfirmPhoneHeaderText" xml:space="preserve">
+    <value>Telefonnummer</value>
+  </data>
+  <data name="ConfirmPhoneSubtitle" xml:space="preserve">
+    <value>Vi har sendt en bekræftelseskode til din telefon.</value>
+  </data>
+  <data name="ConfirmPhoneMessage" xml:space="preserve">
+    <value>Bekræft dit telefonnummer ved at indtaste koden her.</value>
+  </data>
+  <data name="PhoneNumberPlaceholder" xml:space="preserve">
+    <value>Indtast telefonnummer</value>
+  </data>
+  <data name="PhoneToken" xml:space="preserve">
+    <value>Kode</value>
+  </data>
+  <data name="PhoneTokenConfirmButtonText" xml:space="preserve">
+    <value>Bekræft telefonnummer</value>
+  </data>
+  <data name="NotReceivedPhoneMessage" xml:space="preserve">
+    <value>Har du ikke modtaget koden på din telefon?</value>
+  </data>
+  <data name="ResendPhoneTokenButtonText" xml:space="preserve">
+    <value>Send kode igen</value>
+  </data>
+  <data name="PhoneConfirmationSuccessTitle" xml:space="preserve">
+    <value>Dit telefonnummer ({0}) er blevet bekræftet.</value>
+  </data>
+  <data name="PhoneConfirmationSuccessMessage" xml:space="preserve">
+    <value>Du kan nu logge ind med din konto.</value>
+  </data>
+  <data name="AccountTitle" xml:space="preserve">
+    <value>Konto</value>
+  </data>
+  <data name="AccountSubtitle" xml:space="preserve">
+    <value>Skift din kontos e-mail, telefonnummer eller indstillinger for log-ind uden adgangskode</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Slet konto</value>
+  </data>
+  <data name="DeleteAccountPrompt" xml:space="preserve">
+    <value>Er du sikker på, at du vil slette din konto?</value>
+  </data>
+  <data name="DontHaveAccountMessage" xml:space="preserve">
+    <value>Har du ikke en konto?</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Rediger</value>
+  </data>
+  <data name="FileUploadFailed" xml:space="preserve">
+    <value>Der opstod en fejl under upload af filen</value>
+  </data>
+  <data name="ForgotPasswordPageTitle" xml:space="preserve">
+    <value>Glemt adgangskode</value>
+  </data>
+  <data name="ForgotPasswordTitle" xml:space="preserve">
+    <value>Glemt adgangskode</value>
+  </data>
+  <data name="ForgotPasswordMessage" xml:space="preserve">
+    <value>Indtast din e-mailadresse eller dit telefonnummer, så vi kan sende dig en kode til at nulstille din adgangskode.</value>
+  </data>
+  <data name="GenderMale" xml:space="preserve">
+    <value>Mand</value>
+  </data>
+  <data name="GenderOther" xml:space="preserve">
+    <value>Andet</value>
+  </data>
+  <data name="GoToToday" xml:space="preserve">
+    <value>Gå til i dag</value>
+  </data>
+  <data name="HomeMessage" xml:space="preserve">
+    <value>Alt, hvad du ser, virker allerede på web, Android, iOS, Windows og macOS. Gør det til dit eget, og udgiv det.</value>
+  </data>
+  <data name="HomePageTitle" xml:space="preserve">
+    <value>Forside</value>
+  </data>
+  <data name="HomePanelTitle" xml:space="preserve">
+    <value>Byg alle dine apps</value>
+  </data>
+  <data name="HomePanelSubtitle" xml:space="preserve">
+    <value>med det, du allerede kender og elsker</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Læs mere</value>
+  </data>
+    <data name="BitFabricMessage" xml:space="preserve">
+    <value>Denne app er lavet med bit Fabric. Din AI-agent bygger videre på et fundament, hvor alt allerede virker, og koden er din.</value>
+  </data>
+    <data name="StartYourOwn" xml:space="preserve">
+    <value>Start dit eget</value>
+  </data>
+    <data name="StartYourOwnMessage" xml:space="preserve">
+    <value>Besvar et par spørgsmål om dit produkt, så sætter bit Fabric et projekt som dette op til din AI-agent.</value>
+  </data>
+    <data name="CreateProject" xml:space="preserve">
+    <value>Opret et projekt</value>
+  </data>
+    <data name="WorksWithYourAIAgent" xml:space="preserve">
+    <value>Fungerer med din AI-agent</value>
+  </data>
+    <data name="WorksWithYourAIAgentMessage" xml:space="preserve">
+    <value>Claude Code, GitHub Copilot, Codex, Cursor og andre læser projektets egne instruktioner og skills.</value>
+  </data>
+    <data name="BitCliMessage" xml:space="preserve">
+    <value>Opretter projektet, sætter det op på en hvilken som helst computer, laver dets nøgler og holder det opdateret, fra kommandolinjen.</value>
+  </data>
+  <data name="DescriptionMetaTagValue" xml:space="preserve">
+    <value>Boilerplate er bygget med ASP.NET Core, Identity, Web API, EF Core og Blazor.</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Ny adgangskode</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Gammel adgangskode</value>
+  </data>
+  <data name="NotReceivedEmailMessage" xml:space="preserve">
+    <value>Har du ikke modtaget e-mailen?</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>eller</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Fjern</value>
+  </data>
+  <data name="ResendEmailTokenButtonText" xml:space="preserve">
+    <value>Send kode igen</value>
+  </data>
+  <data name="ResetPasswordPageTitle" xml:space="preserve">
+    <value>Nulstil adgangskode</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Nulstil adgangskode</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Nulstil adgangskode</value>
+  </data>
+  <data name="ResetPasswordSubtitle" xml:space="preserve">
+    <value>Vi har sendt en kode til din telefon eller e-mail.</value>
+  </data>
+  <data name="ResetPasswordMessage" xml:space="preserve">
+    <value>Indtast koden sammen med din nye adgangskode her.</value>
+  </data>
+  <data name="ResetPasswordButtonText" xml:space="preserve">
+    <value>Angiv adgangskode</value>
+  </data>
+  <data name="ResetPasswordSuccessTitle" xml:space="preserve">
+    <value>Din adgangskode er blevet nulstillet.</value>
+  </data>
+  <data name="ResetPasswordSuccessBody" xml:space="preserve">
+    <value>Du kan nu logge ind med din adgangskode.</value>
+  </data>
+  <data name="ResetPasswordMessageInForgot" xml:space="preserve">
+    <value>Har du allerede en kode til nulstilling af adgangskoden?</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Gem</value>
+  </data>
+  <data name="SignInPageTitle" xml:space="preserve">
+    <value>Log ind</value>
+  </data>
+  <data name="SignInPanelTitle" xml:space="preserve">
+    <value>Velkommen</value>
+  </data>
+  <data name="SignInPanelSubtitle" xml:space="preserve">
+    <value>Fortsæt med din</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Fortsæt</value>
+  </data>
+  <data name="GoogleSignInButtonText" xml:space="preserve">
+    <value>Log ind med Google</value>
+  </data>
+  <data name="FacebookSignInButtonText" xml:space="preserve">
+    <value>Log ind med Facebook</value>
+  </data>
+  <data name="GitHubSignInButtonText" xml:space="preserve">
+    <value>Log ind med GitHub</value>
+  </data>
+  <data name="TwitterSignInButtonText" xml:space="preserve">
+    <value>Log ind med Twitter (X)</value>
+  </data>
+  <data name="AppleSignInButtonText" xml:space="preserve">
+    <value>Log ind med Apple</value>
+  </data>
+  <data name="KeycloakSignInButtonText" xml:space="preserve">
+    <value>Log ind med Enterprise SSO</value>
+  </data>
+  <data name="AzureEntraSignInButtonText" xml:space="preserve">
+    <value>Log ind med Azure Entra</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Log ud</value>
+  </data>
+  <data name="SignOutPrompt" xml:space="preserve">
+    <value>Er du sikker på, at du vil logge ud?</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Opret konto</value>
+  </data>
+  <data name="SignUpPageTitle" xml:space="preserve">
+    <value>Opret konto</value>
+  </data>
+  <data name="SignUpPanelTitle" xml:space="preserve">
+    <value>Kom i gang i dag</value>
+  </data>
+  <data name="SignUpPanelSubtitle" xml:space="preserve">
+    <value>Opret en ny konto med</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="UploadNewImage" xml:space="preserve">
+    <value>Træk eller vælg et billede</value>
+  </data>
+  <data name="SelectBirthDate" xml:space="preserve">
+    <value>Vælg din fødselsdato</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Handling</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Tilbage</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuller</value>
+  </data>
+  <data name="CheckSpamMailMessage" xml:space="preserve">
+    <value>Tjek mappen Spam/Uønsket post, hvis du ikke kan finde den i indbakken.</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Farve</value>
+  </data>
+  <data name="CustomColor" xml:space="preserve">
+    <value>Brugerdefineret farve</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Slet</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Log ind</value>
+  </data>
+  <data name="SignInByModal" xml:space="preserve">
+    <value>Log ind (pop op)</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bekræft</value>
+  </data>
+  <data name="SignInAsDifferentUser" xml:space="preserve">
+    <value>Log ind som en anden bruger</value>
+  </data>
+  <data name="YouAreSignedInAs" xml:space="preserve">
+    <value>Du er logget ind som</value>
+  </data>
+  <data name="ForgotPasswordLink" xml:space="preserve">
+    <value>Glemt adgangskode?</value>
+  </data>
+  <data name="GenderFemale" xml:space="preserve">
+    <value>Kvinde</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Husk mig?</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopiér</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Kopieret</value>
+  </data>
+  <data name="TfaTitle" xml:space="preserve">
+    <value>Totrinsbekræftelse</value>
+  </data>
+  <data name="TfaSubtitle" xml:space="preserve">
+    <value>Administrer totrinsbekræftelse for din konto</value>
+  </data>
+  <data name="TwoFactorCode" xml:space="preserve">
+    <value>2FA-kode</value>
+  </data>
+  <data name="TwoFactorRecoveryCode" xml:space="preserve">
+    <value>Gendannelseskode</value>
+  </data>
+  <data name="TfaPanelTitle" xml:space="preserve">
+    <value>Totrinsbekræftelse</value>
+  </data>
+  <data name="TfaPanelSubtitle" xml:space="preserve">
+    <value>Hent en ny kode i din godkendelsesapp, eller brug din gendannelseskode.</value>
+  </data>
+  <data name="TfaPanelAnotherWayTitle" xml:space="preserve">
+    <value>Prøv en anden måde</value>
+  </data>
+  <data name="TfaPanelAnotherWaySubtitle" xml:space="preserve">
+    <value>Du kan få en ny kode via din e-mail eller telefon.</value>
+  </data>
+  <data name="TfaPanelAnotherWayGetCode" xml:space="preserve">
+    <value>Få kode</value>
+  </data>
+  <data name="TfaResetSharedKeyError" xml:space="preserve">
+    <value>Nulstilling af den delte 2FA-nøgle skal deaktivere 2FA, indtil en 2FA-kode baseret på den nye delte nøgle er valideret.</value>
+  </data>
+  <data name="TfaEmptyCodeError" xml:space="preserve">
+    <value>Anmodningen indeholdt ingen 2FA-kode. Der kræves en gyldig 2FA-kode for at aktivere 2FA.</value>
+  </data>
+  <data name="TfaInvalidCodeError" xml:space="preserve">
+    <value>2FA-koden i anmodningen var ugyldig. Der kræves en gyldig 2FA-kode for at aktivere 2FA.</value>
+  </data>
+  <data name="TfaConfigureAutAppTitle" xml:space="preserve">
+    <value>Konfigurer godkendelsesapp</value>
+  </data>
+  <data name="TfaConfigureAutAppSubtitle" xml:space="preserve">
+    <value>Følg disse trin for at bruge en godkendelsesapp:</value>
+  </data>
+  <data name="TfaConfigureAutAppStep1" xml:space="preserve">
+    <value>Download en godkendelsesapp som Google Authenticator til {0} og {1}.</value>
+  </data>
+  <data name="TfaConfigureAutAppStep2" xml:space="preserve">
+    <value>Scan/klik på QR-koden, eller indtast følgende nøgle i din godkendelsesapp (mellemrum og store/små bogstaver er ligegyldige):</value>
+  </data>
+  <data name="TfaConfigureAutAppStep3" xml:space="preserve">
+    <value>Når du har scannet QR-koden eller indtastet nøglen ovenfor, giver din godkendelsesapp dig en unik kode. Indtast koden i bekræftelsesfeltet nedenfor.</value>
+  </data>
+  <data name="SignOutOfAllDevicesWarningMessage" xml:space="preserve">
+    <value>Af hensyn til din sikkerhed bliver du logget ud af alle dine enheder, også denne, inden for få minutter. Log ind igen.</value>
+  </data>
+  <data name="ChangePasswordButtonText" xml:space="preserve">
+    <value>Skift adgangskode</value>
+  </data>
+  <data name="PasswordChangedSuccessfullyMessage" xml:space="preserve">
+    <value>Din adgangskode er blevet ændret.</value>
+  </data>
+  <data name="TwoFactorAuthenticationEnabled" xml:space="preserve">
+    <value>Totrinsbekræftelse er blevet aktiveret.</value>
+  </data>
+  <data name="TwoFactorAuthenticationDisabled" xml:space="preserve">
+    <value>Totrinsbekræftelse er blevet deaktiveret.</value>
+  </data>
+  <data name="TfaConfigureAutAppVerificationCodeLabel" xml:space="preserve">
+    <value>Bekræftelseskode:</value>
+  </data>
+  <data name="TfaConfigureAutAppVerifyButtonText" xml:space="preserve">
+    <value>Bekræft</value>
+  </data>
+  <data name="TfaRecoveryCodesHeader" xml:space="preserve">
+    <value>Gendannelse</value>
+  </data>
+  <data name="TfaRecoveryCodesZeroLeftTitle" xml:space="preserve">
+    <value>Du har ingen gendannelseskoder tilbage.</value>
+  </data>
+  <data name="TfaRecoveryCodesZeroLeftSubtitle" xml:space="preserve">
+    <value>Du skal generere et nyt sæt gendannelseskoder, før du kan logge ind med en gendannelseskode.</value>
+  </data>
+  <data name="TfaRecoveryCodesOneLeftTitle" xml:space="preserve">
+    <value>Du har 1 gendannelseskode tilbage.</value>
+  </data>
+  <data name="TfaRecoveryCodesOneLeftSubtitle" xml:space="preserve">
+    <value>Du kan generere et nyt sæt gendannelseskoder.</value>
+  </data>
+  <data name="TfaRecoveryCodesThreeLeftTitle" xml:space="preserve">
+    <value>Du har {0} gendannelseskoder tilbage.</value>
+  </data>
+  <data name="TfaRecoveryCodesThreeLeftSubtitle" xml:space="preserve">
+    <value>Du bør generere et nyt sæt gendannelseskoder.</value>
+  </data>
+  <data name="TfaRecoveryCodesGenerateWraning" xml:space="preserve">
+    <value>Når du genererer nye gendannelseskoder, ændres de nøgler, der bruges i godkendelsesapps, ikke. Hvis du vil ændre nøglen i en godkendelsesapp, skal du nulstille dine godkendelsesnøgler under næste fane.</value>
+  </data>
+  <data name="TfaRecoveryCodesGenerateButtonText" xml:space="preserve">
+    <value>Generer gendannelseskoder</value>
+  </data>
+  <data name="TfaRecoveryCodesWarningTitle" xml:space="preserve">
+    <value>Opbevar disse koder et sikkert sted.</value>
+  </data>
+  <data name="TfaRecoveryCodesWarning" xml:space="preserve">
+    <value>Hvis du mister din godkendelsesenhed og ikke har gendannelseskoderne, mister du adgangen til din konto.</value>
+  </data>
+  <data name="TfaRecoveryCodesTitle" xml:space="preserve">
+    <value>Gendannelseskoder:</value>
+  </data>
+  <data name="TfaAuthAppHeader" xml:space="preserve">
+    <value>Godkendelsesapp</value>
+  </data>
+  <data name="TfaAuthAppWarningTitle" xml:space="preserve">
+    <value>Hvis du nulstiller din godkendelsesnøgle, virker din godkendelsesapp ikke, før du konfigurerer den igen.</value>
+  </data>
+  <data name="TfaAuthAppWarning" xml:space="preserve">
+    <value>Denne proces deaktiverer 2FA, indtil du bekræfter din godkendelsesapp. Hvis du ikke fuldfører konfigurationen af din godkendelsesapp, kan du miste adgangen til din konto.</value>
+  </data>
+  <data name="TfaAuthAppResetKeyButtonText" xml:space="preserve">
+    <value>Nulstil godkendelsesnøgle</value>
+  </data>
+  <data name="TfaDisable2faHeader" xml:space="preserve">
+    <value>Deaktivér</value>
+  </data>
+  <data name="TfaDisable2faWarningTitle" xml:space="preserve">
+    <value>Denne handling deaktiverer kun 2FA.</value>
+  </data>
+  <data name="TfaDisable2faWarning" xml:space="preserve">
+    <value>Deaktivering af 2FA ændrer ikke de nøgler, der bruges i godkendelsesapps. Hvis du vil ændre nøglen i en godkendelsesapp, skal du nulstille dine godkendelsesnøgler under forrige fane.</value>
+  </data>
+  <data name="TfaDisable2faButtonText" xml:space="preserve">
+    <value>Deaktivér 2FA</value>
+  </data>
+  <data name="TfaTokenSentMessage" xml:space="preserve">
+    <value>2FA-koden er blevet genereret og sendt til dig.</value>
+  </data>
+  <data name="ElevatedAccessTokenShortText" xml:space="preserve">
+    <value>{0} er din kode i Boilerplate.</value>
+  </data>
+  <data name="WaitForEmailTokenRequestResendDelay" xml:space="preserve">
+    <value>Du har allerede anmodet om bekræftelsesmailen. Prøv igen om {0}</value>
+  </data>
+  <data name="WaitForPhoneNumberTokenRequestResendDelay" xml:space="preserve">
+    <value>Du har allerede anmodet om bekræftelses-sms'en. Prøv igen om {0}</value>
+  </data>
+  <data name="WaitForResetPasswordTokenRequestResendDelay" xml:space="preserve">
+    <value>Du har allerede anmodet om en kode til nulstilling af adgangskoden. Prøv igen om {0}</value>
+  </data>
+  <data name="WaitForOtpRequestResendDelay" xml:space="preserve">
+    <value>Du har allerede anmodet om en OTP. Prøv igen om {0}</value>
+  </data>
+  <data name="WaitForElevatedAccessTokenRequestResendDelay" xml:space="preserve">
+    <value>Du har allerede anmodet om en kode til udvidet adgang. Prøv igen om {0}</value>
+  </data>
+  <data name="Otp" xml:space="preserve">
+    <value>OTP</value>
+  </data>
+  <data name="OtpPanelTitle" xml:space="preserve">
+    <value>Tjek din {0}</value>
+  </data>
+  <data name="OtpPanelSubtitle" xml:space="preserve">
+    <value>Bekræft din {0} ved at indtaste koden, der blev sendt til {1}</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Kode</value>
+  </data>
+  <data name="OtpResendMessage" xml:space="preserve">
+    <value>Fik du ikke koden?</value>
+  </data>
+  <data name="Resend" xml:space="preserve">
+    <value>Send igen</value>
+  </data>
+  <data name="SendOtpButtonText" xml:space="preserve">
+    <value>Send OTP</value>
+  </data>
+  <data name="SendMagicLinkButtonText" xml:space="preserve">
+    <value>Send magisk link og OTP</value>
+  </data>
+  <data name="SignInByPassword" xml:space="preserve">
+    <value>Brug adgangskode</value>
+  </data>
+  <data name="SignInByOtp" xml:space="preserve">
+    <value>Brug OTP</value>
+  </data>
+  <data name="EitherProvidePasswordOrOtp" xml:space="preserve">
+    <value>Angiv enten adgangskode eller OTP</value>
+  </data>
+  <data name="WaitForTwoFactorTokenRequestResendDelay" xml:space="preserve">
+    <value>Du har allerede anmodet om e-mailen med 2FA-koden. Prøv igen om {0}.</value>
+  </data>
+  <data name="ChangePhoneNumberTokenShortText" xml:space="preserve">
+    <value>{0} er din kode i Boilerplate.</value>
+  </data>
+  <data name="ConfirmPhoneTokenShortText" xml:space="preserve">
+    <value>{0} er din kode i Boilerplate.</value>
+  </data>
+  <data name="TwoFactorTokenShortText" xml:space="preserve">
+    <value>{0} er din kode i Boilerplate.</value>
+  </data>
+  <data name="OtpShortText" xml:space="preserve">
+    <value>{0} er din kode i Boilerplate.</value>
+  </data>
+  <data name="ResetPasswordTokenShortText" xml:space="preserve">
+    <value>{0} er din kode i Boilerplate.</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="Recently" xml:space="preserve">
+    <value>For nylig</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Opdater</value>
+  </data>
+  <data name="ForceUpdateTitle" xml:space="preserve">
+    <value>Tid til en opdatering</value>
+  </data>
+  <data name="ForceUpdateBody" xml:space="preserve">
+    <value>Denne opdatering er nødvendig, for at din app fortsat kan køre problemfrit</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Om</value>
+  </data>
+  <data name="AboutPageTitle" xml:space="preserve">
+    <value>Om</value>
+  </data>
+  <!--#if (sample == true || offlineDb == true) -->
+  <data name="TodoAddPlaceholder" xml:space="preserve">
+    <value>Tilføj en opgave</value>
+  </data>
+  <data name="NoTodos" xml:space="preserve">
+    <value>Ingen opgaver endnu</value>
+  </data>
+  <data name="TodoSearchPlaceholder" xml:space="preserve">
+    <value>Søg i opgaver...</value>
+  </data>
+  <data name="ToDoItemCouldNotBeFound" xml:space="preserve">
+    <value>Opgaven blev ikke fundet</value>
+  </data>
+  <data name="TodoPageTitle" xml:space="preserve">
+    <value>Opgaver</value>
+  </data>
+  <data name="Todo" xml:space="preserve">
+    <value>Opgaver</value>
+  </data>
+  <data name="DeleteTodoItem" xml:space="preserve">
+    <value>Slet opgave</value>
+  </data>
+  <data name="SortAscending" xml:space="preserve">
+    <value>Sortér stigende</value>
+  </data>
+  <data name="SortDescending" xml:space="preserve">
+    <value>Sortér faldende</value>
+  </data>
+  <!--#endif -->
+  <!--#if (module == "Admin" || module == "Sales") -->
+  <data name="CategoryCouldNotBeFound" xml:space="preserve">
+    <value>Kategorien blev ikke fundet</value>
+  </data>
+  <data name="ProductCouldNotBeFound" xml:space="preserve">
+    <value>Produktet blev ikke fundet</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="AltText" xml:space="preserve">
+    <value>Alternativ tekst</value>
+  </data>
+  <!--#endif -->
+    <data name="Of" xml:space="preserve">
+    <value>af</value>
+  </data>
+    <data name="TryAgain" xml:space="preserve">
+    <value>Prøv igen</value>
+  </data>
+  <!--#if (module == "Admin") -->
+  <data name="AdminPanel" xml:space="preserve">
+    <value>Adminpanel</value>
+  </data>
+  <data name="Last30DaysProductCount" xml:space="preserve">
+    <value>Antal produkter de seneste 30 dage</value>
+  </data>
+  <data name="AddProduct" xml:space="preserve">
+    <value>Tilføj produkt</value>
+  </data>
+  <data name="SearchProductsPlaceholder" xml:space="preserve">
+    <value>Søg i produkternes navn, kategori og beskrivelse her...</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>Vælg kategori</value>
+  </data>
+  <data name="TotalCategories" xml:space="preserve">
+    <value>Kategorier i alt</value>
+  </data>
+  <data name="TotalProducts" xml:space="preserve">
+    <value>Produkter i alt</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Rediger kategori</value>
+  </data>
+  <data name="AddCategory" xml:space="preserve">
+    <value>Ny kategori</value>
+  </data>
+  <data name="CategoriesPageTitle" xml:space="preserve">
+    <value>Kategorier</value>
+  </data>
+  <data name="EnterCategoryName" xml:space="preserve">
+    <value>Indtast kategorinavn</value>
+  </data>
+  <data name="EnterProductName" xml:space="preserve">
+    <value>Indtast produktnavn</value>
+  </data>
+  <data name="CategoriesWithProductCount" xml:space="preserve">
+    <value>Kategorier med antal produkter</value>
+  </data>
+  <data name="ProductsCountPerCategoryChart" xml:space="preserve">
+    <value>Diagram over antal produkter pr. kategori</value>
+  </data>
+  <data name="ProductsCountPerCategoryChartText" xml:space="preserve">
+    <value>Dette diagram viser antallet af produkter i hver kategori.</value>
+  </data>
+  <data name="ProductsPageTitle" xml:space="preserve">
+    <value>Produkter</value>
+  </data>
+  <data name="ProductsPercentagePerCategory" xml:space="preserve">
+    <value>Procentdel af produkter pr. kategori</value>
+  </data>
+  <data name="ProductsPercentagePerCategoryText" xml:space="preserve">
+    <value>Dette diagram viser procentdelen af produkter i hver kategori.</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Kategorier</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Produkter</value>
+  </data>
+  <data name="CategoryNotEmpty" xml:space="preserve">
+    <value>Denne kategori indeholder produkter, så du kan ikke slette den</value>
+  </data>
+  <data name="AreYouSureWannaDeleteProduct" xml:space="preserve">
+    <value>Er du sikker på, at du vil slette produktet {0}?</value>
+  </data>
+  <data name="DeleteProduct" xml:space="preserve">
+    <value>Slet produkt</value>
+  </data>
+  <data name="EditProduct" xml:space="preserve">
+    <value>Rediger produktet {0}</value>
+  </data>
+  <data name="DuplicateProductName" xml:space="preserve">
+    <value>Produktnavnet findes allerede</value>
+  </data>
+  <data name="DuplicateCategoryName" xml:space="preserve">
+    <value>Kategorien {0} findes allerede</value>
+  </data>
+  <data name="DashboardPageTitle" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="DashboardSubtitle" xml:space="preserve">
+    <value>Her er dine analysedata</value>
+  </data>
+  <data name="Resize" xml:space="preserve">
+    <value>Tilpas størrelse</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Skjul</value>
+  </data>
+    <data name="DeleteCategory" xml:space="preserve">
+    <value>Slet kategori</value>
+  </data>
+    <data name="AreYouSureWannaDeleteCategory" xml:space="preserve">
+    <value>Er du sikker på, at du vil slette kategorien {0}?</value>
+  </data>
+    <data name="PresetColors" xml:space="preserve">
+    <value>Forudindstillede farver</value>
+  </data>
+    <data name="ProductCouldNotBeLoaded" xml:space="preserve">
+    <value>Produktet kunne ikke indlæses.</value>
+  </data>
+  <!--#endif -->
+  <!--#if (captcha == "reCaptcha") -->
+  <data name="InvalidGoogleRecaptchaResponse" xml:space="preserve">
+    <value>Ugyldigt Google reCAPTCHA-svar.</value>
+  </data>
+  <data name="InvalidGoogleRecaptchaChallenge" xml:space="preserve">
+    <value>Du skal bestå Google reCAPTCHA-udfordringen.</value>
+  </data>
+  <!--#endif -->
+  <!--#if (module == "Sales") -->
+  <data name="SimilarProducts" xml:space="preserve">
+    <value>Lignende produkter</value>
+  </data>
+  <data name="SiblingProducts" xml:space="preserve">
+    <value>Produkter i samme kategori</value>
+  </data>
+  <data name="Buy" xml:space="preserve">
+    <value>Køb</value>
+  </data>
+  <data name="PurchaseSuccessful" xml:space="preserve">
+    <value>Købet er gennemført!</value>
+  </data>
+    <data name="NoProductsToShow" xml:space="preserve">
+    <value>Der er ingen produkter at vise lige nu.</value>
+  </data>
+    <data name="SearchProducts" xml:space="preserve">
+    <value>Søg efter produkter</value>
+  </data>
+    <data name="ProductsCouldNotBeLoaded" xml:space="preserve">
+    <value>Produkterne kunne ikke indlæses.</value>
+  </data>
+  <!--#endif -->
+  <data name="Passwordless" xml:space="preserve">
+    <value>Uden adgangskode</value>
+  </data>
+  <data name="PasswordlessTitle" xml:space="preserve">
+    <value>Log-ind uden adgangskode</value>
+  </data>
+  <data name="EnablePasswordless" xml:space="preserve">
+    <value>Aktivér log-ind uden adgangskode</value>
+  </data>
+  <data name="EnablePasswordlessSucsessMessage" xml:space="preserve">
+    <value>Log-ind uden adgangskode er aktiveret</value>
+  </data>
+  <data name="DisablePasswordless" xml:space="preserve">
+    <value>Deaktivér log-ind uden adgangskode</value>
+  </data>
+  <data name="DisablePasswordlessSucsessMessage" xml:space="preserve">
+    <value>Log-ind uden adgangskode er deaktiveret</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Ryd</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Annulleret</value>
+  </data>
+  <data name="NoAppCanOpenLinksOfScheme" xml:space="preserve">
+    <value>Ingen app på denne enhed kan åbne {0}-links.</value>
+  </data>
+  <!--#if (signalR == true) -->
+  <data name="AiChatPanelVoiceCall" xml:space="preserve">
+    <value>Taleopkald</value>
+  </data>
+  <data name="AiChatPanelStartVoiceCall" xml:space="preserve">
+    <value>Start taleopkald</value>
+  </data>
+  <data name="AiChatPanelEndVoiceCall" xml:space="preserve">
+    <value>Afslut taleopkald</value>
+  </data>
+  <data name="AiChatPanelBackToVoiceCall" xml:space="preserve">
+    <value>Tilbage til taleopkaldet</value>
+  </data>
+  <data name="AiChatPanelVoiceCallTimeLeft" xml:space="preserve">
+    <value>Resterende tid af taleopkaldet</value>
+  </data>
+  <data name="AiChatPanelVoiceCallEnded" xml:space="preserve">
+    <value>Taleopkaldet er afsluttet.</value>
+  </data>
+  <data name="AiChatPanelVoiceCallMessageNotSent" xml:space="preserve">
+    <value>Beskeden kunne ikke sendes til opkaldet.</value>
+  </data>
+  <data name="AiChatPanelVoiceCallAssistantBusy" xml:space="preserve">
+    <value>Assistenten er optaget. Prøv igen om {0} sekunder.</value>
+  </data>
+  <data name="AiChatPanelVoiceCallAssistantFailed" xml:space="preserve">
+    <value>Assistenten kunne ikke svare. Prøv igen.</value>
+  </data>
+  <data name="AiChatTooManyRequests" xml:space="preserve">
+    <value>Du chatter for hurtigt. Vent et minut, og prøv igen.</value>
+  </data>
+  <data name="AiChatHumanFollowUpPrompt" xml:space="preserve">
+    <value>Efterlad dine kontaktoplysninger, så vender en medarbejder tilbage til dig.</value>
+  </data>
+  <data name="AiChatHumanFollowUpConversationSummary" xml:space="preserve">
+    <value>Opsummering af samtalen</value>
+  </data>
+  <data name="AiChatHumanFollowUpSignedInAs" xml:space="preserve">
+    <value>Logget ind som</value>
+  </data>
+  <data name="AiChatHumanFollowUpSent" xml:space="preserve">
+    <value>Din anmodning er sendt. En medarbejder vender snart tilbage til dig.</value>
+  </data>
+  <data name="AiChatApprovalWhatHappens" xml:space="preserve">
+    <value>Hvad der sker</value>
+  </data>
+  <data name="AiChatApprovalWaiting" xml:space="preserve">
+    <value>Venter på dit svar</value>
+  </data>
+  <data name="AiChatApprovalClearAppFilesDescription" xml:space="preserve">
+    <value>En frisk start løser de fleste problemer, der skyldes beskadigede lokale data.</value>
+  </data>
+  <data name="AiChatApprovalClearAppFilesSignOut" xml:space="preserve">
+    <value>Du bliver logget ud</value>
+  </data>
+  <data name="AiChatApprovalClearAppFilesDeleteConversation" xml:space="preserve">
+    <value>Denne samtale bliver slettet</value>
+  </data>
+  <data name="AiChatApprovalClearAppFilesRestart" xml:space="preserve">
+    <value>Appen genstarter</value>
+  </data>
+  <data name="AiChatApprovalClearAppFilesEndVoiceCall" xml:space="preserve">
+    <value>Taleopkaldet afsluttes</value>
+  </data>
+  <data name="AiChatApprovalClearAppFilesApprove" xml:space="preserve">
+    <value>Ryd filer</value>
+  </data>
+  <data name="AiChatApprovalApprove" xml:space="preserve">
+    <value>Godkend</value>
+  </data>
+  <data name="AiChatApprovalDecline" xml:space="preserve">
+    <value>Afvis</value>
+  </data>
+  <!--#if (module == "Sales") -->
+  <!--#if (database == "PostgreSQL" || database == "SqlServer") -->
+  <data name="AiChatProductsBestMatch" xml:space="preserve">
+    <value>Bedste match</value>
+  </data>
+  <data name="AiChatProductsAlsoAGoodFit" xml:space="preserve">
+    <value>Passer også godt</value>
+  </data>
+  <data name="AiChatProductsAsk" xml:space="preserve">
+    <value>Spørg</value>
+  </data>
+  <data name="AiChatProductsTellMeMore" xml:space="preserve">
+    <value>Fortæl mig mere om {0}</value>
+  </data>
+  <!--#endif -->
+  <!--#endif -->
+  <data name="AiChatPanelTitle" xml:space="preserve">
+    <value>AI-chatpanel</value>
+  </data>
+  <data name="AiChatPanelDictate" xml:space="preserve">
+    <value>Diktér din besked</value>
+  </data>
+  <data name="AiChatPanelStopDictation" xml:space="preserve">
+    <value>Stop diktering</value>
+  </data>
+  <data name="AiChatPanelMicrophoneBlocked" xml:space="preserve">
+    <value>Adgang til mikrofonen er blokeret. Tillad den i dine indstillinger for at diktere.</value>
+  </data>
+  <data name="AiChatPanelDictationStopped" xml:space="preserve">
+    <value>Dikteringen stoppede: {0}</value>
+  </data>
+  <data name="AiChatPanelReadAloud" xml:space="preserve">
+    <value>Læs højt</value>
+  </data>
+  <data name="AiChatPanelStopReading" xml:space="preserve">
+    <value>Stop oplæsning</value>
+  </data>
+  <data name="AiChatPanelTranscribing" xml:space="preserve">
+    <value>Skriver ned, hvad du sagde</value>
+  </data>
+  <data name="AiChatPanelSpeechSignInTitle" xml:space="preserve">
+    <value>Tale kræver en konto</value>
+  </data>
+  <data name="AiChatPanelSpeechSignInMessage" xml:space="preserve">
+    <value>Diktering og oplæsning kører begge på serveren. Log ind én gang, så kan du tale med chatten og få den til at svare højt.</value>
+  </data>
+  <data name="AiChatPanelAttachImage" xml:space="preserve">
+    <value>Vedhæft et billede</value>
+  </data>
+  <data name="AiChatPanelImageTooLarge" xml:space="preserve">
+    <value>Billedet er større end 10 MB.</value>
+  </data>
+  <data name="AiChatPanelOnlyImagesAllowed" xml:space="preserve">
+    <value>Kun billeder kan vedhæftes.</value>
+  </data>
+  <data name="AiChatPanelAttachmentFailed" xml:space="preserve">
+    <value>Billedet kunne ikke vedhæftes.</value>
+  </data>
+  <data name="AiChatPanelImageSignInTitle" xml:space="preserve">
+    <value>Billeder kræver en konto</value>
+  </data>
+  <data name="AiChatPanelImageSignInMessage" xml:space="preserve">
+    <value>Log ind for at sende et billede sammen med din besked.</value>
+  </data>
+  <data name="AiChatPanelInitialResponse" xml:space="preserve">
+    <value>Hej{0}! Jeg er her for at gøre din oplevelse af appen fantastisk! Har du et spørgsmål, eller har du brug for hjælp?</value>
+  </data>
+  <data name="AiChatPanelPrompt1" xml:space="preserve">
+    <value>Åbn siden til nulstilling af adgangskode, og fortæl mig, hvordan den virker</value>
+  </data>
+  <data name="AiChatPanelPrompt2" xml:space="preserve">
+    <value>Hvordan installerer jeg PWA-versionen af appen?</value>
+  </data>
+  <data name="AiChatPanelPrompt3" xml:space="preserve">
+  <!--#if (module == "Admin") -->
+  <value>Hvor kan jeg finde rapporter om produkter?</value>
+  <!--#elif (module == "Sales") -->
+  <value>Jeg leder efter en elektrisk Benz-SUV med et budget på 75K!</value>
+  <!--#else -->
+  <value>Jeg har noget feedback, som jeg gerne vil dele!</value>
+  <!--#endif -->
+  </data>
+  <data name="AiChatPanelPlaceholder" xml:space="preserve">
+    <value>Skriv en besked...</value>
+  </data>
+    <data name="AiChatPanelMaximize" xml:space="preserve">
+    <value>Maksimér</value>
+  </data>
+  <data name="AiChatPanelRestore" xml:space="preserve">
+    <value>Gendan</value>
+  </data>
+  <data name="AiChatStop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="AiChatRegenerate" xml:space="preserve">
+    <value>Svar igen</value>
+  </data>
+  <data name="AiChatRetry" xml:space="preserve">
+    <value>Prøv igen</value>
+  </data>
+  <data name="AiChatGoodAnswer" xml:space="preserve">
+    <value>Godt svar</value>
+  </data>
+  <data name="AiChatBadAnswer" xml:space="preserve">
+    <value>Dårligt svar</value>
+  </data>
+  <data name="AiChatScrollToLatest" xml:space="preserve">
+    <value>Gå til den seneste besked</value>
+  </data>
+  <data name="AiChatThinking" xml:space="preserve">
+    <value>Tænker…</value>
+  </data>
+  <data name="AiChatFollowUps" xml:space="preserve">
+    <value>Foreslåede opfølgende spørgsmål</value>
+  </data>
+  <data name="AiChatListening" xml:space="preserve">
+    <value>Lytter</value>
+  </data>
+  <data name="AiChatRecordingTimeLeft" xml:space="preserve">
+    <value>{0} tilbage</value>
+  </data>
+  <data name="AiChatDurationMinutes" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="AiChatDurationSeconds" xml:space="preserve">
+    <value>{0} sek.</value>
+  </data>
+  <data name="AiChatRecordingStarted" xml:space="preserve">
+    <value>Optager, {0} tilbage</value>
+  </data>
+  <data name="AiChatCommands" xml:space="preserve">
+    <value>Kommandoer</value>
+  </data>
+  <data name="AiChatRetryIn" xml:space="preserve">
+    <value>Prøv igen om {0}.</value>
+  </data>
+  <data name="AiChatReasoning" xml:space="preserve">
+    <value>Ræsonnement</value>
+  </data>
+  <data name="AiChatReasonedFor" xml:space="preserve">
+    <value>Tænkte i {0}</value>
+  </data>
+  <data name="AiChatSteps" xml:space="preserve">
+    <value>Trin</value>
+  </data>
+  <data name="AiChatInProgress" xml:space="preserve">
+    <value>I gang</value>
+  </data>
+  <data name="AiChatDone" xml:space="preserve">
+    <value>Færdig</value>
+  </data>
+  <data name="AiChatFailed" xml:space="preserve">
+    <value>Mislykkedes</value>
+  </data>
+  <data name="AiChatSkipped" xml:space="preserve">
+    <value>Sprunget over</value>
+  </data>
+  <data name="AiChatNotStarted" xml:space="preserve">
+    <value>Ikke startet</value>
+  </data>
+  <data name="AiChatElapsed" xml:space="preserve">
+    <value>Forløbet tid</value>
+  </data>
+  <data name="AiChatToolCalls" xml:space="preserve">
+    <value>Værktøjer, den brugte</value>
+  </data>
+  <data name="AiChatDropImage" xml:space="preserve">
+    <value>Slip billedet for at vedhæfte det</value>
+  </data>
+  <data name="AiChatTooManyImages" xml:space="preserve">
+    <value>Op til {0} billeder pr. besked</value>
+  </data>
+  <data name="AiChatToolProductSearch" xml:space="preserve">
+    <value>Produktsøgning</value>
+  </data>
+  <data name="AiChatToolNavigation" xml:space="preserve">
+    <value>Sidenavigation</value>
+  </data>
+  <data name="AiChatToolThemeChange" xml:space="preserve">
+    <value>Temaskift</value>
+  </data>
+  <data name="AiChatToolLanguageChange" xml:space="preserve">
+    <value>Sprogskift</value>
+  </data>
+  <data name="AiChatToolSignIn" xml:space="preserve">
+    <value>Log-ind</value>
+  </data>
+  <data name="AiChatToolErrorCheck" xml:space="preserve">
+    <value>Tjek af fejlrapport</value>
+  </data>
+  <data name="AiChatToolFailed" xml:space="preserve">
+    <value>{0} mislykkedes</value>
+  </data>
+  <data name="AiChatToolDeclined" xml:space="preserve">
+    <value>{0} blev afvist</value>
+  </data>
+  <data name="AiChatToolCancelled" xml:space="preserve">
+    <value>{0} blev annulleret</value>
+  </data>
+  <!--#endif -->
+  <!--#if (ads == true) -->
+  <data name="Upgrade" xml:space="preserve">
+    <value>Opgrader</value>
+  </data>
+  <data name="UpgradeTitle" xml:space="preserve">
+    <value>Opgrader konto</value>
+  </data>
+  <data name="UpgradeSubtitle" xml:space="preserve">
+    <value>Der er ingen kontoopgradering her. Dette er kun en demo af belønningsannoncer.</value>
+  </data>
+  <data name="UpgradeSuccessMessage" xml:space="preserve">
+    <value>Kontoen er opgraderet.</value>
+  </data>
+  <data name="UpgradeFailMessage" xml:space="preserve">
+    <value>Opgradering af kontoen mislykkedes.</value>
+  </data>
+  <data name="UpgradeAdNotAvailableMessage" xml:space="preserve">
+    <value>Der er ingen tilgængelige annoncer lige nu. Prøv igen senere.</value>
+  </data>
+  <data name="UpgradeAdHaveTrouble" xml:space="preserve">
+    <value>Problemer med at se annoncen?</value>
+  </data>
+  <data name="UpgradeAdHaveTroublePrompt" xml:space="preserve">
+    <value>Jeg har problemer med at se annoncer i appen.</value>
+  </data>
+  <!--#endif -->
+  <data name="Management" xml:space="preserve">
+    <value>Administration</value>
+  </data>
+  <data name="UserGroups" xml:space="preserve">
+    <value>Brugergrupper</value>
+  </data>
+  <data name="RolesPageTitle" xml:space="preserve">
+    <value>Administrer brugergrupper</value>
+  </data>
+  <data name="NoRoleMessage" xml:space="preserve">
+    <value>Ingen brugergrupper</value>
+  </data>
+  <data name="AddRole" xml:space="preserve">
+    <value>Tilføj brugergruppe</value>
+  </data>
+  <data name="EditRole" xml:space="preserve">
+    <value>Rediger brugergruppe</value>
+  </data>
+  <data name="NewRoleName" xml:space="preserve">
+    <value>Navn på ny brugergruppe</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Brugere</value>
+  </data>
+  <data name="Features" xml:space="preserve">
+    <value>Funktioner</value>
+  </data>
+  <data name="Quota" xml:space="preserve">
+    <value>Kvote</value>
+  </data>
+  <data name="QuotaDescription" xml:space="preserve">
+    <value>For at begrænse brugen af funktioner kan du definere kvoter under denne fane, og de kan variere fra rolle til rolle. For eksempel antallet af enheder, en bruger kan logge ind på, eller antallet af gange, vedkommende kan bruge en bestemt funktion i appen.</value>
+  </data>
+  <data name="MaxPrevilegedSessions" xml:space="preserve">
+    <value>Maks. privilegerede sessioner</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Generelt</value>
+  </data>
+  <data name="RoleName" xml:space="preserve">
+    <value>Brugergruppens navn</value>
+  </data>
+  <!--#if (notification == true || signalR == true) -->
+  <data name="RoleNotificationLabel" xml:space="preserve">
+    <value>Notifikationsbesked</value>
+  </data>
+  <data name="SendRoleNotification" xml:space="preserve">
+    <value>Send notifikation</value>
+  </data>
+  <data name="SessionNotificationsAllowedTitle" xml:space="preserve">
+    <value>Notifikationer er slået til for denne session.</value>
+  </data>
+  <data name="SessionNotificationsMutedTitle" xml:space="preserve">
+    <value>Notifikationer er sat på lydløs for denne session.</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notifikationer</value>
+  </data>
+  <data name="TurnNotificationsOn" xml:space="preserve">
+    <value>Slå notifikationer til</value>
+  </data>
+  <data name="TurnNotificationsOff" xml:space="preserve">
+    <value>Slå notifikationer fra</value>
+  </data>
+  <data name="TestPushNotificationTitle" xml:space="preserve">
+    <value>Pushnotifikationer er slået til</value>
+  </data>
+  <data name="TestPushNotificationMessage" xml:space="preserve">
+    <value>Vi har sendt denne, så du kan tjekke, at notifikationer når frem til denne enhed. Tryk for at læse vores privatlivspolitik.</value>
+  </data>
+  <data name="TestRealtimeConnectionMessage" xml:space="preserve">
+    <value>Din liveforbindelse til serveren er oppe. Denne besked kom igennem den, og fra nu af vises ændringer i samme øjeblik, de sker.</value>
+  </data>
+  <!--#endif -->
+  <data name="UsersPageTitle" xml:space="preserve">
+    <value>Administrer brugere</value>
+  </data>
+  <data name="DeleteRole" xml:space="preserve">
+    <value>Slet brugergruppe</value>
+  </data>
+  <data name="DeleteUser" xml:space="preserve">
+    <value>Slet bruger</value>
+  </data>
+  <data name="AppVersion" xml:space="preserve">
+    <value>Appversion</value>
+  </data>
+  <data name="IP" xml:space="preserve">
+    <value>IP</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="DeviceInfo" xml:space="preserve">
+    <value>Enhedsoplysninger</value>
+  </data>
+  <data name="Privileged" xml:space="preserve">
+    <value>Privilegeret</value>
+  </data>
+  <data name="RenewedOn" xml:space="preserve">
+    <value>Fornyet den</value>
+  </data>
+  <data name="OnlineUsers" xml:space="preserve">
+    <value>Brugere online: {0}</value>
+  </data>
+  <data name="DeleteSession" xml:space="preserve">
+    <value>Slet session</value>
+  </data>
+  <data name="NoUserMessage" xml:space="preserve">
+    <value>Ingen brugere</value>
+  </data>
+  <data name="NoUserSessionMessage" xml:space="preserve">
+    <value>Ingen brugersessioner</value>
+  </data>
+  <data name="NoUserSelectedMessage" xml:space="preserve">
+    <value>Vælg først en bruger</value>
+  </data>
+  <data name="RevokeAllSessions" xml:space="preserve">
+    <value>Tilbagekald alle sessioner</value>
+  </data>
+  <data name="RevokeAllSessionsConfrimMessage" xml:space="preserve">
+    <value>Er du sikker på, at du vil tilbagekalde alle sessioner for {0}? Godkendte applikationer bevares.</value>
+  </data>
+  <data name="UserCantUnassignAllGlobalAdminsErrorMessage" xml:space="preserve">
+    <value>Du kan ikke fjerne denne bruger fra brugergruppen for globale administratorer.</value>
+  </data>
+  <data name="UserCantChangeSuperAdminRoleClaimsErrorMessage" xml:space="preserve">
+    <value>Superadministratorens tilladelser kan ikke ændres.</value>
+  </data>
+  <data name="CanNotChangeBuiltInRole" xml:space="preserve">
+    <value>Brugergruppen {0} kan ikke ændres.</value>
+  </data>
+  <data name="UserCantRemoveItselfErrorMessage" xml:space="preserve">
+    <value>Du kan ikke fjerne din egen bruger</value>
+  </data>
+  <data name="UserCantRemoveGlobalAdminErrorMessage" xml:space="preserve">
+    <value>Du kan ikke fjerne denne globale administrator</value>
+  </data>
+  <data name="UserCantRevokeGlobalAdminSessionsErrorMessage" xml:space="preserve">
+    <value>Du kan ikke tilbagekalde sessionerne for denne globale administrator</value>
+  </data>
+  <data name="UserCantRemoveItsCurrentSessionsErrorMessage" xml:space="preserve">
+    <value>Du kan ikke fjerne din aktuelle session</value>
+  </data>
+  <data name="SearchRolesPlaceholder" xml:space="preserve">
+    <value>Søg i brugergrupper</value>
+  </data>
+  <data name="SearchUsersPlaceholder" xml:space="preserve">
+    <value>Søg efter brugere</value>
+  </data>
+  <data name="SearchRoleUsersPlaceholder" xml:space="preserve">
+    <value>Søg efter brugere</value>
+  </data>
+  <data name="SearchUserSessionsPlaceholder" xml:space="preserve">
+    <value>Søg i brugersessioner</value>
+  </data>
+  <data name="RemoveRoleFromAllUsers" xml:space="preserve">
+    <value>Fjern alle brugere fra brugergruppen</value>
+  </data>
+  <data name="RemoveRoleFromAllUsersConfrimMessage" xml:space="preserve">
+    <value>Er du sikker på, at du vil fjerne alle brugere fra {0}?</value>
+  </data>
+  <data name="RoleNotificationPageUrlLabel" xml:space="preserve">
+    <value>Sidens URL</value>
+  </data>
+  <data name="InvalidPageUrl" xml:space="preserve">
+    <value>Sidens URL skal være en relativ URL i appen, f.eks. /products.</value>
+  </data>
+  <data name="YouAreNotAuthorized" xml:space="preserve">
+    <value>Du har ikke adgang</value>
+  </data>
+  <data name="YouAreNotAuthorizedMessage" xml:space="preserve">
+    <value>Du har ikke tilladelse til at åbne denne side.</value>
+  </data>
+  <data name="SignInPasswordMessage1" xml:space="preserve">
+    <value>Første gang her?</value>
+  </data>
+  <data name="SignInPasswordMessage2" xml:space="preserve">
+    <value>Vi opretter automatisk en konto til dig.</value>
+  </data>
+  <data name="ImageTooSmall" xml:space="preserve">
+    <value>Billedet er for lille. De mindste tilladte dimensioner er {0}x{1}, men de aktuelle dimensioner er {2}x{3}.</value>
+  </data>
+  <data name="UnsupportedImageFormat" xml:space="preserve">
+    <value>Den uploadede fil er ikke et understøttet billede.</value>
+  </data>
+  <data name="ImageNotCarError" xml:space="preserve">
+    <value>Det angivne billede indeholder ikke en bil.</value>
+  </data>
+      <data name="AddUserToGroupTitle" xml:space="preserve">
+    <value>Tilføj {0} til denne brugergruppe</value>
+  </data>
+  <data name="RemoveUserFromGroupTitle" xml:space="preserve">
+    <value>Fjern {0} fra denne brugergruppe</value>
+  </data>
+  <data name="GrantFeatureTitle" xml:space="preserve">
+    <value>Tildel {0}</value>
+  </data>
+  <data name="RevokeFeatureTitle" xml:space="preserve">
+    <value>Tilbagekald {0}</value>
+  </data>
+  <data name="GrantAllGroupFeaturesTitle" xml:space="preserve">
+    <value>Tildel alle {0}-funktioner</value>
+  </data>
+  <data name="RevokeAllGroupFeaturesTitle" xml:space="preserve">
+    <value>Tilbagekald alle {0}-funktioner</value>
+  </data>
+  <data name="RefreshSelectedUserGroupTitle" xml:space="preserve">
+    <value>Opdater den valgte brugergruppe</value>
+  </data>
+  <data name="RefreshSelectedUserTitle" xml:space="preserve">
+    <value>Opdater den valgte bruger</value>
+  </data>
+  <data name="NoMatchingUserSessionMessage" xml:space="preserve">
+    <value>Ingen sessioner matcher din søgning.</value>
+  </data>
+  <data name="TfaVerificationCodeRequiredMessage" xml:space="preserve">
+    <value>Indtast den 6-cifrede kode fra din godkendelsesapp.</value>
+  </data>
+  <data name="TfaOpenInAuthenticatorAppTitle" xml:space="preserve">
+    <value>Åbn denne konto i din godkendelsesapp</value>
+  </data>
+  <data name="TfaQrCodeAlt" xml:space="preserve">
+    <value>QR-kode til opsætning af din godkendelsesapp</value>
+  </data>
+  <data name="SessionNoLongerValidMessage" xml:space="preserve">
+    <value>Denne session er ikke længere gyldig. Log ind igen.</value>
+  </data>
+  <data name="RevokeSessionTitle" xml:space="preserve">
+    <value>Tilbagekald denne session</value>
+  </data>
+  <data name="ImageMaxSizeErrorMessage" xml:space="preserve">
+    <value>Billedet må højst være {0}.</value>
+  </data>
+  <data name="OnlyImageFilesAllowedErrorMessage" xml:space="preserve">
+    <value>Kun billedfiler kan bruges</value>
+  </data>
+  <data name="SamePhoneNumberErrorMessage" xml:space="preserve">
+    <value>Det er allerede dit telefonnummer. Indtast et andet.</value>
+  </data>
+  <data name="SameEmailErrorMessage" xml:space="preserve">
+    <value>Det er allerede din e-mailadresse. Indtast en anden.</value>
+  </data>
+  <data name="MoreTabsTitle" xml:space="preserve">
+    <value>Flere faner</value>
+  </data>
+  <data name="OpenNavigationMenuTitle" xml:space="preserve">
+    <value>Åbn navigationsmenuen</value>
+  </data>
+  <data name="AccountMenuTitle" xml:space="preserve">
+    <value>Kontomenu</value>
+  </data>
+  <data name="SwitchToDarkThemeTitle" xml:space="preserve">
+    <value>Skift til mørkt tema</value>
+  </data>
+  <data name="SwitchToLightThemeTitle" xml:space="preserve">
+    <value>Skift til lyst tema</value>
+  </data>
+  <!--#if (signalR == true) -->
+  <data name="SignalRConnectionId" xml:space="preserve">
+    <value>SignalRConnectionId</value>
+  </data>
+  <!--#endif -->
+  <!--#if (multitenant == true) -->
+    <data name="Tenant" xml:space="preserve">
+    <value>Tenant</value>
+  </data>
+    <data name="ManageAllTenants" xml:space="preserve">
+    <value>Administrer alle tenants</value>
+  </data>
+    <data name="ManageAllTenantsPageTitle" xml:space="preserve">
+    <value>Administrer alle tenants</value>
+  </data>
+    <data name="ManageMyTenants" xml:space="preserve">
+    <value>Administrer mine tenants</value>
+  </data>
+    <data name="ManageMyTenantsPageTitle" xml:space="preserve">
+    <value>Administrer mine tenants</value>
+  </data>
+    <data name="CreateNewTenant" xml:space="preserve">
+    <value>Opret ny tenant</value>
+  </data>
+    <data name="AddTenant" xml:space="preserve">
+    <value>Tilføj tenant</value>
+  </data>
+    <data name="EditTenant" xml:space="preserve">
+    <value>Rediger tenant</value>
+  </data>
+    <data name="LeaveTenant" xml:space="preserve">
+    <value>Forlad tenant</value>
+  </data>
+    <data name="LeaveTenantConfirmMessage" xml:space="preserve">
+    <value>Er du sikker på, at du vil forlade tenanten {0}?</value>
+  </data>
+    <data name="SwitchTenant" xml:space="preserve">
+    <value>Skift tenant</value>
+  </data>
+    <data name="InviteUserToTenant" xml:space="preserve">
+    <value>Inviter bruger til {0}</value>
+  </data>
+    <data name="Invite" xml:space="preserve">
+    <value>Inviter</value>
+  </data>
+    <data name="UserInvitedSuccessfullyMessage" xml:space="preserve">
+    <value>Brugeren er blevet inviteret.</value>
+  </data>
+    <data name="UserIsAlreadyInTenantErrorMessage" xml:space="preserve">
+    <value>Denne bruger er allerede medlem af tenanten.</value>
+  </data>
+    <data name="DuplicateTenantName" xml:space="preserve">
+    <value>Tenantnavnet '{0}' er allerede i brug.</value>
+  </data>
+    <data name="ReservedTenantName" xml:space="preserve">
+    <value>Tenantnavnet '{0}' er reserveret og kan ikke bruges.</value>
+  </data>
+    <data name="TenantCouldNotBeFound" xml:space="preserve">
+    <value>Tenanten blev ikke fundet.</value>
+  </data>
+    <data name="TenantNameRegexPatternError" xml:space="preserve">
+    <value>{0} skal være et gyldigt underdomænenavn, der består af små bogstaver, cifre og bindestreger (f.eks. my-tenant).</value>
+  </data>
+    <data name="EnterTenantName" xml:space="preserve">
+    <value>Indtast tenantnavn</value>
+  </data>
+    <data name="EnterTenantTitle" xml:space="preserve">
+    <value>Indtast tenanttitel</value>
+  </data>
+    <data name="Domain" xml:space="preserve">
+    <value>Domæne</value>
+  </data>
+    <data name="EnterTenantDomain" xml:space="preserve">
+    <value>Indtast tenantens brugerdefinerede domæne (f.eks. myapp.com)</value>
+  </data>
+    <data name="TenantDomainRegexPatternError" xml:space="preserve">
+    <value>{0} skal være et gyldigt domænenavn uden skema eller sti (f.eks. myapp.com).</value>
+  </data>
+    <data name="DuplicateTenantDomain" xml:space="preserve">
+    <value>Domænet '{0}' er allerede i brug.</value>
+  </data>
+    <data name="ReservedTenantDomain" xml:space="preserve">
+    <value>Domænet '{0}' er reserveret og kan ikke bruges.</value>
+  </data>
+    <data name="SelectTenantMessage" xml:space="preserve">
+    <value>Du har ikke valgt en tenant endnu. Skift til en af dine tenants, eller opret en ny for at komme i gang.</value>
+  </data>
+    <data name="TenantInvitationShortText" xml:space="preserve">
+    <value>{0} har inviteret dig til at blive medlem af {1}. Åbn {2}, og log ind for at blive en del af tenanten.</value>
+  </data>
+    <data name="Switch" xml:space="preserve">
+    <value>Skift</value>
+  </data>
+    <data name="AcceptInvitation" xml:space="preserve">
+    <value>Acceptér</value>
+  </data>
+    <data name="PendingInvitation" xml:space="preserve">
+    <value>Afventende invitation</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
+    <value>Afventende invitationer</value>
+  </data>
+    <data name="CurrentTenant" xml:space="preserve">
+    <value>Aktuel tenant</value>
+  </data>
+    <data name="Inactive" xml:space="preserve">
+    <value>Inaktiv</value>
+  </data>
+      <data name="DeclineInvitation" xml:space="preserve">
+    <value>Afvis invitation</value>
+  </data>
+  <data name="DeclineInvitationConfirmMessage" xml:space="preserve">
+    <value>Vil du afvise invitationen til {0}? Dette kan ikke fortrydes - du skal have en ny invitation for at blive medlem.</value>
+  </data>
+  <!--#endif-->
+    <data name="TimeZone" xml:space="preserve">
+    <value>Tidszone</value>
+  </data>
+    <data name="SelectTimeZone" xml:space="preserve">
+    <value>Vælg tidszone</value>
+  </data>
+    <data name="FindTimeZone" xml:space="preserve">
+    <value>Find en tidszone</value>
+  </data>
+    <data name="NoTimeZoneMatchesSearchMessage" xml:space="preserve">
+    <value>Ingen tidszone matcher din søgning.</value>
+  </data>
+  <!--#if (notification == true) -->
+    <data name="PushNotificationsBlockedMessage" xml:space="preserve">
+    <value>Pushnotifikationer er blokeret for denne app. Tillad notifikationer i din browser eller i styresystemets indstillinger, og prøv igen.</value>
+  </data>
+  <!--#endif-->
+    <data name="PrivacyTitle" xml:space="preserve">
+    <value>Privatliv</value>
+  </data>
+    <data name="PrivacySubtitle" xml:space="preserve">
+    <value>Download en kopi af dine data</value>
+  </data>
+    <data name="PrivacyChoicesTitle" xml:space="preserve">
+    <value>Dine valg om privatliv</value>
+  </data>
+    <data name="PrivacyChoicesNote" xml:space="preserve">
+    <value>Login, husket sprogvalg og fejlrapporter er ikke på denne liste: appen kan ikke fungere uden de to første, og fejlrapporter indeholder intet, der identificerer din enhed.</value>
+  </data>
+    <data name="ConsentAnalytics" xml:space="preserve">
+    <value>Brugsstatistik</value>
+  </data>
+    <data name="ConsentAnalyticsDescription" xml:space="preserve">
+    <value>Lader os genkende din enhed mellem besøg, så vi kan se, hvilke sider der bruges, og hvor lang tid de tager. Hvis du slår dette fra, stopper fejlrapporterne ikke.</value>
+  </data>
+    <data name="ConsentAdvertising" xml:space="preserve">
+    <value>Annoncering</value>
+  </data>
+    <data name="ConsentAdvertisingDescription" xml:space="preserve">
+    <value>Indlæser annoncescriptet, som sætter sine egne id'er. Intet indlæses, før du slår dette til.</value>
+  </data>
+    <data name="ConsentBannerTitle" xml:space="preserve">
+    <value>Dit privatliv</value>
+  </data>
+    <data name="ConsentBannerMessage" xml:space="preserve">
+    <value>Vi vil gerne gemme nogle oplysninger på din enhed, som appen ikke har brug for for at fungere. Login, husket sprogvalg og fejlrapporter sker under alle omstændigheder.</value>
+  </data>
+    <data name="Accept" xml:space="preserve">
+    <value>Acceptér</value>
+  </data>
+    <data name="Reject" xml:space="preserve">
+    <value>Afvis</value>
+  </data>
+    <data name="PrivacySettings" xml:space="preserve">
+    <value>Indstillinger for privatliv</value>
+  </data>
+    <data name="AccountSettingsLink" xml:space="preserve">
+    <value>Kontoindstillinger</value>
+  </data>
+    <data name="ExportPersonalDataTitle" xml:space="preserve">
+    <value>Download dine data</value>
+  </data>
+    <data name="ExportPersonalDataMessage" xml:space="preserve">
+    <value>Få en kopi af alt, hvad denne app har om dig: din konto, de enheder, du er logget ind på, dit profilbillede og det indhold, du har oprettet. Du får det som en zip-fil med data.json og dine filer.</value>
+  </data>
+    <data name="ExportPersonalDataMetadataNote" xml:space="preserve">
+    <value>Hver del af filen fortæller også, hvorfor den gemmes, hvor længe, hvem der ellers modtager den, og om den fjernes, når du sletter din konto.</value>
+  </data>
+    <data name="ExportPersonalDataButton" xml:space="preserve">
+    <value>Download mine data</value>
+  </data>
+    <data name="ExportPersonalDataDeleteHint" xml:space="preserve">
+    <value>Hvis du hellere vil have dine data fjernet, kan du slette din konto fra</value>
+  </data>
+    <data name="ExportUserData" xml:space="preserve">
+    <value>Eksportér data</value>
+  </data>
+    <data name="ExportUserDataTitle" xml:space="preserve">
+    <value>Besvarer en dataanmodning, der ikke kom ind via appen.</value>
+  </data>
+    <data name="AdsConsentMessage" xml:space="preserve">
+    <value>Når du ser en annonce, indlæses Googles annoncescript, som sætter sine egne id'er på din enhed. Intet indlæses, før du giver dit samtykke.</value>
+  </data>
+    <data name="AdsConsentAgree" xml:space="preserve">
+    <value>Acceptér og fortsæt</value>
+  </data>
+    <data name="OAuthConsentPageTitle" xml:space="preserve">
+    <value>Godkend applikation</value>
+  </data>
+    <data name="OAuthConsentChecking" xml:space="preserve">
+    <value>Kontrollerer denne anmodning...</value>
+  </data>
+    <data name="OAuthConsentRequestCannotBeAuthorized" xml:space="preserve">
+    <value>Denne anmodning kan ikke godkendes</value>
+  </data>
+    <data name="OAuthConsentNothingShared" xml:space="preserve">
+    <value>Intet er blevet delt. Du kan lukke denne side og prøve igen fra applikationen.</value>
+  </data>
+    <data name="GoToHomePage" xml:space="preserve">
+    <value>Gå til forsiden</value>
+  </data>
+    <data name="OAuthConsentLeftForApp" xml:space="preserve">
+    <value>Du kan gå tilbage til applikationen</value>
+  </data>
+    <data name="OAuthConsentLeftForAppMessage" xml:space="preserve">
+    <value>Resultatet blev givet videre til {0}. Hvis den ikke selv kom frem, så skift til den.</value>
+  </data>
+    <data name="OAuthConsentAuthorizeTitle" xml:space="preserve">
+    <value>Vil du godkende {0}?</value>
+  </data>
+    <data name="OAuthConsentActOnYourBehalfMessage" xml:space="preserve">
+    <value>Den beder om at handle på dine vegne. Fortsæt kun, hvis du startede dette fra en applikation, du stoler på.</value>
+  </data>
+    <data name="OAuthConsentApplication" xml:space="preserve">
+    <value>Applikation</value>
+  </data>
+    <data name="OAuthConsentCanAccess" xml:space="preserve">
+    <value>Får adgang til</value>
+  </data>
+    <data name="OAuthConsentSendsYouBackTo" xml:space="preserve">
+    <value>Sender dig tilbage til</value>
+  </data>
+    <data name="OAuthConsentItWillBeAbleTo" xml:space="preserve">
+    <value>Den vil kunne:</value>
+  </data>
+    <data name="OAuthConsentDeniedScopesMessage" xml:space="preserve">
+    <value>Din konto kan ikke give alt, hvad denne applikation bad om, så følgende bliver udeladt: {0}</value>
+  </data>
+    <data name="OAuthConsentSelfDescribedMessage" xml:space="preserve">
+    <value>Denne applikation har selv beskrevet sig; ingen hos {0} har stået inde for den.</value>
+  </data>
+    <data name="Authorize" xml:space="preserve">
+    <value>Godkend</value>
+  </data>
+    <data name="OAuthErrorInvalidClient" xml:space="preserve">
+    <value>Applikationen, der sender denne anmodning, kunne ikke identificeres.</value>
+  </data>
+    <data name="OAuthErrorInvalidRedirectUri" xml:space="preserve">
+    <value>Den adresse, som denne applikation vil sendes tilbage til, er ikke en, den har registreret.</value>
+  </data>
+    <data name="OAuthErrorInvalidRequest" xml:space="preserve">
+    <value>Denne godkendelsesanmodning er ikke gyldig.</value>
+  </data>
+    <data name="OAuthScopeDevMcpDescription" xml:space="preserve">
+    <value>Læs diagnostiske oplysninger om denne udrulning - konfiguration, databaseskema, baggrundsjob. Den kan ikke ændre noget.</value>
+  </data>
+    <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
+    <value>Læs diagnostiske oplysninger om denne udrulning.</value>
+  </data>
+    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
+    <value>Læs den detaljerede helbredsrapport for denne udrulning, uden fejldetaljerne om det, der fejler.</value>
+  </data>
+    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
+    <value>Læs helbredsrapporten.</value>
+  </data>
+    <data name="OAuthSessionsTitle" xml:space="preserve">
+    <value>Godkendte applikationer</value>
+  </data>
+    <data name="OAuthSessionsHint" xml:space="preserve">
+    <value>Det er ikke enheder, så de tæller ikke med i de enheder, der giver adgang til alle funktioner. Hver enkelt tilbagekaldes for sig.</value>
+  </data>
+    <data name="OAuthSessionRevokeConfirmMessage" xml:space="preserve">
+    <value>Vil du tilbagekalde adgangen for {0}? Den holder op med at virke, indtil den bliver godkendt igen.</value>
+  </data>
+    <data name="OAuthClients" xml:space="preserve">
+    <value>Applikationer</value>
+  </data>
+    <data name="OAuthClientsPageTitle" xml:space="preserve">
+    <value>Godkendte applikationer</value>
+  </data>
+    <data name="OAuthClientsSubtitle" xml:space="preserve">
+    <value>Eksterne applikationer, som dine brugere har godkendt via OAuth.</value>
+  </data>
+    <data name="OAuthClientsEmptyTitle" xml:space="preserve">
+    <value>Ingen applikation er blevet godkendt endnu.</value>
+  </data>
+    <data name="OAuthClientsEmptyMessage" xml:space="preserve">
+    <value>Applikationer vises her, når nogen godkender en; intet skal registreres på forhånd.</value>
+  </data>
+    <data name="OAuthClientActiveGrants" xml:space="preserve">
+    <value>aktive tilladelser</value>
+  </data>
+    <data name="OAuthClientRedirectUris" xml:space="preserve">
+    <value>Sender brugere tilbage til:</value>
+  </data>
+    <data name="OAuthClientRevokeAccess" xml:space="preserve">
+    <value>Tilbagekald adgang</value>
+  </data>
+    <data name="OAuthClientRevokeConfirmMessage" xml:space="preserve">
+    <value>{0} har i øjeblikket {1} tilladelse(r). Tilbagekaldelse logger den ud for alle, der har godkendt den; de kan godkende den igen.</value>
+  </data>
+    <data name="OAuthClientRevokedMessage" xml:space="preserve">
+    <value>{0} tilladelse(r) tilbagekaldt.</value>
+  </data>
+    <data name="OAuthClientKindConfigured" xml:space="preserve">
+    <value>Forudkonfigureret</value>
+  </data>
+    <data name="OAuthClientKindSelfDescribed" xml:space="preserve">
+    <value>Selvbeskrevet</value>
+  </data>
+    <data name="OAuthErrorClientNotIdentified" xml:space="preserve">
+    <value>Denne applikation kunne ikke identificeres, så der er intet at vende tilbage til.</value>
+  </data>
+    <data name="OAuthErrorInvalidRequestWithReason" xml:space="preserve">
+    <value>Denne godkendelsesanmodning er ikke gyldig ({0}).</value>
+  </data>
+    <data name="OAuthErrorInsufficientPermissions" xml:space="preserve">
+    <value>Din konto har ikke de tilladelser, som denne applikation beder om.</value>
+  </data>
+    <data name="OAuthErrorTwoFactorRequired" xml:space="preserve">
+    <value>Denne applikation kræver totrinsbekræftelse. Slå det til i dine kontoindstillinger, log ind igen, og start forfra fra applikationen.</value>
+  </data>
+  <!--#if (multitenant == true) -->
+    <data name="OAuthConsentWorkspace" xml:space="preserve">
+    <value>Arbejdsområde</value>
+  </data>
+    <data name="OAuthErrorNotAMemberOfWorkspace" xml:space="preserve">
+    <value>Du er ikke medlem af det arbejdsområde, som denne applikation beder om.</value>
+  </data>
+  <!--#endif -->
+  <!--#if (signalR == true) -->
+    <data name="OAuthScopeChatDescription" xml:space="preserve">
+    <value>Brug denne apps assistent på dine vegne - stil den spørgsmål, og søg i det, den kan søge i. Den kan ikke handle på din enhed.</value>
+  </data>
+    <data name="OAuthScopeChatShortDescription" xml:space="preserve">
+    <value>Brug denne apps assistent på dine vegne.</value>
+  </data>
+  <!--#endif -->
+    <data name="Verify" xml:space="preserve">
+    <value>Bekræft</value>
+  </data>
+    <data name="ElevatedAccessTitle" xml:space="preserve">
+    <value>Bekræft, at det er dig</value>
+  </data>
+    <data name="ElevatedAccessSubtitle" xml:space="preserve">
+    <value>Denne ændring påvirker din kontos sikkerhed.</value>
+  </data>
+    <data name="ElevatedAccessPasskeyTitle" xml:space="preserve">
+    <value>Brug fingeraftryk eller Face ID</value>
+  </data>
+    <data name="ElevatedAccessPasskeySubtitle" xml:space="preserve">
+    <value>Ingen kode at vente på.</value>
+  </data>
+    <data name="ElevatedAccessCodeLabel" xml:space="preserve">
+    <value>Indtast din 6-cifrede kode</value>
+  </data>
+    <data name="ElevatedAccessInvalidCode" xml:space="preserve">
+    <value>Koden virkede ikke. Tjek den, og prøv igen.</value>
+  </data>
+    <data name="ElevatedAccessUseAuthenticatorApp" xml:space="preserve">
+    <value>Åbn din godkendelsesapp, og indtast den kode, den viser for denne konto.</value>
+  </data>
+    <data name="ElevatedAccessUsePasskeyOrAskForCode" xml:space="preserve">
+    <value>Bekræft ovenfor, eller bed om en kode i stedet.</value>
+  </data>
+    <data name="ElevatedAccessSendCode" xml:space="preserve">
+    <value>Send mig en kode</value>
+  </data>
+    <data name="ElevatedAccessResendCode" xml:space="preserve">
+    <value>Send kode igen</value>
+  </data>
+    <data name="ElevatedAccessResendIn" xml:space="preserve">
+    <value>Send igen om {0:m\:ss}</value>
+  </data>
+    <data name="ElevatedAccessCodeAlreadySent" xml:space="preserve">
+    <value>En kode er allerede på vej. Brug den, eller bed om en ny, når den udløber.</value>
+  </data>
+    <data name="ElevatedAccessChannelEmail" xml:space="preserve">
+    <value>din e-mail</value>
+  </data>
+    <data name="ElevatedAccessChannelPhone" xml:space="preserve">
+    <value>din telefon</value>
+  </data>
+    <data name="ElevatedAccessChannelOtherDevices" xml:space="preserve">
+    <value>dine andre enheder, hvor du er logget ind</value>
+  </data>
+    <data name="ElevatedAccessNoChannel" xml:space="preserve">
+    <value>Der er ingen bekræftet e-mail eller telefonnummer på denne konto, som en kode kan sendes til.</value>
+  </data>
+    <data name="ElevatedAccessSentTo" xml:space="preserve">
+    <value>Vi har sendt en kode til {0}.</value>
+  </data>
+    <data name="ElevatedAccessSentToMany" xml:space="preserve">
+    <value>Vi har sendt en kode til {0} og {1}.</value>
+  </data>
+    <data name="EditImage" xml:space="preserve">
+    <value>Rediger billede</value>
+  </data>
+    <data name="Crop" xml:space="preserve">
+    <value>Beskær</value>
+  </data>
+    <data name="ApplyCrop" xml:space="preserve">
+    <value>Anvend beskæring</value>
+  </data>
+    <data name="RotateLeft" xml:space="preserve">
+    <value>Rotér til venstre</value>
+  </data>
+    <data name="RotateRight" xml:space="preserve">
+    <value>Rotér til højre</value>
+  </data>
+    <data name="Undo" xml:space="preserve">
+    <value>Fortryd</value>
+  </data>
+    <data name="Redo" xml:space="preserve">
+    <value>Annuller fortryd</value>
+  </data>
+    <data name="ImageEditorCropHint" xml:space="preserve">
+    <value>Træk hen over billedet for at markere den del, der skal beholdes.</value>
+  </data>
+    <data name="ImageEditorMoreFeatures" xml:space="preserve">
+    <value>Vil du tilføje flere funktioner til billedredigering i dit projekt?</value>
+  </data>
+    <data name="ImageEditorCouldNotOpenImage" xml:space="preserve">
+    <value>Dette billede kan ikke åbnes til redigering her. Du kan stadig uploade det, som det er.</value>
+  </data>
+    <data name="UploadImageAsIs" xml:space="preserve">
+    <value>Upload, som det er</value>
+  </data>
+    <data name="ResetPasswordTwoFactorCodeRequired" xml:space="preserve">
+    <value>Totrinsbekræftelse er slået til for denne konto. Indtast en kode fra din godkendelsesapp eller en af dine gendannelseskoder.</value>
+  </data>
+    <data name="AccountAlreadyExistsShortText" xml:space="preserve">
+    <value>Du har allerede en Boilerplate-konto med dette telefonnummer. Hvis du lige har forsøgt at oprette en konto, så log ind i stedet.</value>
+  </data>
+    <data name="AddAnotherAccount" xml:space="preserve">
+    <value>Tilføj en anden konto</value>
+  </data>
+    <data name="SignOutOfAllAccounts" xml:space="preserve">
+    <value>Log ud af alle konti på denne enhed</value>
+  </data>
+    <data name="DiagnosticPageTitle" xml:space="preserve">
+    <value>Diagnosticering</value>
+  </data>
+    <data name="DiagnosticPageDescription" xml:space="preserve">
+    <value>Hvad denne enhed og serveren rapporterer om appen, til fejlfinding.</value>
+  </data>
+    <data name="Lock" xml:space="preserve">
+    <value>Lås</value>
+  </data>
+    <data name="LockAccountTitle" xml:space="preserve">
+    <value>Lås denne konto</value>
+  </data>
+    <data name="LockNeedsPin" xml:space="preserve">
+    <value>Første gang du låser denne konto, skal du bruge en PIN-kode. Du indtaster den for at vende tilbage til denne konto på denne enhed, og den forlader aldrig enheden.</value>
+  </data>
+    <data name="NewPin" xml:space="preserve">
+    <value>Ny PIN-kode</value>
+  </data>
+    <data name="RepeatPin" xml:space="preserve">
+    <value>Indtast PIN-koden igen</value>
+  </data>
+    <data name="PinsDoNotMatch" xml:space="preserve">
+    <value>PIN-koderne er ikke ens. Prøv igen.</value>
+  </data>
+    <data name="EnterPinTitle" xml:space="preserve">
+    <value>Indtast PIN-koden</value>
+  </data>
+    <data name="WrongPinAttemptsLeft" xml:space="preserve">
+    <value>Forkert PIN-kode. Forsøg tilbage: {0}.</value>
+  </data>
+    <data name="TooManyWrongPins" xml:space="preserve">
+    <value>For mange forkerte PIN-koder, så denne konto gemmes ikke længere på denne enhed. Log ind igen for at bruge den.</value>
+  </data>
+    <data name="SignInAgainToRemovePin" xml:space="preserve">
+    <value>Log ind igen for at fjerne PIN-koden</value>
+  </data>
+    <data name="PinUseLetters" xml:space="preserve">
+    <value>Brug bogstaver</value>
+  </data>
+    <data name="PinUseDigits" xml:space="preserve">
+    <value>Brug tal</value>
+  </data>
+  <!--#if (framework == 'net11.0') -->
+    <data name="KioskTitle" xml:space="preserve">
+    <value>Kiosktilstand</value>
+  </data>
+    <data name="KioskMessage" xml:space="preserve">
+    <value>Denne app er låst til skærmen: Windows-tasten, Alt+Tab og lukning af vinduet er alle blokeret. Brug knappen for at forlade den.</value>
+  </data>
+    <data name="KioskExitApp" xml:space="preserve">
+    <value>Afslut appen</value>
+  </data>
+  <!--#endif -->
+</root>
