@@ -61,6 +61,12 @@ public partial class ContentSecurityPolicy
             connectSrc.Add($"{otlpEndpoint.Scheme}://{otlpEndpoint.Authority}");
         }
 
+        // --- Add the status page's script, which Server.Web's App.razor loads (See ClientWebSettings.StatusPageScriptUrl) ---
+        if (Uri.TryCreate(configuration["StatusPageScriptUrl"], UriKind.Absolute, out var statusPageScript) && statusPageScript.Scheme is ("https" or "http"))
+        {
+            scriptSrc.Add($"{statusPageScript.Scheme}://{statusPageScript.Authority}");
+        }
+
         //#if (captcha == "reCaptcha")
         // --- Add Google reCAPTCHA ---
         connectSrc.Add("https://www.google.com/");

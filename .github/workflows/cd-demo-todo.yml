@@ -12,6 +12,8 @@ env:
   ShowBuildProvenance: ${{ github.event.repository.visibility == 'public' }}
   SERVER_WEB_ADDRESS: 'https://todo.bitfabric.co'
   SERVER_API_ADDRESS: 'https://todo-api.bitfabric.co'
+  # The script of the demo's status page on bit Fabric, which shows a bar in the web app while something is wrong.
+  STATUS_PAGE_SCRIPT_URL: 'https://api.bitfabric.co/api/v1/PublicStatus/Embed/bit-todosample'
   R2_BUCKET: 'todo'
   APP_BUNDLE_ID: 'com.bitplatform.Todo.Template'
   OpenAI__ApiKey: ${{ secrets.OPENAI__APIKEY }}
@@ -203,6 +205,7 @@ jobs:
         AdsPushVapid.PublicKey: ${{ secrets.TODO_PUBLIC_VAPIDKEY }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
         ApplicationInsights.ConnectionString: ${{ secrets.APPLICATION_INSIGHTS_CONNECTION_STRING }}
+        StatusPageScriptUrl: ${{ env.STATUS_PAGE_SCRIPT_URL }}
         
     - name: Configure bswup # Always AlwaysPrerender is the last item, so overriding it has the desired effect
       run: |

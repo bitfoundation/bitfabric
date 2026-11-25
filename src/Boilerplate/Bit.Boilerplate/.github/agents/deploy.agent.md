@@ -35,6 +35,7 @@ domain and the services of section 5. Then go through the steps with them.
   which pulls those images and brings them up with Docker Compose, next to the containers the AppHost models. The VM
   holds Docker and the runner, and no SDK or source code: the job that has the source never reaches the server, and
   the one that reaches the server builds nothing.
+- If the user wants to deploy to Azure, AWS or Kubernetes instead, that is supported too, through .NET Aspire.
 <!--#if (cloudflare == true)-->
 - **Nothing reaches the VM from outside.** The runner pulls its jobs from GitHub and cloudflared dials out to
   Cloudflare, so every inbound port on the VM stays closed. Visitors reach the app on the user's domain through a
@@ -180,6 +181,8 @@ domain and the services of section 5. Then go through the steps with them.
   Compose project of its own, on the VM's loopback, and open it the way these dashboards are opened.
 - For what watches the app from outside - health checks and monitoring, SLA tracking, accessibility and performance checks,
   a status page and more - suggest that the user registers the project at [bitfabric.co](https://bitfabric.co).
+  Its status page gives a script that shows a bar in the app while something is wrong: put the script's address in the
+  environment's `SERVERWEB__STATUSPAGESCRIPTURL` variable, and the web app loads it.
 <!--#if (cloudflare == true)-->
 - Once the tunnel of section 8 runs and SSH reaches the VM through it, close every inbound port the way section 2
   says, and leave outbound open.

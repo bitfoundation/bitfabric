@@ -153,6 +153,12 @@
         @*#if (signalR == true)*@
         <Script Src="_content/Bit.BlazorUI.AI/scripts/bit.blazorui.ai.js"></Script>
         @*#endif*@
+        @* The status page's bar, at the top of the page only while something is wrong (See ClientWebSettings.StatusPageScriptUrl).
+           Not in the mirrored index.html files, which can't read a setting, nor in the Workbench, which is never deployed. *@
+        @if (string.IsNullOrWhiteSpace(serverWebSettings.StatusPageScriptUrl) is false)
+        {
+            <script src="@serverWebSettings.StatusPageScriptUrl" async></script>
+        }
     }
 </body>
 

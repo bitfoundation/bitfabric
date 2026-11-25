@@ -12,6 +12,8 @@ env:
   ShowBuildProvenance: ${{ github.event.repository.visibility == 'public' }}
   SERVER_WEB_ADDRESS: 'https://adminpanel.bitfabric.co'
   SERVER_API_ADDRESS: 'https://adminpanel-api.bitfabric.co'
+  # The script of the demo's status page on bit Fabric, which shows a bar in the web app while something is wrong.
+  STATUS_PAGE_SCRIPT_URL: 'https://api.bitfabric.co/api/v1/PublicStatus/Embed/bit-adminpanel'
   APP_SERVICE_NAME: 'bit-adminpanel'
   R2_BUCKET: 'adminpanel'
   APP_BUNDLE_ID: 'com.bitplatform.AdminPanel.Template'
@@ -128,6 +130,7 @@ jobs:
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
         AdsPushVapid.PublicKey: ${{ secrets.ADMINPANEL_PUBLIC_VAPIDKEY }}
         ApplicationInsights.ConnectionString: ${{ secrets.APPLICATION_INSIGHTS_CONNECTION_STRING }}
+        StatusPageScriptUrl: ${{ env.STATUS_PAGE_SCRIPT_URL }}
 
     - name: Configure text embedding
       run: |

@@ -436,7 +436,7 @@ dnx Bit.Cli --version 11.0.0-pre-24 -- translate
     "servers": {
         "bitplatform": {
             "type": "http",
-            "url": "https://api.bitfabric.co/docs-mcp?v=11.0.0"
+            "url": "https://api.bitfabric.co/docs-mcp"
         }
     }
 }

@@ -74,8 +74,8 @@ public class DocsMcpFeedbackTool(ServerApiSettings settings, ILogger<DocsMcpFeed
     };
 
     /// <summary>
-    /// Sends what the agent wrote, stamped with the release and the project it connected for - the only facts this server
-    /// is certain of, whatever the report itself claims.
+    /// Sends what the agent wrote, stamped with the project it connected for - the only fact this server is certain of,
+    /// whatever the report itself claims.
     /// </summary>
     /// <param name="request">The call, with the title and report the agent wrote.</param>
     /// <param name="connection">The address the agent connected with.</param>
@@ -111,7 +111,6 @@ public class DocsMcpFeedbackTool(ServerApiSettings settings, ILogger<DocsMcpFeed
             .To(teamAddress)
             .Subject($"bit platform feedback: {title.ReplaceLineEndings(" ")}")
             .Body($"""
-                Release: {connection.RequestedVersion ?? "-"}
                 Project: {connection.ProjectId ?? "-"}
 
                 {report}

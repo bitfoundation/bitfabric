@@ -232,6 +232,7 @@ server, so changing one setting changes it and nothing else:
 | `WebAppRender:PrerenderEnabled` | `SERVERWEB__WEBAPPRENDER__PRERENDERENABLED` | variable |
 | The second item of the `TrustedOrigins` array | `SERVERWEB__TRUSTEDORIGINS__1` | variable |
 <!--#endif-->
+| The web app's `StatusPageScriptUrl`, the script of its status page on bit Fabric | `SERVERWEB__STATUSPAGESCRIPTURL` | variable |
 | The landing page's `AI:OpenAI:ChatApiKey` | `LANDINGPAGE__AI__OPENAI__CHATAPIKEY` | secret |
 
 ```bash

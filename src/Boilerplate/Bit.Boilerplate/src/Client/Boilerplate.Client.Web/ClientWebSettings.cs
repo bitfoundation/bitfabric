@@ -11,6 +11,13 @@ public class ClientWebSettings : ClientCoreSettings
     public AdsPushVapidOptions? AdsPushVapid { get; set; }
     //#endif
 
+    /// <summary>
+    /// The script of the app's status page on bit Fabric (https://bitfabric.co), which shows a bar at the top of the web
+    /// app only while something is wrong. Server.Web's App.razor loads it, and the Content-Security-Policy allows its
+    /// origin (See ContentSecurityPolicy.BuildCspString). Empty loads nothing.
+    /// </summary>
+    public string? StatusPageScriptUrl { get; set; }
+
     public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         var validationResults = base.Validate(validationContext).ToList();
@@ -24,6 +31,12 @@ public class ClientWebSettings : ClientCoreSettings
             }
         }
         //#endif
+
+        if (string.IsNullOrWhiteSpace(StatusPageScriptUrl) is false
+            && (Uri.TryCreate(StatusPageScriptUrl, UriKind.Absolute, out var statusPageScript) is false || statusPageScript.Scheme is not ("https" or "http")))
+        {
+            validationResults.Add(new ValidationResult($"{nameof(StatusPageScriptUrl)} must be the absolute address of the status page's script, such as https://api.bitfabric.co/api/v1/PublicStatus/Embed/<page>.", [nameof(StatusPageScriptUrl)]));
+        }
 
         return validationResults;
     }

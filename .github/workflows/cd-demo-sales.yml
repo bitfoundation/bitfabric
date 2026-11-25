@@ -11,6 +11,8 @@ env:
   # Lets the About page show the run, the commit and the attestations of the build, only in a public repository whose links anyone can open.
   ShowBuildProvenance: ${{ github.event.repository.visibility == 'public' }}
   SERVER_ADDRESS: 'https://sales.bitfabric.co'
+  # The script of the demo's status page on bit Fabric, which shows a bar in the web app while something is wrong.
+  STATUS_PAGE_SCRIPT_URL: 'https://api.bitfabric.co/api/v1/PublicStatus/Embed/bit-salesmodule'
   R2_BUCKET: 'sales'
   OpenAI__ApiKey: ${{ secrets.OPENAI__APIKEY }}
   OpenAI__Endpoint: ${{ vars.OPENAI__ENDPOINT }}
@@ -100,6 +102,7 @@ jobs:
         AdsPushVapid.PublicKey: ${{ secrets.SALES_PUBLIC_VAPIDKEY }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
         ApplicationInsights.ConnectionString: ${{ secrets.APPLICATION_INSIGHTS_CONNECTION_STRING }}
+        StatusPageScriptUrl: ${{ env.STATUS_PAGE_SCRIPT_URL }}
 
     - name: Configure bswup
       run: |

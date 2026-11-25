@@ -47,8 +47,7 @@ public static class DocsMcpHttp
         // Public: the documentation needs no sign-in. Whether a project's license covers it is IDocsMcpAccess's to say.
         app.MapMcp(DocsMcpServer.Path);
 
-        // The version the source code tools read, whatever ?v= names: the newest bit platform tag, once it is indexed, and
-        // so one entry at most.
+        // The version the source code tools read: the newest bit platform tag, once it is indexed, and so one entry at most.
         app.MapGet($"{DocsMcpServer.Path}/versions", (DocsMcpVersions versions) => Results.Text(new JsonObject
         {
             ["latest"] = versions.Served?.Name,

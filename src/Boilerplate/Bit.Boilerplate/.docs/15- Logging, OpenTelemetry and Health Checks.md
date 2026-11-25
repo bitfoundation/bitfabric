@@ -346,6 +346,11 @@ user holding `Operations_View` grants from a session that signed in with two fac
 To read the report yourself, open `/healthz` on the server signed in with `Operations_View`, or ask the environment's
 dev-mcp for `GetHealth`; the app's logs say what happened around a failure.
 
+bit Fabric also gives the app a public status page, with a script that shows a bar at the top of the app, linking to the
+page, only while something is wrong. Put the script's address in `StatusPageScriptUrl`, in Client.Web's
+`appsettings.json` or, for a deployment, in the environment's `SERVERWEB__STATUSPAGESCRIPTURL` variable: Server.Web's
+`App.razor` loads it, and the Content-Security-Policy allows its origin. Empty, as it ships, loads nothing.
+
 The **Hangfire dashboard** is at `/hangfire`, for a user who holds `AppFeatures.System.Jobs_Manage`, the claim
 [`HangfireDashboardAuthorizationFilter`](/src/Server/Boilerplate.Server.Api/Infrastructure/RequestPipeline/HangfireDashboardAuthorizationFilter.cs)
 checks. A plain browser navigation carries only a cookie: the `access_token` cookie, which `IUserController.UpdateSession`

@@ -2,8 +2,8 @@ namespace Bit.Fabric.Server.Api.Features.DocsMcp;
 
 /// <summary>
 /// The one version the source code index serves: the newest tag of bitfoundation/bitplatform, a prerelease included, as
-/// DocsMcpCodeIndexer finishes indexing it. Every source code tool call reads it, whatever ?v= the caller sent. None until
-/// the first one is ready, and on a server with no index configured, when <see cref="Unavailable"/> says why.
+/// DocsMcpCodeIndexer finishes indexing it. Every source code tool call reads it. None until the first one is ready, and on
+/// a server with no index configured, when <see cref="Unavailable"/> says why.
 /// </summary>
 public sealed class DocsMcpVersions(ServerApiSettings settings)
 {
@@ -23,13 +23,10 @@ public sealed class DocsMcpVersions(ServerApiSettings settings)
     /// <summary>Why the source code tools can't answer, while no version is served; null once one is.</summary>
     public string? Unavailable => snapshot.Served is null ? snapshot.Problem : null;
 
-    /// <summary>
-    /// Names the version the source code tools read, for the server instructions: the only way a caller learns that they
-    /// read the newest code, not the version its ?v= names.
-    /// </summary>
+    /// <summary>Names the version the source code tools read, for the server instructions.</summary>
     public string Describe()
         => Served is { } served
-            ? $"Its source code tools read {served.Name}, the newest bit platform code, whatever v this connection names."
+            ? $"Its source code tools read {served.Name}, the newest bit platform code."
             : $"Its source code tools don't answer for now: {Unavailable}. Every other tool does.";
 
     /// <summary>Serves <paramref name="version"/> in place of the one served before, as DocsMcpCodeIndexer finishes indexing it.</summary>
