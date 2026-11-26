@@ -28,7 +28,8 @@
                     {
                         var isCurrent = project.Id == Current.Id;
                         <li @key="project.Id">
-                            <BitButton Variant="BitVariant.Text" FullWidth Href="@HrefOf(project)" OnClick="() => isOpen = false"
+                            @* TertiaryBackground: a hovered or focused row takes a quiet tint of the menu, not the primary color, under the row's own text colors. *@
+                            <BitButton Variant="BitVariant.Text" Color="BitColor.TertiaryBackground" FullWidth Href="@HrefOf(project)" OnClick="() => isOpen = false"
                                        aria-current="@(isCurrent ? "page" : null)" Class="@(isCurrent ? "switcher-item current" : "switcher-item")">
                                 <span class="switcher-check" aria-hidden="true">
                                     @if (isCurrent)
