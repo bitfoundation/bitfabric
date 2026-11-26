@@ -86,19 +86,14 @@ BEGIN
         WHERE c.table_schema = 'public' AND pg_get_serial_sequence(format('public.%I', c.table_name), c.column_name) IS NOT NULL
     LOOP
         EXECUTE format('SELECT max(%I) FROM public.%I', s.column_name, s.table_name) INTO maxid;
+        -- Seeded rows may have ids below 1, where a sequence never goes.
         IF maxid IS NOT NULL THEN
-            PERFORM setval(s.seq, maxid);
+            PERFORM setval(s.seq, greatest(maxid, 1), maxid >= 1);
         END IF;
     END LOOP;
 END $$;
 
 SELECT pg_temp.go_on_from_carried_ids();
-
--- bit Boilerplate 11.0.0-pre-25's data change, folded into the new Initial with its migration (AssistantWindowsInstallerUrl):
--- the AdminPanel demo's Windows installer's new address, in every prompt that has the old one.
-UPDATE public."SystemPrompts"
-SET "Markdown" = replace("Markdown", 'https://windows-admin.bitplatform.dev/AdminPanel.Client.Windows-win-Setup.exe', 'https://windows-adminpanel.bitfabric.co/AdminPanel.Client.Windows-win-Setup.exe')
-WHERE strpos("Markdown", 'https://windows-admin.bitplatform.dev/AdminPanel.Client.Windows-win-Setup.exe') > 0;
 
 -- 2. Each monitored project: a project of its own, and its environment, Production.
 INSERT INTO public."Projects" ("Id", "TenantId", "Name", "BitProjectId", "FirstCommit", "CreatedOn")
@@ -221,6 +216,12 @@ SELECT DISTINCT ON (p."Id", lt."UserId") p."Id", lt."UserId", lt."TenantId", (SE
 FROM license_teams lt
 JOIN public."Projects" p ON p."TenantId" = lt."TenantId" AND p."BitProjectId" = lt."BitProjectId"
 ON CONFLICT DO NOTHING;
+
+-- bit Boilerplate 11.0.0-pre-25's data change, folded into the new Initial with its migration (AssistantWindowsInstallerUrl):
+-- the AdminPanel demo's Windows installer's new address, in every prompt that has the old one.
+UPDATE public."SystemPrompts"
+SET "Markdown" = replace("Markdown", 'https://windows-admin.bitplatform.dev/AdminPanel.Client.Windows-win-Setup.exe', 'https://windows-adminpanel.bitfabric.co/AdminPanel.Client.Windows-win-Setup.exe')
+WHERE strpos("Markdown", 'https://windows-admin.bitplatform.dev/AdminPanel.Client.Windows-win-Setup.exe') > 0;
 
 SELECT pg_temp.go_on_from_carried_ids();
 
