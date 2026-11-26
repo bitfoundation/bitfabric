@@ -86,9 +86,8 @@ function chromeFlags(guardPort: number): string[] {
 const skipAudits = ['screenshot-thumbnails', 'final-screenshot', 'full-page-screenshot', 'script-treemap-data'];
 
 /**
- * Lighthouse's own user agent for the form factor with "Chrome-Lighthouse" at its end, as PageSpeed Insights sends it.
- * Lighthouse dropped that token from its default, and an app may serve Lighthouse a page of its own by it, as one made
- * from bit Boilerplate does, without the Blazor scripts; without it, a scan would score a page PageSpeed Insights never sees.
+ * Lighthouse's own user agent for the form factor with "Chrome-Lighthouse" at its end, the way PageSpeed Insights sends
+ * it, so a scan sees a site the way PageSpeed Insights does.
  */
 export function userAgentFor(formFactor: FormFactor): string {
     return `${userAgents[formFactor]} Chrome-Lighthouse`;
