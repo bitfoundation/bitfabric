@@ -3,14 +3,14 @@
 Create [bit Fabric](https://bitfabric.co) projects that are ready to run on Windows, macOS and Linux, translate `.resx` files with an LLM, decode stack traces minified by Bit.Minifier, and write the profiles that compile Blazor WebAssembly apps ahead of time.
 
 ```bash
-dotnet tool install --global Bit.Cli --version 11.0.0-pre-24
+dotnet tool install --global Bit.Cli --version 11.0.0-pre-25
 bit new MyApp
 ```
 
 Or run it without installing anything:
 
 ```bash
-dnx Bit.Cli --version 11.0.0-pre-24 -- new MyApp
+dnx Bit.Cli --version 11.0.0-pre-25 -- new MyApp
 ```
 
 It needs a .NET 10 SDK or later. `dnx` asks once before it downloads the package.
@@ -206,7 +206,7 @@ It needs the GitHub CLI, signed in with admin rights on the repository. For anot
 `bit new` and `bit setup` prepare CI machines too, so a pipeline needs no steps of its own for Node.js, workloads, Playwright or the development certificate. The pipelines bit Boilerplate ships install bit once per job and run it before they publish:
 
 ```bash
-dotnet tool install --global Bit.Cli --version 11.0.0-pre-24
+dotnet tool install --global Bit.Cli --version 11.0.0-pre-25
 bit setup --platforms android --no-browsers --yes
 ```
 
@@ -363,7 +363,7 @@ In a pipeline:
 
 ```yaml
 - name: Install the bit CLI
-  run: dotnet tool install --global Bit.Cli --version 11.0.0-pre-24
+  run: dotnet tool install --global Bit.Cli --version 11.0.0-pre-25
 
 - name: Translate .resx files
   env:
@@ -582,5 +582,5 @@ When a step fails, bit says right under it what it was doing: the exact command 
 
 | Before | Now |
 |---|---|
-| `dnx Bit.ResxTranslator` | `dnx Bit.Cli --version 11.0.0-pre-24 -- translate`, or `bit translate` |
-| `dnx Bit.Minifier.Cli --decode map trace` | `dnx Bit.Cli --version 11.0.0-pre-24 -- decode map trace`, or `bit decode map trace` |
+| `dnx Bit.ResxTranslator` | `dnx Bit.Cli --version 11.0.0-pre-25 -- translate`, or `bit translate` |
+| `dnx Bit.Minifier.Cli --decode map trace` | `dnx Bit.Cli --version 11.0.0-pre-25 -- decode map trace`, or `bit decode map trace` |
