@@ -1,0 +1,125 @@
+@inherits AppComponentBase
+
+@* The app's status page in BevTools (See AppBevTools): what its summary.json says now, and what the app shows its users
+   for it. Read the moment the tab opens; Check again reads it once more. *@
+<div class="panel">
+    <BitStack Gap="1rem" AutoHeight Padding="1rem">
+
+        <BitStack Horizontal AutoHeight VerticalAlign="BitAlignment.Center" Gap="0.75rem">
+            <BitIcon Size="BitSize.Large" Color="@IndicatorColor" IconName="@IndicatorIcon" Class="@(reading ? "indicator reading" : "indicator")" />
+            <BitStack AutoHeight Gap="0" Class="headline">
+                <BitText Typography="BitTypography.H6" Dir="BitDir.Auto">@Headline</BitText>
+                @if (Subline is not null)
+                {
+                    <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground" Dir="BitDir.Auto">@Subline</BitText>
+                }
+            </BitStack>
+            <BitSpacer />
+            @if (statusPageService.IsEnabled)
+            {
+                <BitButton AutoLoading
+                           Class="check-again"
+                           Size="BitSize.Small"
+                           Variant="BitVariant.Outline"
+                           IconName="@BitIconName.Refresh"
+                           OnClick="WrapHandled(Read)">
+                    Check again
+                </BitButton>
+            }
+        </BitStack>
+
+        @if (statusPageService.IsEnabled is false)
+        {
+            <BitText Typography="BitTypography.Body2" Color="BitColor.SecondaryForeground" Dir="BitDir.Auto">
+                ClientCoreSettings.StatusPageSummaryUrl is empty, so the app reads no status page and shows its users no notice.
+            </BitText>
+        }
+        else
+        {
+            <div class="pairs">
+                <div class="key">Address</div>
+                <div class="value address" dir="ltr">@statusPageService.SummaryUrl</div>
+
+                @if (read is not null && read.Error is null)
+                {
+                    <div class="key">The app shows</div>
+                    <div class="value" dir="auto">@NoticeText</div>
+                }
+            </div>
+
+            @if (read?.Error is { } error)
+            {
+                <div class="error" dir="ltr">@error</div>
+            }
+
+            @if (Components.Length > 0)
+            {
+                <section>
+                    <BitText Typography="BitTypography.Subtitle2" Class="section-title">Components</BitText>
+                    <ul class="rows">
+                        @foreach (var component in Components)
+                        {
+                            var (color, text) = StateOf(component.Status);
+                            <li class="row">
+                                <BitIcon IconName="@BitIconName.CircleFill" Size="BitSize.Small" Color="@color" />
+                                <BitText Typography="BitTypography.Body2" Class="name" Dir="BitDir.Auto">@component.Name</BitText>
+                                <BitText Typography="BitTypography.Caption1" Color="@color">@text</BitText>
+                            </li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            @if (read is not null && read.Error is null)
+            {
+                <section>
+                    <BitText Typography="BitTypography.Subtitle2" Class="section-title">Open incidents</BitText>
+                    @if (Incidents.Length is 0)
+                    {
+                        <BitText Typography="BitTypography.Body2" Color="BitColor.SecondaryForeground">None</BitText>
+                    }
+                    @foreach (var incident in Incidents)
+                    {
+                        var latest = Latest(incident);
+                        <div class="item">
+                            <BitStack Horizontal AutoHeight Wrap Gap="0.5rem" VerticalAlign="BitAlignment.Center">
+                                <BitIcon IconName="@BitIconName.CircleFill" Size="BitSize.Small" Color="@(ColorOf(incident.Impact))" />
+                                <BitText Typography="BitTypography.Body2" Class="name" Dir="BitDir.Auto">@incident.Name</BitText>
+                                <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">@($"{incident.Impact ?? "no"} impact · {latest?.Status ?? incident.Status}")</BitText>
+                            </BitStack>
+                            @if (latest?.Body is { Length: > 0 } body)
+                            {
+                                <BitText Typography="BitTypography.Body2" Class="update" Dir="BitDir.Auto">@body</BitText>
+                            }
+                            <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">
+                                @($"Started {Time(incident.StartedAt ?? incident.CreatedAt)}{(latest is null ? "" : $", updated {Time(latest.DisplayAt ?? latest.CreatedAt)}")}")
+                            </BitText>
+                        </div>
+                    }
+                </section>
+
+                <section>
+                    <BitText Typography="BitTypography.Subtitle2" Class="section-title">Planned maintenance</BitText>
+                    @if (Maintenances.Length is 0)
+                    {
+                        <BitText Typography="BitTypography.Body2" Color="BitColor.SecondaryForeground">None</BitText>
+                    }
+                    @foreach (var maintenance in Maintenances)
+                    {
+                        <div class="item">
+                            <BitStack Horizontal AutoHeight Wrap Gap="0.5rem" VerticalAlign="BitAlignment.Center">
+                                <BitIcon IconName="@BitIconName.Repair" Size="BitSize.Small" Color="BitColor.Info" />
+                                <BitText Typography="BitTypography.Body2" Class="name" Dir="BitDir.Auto">@maintenance.Name</BitText>
+                                <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">@maintenance.Status</BitText>
+                            </BitStack>
+                            <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">
+                                @($"{Time(maintenance.ScheduledFor)} – {Time(maintenance.ScheduledUntil) ?? "open-ended"}")
+                            </BitText>
+                        </div>
+                    }
+                </section>
+            }
+        }
+
+    </BitStack>
+</div>

@@ -309,6 +309,9 @@ in the background, and when a request to the app's own server fails; it doesn't 
 with its latest update and step, or a planned maintenance under way or starting within a day, with a link to the page,
 until the user closes it; a closed notice comes back only for a new incident or update. A summary that doesn't come back
 is logged as an error and shows nothing. The Content-Security-Policy allows its origin. Empty, as it ships, asks nothing.
+BevTools' Status tab ([`AppStatusPagePanel`](/src/Client/Boilerplate.Client.Core/Components/Layout/Diagnostic/AppStatusPagePanel.razor.cs))
+reads the same summary the moment it opens and shows the page's overall status, its components, open incidents and
+planned maintenance, what the notice shows the user for them, or why the read failed, with Check again to read it once more.
 
 The **Hangfire dashboard** is at `/hangfire`, for a user who holds `AppFeatures.System.Jobs_Manage`, the claim
 [`HangfireDashboardAuthorizationFilter`](/src/Server/Boilerplate.Server.Api/Infrastructure/RequestPipeline/HangfireDashboardAuthorizationFilter.cs)

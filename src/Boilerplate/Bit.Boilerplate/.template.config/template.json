@@ -955,6 +955,8 @@
                         "src/Tests/Features/Categories/AddOrEditCategoryModalTests.cs",
                         "src/Tests/Features/Ads/AdsServiceTests.cs",
                         "src/Tests/Features/StatusPage/StatusPageNoticeTests.cs",
+                        "src/Tests/Features/StatusPage/AppStatusPagePanelTests.cs",
+                        "src/Tests/Features/StatusPage/StatusNoticeTests.cs",
                         "src/Tests/Features/Configuration/ClientSettingsValidationTests.cs",
                         "src/Tests/Features/Configuration/HttpClientDefaultsTests.cs",
                         "src/Tests/Features/ForceUpdate/ForceUpdateTests.cs",

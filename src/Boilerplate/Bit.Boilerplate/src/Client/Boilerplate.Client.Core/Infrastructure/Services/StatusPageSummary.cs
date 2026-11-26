@@ -11,6 +11,11 @@ public class StatusPageSummary
 {
     public StatusPageSummaryPage? Page { get; set; }
 
+    /// <summary>The page's overall state, which BevTools' Status tab shows (See AppStatusPagePanel).</summary>
+    public StatusPageSummaryStatus? Status { get; set; }
+
+    public StatusPageSummaryComponent[]? Components { get; set; }
+
     /// <summary>The unresolved incidents.</summary>
     public StatusPageSummaryIncident[]? Incidents { get; set; }
 
@@ -20,7 +25,30 @@ public class StatusPageSummary
 
 public class StatusPageSummaryPage
 {
+    public string? Name { get; set; }
+
     public string? Url { get; set; }
+
+    public DateTimeOffset? UpdatedAt { get; set; }
+}
+
+public class StatusPageSummaryStatus
+{
+    /// <summary>none, minor, major, critical or maintenance.</summary>
+    public string? Indicator { get; set; }
+
+    public string? Description { get; set; }
+}
+
+public class StatusPageSummaryComponent
+{
+    public string? Name { get; set; }
+
+    /// <summary>operational, degraded_performance, partial_outage, major_outage or under_maintenance.</summary>
+    public string? Status { get; set; }
+
+    /// <summary>A group only gathers other components, which the summary lists on their own too.</summary>
+    public bool? Group { get; set; }
 }
 
 /// <summary>An incident, or a planned maintenance, which <c>summary.json</c> writes in the same shape.</summary>
