@@ -169,6 +169,9 @@ public static partial class PageUrls
     [Description("Run this deployment: the status of every dependency it relies on, and its background jobs. Requires sign-in.")]
     public const string Operations = "/operations";
 
+    [Description("Projects, Trials and Licenses over time, every team's together, as totals only. Requires sign-in.")]
+    public const string Growth = "/growth";
+
     /// <summary>
     /// Signed out, it only says what signing in gives (bitfabric-internal/specs/monitoring.md), so it isn't in the sitemap
     /// (bitfabric-internal/specs/home-page.md, 2026-11-19).

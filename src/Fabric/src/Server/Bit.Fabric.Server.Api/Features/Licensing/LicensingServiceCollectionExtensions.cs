@@ -13,6 +13,9 @@ public static class LicensingServiceCollectionExtensions
 
         services.AddScoped<Projects.ProjectLicenses>();
 
+        // The growth page's counts, for its controller and its MCP tool.
+        services.AddScoped<Growth.GrowthService>();
+
         return services;
     }
 }

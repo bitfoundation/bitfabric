@@ -11760,4 +11760,242 @@
   <data name="ProjectsOnlyTeamMembers" xml:space="preserve">
     <value>فقط کسی که به Team پیوسته است می‌تواند روی پروژه‌های آن کار کند.</value>
   </data>
+  <data name="GrowthTitle" xml:space="preserve">
+    <value>رشد</value>
+  </data>
+  <data name="GrowthPeriodLabel" xml:space="preserve">
+    <value>بازه</value>
+  </data>
+  <data name="GrowthWeek" xml:space="preserve">
+    <value>هفته</value>
+  </data>
+  <data name="GrowthMonth" xml:space="preserve">
+    <value>ماه</value>
+  </data>
+  <data name="GrowthQuarter" xml:space="preserve">
+    <value>سه ماه</value>
+  </data>
+  <data name="GrowthYear" xml:space="preserve">
+    <value>سال</value>
+  </data>
+  <data name="GrowthAll" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="GrowthWindowWeek" xml:space="preserve">
+    <value>۷ روز گذشته، در برابر ۷ روز پیش از آن</value>
+  </data>
+  <data name="GrowthWindowMonth" xml:space="preserve">
+    <value>۳۰ روز گذشته، در برابر ۳۰ روز پیش از آن</value>
+  </data>
+  <data name="GrowthWindowQuarter" xml:space="preserve">
+    <value>۱۳ هفتهٔ گذشته، در برابر ۱۳ هفتهٔ پیش از آن</value>
+  </data>
+  <data name="GrowthWindowYear" xml:space="preserve">
+    <value>۱۲ ماه گذشته، در برابر ۱۲ ماه پیش از آن</value>
+  </data>
+  <data name="GrowthWindowAll" xml:space="preserve">
+    <value>از نخستین پروژه، {0}</value>
+    <comment>{0} is the day of the first project.</comment>
+  </data>
+  <data name="GrowthProjects" xml:space="preserve">
+    <value>پروژه‌ها</value>
+  </data>
+  <data name="GrowthPerDay" xml:space="preserve">
+    <value>روزی حدود {0}</value>
+    <comment>The projects made a day on average over the period.</comment>
+  </data>
+  <data name="GrowthFlowEnded" xml:space="preserve">
+    <value>Trial پایان‌یافته</value>
+  </data>
+  <data name="GrowthFlowGiven" xml:space="preserve">
+    <value>Trial تا اینجا</value>
+  </data>
+  <data name="GrowthFlowLicensed" xml:space="preserve">
+    <value>License گرفتند</value>
+  </data>
+  <data name="GrowthRealOnly" xml:space="preserve">
+    <value>اجراهای خودکار تست شمرده نمی‌شوند.</value>
+    <comment>Every figure built on projects leaves out those whose Trial bit CLI asked for from CI.</comment>
+  </data>
+  <data name="GrowthNew" xml:space="preserve">
+    <value>تازه</value>
+    <comment>A figure that had nothing in the period before.</comment>
+  </data>
+  <data name="GrowthUp" xml:space="preserve">
+    <value>بیشتر</value>
+    <comment>Read before a change, for screen readers.</comment>
+  </data>
+  <data name="GrowthDown" xml:space="preserve">
+    <value>کمتر</value>
+    <comment>Read before a change, for screen readers.</comment>
+  </data>
+  <data name="GrowthTimes" xml:space="preserve">
+    <value>{0} برابر</value>
+    <comment>A count three times or more what it was in the period before.</comment>
+  </data>
+  <data name="GrowthPoint" xml:space="preserve">
+    <value>۱ واحد</value>
+    <comment>A change of a percentage by one percentage point.</comment>
+  </data>
+  <data name="GrowthPoints" xml:space="preserve">
+    <value>{0} واحد</value>
+    <comment>A change of a percentage, in percentage points.</comment>
+  </data>
+  <data name="GrowthLicensedProjects" xml:space="preserve">
+    <value>پروژه‌های دارای License</value>
+  </data>
+  <data name="GrowthConversion" xml:space="preserve">
+    <value>از Trial به License</value>
+  </data>
+  <data name="GrowthConversionOf" xml:space="preserve">
+    <value>از {0} Trial پایان‌یافته</value>
+  </data>
+  <data name="GrowthConversionSoFar" xml:space="preserve">
+    <value>تا اینجا، از {0} Trial</value>
+  </data>
+  <data name="GrowthOverTime" xml:space="preserve">
+    <value>پروژه‌ها در گذر زمان</value>
+  </data>
+  <data name="GrowthOverTimeDescription" xml:space="preserve">
+    <value>تا اینجا {0} پروژه، که {1} پروژه License دارد.</value>
+  </data>
+  <data name="GrowthSeriesProjects" xml:space="preserve">
+    <value>پروژه‌ها</value>
+  </data>
+  <data name="GrowthSeriesLicensed" xml:space="preserve">
+    <value>دارای License</value>
+  </data>
+  <data name="GrowthEachDay" xml:space="preserve">
+    <value>هر روز</value>
+  </data>
+  <data name="GrowthEachWeek" xml:space="preserve">
+    <value>هر هفته</value>
+  </data>
+  <data name="GrowthEachMonth" xml:space="preserve">
+    <value>هر ماه</value>
+  </data>
+  <data name="GrowthEachDescription" xml:space="preserve">
+    <value>{0} پروژه ساخته شد و {1} پروژه در این بازه License گرفت.</value>
+  </data>
+  <data name="GrowthSeriesMade" xml:space="preserve">
+    <value>پروژه‌های ساخته‌شده</value>
+  </data>
+  <data name="GrowthSeriesNewlyLicensed" xml:space="preserve">
+    <value>پروژه‌هایی که License گرفتند</value>
+  </data>
+  <data name="GrowthSoFar" xml:space="preserve">
+    <value>{0}، تا امروز</value>
+    <comment>A month that isn't over yet.</comment>
+  </data>
+  <data name="GrowthTrialSection" xml:space="preserve">
+    <value>از Trial تا License</value>
+  </data>
+  <data name="GrowthTrialsNow" xml:space="preserve">
+    <value>هر Trial اکنون کجاست</value>
+  </data>
+  <data name="GrowthTrialsGiven" xml:space="preserve">
+    <value>Trial داده‌شده تا امروز</value>
+  </data>
+  <data name="GrowthStateLicensed" xml:space="preserve">
+    <value>License گرفت</value>
+  </data>
+  <data name="GrowthStateRunning" xml:space="preserve">
+    <value>در Trial</value>
+  </data>
+  <data name="GrowthStateEnding" xml:space="preserve">
+    <value>این هفته تمام می‌شود</value>
+  </data>
+  <data name="GrowthStateEnded" xml:space="preserve">
+    <value>تمام شد، بی License</value>
+  </data>
+  <data name="GrowthDaysToLicense" xml:space="preserve">
+    <value>روزها تا License</value>
+  </data>
+  <data name="GrowthDays" xml:space="preserve">
+    <value>{0} روز</value>
+  </data>
+  <data name="GrowthOneDay" xml:space="preserve">
+    <value>۱ روز</value>
+  </data>
+  <data name="GrowthHalfWithin" xml:space="preserve">
+    <value>نیمی در همین مدت License می‌گیرند</value>
+  </data>
+  <data name="GrowthNoLicensesInPeriod" xml:space="preserve">
+    <value>هنوز در این بازه Licenseای نیست</value>
+  </data>
+  <data name="GrowthSameDay" xml:space="preserve">
+    <value>همان روز</value>
+  </data>
+  <data name="GrowthDays1To7" xml:space="preserve">
+    <value>۱–۷</value>
+  </data>
+  <data name="GrowthDays8To14" xml:space="preserve">
+    <value>۸–۱۴</value>
+  </data>
+  <data name="GrowthDays15To30" xml:space="preserve">
+    <value>۱۵–۳۰</value>
+  </data>
+  <data name="GrowthAfterTrial" xml:space="preserve">
+    <value>بعدتر</value>
+    <comment>After the Trial ended.</comment>
+  </data>
+  <data name="GrowthReminders" xml:space="preserve">
+    <value>bit CLI از روز ۱۴ Trial یادآوری می‌کند.</value>
+  </data>
+  <data name="GrowthMoreThanOne" xml:space="preserve">
+    <value>بیش از یک پروژه</value>
+  </data>
+  <data name="GrowthAccountsCreated" xml:space="preserve">
+    <value>حساب‌های ساخته‌شده</value>
+  </data>
+  <data name="GrowthAccountsCreatedNote" xml:space="preserve">
+    <value>همهٔ حساب‌های bitfabric.co</value>
+  </data>
+  <data name="GrowthEmptyTitle" xml:space="preserve">
+    <value>هنوز پروژه‌ای نیست</value>
+  </data>
+  <data name="GrowthEmptyText" xml:space="preserve">
+    <value>هر پروژه‌ای که bit new بسازد اینجا دیده می‌شود.</value>
+  </data>
+  <data name="GrowthError" xml:space="preserve">
+    <value>عددها بارگذاری نشدند.</value>
+  </data>
+  <data name="GrowthRetry" xml:space="preserve">
+    <value>دوباره</value>
+  </data>
+  <data name="GrowthTeamsWithLicense" xml:space="preserve">
+    <value>Team های دارای License</value>
+    <comment>A License is a team's.</comment>
+  </data>
+  <data name="GrowthInProduction" xml:space="preserve">
+    <value>در Production</value>
+    <comment>Licensed projects that monitoring watches in production.</comment>
+  </data>
+  <data name="GrowthInProductionNote" xml:space="preserve">
+    <value>{0} از پروژه‌های دارای License</value>
+  </data>
+  <data name="GrowthTeamsSection" xml:space="preserve">
+    <value>Team ها</value>
+  </data>
+  <data name="GrowthTeamsByProjects" xml:space="preserve">
+    <value>Team ها بر پایهٔ شمار پروژه‌هایشان</value>
+  </data>
+  <data name="GrowthProjectsPerTeam" xml:space="preserve">
+    <value>پروژه برای هر Team</value>
+  </data>
+  <data name="GrowthProjects3To5" xml:space="preserve">
+    <value>۳–۵</value>
+  </data>
+  <data name="GrowthProjects6Plus" xml:space="preserve">
+    <value>۶+</value>
+  </data>
+  <data name="GrowthSeriesTeams" xml:space="preserve">
+    <value>Team ها</value>
+  </data>
+  <data name="GrowthPeopleInTeams" xml:space="preserve">
+    <value>افراد Team های دارای License</value>
+  </data>
+  <data name="GrowthPeopleInTeamsNote" xml:space="preserve">
+    <value>اعضای Team هایی که License دارند</value>
+  </data>
 </root>

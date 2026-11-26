@@ -38,6 +38,9 @@ public static class IWorkbenchServiceCollectionExtensions
             services.AddScoped<IStatusPagesController, WorkbenchStatusPagesController>();
             services.AddScoped<IPublicStatusController, WorkbenchPublicStatusController>();
             services.AddScoped<ITenantController, WorkbenchTenantController>();
+
+            // The app's growth page, on the sample worlds of Components/Pages/Growth/Data.
+            services.AddScoped<Bit.Fabric.Shared.Features.Growth.IGrowthController, Components.Pages.Growth.Data.WorkbenchGrowthController>();
             services.AddScoped<WorkbenchPushNotificationService>();
             services.AddScoped<IPushNotificationService>(sp => sp.GetRequiredService<WorkbenchPushNotificationService>());
             services.AddScoped<IExternalNavigationService, WorkbenchApprovalNavigation>();

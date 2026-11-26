@@ -297,6 +297,27 @@ public static class WorkbenchPageCatalog
                 ])
             ]
         },
+        // The app's growth page (bitfabric-internal/specs/growth.md), rendered from Client.Core on made-up sample worlds,
+        // counted the way the server counts (Components/Pages/Growth/Data).
+        new("growth",
+            "Growth",
+            "The app's growth page for global admins: projects made each day, Trials that became Licenses and how fast, licensed projects in production and the teams behind them. Totals only, on made-up sample numbers",
+            BitIconName.AreaChart,
+            typeof(Bit.Fabric.Workbench.Components.Pages.Growth.GrowthHost),
+            nameof(WorkbenchStrings.CategoryBitFabric),
+            ["BitChart", "BitButtonGroup", "BitShimmer", "BitEmptyState"],
+            "Projects and licenses, over time")
+        {
+            Switches =
+            [
+                new(Bit.Fabric.Workbench.Components.Pages.Growth.Data.GrowthSamples.HistorySwitch, "History",
+                [
+                    new(Bit.Fabric.Workbench.Components.Pages.Growth.Data.GrowthSamples.Months, "Months of growth"),
+                    new(Bit.Fabric.Workbench.Components.Pages.Growth.Data.GrowthSamples.FirstDay, "A first day"),
+                    new(Bit.Fabric.Workbench.Components.Pages.Growth.Data.GrowthSamples.SlowWeek, "A slow week")
+                ])
+            ]
+        },
         // Monitoring (bitfabric-internal/specs/monitoring.md): the app's own pages, rendered from Client.Core on the sample world of
         // Components/Pages/Monitoring/Data, so QA sees every state of what ships. Texts are literals, as the Workbench's own.
         new("projects",
