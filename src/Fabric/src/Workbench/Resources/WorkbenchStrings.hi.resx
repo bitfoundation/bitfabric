@@ -4503,4 +4503,25 @@
     <data name="PosNoGoalSetDescription" xml:space="preserve">
         <value>स्टोर लक्ष्य के कितने करीब है, यह देखने के लिए बिक्री लक्ष्य तय करें।</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>योजना</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>पूरी स्क्रीन पर पढ़ें</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{1} में से {0} काम पूरे</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>सब दिखाएँ</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>कम दिखाएँ</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>बंद करें</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>विषय-सूची</value>
+    </data>
 </root>

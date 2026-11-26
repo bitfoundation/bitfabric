@@ -339,6 +339,32 @@ public class WorkbenchProgressDocumentTests
     }
 
     [TestMethod]
+    public void APlan_Should_ReadBackWholeUntilItsLimitAndGoWhenEmpty()
+    {
+        Create(Update("Build the orders page"));
+
+        const string plan = "# Orders\n\n- [x] The entity\n- [ ] The page";
+
+        Edit(() => WorkbenchProgressDocument.Apply(Progress, "t", "Claude Code", new(null, null, null, null, null, null, null, null, null, Plan: plan)));
+
+        Assert.AreEqual(plan, Task().Plan);
+
+        const string indented = "    an indented block\n";
+
+        Edit(() => WorkbenchProgressDocument.Apply(Progress, "t", "Claude Code", new(null, null, null, null, null, null, null, null, null, Plan: indented)));
+
+        Assert.AreEqual(indented, Task().Plan, "A plan keeps its Markdown as sent, leading spaces included.");
+
+        Edit(() => WorkbenchProgressDocument.Apply(Progress, "t", "Claude Code", new(null, null, null, null, null, null, null, null, null, Plan: new string('a', WorkbenchProgressDocument.MaxPlanLength + 10))));
+
+        Assert.AreEqual(WorkbenchProgressDocument.MaxPlanLength, Task().Plan!.Length, "A plan past its limit is cut.");
+
+        Edit(() => WorkbenchProgressDocument.Apply(Progress, "t", "Claude Code", new(null, null, null, null, null, null, null, null, null, Plan: " ")));
+
+        Assert.IsNull(Task().Plan, "An empty plan takes it away.");
+    }
+
+    [TestMethod]
     public void TheActivity_Should_KeepOnlyItsNewestLines()
     {
         Create(Update("Task"));
@@ -375,6 +401,8 @@ public class WorkbenchProgressDocumentTests
         Assert.Contains(s => s.Owner is WorkbenchProgressOwner.Agent && s.Status is WorkbenchProgressStepStatus.Doing, feature.Steps);
         Assert.AreEqual((WorkbenchProgressStatus.Done, 100d), (fix.Status, fix.Percent));
         Assert.IsFalse(string.IsNullOrWhiteSpace(fix.Report), "The finished one shows the report an agent ends with.");
+        Assert.Contains("- [ ] ", feature.Plan!, "The feature shows the plan it follows, with its tasks.");
+        Assert.IsGreaterThan(deploy.UpdatedAt, feature.UpdatedAt, "The feature, with its plan, is the sample that shows first.");
         Assert.IsTrue(new[] { deploy, feature, fix }.SelectMany(t => t.Links).All(link => WorkbenchProgressDocument.IsSafeUrl(link.Url)));
         Assert.IsTrue(new[] { deploy, feature, fix }.SelectMany(t => t.Asks).Where(a => a.Kind is WorkbenchProgressAskKind.Choice or WorkbenchProgressAskKind.Choices).All(a => a.Options.Length >= 2));
     }

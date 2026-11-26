@@ -24,6 +24,9 @@ public sealed record WorkbenchProgressTask(string Id,
     /// <summary>The agent's write-up of the task in Markdown, like the report a long run ends with.</summary>
     public string? Report { get; init; }
 
+    /// <summary>The plan the task follows in Markdown, like a change plan with its checklist of tasks, which the page shows as a document of its own.</summary>
+    public string? Plan { get; init; }
+
     /// <summary>The language the agent writes the task in, like <c>fa</c> or <c>en</c>, which sets the way its texts read; null when it gave none.</summary>
     public string? Language { get; init; }
 

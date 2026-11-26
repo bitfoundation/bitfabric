@@ -5726,4 +5726,25 @@
     <data name="FlowsGroupSamples" xml:space="preserve">
         <value>Samples</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>Plan</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>Read full screen</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{0} of {1} tasks done</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>Show all</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>Show less</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>Close</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>Outline</value>
+    </data>
 </root>

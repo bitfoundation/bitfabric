@@ -4503,4 +4503,25 @@
     <data name="PosNoGoalSetDescription" xml:space="preserve">
         <value>Définissez un objectif de ventes pour voir où en est le magasin.</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>Plan</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>Lire en plein écran</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{0} tâches sur {1} terminées</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>Tout afficher</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>Afficher moins</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>Fermer</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>Sommaire</value>
+    </data>
 </root>

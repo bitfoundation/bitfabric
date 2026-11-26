@@ -4677,4 +4677,25 @@
     <data name="FlowsGroupSamples" xml:space="preserve">
         <value>نمونه‌ها</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>برنامه</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>خواندن در تمام صفحه</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{0} از {1} کار انجام شده</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>نمایش همه</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>نمایش کمتر</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>بستن</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>فهرست مطالب</value>
+    </data>
 </root>

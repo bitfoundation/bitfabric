@@ -4503,4 +4503,25 @@
     <data name="PosNoGoalSetDescription" xml:space="preserve">
         <value>حدد هدفًا للمبيعات لترى مدى اقتراب الفرع منه.</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>الخطة</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>القراءة بملء الشاشة</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{0} من {1} مهام منجزة</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>عرض الكل</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>عرض أقل</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>إغلاق</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>المحتويات</value>
+    </data>
 </root>

@@ -284,6 +284,38 @@ public class ProgressUITests : ProgressPageTest
         await Expect(detail.Locator("code")).ToHaveTextAsync("9cfbf7c2fd");
         await Expect(Page.Locator(".feed .entry.tone-success")).ToContainTextAsync("CI is green");
     }
+
+    [TestMethod, WithAnAgent]
+    public async Task ThePlan_Should_CountItsTasksAndReadFullScreenWithItsOutline(WorkbenchSurface surface)
+    {
+        var (id, _) = await Agent.Create("Claude Code", new(null, "Build the orders page", null, null, null, null, null, null, null,
+            // The ticked line in the code block is an example, not a task, so it isn't counted
+            Plan: "# Orders page\n\n## Design\n\nThe entity and its page.\n\n```md\n- [x] An example\n```\n\n## Tasks\n\n- [x] The entity\n- [ ] The page\n- [ ] The tests"), CancellationToken.None);
+
+        await OpenProgress($"progress/{id}");
+
+        var plan = Page.Locator(".plan");
+
+        await Expect(plan.Locator(".plan-count")).ToHaveTextAsync("1 of 3 tasks done");
+        await Expect(plan.GetByRole(AriaRole.Heading, new() { Name = "Orders page" })).ToBeVisibleAsync();
+
+        await plan.GetByRole(AriaRole.Button, new() { Name = "Read full screen" }).ClickAsync();
+
+        var reader = Page.GetByRole(AriaRole.Dialog, new() { Name = "Orders page" });
+
+        await Expect(reader).ToBeVisibleAsync();
+        await Expect(reader.GetByRole(AriaRole.Heading, new() { Name = "Tasks" })).ToBeVisibleAsync();
+
+        // The outline sits beside the plan on a wide screen; a phone has no room for it.
+        if (IsPhone is false)
+        {
+            await Expect(reader.GetByRole(AriaRole.Navigation, new() { Name = "Outline" }).GetByRole(AriaRole.Link)).ToHaveTextAsync(["Design", "Tasks"]);
+        }
+
+        await reader.GetByRole(AriaRole.Button, new() { Name = "Close" }).ClickAsync();
+
+        await Expect(reader).ToBeHiddenAsync();
+    }
 }
 
 /// <summary>

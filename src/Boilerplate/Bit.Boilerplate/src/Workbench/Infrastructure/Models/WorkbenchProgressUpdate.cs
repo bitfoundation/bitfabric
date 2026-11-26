@@ -3,7 +3,8 @@ namespace Boilerplate.Workbench.Infrastructure.Models;
 /// <summary>
 /// What an agent sends to start a task or to change it, over HTTP. Only what it holds changes: the steps, notes and
 /// questions are matched by id, a new id adds one, and the log line goes into the activity, marked by its kind. The
-/// report is the task's write-up in Markdown, sent whole each time, and an empty one takes it away. The language, like
+/// report is the task's write-up in Markdown, sent whole each time, and an empty one takes it away; the plan is the plan the
+/// task follows, like a change plan's Markdown file, sent whole the same way. The language, like
 /// <c>fa</c>, is the one the task is written in, and sets the way its texts read.
 /// </summary>
 public sealed record WorkbenchProgressUpdate(string? Agent,
@@ -17,7 +18,8 @@ public sealed record WorkbenchProgressUpdate(string? Agent,
                                              string? Log,
                                              string? LogKind = null,
                                              string? Report = null,
-                                             string? Language = null);
+                                             string? Language = null,
+                                             string? Plan = null);
 
 /// <summary>A step to add or change; <c>owner</c> is <c>agent</c> or <c>you</c>, <c>remove</c> takes it away.</summary>
 public sealed record WorkbenchProgressStepUpdate(string Id, string? Text, string? Owner, string? Status, string? Detail, string? Link, bool Remove = false);
