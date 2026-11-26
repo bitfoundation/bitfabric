@@ -3,7 +3,8 @@ namespace Bit.Fabric.Client.Core.Infrastructure.Services;
 /// <summary>
 /// Reads the app's status page (See <see cref="ClientCoreSettings.StatusPageSummaryUrl"/>) for <see cref="StatusPageNotice"/>
 /// and for BevTools' Status tab (See AppStatusPagePanel). The request goes out with a plain <see cref="HttpClient"/>: the
-/// status page is someone else's server, so none of the app's handlers - its access token included - go with it. A
+/// status page is someone else's server, so none of the app's handlers - its access token included - go with it. It reads
+/// a summary.json in Atlassian Statuspage's shape, and a Better Stack page's index.json (See BetterStackStatusPage). A
 /// summary that doesn't come back, or comes back as anything but a summary, is logged as an error and shows nothing.
 /// </summary>
 public class StatusPageService(ClientCoreSettings settings, TimeProvider timeProvider, ILogger<StatusPageService> logger)
@@ -51,7 +52,14 @@ public class StatusPageService(ClientCoreSettings settings, TimeProvider timePro
             using var httpClient = CreateHttpClient();
             httpClient.Timeout = Timeout;
 
-            var summary = await httpClient.GetFromJsonAsync(url, StatusPageSummaryJsonContext.Default.StatusPageSummary, cancellationToken);
+            using var response = await httpClient.GetAsync(url, cancellationToken);
+            response.EnsureSuccessStatusCode();
+
+            // A Better Stack page answers in a shape of its own (See BetterStackStatusPage), and labels its JSON text/html.
+            using var document = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(cancellationToken), cancellationToken: cancellationToken);
+            var summary = BetterStackStatusPage.Is(document.RootElement)
+                ? BetterStackStatusPage.Read(document.RootElement, url, timeProvider.GetUtcNow())
+                : document.RootElement.Deserialize(StatusPageSummaryJsonContext.Default.StatusPageSummary);
 
             return new(timeProvider.GetUtcNow(), summary, summary is null ? "The answer was empty." : null);
         }
