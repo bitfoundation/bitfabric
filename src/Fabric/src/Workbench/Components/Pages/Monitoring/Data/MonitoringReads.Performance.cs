@@ -48,6 +48,12 @@ public static partial class MonitoringReads
             }, (start, end) => (Minutes(downs.Select(incident => (incident.StartedAt, incident.EndedAt)), start, end, now), 0), homeUntil));
         }
 
+        // Through the cache in front of the app, for a project something caches.
+        if (project.VisitorBaseMs is { } visitorMs)
+        {
+            series.Add(Series(ProjectRollupKeys.HomePageForVisitors, "Germany", _ => visitorMs, (_, _) => (0, 0), homeUntil));
+        }
+
         series.Add(Series(ProjectRollupKeys.Report, "Germany", _ => project.Checks.Where(check => check.IsNotConfigured is false).Select(check => (double)check.DurationMs).DefaultIfEmpty(40).Max() + 38,
             (start, end) => (Minutes(downs.Select(incident => (incident.StartedAt, incident.EndedAt)), start, end, now),
                              Minutes(project.Periods.Where(period => period.Status is HealthCheckStatus.Degraded).Select(period => (period.StartedAt, period.EndedAt)), start, end, now)), reportUntil));

@@ -54,6 +54,7 @@ public static partial class MonitoringReads
             Uptime30Days = project.CheckedAt is null ? null : ProjectHistoryDays.UptimeOf(appDays),
             MedianMs = isRead && hourly.Any(ms => ms > 0) ? Median(hourly.Where(ms => ms > 0)) : null,
             P95Ms = isRead && hourly.Any(ms => ms > 0) ? (int)Math.Round(hourly.Where(ms => ms > 0).Max() * 1.35) : null,
+            MedianVisitorMs = isRead && hourly.Any(ms => ms > 0) ? project.VisitorBaseMs : null,
             ResponseLast24Hours = hourly,
             Last30Days = [.. appDays.Select(day => new ProjectDayDto { Date = day.Date, Tone = day.Tone, Uptime = day.Uptime, DownMinutes = day.DownMinutes, DegradedMinutes = day.DegradedMinutes })],
             FailingChecks = project.ConnectionStatus is ProjectConnectionStatus.Connected
@@ -112,6 +113,7 @@ public static partial class MonitoringReads
             CheckedAt = project.CheckedAt,
             ReportMs = project.CheckedAt is null || configured.Length is 0 ? null : configured.Max(check => check.DurationMs) + 38,
             HomePageMs = project.CheckedAt is null ? null : project.HomePageMs,
+            HomePageVisitorMs = project.CheckedAt is null || project.HomePageMs is null || project.VisitorBaseMs is not { } visitorMs ? null : (int)Math.Round(visitorMs * (0.85 + 0.3 * MonitoringNoise.Of($"{project.Key}:visitor", 0))),
             ApplicationVersion = project.ApplicationVersion,
             LastDeployedAt = project.Starts.Where(start => start.IsDeploy).Select(start => (DateTimeOffset?)start.At).Max(),
             LastRestartedAt = project.Starts.Where(start => start.IsDeploy is false).Select(start => (DateTimeOffset?)start.At).Max(),

@@ -131,7 +131,9 @@
 .metrics {
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    // A column per number: two, or three when visitors' time comes first.
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
     gap: 0.5rem;
 
     div {

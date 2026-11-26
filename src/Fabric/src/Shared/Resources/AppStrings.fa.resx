@@ -6934,6 +6934,27 @@
   <data name="MonitoringTypicalResponseTime" xml:space="preserve">
     <value>زمان پاسخ معمول</value>
   </data>
+  <data name="MonitoringForVisitors" xml:space="preserve">
+    <value>برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringForVisitorsHelp" xml:space="preserve">
+    <value>صفحهٔ اصلی همان‌طور که بازدیدکننده‌ها می‌گیرند، از Cache جلوی اپ شما.</value>
+  </data>
+  <data name="MonitoringServerTime" xml:space="preserve">
+    <value>سرور</value>
+  </data>
+  <data name="MonitoringHomePageForVisitors" xml:space="preserve">
+    <value>صفحهٔ اصلی برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringTypicalForVisitors" xml:space="preserve">
+    <value>زمان معمول برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringTypicalServerTime" xml:space="preserve">
+    <value>زمان معمول سرور</value>
+  </data>
+  <data name="MonitoringConnectedVisitorsAndServer" xml:space="preserve">
+    <value>{0} برای بازدیدکننده‌ها ({1} سرور)</value>
+  </data>
   <data name="MonitoringPastIncidents" xml:space="preserve">
     <value>رخدادهای گذشته</value>
   </data>

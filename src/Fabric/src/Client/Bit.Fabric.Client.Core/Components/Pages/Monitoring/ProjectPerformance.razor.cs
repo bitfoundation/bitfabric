@@ -51,6 +51,8 @@ public partial class ProjectPerformance
         List<BitResourceTimelineResource> resources =
         [
             .. regions.Select(region => new BitResourceTimelineResource { Id = $"{ProjectRollupKeys.HomePage}|{region}", Name = Localizer[nameof(AppStrings.MonitoringHomePageRegion), MonitoringWords.Region(Localizer, region)] }),
+            // Through the cache in front of the app, a row only when a cache answers the home page (See ProjectDto.MedianVisitorMs).
+            .. Project.MedianVisitorMs is null ? Array.Empty<BitResourceTimelineResource>() : [new BitResourceTimelineResource { Id = ProjectRollupKeys.HomePageForVisitors, Name = Localizer[nameof(AppStrings.MonitoringHomePageForVisitors)] }],
             new() { Id = ProjectRollupKeys.Report, Name = Localizer[nameof(AppStrings.MonitoringHealthReport)] },
             // Right under the timings, so a slower stretch that starts at a deployment reads as its likely cause.
             new() { Id = StartsRow, Name = Localizer[nameof(AppStrings.MonitoringDeploysAndRestarts)] }
@@ -132,6 +134,7 @@ public partial class ProjectPerformance
             var title = series.Key switch
             {
                 ProjectRollupKeys.HomePage => Localizer[nameof(AppStrings.MonitoringHomePageRegion), MonitoringWords.Region(Localizer, series.Region!)].Value,
+                ProjectRollupKeys.HomePageForVisitors => Localizer[nameof(AppStrings.MonitoringHomePageForVisitors)].Value,
                 ProjectRollupKeys.Report => Localizer[nameof(AppStrings.MonitoringHealthReport)].Value,
                 _ => Checks.FirstOrDefault(check => check.Key == series.Key) is { } check ? ProjectChecks.TitleOf(check) : series.Key
             };

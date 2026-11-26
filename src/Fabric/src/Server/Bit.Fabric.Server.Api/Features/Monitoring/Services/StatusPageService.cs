@@ -196,12 +196,14 @@ public partial class StatusPageService
             };
         })];
 
-        var medianMs = page.ShowsResponseTime
+        var times = page.ShowsResponseTime
             ? await dbContext.ProjectProbes.IgnoreQueryFilters().AsNoTracking()
                 .Where(probe => probe.ProjectId == project.Id && probe.At >= now.AddHours(-24) && probe.ResponseMs != null)
-                .Select(probe => probe.ResponseMs!.Value)
+                .Select(probe => new { Ms = probe.ResponseMs!.Value, probe.VisitorMs })
                 .ToListAsync(cancellationToken)
             : [];
+        var medianMs = times.Select(time => time.Ms).ToList();
+        var visitorMs = times.Where(time => time.VisitorMs is not null).Select(time => time.VisitorMs!.Value).ToList();
 
         return new()
         {
@@ -216,6 +218,7 @@ public partial class StatusPageService
             CheckedAt = project.LastCheckedAt,
             WatchedSince = project.CreatedOn,
             MedianResponseMs = medianMs.Count is 0 ? null : medianMs.Order().ElementAt(medianMs.Count / 2),
+            MedianVisitorMs = visitorMs.Count is 0 ? null : visitorMs.Order().ElementAt(visitorMs.Count / 2),
             SupportAddress = page.SupportAddress,
             PushPublicKey = settings.AdsPushVapid?.PublicKey,
             Components = publicComponents,

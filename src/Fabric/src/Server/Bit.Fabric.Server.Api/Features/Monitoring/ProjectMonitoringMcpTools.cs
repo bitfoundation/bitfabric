@@ -39,7 +39,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
     private const string ConfirmFirst = "It changes the project for the whole team, so first tell the user exactly what you are about to do and call it only once they have confirmed in the conversation.";
 
     [McpServerTool(Name = nameof(GetProjects), Title = "List the monitored projects", ReadOnly = true, OpenWorld = false)]
-    [Description("Lists every project the user's team monitors in bit Fabric (each project is one of their live apps), failing ones first, with its health right now: Operational; Degraded, some parts don't work while the app itself does; Down; NeedsReconnecting, bit Fabric's approval in the app stopped working, so nothing is read until a team member reconnects it on the project's Settings tab; Disconnected, a team member disconnected it on its Settings tab, so nothing is read until someone reconnects it; NotCheckedYet, its first checks are running; or NoData. Each also has its uptime over the last 30 days, the days of those 30 a check found it down or a part failing, as its card's day bars show them, the typical (median) and the slowest 5% response time of its home page over the last 24 hours, the parts not working right now by the app's own names, its ongoing incident, a cache warning, and when it was last checked. Call it first for any question about the user's projects or apps, such as \"are my projects healthy?\" or \"how did they do this month?\".")]
+    [Description("Lists every project the user's team monitors in bit Fabric (each project is one of their live apps), failing ones first, with its health right now: Operational; Degraded, some parts don't work while the app itself does; Down; NeedsReconnecting, bit Fabric's approval in the app stopped working, so nothing is read until a team member reconnects it on the project's Settings tab; Disconnected, a team member disconnected it on its Settings tab, so nothing is read until someone reconnects it; NotCheckedYet, its first checks are running; or NoData. Each also has its uptime over the last 30 days, the days of those 30 a check found it down or a part failing, as its card's day bars show them, the typical (median) and the slowest 5% response time of its home page over the last 24 hours past any cache (the server's own time), the typical time a visitor waits for it through the cache in front of the app when one answers it, the parts not working right now by the app's own names, its ongoing incident, a cache warning, and when it was last checked. Call it first for any question about the user's projects or apps, such as \"are my projects healthy?\" or \"how did they do this month?\".")]
     public async Task<JsonElement> GetProjects(
         [Description("The IANA time zone the last 30 days are counted in, such as \"Asia/Tehran\": the user's own when they say it. UTC when left out.")] string? timeZone = null,
         CancellationToken cancellationToken = default)
@@ -59,6 +59,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
             Round(project.Uptime30Days, 3),
             project.MedianMs,
             project.P95Ms,
+            project.MedianVisitorMs,
             project.FailingChecks,
             OngoingOf(project),
             project.HasCacheWarning ? CacheWarning : null,
@@ -105,11 +106,11 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
         // bit Fabric's own server reads the report; the bitplatform Network's locations the customer picked time the home page.
         CheckedFrom[] checkedFrom =
         [
-            new(settings.Monitoring.Region, null, "The health report with every part of the app, and the home page", details.CheckedAt, null, null, details.ReportMs, null),
+            new(settings.Monitoring.Region, null, "The health report with every part of the app, and the home page", details.CheckedAt, null, details.HomePageMs, details.HomePageVisitorMs, details.ReportMs, null),
             .. dto.Locations.Select(NetworkLocations.Find).OfType<NetworkLocation>().Select(location =>
                 details.NetworkReadings.FirstOrDefault(reading => reading.Location == location.Code) is { } reading
-                    ? new CheckedFrom(location.Name, location.Code, "The home page", reading.At, reading.Colo, reading.ResponseMs, null, reading.ResponseMs is not null)
-                    : new CheckedFrom(location.Name, location.Code, "The home page", null, null, null, null, null))
+                    ? new CheckedFrom(location.Name, location.Code, "The home page", reading.At, reading.Colo, reading.ResponseMs, null, null, reading.ResponseMs is not null)
+                    : new CheckedFrom(location.Name, location.Code, "The home page", null, null, null, null, null, null))
         ];
 
         return Result(new ProjectDetail(dto.Id,

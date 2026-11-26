@@ -28,6 +28,7 @@ public partial class MonitoringNetworkController : AppControllerBase
     private static readonly TimeSpan maxClockSkew = TimeSpan.FromMinutes(1);
 
     [AutoInject] private ILogger<MonitoringNetworkController> logger = default!;
+    [AutoInject] private ProjectLandings landings = default!;
 
     /// <summary>The projects a location times every minute: what to open, and whether it is a static front end's server.</summary>
     [HttpGet]
@@ -40,7 +41,8 @@ public partial class MonitoringNetworkController : AppControllerBase
         return [.. (await TargetsOf(networkLocation, cancellationToken)).Select(project => new NetworkTargetDto
         {
             ProjectId = project.Id,
-            Url = ProjectProber.FrontDoorOf(project),
+            // The page the front door lands on, once a round from here found it, so a location times one request too.
+            Url = landings.AddressOf(project),
             IsServerHealth = project.HasStaticFrontEnd
         })];
     }
