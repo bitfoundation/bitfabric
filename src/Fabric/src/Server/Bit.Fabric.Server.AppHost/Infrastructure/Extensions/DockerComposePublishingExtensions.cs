@@ -235,35 +235,6 @@ public static class DockerComposePublishingExtensions
 
                 composeFile.Services[serverWebProject.Resource.Name].DependsOn[serverApiProject.Resource.Name] = new() { Condition = "service_started" };
 
-                // A new major of PostgreSQL: the one-shot `postgresserver-upgrade` service, in postgresserver's own image, copies
-                // the databases of the server still running the older major into this major's volume, and postgresserver
-                // starts only once it has exited with 0. Every deployment runs it, and once the copy is done it does nothing,
-                // so it stays for the next major. The older major's volume is mounted read-only, only to tell whether it
-                // holds a database. See deploy/database/upgrade.sh.
-                var postgres = composeFile.Services["postgresserver"];
-                var dataVolume = postgres.Volumes.Single(volume => volume.Target is "/var/lib/postgresql");
-                var previousDataVolume = dataVolume.Source![..^PostgresDataVolume.Suffix.Length] + PostgresDataVolume.PreviousSuffix;
-                var upgradeScript = File.ReadAllText(Path.Combine(builder.AppHostDirectory, "..", "..", "..", "deploy", "database", "upgrade.sh")).ReplaceLineEndings("\n");
-                composeFile.AddService(new Service
-                {
-                    Name = "postgresserver-upgrade",
-                    Image = postgres.Image,
-                    // Compose reads a $ as the start of one of its own variables, and $$ as a $.
-                    Entrypoint = ["bash", "-c", upgradeScript.Replace("$", "$$")],
-                    Environment = new(postgres.Environment.Where(variable => variable.Key.StartsWith("OTEL_") is false)),
-                    Volumes =
-                    [
-                        new Volume { Name = dataVolume.Source, Type = "volume", Source = dataVolume.Source, Target = "/var/lib/postgresql" },
-                        new Volume { Name = previousDataVolume, Type = "volume", Source = previousDataVolume, Target = "/var/lib/postgresql-previous", ReadOnly = true },
-                        new Volume { Name = "postgresserver-upgrade", Type = "volume", Source = "postgresserver-upgrade", Target = "/upgrade" }
-                    ],
-                    Networks = [.. postgres.Networks],
-                    Restart = "no"
-                });
-                composeFile.AddVolume(new Volume { Name = previousDataVolume, Driver = "local" });
-                composeFile.AddVolume(new Volume { Name = "postgresserver-upgrade", Driver = "local" });
-                postgres.DependsOn["postgresserver-upgrade"] = new() { Condition = "service_completed_successfully" };
-
                 // The Lighthouse service is on a network of its own, which the api joins to call it: from there it reaches the
                 // internet, and none of the database, Redis, the dashboard or the other services, which are on Aspire's network
                 // alone. The migrations, made from the api's service above, stay off it.
