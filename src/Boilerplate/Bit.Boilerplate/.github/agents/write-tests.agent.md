@@ -15,8 +15,9 @@ infrastructure is `.docs/17- Automated Testing (Unitigration Tests).md`; this is
   `pwsh src/Tests/bin/Debug/net11.0/playwright.ps1 install`.
 - Stop the running app first, as the **run-app** skill (`.github/agents/run-app.agent.md`) says: it holds the build
   outputs the tests need.
-- Run the whole suite on the code as it is before you change anything, and keep the list of what fails. A failure
-  afterwards is then either on that list or yours, and one you brought in looks exactly like one you inherited.
+- Run the tests of the area you change on the code as it is before you change anything, and keep the list of what
+  fails. A failure afterwards is then either on that list or yours, and one you brought in looks exactly like one you
+  inherited. The whole suite isn't yours to run: CI runs it in each CD before it deploys.
 
 ## 2. Which test
 
