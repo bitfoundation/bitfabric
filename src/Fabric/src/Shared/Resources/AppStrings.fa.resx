@@ -11553,6 +11553,12 @@
   <data name="LicenseTeamThatHoldsIt" xml:space="preserve">
     <value>Team ای که آن را نگه می‌دارد</value>
   </data>
+  <data name="LicenseTeam" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="LicenseTeamName" xml:space="preserve">
+    <value>نام Team</value>
+  </data>
   <data name="LicenseNameYourTeam" xml:space="preserve">
     <value>هر License مال یک Team است. نام Team خود را بنویسید؛ دیگران را بعداً می‌توانید دعوت کنید.</value>
   </data>

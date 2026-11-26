@@ -57,7 +57,7 @@
 
 .facts {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(8rem, 100%), 1fr));
     gap: 8px 16px;
     margin: 0;
 
@@ -78,6 +78,8 @@
 }
 
 .mono {
+    direction: ltr;
+    unicode-bidi: isolate;
     font-family: $bit-typography-font-family-mono;
     font-size: $bit-typography-fs-xs;
 }

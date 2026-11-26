@@ -56,7 +56,7 @@
                                 {
                                     <div><dt>@Localizer[nameof(AppStrings.LicensesGotBy)]</dt><dd>@by</dd></div>
                                 }
-                                <div><dt>@Localizer[nameof(AppStrings.LicenseFirstCommit)]</dt><dd class="mono" dir="ltr">@license.FirstCommit?[..Math.Min(12, license.FirstCommit.Length)]</dd></div>
+                                <div><dt>@Localizer[nameof(AppStrings.LicenseFirstCommit)]</dt><dd><bdi class="mono">@license.FirstCommit?[..Math.Min(12, license.FirstCommit.Length)]</bdi></dd></div>
                             </dl>
                             <div class="actions">
                                 <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@(copied == license.Id ? BitIconName.CheckMark : BitIconName.Copy)"

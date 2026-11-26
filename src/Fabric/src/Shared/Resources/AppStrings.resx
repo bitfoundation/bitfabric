@@ -11553,6 +11553,12 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="LicenseTeamThatHoldsIt" xml:space="preserve">
     <value>The team that holds it</value>
   </data>
+  <data name="LicenseTeam" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="LicenseTeamName" xml:space="preserve">
+    <value>Team name</value>
+  </data>
   <data name="LicenseNameYourTeam" xml:space="preserve">
     <value>A license belongs to a team. Name yours; you can invite the others later.</value>
   </data>

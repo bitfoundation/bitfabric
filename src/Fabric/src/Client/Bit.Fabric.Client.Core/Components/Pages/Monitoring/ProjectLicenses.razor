@@ -19,13 +19,13 @@
                 <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="row-meta">
                     @if (project.BitProjectId is { } bitId)
                     {
-                        <span>@Localizer[nameof(AppStrings.LicenseProjectId)] <bdi class="mono">@bitId.ToString()[..8]</bdi></span>
+                        <span class="part">@Localizer[nameof(AppStrings.LicenseProjectId)] <bdi class="mono">@bitId.ToString()[..8]</bdi></span>
                     }
                     @if (project.License.FirstCommit is { Length: >= 7 } commit)
                     {
-                        <span>@Dot@Localizer[nameof(AppStrings.LicenseFirstCommit)] <bdi class="mono">@commit[..7]</bdi></span>
+                        <span class="part">@Dot@Localizer[nameof(AppStrings.LicenseFirstCommit)] <bdi class="mono">@commit[..7]</bdi></span>
                     }
-                    <span>@Dot@EnvironmentsOf(project)</span>
+                    <span class="part">@Dot@EnvironmentsOf(project)</span>
                 </BitText>
             </li>
         }
