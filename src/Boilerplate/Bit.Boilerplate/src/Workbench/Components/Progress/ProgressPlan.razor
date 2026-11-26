@@ -1,0 +1,67 @@
+@inherits WorkbenchComponentBase
+
+<section class="plan" aria-labelledby="plan-title" data-bonboarding-anchor="progress-plan">
+    <div class="plan-head">
+        <h3 id="plan-title" class="plan-title">
+            <BitIcon IconName="@BitIconName.ClipboardList" Color="BitColor.Primary" />
+            @Localizer[nameof(WorkbenchStrings.ProgressPlan)]
+        </h3>
+        <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.FullScreen" OnClick="Open" Class="plan-open">
+            @Localizer[nameof(WorkbenchStrings.ProgressPlanRead)]
+        </BitButton>
+    </div>
+
+    @if (taskCount > 0)
+    {
+        <div class="plan-tasks">
+            <BitProgress Percent="@Percent" Thickness="6" Rounded Color="@(doneCount == taskCount ? BitColor.Success : BitColor.Primary)"
+                         AriaValueText="@TasksDoneText" Class="plan-bar" />
+            <span class="plan-count">@TasksDoneText</span>
+        </div>
+    }
+
+    <div class="plan-preview as-written @(IsLong && isExpanded is false ? "is-collapsed" : null)" dir="@Direction">
+        <BitMarkdownViewer Markdown="@Markdown" Pipeline="pipeline" HeadingLevelOffset="3" HeadingIdPrefix="plan-" Dir="@BitDirection" />
+    </div>
+
+    @if (IsLong)
+    {
+        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@(isExpanded ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
+                   aria-expanded="@(isExpanded ? "true" : "false")" OnClick="() => isExpanded = isExpanded is false" Class="plan-toggle">
+            @Localizer[isExpanded ? nameof(WorkbenchStrings.ProgressPlanShowLess) : nameof(WorkbenchStrings.ProgressPlanShowAll)]
+        </BitButton>
+    }
+</section>
+
+@* The plan read as a document of its own, the whole screen with its outline beside it. *@
+<BitModal @bind-IsOpen="isOpen" FullSize NoBorder TitleAriaId="plan-reader-title">
+    <div class="plan-reader" dir="@Direction" lang="@Language">
+        <header class="reader-head">
+            <BitIcon IconName="@BitIconName.ClipboardList" Color="BitColor.Primary" />
+            <h2 id="plan-reader-title" class="reader-title as-written">@(title ?? Localizer[nameof(WorkbenchStrings.ProgressPlan)].Value)</h2>
+            @if (taskCount > 0)
+            {
+                <span class="reader-count">@TasksDoneText</span>
+            }
+            <BitButton IconOnly Variant="BitVariant.Text" IconName="@BitIconName.Cancel" OnClick="() => isOpen = false"
+                       Title="@Localizer[nameof(WorkbenchStrings.ProgressPlanClose)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.ProgressPlanClose)]" />
+        </header>
+
+        <div class="reader-body">
+            @if (outline.Count > 1)
+            {
+                <nav class="reader-outline" aria-label="@Localizer[nameof(WorkbenchStrings.ProgressPlanOutline)]">
+                    <span class="outline-title">@Localizer[nameof(WorkbenchStrings.ProgressPlanOutline)]</span>
+                    @foreach (var entry in outline)
+                    {
+                        <BitLink Href="@($"#{entry.Id}")" Class="@($"outline-link level-{entry.Level}")">@entry.Text</BitLink>
+                    }
+                </nav>
+            }
+
+            <article class="reader-doc as-written">
+                <BitMarkdownViewer Markdown="@Markdown" Pipeline="pipeline" HeadingIdPrefix="plan-full-" OnParsed="ReadOutline" Dir="@BitDirection" />
+            </article>
+        </div>
+    </div>
+</BitModal>

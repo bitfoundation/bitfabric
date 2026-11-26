@@ -5726,4 +5726,25 @@
     <data name="FlowsGroupSamples" xml:space="preserve">
         <value>Voorbeelden</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>Plan</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>Volledig scherm lezen</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{0} van {1} taken klaar</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>Alles tonen</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>Minder tonen</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>Sluiten</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>Inhoud</value>
+    </data>
 </root>

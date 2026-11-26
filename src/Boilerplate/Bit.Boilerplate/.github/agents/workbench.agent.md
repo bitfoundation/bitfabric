@@ -274,15 +274,17 @@ as its host here. The rest of this section is for a page of the Workbench's own.
   then on send only what changed with `PATCH /api/progress/<id>`: a step, note or question with an id the task already
   has changes, a new id adds one, `remove` takes one away, `log` adds a line to its activity, marked with `logKind`
   (`info`, `warning`, `decision`, `success` or `error`) when it is news of that kind, `report` replaces the task's
-  write-up, sent whole, and `status` ends it (`done`, `failed` or `stopped`). `GET /api/progress/<id>` reads it back,
+  write-up, sent whole, `plan` the plan the task follows, like the change plan ai-dlc writes, sent whole as text (not a
+  path, since the Workbench may run from another worktree) each time it changes, which the page shows with its ticked
+  tasks counted and full screen beside its outline, and `status` ends it (`done`, `failed` or `stopped`). `GET /api/progress/<id>` reads it back,
   and `GET /api/progress` lists every task, so a chat that lost its id finds its own again.
 - A step has `text`, `owner` (`agent` or `you`) and `status` (`todo`, `doing`, `done`, `blocked` or `skipped`). A step of
   the user's that is `doing` waits for them, with a button to say it is done, so give it a `detail` with what to do and
   where its result goes, and a `link` to where they do it. `notes` (`kind`: `info`, `warning`, `decision`, `success` or
   `error`) hold what the user must not miss, and `links` (`label`, `url`) what they will want to open: the Test site, the
   pull request, a dashboard.
-- Details, notes, log lines and the report are Markdown, so a run, an issue or a commit is a link or `code` there rather
-  than a bare address; the report also takes headings and tables. Titles, step texts and the summary are plain text.
+- Details, notes, log lines, the plan and the report are Markdown, so a run, an issue or a commit is a link or `code` there
+  rather than a bare address; the plan and the report also take headings, tables, task lists and GitHub's alerts. Titles, step texts and the summary are plain text.
 - Write the task in the user's language.
 - Ask on the page rather than in the chat whenever the answer is a choice or a few words: `asks`, each with `id`,
   `question`, `kind` (`text`, `choice`, `choices`, `confirm` or `secret`), `options` for a choice and an optional `detail`,

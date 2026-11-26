@@ -1,9 +1,9 @@
 namespace Boilerplate.Workbench.Infrastructure.Services;
 
 /// <summary>
-/// The three tasks the Progress page shows while no agent has started one: a first deployment that waits for the user, a
-/// new feature being built and a fix that is done. They show what an agent can put there, in the Workbench's language,
-/// with times counted back from now.
+/// The three tasks the Progress page shows while no agent has started one: a new feature being built, with its plan, that
+/// waits for the user and shows first, a first deployment that waits for them too, and a fix that is done. They show what an
+/// agent can put there, in the Workbench's language, with times counted back from now.
 /// </summary>
 public static class WorkbenchSampleTasks
 {
@@ -72,8 +72,8 @@ public static class WorkbenchSampleTasks
             "Codex",
             WorkbenchProgressStatus.Working,
             now - TimeSpan.FromHours(3),
-            now - TimeSpan.FromMinutes(6),
             now - TimeSpan.FromMinutes(1),
+            now - TimeSpan.FromSeconds(30),
             [
                 Step("requirements", nameof(WorkbenchStrings.SampleFeatureStepRequirements), WorkbenchProgressStepStatus.Done),
                 Step("plan", nameof(WorkbenchStrings.SampleFeatureStepPlan), WorkbenchProgressStepStatus.Done),
@@ -98,7 +98,10 @@ public static class WorkbenchSampleTasks
                 FromYou(WorkbenchProgressEntryKind.Message, Text(nameof(WorkbenchStrings.SampleFeatureFeed2)), TimeSpan.FromMinutes(54), 2),
                 Update(nameof(WorkbenchStrings.SampleFeatureFeed3), TimeSpan.FromMinutes(50)),
                 Update(nameof(WorkbenchStrings.SampleFeatureFeed4), TimeSpan.FromMinutes(6), WorkbenchProgressNoteKind.Success)
-            ]);
+            ])
+        {
+            Plan = SamplePlan
+        };
 
         var fix = new WorkbenchProgressTask(FixId,
             Text(nameof(WorkbenchStrings.SampleFixTitle)),
@@ -134,4 +137,38 @@ public static class WorkbenchSampleTasks
 
         return [deploy, feature, fix];
     }
+
+    /// <summary>
+    /// The plan the loyalty points sample follows, short and in English: a sample of what an agent's change plan looks like on
+    /// the page, not a real one.
+    /// </summary>
+    private const string SamplePlan = """
+        # Loyalty points
+
+        > [!NOTE]
+        > A sample plan, light on details: it shows how an agent's plan reads here.
+
+        Customers earn points on every order and spend them at checkout.
+
+        ## Design
+
+        - **Earning:** 1 point per whole unit of an order's total, once it is paid.
+        - **Spending:** at checkout, 100 points take 1 unit off, up to half the total.
+        - **Expiry:** points expire 12 months after they were earned.
+
+        | Part | Where |
+        | --- | --- |
+        | The ledger | A `LoyaltyEntry` table: one row per points earned or spent |
+        | Checkout | A "Use my points" switch on the payment step |
+        | The account | The balance and its history on the profile page |
+
+        ## Tasks
+
+        - [x] The spec and its rules
+        - [x] The checkout design, approved in the Workbench
+        - [ ] The ledger, its migration and its controller
+        - [ ] Points at checkout
+        - [ ] The tests: earning, spending, expiry
+        - [ ] Try it on Test
+        """;
 }

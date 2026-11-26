@@ -1,0 +1,166 @@
+@import '../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.plan {
+    gap: 0.875rem;
+    display: flex;
+    padding: 1.25rem;
+    flex-direction: column;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-tertiary;
+    background-color: $bit-color-background-primary;
+}
+
+.plan-head {
+    gap: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.plan-title {
+    gap: 0.5rem;
+    margin: 0;
+    display: flex;
+    font-size: 16px;
+    font-weight: 700;
+    align-items: center;
+}
+
+.plan-tasks {
+    gap: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+::deep .plan-bar {
+    flex: 1;
+    min-width: 0;
+}
+
+.plan-count,
+.reader-count {
+    font-size: 13px;
+    white-space: nowrap;
+    color: $bit-color-foreground-secondary;
+}
+
+// The plan's Markdown, drawn in the color of the text around it, its headings sized as a document's.
+.plan-preview,
+.reader-doc {
+    min-width: 0;
+    font-size: 14px;
+    --bit-MarkdownViewer-color: currentColor;
+    --bit-MarkdownViewer-line-height: 1.6;
+
+    // A link, a path or a commit's hash keeps its own direction among words of another, as in a Persian line.
+    ::deep :is(a, code) {
+        unicode-bidi: plaintext;
+    }
+}
+
+.plan-preview {
+    ::deep :is(h4, h5, h6) {
+        font-weight: 700;
+    }
+
+    ::deep h4 {
+        font-size: 18px;
+    }
+
+    ::deep h5 {
+        font-size: 16px;
+    }
+
+    ::deep h6 {
+        font-size: 14px;
+    }
+
+    // A long plan shows its start, fading out above the button that shows the rest.
+    &.is-collapsed {
+        overflow: hidden;
+        max-height: 22rem;
+        mask-image: linear-gradient(to bottom, black 70%, transparent);
+    }
+}
+
+::deep .plan-toggle {
+    align-self: flex-start;
+}
+
+.plan-reader {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background-color: $bit-color-background-primary;
+}
+
+.reader-head {
+    gap: 0.75rem;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid $bit-color-border-tertiary;
+}
+
+.reader-title {
+    flex: 1;
+    margin: 0;
+    min-width: 0;
+    font-size: 18px;
+    font-weight: 700;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.reader-body {
+    flex: 1;
+    gap: 2.5rem;
+    min-height: 0;
+    display: flex;
+    overflow: auto;
+    padding: 1.5rem 1.25rem 3rem;
+    justify-content: center;
+    // The heading an outline link lands on stays clear of the top edge.
+    --bit-MarkdownViewer-scroll-margin: 1rem;
+}
+
+.reader-outline {
+    top: 0;
+    gap: 0.25rem;
+    display: flex;
+    flex: 0 0 15rem;
+    position: sticky;
+    align-self: flex-start;
+    flex-direction: column;
+    max-height: calc(100dvh - 8rem);
+    overflow: auto;
+    font-size: 13px;
+
+    @include lt-md {
+        display: none;
+    }
+}
+
+.outline-title {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    color: $bit-color-foreground-secondary;
+}
+
+::deep .outline-link {
+    padding-block: 0.125rem;
+}
+
+::deep .level-3 {
+    padding-inline-start: 0.875rem;
+}
+
+.reader-doc {
+    flex: 0 1 52rem;
+    font-size: 15px;
+}

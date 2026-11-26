@@ -32,6 +32,7 @@ public static class WorkbenchProgressJson
             task.Cursor,
             task.Language,
             task.Report,
+            task.Plan,
             Steps = task.Steps.Select(step => new { step.Id, step.Text, Owner = Name(step.Owner), Status = Name(step.Status), step.Detail, step.Link }).ToArray(),
             Notes = task.Notes.Select(note => new { note.Id, Kind = Name(note.Kind), note.Text }).ToArray(),
             Links = task.Links.Select(link => new { link.Label, link.Url }).ToArray(),

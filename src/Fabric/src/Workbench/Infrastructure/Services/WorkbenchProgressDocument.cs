@@ -18,6 +18,7 @@ public static partial class WorkbenchProgressDocument
     public const int MaxSummaryLength = 600;
     public const int MaxTextLength = 2000;
     public const int MaxReportLength = 30000;
+    public const int MaxPlanLength = 60000;
     public const int MaxIdLength = 40;
     public const int MaxSteps = 60;
     public const int MaxNotes = 30;
@@ -66,6 +67,7 @@ public static partial class WorkbenchProgressDocument
                    [.. ReadMaps(task.GetArray("feed")).Select(ReadEntry)])
         {
             Report = ReadString(task, "report"),
+            Plan = ReadString(task, "plan"),
             Language = ReadString(task, "language"),
             Removed = [.. ReadMaps(task.GetArray("removed")).Select(ReadEntry)]
         };
@@ -280,6 +282,7 @@ public static partial class WorkbenchProgressDocument
         if (update.Summary is not null) task.Set("summary", Trim(update.Summary, MaxSummaryLength));
         if (update.Status is { } status && TryParse<WorkbenchProgressStatus>(status, out var parsed)) task.Set("status", parsed.ToString());
         if (update.Report is not null) task.Set("report", Blank(Trim(update.Report, MaxReportLength)));
+        if (update.Plan is not null) task.Set("plan", Blank(Trim(update.Plan, MaxPlanLength)));
         if (update.Language is not null) task.Set("language", Blank(update.Language.Trim()));
 
         if (task.GetArray("steps") is { } steps)
@@ -526,6 +529,7 @@ public static partial class WorkbenchProgressDocument
         map.Set("updatedAt", Format(task.UpdatedAt));
         map.Set("seenAt", task.SeenAt is { } seen ? Format(seen) : null);
         map.Set("report", task.Report);
+        map.Set("plan", task.Plan);
         map.Set("language", task.Language);
         map.Set("steps", steps);
         map.Set("notes", notes);

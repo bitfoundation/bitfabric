@@ -57,7 +57,7 @@ port, rebrand, landing-page, bitify-ui, template-diff and scaffold-entity, and t
 - Break the work into small, verifiable, independently completable tasks
 - Order tasks by dependency
 - End the plan with phase 5's validation as its last tasks: the build and the tests, the **review** skill on the changes, the acceptance criteria, and each check in the running app that applies, so they are ticked like every other task
-- Write the plan into a new file under `specs/changes/` and present it to the user for approval before starting. Approval is the user telling you to go ahead; answers to your questions are not approval, so fold them into the plan and present it again
+- Write the plan into a new file under `specs/changes/` and present it to the user for approval before starting: put its text on your Progress task as its `plan` (section 9 of the **workbench** skill), where the user reads it full screen, and send it again each time it changes or a task is ticked. Approval is the user telling you to go ahead; answers to your questions are not approval, so fold them into the plan and present it again
 
 ### 3. Design
 - Identify affected files, components, APIs, and data models

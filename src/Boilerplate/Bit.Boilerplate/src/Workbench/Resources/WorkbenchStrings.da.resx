@@ -5726,4 +5726,25 @@
     <data name="FlowsGroupSamples" xml:space="preserve">
         <value>Eksempler</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>Plan</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>Læs i fuld skærm</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{0} af {1} opgaver færdige</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>Vis alt</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>Vis mindre</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>Luk</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>Indhold</value>
+    </data>
 </root>

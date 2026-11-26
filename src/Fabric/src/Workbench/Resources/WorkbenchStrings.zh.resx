@@ -4503,4 +4503,25 @@
     <data name="PosNoGoalSetDescription" xml:space="preserve">
         <value>设定销售目标，即可查看门店离目标还有多远。</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>计划</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>全屏阅读</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>已完成 {0}/{1} 项任务</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>全部显示</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>收起</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>关闭</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>目录</value>
+    </data>
 </root>

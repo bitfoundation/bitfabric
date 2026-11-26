@@ -4503,4 +4503,25 @@
     <data name="PosNoGoalSetDescription" xml:space="preserve">
         <value>Sätt ett försäljningsmål för att se hur nära butiken är.</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>Plan</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>Läs i helskärm</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{0} av {1} uppgifter klara</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>Visa allt</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>Visa mindre</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>Stäng</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>Innehåll</value>
+    </data>
 </root>

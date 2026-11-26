@@ -4503,4 +4503,25 @@
     <data name="PosNoGoalSetDescription" xml:space="preserve">
         <value>Legen Sie ein Umsatzziel fest, um zu sehen, wie nah die Filiale daran ist.</value>
     </data>
+    <data name="ProgressPlan" xml:space="preserve">
+        <value>Plan</value>
+    </data>
+    <data name="ProgressPlanRead" xml:space="preserve">
+        <value>Im Vollbild lesen</value>
+    </data>
+    <data name="ProgressPlanTasksDone" xml:space="preserve">
+        <value>{0} von {1} Aufgaben erledigt</value>
+    </data>
+    <data name="ProgressPlanShowAll" xml:space="preserve">
+        <value>Alles anzeigen</value>
+    </data>
+    <data name="ProgressPlanShowLess" xml:space="preserve">
+        <value>Weniger anzeigen</value>
+    </data>
+    <data name="ProgressPlanClose" xml:space="preserve">
+        <value>Schließen</value>
+    </data>
+    <data name="ProgressPlanOutline" xml:space="preserve">
+        <value>Inhalt</value>
+    </data>
 </root>

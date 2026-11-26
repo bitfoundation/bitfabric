@@ -152,13 +152,19 @@
                                     </div>
                                 }
 
+                                @* The plan the task follows, like a change plan, read here or full screen. *@
+                                @if (string.IsNullOrWhiteSpace(task.Plan) is false)
+                                {
+                                    <ProgressPlan Markdown="@task.Plan" TaskDirection="@textDir" Language="@task.Language" />
+                                }
+
                                 @* The agent's write-up, like the report a long run ends with, read as a document. *@
                                 @if (string.IsNullOrWhiteSpace(task.Report) is false)
                                 {
                                     <section class="report" aria-labelledby="report-title">
                                         <h3 id="report-title" class="section-title">@Localizer[nameof(WorkbenchStrings.ProgressReport)]</h3>
                                         <div class="report-body as-written" dir="@Dir(task.Report, textDir)">
-                                            <BitMarkdownViewer Markdown="@task.Report" Pipeline="BitMarkdownPipelines.GitHub" HeadingLevelOffset="3" HeadingIdPrefix="report-" Dir="@BitDirOf(task.Report, textDir)" />
+                                            <BitMarkdownViewer Markdown="@task.Report" Pipeline="BitMarkdownPipelines.Advanced" HeadingLevelOffset="3" HeadingIdPrefix="report-" Dir="@BitDirOf(task.Report, textDir)" />
                                         </div>
                                     </section>
                                 }
