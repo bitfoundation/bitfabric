@@ -108,10 +108,16 @@
             <BitPivotItem Key="@OverviewTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringOverview)]" IconName="@BitIconName.Health">
                 <ProjectOverview Details="details" />
             </BitPivotItem>
+            <BitPivotItem Key="@MapTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringAppMap)]" IconName="@BitIconName.Relationship">
+                @if (SelectedTab == MapTab)
+                {
+                    <ProjectMap Project="project" OnOpenTab="WrapHandled<ProjectTabLink>(Open)" />
+                }
+            </BitPivotItem>
             <BitPivotItem Key="@HistoryTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringHistory)]" IconName="@BitIconName.History">
                 @if (SelectedTab == HistoryTab)
                 {
-                    <ProjectHistory Project="project" />
+                    <ProjectHistory @key="Check" Project="project" Check="@Check" OnShowEveryPart="WrapHandled(() => OpenTab(HistoryTab))" />
                 }
             </BitPivotItem>
             <BitPivotItem Key="@IncidentsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringIncidents)]" IconName="@BitIconName.WarningSolid">
@@ -123,7 +129,7 @@
             <BitPivotItem Key="@PerformanceTab" HeaderText="@Localizer[nameof(AppStrings.AppHomePerformance)]" IconName="@BitIconName.SpeedHigh">
                 @if (SelectedTab == PerformanceTab)
                 {
-                    <ProjectPerformance Project="project" Checks="details.Checks" Regions="details.Regions" />
+                    <ProjectPerformance @key="Check" Project="project" Checks="details.Checks" Regions="details.Regions" Check="@Check" OnShowEveryPart="WrapHandled(() => OpenTab(PerformanceTab))" />
                 }
             </BitPivotItem>
             <BitPivotItem Key="@ScansTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringScans)]" IconName="@BitIconName.SiteScan">

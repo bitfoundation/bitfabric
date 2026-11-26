@@ -7,6 +7,11 @@
     }
     else
     {
+        @if (onlyPart is not null)
+        {
+            <ProjectPartFilter Title="@(onlyPart.Title ?? onlyPart.Key ?? "")" OnClear="OnShowEveryPart" />
+        }
+
         <section class="panel" aria-labelledby="days-title">
             <div class="panel-head">
                 <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="days-title">@Localizer[nameof(AppStrings.MonitoringLast90Days)]</BitText>
@@ -46,9 +51,9 @@
 
         @if (Selected is { } picked)
         {
-            var incidents = history.Incidents.Where(incident => incident.StartedAt < picked.End && (incident.EndedAt ?? DateTimeOffset.UtcNow) > picked.Start).ToArray();
+            var incidents = history.Incidents.Where(incident => incident.StartedAt < picked.End && (incident.EndedAt ?? DateTimeOffset.UtcNow) > picked.Start && IsAboutTheShownPart(incident)).ToArray();
             var starts = history.Starts.Where(start => start.At >= picked.Start && start.At < picked.End).ToArray();
-            var periods = history.Periods.Where(period => period.StartedAt < picked.End && (period.EndedAt ?? DateTimeOffset.UtcNow) > picked.Start).ToArray();
+            var periods = history.Periods.Where(period => period.StartedAt < picked.End && (period.EndedAt ?? DateTimeOffset.UtcNow) > picked.Start && IsAboutTheShownPart(period)).ToArray();
 
             <section class="panel" aria-labelledby="day-title" aria-live="polite">
                 <div class="panel-head">

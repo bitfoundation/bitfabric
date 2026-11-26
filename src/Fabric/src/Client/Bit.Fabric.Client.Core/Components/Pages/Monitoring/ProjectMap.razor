@@ -1,0 +1,64 @@
+@inherits AppComponentBase
+
+<BitMediaQuery ScreenQuery="BitScreenQuery.LtMd" OnChange="(bool narrow) => isNarrow = narrow" NoWrapper />
+
+@if (isMapWanted)
+{
+    @* Blow's stylesheet comes when the map does, so it holds up no other tab *@
+    <link rel="stylesheet" href="_content/Bit.Blow/bit-blow.css" />
+}
+
+@if (map is null)
+{
+    <BitShimmer Height="22rem" Width="100%" />
+}
+else if (map.Parts.Length is 0)
+{
+    <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringNoHealthReportYet)]</BitText>
+}
+else
+{
+    <div class="map-layout">
+        <div class="map-canvas">
+            @if (mapType is not null)
+            {
+                <DynamicComponent Type="mapType" Parameters="MapParameters()" />
+            }
+            else if (isMapFailed)
+            {
+                @* The drawing didn't come: the same parts as a list, so nothing is lost but the picture *@
+                <BitStack Gap="1rem">
+                    @foreach (var group in Groups)
+                    {
+                        <BitStack Gap="0.25rem">
+                            <BitText Typography="BitTypography.Subtitle2" Foreground="BitColorKind.Secondary"><bdi>@Localizer[ProjectChecks.TitleOf(group.Key)]</bdi></BitText>
+                            @foreach (var part in group)
+                            {
+                                <BitButton Variant="BitVariant.Text" IconName="@(part.IconName ?? BitIconName.Puzzle)" OnClick="WrapHandled(() => Select(part.Key))"><bdi>@ProjectMapTones.TitleOf(part)</bdi></BitButton>
+                            }
+                        </BitStack>
+                    }
+                </BitStack>
+            }
+            else
+            {
+                <BitShimmer Height="22rem" Width="100%" />
+            }
+        </div>
+
+        @if (isNarrow is false)
+        {
+            <BitCard FullWidth NoShadow Class="map-panel">
+                <ProjectMapDetails Part="selected" Parts="map.Parts" AppTone="AppTone" OnOpenTab="OnOpenTab" />
+            </BitCard>
+        }
+    </div>
+
+    @if (isNarrow)
+    {
+        @* On a phone the map is tall: a part's details slide up over it rather than wait at its far end *@
+        <BitPanel IsOpen="isSheetOpen && selected is not null" IsOpenChanged="WrapHandled<bool>(SheetChanged)" Placement="BitPlacement.Bottom" ShowCloseButton>
+            <ProjectMapDetails Part="selected" Parts="map.Parts" AppTone="AppTone" OnOpenTab="OnOpenTab" />
+        </BitPanel>
+    }
+}

@@ -278,6 +278,7 @@ public static class WebApplicationExtensions
     {
         var registrations = context.RequestServices.GetRequiredService<IOptions<HealthCheckServiceOptions>>().Value.Registrations.ToDictionary(r => r.Name);
         var descriptions = context.RequestServices.GetRequiredService<IOptions<HealthCheckDescriptions>>().Value;
+        var dependencies = context.RequestServices.GetRequiredService<IOptions<HealthCheckDependencies>>().Value;
 
         // An exception can carry a server name or a connection string. A signed-in user's own session gets it; an OAuth
         // token, which some other app holds, never does.
@@ -299,6 +300,9 @@ public static class WebApplicationExtensions
                     ? tagged
                     : null;
                 var description = descriptions.GetValueOrDefault(entry.Key);
+                var isNotConfigured = entry.Value.Tags.Contains(HealthCheckTags.NotConfigured);
+                // The stand-in of a check whose settings are missing talks to nothing yet.
+                var dependency = isNotConfigured ? null : dependencies.GetValueOrDefault(entry.Key);
 
                 return new HealthReportEntryDto
                 {
@@ -320,7 +324,10 @@ public static class WebApplicationExtensions
                     Title = description?.Title ?? entry.Key,
                     IconName = description?.IconName ?? HealthCheckCategories.IconOf(category),
                     About = description?.About,
-                    IsNotConfigured = entry.Value.Tags.Contains(HealthCheckTags.NotConfigured),
+                    Provider = dependency?.Provider,
+                    Host = dependency?.Host,
+                    Model = dependency?.Model,
+                    IsNotConfigured = isNotConfigured,
                     // Stringified, as a check may put anything in here.
                     Data = data.Where(item => HealthCheckResultData.Keys.Contains(item.Key) is false).ToDictionary(item => item.Key, item => item.Value switch
                     {

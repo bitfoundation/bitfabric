@@ -20,6 +20,18 @@ public partial class ProjectPerformance
     /// <summary>Where the rounds run from, a home page row each.</summary>
     [Parameter] public string[] Regions { get; set; } = [];
 
+    /// <summary>
+    /// The one part to show, by its report key, as the map opens the tab on it (See ProjectTabLink): its row and the
+    /// deployments and restarts beside it. Every row when null.
+    /// </summary>
+    [Parameter] public string? Check { get; set; }
+
+    /// <summary>Shows every part again.</summary>
+    [Parameter] public EventCallback OnShowEveryPart { get; set; }
+
+    /// <summary>The part the tab shows alone, when the last report has it.</summary>
+    private ProjectCheckDto? OnlyPart => Check is null ? null : Checks.FirstOrDefault(check => check.Key == Check && check.IsNotConfigured is false);
+
     [AutoInject] private IProjectsController projectsController = default!;
 
     private const string StartsRow = "starts";
@@ -48,7 +60,13 @@ public partial class ProjectPerformance
         var now = DateTimeOffset.UtcNow;
         var regions = Regions;
 
-        List<BitResourceTimelineResource> resources =
+        List<BitResourceTimelineResource> resources = OnlyPart is { } onlyPart
+        ?
+        [
+            new() { Id = onlyPart.Key!, Name = ProjectChecks.TitleOf(onlyPart) },
+            new() { Id = StartsRow, Name = Localizer[nameof(AppStrings.MonitoringDeploysAndRestarts)] }
+        ]
+        :
         [
             .. regions.Select(region => new BitResourceTimelineResource { Id = $"{ProjectRollupKeys.HomePage}|{region}", Name = Localizer[nameof(AppStrings.MonitoringHomePageRegion), MonitoringWords.Region(Localizer, region)] }),
             // Through the cache in front of the app, a row only when a cache answers the home page (See ProjectDto.MedianVisitorMs).
@@ -60,7 +78,7 @@ public partial class ProjectPerformance
 
         // A part that only misses its settings has no history to draw (bitfabric-internal/specs/monitoring.md, Not
         // configured is a setup finding).
-        foreach (var group in Checks.Where(check => check.IsNotConfigured is false)
+        foreach (var group in Checks.Where(check => check.IsNotConfigured is false && OnlyPart is null)
                                     .GroupBy(ProjectChecks.GroupOf)
                                     .OrderBy(group => ProjectChecks.OrderOf(group.Key)).ThenBy(group => group.Key))
         {

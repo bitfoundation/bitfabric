@@ -1,0 +1,96 @@
+@* A project's application map: the app in the middle and the categories of what it talks to around it, drawn by bit Blow
+   with nothing to drag, connect or zoom. Each part is a button that tells the page which one to show. *@
+<BitMediaQuery ScreenQuery="BitScreenQuery.LtMd" OnChange="ScreenChanged" NoWrapper />
+
+<div class="pmv" style="height:@(height)px" role="group" aria-label="@Picture.AriaLabel">
+    @if (isAnswered)
+    {
+        <BlowCanvas @key="layoutKey"
+                    @ref="canvas"
+                    Nodes="nodes"
+                    Edges="edges"
+                    FitViewOnInit
+                    FitViewOptions="fitOptions"
+                    OnPaneResize="FitToPane"
+                    MinZoom="0.4"
+                    MaxZoom="1"
+                    NodesDraggable="false"
+                    NodesConnectable="false"
+                    NodesFocusable="false"
+                    EdgesFocusable="false"
+                    EdgesReconnectable="false"
+                    ElementsSelectable="false"
+                    PanOnDrag="false"
+                    ZoomOnScroll="false"
+                    ZoomOnPinch="false"
+                    ZoomOnDoubleClick="false"
+                    PreventScrolling="false"
+                    HideAttribution
+                    AriaLabel="@Picture.AriaLabel"
+                    Style="@CanvasStyle">
+            <NodeTemplate Context="node">
+                @foreach (var (id, position) in Sides)
+                {
+                    <BlowHandle Id="@($"t-{id}")" Type="BlowHandleType.Target" Position="position" IsConnectable="false" Style="opacity:0;pointer-events:none" />
+                    <BlowHandle Id="@($"s-{id}")" Type="BlowHandleType.Source" Position="position" IsConnectable="false" Style="opacity:0;pointer-events:none" />
+                }
+
+                @if (node.Data is ProjectMapPicture app)
+                {
+                    <div class="pmv-app @ToneClass(app.AppTone)" dir="@TextDir">
+                        <span class="pmv-app-ring" aria-hidden="true">
+                            <BitIcon IconName="@ToneIcon(app.AppTone)" Color="ToneColor(app.AppTone)" />
+                        </span>
+                        <strong class="pmv-app-title" dir="auto">@app.AppTitle</strong>
+                        @if (app.AppSubtitle is not null)
+                        {
+                            <span class="pmv-app-subtitle app-latin-digits" dir="ltr">@app.AppSubtitle</span>
+                        }
+                        @if (app.AppMeasure is not null)
+                        {
+                            <span class="pmv-app-measure">@app.AppMeasure</span>
+                        }
+                    </div>
+                }
+                else if (node.Data is ProjectMapGroup group)
+                {
+                    <div class="pmv-group @ToneClass(group.Tone)" dir="@TextDir">
+                        <div class="pmv-group-head">
+                            <BitIcon IconName="@group.Icon" Size="BitSize.Small" Class="pmv-group-icon" />
+                            <span class="pmv-group-title" dir="auto">@group.Title</span>
+                            <span class="pmv-dot @ToneClass(group.Tone)" aria-hidden="true"></span>
+                        </div>
+                        @foreach (var part in group.Parts)
+                        {
+                            <button type="button"
+                                    class="pmv-part @ToneClass(part.Tone) @(part.Key == SelectedKey ? "is-selected" : null) @(part.Behind is null ? null : "has-behind")"
+                                    aria-pressed="@(part.Key == SelectedKey ? "true" : "false")"
+                                    @onclick="() => OnSelect.InvokeAsync(part.Key)">
+                                <span class="pmv-dot @ToneClass(part.Tone)" aria-hidden="true"></span>
+                                @if (part.Icon is not null)
+                                {
+                                    <BitIcon IconName="@part.Icon" Size="BitSize.Small" Class="pmv-part-icon" />
+                                }
+                                <span class="pmv-part-words">
+                                    <span class="pmv-part-title" dir="auto">@part.Title</span>
+                                    @if (part.Behind is not null)
+                                    {
+                                        <span class="pmv-part-behind app-latin-digits" dir="auto">@part.Behind</span>
+                                    }
+                                </span>
+                                @if (part.Flag is not null)
+                                {
+                                    <span class="pmv-flag">@part.Flag</span>
+                                }
+                                else if (part.Measure is not null)
+                                {
+                                    <span class="pmv-part-measure">@part.Measure</span>
+                                }
+                            </button>
+                        }
+                    </div>
+                }
+            </NodeTemplate>
+        </BlowCanvas>
+    }
+</div>

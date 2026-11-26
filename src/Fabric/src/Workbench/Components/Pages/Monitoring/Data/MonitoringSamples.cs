@@ -104,6 +104,7 @@ public static partial class MonitoringSamples
         {
             var part = MonitoringParts.Find(key);
             var ms = Math.Max(0, (int)Math.Round(part.TypicalMs * (0.7 + 0.6 * MonitoringNoise.Of($"{project.Key}:{key}", 0))));
+            var behind = MonitoringParts.Behind.GetValueOrDefault(key);
 
             project.Checks.Add(new()
             {
@@ -111,6 +112,9 @@ public static partial class MonitoringSamples
                 Title = part.Title,
                 IconName = part.IconName,
                 About = part.About,
+                Provider = behind.Provider,
+                Host = behind.Host,
+                Model = behind.Model,
                 Category = part.Category,
                 Tags = [$"{HealthCheckCategories.TagPrefix}{part.Category}"],
                 Status = HealthCheckStatus.Healthy,

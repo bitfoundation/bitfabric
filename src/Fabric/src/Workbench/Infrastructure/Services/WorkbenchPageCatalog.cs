@@ -356,6 +356,7 @@ public static class WorkbenchPageCatalog
                 new(ProjectOpsHost.TabSwitch, "Tab",
                 [
                     new("overview", "Overview"),
+                    new("map", "Application map"),
                     new("history", "History"),
                     new("incidents", "Incidents"),
                     new("performance", "Performance"),

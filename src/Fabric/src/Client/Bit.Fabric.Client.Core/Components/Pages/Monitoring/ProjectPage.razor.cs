@@ -20,7 +20,11 @@ public partial class ProjectPage
     /// <summary>The open tab, in the address so it can be shared and survives a refresh.</summary>
     [Parameter, SupplyParameterFromQuery(Name = "tab")] public string? Tab { get; set; }
 
+    /// <summary>The one part History and Performance show, by its report key, such as the map opens them on (See ProjectTabLink).</summary>
+    [Parameter, SupplyParameterFromQuery(Name = "check")] public string? Check { get; set; }
+
     private const string OverviewTab = "overview";
+    private const string MapTab = "map";
     private const string HistoryTab = "history";
     private const string IncidentsTab = "incidents";
     private const string PerformanceTab = "performance";
@@ -31,13 +35,21 @@ public partial class ProjectPage
     private const string StatusTab = "status";
     private const string SettingsTab = "settings";
 
-    private static readonly string[] tabs = [OverviewTab, HistoryTab, IncidentsTab, PerformanceTab, ScansTab, SlaTab, LocationsTab, StatusTab, AlertsTab, SettingsTab];
+    private static readonly string[] tabs = [OverviewTab, MapTab, HistoryTab, IncidentsTab, PerformanceTab, ScansTab, SlaTab, LocationsTab, StatusTab, AlertsTab, SettingsTab];
 
     private string SelectedTab => tabs.Contains(Tab) ? Tab! : OverviewTab;
 
-    private void OpenTab(string? key)
+    /// <summary>Another tab, on every part.</summary>
+    private void OpenTab(string? key) => Open(new(key ?? OverviewTab));
+
+    /// <summary>A tab, on one part when the link names it: the address says both, so it can be shared.</summary>
+    private void Open(ProjectTabLink link)
     {
-        NavigationManager.NavigateTo(NavigationManager.GetUriWithQueryParameter("tab", key is OverviewTab or null ? null : key), replace: true);
+        NavigationManager.NavigateTo(NavigationManager.GetUriWithQueryParameters(new Dictionary<string, object?>
+        {
+            ["tab"] = link.Tab is OverviewTab ? null : link.Tab,
+            ["check"] = link.Tab is HistoryTab or PerformanceTab ? link.Check : null
+        }), replace: true);
     }
 
     private void Renamed(string? name)

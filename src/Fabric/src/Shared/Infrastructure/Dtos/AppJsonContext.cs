@@ -46,6 +46,7 @@ namespace Bit.Fabric.Shared.Infrastructure.Dtos;
 [JsonSerializable(typeof(ProjectDto))]
 [JsonSerializable(typeof(List<ProjectDto>))]
 [JsonSerializable(typeof(ProjectDetailsDto))]
+[JsonSerializable(typeof(ProjectMapDto))]
 [JsonSerializable(typeof(ProjectPerformanceRequestDto))]
 [JsonSerializable(typeof(ProjectPerformanceDto))]
 [JsonSerializable(typeof(ProjectHistoryRequestDto))]

@@ -2,8 +2,8 @@
 
     <!--
         The home page's pictures of how a new version goes live and how the live app is protected, one copy for the app
-        (Client.Core's HomePage) and the Workbench's design of it. It holds them apart from the films, so a visit to the home
-        page doesn't download the films as well.
+        (Client.Core's HomePage) and the Workbench's design of it, and a project's application map (Client.Core's
+        ProjectMap). It holds them apart from the films, so a visit to the home page doesn't download the films as well.
     -->
     <PropertyGroup>
         <TargetFramework>net11.0</TargetFramework>

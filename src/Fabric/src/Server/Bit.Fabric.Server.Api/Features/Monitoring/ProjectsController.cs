@@ -42,6 +42,11 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
     public Task<ProjectDetailsDto> GetProject(Guid id, CancellationToken cancellationToken)
         => projectsService.GetProject(id, cancellationToken);
 
+    /// <summary>Read the same way by the AI tools (See ProjectsService.GetMap).</summary>
+    [HttpGet("{id}")]
+    public Task<ProjectMapDto> GetMap(Guid id, CancellationToken cancellationToken)
+        => projectsService.GetMap(id, cancellationToken);
+
     /// <summary>The widths a bar may have, in minutes: a round, then the rollup and its multiples.</summary>
     private static readonly int[] performanceSteps = [1, ProjectRollup.BucketMinutes, 60, 360, 1440];
 

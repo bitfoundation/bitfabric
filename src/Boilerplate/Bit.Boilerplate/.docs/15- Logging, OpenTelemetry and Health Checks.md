@@ -488,6 +488,15 @@ to its registration, e.g.
 `.Describe("paymentGateway", "Payment gateway", "Money", "Authorizes and voids a one cent payment.")`; one described
 nowhere is reported under its registration name, with its category's icon.
 
+An entry also says what the check talks to, so a monitor can show what lies behind a part, such as the mail server
+behind "Email": `provider` (a short name, such as `Twilio` or `OpenAI`), `host` (the host name alone) and, for an AI
+check, `model`. The template's checks name theirs where they are registered, from the app's settings; name yours with
+`.TalksTo("paymentGateway", "Stripe", "api.stripe.com")`. These are names only: never put a key, a connection string, a
+user name or a query string in them, and pass a host read from a setting through `HealthCheckDependency.HostOf`, which
+keeps only the host name. The stand-in of a check whose settings are missing names nothing. Like the rest of `/healthz`,
+they are read only by a signed-in user with the Operations feature, or by an app that user approved with the `healthz`
+scope.
+
 ---
 
 ### AI Wiki

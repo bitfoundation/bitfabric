@@ -36,7 +36,7 @@ public partial class ProjectMonitoringTests
 
         var tools = await mcp.ListToolsAsync(cancellationToken: TestContext.CancellationToken);
 
-        string[] reads = ["GetProjects", "GetProject", "GetIncidents", "GetHistory", "GetSlaReport", "GetStatusPage"];
+        string[] reads = ["GetProjects", "GetProject", "GetApplicationMap", "GetIncidents", "GetHistory", "GetSlaReport", "GetStatusPage"];
         string[] actions = ["AcknowledgeIncident", "PostIncidentUpdate", "ScheduleMaintenance"];
 
         foreach (var name in reads)

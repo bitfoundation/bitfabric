@@ -10,6 +10,9 @@ public partial class ProjectOpsHost
 
     public const string TabSwitch = "tab";
 
+    /// <summary>The one part History and Performance show, as the map opens them on it (See ProjectTabLink).</summary>
+    public const string CheckSwitch = "check";
+
     public const string DefaultProject = "yourapp";
 
     public const string PressSwitch = "press";
@@ -29,7 +32,7 @@ public partial class ProjectOpsHost
     private bool isPressed;
 
     /// <summary>The project page's tabs, as its address names them (See ProjectPage), Overview first.</summary>
-    public static readonly string[] Tabs = ["overview", "history", "incidents", "performance", "scans", "sla", "locations", "status", "alerts", "settings"];
+    public static readonly string[] Tabs = ["overview", "map", "history", "incidents", "performance", "scans", "sla", "locations", "status", "alerts", "settings"];
 
     /// <summary>The picked project, or Your app; a project the view added on the add page counts too, while the view lasts.</summary>
     private Guid ProjectId => (World.Find(Scenario.GetSwitch(ProjectSwitch) ?? DefaultProject) ?? World.Find(DefaultProject))?.Id ?? Guid.Empty;
@@ -50,13 +53,18 @@ public partial class ProjectOpsHost
         await Press(press.Selector);
     }
 
-    protected override IReadOnlyDictionary<string, object?> QueryOfSwitches() => new Dictionary<string, object?> { ["tab"] = Tab };
+    protected override IReadOnlyDictionary<string, object?> QueryOfSwitches() => new Dictionary<string, object?>
+    {
+        ["tab"] = Tab,
+        ["check"] = Tab is "history" or "performance" ? Scenario.GetSwitch(CheckSwitch) : null
+    };
 
     /// <summary>A tab the page opened becomes the Tab switch, and leaves behind a press made on another tab.</summary>
     protected override WorkbenchScenario SwitchesOfQuery(WorkbenchScenario scenario, IReadOnlyDictionary<string, string> query)
     {
         var tab = query.GetValueOrDefault("tab") is { } opened && Tabs.Contains(opened) && opened != Tabs[0] ? opened : null;
-        var updated = scenario.WithSwitch(TabSwitch, tab);
+        var updated = scenario.WithSwitch(TabSwitch, tab)
+                              .WithSwitch(CheckSwitch, tab is "history" or "performance" ? query.GetValueOrDefault("check") : null);
 
         return PressedButton is { } press && press.Tab != tab ? updated.WithSwitch(PressSwitch, null) : updated;
     }

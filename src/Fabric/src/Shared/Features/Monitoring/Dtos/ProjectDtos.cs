@@ -240,6 +240,15 @@ public partial class ProjectCheckDto
     /// <summary>What a pass proves, from the report.</summary>
     public string? About { get; set; }
 
+    /// <summary>What the check talks to, such as "Twilio", from the report.</summary>
+    public string? Provider { get; set; }
+
+    /// <summary>The host the check reaches, from the report.</summary>
+    public string? Host { get; set; }
+
+    /// <summary>The model an AI check uses, from the report.</summary>
+    public string? Model { get; set; }
+
     /// <summary>The check only misses its settings: a setup finding, not an outage.</summary>
     public bool IsNotConfigured { get; set; }
 

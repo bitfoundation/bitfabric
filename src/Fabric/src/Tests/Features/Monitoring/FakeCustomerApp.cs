@@ -206,7 +206,7 @@ public sealed class FakeCustomerApp
         {
             ["AppDbContext"] = new() { Status = HealthCheckStatus.Healthy, FailureStatus = HealthCheckStatus.Unhealthy, Tags = ["live", "category:Platform"], Category = "Platform", Title = "Database", IconName = "Database", About = "Opens a connection to the app's database." },
             // A cached check: its result was measured minutes before the report, which the report says (See HealthReport).
-            ["smtp"] = new() { Status = HealthCheckStatus.Healthy, FailureStatus = HealthCheckStatus.Degraded, Timeout = TimeSpan.FromSeconds(5), Duration = TimeSpan.FromMilliseconds(850), CacheDuration = TimeSpan.FromMinutes(5), Tags = ["category:Messaging"], Category = "Messaging", Title = "Email", IconName = "Mail" },
+            ["smtp"] = new() { Status = HealthCheckStatus.Healthy, FailureStatus = HealthCheckStatus.Degraded, Timeout = TimeSpan.FromSeconds(5), Duration = TimeSpan.FromMilliseconds(850), CacheDuration = TimeSpan.FromMinutes(5), Tags = ["category:Messaging"], Category = "Messaging", Title = "Email", IconName = "Mail", Provider = "SMTP", Host = "smtp.example.com" },
             // The app's own check, described the way the template tells its users to describe one.
             ["paymentGateway"] = new() { Status = HealthCheckStatus.Healthy, FailureStatus = HealthCheckStatus.Degraded, Duration = TimeSpan.FromMilliseconds(120), Tags = ["category:Integrations"], Category = "Integrations", Title = "Payment gateway", IconName = "Money", About = "Authorizes and voids a one cent payment." },
             // A dependency whose code the app ships without its settings: Degraded, but a setup finding rather than an outage.

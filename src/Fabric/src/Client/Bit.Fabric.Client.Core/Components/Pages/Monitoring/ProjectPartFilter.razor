@@ -1,0 +1,12 @@
+@inherits AppComponentBase
+
+@* The one part a tab shows, as the map opened it on: a chip whose close shows every part again *@
+<div class="part-filter">
+    <BitTag Variant="BitVariant.Outline"
+            Color="BitColor.Primary"
+            IconName="@BitIconName.Filter"
+            Text="@Title"
+            Title="@Localizer[nameof(AppStrings.MonitoringShowEveryPart)]"
+            OnDismiss="WrapHandled(() => OnClear.InvokeAsync())" />
+</div>
+

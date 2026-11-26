@@ -43,6 +43,25 @@ public static class MonitoringParts
         new("paymentGateway", "Payment gateway", "Money", "Authorizes and voids a one cent payment.", "Integrations", 8000, 540, 5)
     ];
 
+    /// <summary>
+    /// What lies behind an entry, as the template's report names it from the app's settings (HealthCheckDependencies in
+    /// src/Boilerplate): the outside service, its host and an AI check's model. The payment gateway names its own.
+    /// </summary>
+    public static readonly Dictionary<string, (string Provider, string? Host, string? Model)> Behind = new()
+    {
+        ["userProfileImages"] = ("Amazon S3", "s3.eu-central-1.amazonaws.com", null),
+        ["cloudflare"] = ("Cloudflare", "api.cloudflare.com", null),
+        ["smtp"] = ("SMTP", "smtp.sendgrid.net", null),
+        ["sms"] = ("Twilio", "api.twilio.com", null),
+        ["firebase"] = ("Firebase Cloud Messaging", "fcm.googleapis.com", null),
+        ["apns"] = ("Apple Push Notification service", "api.push.apple.com", null),
+        ["reCaptcha"] = ("Google reCAPTCHA", "www.google.com", null),
+        ["aiChat"] = ("OpenAI", "api.openai.com", "gpt-4.1-mini"),
+        ["aiEmbedding"] = ("OpenAI", "api.openai.com", "text-embedding-3-small"),
+        ["aiRealtime"] = ("OpenAI", "api.openai.com", "gpt-realtime"),
+        ["paymentGateway"] = ("Stripe", "api.stripe.com", null)
+    };
+
     /// <summary>The settings section a not-configured entry names, as the template's stand-in check reports it.</summary>
     public static readonly Dictionary<string, string> Settings = new()
     {

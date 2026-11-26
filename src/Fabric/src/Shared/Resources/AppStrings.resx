@@ -11400,6 +11400,54 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="AppHomeSeeCli" xml:space="preserve">
     <value>What bit CLI does</value>
   </data>
+  <data name="MonitoringAppMap" xml:space="preserve">
+    <value>Application map</value>
+  </data>
+  <data name="MonitoringAppMapAria" xml:space="preserve">
+    <value>What {0} talks to, and how each part is doing</value>
+  </data>
+  <data name="MonitoringAppMapPick" xml:space="preserve">
+    <value>Pick a part on the map to see how it has done.</value>
+  </data>
+  <data name="MonitoringAppMapLastRun" xml:space="preserve">
+    <value>Last run</value>
+  </data>
+  <data name="MonitoringAppMapTypical" xml:space="preserve">
+    <value>Typical</value>
+  </data>
+  <data name="MonitoringAppMapSlowest" xml:space="preserve">
+    <value>Slowest</value>
+  </data>
+  <data name="MonitoringAppMapLast24Hours" xml:space="preserve">
+    <value>Last 24 hours</value>
+  </data>
+  <data name="MonitoringAppMapTrouble" xml:space="preserve">
+    <value>Had trouble in {0} of {1} checks</value>
+  </data>
+  <data name="MonitoringAppMapNoTrouble" xml:space="preserve">
+    <value>No trouble in {0} checks</value>
+  </data>
+  <data name="MonitoringAppMapRan" xml:space="preserve">
+    <value>Last ran {0}</value>
+  </data>
+  <data name="MonitoringAppMapIncident" xml:space="preserve">
+    <value>Incident</value>
+  </data>
+  <data name="MonitoringAppMapHomePage" xml:space="preserve">
+    <value>Home page {0}</value>
+  </data>
+  <data name="MonitoringAppMapTalksTo" xml:space="preserve">
+    <value>Talks to</value>
+  </data>
+  <data name="MonitoringAppMapModel" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="MonitoringAppMapHost" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="MonitoringShowEveryPart" xml:space="preserve">
+    <value>Show every part</value>
+  </data>
   <data name="AppHomeDayOneStatusNotice" xml:space="preserve">
     <value>Tells users when something breaks</value>
   </data>

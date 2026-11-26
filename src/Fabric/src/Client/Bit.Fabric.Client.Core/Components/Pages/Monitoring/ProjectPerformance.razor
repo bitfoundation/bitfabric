@@ -1,5 +1,10 @@
 @inherits AppComponentBase
 
+@if (OnlyPart is { } onlyPart)
+{
+    <ProjectPartFilter Title="@ProjectChecks.TitleOf(onlyPart)" OnClear="OnShowEveryPart" />
+}
+
 <section class="panel" aria-labelledby="performance-title">
     <div class="panel-head">
         <div class="panel-text">
