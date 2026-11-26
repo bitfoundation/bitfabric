@@ -134,6 +134,25 @@ bit run ios
 
 In VS Code, bit Boilerplate's **Run the Android app** task runs `bit run android`.
 
+## bit codespace
+
+Runs the project on GitHub Codespaces, from your terminal:
+
+```bash
+bit codespace
+bit codespace --branch cart
+bit codespace code
+bit codespace stop
+bit codespace delete
+```
+
+- It works in the project's git repository, whose `origin` is on github.com, through the GitHub CLI: it installs the GitHub CLI when it's missing, the way `bit setup` does, and signs you in in your browser. Codespaces need the sign-in's `codespace` scope, which `gh auth login` doesn't ask for, so bit asks GitHub for it in the browser the first time.
+- Each branch has one codespace. bit reuses the codespace that has the branch checked out, preferring one that runs, starts it when it's stopped, and creates one only when there's none, so running the project again doesn't pay for another machine or wait for another first setup. `--codespace <name>` picks another of the repository's codespaces. A new codespace gets the smallest machine with a prebuild ready, which starts in a minute instead of setting the project up first, or else the smallest machine GitHub offers for the dev container's `hostRequirements`; `--machine` picks one.
+- A codespace checks out what GitHub has, so bit offers to push the branch's commits that GitHub doesn't have, and pushes them without asking with `--yes`. A branch GitHub doesn't have at all can't run in a codespace before it's pushed. Changes that aren't committed stay on your machine, and bit says so.
+- In the codespace, on a new one, it waits for the dev container's `bit setup` to finish, brings the branch up to date when that's a fast-forward, and runs `bit run` in your terminal. It forwards the ports of the app, of a standalone api and of the Aspire dashboard to the same ports on your machine, so the `localhost` addresses `bit run` shows, and the app's own `ServerAddress`, work as they do locally, and opens the app in your browser once it answers (`--no-open` doesn't). Ctrl+C stops it.
+- The codespace keeps running until it's idle for its timeout, 30 minutes unless you changed it in your GitHub settings, and GitHub deletes a stopped one after its retention period. `bit codespace stop` stops it at once, and `bit codespace delete` deletes it, after asking, and saying when it has changes that aren't committed or pushed. `bit codespace code` opens it in VS Code, or with `--web` in VS Code for the Web, creating it first when there's none.
+- bit runs the project through the codespace's SSH server, which bit Boilerplate's dev container has (`ghcr.io/devcontainers/features/sshd`). Codespaces reads the dev container from `.devcontainer` at the repository's root, where `bit new` puts the project.
+
 ## bit diff
 
 Shows what changed in bit Boilerplate between two versions, for your project:
@@ -265,9 +284,11 @@ bit remove ../Contoso.Shop-cart --yes
 Deletes a folder for good, any folder: a project, a repository `bit diff` created, a git worktree. On Windows that fails while an app, a build process or Node.js still holds its files, so:
 
 - It asks first, and says what would be lost: changes that aren't committed, commits that aren't pushed, and, when the folder holds the repository itself, its other branches' commits that aren't pushed, its stashes and its other worktrees. Without a terminal to ask in, it needs `--yes`.
-- It stops the apps that run from the folder, the same way `bit clean` does, then deletes the folder, read-only files like git's included. When a file is still in use, it stops the build process that holds it, if one does, like `bit clean` does, and tries once more. The failure names any other app that still holds a file.
+- It never waits more than 10 seconds in all, for git, for the apps it stops or for the files they hold; the time you take to answer its question doesn't count. Reading what would be lost takes 3 of them at most, and when git doesn't answer by then, it says it couldn't check everything.
+- It stops the apps that run from the folder, the same way `bit clean` does, then deletes the folder, read-only files like git's included. When a file is still in use, it stops the build process that holds it, if one does, like `bit clean` does, and tries again. While another app holds a file or is in the folder, such as an editor or another terminal, it keeps trying for that app to let go, and once it's done waiting, it stops that app too. It never stops the terminal it runs in, or Windows Explorer, and the failure names an app it couldn't stop.
+- When deleting takes longer than that, as for a folder with a lot of build output, it moves the folder aside at once, to a hidden `.bit-remove-<id>` folder next to it, and that is deleted in the background, by `rd` on Windows and `rm` elsewhere, after bit is done.
 - When the folder is a linked git worktree (`git worktree add`), it also takes it off its repository's worktrees, the way `git worktree remove` does, so its branch can be deleted or checked out elsewhere and its path used again. Only that worktree: `git worktree prune` isn't needed, and isn't run, since it also clears every other worktree of the repository whose folder is gone. The branch stays in the repository, and when it has commits that aren't pushed, or no upstream, it says so first.
-- When a terminal is still in the folder, everything in it is deleted and the empty folder stays. Delete it after leaving it.
+- When the terminal it runs in is in the folder, everything in it is deleted and the empty folder stays. Delete it after leaving it.
 - It never deletes a drive's root, your home folder, a folder of your account like Documents or AppData, a system folder like Program Files, bit's own folder or the .NET it runs on, or a folder that holds one of them. Run in a git worktree, it doesn't delete the folder that holds that worktree's repository either.
 - A project's Aspire containers and volumes stay in Docker. Remove them in Docker when you no longer need their data.
 

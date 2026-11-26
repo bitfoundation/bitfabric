@@ -59,7 +59,7 @@
     <File Path=".docs/20- .NET Aspire.md" />
     <File Path=".docs/21- .NET MAUI - Blazor Hybrid.md" />
     <File Path=".docs/22- Messaging.md" />
-    <File Path=".docs/23- Diagnostic Modal.md" />
+    <File Path=".docs/23- In-App Dev Tools.md" />
     <File Path=".docs/24- WebAuthn and Passwordless Authentication (Advanced).md" />
     <!--#if ((database == "PostgreSQL" || database == "SqlServer") && (module == "Admin" || module == "Sales"))-->
     <File Path=".docs/25- RAG - Semantic Search with Vector Embeddings (Advanced).md" />

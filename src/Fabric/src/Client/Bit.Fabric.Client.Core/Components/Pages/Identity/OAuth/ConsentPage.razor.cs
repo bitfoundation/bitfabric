@@ -51,6 +51,7 @@ public partial class ConsentPage
     private bool isLoading = true;
     private bool isSubmitting;
     private bool redirectToSignIn;
+    private bool twoFactorRequired;
     private string? error;
     private string? leftFor;
     private OAuthConsentDto? consent;
@@ -73,6 +74,10 @@ public partial class ConsentPage
         try
         {
             consent = await oauthController.Review(BuildRequest(), CurrentCancellationToken);
+        }
+        catch (BadRequestException exception) when (exception.Key == nameof(AppStrings.OAuthErrorTwoFactorRequired))
+        {
+            twoFactorRequired = true;
         }
         catch (KnownException exception)
         {
@@ -98,6 +103,13 @@ public partial class ConsentPage
 
         redirectToSignIn = (await AuthenticationStateTask).User.IsAuthenticated() is false;
     }
+
+    /// <summary>
+    /// The settings' two-factor section, which brings the user back here once it is on and this session signed in with it
+    /// (See TwoFactorSection.ReturnUrl): the request travels in this page's query string, so coming back resumes it.
+    /// </summary>
+    private string GetTurnOnTwoFactorUrl()
+        => $"{PageUrls.Settings}/{PageUrls.SettingsSections.Tfa}?return-url={Uri.EscapeDataString(NavigationManager.GetRelativePath())}";
 
     private Task Approve() => Submit(oauthController.Approve);
 

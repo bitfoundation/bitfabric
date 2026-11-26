@@ -29,10 +29,14 @@ public partial class AppErrorBoundary
         exceptionHandler.Handle(exception, ExceptionDisplayKind.None);
     }
 
+    /// <summary>
+    /// Brings the layout back, and with it BevTools, opened on the errors logged: its Logs panel has what was logged
+    /// before it was attached too, which its Errors panel has only where it runs from the start.
+    /// </summary>
     private async Task ShowDiagnostic()
     {
         boundaryRef.Recover();
         await Task.Yield();
-        pubSubService.Publish(ClientAppMessages.SHOW_DIAGNOSTIC_MODAL);
+        pubSubService.Publish(ClientAppMessages.SHOW_DEV_TOOLS, "logs level:error");
     }
 }

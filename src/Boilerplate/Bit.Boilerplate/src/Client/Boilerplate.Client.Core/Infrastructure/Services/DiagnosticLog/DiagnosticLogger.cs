@@ -9,7 +9,7 @@ public partial class DiagnosticLogger(TimeProvider timeProvider) : ILogger
     public static IReadOnlyCollection<DiagnosticLogDto> Store => store;
 
     /// <summary>
-    /// Discards this device's buffer. Called when the signed-in user changes, and by the diagnostic modal.
+    /// Discards this device's buffer. Called when the signed-in user changes.
     /// </summary>
     public static void ClearStore() => store.Clear();
 

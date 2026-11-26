@@ -1,0 +1,8 @@
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+// BevTools paints its panels in a theme of its own; this one shows the app's components, so it takes the app's.
+.panel {
+    min-height: 100%;
+    color: $bit-color-foreground-primary;
+    background-color: $bit-color-background-primary;
+}

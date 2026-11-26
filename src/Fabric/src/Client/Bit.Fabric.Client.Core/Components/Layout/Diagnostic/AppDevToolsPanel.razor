@@ -1,0 +1,34 @@
+@inherits AppComponentBase
+
+@* The app's own panel in BevTools (See AppBevTools): what the app knows of this device and of its server, and what a
+   support session asks the app to do. BevTools' own panels cover the rest: Logs, Errors, Network, Runtime, Browser. *@
+<div class="panel">
+    <BitStack Horizontal Wrap AutoHeight Gap="0.5rem" Padding="1rem">
+        @* Deliberately unwrapped: this button exists to prove the unhandled-exception path, so
+           WrapHandled would defeat the only thing it does. *@
+        <BitButton IconOnly
+                   Title="Throw test error"
+                   AriaLabel="Throw test error"
+                   OnClick="ThrowTestException"
+                   IconName="@BitIconName.Error"
+                   Color="BitColor.SecondaryBackground" />
+
+        <BitButton IconOnly
+                   AutoLoading
+                   Title="Clear app files"
+                   AriaLabel="Clear app files"
+                   IconName="@BitIconName.RemoveFrom"
+                   OnClick="WrapHandled(ClearAppFiles)"
+                   Color="BitColor.SecondaryBackground" />
+
+        <BitButton IconOnly
+                   AutoLoading
+                   Title="Update app"
+                   AriaLabel="Update app"
+                   IconName="@BitIconName.UpdateRestore"
+                   OnClick="WrapHandled(UpdateApp)"
+                   Color="BitColor.SecondaryBackground" />
+    </BitStack>
+
+    <DiagnosticReport AutoRun="false" Embedded />
+</div>

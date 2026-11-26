@@ -57,7 +57,7 @@ public partial class ClientAppMessages // : SharedAppMessages, when signalR is e
     public const string THEME_CHANGED = nameof(THEME_CHANGED);
     
     // Diagnostics
-    public const string SHOW_DIAGNOSTIC_MODAL = nameof(SHOW_DIAGNOSTIC_MODAL);
+    public const string SHOW_DEV_TOOLS = nameof(SHOW_DEV_TOOLS);
     
     // ... and more
 }
@@ -185,8 +185,9 @@ unsubscribe = PubSubService.Subscribe(SharedAppMessages.DASHBOARD_DATA_CHANGED, 
 // interop call fails (and its promise rejects, silently) when it cannot be deserialized into string?.
 App.publishMessage('CUSTOM_EVENT', JSON.stringify({ data: 'some data' }));
 
-// Show diagnostic modal
-App.showDiagnostic(); // Publishes SHOW_DIAGNOSTIC_MODAL message
+// Open BevTools, the in-app dev tools, on the app's own tab or on another panel
+App.showDevTools(); // Publishes SHOW_DEV_TOOLS message
+App.showDevTools('logs level:error');
 ```
 
 **How it works**:

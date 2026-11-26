@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Bit.Cli.Commands;
 using Bit.Cli.Infrastructure;
 using Bit.Cli.Tests.Infrastructure;
 
@@ -321,12 +322,14 @@ public class RemoveTests
     }
 
     [TestMethod]
-    public async Task Remove_Should_RemoveAWorktreeWhoseEmptyFolderATerminalKeeps()
+    public async Task Remove_Should_RemoveAWorktreeWhoseFolderATerminalKeeps()
     {
         if (OperatingSystem.IsWindows() is false || await GitIdentity.GitAvailableAsync() is false)
             return;
 
-        using var host = new TestHost(HostOs.Windows, variables: GitIdentity.RealPath(), realProcesses: true);
+        var variables = GitIdentity.RealPath();
+        variables[RemoveCommand.WaitLimitVariable] = "5";
+        using var host = new TestHost(HostOs.Windows, variables: variables, realProcesses: true);
         using var identity = new GitIdentity(host.Root);
         var (main, worktrees) = await CreateRepositoryAsync(host, "feature");
 
@@ -336,9 +339,9 @@ public class RemoveTests
         {
             Assert.AreEqual(0, await host.RunAsync("remove", worktrees[0], "--yes"), host.Output);
 
-            Assert.IsTrue(Directory.Exists(worktrees[0]));
-            Assert.IsEmpty(Directory.EnumerateFileSystemEntries(worktrees[0]));
-            StringAssert.Contains(host.FlatOutput, $"stays, empty, while cmd ({terminal.Id}) is in it");
+            Assert.IsFalse(Directory.Exists(worktrees[0]));
+            Assert.IsTrue(terminal.WaitForExit(TimeSpan.FromSeconds(10)));
+            StringAssert.Contains(host.FlatOutput, $"after stopping cmd ({terminal.Id})");
             StringAssert.Contains(host.FlatOutput, "Removed it from its repository's worktrees");
             CollectionAssert.AreEqual(new[] { "main" }, await WorktreesAsync(main));
         }
@@ -364,33 +367,30 @@ public class RemoveTests
     }
 
     [TestMethod]
-    public async Task Remove_Should_KeepTheEmptyFolderATerminalIsIn()
+    public async Task Remove_Should_StopATerminalThatStaysInTheFolderOnceItsDoneWaiting()
     {
         if (OperatingSystem.IsWindows() is false)
             return;
 
-        using var host = new TestHost(HostOs.Windows);
+        using var host = new TestHost(HostOs.Windows, variables: new Dictionary<string, string> { [RemoveCommand.WaitLimitVariable] = "5" });
         var folder = CreateProject(host);
         host.Runner.On("git", "rev-parse", 128, "fatal: not a git repository");
 
         using var terminal = Process.Start(new ProcessStartInfo(Path.Combine(Environment.SystemDirectory, "cmd.exe")) { WorkingDirectory = folder, UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true, CreateNoWindow = true })!;
+        var stopwatch = Stopwatch.StartNew();
 
         try
         {
             Assert.AreEqual(0, await host.RunAsync("remove", folder, "--yes"), host.Output);
 
-            Assert.IsTrue(Directory.Exists(folder));
-            Assert.IsEmpty(Directory.EnumerateFileSystemEntries(folder));
-            StringAssert.Contains(host.FlatOutput, $"stays, empty, while cmd ({terminal.Id}) is in it");
-            Assert.IsFalse(terminal.HasExited);
+            Assert.IsFalse(Directory.Exists(folder));
+            Assert.IsTrue(terminal.WaitForExit(TimeSpan.FromSeconds(10)));
+            StringAssert.Contains(host.FlatOutput, $"after stopping cmd ({terminal.Id})");
+            Assert.IsGreaterThanOrEqualTo(TimeSpan.FromSeconds(3.9), stopwatch.Elapsed, "bit stopped the terminal before it was done waiting for it to leave.");
         }
         finally
         {
-            if (terminal.HasExited is false)
-            {
-                terminal.Kill();
-                terminal.WaitForExit();
-            }
+            Stop(terminal);
         }
     }
 
@@ -568,30 +568,114 @@ public class RemoveTests
     }
 
     [TestMethod]
-    public async Task Remove_Should_NameTheAppThatHoldsAFileAndLeaveItRunning()
+    public async Task Remove_Should_StopTheAppThatStillHoldsAFileOnceItsDoneWaiting()
+    {
+        if (OperatingSystem.IsWindows() is false)
+            return;
+
+        using var host = new TestHost(HostOs.Windows, variables: new Dictionary<string, string> { [RemoveCommand.WaitLimitVariable] = "5" });
+        var folder = CreateProject(host);
+        host.Runner.On("git", "rev-parse", 128, "fatal: not a git repository");
+        var held = Path.Combine(folder, "src", "Client", "Contoso.Client.Core", "held.txt");
+
+        using var holder = HoldFile(Path.Combine(Environment.SystemDirectory, "cmd.exe"), held);
+        var stopwatch = Stopwatch.StartNew();
+
+        try
+        {
+            Assert.AreEqual(0, await host.RunAsync("remove", folder, "--yes"), host.Output);
+
+            Assert.IsFalse(Directory.Exists(folder));
+            Assert.IsTrue(holder.WaitForExit(TimeSpan.FromSeconds(10)));
+            StringAssert.Contains(host.FlatOutput, $"after stopping cmd ({holder.Id})");
+            Assert.IsGreaterThanOrEqualTo(TimeSpan.FromSeconds(3.9), stopwatch.Elapsed, "bit stopped the app before it was done waiting for it to let go.");
+        }
+        finally
+        {
+            Stop(holder);
+        }
+    }
+
+    [TestMethod]
+    public async Task Remove_Should_NeverWaitMoreThanTenSeconds()
     {
         if (OperatingSystem.IsWindows() is false)
             return;
 
         using var host = new TestHost(HostOs.Windows);
         var folder = CreateProject(host);
-        host.Runner.On("git", "rev-parse", 128, "fatal: not a git repository");
-        var held = Path.Combine(folder, "src", "Client", "Contoso.Client.Core", "held.txt");
+        InARepository(host, folder);
+        host.Runner.OnAsync("git", "status", async (spec, cancellationToken) =>
+        {
+            // git hangs, as on a network drive that doesn't answer, until bit's timeout stops it
+            await Task.Delay(spec.Timeout ?? TimeSpan.FromMinutes(5), cancellationToken);
+            return new ProcessResult { ExitCode = -1, TimedOut = true };
+        });
 
+        var held = Path.Combine(folder, "src", "Client", "Contoso.Client.Core", "held.txt");
         using var holder = HoldFile(Path.Combine(Environment.SystemDirectory, "cmd.exe"), held);
+        using var terminal = Process.Start(new ProcessStartInfo(Path.Combine(Environment.SystemDirectory, "cmd.exe")) { WorkingDirectory = Path.GetDirectoryName(held)!, UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true, CreateNoWindow = true })!;
+        var stopwatch = Stopwatch.StartNew();
 
         try
         {
-            Assert.AreEqual(CliApp.ExitFailed, await host.RunAsync("remove", folder, "--yes"));
+            Assert.AreEqual(0, await host.RunAsync("remove", folder, "--yes"), host.Output);
+            stopwatch.Stop();
 
-            Assert.IsTrue(File.Exists(held));
-            Assert.IsFalse(holder.HasExited);
-            StringAssert.Contains(host.FlatOutput, $"In use by cmd ({holder.Id})");
+            Assert.IsFalse(Directory.Exists(folder));
+            Assert.IsLessThan(TimeSpan.FromSeconds(10), host.Runner.Calls.Single(c => c.Arguments.FirstOrDefault() is "status").Timeout!.Value, "git status may take only its share of the 10 seconds.");
+            StringAssert.Contains(host.FlatOutput, "git didn't answer in time, so bit couldn't check everything deleting it would lose.");
+            StringAssert.Contains(host.FlatOutput, $"cmd ({holder.Id})");
+            StringAssert.Contains(host.FlatOutput, $"cmd ({terminal.Id})");
+            Assert.IsLessThan(TimeSpan.FromSeconds(12), stopwatch.Elapsed, "bit remove waited more than 10 seconds, with some time for itself.");
         }
         finally
         {
             Stop(holder);
+            Stop(terminal);
         }
+    }
+
+    [TestMethod]
+    [DataRow(HostOs.Windows)]
+    [DataRow(HostOs.Linux)]
+    public async Task Remove_Should_LeaveWhatItHasNoTimeForToTheBackground(HostOs os)
+    {
+        // No time at all: the folder is moved aside at once, and deleted by a process of its own
+        using var host = new TestHost(os, variables: new Dictionary<string, string> { [RemoveCommand.WaitLimitVariable] = "0" });
+        var folder = CreateProject(host);
+
+        Assert.AreEqual(0, await host.RunAsync("remove", folder, "--yes"), host.Output);
+
+        Assert.IsFalse(Directory.Exists(folder));
+        Assert.IsEmpty(host.Runner.Calls, "With no time, bit runs no git.");
+        StringAssert.Contains(host.FlatOutput, "the last of its files go in the background");
+
+        var delete = host.Runner.Detached.Single();
+        var aside = Path.Combine(delete.WorkingDirectory!, delete.Arguments[^1]);
+        Assert.AreEqual(host.WorkingDirectory, delete.WorkingDirectory);
+        StringAssert.Matches(delete.Arguments[^1], new System.Text.RegularExpressions.Regex("^\\.bit-remove-[0-9a-f]{8}$"));
+        CollectionAssert.AreEqual(os is HostOs.Windows ? new[] { "/d", "/c", "rd", "/s", "/q", delete.Arguments[^1] } : new[] { "-rf", "--", delete.Arguments[^1] }, delete.Arguments.ToArray());
+        Assert.AreEqual(os is HostOs.Windows ? "cmd.exe" : "rm", delete.FileName);
+        Assert.IsTrue(File.Exists(Path.Combine(aside, "Contoso.slnx")), "The fake runner deletes nothing, so the folder is where bit moved it.");
+    }
+
+    [TestMethod]
+    public async Task Remove_Should_DeleteWhatItMovedAsideInTheBackground()
+    {
+        using var host = new TestHost(variables: new Dictionary<string, string>(GitIdentity.RealPath()) { [RemoveCommand.WaitLimitVariable] = "0" }, realProcesses: true);
+        var folder = CreateProject(host);
+
+        Assert.AreEqual(0, await host.RunAsync("remove", folder, "--yes"), host.Output);
+
+        Assert.IsFalse(Directory.Exists(folder));
+
+        for (var i = 0; i < 100 && Directory.EnumerateDirectories(host.WorkingDirectory, ".bit-remove-*").Any(); i++)
+        {
+            await Task.Delay(100);
+        }
+
+        Assert.IsEmpty(Directory.EnumerateDirectories(host.WorkingDirectory, ".bit-remove-*"), "The background deletion left the folder behind.");
     }
 
     [TestMethod]
