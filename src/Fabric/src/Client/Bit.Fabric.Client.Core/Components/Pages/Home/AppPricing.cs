@@ -102,7 +102,8 @@ public static class AppPricing
         l[nameof(AppStrings.PricingSavingWhyAi)],
         l[nameof(AppStrings.PricingSavingWhyServer), Euros(ExampleOwnServer)],
         l[nameof(AppStrings.PricingSavingWhyTests)],
-        l[nameof(AppStrings.PricingSavingWhyBills)]
+        l[nameof(AppStrings.PricingSavingWhyBills)],
+        l[nameof(AppStrings.PricingSavingWhyContext)]
     ];
 
     /// <summary>What a license gives: the right to keep developing.</summary>

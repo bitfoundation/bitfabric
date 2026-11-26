@@ -1,8 +1,9 @@
 namespace Bit.Fabric.Client.Films.Components;
 
 /// <summary>
-/// A feature's film, in the home page's dialog: its scenes play by themselves in a loop on a drawn device, with a caption
-/// under each, and can be paused, replayed or stepped through. Two-step sign-in's was the first one, and the model for
+/// A feature's film, in the home page's dialog: its scenes play by themselves once on a drawn device, with a caption under
+/// each, and can be paused, replayed or stepped through. At its end it stops on Replay, and on Learn more when the feature
+/// has a page that shows it live (<see cref="MoreUrl"/>). Two-step sign-in's was the first one, and the model for
 /// every feature (bitfabric-internal/specs/home-page.md, 2026-11-07).
 /// </summary>
 public partial class AppHomeFilm
@@ -21,9 +22,13 @@ public partial class AppHomeFilm
     /// </summary>
     [Parameter] public RenderFragment<string>? Logo { get; set; }
 
+    /// <summary>Where the feature can be seen live, offered when the film ends.</summary>
+    [Parameter] public string? MoreUrl { get; set; }
+
     private int index;
     private int elapsed;
     private bool isPaused;
+    private bool isEnded;
 
     private AppHomeFilmScene Current => Scenes[Math.Min(index, Scenes.Length - 1)];
 
@@ -66,7 +71,7 @@ public partial class AppHomeFilm
             {
                 await Task.Delay(TickMilliseconds, cancellationToken);
 
-                if (isPaused)
+                if (isPaused || isEnded)
                     continue;
 
                 elapsed += TickMilliseconds;
@@ -75,7 +80,14 @@ public partial class AppHomeFilm
                     continue;
 
                 elapsed = 0;
-                index = (index + 1) % Scenes.Length;
+                if (index == Scenes.Length - 1)
+                {
+                    isEnded = true;
+                }
+                else
+                {
+                    index++;
+                }
                 await InvokeAsync(StateHasChanged);
             }
         }
@@ -86,6 +98,7 @@ public partial class AppHomeFilm
     {
         index = (scene + Scenes.Length) % Scenes.Length;
         elapsed = 0;
+        isEnded = false;
     }
 
     private void Replay()

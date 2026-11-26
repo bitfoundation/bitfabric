@@ -211,8 +211,8 @@ public partial class FeaturesPage
         new("platforms", Localizer[nameof(AppStrings.AppHomeEveryPlatformFromOneProject)], Localizer[nameof(AppStrings.AppHomeOneCodebaseBecomesYourAppsYour)],
         [
             new("apps", BitIconName.CellPhone, Localizer[nameof(AppStrings.AppHomeAndroidIOSWindowsAndMacOS)], Localizer[nameof(AppStrings.AppHomeRealAppsWithUnlimitedAccessToNative)], Explained: false),
-            new("website", BitIconName.Globe, Localizer[nameof(AppStrings.AppHomeAFastWebsiteSearchEnginesLove)], Localizer[nameof(AppStrings.AppHomePagesThatOpenFastAndAreReadyFor)]),
-            new("admin-panel", BitIconName.BarChartVerticalFill, Localizer[nameof(AppStrings.AppHomeAnAdminPanel)], Localizer[nameof(AppStrings.AppHomeTheBackOfficeForYouAndYourTeamInThe)]),
+            new("website", BitIconName.Globe, Localizer[nameof(AppStrings.AppHomeAFastWebsiteSearchEnginesLove)], Localizer[nameof(AppStrings.AppHomePagesThatOpenFastAndAreReadyFor)], More: "https://sales.bitplatform.dev/"),
+            new("admin-panel", BitIconName.BarChartVerticalFill, Localizer[nameof(AppStrings.AppHomeAnAdminPanel)], Localizer[nameof(AppStrings.AppHomeTheBackOfficeForYouAndYourTeamInThe)], More: AppHomeNumbers.AdminPanelDemoUrl),
             new("tenants", BitIconName.Org, Localizer[nameof(AppStrings.AppHomeManyCompaniesOneApp)], Localizer[nameof(AppStrings.AppHomeMultiTenantAndSaaSReady)]),
             new("gdpr", BitIconName.ShieldSolid, Localizer[nameof(AppStrings.AppHomeGDPRFriendly)], Localizer[nameof(AppStrings.AppHomeUsersChooseWhatTheyAllowDownload)]),
             new("offline", BitIconName.CloudDownload, Localizer[nameof(AppStrings.AppHomeWorksOffline)], Localizer[nameof(AppStrings.AppHomeItKeepsWorkingWithoutAConnectionAnd)]),
@@ -263,12 +263,15 @@ public partial class FeaturesPage
         new("workbench", Localizer[nameof(AppStrings.AppHomeDesignWithTheRealThing)], Localizer[nameof(AppStrings.AppHomeTheWorkbenchShowsYourPagesOnSample)],
         [
             new("any-ai", BitIconName.Robot, Localizer[nameof(AppStrings.AppHomeWorksWithAnyAI)], Localizer[nameof(AppStrings.AppHomeNotTiedToOneCompanySDesignTool)]),
-            new("real-components", BitIconName.Color, Localizer[nameof(AppStrings.AppHomeRealComponents)], Localizer[nameof(AppStrings.AppHomePagesAreDrawnWithTheComponentsTheApp)]),
-            new("states", BitIconName.Devices3, Localizer[nameof(AppStrings.AppHomeEveryStateEveryDevice)], Localizer[nameof(AppStrings.AppHomePhonesTabletsAndDesktopsLightAndDark)]),
+            new("real-components", BitIconName.Color, Localizer[nameof(AppStrings.AppHomeRealComponents)], Localizer[nameof(AppStrings.AppHomePagesAreDrawnWithTheComponentsTheApp)], More: AppHomeNumbers.WorkbenchDemoUrl),
+            new("states", BitIconName.Devices3, Localizer[nameof(AppStrings.AppHomeEveryStateEveryDevice)], Localizer[nameof(AppStrings.AppHomePhonesTabletsAndDesktopsLightAndDark)], More: AppHomeNumbers.WorkbenchDemoUrl),
             // Side by side, store screenshots and flows are cards of their own
-            new("side-by-side", BitIconName.Devices2, Localizer[nameof(AppStrings.AppHomeSideBySideOnEveryDevice)], Localizer[nameof(AppStrings.AppHomeSideBySideOnEveryDeviceText)]),
+            new("side-by-side", BitIconName.Devices2, Localizer[nameof(AppStrings.AppHomeSideBySideOnEveryDevice)], Localizer[nameof(AppStrings.AppHomeSideBySideOnEveryDeviceText)], More: AppHomeNumbers.WorkbenchDemoUrl),
             new("screenshots", BitIconName.DesktopScreenshot, Localizer[nameof(AppStrings.AppHomeStoreScreenshots)], Localizer[nameof(AppStrings.AppHomeStoreScreenshotsText)]),
-            new("flows", BitIconName.Flow, Localizer[nameof(AppStrings.AppHomeFlowsBetweenYourPages)], Localizer[nameof(AppStrings.AppHomeFlowsBetweenYourPagesText)])
+            new("flows", BitIconName.Flow, Localizer[nameof(AppStrings.AppHomeFlowsBetweenYourPages)], Localizer[nameof(AppStrings.AppHomeFlowsBetweenYourPagesText)], More: $"{AppHomeNumbers.WorkbenchDemoUrl}/flows"),
+            // Shown live in the template's Workbench rather than in a film
+            new("boards", BitIconName.ViewDashboard, Localizer[nameof(AppStrings.AppHomeBoards)], Localizer[nameof(AppStrings.AppHomeBoardsText)], Explained: false, Url: $"{AppHomeNumbers.WorkbenchDemoUrl}/boards"),
+            new("progress", BitIconName.TaskList, Localizer[nameof(AppStrings.AppHomeAProgressPage)], Localizer[nameof(AppStrings.AppHomeAProgressPageText)], Explained: false, Url: $"{AppHomeNumbers.WorkbenchDemoUrl}/progress")
         ]),
         new("growth", Localizer[nameof(AppStrings.AppHomeGrowKeepAndEarn)], Localizer[nameof(AppStrings.AppHomeWhatBringsUsersBackIsAlreadyWiredIn)],
         [
@@ -332,7 +335,9 @@ public partial class FeaturesPage
             new("performance-scan", BitIconName.Stopwatch, Localizer[nameof(AppStrings.AppHomePerformanceScanner)], Localizer[nameof(AppStrings.AppHomeHowFastYourPagesOpenWithAFixYourAI)]),
             new("seo-scan", BitIconName.Search, Localizer[nameof(AppStrings.AppHomeSEOScanner)], Localizer[nameof(AppStrings.AppHomeWhatKeepsYourPagesOutOfGoogleAndBing)]),
             new("accessibility-scan", BitIconName.AccessibilityChecker, Localizer[nameof(AppStrings.AppHomeAccessibilityScanner)], Localizer[nameof(AppStrings.AppHomeWhetherEveryoneCanUseYourAppScreen)]),
-            new("status-page", BitIconName.SyncStatus, Localizer[nameof(AppStrings.AppHomeAStatusPage)], Localizer[nameof(AppStrings.AppHomeOnYourOwnDomainSoYourCustomersSee)]),
+            new("status-page", BitIconName.SyncStatus, Localizer[nameof(AppStrings.AppHomeAStatusPage)], Localizer[nameof(AppStrings.AppHomeOnYourOwnDomainSoYourCustomersSee)], More: AppHomeNumbers.DemoStatusPageUrl),
+            // The app's own notice reads the status page from bit Fabric, not from the app's server, so it speaks while that server is down
+            new("status-notice", BitIconName.Megaphone, Localizer[nameof(AppStrings.AppHomeYourAppTellsItsUsersWhenItSDown)], Localizer[nameof(AppStrings.AppHomeEvenWithYourServerCompletelyDown)], More: AppHomeNumbers.DemoStatusPageUrl),
             // No "New" tag, as everything here is
             new("alerts", BitIconName.Ringer, Localizer[nameof(AppStrings.AppHomeAlertsInSlackTeamsAndDiscord)], Localizer[nameof(AppStrings.AppHomeYourTeamHearsItWhereItAlreadyTalks)])
         ],
