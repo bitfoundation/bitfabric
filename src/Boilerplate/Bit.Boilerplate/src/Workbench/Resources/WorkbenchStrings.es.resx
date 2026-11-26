@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>Lo que tu agente te muestra como página en lugar de una respuesta larga: un flujo dibujado, opciones lado a lado, números para probar.</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>Haz un tablero de cómo se despliega nuestra aplicación.</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>Dibuja qué pasa cuando un usuario olvida su contraseña.</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>Compara tres proveedores de correo lado a lado, con sus precios.</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>Haz un tablero donde pueda probar precios para nuestros planes y ver los ingresos del mes.</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>Aún no hay tableros. Pídele uno a tu agente y aparecerá aquí.</value>

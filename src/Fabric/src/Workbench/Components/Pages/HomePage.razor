@@ -183,7 +183,10 @@
                 </ul>
                 <figure class="prompt boards-prompt">
                     <figcaption class="prompt-label"><BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.HomeCtaPromptLabel)]</figcaption>
-                    <blockquote class="prompt-text">@Localizer[nameof(WorkbenchStrings.BoardsPrompt)]</blockquote>
+                    @foreach (var promptKey in WorkbenchBoardCatalog.PromptKeys)
+                    {
+                        <blockquote class="prompt-text">@Localizer[promptKey]</blockquote>
+                    }
                 </figure>
                 <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.ViewDashboard" Href="@WorkbenchUrls.Boards" Class="boards-open">@Localizer[nameof(WorkbenchStrings.HomeBoardsOpen)]</BitButton>
             </div>

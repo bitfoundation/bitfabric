@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>ما يعرضه عليك وكيلك في صفحة بدل جواب طويل: مسار مرسوم، وخيارات جنبًا إلى جنب، وأرقام تجرّبها.</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>اصنع لوحة تُظهر كيف يُنشر تطبيقنا.</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>ارسم ما يحدث عندما ينسى مستخدم كلمة مروره.</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>قارن بين ثلاثة مزوّدين للبريد الإلكتروني جنبًا إلى جنب، مع أسعارهم.</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>اصنع لوحة أجرّب فيها أسعار خططنا وأرى الدخل الشهري.</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>لا توجد لوحات بعد. اطلب واحدة من وكيلك، وستظهر هنا.</value>

@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>What your agent shows you as a page instead of a long answer: a flow drawn, options side by side, numbers to try.</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>Make a board of how our app gets deployed.</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>Draw what happens when a user forgets their password.</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>Compare three email providers side by side, with their prices.</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>Make a board where I can try prices for our plans and see the monthly income.</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>No boards yet. Ask your agent for one, and it shows up here.</value>

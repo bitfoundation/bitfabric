@@ -4614,8 +4614,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>What your agent shows you as a page instead of a long answer: a flow drawn, options side by side, numbers to try.</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>Make a board of how bit Fabric's monitoring works.</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>Draw how a license gets from checkout into a customer's project.</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>Compare three payment providers for our plans, side by side.</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>Make a board where I can try plan prices and see what a year brings in.</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>No boards yet. Ask your agent for one, and it shows up here.</value>
