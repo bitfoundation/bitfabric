@@ -53,14 +53,15 @@ public class ProjectSwitcherTests
         Assert.Contains("No environment yet", cut.FindAll(".switcher-item").Single(item => item.TextContent.Contains("Invoices")).TextContent);
 
         // A search by name, or by an environment's address.
-        cut.Find(".switcher-search input").Input("shop.example");
+        // Found and typed into in one go: the search box renders again as the list filters, which gives the input a new handler.
+        await cut.InvokeAsync(() => cut.Find(".switcher-search input").Input("shop.example"));
         cut.WaitForAssertion(() => Assert.HasCount(1, cut.FindAll(".switcher-item")));
 
         var shop = cut.Find(".switcher-item");
         Assert.Contains("Corner shop", shop.TextContent);
         Assert.AreEqual($"{PageUrls.Projects}/{projects[0].Id}?tab=incidents", shop.GetAttribute("href"), "It opens on the same tab.");
 
-        cut.Find(".switcher-search input").Input("nothing like it");
+        await cut.InvokeAsync(() => cut.Find(".switcher-search input").Input("nothing like it"));
         cut.WaitForAssertion(() => Assert.Contains("No project matches.", cut.Markup));
 
         A.CallTo(() => controller.GetProjects(A<string?>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
