@@ -8,4 +8,5 @@
                Items="items"
                Class="@Class"
                Styles="styles"
-               Title="@Localizer[nameof(WorkbenchStrings.WorkbenchSections)]" />
+               Title="@Localizer[nameof(WorkbenchStrings.WorkbenchSections)]"
+               AriaLabel="@($"{Localizer[WorkbenchSections.TextKeyOf(Section)]} ({Localizer[nameof(WorkbenchStrings.WorkbenchSections)]})")" />

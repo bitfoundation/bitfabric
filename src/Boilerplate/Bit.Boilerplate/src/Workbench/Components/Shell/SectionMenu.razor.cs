@@ -3,7 +3,8 @@ namespace Boilerplate.Workbench.Components.Shell;
 /// <summary>
 /// The Workbench's sections as one button that names the section the user is in and opens all of them, Home included,
 /// with the count of what the agents' tasks wait for on Progress: the header's on a phone, and the breadcrumb's in a page's
-/// own view, whose toolbar has no room for <see cref="SectionNav"/>.
+/// own view, whose toolbar has no room for <see cref="SectionNav"/>. Its name adds that it holds the sections, as a page's
+/// view already has a button named Pages, the one that folds its list of pages.
 /// </summary>
 public partial class SectionMenu
 {

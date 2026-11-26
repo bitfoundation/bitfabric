@@ -4,7 +4,7 @@
 
 <PageTitle>@(Board is { } titled ? $"{Localizer[titled.TitleKey]} · {Localizer[nameof(WorkbenchStrings.Boards)]}" : $"{Localizer[nameof(WorkbenchStrings.Boards)]} · {Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]}")</PageTitle>
 
-<div class="boards-page">
+<div class="boards-page @(BoardId is null ? null : "showing-board")">
     <ShellHeader Section="WorkbenchSection.Boards" />
 
     @if (BoardId is null)

@@ -8,6 +8,17 @@
     background-color: $bit-color-background-primary;
 }
 
+// An open board and the list beside it scroll on their own under the header; a phone scrolls the page.
+.showing-board {
+    height: 100dvh;
+    overflow: hidden;
+
+    @include lt-md {
+        height: auto;
+        overflow: visible;
+    }
+}
+
 // ---- The list: a short head, then a card per board with its icon drawn large.
 .list {
     gap: 2.5rem;
@@ -238,20 +249,15 @@
 
 // ---- An open board: the others at its side, the board beside them.
 .item-layout {
+    min-height: 0;
     flex-grow: 1;
     display: flex;
-    align-items: stretch;
 }
 
-// Stays in sight while a long board scrolls, under the header.
 .side {
-    top: 52px;
     flex-shrink: 0;
     width: 17.5rem;
-    position: sticky;
     overflow-y: auto;
-    align-self: flex-start;
-    max-height: calc(100dvh - 52px);
     border-inline-end: 1px solid $bit-color-border-tertiary;
 
     @include lt-md {
@@ -263,7 +269,12 @@
     min-width: 0;
     flex-grow: 1;
     display: flex;
+    overflow-y: auto;
     flex-direction: column;
+
+    @include lt-md {
+        overflow: visible;
+    }
 }
 
 // On a phone, in place of the side list.
