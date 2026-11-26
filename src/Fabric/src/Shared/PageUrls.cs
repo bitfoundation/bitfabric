@@ -166,9 +166,6 @@ public static partial class PageUrls
     [Description("Review and revoke the external applications authorized over OAuth. Requires sign-in.")]
     public const string OAuthClients = "/oauth-clients";
 
-    [Description("Run this deployment: the status of every dependency it relies on, and its background jobs. Requires sign-in.")]
-    public const string Operations = "/operations";
-
     /// <summary>
     /// Signed out, it only says what signing in gives (bitfabric-internal/specs/monitoring.md), so it isn't in the sitemap
     /// (bitfabric-internal/specs/home-page.md, 2026-11-19).

@@ -4,7 +4,7 @@ using Bit.Fabric.Shared.Features.Monitoring.Dtos;
 namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 
 /// <summary>
-/// A project's Scans tab (bitfabric-internal/specs/scanners.md), in the Operations look of the other tabs: each kind with
+/// A project's Scans tab (bitfabric-internal/specs/scanners.md), in the look of the Overview and SLA tabs: each kind with
 /// its grade, score or days left and when and why it ran; every finding of the latest scans ranked urgent first, each with
 /// what it means, why it matters, the fix, a prompt for the customer's AI agent and "This is wrong"; one prompt that fixes
 /// them all; the past runs; and when bit Fabric scans, the deployment setting in the home page's words. While scans wait or

@@ -262,7 +262,7 @@ The project includes **health check endpoints** to monitor application health.
 
 1. **`/health`** - readiness. Runs every registered check, and returns 503 only when one of them reports Unhealthy.
 2. **`/alive`** - liveness. Runs only the checks tagged `"live"`, which today is the disk-space check alone.
-3. **`/healthz`** - the detailed report behind the **Operations** page (Management menu). It keeps the HealthChecks UI
+3. **`/healthz`** - the detailed report, which [bit Fabric](https://bitfabric.co)'s monitoring reads. It keeps the HealthChecks UI
    format and adds each check's failure status, timeout, category, whether it only misses its settings (`isNotConfigured`)
    and full exception, plus the time of the report. It also says
    which build answered and since when: `applicationVersion` (the informational version, which ends with the commit
@@ -275,10 +275,10 @@ The project includes **health check endpoints** to monitor application health.
 `/healthz`, which names every dependency and carries each failure's exception (possibly a connection string), is
 mapped everywhere too, but behind its feature and never cached. It is also an **OAuth resource** (`OAuthResources`), so
 an external monitor can read it with a token of its own instead of a user's session, minted through the same consent
-page as `/dev-mcp`. Granting one takes more than reading the page does: the feature **and** a session that signed in
+page as `/dev-mcp`. Granting one takes more than reading the report does: the feature **and** a session that signed in
 with two factor (`GrantPolicies` on the resource's row), because that token reads the report unattended. A token gets
 the report without the exceptions, which can carry a server name or a connection string, nor the description a check
-that throws takes from its exception's message; only the app's own session, which the Operations page uses, reads them. The resource's metadata document
+that throws takes from its exception's message; only a signed-in user's own session reads them. The resource's metadata document
 (`/.well-known/oauth-protected-resource/healthz`, anonymous like every RFC 9728 document) lists the `healthz` scope and carries
 `bit_template_version`, the version `bit.json` records, so a monitor can tell an app made from bit-bp and its version
 before it asks for a token. A refused token request says why in `error_description`, such as a revoked approval or
@@ -293,32 +293,11 @@ expose `/health` publicly or to restrict it to your load balancer's network, bec
 work behind it. `/health` and `/alive` responses are output-cached for 10 seconds, but that cache does not apply to a
 failing (non-200) response.
 
-The **Operations** page (`/operations`) is where a deployment is run from. It opens the **Hangfire dashboard** for a user
-who also holds `AppFeatures.System.Jobs_Manage`, the claim
-[`HangfireDashboardAuthorizationFilter`](/src/Server/Bit.Fabric.Server.Api/Infrastructure/RequestPipeline/HangfireDashboardAuthorizationFilter.cs)
-checks, and only in a browser app served by the server: a hybrid app would open the url in the system browser, which
-shares no cookie jar with its web view. The button refreshes the access token, calls `IUserController.UpdateSession`,
-which writes the `access_token` cookie with the token's own expiry, and then opens `/hangfire`, a plain browser
-navigation for which that cookie is the only credential.
-
-The page also reads `/healthz`, refreshes it on an interval you pick, and keeps each
-check's recent probes while it is open. It shows how long each check took against its timeout, which checks take the
-instance out of rotation when they fail, when a cached check really ran, and each failure's details. It also lists
-what no check can prove (push notification, email and SMS delivery, social sign in, ...) and how to verify each. Push,
-email and SMS have a button that sends a test message through `IDiagnosticController`: the push to the current device's
-subscription, the email and the SMS, which need `Operations_View` too, to the signed-in user's own address and phone number, if the
-account has them. A last section, **Configuration**, reads `IDiagnosticController.GetDeploymentConfiguration` - also
-`Operations_View` - and shows the settings no check reports: a check proves a dependency answers, not that output
-caching, prerendering, forwarded headers, the telemetry exporters or a force-update floor are switched on. Whatever a
-check already covers is deliberately absent from it, and no credential is ever in it - each one is a boolean saying
-whether it is set, which `DeploymentConfigurationTests` asserts against the deployment's own connection strings.
-Each check is shown under the title, icon and description its report gives it: describe a check of your own with
-`.Describe(...)` next to its registration and give it a category tag, as the end of this section shows. It is grouped
-under the category its report names, or under **Other** when the page has no group for that category.
-
-With a standalone API, the page also reads `Server.Web`'s own `/healthz`, behind the same feature, and shows its checks
-under **Web server** with a `web:` prefix (`web:binStorage`, `web:serverApi`). If that report can't be read, a
-`web:healthz` check says so. A standalone WASM app, and a hybrid app without `WebAppUrl`, have no `Server.Web` to ask.
+The app has no page of its own that shows this report. For a deployed app, register it at
+[bitfabric.co](https://bitfabric.co): bit Fabric's monitoring connects through OAuth with the `healthz` scope, which a
+user holding `Operations_View` grants from a session that signed in with two factor, and reads `/healthz` from then on.
+To read the report yourself, open `/healthz` on the server signed in with `Operations_View`, or ask the environment's
+dev-mcp for `GetHealth`; the app's logs say what happened around a failure.
 
 The app tells its own users when its status page reports a problem, on the web and in the Android, iOS and Windows apps
 alike. Put the address of the page's `summary.json` in `StatusPageSummaryUrl`, in Client.Core's `appsettings.json` or,
@@ -333,6 +312,23 @@ is logged as an error and shows nothing. The Content-Security-Policy allows its 
 BevTools' Status tab ([`AppStatusPagePanel`](/src/Client/Bit.Fabric.Client.Core/Components/Layout/Diagnostic/AppStatusPagePanel.razor.cs))
 reads the same summary the moment it opens and shows the page's overall status, its components, open incidents and
 planned maintenance, what the notice shows the user for them, or why the read failed, with Check again to read it once more.
+
+The **Hangfire dashboard** is at `/hangfire`, for a user who holds `AppFeatures.System.Jobs_Manage`, the claim
+[`HangfireDashboardAuthorizationFilter`](/src/Server/Bit.Fabric.Server.Api/Infrastructure/RequestPipeline/HangfireDashboardAuthorizationFilter.cs)
+checks. A plain browser navigation carries only a cookie: the `access_token` cookie, which `IUserController.UpdateSession`
+writes with the token's own expiry when a browser app served by the server starts or signs in. Open it in the browser
+that runs the app; a hybrid app's web view shares no cookie jar with the system browser.
+
+No check can prove a delivery, so `IDiagnosticController` sends test messages: `SendTestPushNotification` to a device's
+subscription, and `SendTestEmail` and `SendTestSms`, which need `Operations_View` too, to the signed-in user's own address
+and phone number, if the account has them. `IDiagnosticController.GetDeploymentConfiguration` - also `Operations_View` -
+returns the settings no check reports: a check proves a dependency answers, not that output caching, prerendering,
+forwarded headers, the telemetry exporters or a force-update floor are switched on. Whatever a check already covers is
+deliberately absent from it, and no credential is ever in it - each one is a boolean saying whether it is set, which
+`DeploymentConfigurationTests` asserts against the deployment's own connection strings.
+
+With a standalone API, `Server.Web` serves its own `/healthz` (`binStorage`, `serverApi`) and `/deployment-configuration`,
+behind the same feature, as it is a process of its own.
 
 ### Registered Checks
 
@@ -350,8 +346,8 @@ It also adds checks for remote dependencies. Each one has a timeout and reports 
 provider outage does not take an otherwise healthy instance out of the load balancer:
 - **`fileStorage`**: the blob storage.
 - **`website:<address>`**: one check for each of your other sites, listed in `HealthChecks:Websites`, such as the landing
-  page, a blog on WordPress or the docs, so a monitor reading `/healthz` watches them along with the app and the Operations
-  page shows a card for each. Each one gets a GET that has to end, after its redirects, in a success status: behind a CDN
+  page, a blog on WordPress or the docs, so a monitor reading `/healthz` watches them along with the app, with an entry
+  for each. Each one gets a GET that has to end, after its redirects, in a success status: behind a CDN
   such as Cloudflare a TCP connection succeeds whatever state the site is in. It gets 10 seconds, so a site that hangs
   can't hold `/health` past a monitor's timeout. A check that failed says what went wrong in its description: its status
   code, a Cloudflare challenge, a name that doesn't resolve, a TLS or connection error, or no answer in time. A bare host is
@@ -425,7 +421,7 @@ In development, `sms`,
 `entraId`, `appleSignIn`, `googleSignIn`, `gitHubSignIn`, `twitterSignIn`, `facebookSignIn`, `webPush`, `firebase`, `apns`,
 and the AI checks are registered only when their settings are present. In any other environment they are always
 registered, and one without settings reports Degraded with "... is not configured", and `/healthz` marks its entry
-`isNotConfigured`, so the Operations page and a monitor show it as a setup gap rather than as a failing dependency. A
+`isNotConfigured`, so a monitor shows it as a setup gap rather than as a failing dependency. A
 deployment that ships the code for a dependency but leaves it unconfigured is most likely a mistake. If your project
 doesn't use one of them, remove its code, check included.
 
@@ -454,11 +450,11 @@ standalone API, `Server.Web` has only `redis-cache` and also checks the API's `/
 Anything you add that a request path genuinely depends on should report Unhealthy; anything external should not.
 
 Every check carries one of `HealthCheckCategories` (`Platform`, `Messaging`, `Identity`, `AI`, `Integrations`, `Websites`) as a tag,
-which `/healthz` reports as the entry's `category`, so the Operations page and a monitor can group a check they don't know
-by name. Tag yours too, e.g. `tags: [HealthCheckCategories.Integrations]` for a payment gateway, a map or a CRM; a
-category of your own, `category:<Name>`, works as well. Each entry also carries the check's `title`, `iconName` (a
-`BitIconName`) and `about`, what a pass proves, from `HealthCheckDescriptions`, so the Operations page and a monitor
-show it the way the app names it. Describe yours next to its registration, e.g.
+which `/healthz` reports as the entry's `category`, so a monitor can group a check it doesn't know by name. Tag yours
+too, e.g. `tags: [HealthCheckCategories.Integrations]` for a payment gateway, a map or a CRM; a category of your own,
+`category:<Name>`, works as well. Each entry also carries the check's `title`, `iconName` (a `BitIconName`) and `about`,
+what a pass proves, from `HealthCheckDescriptions`, so a monitor shows it the way the app names it. Describe yours next
+to its registration, e.g.
 `.Describe("paymentGateway", "Payment gateway", "Money", "Authorizes and voids a one cent payment.")`; one described
 nowhere is reported under its registration name, with its category's icon.
 
