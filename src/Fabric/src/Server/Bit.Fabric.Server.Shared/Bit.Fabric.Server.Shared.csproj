@@ -28,4 +28,13 @@
         <ProjectReference Include="..\..\Shared\Bit.Fabric.Shared.csproj" />
     </ItemGroup>
 
+    <!-- The project's id in bit.json, which /healthz reports (See HealthReportDto.ProjectId). -->
+    <PropertyGroup Condition="'$(BitProjectId)' == '' AND Exists('$(MSBuildThisFileDirectory)../../../bit.json')">
+        <BitProjectId>$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)../../../bit.json')), '"projectId"\s*:\s*"([^"]+)"').Groups[1].Value)</BitProjectId>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(BitProjectId)' != ''">
+        <AssemblyMetadata Include="BitProjectId" Value="$(BitProjectId)" />
+    </ItemGroup>
+
 </Project>
