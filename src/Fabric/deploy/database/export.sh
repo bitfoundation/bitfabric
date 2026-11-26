@@ -23,7 +23,7 @@ if [[ -f "$new_marker" ]]; then
     exit 0
 fi
 
-rm -f "$dumps/pending"
+rm -f "$dumps/pending" "$dumps/pending.tmp"
 if [[ ! -s "$previous/PG_VERSION" ]]; then
     say "there is no earlier database to export"
     exit 0
@@ -64,12 +64,26 @@ if [[ -n "$other_roles" ]]; then
     say "The database has roles besides $user ($other_roles), which this copy doesn't carry. Move them by hand first."
     exit 1
 fi
-mapfile -t databases < <(sql -d postgres -c "select datname from pg_database where datallowconn and not datistemplate and datname <> 'postgres' order by 1")
+# Read into a variable first: a query that fails there stops the script, where one feeding mapfile would leave it an
+# empty list. A server with no database of the app's is refused too, rather than leaving PostgreSQL 19 empty.
+database_list="$(sql -d postgres -c "select datname from pg_database where datallowconn and not datistemplate and datname <> 'postgres' order by 1")"
+if [[ -z "$database_list" ]]; then
+    say "The earlier server holds no database besides postgres, so there is nothing to move. Look at it before deploying again."
+    exit 1
+fi
+mapfile -t databases <<< "$database_list"
 
 # Each table's rows, for upgrade.sh to check its copy against.
 counts() {
     printf '%s \\gexec\n' "select format('select %L, count(*) from %I.%I', n.nspname || '.' || c.relname, n.nspname, c.relname) from pg_class c join pg_namespace n on n.oid = c.relnamespace where c.relkind in ('r', 'p') and n.nspname not in ('pg_catalog', 'information_schema') and n.nspname !~ '^pg_toast' order by 1" \
         | sql -d "$1" -f -
+}
+
+# The database's own settings (ALTER DATABASE ... SET, ALTER ROLE ... IN DATABASE ... SET), which pg_restore --create
+# brings over and upgrade.sh checks.
+settings() {
+    printf '%s\n' "select coalesce(r.rolname, '') || '|' || array_to_string(s.setconfig, ',') from pg_db_role_setting s join pg_database d on d.oid = s.setdatabase left join pg_roles r on r.oid = s.setrole where d.datname = :'database' order by 1" \
+        | sql -d postgres -v database="$1" -f -
 }
 
 stamp="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -80,12 +94,12 @@ pg_dumpall -h /tmp -U "$user" --globals-only --no-role-passwords > "$folder/glob
 for database in "${databases[@]}"; do
     counts "$database" > "$folder/$database.rows.txt"
     sql -d "$database" -c 'select extname from pg_extension order by 1' > "$folder/$database.extensions.txt"
+    settings "$database" > "$folder/$database.settings.txt"
     pg_dump -h /tmp -U "$user" -Fc -f "$folder/$database.dump" "$database"
-    say "dumped $database ($(du -h "$folder/$database.dump" | cut -f1), $(wc -l < "$folder/$database.rows.txt") tables)"
+    say "dumped $database ($(du -h "$folder/$database.dump" | cut -f1), $(wc -l < "$folder/$database.rows.txt") tables, $(wc -l < "$folder/$database.settings.txt") database settings)"
 done
-: > "$folder/databases.txt"
-for database in "${databases[@]}"; do
-    printf '%s\n' "$database" >> "$folder/databases.txt"
-done
-printf '%s\n' "$folder" > "$dumps/pending"
+printf '%s\n' "${databases[@]}" > "$folder/databases.txt"
+# Published last, and whole: upgrade.sh takes only a finished export.
+printf '%s\n' "$folder" > "$dumps/pending.tmp"
+mv -f "$dumps/pending.tmp" "$dumps/pending"
 say "exported ${#databases[@]} database(s) from PostgreSQL $previous_major to $folder"
