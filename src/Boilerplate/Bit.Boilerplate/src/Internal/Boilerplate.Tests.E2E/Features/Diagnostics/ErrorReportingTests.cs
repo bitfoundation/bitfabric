@@ -4,11 +4,11 @@ using Boilerplate.Tests.E2E.Infrastructure.Services;
 
 namespace Boilerplate.Tests.E2E.Features.Diagnostics;
 
-/// <summary>The diagnostic modal's test error, as the error tracker's ingestion endpoint receives it.</summary>
+/// <summary>The test error of BevTools' App tab, as the error tracker's ingestion endpoint receives it.</summary>
 [TestClass, TestCategory(TestCategories.Web), Retry(2)]
 public partial class ErrorReportingTests : AppTestBase
 {
-    /// <summary>AppDiagnosticModal.ThrowTestException alternates between these two.</summary>
+    /// <summary>AppDevToolsPanel.ThrowTestException alternates between these two.</summary>
     private static readonly Regex testError = new(@"Something (bad|critical) happened\.");
 
     protected override IAppOpener AppOpener => new WebAppOpener();
@@ -38,7 +38,7 @@ public partial class ErrorReportingTests : AppTestBase
         await WaitUntilInteractive(page);
 
         var throwTestError = page.Locator("button[title='Throw test error']");
-        await OpenDiagnosticModal(page, throwTestError);
+        await OpenDevTools(page, throwTestError);
         await throwTestError.ClickAsync();
 
         var deadline = DateTimeOffset.UtcNow + TimeSpan.FromSeconds(30);
@@ -64,14 +64,17 @@ public partial class ErrorReportingTests : AppTestBase
         Assert.IsEmpty(failedAssets, $"{app} failed to load: {string.Join(", ", failedAssets)}");
     }
 
-    /// <summary>App.showDiagnostic reaches .NET only once the app has booted, so it is called until the modal opens.</summary>
-    private static async Task OpenDiagnosticModal(IPage page, ILocator throwTestError)
+    /// <summary>
+    /// App.showDevTools reaches .NET only once the app has booted, so it is called until BevTools shows its App tab. Outside
+    /// Development the first call also downloads Bit.BevTools.wasm.
+    /// </summary>
+    private static async Task OpenDevTools(IPage page, ILocator throwTestError)
     {
         var deadline = DateTimeOffset.UtcNow + TimeSpan.FromMinutes(2);
 
         while (true)
         {
-            await page.EvaluateAsync("() => window.App?.showDiagnostic?.()");
+            await page.EvaluateAsync("() => window.App?.showDevTools?.()");
 
             try
             {

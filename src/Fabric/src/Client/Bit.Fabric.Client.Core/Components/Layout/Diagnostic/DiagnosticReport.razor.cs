@@ -10,14 +10,14 @@ namespace Bit.Fabric.Client.Core.Components.Layout.Diagnostic;
 public partial class DiagnosticReport
 {
     /// <summary>
-    /// Off in <see cref="AppDiagnosticModal"/>: the round trip sends a test push and a test SignalR message, so it
+    /// Off in <see cref="AppDevToolsPanel"/>: the round trip sends a test push and a test SignalR message, so it
     /// only runs when asked for.
     /// </summary>
     [Parameter] public bool AutoRun { get; set; } = true;
 
     /// <summary>
-    /// Set by <see cref="AppDiagnosticModal"/>, which shows the report on top of whatever page is open: the report then
-    /// leaves that page's title, description and head alone.
+    /// Set by <see cref="AppDevToolsPanel"/>, which shows the report in BevTools on top of whatever page is open: the
+    /// report then leaves that page's title, description and head alone.
     /// </summary>
     [Parameter] public bool Embedded { get; set; }
 

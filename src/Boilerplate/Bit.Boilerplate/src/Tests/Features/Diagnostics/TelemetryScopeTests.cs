@@ -5,7 +5,7 @@ namespace Boilerplate.Tests.Features.Diagnostics;
 
 /// <summary>
 /// Everything <c>ClientExceptionHandlerBase.Handle</c> puts into a logging scope ends up in the process-wide
-/// <c>DiagnosticLogger.Store</c>, in the support engineer's diagnostic modal, in the chatbot's <c>CheckLastError</c>
+/// <c>DiagnosticLogger.Store</c>, in BevTools' Logs panel, in the chatbot's <c>CheckLastError</c>
 /// tool output and - when an exporter is configured - off the device entirely. Two properties of that dictionary are
 /// worth pinning: building it must never throw, and it must not carry credentials.
 /// </summary>

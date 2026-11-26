@@ -15,7 +15,7 @@ namespace Boilerplate.Tests.Features.TemplateConfig;
 /// warns, and no build or test notices</b>. The three found so far:
 /// <list type="bullet">
 /// <item><c>EnableVirtualization</c> on <c>BitBasicList</c> - the parameter is <c>Virtualize</c>. Found on
-/// <c>AppDiagnosticModal</c> first, then on <b>both</b> todo pages and <c>SessionsSection</c>, because the first fix
+/// the log list of the old diagnostic modal first, then on <b>both</b> todo pages and <c>SessionsSection</c>, because the first fix
 /// was never swept across the other call sites. Three sites, two batches apart.</item>
 /// <item><c>Accent</c> on <c>BitSearchBox</c> - the parameter is <c>Background</c>. <c>Accent</c> is real on
 /// <c>BitTextField</c>, <c>BitOtpInput</c>, <c>BitNumberField</c>, <c>BitNav</c>, <c>BitCarousel</c> and

@@ -96,6 +96,9 @@ public sealed record ToolNeeds
     /// <summary>The project is cloned from github.com over HTTPS, where the GitHub CLI signs in to a private repository.</summary>
     public bool CloneFromGitHub { get; init; }
 
+    /// <summary>bit codespace runs the project in a GitHub codespace, through the GitHub CLI.</summary>
+    public bool Codespaces { get; init; }
+
     public IReadOnlySet<Platform> Platforms { get; init; } = new HashSet<Platform> { Platform.Web };
 
     public string? Ide { get; init; }

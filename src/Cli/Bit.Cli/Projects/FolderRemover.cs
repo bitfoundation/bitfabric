@@ -1,11 +1,27 @@
-﻿namespace Bit.Cli.Projects;
+﻿using Bit.Cli.Infrastructure;
+
+namespace Bit.Cli.Projects;
+
+/// <param name="Unfinished">The time ran out before every file and folder was tried.</param>
+public sealed record FolderDeletion(IReadOnlyList<PathFailure> Failures, bool OnlyEmptyFoldersLeft, bool Unfinished)
+{
+    public bool IsGone => Failures.Count == 0 && OnlyEmptyFoldersLeft is false && Unfinished is false;
+}
 
 public static class FolderRemover
 {
     public static (IReadOnlyList<PathFailure> Failures, bool OnlyEmptyFoldersLeft) Delete(string folder)
     {
+        var deletion = Delete(folder, null);
+        return (deletion.Failures, deletion.OnlyEmptyFoldersLeft);
+    }
+
+    /// <summary>Deletes the folder, and stops where it got to once the deadline is over.</summary>
+    public static FolderDeletion Delete(string folder, Deadline? deadline)
+    {
         var failures = new List<PathFailure>();
         var root = new DirectoryInfo(folder);
+        var unfinished = false;
 
         if (root.Exists && root.Attributes.HasFlag(FileAttributes.ReparsePoint))
         {
@@ -13,16 +29,19 @@ public static class FolderRemover
         }
         else
         {
-            DeleteTree(root, failures);
+            DeleteTree(root, failures, deadline, ref unfinished);
         }
 
         if (Directory.Exists(folder) is false)
-            return ([], false);
+            return new([], false, false);
 
-        return HasFiles(folder) ? (failures, false) : ([], true);
+        if (unfinished)
+            return new(failures, false, true);
+
+        return HasFiles(folder) ? new(failures, false, false) : new([], true, false);
     }
 
-    private static void DeleteTree(DirectoryInfo folder, List<PathFailure> failures)
+    private static void DeleteTree(DirectoryInfo folder, List<PathFailure> failures, Deadline? deadline, ref bool unfinished)
     {
         var before = failures.Count;
         List<FileSystemInfo> entries;
@@ -40,15 +59,24 @@ public static class FolderRemover
 
         foreach (var entry in entries)
         {
+            if (unfinished || deadline?.IsOver is true)
+            {
+                unfinished = true;
+                return;
+            }
+
             if (entry is DirectoryInfo directory && directory.Attributes.HasFlag(FileAttributes.ReparsePoint) is false)
             {
-                DeleteTree(directory, failures);
+                DeleteTree(directory, failures, deadline, ref unfinished);
             }
             else
             {
                 TryDelete(entry, failures);
             }
         }
+
+        if (unfinished)
+            return;
 
         if (failures.Count == before)
         {

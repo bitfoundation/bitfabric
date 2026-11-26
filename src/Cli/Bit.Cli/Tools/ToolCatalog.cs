@@ -343,11 +343,14 @@ public static partial class ToolCatalog
 
         public override string Name => "GitHub CLI";
 
-        public override bool AppliesTo(ToolContext context) => context.Needs.GitHubRepo || context.Needs.CloneFromGitHub;
+        public override bool AppliesTo(ToolContext context) => context.Needs.GitHubRepo || context.Needs.CloneFromGitHub || context.Needs.Codespaces;
 
-        public override string Why(ToolContext context) => context.Needs.GitHubRepo
-            ? "creates the project's private GitHub repository and pushes main to it"
-            : "signs in to GitHub, so a private repository can be cloned";
+        public override string Why(ToolContext context) => context.Needs switch
+        {
+            { GitHubRepo: true } => "creates the project's private GitHub repository and pushes main to it",
+            { Codespaces: true } => "creates, starts and connects to the project's GitHub codespace",
+            _ => "signs in to GitHub, so a private repository can be cloned"
+        };
 
         public override bool IsNeeded(ToolContext context) => true;
 

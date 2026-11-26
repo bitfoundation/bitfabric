@@ -1,3 +1,4 @@
+using Bit.BevTools;
 using Bit.Fabric.Shared.Features.Tenants;
 using Bit.Fabric.Shared.Features.Tenants.Dtos;
 
@@ -13,6 +14,7 @@ public partial class MainLayout : IAsyncDisposable
     [AutoInject] private Dom dom = default!;
     [AutoInject] private Document document = default!;
     [AutoInject] private Keyboard keyboard = default!;
+    [AutoInject] private BevToolsLoader bevToolsLoader = default!;
     [AutoInject] private AuthManager authManager = default!;
     [AutoInject] private ThemeService themeService = default!;
     [AutoInject] private BitThemeNotifications bitThemeNotifications = default!;
@@ -154,7 +156,7 @@ public partial class MainLayout : IAsyncDisposable
 
         if (firstRender)
         {
-            await keyboard.Add(ButilKeyCodes.KeyX, OpenDiagnosticModal, ButilModifiers.Ctrl | ButilModifiers.Shift);
+            await keyboard.Add(ButilKeyCodes.KeyD, OpenDevTools, ButilModifiers.Ctrl | ButilModifiers.Shift);
 
             // Stamps the booted culture onto <html> for the static hosts, whose index.html carries no lang/dir;
             // a no-op re-stamp on Server.Web, where App.razor already rendered the same values.
@@ -369,9 +371,15 @@ public partial class MainLayout : IAsyncDisposable
         isIdentityPage = false;
     }
 
-    private void OpenDiagnosticModal()
+    /// <summary>
+    /// BevTools' own Ctrl+Shift+D, for the time before it is attached: a browser outside Development loads it on its first
+    /// open, and until then nothing of it listens. Once it runs, it answers the shortcut itself, toggling the panel.
+    /// </summary>
+    private void OpenDevTools()
     {
-        pubSubService.Publish(ClientAppMessages.SHOW_DIAGNOSTIC_MODAL);
+        if (bevToolsLoader.IsActive) return;
+
+        pubSubService.Publish(ClientAppMessages.SHOW_DEV_TOOLS);
     }
 
 

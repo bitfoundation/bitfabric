@@ -105,6 +105,7 @@ public static class AppCliGuide
         new("bit new", l[nameof(AppStrings.CliRefNew)]),
         new("bit setup", l[nameof(AppStrings.CliRefSetup)]),
         new("bit run", l[nameof(AppStrings.CliRefRun)]),
+        new("bit codespace", l[nameof(AppStrings.CliRefCodespace)]),
         new("bit diff", l[nameof(AppStrings.CliRefDiff)]),
         new("bit doctor", l[nameof(AppStrings.CliRefDoctor)]),
         new("bit trust", l[nameof(AppStrings.CliRefTrust)]),

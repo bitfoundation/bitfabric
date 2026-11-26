@@ -24,7 +24,7 @@ public partial class DiagnosticController : AppControllerBase, IDiagnosticContro
     [AutoInject] private ISmsClient smsClient = default!;
     [AutoInject] private IStringLocalizer<EmailStrings> emailLocalizer = default!;
 
-    // The report is reachable anonymously (7 header taps / Ctrl+Shift+X / the /diagnostic page), and an anonymous
+    // The report is reachable anonymously (the App panel of BevTools / the /diagnostic page), and an anonymous
     // visitor's subscription or connection is owned by no UserSession - so the rule is ownership, not
     // authentication: an identifier owned by nobody passes, one owned by a session only for that session.
     private Guid? CallerUserSessionId => User.IsAuthenticated() ? User.GetSessionId() : null;
