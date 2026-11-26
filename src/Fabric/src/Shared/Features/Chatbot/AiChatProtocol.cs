@@ -20,6 +20,9 @@ public static class AiChatProtocol
     /// <summary>The device the app runs on, for the system prompt's variables.</summary>
     public const string DeviceInfo = "deviceInfo";
 
+    /// <summary>"true" when the chat was opened from the home page's fact-check band, to evaluate bit Fabric for the visitor's business.</summary>
+    public const string Evaluation = "evaluation";
+
     #endregion
 
     #region What the server writes on an answer (BitAiGenerationMetadata.Extra)
@@ -63,6 +66,8 @@ public static class AiChatProtocol
         public const string ClearAppFiles = nameof(ClearAppFiles);
         public const string GetBitLibraryTools = nameof(GetBitLibraryTools);
         public const string CallBitLibraryTool = nameof(CallBitLibraryTool);
+        public const string ReadSitePage = nameof(ReadSitePage);
+        public const string RecordEvaluationOutcome = nameof(RecordEvaluationOutcome);
 
         /// <summary>The calls the user doesn't see: the ones that only feed the model, and the suggestions, which show under the answer.</summary>
         public static readonly IReadOnlySet<string> Hidden = new HashSet<string>([GetCurrentDateTime, GetAppPages, ShowFollowUpSuggestions, GetBitLibraryTools]);

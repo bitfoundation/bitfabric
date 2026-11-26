@@ -131,6 +131,10 @@ public static partial class Program
         var services = builder.Services;
         var configuration = builder.Configuration;
 
+        // The pages as Markdown read them from this host itself, with no proxy, cookie or retry of the app's own clients.
+        services.AddMemoryCache();
+        services.AddHttpClient(PageMarkdown.HttpClientName, client => client.DefaultRequestHeaders.UserAgent.ParseAdd("bitFabric-PageMarkdown/1.0"));
+        services.AddSingleton<PageMarkdown>();
         services.AddScoped<IPrerenderStateService, WebServerPrerenderStateService>();
         services.AddScoped<ClientExceptionHandlerBase, WebServerExceptionHandler>();
         services.AddScoped<SharedExceptionHandler>(sp => sp.GetRequiredService<ClientExceptionHandlerBase>());

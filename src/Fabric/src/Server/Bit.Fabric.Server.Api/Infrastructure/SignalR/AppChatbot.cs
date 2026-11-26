@@ -34,6 +34,10 @@ public partial class AppChatbot
 {
     private AIAgent? supportAgent = default!;
 
+    /// <summary>Whether this answer is part of an evaluation opened from the home page, the only chat whose outcome is kept.</summary>
+    private bool isEvaluation;
+    private bool isEvaluationRecorded;
+
     [AutoInject] private IStore blobStorage = default!;
     [AutoInject] private IHostEnvironment hostEnvironment = default!;
     [AutoInject] private TimeProvider timeProvider = default!;
@@ -42,6 +46,7 @@ public partial class AppChatbot
     [AutoInject] private IConfiguration configuration = default!;
     [AutoInject] private IServiceProvider serviceProvider = default!;
     [AutoInject] private ChatbotRateLimiter rateLimiter = default!;
+    [AutoInject] private Features.Evaluation.SiteContent siteContent = default!;
     [AutoInject] private IHubContext<AppHub> hubContext = default!;
     [AutoInject] private BitAiApprovalBroker approvalBroker = default!;
     [AutoInject] private IStringLocalizer<AppStrings> localizer = default!;
@@ -117,7 +122,20 @@ public partial class AppChatbot
 
             supportAgent ??= serviceProvider.GetRequiredKeyedService<AIAgent>("SupportAgent");
 
-            List<ChatMessage> conversation = [new(ChatRole.System, VariablesPrompt(request, user)), .. await ToChatMessages(request, cancellationToken)];
+            // The site's pages and the license come first, the same for everyone, so the provider's prompt cache serves them
+            // after the first chat (bitfabric-internal/specs/home-page.md, "The AI evaluation").
+            var webAppUrl = httpContextAccessor.HttpContext!.Request.GetWebAppUrl();
+            var sources = Features.Evaluation.EvaluationPrompt.Sources(await siteContent.All(webAppUrl, cancellationToken), await siteContent.License(cancellationToken));
+            isEvaluation = ContextValue(request, AiChatProtocol.Evaluation) is "true";
+
+            List<ChatMessage> conversation = [new(ChatRole.System, sources), new(ChatRole.System, VariablesPrompt(request, user))];
+
+            if (isEvaluation)
+            {
+                conversation.Add(new(ChatRole.System, $"{Features.Evaluation.EvaluationPrompt.Instructions}\n{Features.Evaluation.EvaluationPrompt.ChatRecording}"));
+            }
+
+            conversation.AddRange(await ToChatMessages(request, cancellationToken));
 
             var startedAt = timeProvider.GetUtcNow();
             StringBuilder answer = new();
@@ -507,6 +525,8 @@ public partial class AppChatbot
             AIFunctionFactory.Create(SetApplicationTheme),
             AIFunctionFactory.Create(CheckLastError),
             AIFunctionFactory.Create(ClearAppFiles),
+            AIFunctionFactory.Create(ReadSitePage),
+            AIFunctionFactory.Create(RecordEvaluationOutcome),
         };
 
         // The same tools /mcp serves, so "are my projects healthy?" gets the same answer here as in grok.com.

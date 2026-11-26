@@ -76,6 +76,9 @@ public partial class AppDbContext
     public DbSet<ProjectTrial> ProjectTrials { get; set; } = default!;
     public DbSet<IssuedLicense> IssuedLicenses { get; set; } = default!;
 
+    /// <summary>The anonymous summaries of the AI evaluations of bit Fabric (See EvaluationRecorder).</summary>
+    public DbSet<Features.Evaluation.Models.EvaluationOutcome> EvaluationOutcomes { get; set; } = default!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

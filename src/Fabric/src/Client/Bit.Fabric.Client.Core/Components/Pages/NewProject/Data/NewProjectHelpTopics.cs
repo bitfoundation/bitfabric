@@ -18,4 +18,7 @@ public static class NewProjectHelpTopics
     public const string Offline = "offline";
     public const string Line = "line";
     public const string General = "general";
+
+    /// <summary>Every topic, in the order the page asks its questions, which the page pre-renders hidden for crawlers.</summary>
+    public static readonly string[] All = [Name, Goal, Start, Customers, Features, Errors, Devices, Database, GitHub, Offline, Line, General];
 }

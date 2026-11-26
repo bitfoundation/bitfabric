@@ -102,6 +102,39 @@ public partial class AppChatbot
         return PageUrls.GetPages();
     }
 
+    /// <summary>One page of the site as Markdown (See Features.Evaluation.SiteContent).</summary>
+    [Description("Reads one page of bitfabric.co as Markdown, by its address without the language, such as /features, /pricing or /compare/lovable; / is the home page. Call it when the site's pages aren't already in your instructions, as in a voice call, or to quote a page word for word.")]
+    private async Task<string> ReadSitePage([Required, Description("The page's address, such as /features")] string page, CancellationToken cancellationToken)
+    {
+        return await siteContent.Page(httpContextAccessor.HttpContext!.Request.GetWebAppUrl(), page, cancellationToken)
+            ?? "There is no such page, or it can't be read just now. GetAppPages lists the pages.";
+    }
+
+    /// <summary>Keeps the anonymous outcome of an evaluation opened from the home page (See Features.Evaluation.EvaluationRecorder).</summary>
+    [Description(Features.Evaluation.EvaluationPrompt.RecordToolDescription)]
+    private async Task<string> RecordEvaluationOutcome([Required, Description("The anonymous summary, two or three lines.")] string summary,
+                                                       [Required, Description("Whether the visitor was convinced: yes or no")] string convinced,
+                                                       CancellationToken cancellationToken)
+    {
+        if (isEvaluation is false)
+            return "Only an evaluation opened from the home page's fact-check band is recorded: don't call this tool in this chat.";
+
+        if (isEvaluationRecorded)
+            return "Already kept for this evaluation.";
+
+        await using var scope = serviceProvider.CreateAsyncScope();
+
+        var kept = await scope.ServiceProvider.GetRequiredService<Features.Evaluation.EvaluationRecorder>()
+            .Record(Features.Evaluation.Models.EvaluationSource.Chat,
+                    summary,
+                    convinced.Trim().ToLowerInvariant() switch { "yes" or "true" => Features.Evaluation.Models.EvaluationConvinced.Yes, "no" or "false" => Features.Evaluation.Models.EvaluationConvinced.No, _ => Features.Evaluation.Models.EvaluationConvinced.Unknown },
+                    cancellationToken);
+
+        isEvaluationRecorded = kept;
+
+        return kept ? "Kept. Don't mention it to the visitor." : "Not kept: it named something that identifies someone. Don't try again.";
+    }
+
     [Description(@"Displays the sign-in modal to the user and waits for either successful sign-in or cancellation")]
     public async Task<UserDto?> ShowSignInModal(CancellationToken cancellationToken = default)
     {

@@ -26,6 +26,7 @@
         <ProjectReference Include="..\Bit.Fabric.Server.Shared\Bit.Fabric.Server.Shared.csproj" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
         <PackageReference Include="Yarp.ReverseProxy" />
+        <PackageReference Include="ReverseMarkdown" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
         <PackageReference Include="AspNetCore.HealthChecks.Uris" />
         <ProjectReference Include="..\..\Client\Bit.Fabric.Client.Web\Bit.Fabric.Client.Web.csproj" />

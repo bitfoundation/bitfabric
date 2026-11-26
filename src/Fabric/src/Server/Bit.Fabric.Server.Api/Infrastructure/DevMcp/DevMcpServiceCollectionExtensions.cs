@@ -32,6 +32,12 @@ public static class DevMcpServiceCollectionExtensions
             {
                 options.ConfigureSessionOptions = async (httpContext, mcpOptions, cancellationToken) =>
                 {
+                    if (httpContext.Request.Path.StartsWithSegments(Bit.Fabric.Server.Api.Features.Evaluation.EvaluationMcpServer.Path))
+                    {
+                        httpContext.RequestServices.GetRequiredService<Bit.Fabric.Server.Api.Features.Evaluation.EvaluationMcpServer>().ConfigureSession(mcpOptions);
+                        return;
+                    }
+
                     if (httpContext.Request.Path.StartsWithSegments(DocsMcpServer.Path))
                     {
                         await httpContext.RequestServices.GetRequiredService<DocsMcpServer>().ConfigureSession(httpContext, mcpOptions, cancellationToken);

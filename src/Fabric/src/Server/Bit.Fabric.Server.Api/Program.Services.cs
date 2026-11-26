@@ -79,6 +79,17 @@ public static partial class Program
         services.AddDocsMcp();
         services.AddLicensing();
 
+        // The AI evaluation: the site and the license as the assistant and the evaluation agent read them, what is kept of
+        // each evaluation, and /evaluate-mcp (See EvaluationMcpServer).
+        services.AddSingleton<Features.Evaluation.SiteContent>();
+        services.AddScoped<Features.Evaluation.EvaluationRecorder>();
+        services.AddSingleton<Features.Evaluation.EvaluationMcpServer>();
+        services.AddHttpClient(Features.Evaluation.SiteContent.HttpClientName, client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(60);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("bitFabric-SiteContent/1.0 (+https://bitfabric.co)");
+        });
+
         services.AddScoped<IdentityEmailService>();
         services.AddScoped<EmailServiceJobsRunner>();
         services.AddScoped<PhoneService>();

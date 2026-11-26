@@ -38,52 +38,21 @@
             </div>
 
             <div class="np-step">
-                @switch (CurrentStep)
-                {
-                    case 0:
-                        <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Class="np-lede">@Localizer[nameof(AppStrings.NewProjectLede)]</BitText>
-                        <NewProjectNameQuestion />
-                        <NewProjectGoalQuestion />
-                        break;
-                    case 1:
-                        <NewProjectStartQuestion />
-                        <NewProjectCustomersQuestion />
-                        break;
-                    case 2:
-                        <NewProjectFeaturesQuestion />
-                        <NewProjectErrorsQuestion />
-                        break;
-                    case 3:
-                        <NewProjectDevicesQuestion />
-                        break;
-                    default:
-                        <div class="np-step-summary">
-                            <NewProjectSummary />
-                        </div>
-                        <div class="np-more">
-                            <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
-                                       IconName="@(Store.IsMoreOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
-                                       aria-expanded="@(Store.IsMoreOpen ? "true" : "false")"
-                                       OnClick="() => Store.ShowMore(Store.IsMoreOpen is false)"
-                                       Class="np-more-toggle">@Localizer[nameof(AppStrings.NewProjectTechnicalChoices)]</BitButton>
-                            @if (Store.IsMoreOpen)
-                            {
-                                <NewProjectTechnicalQuestion HeadingElement="h2" />
-                            }
-                            <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
-                                       IconName="@(Store.IsSuperTechnicalOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
-                                       aria-expanded="@(Store.IsSuperTechnicalOpen ? "true" : "false")"
-                                       OnClick="() => Store.ShowSuperTechnical(Store.IsSuperTechnicalOpen is false)"
-                                       Class="np-more-toggle">@SuperTechnicalSummary</BitButton>
-                            @if (Store.IsSuperTechnicalOpen)
-                            {
-                                <NewProjectSuperTechnicalQuestion HeadingElement="h2" />
-                            }
-                        </div>
-                        <NewProjectGetIt />
-                        break;
-                }
+                <NewProjectStep Step="CurrentStep" />
             </div>
+            @if (RendererInfo.IsInteractive is false)
+            {
+                @* Pre-rendered for crawlers and the page's Markdown copy, which then read the whole wizard; once interactive, only the current step is there. *@
+                @for (var i = 0; i < StepTitles.Length; i++)
+                {
+                    if (i == CurrentStep)
+                        continue;
+
+                    <section class="np-step" hidden aria-label="@StepTitles[i]">
+                        <NewProjectStep Step="i" />
+                    </section>
+                }
+            }
 
             <div class="np-nav">
                 @if (CurrentStep > 0)

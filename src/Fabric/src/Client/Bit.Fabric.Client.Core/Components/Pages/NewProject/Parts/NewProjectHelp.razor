@@ -72,3 +72,36 @@
         </div>
     }
 </BitPanel>
+
+@if (RendererInfo.IsInteractive is false)
+{
+    @* Pre-rendered for crawlers and the page's Markdown copy, which then read every topic's help; once interactive, the panel shows one at a time. *@
+    <div class="np-help-all" hidden>
+        @foreach (var topic in NewProjectHelpTopics.All)
+        {
+            if (Content(topic) is not { } help)
+                continue;
+
+            <section>
+                <h3>@help.Title</h3>
+                @if (help.Lead is not null)
+                {
+                    <p>@help.Lead</p>
+                }
+                @if (help.Advice is not null)
+                {
+                    <p><b>@Localizer[nameof(AppStrings.NewProjectHelpAdvice)]</b> @help.Advice</p>
+                }
+                @if (help.Later is not null)
+                {
+                    <p><b>@Localizer[nameof(AppStrings.NewProjectHelpLater)]</b> @Localizer[nameof(AppStrings.NewProjectHelpLaterText)] <q>@help.Later</q></p>
+                }
+                @foreach (var (question, answer) in help.Faq)
+                {
+                    <h4>@question</h4>
+                    <p>@answer</p>
+                }
+            </section>
+        }
+    </div>
+}
