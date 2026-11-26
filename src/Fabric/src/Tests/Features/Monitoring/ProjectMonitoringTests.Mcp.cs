@@ -309,7 +309,7 @@ public partial class ProjectMonitoringTests
             var list = await Call(mcp, "GetProjects");
             Assert.AreEqual("Test team", list.GetProperty("team").GetString());
 
-            var card = list.GetProperty("projects").EnumerateArray().Single();
+            var card = list.GetProperty("projects").EnumerateArray().Single().GetProperty("environments").EnumerateArray().Single();
             Assert.AreEqual(project.Id, card.GetProperty("id").GetGuid());
             Assert.AreEqual("Degraded", card.GetProperty("health").GetString());
 
@@ -353,7 +353,7 @@ public partial class ProjectMonitoringTests
         {
             var answer = (JsonElement)(await functions.Single(function => function.Name == "GetProjects").InvokeAsync(new(), TestContext.CancellationToken))!;
 
-            var card = answer.GetProperty("projects").EnumerateArray().Single();
+            var card = answer.GetProperty("projects").EnumerateArray().Single().GetProperty("environments").EnumerateArray().Single();
             Assert.AreEqual(project.Id, card.GetProperty("id").GetGuid());
             Assert.AreEqual("Degraded", card.GetProperty("health").GetString());
             Assert.AreSequenceEqual(new[] { "Email" }, Strings(card.GetProperty("partsNotWorking")));

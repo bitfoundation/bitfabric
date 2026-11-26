@@ -542,9 +542,9 @@ public partial class ProjectMonitoringTests
     }
 
     /// <summary>The add flow, the way the browser goes through it: start, the customer app's approval, the callback.</summary>
-    private async Task<MonitoringDto> Connect(IMonitoringsController projects, FakeCustomerApp customerApp, string address)
+    private async Task<MonitoringDto> Connect(IMonitoringsController projects, FakeCustomerApp customerApp, string address, Guid? projectId = null, string? environment = null)
     {
-        var start = await projects.StartConnect(new() { Address = address }, TestContext.CancellationToken);
+        var start = await projects.StartConnect(new() { Address = address, ProjectId = projectId, Environment = environment }, TestContext.CancellationToken);
         var authorize = QueryHelpers.ParseQuery(new Uri(start.AuthorizeUrl!).Query);
 
         Assert.AreEqual("healthz", authorize["scope"].ToString());
