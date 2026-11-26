@@ -40,6 +40,12 @@ public sealed class FakeBitFabric : HttpMessageHandler
     /// <summary>The bodies of the trial requests, and the codes asked for, in order.</summary>
     public ConcurrentQueue<string> Requests { get; } = new();
 
+    /// <summary>
+    /// The trials it gave, by project id. As bit Fabric does, a project that has one gets the same one again, whatever
+    /// first commit it is asked for with; a test puts one here for a project someone else made.
+    /// </summary>
+    public ConcurrentDictionary<Guid, string> Trials { get; } = new();
+
     public string Sign(Guid project, string commit, string plan, DateTimeOffset issued, DateTimeOffset expires, string name = "Contoso", string holder = "")
     {
         var payload = new ArrayBufferWriter<byte>();
@@ -78,7 +84,8 @@ public sealed class FakeBitFabric : HttpMessageHandler
 
             using var json = JsonDocument.Parse(body);
             var issued = TrialsIssued ?? DateTimeOffset.UtcNow;
-            var license = Sign(Guid.Parse(json.RootElement.GetProperty("project").GetString()!), json.RootElement.GetProperty("commit").GetString()!, "trial", issued, issued.AddDays(30), json.RootElement.GetProperty("name").GetString()!);
+            var project = Guid.Parse(json.RootElement.GetProperty("project").GetString()!);
+            var license = Trials.GetOrAdd(project, _ => Sign(project, json.RootElement.GetProperty("commit").GetString()!, "trial", issued, issued.AddDays(30), json.RootElement.GetProperty("name").GetString()!));
 
             return Answer(license);
         }
