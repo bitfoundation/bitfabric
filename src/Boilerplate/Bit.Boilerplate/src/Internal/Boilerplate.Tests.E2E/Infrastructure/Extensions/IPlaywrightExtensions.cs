@@ -28,9 +28,10 @@ public static class IPlaywrightExtensions
         /// instance of any of them would be the one answering on the port - hence every running Client.Windows process
         /// is killed first, then its data cleared (see
         /// <see cref="WindowsAppData"/>) unless <paramref name="clearAppData"/> is false - for the caller testing what
-        /// the app remembers. Started minimized unless the run is headed, so a run leaves the machine's screen alone.
+        /// the app remembers. Started minimized unless the run is headed or <paramref name="visible"/> is true - for the
+        /// caller testing what is in front - so a run leaves the machine's screen alone.
         /// </summary>
-        public async Task<(IPage Page, Func<Task> Stop)> LaunchWindowsApp(string windowsAppId, int port = 9222, bool clearAppData = true)
+        public async Task<(IPage Page, Func<Task> Stop)> LaunchWindowsApp(string windowsAppId, int port = 9222, bool clearAppData = true, bool visible = false)
         {
             var exePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), windowsAppId, "current", $"{windowsAppId}.exe");
 
@@ -45,7 +46,7 @@ public static class IPlaywrightExtensions
                 WindowsAppData.Clear(windowsAppId);
 
             // HEADED=1 is Playwright's own switch for watching a run, so a headed run shows the app too.
-            var windowStyle = Environment.GetEnvironmentVariable("HEADED") is "1" ? ProcessWindowStyle.Normal : ProcessWindowStyle.Minimized;
+            var windowStyle = visible || Environment.GetEnvironmentVariable("HEADED") is "1" ? ProcessWindowStyle.Normal : ProcessWindowStyle.Minimized;
             Environment.SetEnvironmentVariable("WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS", $"--remote-debugging-port={port}");
             Process.Start(new ProcessStartInfo(exePath) { UseShellExecute = true, WindowStyle = windowStyle });
 

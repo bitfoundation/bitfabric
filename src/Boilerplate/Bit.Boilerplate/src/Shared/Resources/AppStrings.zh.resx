@@ -2293,4 +2293,22 @@
     <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
     <value>{0} 至 {1}</value>
   </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>需要双重验证</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>只有使用双重验证登录的账户才能授权此应用。请启用它并使用它重新登录，之后您会回到这里完成授权。</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>启用双重验证</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>双重验证已启用。请保存好恢复代码，然后使用它重新登录，以返回您之前所在的位置。</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>重新登录</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>双重验证已启用，且您已使用它登录。您可以返回之前所在的位置。</value>
+  </data>
 </root>

@@ -938,7 +938,7 @@
                         "src/Tests/Features/Urls/ODataQueryFilterTests.cs",
                         "src/Tests/Features/Diagnostics/TelemetryScopeTests.cs",
                         "src/Tests/Features/Diagnostics/LoggingConfigurationTests.cs",
-                        "src/Tests/Features/Diagnostics/DiagnosticModalVirtualizationTests.cs",
+                        "src/Tests/Features/Diagnostics/DevToolsUITests.cs",
                         "src/Tests/Features/TemplateConfig/SourceNameLeakTests.cs",
                         "src/Tests/Features/TemplateConfig/HybridHostHardeningTests.cs",
                         "src/Tests/Features/TemplateConfig/VelopackPackagingContractTests.cs",

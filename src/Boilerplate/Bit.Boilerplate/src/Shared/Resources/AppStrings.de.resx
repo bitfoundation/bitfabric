@@ -2293,4 +2293,22 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
     <value>{0} bis {1}</value>
   </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Zwei-Faktor-Authentifizierung erforderlich</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Nur ein Konto, das sich mit Zwei-Faktor-Authentifizierung anmeldet, kann diese Anwendung autorisieren. Aktivieren Sie sie und melden Sie sich damit erneut an – danach kehren Sie hierher zurück, um den Vorgang abzuschließen.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Zwei-Faktor-Authentifizierung aktivieren</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>Die Zwei-Faktor-Authentifizierung ist aktiviert. Bewahren Sie Ihre Wiederherstellungscodes auf und melden Sie sich dann damit erneut an, um dorthin zurückzukehren, wo Sie waren.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Erneut anmelden</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>Die Zwei-Faktor-Authentifizierung ist aktiviert, und Sie haben sich damit angemeldet. Sie können dorthin zurückkehren, wo Sie waren.</value>
+  </data>
 </root>

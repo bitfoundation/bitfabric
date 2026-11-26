@@ -2293,4 +2293,22 @@
     <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
     <value>{0} से {1} तक</value>
   </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>दो-कारक प्रमाणीकरण ज़रूरी है</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>इस एप्लिकेशन को केवल वही खाता अधिकृत कर सकता है जो दो-कारक प्रमाणीकरण से साइन इन करता है। इसे चालू करें और इसके साथ दोबारा साइन इन करें, फिर काम पूरा करने के लिए आप यहीं लौट आएँगे।</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>दो-कारक प्रमाणीकरण चालू करें</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>दो-कारक प्रमाणीकरण चालू है। अपने रिकवरी कोड सँभालकर रखें, फिर जहाँ आप थे वहाँ लौटने के लिए इसके साथ दोबारा साइन इन करें।</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>दोबारा साइन इन करें</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>दो-कारक प्रमाणीकरण चालू है और आपने इसके साथ साइन इन किया है। आप जहाँ थे वहाँ लौट सकते हैं।</value>
+  </data>
 </root>

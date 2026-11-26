@@ -2293,4 +2293,22 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
     <value>De {0} a {1}</value>
   </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Se necesita la autenticación en dos pasos</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Solo una cuenta que inicia sesión con autenticación en dos pasos puede autorizar esta aplicación. Actívela e inicie sesión de nuevo con ella, y volverá aquí para terminar.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Activar la autenticación en dos pasos</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>La autenticación en dos pasos está activada. Guarde sus códigos de recuperación y luego inicie sesión de nuevo con ella para volver a donde estaba.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Iniciar sesión de nuevo</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>La autenticación en dos pasos está activada e inició sesión con ella. Puede volver a donde estaba.</value>
+  </data>
 </root>

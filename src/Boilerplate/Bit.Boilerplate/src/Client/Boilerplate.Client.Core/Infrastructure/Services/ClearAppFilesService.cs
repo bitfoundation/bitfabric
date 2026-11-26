@@ -1,75 +1,35 @@
 //+:cnd:noEmit
-using System.Text;
-using Bit.BevTools;
 //#if (offlineDb == true)
 using Bit.Bsqlite;
 //#endif
+//#if (signalR == true)
+using Boilerplate.Client.Core.Components.Layout.AiChat;
+//#endif
 
-namespace Boilerplate.Client.Core.Components.Layout.Diagnostic;
+namespace Boilerplate.Client.Core.Infrastructure.Services;
 
-public partial class AppDiagnosticModal
+/// <summary>
+/// Clear app files: signs out and removes what the app keeps on this device, then reloads it. The App tab of BevTools
+/// asks for it (AppDevToolsPanel), and so does the chatbot's tool, over SharedAppMessages.CLEAR_APP_FILES (See AppDevTools).
+/// </summary>
+public partial class ClearAppFilesService(Cookie cookie,
+                                          AuthManager authManager,
+                                          LocalStorage localStorage,
+                                          CacheStorage cacheStorage,
+                                          //#if (signalR == true)
+                                          IndexedDb indexedDb,
+                                          //#endif
+                                          SessionStorage sessionStorage,
+                                          IStorageService storageService,
+                                          IJSRuntime jsRuntime,
+                                          NavigationManager navigationManager,
+                                          //#if (offlineDb == true)
+                                          SyncService syncService,
+                                          IDbContextFactory<AppOfflineDbContext> dbContextFactory,
+                                          //#endif
+                                          ILogger<ClearAppFilesService> logger)
 {
-    [AutoInject] private Cookie cookie = default!;
-    [AutoInject] private AuthManager authManager = default!;
-    [AutoInject] private LocalStorage localStorage = default!;
-    [AutoInject] private CacheStorage cacheStorage = default!;
-    //#if (signalR == true)
-    [AutoInject] private IndexedDb indexedDb = default!;
-    //#endif
-    [AutoInject] private SessionStorage sessionStorage = default!;
-    [AutoInject] private IStorageService storageService = default!;
-    [AutoInject] private IAppUpdateService appUpdateService = default!;
-    [AutoInject] private ILogger<AppDiagnosticModal> logger = default!;
-    [AutoInject] private BevToolsLoader bevToolsLoader = default!;
-    //#if (offlineDb == true)
-    [AutoInject] private SyncService syncService = default!;
-    [AutoInject] private IDbContextFactory<AppOfflineDbContext> dbContextFactory = default!;
-    //#endif
-
-    private static async Task ThrowTestException()
-    {
-        await Task.Delay(250);
-
-        showKnownException = !showKnownException;
-
-        throw showKnownException
-            ? new InvalidOperationException("Something critical happened.").WithData("TestData", 1)
-            : new DomainLogicException("Something bad happened.").WithData("TestData", 2);
-    }
-
-    private async Task OpenDevTools()
-    {
-        if (await bevToolsLoader.OpenAsync())
-        {
-            isOpen = false;
-        }
-        else
-        {
-            SnackBarService.Error("Open dev tools", bevToolsLoader.Problem ?? string.Empty);
-        }
-    }
-
-    private async Task CallGC()
-    {
-        SnackBarService.Show("Memory Before GC", GetMemoryUsage());
-
-        await Task.Run(() =>
-        {
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
-            GC.WaitForPendingFinalizers();
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
-        });
-
-        SnackBarService.Show("Memory After GC", GetMemoryUsage());
-    }
-
-    private string GetMemoryUsage()
-    {
-        long memory = Environment.WorkingSet;
-        return $"{memory / (1024.0 * 1024.0):F2} MB";
-    }
-
-    private async Task ClearAppFiles()
+    public async Task ClearAppFiles(CancellationToken cancellationToken)
     {
         //#if (offlineDb == true)
         try
@@ -77,7 +37,7 @@ public partial class AppDiagnosticModal
             // Try to push any pending changes before clearing the DB. This deliberately takes the overload that
             // accepts a DbContext rather than SyncService.Push(), which returns without doing anything when the app
             // believes it is offline - the state in which unpushed changes are most likely to exist.
-            using var pushCts = CancellationTokenSource.CreateLinkedTokenSource(CurrentCancellationToken);
+            using var pushCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             pushCts.CancelAfter(TimeSpan.FromSeconds(5));
 
             await using var dbContext = await dbContextFactory.CreateDbContextAsync(pushCts.Token);
@@ -114,13 +74,13 @@ public partial class AppDiagnosticModal
         {
             if (dbContextFactory is IBsqliteDbContextFactory<AppOfflineDbContext> bsqliteDbContextFactory)
             {
-                await bsqliteDbContextFactory.Database.DeleteAsync(CurrentCancellationToken); // Blazor Hybrid stores the db outside webview's storage.
+                await bsqliteDbContextFactory.Database.DeleteAsync(cancellationToken); // Blazor Hybrid stores the db outside webview's storage.
             }
             else
             {
-                await using var dbContext = await dbContextFactory.CreateDbContextAsync(CurrentCancellationToken);
-                await dbContext.Database.EnsureDeletedAsync(CurrentCancellationToken);
-                await dbContext.Database.MigrateAsync(CurrentCancellationToken);
+                await using var dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+                await dbContext.Database.EnsureDeletedAsync(cancellationToken);
+                await dbContext.Database.MigrateAsync(cancellationToken);
             }
         }
         catch (Exception exp)
@@ -131,11 +91,11 @@ public partial class AppDiagnosticModal
 
         if (AppPlatform.IsBlazorHybrid is false)
         {
-            await JSRuntime.InvokeVoidAsync("BitBswup.forceRefresh"); // Clears cache storages and uninstalls service-worker.
+            await jsRuntime.InvokeVoidAsync("BitBswup.forceRefresh", cancellationToken); // Clears cache storages and uninstalls service-worker.
         }
         else
         {
-            NavigationManager.Refresh(forceReload: true);
+            navigationManager.Refresh(forceReload: true);
         }
     }
 
@@ -161,7 +121,7 @@ public partial class AppDiagnosticModal
         //#if (signalR == true)
         // The conversation the AI chat keeps on this device (See AppAiChat.RestoreHistory). The chat drops its connection
         // on delete, which would otherwise block it. A const, so naming it loads nothing of the lazily loaded chat.
-        await Attempt(nameof(IndexedDb), () => indexedDb.DeleteDatabase(AiChat.AppAiChat.HistoryDatabase).AsTask());
+        await Attempt(nameof(IndexedDb), () => indexedDb.DeleteDatabase(AppAiChat.HistoryDatabase).AsTask());
         //#endif
 
         await Attempt(nameof(Cookie), async () =>
@@ -183,10 +143,5 @@ public partial class AppDiagnosticModal
                 logger.LogWarning(exp, "Failed to clear {Storage} during ClearAppStorage.", storageName);
             }
         }
-    }
-
-    private async Task UpdateApp()
-    {
-        await appUpdateService.ForceUpdate();
     }
 }

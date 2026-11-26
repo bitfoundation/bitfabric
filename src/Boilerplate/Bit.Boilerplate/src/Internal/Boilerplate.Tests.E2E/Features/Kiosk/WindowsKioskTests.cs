@@ -65,6 +65,91 @@ public partial class WindowsKioskTests : AppTestBase
     }
 
     /// <summary>
+    /// Alt+Tab, pressed again and again from the moment the window exists until the app is up, while the WebView and
+    /// the app still load and keep the UI thread busy. Not one press may take the front from the kiosk, and once the app
+    /// is up its window is in front, topmost and over the whole monitor.
+    /// <para>
+    /// Started visible, since what is in front is what it tests. It presses only while the kiosk is in front, so a guard
+    /// that fails lets one press through, not a stream of them switching the machine's own windows. Windows refuses
+    /// simulated keys on a locked desktop, which leaves the test inconclusive.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public async Task Window_Should_StayInFrontWhenAltTabIsPressedWhileTheKioskAppStarts()
+    {
+        var windowsAppId = DeployedApps.AdminPanelWindowsAppId;
+
+        // Before the presses start waiting for a window, so the one they find is the one this launch opens.
+        IPlaywrightExtensions.StopWindowsApps();
+
+        using var appIsUp = new CancellationTokenSource();
+        var pressing = Task.Run(() => PressAltTabUntil(windowsAppId, appIsUp.Token));
+
+        try
+        {
+            var page = await LaunchApp(App.AdminPanel, visible: true);
+
+            await GoHome(page);
+        }
+        finally
+        {
+            await appIsUp.CancelAsync();
+        }
+
+        var (inFrontAtLeastOnce, presses, frontsLost, inputRefused) = await pressing;
+
+        if (inputRefused || (inFrontAtLeastOnce is false && WindowsWindow.IsDesktopInteractive() is false))
+            Assert.Inconclusive("The desktop is locked or not interactive: nothing is in front, and simulated keys are refused.");
+
+        Assert.IsTrue(inFrontAtLeastOnce, "The kiosk window never came to the front while the app started.");
+        Assert.AreEqual(0, frontsLost, $"Alt+Tab took the front from the kiosk {frontsLost} time(s) in {presses} presses while the app started.");
+
+        var window = WindowsWindow.Of(windowsAppId);
+
+        Assert.IsTrue(WindowsWindow.IsInFront(window), "The kiosk window is not in front once the app is up.");
+        Assert.IsTrue(WindowsWindow.IsTopMost(window), "The kiosk window is not topmost once the app is up.");
+        Assert.AreEqual(WindowsWindow.ScreenBounds(window), WindowsWindow.RestoredBounds(window), "The kiosk window does not cover its monitor once the app is up.");
+    }
+
+    /// <summary>
+    /// Presses Alt+Tab while the app's window is in front, from the moment it has one until <paramref name="appIsUp"/>,
+    /// and counts the presses after which it was not in front any more.
+    /// </summary>
+    private static (bool InFrontAtLeastOnce, int Presses, int FrontsLost, bool InputRefused) PressAltTabUntil(string windowsAppId, CancellationToken appIsUp)
+    {
+        var window = WindowsWindow.Of(windowsAppId);
+        var inFrontAtLeastOnce = false;
+        var presses = 0;
+        var frontsLost = 0;
+
+        while (appIsUp.IsCancellationRequested is false)
+        {
+            if (WindowsWindow.IsInFront(window) is false)
+            {
+                Thread.Sleep(TimeSpan.FromMilliseconds(50));
+                continue;
+            }
+
+            inFrontAtLeastOnce = true;
+
+            if (WindowsWindow.PressAltTab() is false)
+                return (inFrontAtLeastOnce, presses, frontsLost, InputRefused: true);
+
+            presses++;
+
+            // Windows switches on the key itself; this is the time it takes to show.
+            Thread.Sleep(TimeSpan.FromMilliseconds(200));
+
+            if (WindowsWindow.IsInFront(window) is false)
+            {
+                frontsLost++;
+            }
+        }
+
+        return (inFrontAtLeastOnce, presses, frontsLost, InputRefused: false);
+    }
+
+    /// <summary>
     /// The close a person performs - Alt+F4, or the X that is no longer there. Refused in the kiosk app and nowhere
     /// else; a Windows shutdown and a Task Manager close arrive as other reasons and are let through, which is why
     /// this sends SC_CLOSE rather than WM_CLOSE (see <see cref="WindowsWindow.RequestUserClose"/>).
@@ -116,14 +201,14 @@ public partial class WindowsKioskTests : AppTestBase
     /// <summary>
     /// <see cref="WindowsAppOpener"/>'s launch with a stop that tolerates an app these tests have already ended.
     /// </summary>
-    private async Task<IPage> LaunchApp(App app)
+    private async Task<IPage> LaunchApp(App app, bool visible = false)
     {
         var windowsAppId = DeployedApps.WindowsAppIdOf(app);
 
         if (windowsAppId is null)
             Assert.Inconclusive($"{app} has no Windows build.");
 
-        var (page, stop) = await Playwright.LaunchWindowsApp(windowsAppId!);
+        var (page, stop) = await Playwright.LaunchWindowsApp(windowsAppId!, visible: visible);
 
         RegisterForCleanup(async () =>
         {

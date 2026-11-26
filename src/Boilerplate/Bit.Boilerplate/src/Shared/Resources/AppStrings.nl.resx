@@ -2293,4 +2293,22 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
     <value>{0} tot {1}</value>
   </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Tweefactorauthenticatie is nodig</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Alleen een account dat zich aanmeldt met tweefactorauthenticatie kan deze applicatie autoriseren. Zet die aan en meld u er opnieuw mee aan, dan komt u hier terug om af te ronden.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Tweefactorauthenticatie aanzetten</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>Tweefactorauthenticatie staat aan. Bewaar uw herstelcodes en meld u er daarna opnieuw mee aan om terug te gaan naar waar u was.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Opnieuw aanmelden</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>Tweefactorauthenticatie staat aan en u bent ermee aangemeld. U kunt teruggaan naar waar u was.</value>
+  </data>
 </root>

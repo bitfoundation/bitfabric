@@ -712,6 +712,8 @@ The `bit` command stays available in its terminal, for `bit doctor` and `bit tra
 4. Wait for the container to build and for `bit setup` to finish; GitHub Codespaces prebuilds do both ahead of time
 5. Start developing!
 
+**On GitHub Codespaces from your terminal**: `bit codespace` runs the project in your branch's codespace, which it reuses, starts when it's stopped and creates only when there's none, and forwards the app's ports to your machine, so the app opens at the same `localhost` address as when it runs locally. `bit codespace code` opens the codespace in VS Code, and `bit codespace stop` and `bit codespace delete` stop or delete it. The dev container's SSH server (the `sshd` feature) is what lets bit run the project in it.
+
 ---
 
 ### AI Wiki

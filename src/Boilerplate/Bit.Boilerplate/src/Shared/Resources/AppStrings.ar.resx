@@ -2293,4 +2293,22 @@
     <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
     <value>من {0} إلى {1}</value>
   </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>المصادقة الثنائية مطلوبة</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>لا يمكن تفويض هذا التطبيق إلا من حساب يسجّل الدخول باستخدام المصادقة الثنائية. فعّلها ثم سجّل الدخول مرة أخرى باستخدامها، وستعود إلى هنا لإكمال العملية.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>تفعيل المصادقة الثنائية</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>المصادقة الثنائية مفعّلة. احتفظ برموز الاسترداد، ثم سجّل الدخول مرة أخرى باستخدامها للعودة إلى حيث كنت.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>تسجيل الدخول مرة أخرى</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>المصادقة الثنائية مفعّلة وقد سجّلت الدخول باستخدامها. يمكنك العودة إلى حيث كنت.</value>
+  </data>
 </root>

@@ -2293,4 +2293,22 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
     <value>{0} to {1}</value>
   </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Two-factor authentication is needed</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Only an account that signs in with two-factor authentication can authorize this application. Turn it on and sign in again with it, and you'll come back here to finish.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Turn on two-factor authentication</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>Two-factor authentication is on. Keep your recovery codes, then sign in again with it to go back to where you were.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Sign in again</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>Two-factor authentication is on, and you signed in with it. You can go back to where you were.</value>
+  </data>
 </root>
