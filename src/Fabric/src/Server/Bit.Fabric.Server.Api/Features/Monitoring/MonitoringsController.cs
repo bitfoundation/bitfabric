@@ -175,7 +175,7 @@ public partial class MonitoringsController : AppControllerBase, IMonitoringsCont
 
         var existing = await DbContext.Monitorings.AsNoTracking().FirstOrDefaultAsync(project => project.Address == found.Address, cancellationToken);
 
-        // A new environment of a project of the team's own, by its page's "Add an environment".
+        // A new environment of a project of the team's own, by its page's "Add your server".
         if (request.ProjectId is { } projectId && await DbContext.Projects.AnyAsync(project => project.Id == projectId, cancellationToken) is false)
             throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 

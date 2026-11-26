@@ -11668,7 +11668,7 @@
     <value>bit Fabric وقتی آن را می‌فهمد که اپ روی تازه‌ترین bit Boilerplate باشد، یا Team شما License آن را بگیرد.</value>
   </data>
   <data name="MonitoringAddAnEnvironmentTo" xml:space="preserve">
-    <value>افزودن یک محیط به {0}</value>
+    <value>افزودن سرور به {0}</value>
   </data>
   <data name="MonitoringEnvironment" xml:space="preserve">
     <value>محیط</value>
@@ -11707,7 +11707,7 @@
     <value>محیط‌ها</value>
   </data>
   <data name="MonitoringAddAnEnvironment" xml:space="preserve">
-    <value>افزودن یک محیط</value>
+    <value>افزودن سرور</value>
   </data>
   <data name="MonitoringWatchItsApp" xml:space="preserve">
     <value>پایش اپ آن</value>

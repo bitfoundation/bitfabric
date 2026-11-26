@@ -68,14 +68,15 @@ public class ProjectsPageTests
         cut.FindAll(".filters button[aria-pressed]").Single(tag => tag.TextContent.Contains("All")).Click();
         cut.WaitForAssertion(() => Assert.HasCount(7, cut.FindAll(".project-card")));
 
-        cut.Find(".search input").Input("customers");
+        // Found and typed into in one go: the search box renders again once its debounce ends, which can replace its handler in between.
+        await cut.InvokeAsync(() => cut.Find(".search input").Input("customers"));
         cut.WaitForAssertion(() => Assert.HasCount(1, cut.FindAll(".project-card")));
         Assert.Contains("Customers portal", cut.Find(".project-card").TextContent);
 
-        cut.Find(".search input").Input("letters.example");
+        await cut.InvokeAsync(() => cut.Find(".search input").Input("letters.example"));
         cut.WaitForAssertion(() => Assert.Contains("Newsletter", cut.Find(".project-card").TextContent));
 
-        cut.Find(".search input").Input("nothing like it");
+        await cut.InvokeAsync(() => cut.Find(".search input").Input("nothing like it"));
         cut.WaitForAssertion(() => Assert.Contains("No project matches", cut.Markup));
 
         cut.FindAll("button").Single(button => button.TextContent.Contains("Show all projects")).Click();
