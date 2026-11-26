@@ -513,9 +513,6 @@ public partial class AppChatbot
         aiFunctions.AddRange(Features.Monitoring.ProjectMonitoringMcpTools.AIFunctions(serviceProvider));
         aiFunctions.AddRange(Features.Monitoring.ProjectScansMcpTools.AIFunctions(serviceProvider));
 
-        // The growth page's figures, for the global admins only, as on /mcp.
-        aiFunctions.AddRange(Features.Growth.GrowthMcpTools.AIFunctions(serviceProvider));
-
         // The bit platform libraries' documentation, from the same tools /docs-mcp serves (See DocsMcpChatbotTools).
         aiFunctions.AddRange(Features.DocsMcp.DocsMcpChatbotTools.AIFunctions(serviceProvider));
 

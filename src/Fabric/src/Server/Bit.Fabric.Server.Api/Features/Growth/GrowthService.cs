@@ -9,7 +9,7 @@ namespace Bit.Fabric.Server.Api.Features.Growth;
 /// codebase, known by the id in its bit.json, whichever teams hold it. A Trial bit CLI asked for from CI (its <c>Ci</c>
 /// set) counts in no Trial figure, and makes a project only once that codebase holds a License, as a demo of bit
 /// Boilerplate does. A day is <c>TimeZoneInfo.ConvertTimeBySystemTimeZoneId</c>'s, which PostgreSQL runs as <c>AT TIME
-/// ZONE</c>. Read by <see cref="GrowthController"/> and the MCP tool <see cref="GrowthMcpTools"/>.
+/// ZONE</c>. Read by <see cref="GrowthController"/>.
 /// </summary>
 public partial class GrowthService
 {
