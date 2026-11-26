@@ -1,8 +1,8 @@
 namespace Bit.Fabric.Shared.Features.Diagnostic;
 
 /// <summary>
-/// The body of /healthz (See MapAppHealthChecks). It keeps the HealthChecks UI format's names and adds what the
-/// health checks page needs on top: when the report was made, and each check's failure status and timeout. And which
+/// The body of /healthz (See MapAppHealthChecks). It keeps the HealthChecks UI format's names and adds what a
+/// monitor needs on top: when the report was made, and each check's failure status and timeout. And which
 /// build answered, on which instance, since when: a monitor that polls this marks a deployment where
 /// <see cref="ApplicationVersion"/> changes, and a restart where it stays and <see cref="StartedAt"/> moves.
 /// </summary>
@@ -94,13 +94,17 @@ public class HealthReportEntryDto
     /// <summary>What a pass proves, such as "Opens a connection to the app's database". Null when the app says nothing.</summary>
     public string? About { get; set; }
 
-    /// <summary>The outside service the check talks to, such as "Twilio"; a name only. Null when the app names none.</summary>
+    /// <summary>
+    /// The outside service the check talks to, such as "Twilio" behind "SMS" (See HealthCheckDependencies). Null for a
+    /// check that names none, and for one whose settings are missing. Like <see cref="Host"/> and <see cref="Model"/>,
+    /// it is a name only, never a credential, a connection string or a user name.
+    /// </summary>
     public string? Provider { get; set; }
 
-    /// <summary>The host the check reaches, the host name alone.</summary>
+    /// <summary>The host the check reaches, such as "smtp.example.com": the host name alone, without a port, path or query.</summary>
     public string? Host { get; set; }
 
-    /// <summary>The model an AI check uses.</summary>
+    /// <summary>The model an AI check uses, such as "gpt-4.1-mini".</summary>
     public string? Model { get; set; }
 
     /// <summary>

@@ -550,20 +550,8 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>mit dem, was Sie bereits kennen und lieben</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>Video ansehen</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Mehr erfahren</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>Eine voll ausgestattete App auf jeder Plattform - ab Tag eins</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>Ein Satz performanter, leicht anpassbarer und schöner Blazor-Komponenten</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>Der Ausgangspunkt hinter dieser App: alles fertig verdrahtet, und der Quellcode gehört ganz Ihnen.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Entwickeln Sie Ihre App mit Ihrer eigenen KI, vom ersten Tag an mit vollem Funktionsumfang für Web, Android, iOS, Windows und macOS. Code, Daten und Server bleiben Ihre.</value>
@@ -1476,6 +1464,9 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
   </data>
     <data name="PendingInvitation" xml:space="preserve">
     <value>Ausstehende Einladung</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
+    <value>Ausstehende Einladungen</value>
   </data>
     <data name="CurrentTenant" xml:space="preserve">
     <value>Aktuelles Team</value>
@@ -7698,5 +7689,68 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
   </data>
     <data name="FeaturesLead" xml:space="preserve">
     <value>All das ist vor Ihrem ersten Prompt gebaut und getestet, in Ihrem eigenen Repository, wo Ihre KI jede Zeile lesen und ändern kann. Tippen Sie auf ⓘ einer Karte, um sie in einem kurzen Film zu sehen.</value>
+  </data>
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Gerade funktioniert etwas nicht</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Geplante Wartung</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>Das Team weiß Bescheid. Sie müssen es nicht melden.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Statusseite</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Wird untersucht</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Ursache gefunden</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Behebung eingespielt</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Behoben</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Begonnen {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Begonnen {0}, aktualisiert {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>gerade eben</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>vor {0} Min.</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>vor {0} Std.</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>Läuft bis {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} bis {1}</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Zwei-Faktor-Authentifizierung erforderlich</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Nur ein Konto, das sich mit Zwei-Faktor-Authentifizierung anmeldet, kann diese Anwendung autorisieren. Aktivieren Sie sie und melden Sie sich damit erneut an – danach kehren Sie hierher zurück, um den Vorgang abzuschließen.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Zwei-Faktor-Authentifizierung aktivieren</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>Die Zwei-Faktor-Authentifizierung ist aktiviert. Bewahren Sie Ihre Wiederherstellungscodes auf und melden Sie sich dann damit erneut an, um dorthin zurückzukehren, wo Sie waren.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Erneut anmelden</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>Die Zwei-Faktor-Authentifizierung ist aktiviert, und Sie haben sich damit angemeldet. Sie können dorthin zurückkehren, wo Sie waren.</value>
   </data>
 </root>

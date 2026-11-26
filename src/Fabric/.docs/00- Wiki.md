@@ -20,7 +20,8 @@ If you have questions or need assistance:
 
 ### 3. 🐛 **GitHub Issues**
    - Report bugs or request features
-   - Create an issue: **[https://github.com/bitfoundation/bitplatform/issues/new/choose](https://github.com/bitfoundation/bitplatform/issues/new/choose)**
+   - For this project template or bit CLI: **[https://github.com/bitfoundation/bitfabric/issues/new/choose](https://github.com/bitfoundation/bitfabric/issues/new/choose)**
+   - For a library such as bit BlazorUI or bit Butil: **[https://github.com/bitfoundation/bitplatform/issues/new/choose](https://github.com/bitfoundation/bitplatform/issues/new/choose)**
 
 ### 4. 💭 **GitHub Discussions**
    - Ask questions, share ideas, or discuss with the community

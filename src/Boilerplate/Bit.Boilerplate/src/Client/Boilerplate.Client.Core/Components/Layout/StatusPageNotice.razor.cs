@@ -183,7 +183,7 @@ public partial class StatusPageNotice
             {
                 ({ } startsAt, { } updatedAt) when updatedAt - startsAt >= TimeSpan.FromMinutes(1) => Localizer[nameof(AppStrings.StatusNoticeStartedAndUpdated), Ago(startsAt), Ago(updatedAt)],
                 ({ } startsAt, _) => Localizer[nameof(AppStrings.StatusNoticeStarted), Ago(startsAt)],
-                _ => null
+                _ => (string?)null
             };
         }
     }

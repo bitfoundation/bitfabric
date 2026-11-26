@@ -220,7 +220,7 @@ var authManager = client.AuthManager;
 
 ### TestData Constants
 ```csharp
-public const string DefaultTestEmail = "test@bitplatform.dev";
+public const string DefaultTestEmail = "test@bitfabric.co";
 public const string DefaultTestPassword = "40918412";
 ```
 - Centralized test data in [`TestData.cs`](/src/Tests/Features/Identity/TestData.cs)

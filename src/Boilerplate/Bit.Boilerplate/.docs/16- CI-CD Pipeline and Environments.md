@@ -71,7 +71,7 @@ In a public repository, every build also gets a signed attestation of the commit
 
 Two steps use short composite actions from
 [bitfoundation/bitfabric](https://github.com/bitfoundation/bitfabric/tree/main/.github/actions/bit-bp), at the
-release tag of the project's bit Boilerplate version, so the workflows stay short and get their fixes with each upgrade:
+release tag of the template version the project's `bit.json` records, so the workflows stay short and get their fixes with each upgrade:
 `bit-setup` installs the bit CLI and runs `bit setup`, which installs only what the runner is missing, and
 `artifact-signing` lets `vpk pack` sign the Windows app with Artifact Signing. Each is a few lines of YAML; to stop
 depending on that repository, copy one into this repository and point its step at the copy.

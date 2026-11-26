@@ -550,20 +550,8 @@
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>使用您已经熟悉并喜爱的技术</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>观看视频</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>了解更多</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>开箱即全功能的应用，覆盖所有平台</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>一套高性能、易自定义且美观的 Blazor 组件</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>这个应用的起点：一切都已接好，源码完全属于你。</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>用你自己的 AI 构建应用，从第一天起就在 Web、Android、iOS、Windows 和 macOS 上功能齐全。代码、数据和服务器始终属于你。</value>
@@ -1475,6 +1463,9 @@
     <value>接受</value>
   </data>
     <data name="PendingInvitation" xml:space="preserve">
+    <value>待处理的邀请</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
     <value>待处理的邀请</value>
   </data>
     <data name="CurrentTenant" xml:space="preserve">
@@ -7698,5 +7689,68 @@
   </data>
     <data name="FeaturesLead" xml:space="preserve">
     <value>这一切都在你的第一个提示词之前构建并测试好，就在你自己的代码仓库里，你的 AI 可以阅读和修改每一行。点卡片上的 ⓘ，看一段短片。</value>
+  </data>
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>目前有功能无法正常使用</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>计划维护</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>团队已知晓此问题，无需报告。</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>状态页</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>调查中</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>已找到原因</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>已应用修复</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>已解决</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>开始于 {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>开始于 {0}，更新于 {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>刚刚</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} 分钟前</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} 小时前</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>进行中，至 {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} 至 {1}</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>需要双重验证</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>只有使用双重验证登录的账户才能授权此应用。请启用它并使用它重新登录，之后您会回到这里完成授权。</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>启用双重验证</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>双重验证已启用。请保存好恢复代码，然后使用它重新登录，以返回您之前所在的位置。</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>重新登录</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>双重验证已启用，且您已使用它登录。您可以返回之前所在的位置。</value>
   </data>
 </root>

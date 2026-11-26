@@ -18,9 +18,13 @@ public static class AppBevTools
     /// <summary>The app's own panel, which BevTools opens on unless asked for another one (See AppDevTools).</summary>
     public const string AppPanelId = "app";
 
+    /// <summary>What the app's status page says now (See <see cref="AppStatusPagePanel"/>).</summary>
+    public const string StatusPanelId = "status";
+
     public static void Configure(BevToolsOptions options)
     {
-        // Before BevTools' other extension panels, so it is the first tab after the built-in ones.
+        // Before BevTools' other extension panels, so they are the first tabs after the built-in ones.
         options.AddPanel<AppDevToolsPanel>(AppPanelId, "App", order: 0);
+        options.AddPanel<AppStatusPagePanel>(StatusPanelId, "Status", order: 1);
     }
 }
