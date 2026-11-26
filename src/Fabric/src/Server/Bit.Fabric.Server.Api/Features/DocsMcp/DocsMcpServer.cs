@@ -52,7 +52,7 @@ public class DocsMcpServer(DocsMcpProxy proxy, DocsMcpVersions versions, DocsMcp
         return request.Name switch
         {
             DocsMcpFeedbackTool.ToolName => await feedbackTool.Call(request, connection, requestServices, cancellationToken),
-            DocsMcpReleasesTool.ToolName => await releasesTool.Call(request, connection.RequestedVersion, cancellationToken),
+            DocsMcpReleasesTool.ToolName => await releasesTool.Call(request, cancellationToken),
             _ => await proxy.CallTool(request.Name, request.Arguments, versions.Served, cancellationToken)
         };
     }

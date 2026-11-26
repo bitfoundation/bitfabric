@@ -2248,6 +2248,51 @@
     <value>خروج از برنامه</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>بخشی از برنامه الان درست کار نمی‌کند</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>نگهداری برنامه‌ریزی‌شده</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>تیم از این موضوع باخبر است؛ لازم نیست گزارش دهید.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>صفحه‌ی وضعیت</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>در حال بررسی</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>علت پیدا شد</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>رفع اعمال شد</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>حل شد</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>شروع {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>شروع {0}، آخرین خبر {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>همین حالا</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} دقیقه پیش</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} ساعت پیش</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>در جریان است تا {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>از {0} تا {1}</value>
+  </data>
   <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
     <value>ورود دو مرحله‌ای لازم است</value>
   </data>

@@ -1,5 +1,5 @@
 [mcp_servers.bitplatform]
-url = "https://api.bitfabric.co/docs-mcp?v=11.0.0"
+url = "https://api.bitfabric.co/docs-mcp"
 
 [mcp_servers.dev-mcp-test]
 url = "https://use-your-test-api-server-url-here.com/dev-mcp"

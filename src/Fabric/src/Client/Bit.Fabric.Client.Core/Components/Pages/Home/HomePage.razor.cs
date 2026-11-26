@@ -107,8 +107,9 @@ public partial class HomePage
     ];
 
     /// <summary>
-    /// What every project starts with, as eight cards, each playing the film its id names (See AppHomeFilms). The website's is
-    /// the one the onboarding plays. Every other feature, with its own card and film, is on /features.
+    /// What every project starts with, as nine cards, each playing the film its id names (See AppHomeFilms), but the status
+    /// notice's, which has a note. The website's is the one the onboarding plays. Every other feature, with its own card and
+    /// film, is on /features.
     /// </summary>
     private AppHomeFeature[] DayOne =>
     [
@@ -119,7 +120,8 @@ public partial class HomePage
         new("focused", BitIconName.Chat, Localizer[nameof(AppStrings.AppHomeDayOneAssistant)], Localizer[nameof(AppStrings.AppHomeDayOneAssistantText)]),
         new("rtl", BitIconName.LocaleLanguage, Localizer[nameof(AppStrings.AppHomeDayOneLanguages)], Localizer[nameof(AppStrings.AppHomeDayOneLanguagesText)]),
         new("offline", BitIconName.CloudDownload, Localizer[nameof(AppStrings.AppHomeWorksOffline)], Localizer[nameof(AppStrings.AppHomeItKeepsWorkingWithoutAConnectionAnd)]),
-        new("gdpr", BitIconName.ShieldSolid, Localizer[nameof(AppStrings.AppHomeGDPRFriendly)], Localizer[nameof(AppStrings.AppHomeUsersChooseWhatTheyAllowDownload)])
+        new("gdpr", BitIconName.ShieldSolid, Localizer[nameof(AppStrings.AppHomeGDPRFriendly)], Localizer[nameof(AppStrings.AppHomeUsersChooseWhatTheyAllowDownload)]),
+        StatusNoticeFeature
     ];
 
     /// <summary>How it works, in the order of bitfabric-internal/specs/getting-started.md. "Paste one line", never "run a command".</summary>

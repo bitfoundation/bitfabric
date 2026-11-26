@@ -216,7 +216,8 @@ public partial class FeaturesPage
             new("tenants", BitIconName.Org, Localizer[nameof(AppStrings.AppHomeManyCompaniesOneApp)], Localizer[nameof(AppStrings.AppHomeMultiTenantAndSaaSReady)]),
             new("gdpr", BitIconName.ShieldSolid, Localizer[nameof(AppStrings.AppHomeGDPRFriendly)], Localizer[nameof(AppStrings.AppHomeUsersChooseWhatTheyAllowDownload)]),
             new("offline", BitIconName.CloudDownload, Localizer[nameof(AppStrings.AppHomeWorksOffline)], Localizer[nameof(AppStrings.AppHomeItKeepsWorkingWithoutAConnectionAnd)]),
-            new("force-update", BitIconName.Refresh, Localizer[nameof(AppStrings.AppHomeForceUpdate)], Localizer[nameof(AppStrings.AppHomeWhenAVersionHasToGoItsUsersUpdate)])
+            new("force-update", BitIconName.Refresh, Localizer[nameof(AppStrings.AppHomeForceUpdate)], Localizer[nameof(AppStrings.AppHomeWhenAVersionHasToGoItsUsersUpdate)]),
+            StatusNoticeFeature
         ]),
         new("identity", Localizer[nameof(AppStrings.AppHomeACompleteIdentitySolutionInsideYourProject)], Localizer[nameof(AppStrings.AppHomeNoIdentityProviderToPayAndYourUsers)],
         [

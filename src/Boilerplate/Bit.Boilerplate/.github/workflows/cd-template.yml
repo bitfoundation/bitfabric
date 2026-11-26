@@ -81,6 +81,7 @@ jobs:
         with:
           files: 'src/**/appsettings*json'
         env:
+          StatusPageSummaryUrl: ${{ vars.STATUS_PAGE_SUMMARY_URL }}
           ServerAddress: ${{ vars.SERVER_API_ADDRESS || vars.SERVER_ADDRESS }}
           # The pages and the apps post their telemetry to the web app's own address, whose /v1/ paths go to the dashboard
           # (See .docs/15, In a Deployment). The landing page's servers override it with the landing page's own address.
@@ -721,6 +722,7 @@ jobs:
         with:
           files: 'src\**\appsettings*json'
         env:
+          StatusPageSummaryUrl: ${{ vars.STATUS_PAGE_SUMMARY_URL }}
           ServerAddress: ${{ vars.SERVER_API_ADDRESS || vars.SERVER_ADDRESS }}
           Belemetry.OtlpEndpoint: ${{ vars.SERVER_ADDRESS }}
           WindowsUpdate.FilesUrl: ${{ vars.WINDOWS_UPDATE_FILES_URL }}
@@ -840,6 +842,7 @@ jobs:
         with:
           files: 'src/**/appsettings*json'
         env:
+          StatusPageSummaryUrl: ${{ vars.STATUS_PAGE_SUMMARY_URL }}
           ServerAddress: ${{ vars.SERVER_API_ADDRESS || vars.SERVER_ADDRESS }}
           Belemetry.OtlpEndpoint: ${{ vars.SERVER_ADDRESS }}
 
@@ -919,6 +922,7 @@ jobs:
         with:
           files: 'src/**/appsettings*json'
         env:
+          StatusPageSummaryUrl: ${{ vars.STATUS_PAGE_SUMMARY_URL }}
           ServerAddress: ${{ vars.SERVER_API_ADDRESS || vars.SERVER_ADDRESS }}
           Belemetry.OtlpEndpoint: ${{ vars.SERVER_ADDRESS }}
 

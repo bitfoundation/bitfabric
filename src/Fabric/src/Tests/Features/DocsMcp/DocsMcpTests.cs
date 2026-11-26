@@ -56,7 +56,7 @@ public partial class DocsMcpTests
         await using var platform = new FakeBitPlatform();
         var sender = new CapturingSender();
         await using var server = await StartServer(platform, sender);
-        await using var mcp = await Connect(server, "libraries=all&v=10.6.0&project=a-project");
+        await using var mcp = await Connect(server, "libraries=all&project=a-project");
 
         Assert.AreEqual("BlazorUI on BitDataGrid.", await Call(mcp, "SearchBitBlazorUI", new() { ["query"] = "BitDataGrid" }));
         Assert.StartsWith(FakeBitPlatform.BmageAnswer, await Call(mcp, "SearchBmage", new() { ["query"] = "crop" }));
@@ -74,8 +74,7 @@ public partial class DocsMcpTests
         var email = sender.Sent.Single();
         Assert.AreEqual(TeamAddress, email.Data.ToAddresses.Single().EmailAddress);
         Assert.Contains("BitDropdown loses its selection", email.Data.Subject);
-        Assert.Contains("Release: 10.6.0", email.Data.Body, "Stamped with the release the agent connected for.");
-        Assert.Contains("Project: a-project", email.Data.Body);
+        Assert.Contains("Project: a-project", email.Data.Body, "Stamped with the project the agent connected for.");
         Assert.Contains("Scroll a virtualized list, then pick.", email.Data.Body);
         Assert.IsFalse(email.Data.IsHtml, "Nothing an agent writes renders.");
 
@@ -94,10 +93,14 @@ public partial class DocsMcpTests
     {
         await using var platform = new FakeBitPlatform();
         await using var server = await StartServer(platform);
-        await using var mcp = await Connect(server, "v=11.0.0-pre-24");
+        await using var mcp = await Connect(server);
 
         Assert.AreEqual("11.0.0-pre-24 is up to date: the newest version is 11.0.0-pre-24, published 2026-11-24, https://github.com/bitfoundation/bitfabric/releases/tag/v-11.0.0-pre-24",
-            await Call(mcp, "GetBitPlatformReleases"), "Without a version argument, the one ?v= names is checked.");
+            await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "11.0.0-pre-24" }));
+
+        var withoutVersion = await mcp.CallToolAsync("GetBitPlatformReleases", new Dictionary<string, object?>(), cancellationToken: TestContext.CancellationToken);
+        Assert.IsTrue(withoutVersion.IsError);
+        Assert.StartsWith("Pass version", Text(withoutVersion), "The agent passes the version its project is on; the address names none.");
 
         var behind = await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "11.0.0-pre-22" });
         Assert.StartsWith("11.0.0-pre-22 is behind: 2 newer versions, the newest being 11.0.0-pre-24, published 2026-11-24.", behind);
@@ -137,9 +140,9 @@ public partial class DocsMcpTests
         platform.Releases.Enqueue(new("bitfabric", "v-11.0.0", "2026-12-01T00:00:00Z", "The template on .NET 11."));
 
         await using var server = await StartServer(platform);
-        await using var mcp = await Connect(server, "v=11.0.0-pre-24");
+        await using var mcp = await Connect(server);
 
-        var answer = await Call(mcp, "GetBitPlatformReleases");
+        var answer = await Call(mcp, "GetBitPlatformReleases", new() { ["version"] = "11.0.0-pre-24" });
         Assert.StartsWith("11.0.0-pre-24 is behind: 1 newer version, the newest being 11.0.0, published 2026-12-01.", answer, "A stable version comes after every prerelease of it.");
         Assert.Contains("# 11.0.0, published 2026-12-01, https://github.com/bitfoundation/bitplatform/releases/tag/v-11.0.0", answer);
         Assert.Contains("# 11.0.0 of bit Boilerplate and bit CLI, published 2026-12-01, https://github.com/bitfoundation/bitfabric/releases/tag/v-11.0.0", answer);
@@ -150,12 +153,12 @@ public partial class DocsMcpTests
     }
 
     /// <summary>
-    /// The source code tools read the newest tag of bitplatform, a prerelease included, whatever ?v= a connection names,
-    /// with the template from bitfabric's tag of the same name. A newer tag replaces it once it is indexed, deleting the
-    /// sources of the one it replaced; one that can't be prepared yet leaves the one served answering.
+    /// The source code tools read the newest tag of bitplatform, a prerelease included, with the template from bitfabric's
+    /// tag of the same name. A newer tag replaces it once it is indexed, deleting the sources of the one it replaced; one
+    /// that can't be prepared yet leaves the one served answering.
     /// </summary>
     [TestMethod]
-    public async Task TheSourceCodeTools_Should_ReadTheNewestTag_WhateverTheAddressNames()
+    public async Task TheSourceCodeTools_Should_ReadTheNewestTag()
     {
         var dataDirectory = Directory.CreateTempSubdirectory("docs-mcp-");
 
@@ -202,10 +205,9 @@ public partial class DocsMcpTests
             Assert.AreSequenceEqual(new[] { "project-v-11.0.0-pre-24" }, indexed.Keys.ToArray(), "The indexes of the releases read before are deleted.");
             Assert.AreEqual("// The template of 11.0.0-pre-24", File.ReadAllText(Path.Combine(preSources, "src/Templates/Boilerplate/Bit.Boilerplate/src/Program.cs")));
 
-            await using (var older = await Connect(server, "v=10.7.0"))
+            await using (var mcp = await Connect(server))
             {
-                Assert.Contains("Its source code tools read 11.0.0-pre-24, the newest bit platform code, whatever v this connection names.", older.ServerInstructions!);
-                Assert.StartsWith("10.7.0 is behind", await Call(older, "GetBitPlatformReleases"), "The releases tool still checks the version ?v= names.");
+                Assert.Contains("Its source code tools read 11.0.0-pre-24, the newest bit platform tag indexed so far.", mcp.ServerInstructions!);
             }
 
             // 11.0.0 is tagged in both repositories.
@@ -218,9 +220,9 @@ public partial class DocsMcpTests
             Assert.AreSequenceEqual(new[] { "project-v-11.0.0" }, indexed.Keys.ToArray(), "Nor its index.");
             Assert.AreSequenceEqual(new[] { "v-11.0.0" }, Directory.EnumerateDirectories(sourcesDirectory).Select(Path.GetFileName).ToArray());
 
-            await using (var asBefore = await Connect(server, "v=11.0.0-pre-24"))
+            await using (var mcp = await Connect(server))
             {
-                Assert.Contains("Its source code tools read 11.0.0, the newest bit platform code, whatever v this connection names.", asBefore.ServerInstructions!);
+                Assert.Contains("Its source code tools read 11.0.0, the newest bit platform tag indexed so far.", mcp.ServerInstructions!);
             }
 
             using (var served = JsonDocument.Parse(await server.CreateRawHttpClient().GetStringAsync(new Uri(server.ApiAppAddress, "docs-mcp/versions"), TestContext.CancellationToken)))

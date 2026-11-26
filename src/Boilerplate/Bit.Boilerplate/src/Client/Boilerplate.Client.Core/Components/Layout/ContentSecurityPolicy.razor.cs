@@ -61,6 +61,12 @@ public partial class ContentSecurityPolicy
             connectSrc.Add($"{otlpEndpoint.Scheme}://{otlpEndpoint.Authority}");
         }
 
+        // --- Add the status page StatusPageNotice reads (See ClientCoreSettings.StatusPageSummaryUrl) ---
+        if (Uri.TryCreate(settings.StatusPageSummaryUrl, UriKind.Absolute, out var statusPageSummary) && statusPageSummary.Scheme is "https" or "http")
+        {
+            connectSrc.Add($"{statusPageSummary.Scheme}://{statusPageSummary.Authority}");
+        }
+
         //#if (captcha == "reCaptcha")
         // --- Add Google reCAPTCHA ---
         connectSrc.Add("https://www.google.com/");

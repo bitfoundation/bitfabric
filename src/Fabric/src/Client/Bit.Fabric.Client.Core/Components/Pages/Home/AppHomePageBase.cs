@@ -60,6 +60,20 @@ public abstract partial class AppHomePageBase : AppPageBase
     /// <summary>Whether the film in the dialog is the one the home page's onboarding opened, rather than one the visitor did.</summary>
     protected bool isOnboardingFilm;
 
+    /// <summary>
+    /// The status notice's card on the home page and /features: a few lines rather than a film, since the notice shows only
+    /// while something is wrong (bitfabric-internal/specs/monitoring.md, "The app shows it while something is wrong").
+    /// </summary>
+    protected AppHomeFeature StatusNoticeFeature => new("status-notice", BitIconName.Health,
+        Localizer[nameof(AppStrings.AppHomeDayOneStatusNotice)], Localizer[nameof(AppStrings.AppHomeDayOneStatusNoticeText)],
+        Note: new(Localizer[nameof(AppStrings.AppHomeStatusNoticeLead)],
+        [
+            (Localizer[nameof(AppStrings.AppHomeStatusNoticeWhenTerm)], Localizer[nameof(AppStrings.AppHomeStatusNoticeWhen)]),
+            (Localizer[nameof(AppStrings.AppHomeStatusNoticeShowsTerm)], Localizer[nameof(AppStrings.AppHomeStatusNoticeShows)]),
+            (Localizer[nameof(AppStrings.AppHomeStatusNoticeWhereTerm)], Localizer[nameof(AppStrings.AppHomeStatusNoticeWhere)])
+        ],
+        Localizer[nameof(AppStrings.AppHomeStatusNoticeAfter)]));
+
     protected async Task Explain(AppHomeFeature feature)
     {
         if (feature.Note is null && filmType is null)

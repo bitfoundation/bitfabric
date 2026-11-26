@@ -11,7 +11,7 @@ namespace Bit.Fabric.Tests.Features.Home;
 /// Search engines read the films of the home page and of /features (bitfabric-internal/specs/home-page.md, "Search engines
 /// read the films, and the interactive page doesn't build them"): the prerendered page carries each film's text in its
 /// card, hidden, and the interactive page builds a film only when its info button is pressed. Since 2026-11-18 the
-/// catalogue, with most films, is on /features, and the home page has eight of them. The app runs with prerendering on
+/// catalogue, with most films, is on /features, and the home page has eight of them, and a ninth card with a note. The app runs with prerendering on
 /// here, as production has it (Server.Web's appsettings.Production.json): only a prerendered page has anything for a
 /// crawler.
 /// </summary>
@@ -33,7 +33,7 @@ public partial class HomePageSeoTests
         "magic", "quick-sign-in", "sso", "recaptcha", "firewall", "human-in-the-loop", "mcp", "dev-mcp", "side-by-side", "screenshots", "flows", "zero-downtime"
     ];
 
-    /// <summary>The films of the home page's eight cards (bitfabric-internal/specs/home-page.md, 2026-11-18).</summary>
+    /// <summary>The films of the home page's cards (bitfabric-internal/specs/home-page.md, 2026-11-18); the ninth, the status notice's, has a note.</summary>
     private static readonly string[] HomeFilms = ["website", "two-step", "tenants", "admin-panel", "focused", "rtl", "offline", "gdpr"];
 
     public TestContext TestContext { get; set; } = default!;
@@ -47,6 +47,7 @@ public partial class HomePageSeoTests
 
         Assert.DoesNotContain("<blazor-ssr", html, "A crawler runs no script, so nothing of the page may be left to streaming.");
         AssertHasFilmsText(server, html, Films);
+        AssertHasStatusNoticeNote(html);
         var hidden = Regex.Matches(html, "<p hidden[ >]").Count;
         Assert.IsGreaterThanOrEqualTo(30, hidden, $"Every feature with an info button carries its film's text, hidden; the page has {hidden} such parts.");
 
@@ -57,7 +58,7 @@ public partial class HomePageSeoTests
 
     /// <summary>
     /// The home page (bitfabric-internal/specs/home-page.md, 2026-11-18): the hero's title is its one h1, as the header gives a
-    /// page without a title no heading, its seven bands follow in order as h2s, a crawler reads its eight films and its
+    /// page without a title no heading, its seven bands follow in order as h2s, a crawler reads its eight films, the status notice's note, and its
     /// questions' answers though they are closed, and it no longer brings the pictures' stylesheet, which only /features and
     /// /contents need.
     /// </summary>
@@ -86,6 +87,7 @@ public partial class HomePageSeoTests
         Assert.AreSequenceEqual(bands.Select(b => b.Band), bands.OrderBy(b => b.At).Select(b => b.Band), "The bands come in their order.");
 
         AssertHasFilmsText(server, html, HomeFilms);
+        AssertHasStatusNoticeNote(html);
         // The numbers in the answers are AppHomeNumbers', the ones under the hero, not a copy in each language
         var builtOn = string.Format(AppStrings.AppHomeAnswerBuiltOn, AppHomeNumbers.GitHubStars, AppHomeNumbers.Contributors, AppHomeNumbers.Downloads);
         foreach (var answer in new[] { AppStrings.AppHomeAnswerAISeesCode, AppStrings.AppHomeAnswerDeveloper, builtOn, AppStrings.AppHomeAnswerMac })
@@ -395,6 +397,15 @@ public partial class HomePageSeoTests
 
     private static string? Meta(string head, string attribute, string name) =>
         Match(head, $"<meta {attribute}=\"{Regex.Escape(name)}\" content=\"([^\"]*)\"");
+
+    /// <summary>The status notice's card has a note rather than a film, and a crawler reads it the same way.</summary>
+    private static void AssertHasStatusNoticeNote(string html)
+    {
+        foreach (var line in new[] { AppStrings.AppHomeDayOneStatusNotice, AppStrings.AppHomeStatusNoticeLead, AppStrings.AppHomeStatusNoticeWhen, AppStrings.AppHomeStatusNoticeAfter })
+        {
+            Assert.IsTrue(Contains(html, line), $"The status notice's \"{line}\" is in the page.");
+        }
+    }
 
     private static bool Contains(string html, string caption) =>
         WebUtility.HtmlDecode(html).Contains(caption.Trim().Trim('.', '…').Trim(), StringComparison.Ordinal);

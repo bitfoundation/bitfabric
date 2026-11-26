@@ -12,6 +12,8 @@ env:
   ShowBuildProvenance: ${{ github.event.repository.visibility == 'public' }}
   SERVER_WEB_ADDRESS: 'https://todo.bitfabric.co'
   SERVER_API_ADDRESS: 'https://todo-api.bitfabric.co'
+  # The summary.json of the demo's status page on bit Fabric, which the apps read to tell their users when something is wrong.
+  STATUS_PAGE_SUMMARY_URL: 'https://api.bitfabric.co/api/v1/PublicStatus/Summary/bit-todosample'
   R2_BUCKET: 'todo'
   APP_BUNDLE_ID: 'com.bitplatform.Todo.Template'
   OpenAI__ApiKey: ${{ secrets.OPENAI__APIKEY }}
@@ -121,6 +123,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        StatusPageSummaryUrl: ${{ env.STATUS_PAGE_SUMMARY_URL }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         AdsPushVapid.PublicKey: ${{ secrets.TODO_PUBLIC_VAPIDKEY }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
@@ -197,6 +200,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        StatusPageSummaryUrl: ${{ env.STATUS_PAGE_SUMMARY_URL }}
         WebAppRender.PrerenderEnabled: true
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         WebAppRender.BlazorMode: 'BlazorWebAssembly'
@@ -279,6 +283,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        StatusPageSummaryUrl: ${{ env.STATUS_PAGE_SUMMARY_URL }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         AdsPushVapid.PublicKey: ${{ secrets.TODO_PUBLIC_VAPIDKEY }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
@@ -340,6 +345,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        StatusPageSummaryUrl: ${{ env.STATUS_PAGE_SUMMARY_URL }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         AdsPushVapid.PublicKey: ${{ secrets.TODO_PUBLIC_VAPIDKEY }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
@@ -398,6 +404,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        StatusPageSummaryUrl: ${{ env.STATUS_PAGE_SUMMARY_URL }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
         AdsPushVapid.PublicKey: ${{ secrets.TODO_PUBLIC_VAPIDKEY }}
         GoogleRecaptchaSiteKey: ${{ secrets.GOOGLE_RECAPTCHA_SITE_KEY }}
@@ -464,6 +471,7 @@ jobs:
       with:
         files: 'TodoSample\**\appsettings*json'
       env:
+        StatusPageSummaryUrl: ${{ env.STATUS_PAGE_SUMMARY_URL }}
         Sentry.Dsn: ${{ secrets.TODO_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
@@ -577,6 +585,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        StatusPageSummaryUrl: ${{ env.STATUS_PAGE_SUMMARY_URL }}
         Sentry.Dsn: ${{ secrets.TODO_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
@@ -682,6 +691,7 @@ jobs:
       with:
         files: 'TodoSample/**/appsettings*json'
       env:
+        StatusPageSummaryUrl: ${{ env.STATUS_PAGE_SUMMARY_URL }}
         Sentry.Dsn: ${{ secrets.TODO_SENTRY_DSN }}
         WebAppUrl: ${{ env.SERVER_WEB_ADDRESS }}
         ServerAddress: ${{ env.SERVER_API_ADDRESS }}
