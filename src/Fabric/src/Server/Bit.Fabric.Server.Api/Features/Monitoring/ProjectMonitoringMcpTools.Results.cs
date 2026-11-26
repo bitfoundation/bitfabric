@@ -69,6 +69,8 @@ public partial class ProjectMonitoringMcpTools
     public sealed record MapGroup(string Category, MapPart[] Parts);
 
     /// <summary>
+    /// <c>Provider</c>, <c>Model</c>, <c>Host</c>: What lies behind the part, as the app's report names it: the outside service
+    /// it talks to, an AI part's model and the host it reaches. Left out when the report names none.<br/>
     /// <c>Since</c>: Since when the part has been in this status.<br/>
     /// <c>LastRunAt</c>: When the app last really ran it; earlier than the round for a result the app reuses.<br/>
     /// <c>LastMs</c>: How long that run took.<br/>
@@ -79,6 +81,9 @@ public partial class ProjectMonitoringMcpTools
     public sealed record MapPart(string? Key,
         string Title,
         string Status,
+        string? Provider,
+        string? Model,
+        string? Host,
         DateTimeOffset? Since,
         DateTimeOffset? LastRunAt,
         int? LastMs,

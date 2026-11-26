@@ -87,6 +87,15 @@ public class HealthReportEntryDto
     /// <summary>What a pass proves, such as "Opens a connection to the app's database". Null when the app says nothing.</summary>
     public string? About { get; set; }
 
+    /// <summary>The outside service the check talks to, such as "Twilio"; a name only. Null when the app names none.</summary>
+    public string? Provider { get; set; }
+
+    /// <summary>The host the check reaches, the host name alone.</summary>
+    public string? Host { get; set; }
+
+    /// <summary>The model an AI check uses.</summary>
+    public string? Model { get; set; }
+
     /// <summary>
     /// The check stands in for a dependency whose settings are missing (See AddNotConfiguredCheck). It reports Degraded
     /// like a slow dependency does, but asks for another fix: configure the dependency, or remove the code that uses it.

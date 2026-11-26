@@ -88,6 +88,19 @@ public class HealthReportEntryDto
     public string? About { get; set; }
 
     /// <summary>
+    /// The outside service the check talks to, such as "Twilio" behind "SMS" (See HealthCheckDependencies). Null for a
+    /// check that names none, and for one whose settings are missing. Like <see cref="Host"/> and <see cref="Model"/>,
+    /// it is a name only, never a credential, a connection string or a user name.
+    /// </summary>
+    public string? Provider { get; set; }
+
+    /// <summary>The host the check reaches, such as "smtp.example.com": the host name alone, without a port, path or query.</summary>
+    public string? Host { get; set; }
+
+    /// <summary>The model an AI check uses, such as "gpt-4.1-mini".</summary>
+    public string? Model { get; set; }
+
+    /// <summary>
     /// The check stands in for a dependency whose settings are missing (See AddNotConfiguredCheck). It reports Degraded
     /// like a slow dependency does, but asks for another fix: configure the dependency, or remove the code that uses it.
     /// Set from the registration's <see cref="HealthCheckTags.NotConfigured"/> tag.

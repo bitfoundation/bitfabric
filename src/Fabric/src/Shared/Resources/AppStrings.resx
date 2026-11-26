@@ -11408,4 +11408,16 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="MonitoringAppMapHomePage" xml:space="preserve">
     <value>Home page {0}</value>
   </data>
+  <data name="MonitoringAppMapTalksTo" xml:space="preserve">
+    <value>Talks to</value>
+  </data>
+  <data name="MonitoringAppMapModel" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="MonitoringAppMapHost" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="MonitoringShowEveryPart" xml:space="preserve">
+    <value>Show every part</value>
+  </data>
 </root>

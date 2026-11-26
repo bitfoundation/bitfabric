@@ -22,8 +22,8 @@ public partial class ProjectMap
 
     [Parameter, EditorRequired] public ProjectDto Project { get; set; } = default!;
 
-    /// <summary>Opens another tab of the project, such as its history.</summary>
-    [Parameter] public EventCallback<string> OnOpenTab { get; set; }
+    /// <summary>Opens another tab of the project, such as its history, on one part when the link names it.</summary>
+    [Parameter] public EventCallback<ProjectTabLink> OnOpenTab { get; set; }
 
     [CascadingParameter] public BitDir? CurrentDir { get; set; }
 
@@ -138,7 +138,8 @@ public partial class ProjectMap
                     part.IconName,
                     part.IsNotConfigured ? null : Ms(part.TypicalMs ?? part.LastMs),
                     Look(ProjectMapTones.ToneOf(part)),
-                    part.OngoingIncidentId is null ? null : Localizer[nameof(AppStrings.MonitoringAppMapIncident)]))]))],
+                    part.OngoingIncidentId is null ? null : Localizer[nameof(AppStrings.MonitoringAppMapIncident)],
+                    ProjectMapTones.BehindOf(part)))]))],
             Localizer[nameof(AppStrings.MonitoringAppMapAria), Project.Name ?? host ?? ""]);
     }
 

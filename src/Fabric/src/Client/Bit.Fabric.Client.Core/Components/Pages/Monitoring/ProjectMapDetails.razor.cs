@@ -22,7 +22,8 @@ public partial class ProjectMapDetails
 
     [Parameter] public ProjectMapPartTone AppTone { get; set; }
 
-    [Parameter] public EventCallback<string> OnOpenTab { get; set; }
+    /// <summary>Opens another tab of the project; History and Performance on the picked part.</summary>
+    [Parameter] public EventCallback<ProjectTabLink> OnOpenTab { get; set; }
 
     [CascadingParameter] public BitDir? CurrentDir { get; set; }
 

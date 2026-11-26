@@ -11408,4 +11408,16 @@
   <data name="MonitoringAppMapHomePage" xml:space="preserve">
     <value>صفحهٔ اصلی {0}</value>
   </data>
+  <data name="MonitoringAppMapTalksTo" xml:space="preserve">
+    <value>در ارتباط با</value>
+  </data>
+  <data name="MonitoringAppMapModel" xml:space="preserve">
+    <value>مدل</value>
+  </data>
+  <data name="MonitoringAppMapHost" xml:space="preserve">
+    <value>هاست</value>
+  </data>
+  <data name="MonitoringShowEveryPart" xml:space="preserve">
+    <value>نمایش همهٔ بخش‌ها</value>
+  </data>
 </root>

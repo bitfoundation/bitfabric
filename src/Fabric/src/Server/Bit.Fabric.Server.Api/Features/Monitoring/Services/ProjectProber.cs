@@ -364,6 +364,10 @@ public partial class ProjectProber
             Title = Truncate(NullIfBlank(entry.Value.Title), 100),
             IconName = Truncate(NullIfBlank(entry.Value.IconName), 50),
             About = Truncate(entry.Value.About, 300),
+            // What lies behind the part, as the app names it; nothing when it doesn't.
+            Provider = Truncate(NullIfBlank(entry.Value.Provider), 100),
+            Host = Truncate(NullIfBlank(entry.Value.Host), 255),
+            Model = Truncate(NullIfBlank(entry.Value.Model), 100),
             IsNotConfigured = entry.Value.IsNotConfigured,
             VerifiedAt = entry.Value.VerifiedAt,
             // Both times by the app's clock, so ours being off doesn't matter.

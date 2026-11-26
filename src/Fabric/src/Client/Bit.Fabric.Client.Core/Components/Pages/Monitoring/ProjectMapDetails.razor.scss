@@ -49,7 +49,9 @@
     display: flex;
     flex-direction: column;
     gap: .125rem;
-    padding: .625rem .75rem;
+    min-width: 0;
+    padding: .5rem .625rem;
+    white-space: nowrap;
     background: $bit-color-background-secondary;
     border-radius: $bit-shape-radius-control;
 }
@@ -81,5 +83,39 @@
 }
 
 .map-details[dir=ltr] ::deep .report-text {
+    text-align: left;
+}
+
+.behind {
+    align-self: stretch;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: .375rem 1rem;
+    margin: 0;
+    padding: .625rem .75rem;
+    font-size: .875rem;
+    background: $bit-color-background-secondary;
+    border-radius: $bit-shape-radius-control;
+
+    dt {
+        color: $bit-color-foreground-secondary;
+    }
+
+    dd {
+        min-width: 0;
+        margin: 0;
+        overflow: hidden;
+        font-weight: 600;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+// A name or host keeps its own direction and still lines up with the panel
+.map-details[dir=rtl] .behind dd {
+    text-align: right;
+}
+
+.map-details[dir=ltr] .behind dd {
     text-align: left;
 }

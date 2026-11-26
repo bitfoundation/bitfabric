@@ -29,6 +29,25 @@
                 <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Dir="BitDir.Auto" Class="report-text">@part.About</BitText>
             }
 
+            @if (part.Provider is not null)
+            {
+                @* What lies behind the part, as the app's report names it *@
+                <dl class="behind app-latin-digits">
+                    <dt>@Localizer[nameof(AppStrings.MonitoringAppMapTalksTo)]</dt>
+                    <dd dir="auto">@part.Provider</dd>
+                    @if (part.Model is not null)
+                    {
+                        <dt>@Localizer[nameof(AppStrings.MonitoringAppMapModel)]</dt>
+                        <dd dir="ltr">@part.Model</dd>
+                    }
+                    @if (part.Host is not null)
+                    {
+                        <dt>@Localizer[nameof(AppStrings.MonitoringAppMapHost)]</dt>
+                        <dd dir="ltr">@part.Host</dd>
+                    }
+                </dl>
+            }
+
             @if (part.IsNotConfigured is false)
             {
                 <div class="stats">
@@ -54,12 +73,12 @@
             <BitStack Horizontal Wrap Gap="0.5rem">
                 @if (part.OngoingIncidentId is not null)
                 {
-                    <BitButton Size="BitSize.Small" Color="BitColor.Error" IconName="@BitIconName.WarningSolid" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(ProjectMapDetails.IncidentsTab))">@Localizer[nameof(AppStrings.MonitoringOpenTheIncident)]</BitButton>
+                    <BitButton Size="BitSize.Small" Color="BitColor.Error" IconName="@BitIconName.WarningSolid" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(new(ProjectMapDetails.IncidentsTab)))">@Localizer[nameof(AppStrings.MonitoringOpenTheIncident)]</BitButton>
                 }
-                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.History" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(ProjectMapDetails.HistoryTab))">@Localizer[nameof(AppStrings.MonitoringHistory)]</BitButton>
+                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.History" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(new(ProjectMapDetails.HistoryTab, part.Key)))">@Localizer[nameof(AppStrings.MonitoringHistory)]</BitButton>
                 @if (part.IsNotConfigured is false)
                 {
-                    <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.SpeedHigh" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(ProjectMapDetails.PerformanceTab))">@Localizer[nameof(AppStrings.AppHomePerformance)]</BitButton>
+                    <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.SpeedHigh" OnClick="WrapHandled(() => OnOpenTab.InvokeAsync(new(ProjectMapDetails.PerformanceTab, part.Key)))">@Localizer[nameof(AppStrings.AppHomePerformance)]</BitButton>
                 }
             </BitStack>
         </BitStack>

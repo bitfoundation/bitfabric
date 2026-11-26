@@ -97,6 +97,18 @@ public partial class ProjectProbeCheck
     [MaxLength(300)]
     public string? About { get; set; }
 
+    /// <summary>What the check talks to, such as "Twilio", from the report; never guessed (See ProjectMapPartDto.Provider).</summary>
+    [MaxLength(100)]
+    public string? Provider { get; set; }
+
+    /// <summary>The host the check reaches, from the report.</summary>
+    [MaxLength(255)]
+    public string? Host { get; set; }
+
+    /// <summary>The model an AI check uses, from the report.</summary>
+    [MaxLength(100)]
+    public string? Model { get; set; }
+
     /// <summary>
     /// The check only misses its settings, which is a setup finding rather than an outage: it reports Degraded, but is
     /// left out of the project's status, its periods, its uptime and its rollups.

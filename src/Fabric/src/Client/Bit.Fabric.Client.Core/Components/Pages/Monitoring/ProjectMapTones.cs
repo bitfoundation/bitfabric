@@ -51,6 +51,14 @@ public static class ProjectMapTones
     /// <summary>What the app calls a part; its report key when the app says nothing.</summary>
     public static string TitleOf(ProjectMapPartDto part) => string.IsNullOrWhiteSpace(part.Title) ? part.Key ?? "?" : part.Title;
 
+    /// <summary>
+    /// What lies behind a part in a few words, such as "Twilio" or "OpenAI · gpt-4.1-mini", as the app's report names it;
+    /// null when it names nothing, so nothing is drawn.
+    /// </summary>
+    public static string? BehindOf(ProjectMapPartDto part) => part.Provider is null
+        ? null
+        : part.Model is null ? part.Provider : $"{part.Provider} · {part.Model}";
+
     public static string IconOf(ProjectMapPartTone tone) => tone switch
     {
         ProjectMapPartTone.Healthy => BitIconName.CompletedSolid,

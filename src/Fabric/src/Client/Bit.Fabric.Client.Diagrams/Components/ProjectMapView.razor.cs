@@ -8,6 +8,8 @@ public partial class ProjectMapView
     private const double GroupWidth = 236;
     private const double GroupHead = 46;
     private const double PartHeight = 40;
+    /// <summary>A part with what lies behind it under its name.</summary>
+    private const double TwoLinePartHeight = 52;
     private const double GroupFoot = 10;
     private const double ColumnGap = 76;
     private const double RowGap = 20;
@@ -61,7 +63,9 @@ public partial class ProjectMapView
         Build();
     }
 
-    private static double GroupHeight(ProjectMapGroup group) => GroupHead + group.Parts.Length * PartHeight + GroupFoot;
+    private static double GroupHeight(ProjectMapGroup group) => GroupHead + group.Parts.Sum(PartHeightOf) + GroupFoot;
+
+    private static double PartHeightOf(ProjectMapPart part) => part.Behind is null ? PartHeight : TwoLinePartHeight;
 
     private void Build()
     {
@@ -69,7 +73,7 @@ public partial class ProjectMapView
             return;
 
         // The picture's own words and tones are part of the key, so a newer reading redraws the map.
-        var key = $"{isNarrow}-{IsRtl}-{string.Join('|', Picture.Groups.Select(g => $"{g.Name}:{g.Tone}:{string.Join(',', g.Parts.Select(p => $"{p.Key}{p.Tone}{p.Measure}{p.Flag}"))}"))}-{Picture.AppTone}{Picture.AppMeasure}";
+        var key = $"{isNarrow}-{IsRtl}-{string.Join('|', Picture.Groups.Select(g => $"{g.Name}:{g.Tone}:{string.Join(',', g.Parts.Select(p => $"{p.Key}{p.Tone}{p.Measure}{p.Flag}{p.Behind}"))}"))}-{Picture.AppTone}{Picture.AppMeasure}";
         if (key == layoutKey)
             return;
 

@@ -125,6 +125,11 @@
     gap: .5rem;
     flex: none;
     height: 2.5rem;
+
+    &.has-behind {
+        height: 3.25rem;
+    }
+
     padding-inline: .5rem;
     font: inherit;
     font-size: .875rem;
@@ -161,8 +166,23 @@
     color: $bit-color-foreground-secondary;
 }
 
-.pmv-part-title {
+.pmv-part-words {
+    display: flex;
     flex: 1;
+    flex-direction: column;
+    gap: .0625rem;
+    min-width: 0;
+}
+
+.pmv-part-behind {
+    overflow: hidden;
+    font-size: .75rem;
+    color: $bit-color-foreground-secondary;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.pmv-part-title {
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
@@ -190,14 +210,16 @@
 // period and ellipsis, and still sits beside its icon, on the side the page starts from
 .pmv-group[dir=rtl] {
     .pmv-group-title,
-    .pmv-part-title {
+    .pmv-part-title,
+    .pmv-part-behind {
         text-align: right;
     }
 }
 
 .pmv-group[dir=ltr] {
     .pmv-group-title,
-    .pmv-part-title {
+    .pmv-part-title,
+    .pmv-part-behind {
         text-align: left;
     }
 }

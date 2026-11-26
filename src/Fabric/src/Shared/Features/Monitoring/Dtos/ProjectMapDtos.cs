@@ -36,6 +36,18 @@ public partial class ProjectMapPartDto
     /// <summary>What a pass proves, from the report.</summary>
     public string? About { get; set; }
 
+    /// <summary>
+    /// What lies behind the part, such as "Twilio" behind "SMS": the outside service the app's report says the check talks
+    /// to. Null when the report names none; bit Fabric never guesses it.
+    /// </summary>
+    public string? Provider { get; set; }
+
+    /// <summary>The host the check reaches, from the report.</summary>
+    public string? Host { get; set; }
+
+    /// <summary>The model an AI check uses, from the report.</summary>
+    public string? Model { get; set; }
+
     public HealthCheckStatus Status { get; set; }
 
     /// <summary>Its settings are missing: a setup finding, not an outage.</summary>

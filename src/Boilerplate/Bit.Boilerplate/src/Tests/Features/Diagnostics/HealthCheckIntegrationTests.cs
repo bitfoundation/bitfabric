@@ -351,6 +351,69 @@ public partial class HealthCheckIntegrationTests
     }
 
     /// <summary>
+    /// A monitor shows what lies behind a part, such as the mail server behind "Email" (See HealthCheckDependencies): its
+    /// name, host and model, and nothing a secret could hide in.
+    /// </summary>
+    [TestMethod]
+    public async Task DetailedReport_Should_NameWhatEachCheckTalksTo_AndNothingSecret()
+    {
+        await using var server = new AppTestServer();
+
+        await server.Build(configureTestApiAppServices: services => services.AddHealthChecks()
+                .AddCheck("paymentGateway", () => HealthCheckResult.Healthy(), tags: [HealthCheckCategories.Integrations])
+                .TalksTo("paymentGateway", "Stripe", HealthCheckDependency.HostOf("https://user:secret@api.stripe.com:443/v1?key=sk_test"))
+                .AddNotConfiguredCheck("maps", HealthCheckCategories.Integrations, "Maps")
+                .TalksTo("maps", "Google Maps", "maps.googleapis.com"))
+            .Start(TestContext.CancellationToken);
+
+        await using var adminClient = server.CreateAppClient();
+        await adminClient.AuthManager.SignIn(new()
+        {
+            Email = TestData.DefaultTestEmail,
+            Password = TestData.DefaultTestPassword
+        }, TestContext.CancellationToken);
+
+        using var response = await GetReport(adminClient.HttpClient, new Uri(server.ApiAppAddress, "healthz"));
+
+        var body = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
+
+        using (var json = JsonDocument.Parse(body))
+        {
+            Assert.AreEqual("Stripe", json.RootElement.GetProperty("entries").GetProperty("paymentGateway").GetProperty("provider").GetString(), body);
+        }
+
+        var report = JsonSerializer.Deserialize(body, adminClient.Services.GetRequiredService<JsonSerializerOptions>().GetTypeInfo<HealthReportDto>());
+        Assert.IsNotNull(report);
+
+        var paymentGateway = report.Entries["paymentGateway"];
+        Assert.AreEqual("api.stripe.com", paymentGateway.Host, "The host alone: no user name, password, port, path or query.");
+        Assert.IsNull(paymentGateway.Model);
+
+        Assert.IsNull(report.Entries["maps"].Provider, "A stand-in for a check whose settings are missing talks to nothing yet.");
+        Assert.IsNull(report.Entries["maps"].Host);
+
+        Assert.AreEqual("SMTP", report.Entries["smtp"].Provider, "The template's checks name what they talk to.");
+        Assert.IsFalse(string.IsNullOrEmpty(report.Entries["smtp"].Host));
+
+        foreach (var (name, entry) in report.Entries.Where(entry => entry.Value.Host is not null))
+        {
+            Assert.IsLessThan(0, entry.Host!.IndexOfAny(['@', ':', '/', '?', '=']), $"The '{name}' check reports more than a host name: {entry.Host}");
+        }
+    }
+
+    [TestMethod]
+    public void HostOf_Should_KeepTheHostName_AndNothingElse()
+    {
+        Assert.AreEqual("smtp.example.com", HealthCheckDependency.HostOf("smtp://user:password@smtp.example.com:587"));
+        Assert.AreEqual("o1.ingest.sentry.io", HealthCheckDependency.HostOf("https://publickey@o1.ingest.sentry.io/42"));
+        Assert.AreEqual("api.example.com", HealthCheckDependency.HostOf("api.example.com"));
+        Assert.AreEqual("api.example.com", HealthCheckDependency.HostOf(new Uri("https://api.example.com/v1/?key=1")));
+        Assert.IsNull(HealthCheckDependency.HostOf("Endpoint=https://x;AccessKey=secret"), "A connection string is not a host.");
+        Assert.IsNull(HealthCheckDependency.HostOf((string?)null));
+        Assert.IsNull(HealthCheckDependency.HostOf(""));
+    }
+
+    /// <summary>
     /// The category of every check the template registers (See HealthCheckCategories). A check that isn't listed here
     /// fails <see cref="AssertCategory"/>, so a new one gets a category from the start.
     /// </summary>

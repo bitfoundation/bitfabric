@@ -63,7 +63,7 @@
                         @foreach (var part in group.Parts)
                         {
                             <button type="button"
-                                    class="pmv-part @ToneClass(part.Tone) @(part.Key == SelectedKey ? "is-selected" : null)"
+                                    class="pmv-part @ToneClass(part.Tone) @(part.Key == SelectedKey ? "is-selected" : null) @(part.Behind is null ? null : "has-behind")"
                                     aria-pressed="@(part.Key == SelectedKey ? "true" : "false")"
                                     @onclick="() => OnSelect.InvokeAsync(part.Key)">
                                 <span class="pmv-dot @ToneClass(part.Tone)" aria-hidden="true"></span>
@@ -71,7 +71,13 @@
                                 {
                                     <BitIcon IconName="@part.Icon" Size="BitSize.Small" Class="pmv-part-icon" />
                                 }
-                                <span class="pmv-part-title" dir="auto">@part.Title</span>
+                                <span class="pmv-part-words">
+                                    <span class="pmv-part-title" dir="auto">@part.Title</span>
+                                    @if (part.Behind is not null)
+                                    {
+                                        <span class="pmv-part-behind app-latin-digits" dir="auto">@part.Behind</span>
+                                    }
+                                </span>
                                 @if (part.Flag is not null)
                                 {
                                     <span class="pmv-flag">@part.Flag</span>

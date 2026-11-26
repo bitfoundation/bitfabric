@@ -28,6 +28,9 @@ public partial class ProjectMonitoringTests
 
         var email = map.Parts.Single(part => part.Key == "smtp");
         Assert.AreEqual("Email", email.Title, "By the name the app gives it.");
+        Assert.AreEqual("SMTP", email.Provider, "What lies behind it, as the app's report names it.");
+        Assert.AreEqual("smtp.example.com", email.Host);
+        Assert.IsNull(email.Model);
         Assert.AreEqual("Messaging", email.Category);
         Assert.AreEqual(HealthCheckStatus.Degraded, email.Status);
         Assert.IsNotNull(email.Since);
@@ -45,6 +48,7 @@ public partial class ProjectMonitoringTests
 
         var database = map.Parts.Single(part => part.Key == "AppDbContext");
         Assert.AreEqual(HealthCheckStatus.Healthy, database.Status);
+        Assert.IsNull(database.Provider, "A report that names nothing behind a part gets nothing guessed in its place.");
         Assert.AreEqual(0, database.ProblemRounds);
         Assert.IsNull(database.OngoingIncidentId);
 
@@ -72,6 +76,8 @@ public partial class ProjectMonitoringTests
         Assert.AreEqual("Messaging", group.GetProperty("category").GetString(), "What needs attention comes first.");
         Assert.AreEqual("Email", email.GetProperty("title").GetString());
         Assert.AreEqual("Degraded", email.GetProperty("status").GetString());
+        Assert.AreEqual("SMTP", email.GetProperty("provider").GetString());
+        Assert.AreEqual("smtp.example.com", email.GetProperty("host").GetString());
         Assert.AreEqual(2, email.GetProperty("roundsLast24Hours").GetInt32(), "The round connecting ran, and this one.");
         Assert.AreEqual(1, email.GetProperty("problemRoundsLast24Hours").GetInt32());
 
