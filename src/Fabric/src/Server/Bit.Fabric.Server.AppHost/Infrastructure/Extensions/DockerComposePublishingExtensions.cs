@@ -235,6 +235,57 @@ public static class DockerComposePublishingExtensions
 
                 composeFile.Services[serverWebProject.Resource.Name].DependsOn[serverApiProject.Resource.Name] = new() { Condition = "service_started" };
 
+                // A new major of PostgreSQL, in two one-shot services that postgresserver waits for. Compose has stopped the
+                // server of the older major by the time they run, as it replaces a container before it starts what the new
+                // one waits for. `postgresserver-export`, in the older major's image, runs it on a copy of its read-only
+                // volume and dumps the databases; `postgresserver-upgrade`, in postgresserver's own image, restores them into
+                // this major's volume and checks every table's rows. Every deployment runs both, and once the copy is done
+                // they do nothing, so they stay for the next major. See deploy/database.
+                var postgres = composeFile.Services["postgresserver"];
+                var dataVolume = postgres.Volumes.Single(volume => volume.Target is "/var/lib/postgresql").Source!;
+                var previousDataVolume = dataVolume[..^PostgresMajor.DataVolumeSuffix.Length] + PostgresMajor.PreviousDataVolumeSuffix;
+                const string dumpsVolume = "postgresserver-upgrade";
+                // Compose reads a $ as the start of one of its own variables, and $$ as a $.
+                string Script(string name) => File.ReadAllText(Path.Combine(builder.AppHostDirectory, "..", "..", "..", "deploy", "database", name))
+                    .ReplaceLineEndings("\n").Replace("$", "$$");
+                Volume Mount(string source, string target, bool readOnly = false) => new() { Name = source, Type = "volume", Source = source, Target = target, ReadOnly = readOnly };
+                var environment = postgres.Environment.Where(variable => variable.Key.StartsWith("OTEL_") is false).ToDictionary();
+
+                composeFile.AddService(new Service
+                {
+                    Name = "postgresserver-export",
+                    Image = postgres.Image!.Replace($":{PostgresMajor.Tag}", $":{PostgresMajor.PreviousTag}"),
+                    Entrypoint = ["bash", "-c", Script("export.sh")],
+                    Environment = new(environment),
+                    Volumes =
+                    [
+                        Mount(previousDataVolume, "/var/lib/postgresql-previous", readOnly: true),
+                        Mount(dataVolume, "/var/lib/postgresql-new", readOnly: true),
+                        Mount(dumpsVolume, "/upgrade")
+                    ],
+                    NetworkMode = "none",
+                    Restart = "no"
+                });
+                composeFile.AddService(new Service
+                {
+                    Name = "postgresserver-upgrade",
+                    Image = postgres.Image,
+                    Entrypoint = ["bash", "-c", Script("upgrade.sh")],
+                    Environment = new(environment),
+                    Volumes =
+                    [
+                        Mount(dataVolume, "/var/lib/postgresql"),
+                        Mount(previousDataVolume, "/var/lib/postgresql-previous", readOnly: true),
+                        Mount(dumpsVolume, "/upgrade")
+                    ],
+                    NetworkMode = "none",
+                    Restart = "no"
+                });
+                composeFile.Services["postgresserver-upgrade"].DependsOn["postgresserver-export"] = new() { Condition = "service_completed_successfully" };
+                composeFile.AddVolume(new Volume { Name = previousDataVolume, Driver = "local" });
+                composeFile.AddVolume(new Volume { Name = dumpsVolume, Driver = "local" });
+                postgres.DependsOn["postgresserver-upgrade"] = new() { Condition = "service_completed_successfully" };
+
                 // The Lighthouse service is on a network of its own, which the api joins to call it: from there it reaches the
                 // internet, and none of the database, Redis, the dashboard or the other services, which are on Aspire's network
                 // alone. The migrations, made from the api's service above, stay off it.
