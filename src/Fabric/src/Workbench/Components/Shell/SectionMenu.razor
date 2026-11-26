@@ -1,0 +1,11 @@
+@inherits WorkbenchComponentBase
+
+<BitMenuButton TItem="BitMenuButtonItem"
+               Text="@Localizer[WorkbenchSections.TextKeyOf(Section)]"
+               IconName="@WorkbenchSections.IconOf(Section)"
+               Variant="BitVariant.Text"
+               Size="Size"
+               Items="items"
+               Class="@Class"
+               Styles="styles"
+               Title="@Localizer[nameof(WorkbenchStrings.WorkbenchSections)]" />

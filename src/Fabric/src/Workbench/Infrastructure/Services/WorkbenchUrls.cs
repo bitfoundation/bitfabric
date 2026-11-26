@@ -13,6 +13,12 @@ public static class WorkbenchUrls
 {
     public const string Home = "/";
 
+    /// <summary>The top of the home page, which its logo scrolls back to.</summary>
+    public const string HomeTop = "/#top";
+
+    /// <summary>The home page's list of pages, where the Pages section starts.</summary>
+    public const string HomePages = "/#pages";
+
     /// <summary>The query key of the view a preview belongs to, which keys its saved page state.</summary>
     public const string PaneQueryKey = "pane";
 

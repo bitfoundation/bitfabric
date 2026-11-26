@@ -190,7 +190,8 @@ public class HomePageUITests : WorkbenchPageTest
         await Expect(Page).ToHaveURLAsync(new Regex("#pages$"));
         await Expect(Page.Locator("section#pages .section-head")).ToBeInViewportAsync();
 
-        await Press(Header.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.HomeWhyButton, Exact = true }));
+        // Why is a part of the home page, not a section, so it waits under the hero.
+        await Press(Page.Locator(".hero-actions").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.HomeWhyButton, Exact = true }));
 
         await Expect(Page).ToHaveURLAsync(new Regex("#why$"));
         await Expect(Page.Locator("section#why .section-head")).ToBeInViewportAsync();

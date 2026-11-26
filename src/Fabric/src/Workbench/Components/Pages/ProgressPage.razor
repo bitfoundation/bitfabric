@@ -5,30 +5,13 @@
 <PageTitle>@(SelectedTask is { } titled && TaskId is not null ? $"{titled.Title} · {Localizer[nameof(WorkbenchStrings.Progress)]}" : $"{Localizer[nameof(WorkbenchStrings.Progress)]} · {Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]}")</PageTitle>
 
 <div class="progress-page @(TaskId is null ? "showing-list" : "showing-task")" data-guide="@guideState">
-    <header class="topbar">
-        <a class="brand" href="@WorkbenchUrls.Home">
-            <img src="_content/Bit.Fabric.Client.Core/images/bit-logo.svg" alt="" width="26" height="26" />
-            <span>@Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]</span>
-        </a>
-        <span class="crumb-separator">/</span>
-        <a class="crumb" href="@WorkbenchUrls.Progress">@Localizer[nameof(WorkbenchStrings.Progress)]</a>
-        @if (TaskId is not null && SelectedTask is { } named)
-        {
-            <span class="crumb-separator">/</span>
-            <BitText Typography="BitTypography.Body1" Class="crumb-title as-written" NoWrap Dir="@WorkbenchTextDirection.ToBitDir(Dir(named.Title, WorkbenchTextDirection.Of(named)))">@named.Title</BitText>
-        }
-
-        <BitSpacer />
-
-        <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Help"
-                   Title="@Localizer[nameof(WorkbenchStrings.TourStart)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TourStart)]"
-                   OnClick="StartGuide" />
-        <LanguageMenu Size="BitSize.Small" />
-        <SoundToggle Size="BitSize.Small" />
-        <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Contrast"
-                   Title="@Localizer[nameof(WorkbenchStrings.ToggleWorkbenchTheme)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.ToggleWorkbenchTheme)]"
-                   OnClick="ToggleShellTheme" />
-    </header>
+    <ShellHeader Section="WorkbenchSection.Progress">
+        <Actions>
+            <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Help"
+                       Title="@Localizer[nameof(WorkbenchStrings.TourStart)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TourStart)]"
+                       OnClick="StartGuide" />
+        </Actions>
+    </ShellHeader>
 
     @* Who may see the tasks waits for them, so the empty note never flashes by first. *@
     @if (reviewSession.CanSeeTasks && reviewSession.IsOpen is false && isOpenFailed is false)

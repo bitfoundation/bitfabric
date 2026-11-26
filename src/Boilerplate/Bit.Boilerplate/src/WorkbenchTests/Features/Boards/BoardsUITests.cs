@@ -2,8 +2,8 @@ namespace Boilerplate.WorkbenchTests.Features.Boards;
 
 /// <summary>
 /// The boards an agent builds instead of a long answer in the chat, through the two that ship as examples: the section
-/// lists them, each opens on its own address, what the reader changes on one works without the page jumping, a board
-/// reads in its own language whatever the Workbench's, and the home page and the header lead to them.
+/// lists them by kind, each opens on its own address with the others beside it, what the reader changes on one works without
+/// the page jumping, a board reads in its own language whatever the Workbench's, and the home page and the header lead to them.
 /// </summary>
 [TestClass, TestCategory("UITest")]
 public class BoardsUITests : WorkbenchPageTest
@@ -20,23 +20,57 @@ public class BoardsUITests : WorkbenchPageTest
     private Task UseCulture(string culture) =>
         Context.AddCookiesAsync([new() { Name = ".AspNetCore.Culture", Value = $"c={culture}|uic={culture}", Url = Server.Address.ToString() }]);
 
+    /// <summary>A kind of board on the list, by its title.</summary>
+    private ILocator Kind(string title) => Page.Locator("main.list section.group").Filter(new() { Has = Page.GetByRole(AriaRole.Heading, new() { Name = title, Level = 2 }) });
+
+    /// <summary>The list of boards beside an open one.</summary>
+    private ILocator SideList => Page.GetByRole(AriaRole.Navigation, new() { Name = WorkbenchStrings.Boards, Exact = true });
+
     [TestMethod, EverySurface]
-    public async Task TheBoards_Should_ListTheExamplesPaymentsFirst(WorkbenchSurface surface)
+    public async Task TheBoards_Should_ListTheExamplesByKind(WorkbenchSurface surface)
     {
         await OpenBoards();
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.Boards, Level = 1, Exact = true })).ToBeVisibleAsync();
 
-        var cards = Page.Locator("a.board-card");
+        await Expect(Page.Locator("a.board-card")).ToHaveCountAsync(2);
+        await Expect(Page.Locator("main.list h2")).ToContainTextAsync([WorkbenchStrings.BoardKindHowItWorks, WorkbenchStrings.BoardKindComparison]);
+        await Expect(Kind(WorkbenchStrings.BoardKindHowItWorks).Locator("a.board-card")).ToHaveAttributeAsync("href", "/boards/deploy");
+        await Expect(Kind(WorkbenchStrings.BoardKindComparison).Locator("a.board-card")).ToHaveAttributeAsync("href", "/boards/payments");
 
-        await Expect(cards).ToHaveCountAsync(2);
-        await Expect(cards.Nth(0)).ToHaveAttributeAsync("href", "/boards/payments");
-        await Expect(cards.Nth(1)).ToHaveAttributeAsync("href", "/boards/deploy");
-
-        await Press(cards.Nth(1));
+        await Press(Kind(WorkbenchStrings.BoardKindHowItWorks).Locator("a.board-card"));
 
         await Expect(Page).ToHaveURLAsync(new Regex("/boards/deploy$"));
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.DeployBoardTitle, Level = 1, Exact = true })).ToBeVisibleAsync();
+    }
+
+    [TestMethod, OnDesktops]
+    public async Task AnOpenBoard_Should_ListTheOthersToSwitchTo(WorkbenchSurface surface)
+    {
+        await OpenBoards("/deploy");
+
+        await Expect(SideList).ToContainTextAsync(WorkbenchStrings.BoardKindHowItWorks);
+        await Expect(SideList).ToContainTextAsync(WorkbenchStrings.BoardKindComparison);
+        await Expect(SideList.Locator("[aria-current='page']")).ToHaveAttributeAsync("href", "/boards/deploy");
+
+        await Press(SideList.Locator("a[href='/boards/payments']"));
+
+        await Expect(Page).ToHaveURLAsync(new Regex("/boards/payments$"));
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Taking payments", Level = 1, Exact = true })).ToBeVisibleAsync();
+        await Expect(SideList.Locator("[aria-current='page']")).ToHaveAttributeAsync("href", "/boards/payments");
+    }
+
+    [TestMethod, OnPhones]
+    public async Task APhone_Should_FoldTheListOfBoardsAwayBehindALinkBack(WorkbenchSurface surface)
+    {
+        await OpenBoards("/deploy");
+
+        await Expect(SideList).ToBeHiddenAsync();
+
+        await Press(Page.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.AllBoards, Exact = true }));
+
+        await Expect(Page).ToHaveURLAsync(new Regex("/boards$"));
+        await Expect(Page.Locator("a.board-card")).ToHaveCountAsync(2);
     }
 
     [TestMethod, OnDesktops]

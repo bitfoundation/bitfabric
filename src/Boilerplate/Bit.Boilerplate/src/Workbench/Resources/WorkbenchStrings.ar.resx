@@ -5693,4 +5693,31 @@
     <data name="DeploySetting" xml:space="preserve">
         <value>إعداد</value>
     </data>
+    <data name="Home" xml:space="preserve">
+        <value>الرئيسية</value>
+    </data>
+    <data name="WorkbenchSections" xml:space="preserve">
+        <value>أقسام منضدة العمل</value>
+    </data>
+    <data name="AllBoards" xml:space="preserve">
+        <value>كل اللوحات</value>
+    </data>
+    <data name="BoardKindHowItWorks" xml:space="preserve">
+        <value>كيف يعمل</value>
+    </data>
+    <data name="BoardKindComparison" xml:space="preserve">
+        <value>مقارنات</value>
+    </data>
+    <data name="BoardKindPlan" xml:space="preserve">
+        <value>خطط</value>
+    </data>
+    <data name="BoardKindReport" xml:space="preserve">
+        <value>تقارير</value>
+    </data>
+    <data name="FlowsGroupYours" xml:space="preserve">
+        <value>مسارات هذا المشروع</value>
+    </data>
+    <data name="FlowsGroupSamples" xml:space="preserve">
+        <value>نماذج</value>
+    </data>
 </root>
