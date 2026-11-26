@@ -4644,4 +4644,31 @@
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>باز کردن تابلوها</value>
     </data>
+    <data name="Home" xml:space="preserve">
+        <value>خانه</value>
+    </data>
+    <data name="WorkbenchSections" xml:space="preserve">
+        <value>بخش‌های میز کار</value>
+    </data>
+    <data name="AllBoards" xml:space="preserve">
+        <value>همهٔ تابلوها</value>
+    </data>
+    <data name="BoardKindHowItWorks" xml:space="preserve">
+        <value>چطور کار می‌کند</value>
+    </data>
+    <data name="BoardKindComparison" xml:space="preserve">
+        <value>مقایسه‌ها</value>
+    </data>
+    <data name="BoardKindPlan" xml:space="preserve">
+        <value>برنامه‌ها</value>
+    </data>
+    <data name="BoardKindReport" xml:space="preserve">
+        <value>گزارش‌ها</value>
+    </data>
+    <data name="FlowsGroupYours" xml:space="preserve">
+        <value>مسیرهای این پروژه</value>
+    </data>
+    <data name="FlowsGroupSamples" xml:space="preserve">
+        <value>نمونه‌ها</value>
+    </data>
 </root>

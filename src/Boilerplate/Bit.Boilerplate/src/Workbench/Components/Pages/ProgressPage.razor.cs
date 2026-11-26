@@ -25,7 +25,6 @@ public partial class ProgressPage
 
     [AutoInject] private WorkbenchReviewSession reviewSession = default!;
     [AutoInject] private WorkbenchStore store = default!;
-    [AutoInject] private BitThemeManager bitThemeManager = default!;
     [AutoInject] private IBonboardingService bonboardingService = default!;
     [AutoInject] private Bit.Butil.WebAudio webAudio = default!;
     [AutoInject] private ILogger<ProgressPage> logger = default!;
@@ -395,11 +394,6 @@ public partial class ProgressPage
 
     /// <summary>A link named by its host, or by its path inside the Workbench.</summary>
     private static string LinkText(string url) => Uri.TryCreate(url, UriKind.Absolute, out var uri) ? uri.Host : url;
-
-    private async Task ToggleShellTheme()
-    {
-        await bitThemeManager.ToggleDarkLightAsync();
-    }
 
     private void OnReviewChanged() => InvokeAsync(StateHasChanged);
 

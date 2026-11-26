@@ -16,53 +16,6 @@
     }
 }
 
-.topbar {
-    top: 0;
-    z-index: 5;
-    gap: 0.5rem;
-    display: flex;
-    flex-shrink: 0;
-    min-height: 52px;
-    position: sticky;
-    padding: 0.375rem 0.75rem;
-    align-items: center;
-    background-color: $bit-color-background-primary;
-    border-bottom: 1px solid $bit-color-border-tertiary;
-}
-
-.brand {
-    gap: 0.5rem;
-    display: flex;
-    font-size: 15px;
-    font-weight: 700;
-    align-items: center;
-    text-decoration: none;
-    letter-spacing: -0.01em;
-    color: $bit-color-foreground-primary;
-
-    @include lt-sm {
-        span {
-            display: none;
-        }
-    }
-}
-
-.crumb {
-    text-decoration: none;
-    color: $bit-color-foreground-secondary;
-}
-
-.crumb-separator {
-    color: $bit-color-foreground-tertiary;
-}
-
-// The task's title shrinks into the line rather than wrapping the bar.
-::deep .crumb-title {
-    min-width: 0;
-    flex: 0 1 auto;
-    color: $bit-color-foreground-secondary;
-}
-
 // What the agent and the user wrote keeps the digits it was written with: Persian's font draws 0-9 as ۰-۹ everywhere else
 // (_rtl-fonts.scss), which would turn a version like 1.2.3-pre-04 into ۱.۲.۳-pre-۰۴. The ask and task cards inside take it too.
 .progress-page:lang(fa) ::deep .as-written {

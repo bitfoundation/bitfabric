@@ -215,6 +215,15 @@
     width: 100%;
 }
 
+// The section and the page atop a phone's tools, as a desktop's top bar names them.
+.tools-crumb {
+    gap: 0.25rem;
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
 // Under the guide that points at the user picker inside it, whose dropdown still opens over both.
 .phone-layout ::deep .tools-panel {
     --bit-Panel-z-index: 1100;

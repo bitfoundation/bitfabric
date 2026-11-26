@@ -8,48 +8,69 @@
     flex-direction: column;
 }
 
-// Wraps onto a second row instead of pushing buttons off a narrow screen.
-.topbar {
+// ---- An open flow: the other flows at its side, its own bar and its board beside them.
+.item-layout {
+    min-height: 0;
+    flex-grow: 1;
+    display: flex;
+}
+
+.side {
+    flex-shrink: 0;
+    width: 17.5rem;
+    overflow-y: auto;
+    background-color: $bit-color-background-primary;
+    border-inline-end: 1px solid $bit-color-border-tertiary;
+
+    @include lt-md {
+        display: none;
+    }
+}
+
+.item-column {
+    min-width: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+// The flow's name and what can be done with it; the name gives way on a narrow screen.
+.flow-bar {
     gap: 0.5rem;
     display: flex;
-    flex-wrap: wrap;
     flex-shrink: 0;
-    min-height: 52px;
+    min-height: 48px;
     padding: 0.375rem 0.75rem;
     align-items: center;
     background-color: $bit-color-background-primary;
     border-bottom: 1px solid $bit-color-border-tertiary;
 }
 
-.brand {
-    gap: 0.5rem;
-    display: flex;
-    font-size: 15px;
-    font-weight: 700;
-    align-items: center;
-    text-decoration: none;
-    letter-spacing: -0.01em;
-    color: $bit-color-foreground-primary;
-
-    @include lt-sm {
-        span {
-            display: none;
-        }
-    }
-}
-
-.crumb {
-    text-decoration: none;
-    color: $bit-color-foreground-secondary;
-}
-
-.crumb-separator {
-    color: $bit-color-foreground-tertiary;
-}
-
-::deep .crumb-title {
+::deep .flow-name {
+    margin: 0;
     min-width: 0;
-    color: $bit-color-foreground-secondary;
+    flex: 0 1 auto;
+    font-weight: 600;
+}
+
+// On a phone, in place of the side list.
+.back {
+    --bit-Icon-color: currentColor;
+    width: 2rem;
+    height: 2rem;
+    display: none;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: $bit-shape-radius-control;
+    color: $bit-color-primary;
+
+    &:hover {
+        background-color: $bit-color-background-secondary-hover;
+    }
+
+    @include lt-md {
+        display: grid;
+    }
 }
 
 .loading {
@@ -370,6 +391,33 @@ iframe {
     border-radius: 12px;
     color: $bit-color-foreground-secondary;
     border: 1px dashed $bit-color-border-secondary;
+}
+
+// One group of flows: its name, then its cards.
+.group {
+    gap: 0.75rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.group-title {
+    gap: 0.5rem;
+    display: flex;
+    font-size: 12px;
+    font-weight: 700;
+    align-items: center;
+    letter-spacing: 0.06em;
+    margin: 1rem 0 0;
+    text-transform: uppercase;
+    color: $bit-color-foreground-secondary;
+}
+
+.group-count {
+    padding: 0 0.375rem;
+    font-size: 11px;
+    letter-spacing: 0;
+    border-radius: $bit-shape-radius-full;
+    background-color: $bit-color-background-tertiary;
 }
 
 .flow-cards {

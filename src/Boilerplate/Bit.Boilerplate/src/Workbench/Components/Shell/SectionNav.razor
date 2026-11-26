@@ -1,0 +1,12 @@
+@inherits WorkbenchComponentBase
+
+<BitNavBar TItem="BitNavBarItem"
+           Items="items"
+           Mode="BitNavMode.Manual"
+           SelectedKey="@SelectedKey"
+           InlineText
+           FitWidth
+           Indicator="BitNavBarIndicator.Line"
+           Class="@Class"
+           Styles="styles"
+           AriaLabel="@Localizer[nameof(WorkbenchStrings.WorkbenchSections)]" />

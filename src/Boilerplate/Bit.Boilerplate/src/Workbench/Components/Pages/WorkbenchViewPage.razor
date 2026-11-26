@@ -62,6 +62,12 @@ else if (isSmallScreen && IsTouring is false)
                 </BitStack>
             </Header>
             <Body>
+                @* Where the page sits, with the other sections a tap away, as a desktop's breadcrumb has them. *@
+                <div class="tools-crumb">
+                    <SectionMenu Section="WorkbenchSection.Pages" Waiting="reviewSession.NeedsYouCount" Size="BitSize.Small" Class="section-menu" />
+                    <span class="crumb-separator">/</span>
+                    <BitText Typography="BitTypography.Body2" Class="crumb-title" NoWrap>@Localizer[pageInfo.TitleKey]</BitText>
+                </div>
                 @if (pendingComment is null)
                 {
                     <ScenarioInspector Page="pageInfo" Value="store.SelectedPane.Scenario" ValueChanged="store.ChangeScenario" OnReset="Reset" ShowDevice="false" ShowZoom="false" />
@@ -99,6 +105,9 @@ else
                 <img src="_content/Boilerplate.Client.Core/images/bit-logo.svg" alt="" width="26" height="26" />
                 <span>@Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]</span>
             </a>
+            <span class="crumb-separator">/</span>
+            @* The other sections, from the place in the breadcrumb that names this one. *@
+            <SectionMenu Section="WorkbenchSection.Pages" Waiting="reviewSession.NeedsYouCount" Size="BitSize.Small" Class="section-menu" />
             <span class="crumb-separator">/</span>
             <BitText Typography="BitTypography.Body1" Class="crumb-title" NoWrap>@Localizer[pageInfo.TitleKey]</BitText>
             @if (reviewSession.PageOf(pageInfo.Key) is { } pageReview)

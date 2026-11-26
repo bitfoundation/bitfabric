@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Bit.Fabric.Workbench.Components.Pages;
 
 /// <summary>
-/// /flows lists the flows of the review; /flows/{id} draws one as a Bit.Blow board of live screens joined by arrows,
-/// which dev mode can rearrange, link and label, and anyone can present screen by screen. A sample's arrows open their
-/// editor in dev mode too, and a change made there goes into the review's own copy of the sample, which then opens.
+/// /flows lists the flows of the review, the project's own then the samples; /flows/{id} draws one as a Bit.Blow board of
+/// live screens joined by arrows, which dev mode can rearrange, link and label, and anyone can present screen by screen,
+/// with the other flows listed at its side to switch to. A sample's arrows open their editor in dev mode too, and a change
+/// made there goes into the review's own copy of the sample, which then opens.
 /// </summary>
 public partial class FlowsPage
 {
@@ -32,7 +33,6 @@ public partial class FlowsPage
     private readonly BlowFitViewOptions fitOptions = new() { Padding = 0.08, MaxZoom = 1 };
 
     [AutoInject] private WorkbenchReviewSession reviewSession = default!;
-    [AutoInject] private BitThemeManager bitThemeManager = default!;
     [AutoInject] private ILogger<FlowsPage> logger = default!;
 
     [Parameter] public string? FlowId { get; set; }
@@ -55,6 +55,27 @@ public partial class FlowsPage
     private string? CurrentScreenId => Flow is { } flow && presentIndex >= 0 && presentIndex < flow.Screens.Length ? flow.Screens[presentIndex].Id : null;
 
     private bool IsRtl => CurrentDir is BitDir.Rtl;
+
+    private string BackIcon => IsRtl ? BitIconName.Forward : BitIconName.Back;
+
+    /// <summary>The project's own flows, then the samples, leaving out a group with none.</summary>
+    private IEnumerable<(string TitleKey, List<WorkbenchFlow> Flows)> Groups
+    {
+        get
+        {
+            (string, List<WorkbenchFlow>)[] groups =
+            [
+                (nameof(WorkbenchStrings.FlowsGroupYours), [.. reviewSession.AllFlows.Where(f => f.IsSample is false)]),
+                (nameof(WorkbenchStrings.FlowsGroupSamples), [.. reviewSession.AllFlows.Where(f => f.IsSample)])
+            ];
+
+            return groups.Where(group => group.Item2.Count > 0);
+        }
+    }
+
+    private List<SectionListGroup> SideGroups => [.. Groups.Select(group => new SectionListGroup(
+        Localizer[group.TitleKey],
+        [.. group.Flows.Select(f => new SectionListItem(f.Id, f.Name, Localizer[nameof(WorkbenchStrings.ScreenCount), f.Screens.Length], BitIconName.Flow, WorkbenchUrls.Flow(f.Id)))]))];
 
     protected override void OnInitialized()
     {
@@ -446,11 +467,6 @@ public partial class FlowsPage
 
         reviewSession.DeleteFlow(FlowId);
         NavigationManager.NavigateTo(WorkbenchUrls.Flows);
-    }
-
-    private async Task ToggleShellTheme()
-    {
-        await bitThemeManager.ToggleDarkLightAsync();
     }
 
     private string TitleOf(string pageKey) => WorkbenchPageCatalog.Find(pageKey) is { } page ? Localizer[page.TitleKey].Value : pageKey;

@@ -4644,4 +4644,31 @@
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>Open the boards</value>
     </data>
+    <data name="Home" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="WorkbenchSections" xml:space="preserve">
+        <value>Workbench sections</value>
+    </data>
+    <data name="AllBoards" xml:space="preserve">
+        <value>All boards</value>
+    </data>
+    <data name="BoardKindHowItWorks" xml:space="preserve">
+        <value>How it works</value>
+    </data>
+    <data name="BoardKindComparison" xml:space="preserve">
+        <value>Comparisons</value>
+    </data>
+    <data name="BoardKindPlan" xml:space="preserve">
+        <value>Plans</value>
+    </data>
+    <data name="BoardKindReport" xml:space="preserve">
+        <value>Reports</value>
+    </data>
+    <data name="FlowsGroupYours" xml:space="preserve">
+        <value>This project's flows</value>
+    </data>
+    <data name="FlowsGroupSamples" xml:space="preserve">
+        <value>Samples</value>
+    </data>
 </root>

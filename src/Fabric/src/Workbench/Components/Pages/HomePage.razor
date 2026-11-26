@@ -4,7 +4,7 @@
 <PageTitle>@Localizer[nameof(WorkbenchStrings.HomeAgentPageTitle)]</PageTitle>
 
 <div id="top" class="home @(areRevealsLive ? "reveals-live" : null)">
-    <ShellHeader />
+    <ShellHeader Section="WorkbenchSection.Home" />
 
     <section class="hero">
         <div class="hero-text">
@@ -26,6 +26,9 @@
                             @Localizer[nameof(WorkbenchStrings.HomeStartHere)]
                         </BitButton>
                     }
+                    <BitButton Size="BitSize.Large" Variant="BitVariant.Text" IconName="@BitIconName.Info" Href="#why">
+                        @Localizer[nameof(WorkbenchStrings.HomeWhyButton)]
+                    </BitButton>
                 </div>
             </Bmotion>
             <Bmotion Initial="Bm.To(opacity: 0)" Animate="Bm.To(opacity: 1)" Transition="Enter(4)">
@@ -343,6 +346,7 @@
                 }
                 <a href="@WorkbenchUrls.Progress">@Localizer[nameof(WorkbenchStrings.Progress)]</a>
                 <a href="@WorkbenchUrls.Flows">@Localizer[nameof(WorkbenchStrings.Flows)]</a>
+                <a href="@WorkbenchUrls.Boards">@Localizer[nameof(WorkbenchStrings.Boards)]</a>
             </nav>
             <nav class="footer-links" aria-label="@Localizer[nameof(WorkbenchStrings.HomeFooterLearn)]">
                 <h3>@Localizer[nameof(WorkbenchStrings.HomeFooterLearn)]</h3>

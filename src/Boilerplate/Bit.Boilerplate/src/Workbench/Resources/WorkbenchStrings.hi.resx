@@ -5693,4 +5693,31 @@
     <data name="DeploySetting" xml:space="preserve">
         <value>सेटिंग</value>
     </data>
+    <data name="Home" xml:space="preserve">
+        <value>होम</value>
+    </data>
+    <data name="WorkbenchSections" xml:space="preserve">
+        <value>वर्कबेंच के हिस्से</value>
+    </data>
+    <data name="AllBoards" xml:space="preserve">
+        <value>सभी बोर्ड</value>
+    </data>
+    <data name="BoardKindHowItWorks" xml:space="preserve">
+        <value>यह कैसे काम करता है</value>
+    </data>
+    <data name="BoardKindComparison" xml:space="preserve">
+        <value>तुलनाएँ</value>
+    </data>
+    <data name="BoardKindPlan" xml:space="preserve">
+        <value>योजनाएँ</value>
+    </data>
+    <data name="BoardKindReport" xml:space="preserve">
+        <value>रिपोर्ट</value>
+    </data>
+    <data name="FlowsGroupYours" xml:space="preserve">
+        <value>इस प्रोजेक्ट के फ़्लो</value>
+    </data>
+    <data name="FlowsGroupSamples" xml:space="preserve">
+        <value>नमूने</value>
+    </data>
 </root>

@@ -1080,13 +1080,16 @@ public class ShellUITests : ShellPageTest
     [TestCategory("Localization")]
     public async Task EveryPage_Should_OfferTheLanguageNextToTheThemeSwitch(WorkbenchSurface surface)
     {
-        foreach (var path in new[] { WorkbenchUrls.Progress, WorkbenchUrls.Flows })
+        // The sections share one header; a page's own view has its top bar.
+        var header = Page.Locator("header.shell-header");
+
+        foreach (var path in new[] { WorkbenchUrls.Home, WorkbenchUrls.Progress, WorkbenchUrls.Flows, WorkbenchUrls.Boards })
         {
             await Page.GotoAsync(new Uri(Server.Address, path).ToString());
             await WaitUntilInteractive();
 
-            await Expect(TopBarButton(WorkbenchStrings.WorkbenchLanguage)).ToBeVisibleAsync();
-            await Expect(TopBarButton(WorkbenchStrings.ToggleWorkbenchTheme)).ToBeVisibleAsync();
+            await Expect(header.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.WorkbenchLanguage, Exact = true })).ToBeVisibleAsync();
+            await Expect(header.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ToggleWorkbenchTheme, Exact = true })).ToBeVisibleAsync();
         }
 
         await OpenWorkbench("theme");

@@ -7,8 +7,8 @@ description: Builds a board, a page in the Workbench's Boards section (`/boards`
 
 A board is a page an agent builds when an answer is easier to see than to read. It lives in the Workbench (the
 **workbench** skill, `.github/agents/workbench.agent.md`) in a section of its own, Boards, next to Pages, Flows and
-Progress: `/boards` lists them, newest first, and each opens full width at `/boards/<id>`, on the app's own components
-and theme, in light and dark, on a phone and right to left.
+Progress: `/boards` lists them by kind, newest first, and each opens at `/boards/<id>` with the others listed at its side,
+on the app's own components and theme, in light and dark, on a phone and right to left.
 
 Two examples ship with the Workbench. Look at both before you build your first:
 `src/Workbench/Components/Pages/Boards/Payments`, a dated comparison of payment providers and of the stores' terms with a
@@ -55,7 +55,8 @@ for the options it was created with.
   a `BoardBlock` per idea (an id a link can point at, a heading, at most one line), `BoardNumbers` for big numbers and a
   `BoardSource` for each page or file a fact came from, which `BoardFrame` folds at the foot.
 - Add it to `WorkbenchBoardCatalog.Build` (`src/Workbench/Infrastructure/Services/WorkbenchBoardCatalog.cs`) with its id,
-  title, a one-line summary, an icon, its component, the day it was made and its tone. Hot reload brings it in. While
+  title, a one-line summary, an icon, its component, the day it was made, its tone and its kind (`HowItWorks`,
+  `Comparison`, `Plan` or `Report`), which the list groups the boards by. Hot reload brings it in. While
   you work, the title and the summary can be plain text where the `nameof(WorkbenchStrings.…)` keys go; the Workbench
   shows them as written.
 - Write it in the user's language, as plain text in the board, and give `BoardFrame` that language: it then reads in it,

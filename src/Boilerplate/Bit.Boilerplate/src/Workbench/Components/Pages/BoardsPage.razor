@@ -4,27 +4,8 @@
 
 <PageTitle>@(Board is { } titled ? $"{Localizer[titled.TitleKey]} · {Localizer[nameof(WorkbenchStrings.Boards)]}" : $"{Localizer[nameof(WorkbenchStrings.Boards)]} · {Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]}")</PageTitle>
 
-<div class="boards-page">
-    <header class="topbar">
-        <a class="brand" href="@WorkbenchUrls.Home">
-            <img src="_content/Boilerplate.Client.Core/images/bit-logo.svg" alt="" width="26" height="26" />
-            <span>@Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]</span>
-        </a>
-        <span class="crumb-separator">/</span>
-        <a class="crumb" href="@WorkbenchUrls.Boards">@Localizer[nameof(WorkbenchStrings.Boards)]</a>
-        @if (Board is { } named)
-        {
-            <span class="crumb-separator">/</span>
-            <BitText Typography="BitTypography.Body1" Class="crumb-title" NoWrap>@Localizer[named.TitleKey]</BitText>
-        }
-
-        <BitSpacer />
-
-        <LanguageMenu Size="BitSize.Small" />
-        <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Contrast"
-                   Title="@Localizer[nameof(WorkbenchStrings.ToggleWorkbenchTheme)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.ToggleWorkbenchTheme)]"
-                   OnClick="ToggleTheme" />
-    </header>
+<div class="boards-page @(BoardId is null ? null : "showing-board")">
+    <ShellHeader Section="WorkbenchSection.Boards" />
 
     @if (BoardId is null)
     {
@@ -47,40 +28,63 @@
             }
             else
             {
-                <div class="cards">
-                    @foreach (var board in WorkbenchBoardCatalog.Boards)
-                    {
-                        <Bmotion Preset="BmotionPresets.Reveal(distance: 24)" WhileHover="Bm.To(y: -6)">
-                            <a class="board-card tone-@board.Tone" href="@WorkbenchUrls.Board(board.Id)">
-                                <span class="card-art" aria-hidden="true">
-                                    <span class="art-ring one"></span>
-                                    <span class="art-ring two"></span>
-                                    <span class="art-icon"><BitIcon IconName="@board.IconName" /></span>
-                                </span>
-                                <span class="card-body">
-                                    <span class="card-title">@Localizer[board.TitleKey]</span>
-                                    <span class="card-summary">@Localizer[board.SummaryKey]</span>
-                                    <span class="card-date"><BitIcon IconName="@BitIconName.Calendar" Size="BitSize.Small" /> @board.Updated.ToString("d MMM yyyy", CultureInfo.CurrentUICulture)</span>
-                                </span>
-                            </a>
-                        </Bmotion>
-                    }
-                </div>
+                @foreach (var (kind, boards) in WorkbenchBoardCatalog.Groups)
+                {
+                    <section class="group" aria-labelledby="@($"kind-{kind}")">
+                        <h2 id="@($"kind-{kind}")" class="group-title">@Localizer[WorkbenchBoardCatalog.TitleKeyOf(kind)] <span class="group-count">@boards.Count.ToString(CultureInfo.CurrentCulture)</span></h2>
+                        <div class="cards">
+                            @foreach (var board in boards)
+                            {
+                                <Bmotion Preset="BmotionPresets.Reveal(distance: 24)" WhileHover="Bm.To(y: -6)">
+                                    <a class="board-card tone-@board.Tone" href="@WorkbenchUrls.Board(board.Id)">
+                                        <span class="card-art" aria-hidden="true">
+                                            <span class="art-ring one"></span>
+                                            <span class="art-ring two"></span>
+                                            <span class="art-icon"><BitIcon IconName="@board.IconName" /></span>
+                                        </span>
+                                        <span class="card-body">
+                                            <span class="card-title">@Localizer[board.TitleKey]</span>
+                                            <span class="card-summary">@Localizer[board.SummaryKey]</span>
+                                            <span class="card-date"><BitIcon IconName="@BitIconName.Calendar" Size="BitSize.Small" /> @board.Updated.ToString("d MMM yyyy", CultureInfo.CurrentUICulture)</span>
+                                        </span>
+                                    </a>
+                                </Bmotion>
+                            }
+                        </div>
+                    </section>
+                }
             }
-        </main>
-    }
-    else if (Board is { } board)
-    {
-        <main class="board-view">
-            <DynamicComponent Type="board.ComponentType" />
         </main>
     }
     else
     {
-        <main class="missing">
-            <BitIcon IconName="@BitIconName.Search" Size="BitSize.Large" />
-            <p>@Localizer[nameof(WorkbenchStrings.BoardNotFound)]</p>
-            <BitButton Variant="BitVariant.Outline" Href="@WorkbenchUrls.Boards">@Localizer[nameof(WorkbenchStrings.Boards)]</BitButton>
-        </main>
+        @* An open board lists the others at the side; a phone folds that list away behind a link back to all of them. *@
+        <div class="item-layout">
+            @if (WorkbenchBoardCatalog.Boards.Count > 0)
+            {
+                <aside class="side">
+                    <SectionList AriaLabel="@Localizer[nameof(WorkbenchStrings.Boards)]" Groups="SideGroups" CurrentKey="@Board?.Id" />
+                </aside>
+            }
+
+            <div class="item-column">
+                <a class="back" href="@WorkbenchUrls.Boards"><BitIcon IconName="@BackIcon" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.AllBoards)]</a>
+
+                @if (Board is { } board)
+                {
+                    <main class="board-view">
+                        <DynamicComponent Type="board.ComponentType" />
+                    </main>
+                }
+                else
+                {
+                    <main class="missing">
+                        <BitIcon IconName="@BitIconName.Search" Size="BitSize.Large" />
+                        <p>@Localizer[nameof(WorkbenchStrings.BoardNotFound)]</p>
+                        <BitButton Variant="BitVariant.Outline" Href="@WorkbenchUrls.Boards">@Localizer[nameof(WorkbenchStrings.Boards)]</BitButton>
+                    </main>
+                }
+            </div>
+        </div>
     }
 </div>

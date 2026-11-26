@@ -5693,4 +5693,31 @@
     <data name="DeploySetting" xml:space="preserve">
         <value>Réglage</value>
     </data>
+    <data name="Home" xml:space="preserve">
+        <value>Accueil</value>
+    </data>
+    <data name="WorkbenchSections" xml:space="preserve">
+        <value>Sections de l'établi</value>
+    </data>
+    <data name="AllBoards" xml:space="preserve">
+        <value>Tous les tableaux</value>
+    </data>
+    <data name="BoardKindHowItWorks" xml:space="preserve">
+        <value>Comment ça marche</value>
+    </data>
+    <data name="BoardKindComparison" xml:space="preserve">
+        <value>Comparaisons</value>
+    </data>
+    <data name="BoardKindPlan" xml:space="preserve">
+        <value>Plans</value>
+    </data>
+    <data name="BoardKindReport" xml:space="preserve">
+        <value>Rapports</value>
+    </data>
+    <data name="FlowsGroupYours" xml:space="preserve">
+        <value>Parcours de ce projet</value>
+    </data>
+    <data name="FlowsGroupSamples" xml:space="preserve">
+        <value>Exemples</value>
+    </data>
 </root>

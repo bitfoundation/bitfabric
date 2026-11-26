@@ -5693,4 +5693,31 @@
     <data name="DeploySetting" xml:space="preserve">
         <value>设置</value>
     </data>
+    <data name="Home" xml:space="preserve">
+        <value>首页</value>
+    </data>
+    <data name="WorkbenchSections" xml:space="preserve">
+        <value>工作台的各部分</value>
+    </data>
+    <data name="AllBoards" xml:space="preserve">
+        <value>全部展板</value>
+    </data>
+    <data name="BoardKindHowItWorks" xml:space="preserve">
+        <value>工作原理</value>
+    </data>
+    <data name="BoardKindComparison" xml:space="preserve">
+        <value>对比</value>
+    </data>
+    <data name="BoardKindPlan" xml:space="preserve">
+        <value>计划</value>
+    </data>
+    <data name="BoardKindReport" xml:space="preserve">
+        <value>报告</value>
+    </data>
+    <data name="FlowsGroupYours" xml:space="preserve">
+        <value>本项目的流程</value>
+    </data>
+    <data name="FlowsGroupSamples" xml:space="preserve">
+        <value>示例</value>
+    </data>
 </root>

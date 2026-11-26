@@ -4,6 +4,9 @@ namespace Boilerplate.WorkbenchTests.Features.Flows;
 [TestClass, TestCategory("UITest")]
 public class FlowsUITests : FlowPageTest
 {
+    /// <summary>A group of the list of flows, by its title.</summary>
+    private ILocator Group(string title) => Page.Locator("main.flow-list section.group").Filter(new() { Has = Page.GetByRole(AriaRole.Heading, new() { Name = title }) });
+
     [TestMethod, EverySurface]
     public async Task TheFlowsPage_Should_ListTheFlowsAndOpenABoard(WorkbenchSurface surface)
     {
@@ -13,17 +16,18 @@ public class FlowsUITests : FlowPageTest
 
         await Expect(Page.GetByText(WorkbenchStrings.FlowsHint)).ToBeVisibleAsync();
 
-        var card = Page.GetByRole(AriaRole.Link, new() { Name = flow.Name });
+        // The project's own flows come first, apart from the samples.
+        var card = Group(WorkbenchStrings.FlowsGroupYours).GetByRole(AriaRole.Link, new() { Name = flow.Name });
 
         await Expect(card).ToContainTextAsync(string.Format(CultureInfo.InvariantCulture, WorkbenchStrings.ScreenCount, 2));
         await Expect(card).ToContainTextAsync(WorkbenchStrings.ThemePageTitle);
-        await Expect(card).Not.ToContainTextAsync(WorkbenchStrings.FlowSample);
+        await Expect(Group(WorkbenchStrings.FlowsGroupSamples).GetByRole(AriaRole.Link, new() { Name = flow.Name })).ToHaveCountAsync(0);
 
         await Press(card);
 
         await Expect(Page.Locator("main.board")).ToBeVisibleAsync();
         await Expect(Cards).ToHaveCountAsync(2);
-        await Expect(Page.Locator(".topbar")).ToContainTextAsync(flow.Name);
+        await Expect(Page.Locator(".flow-bar").GetByRole(AriaRole.Heading, new() { Level = 1 })).ToHaveTextAsync(flow.Name);
         await Expect(Page).ToHaveTitleAsync(new Regex(Regex.Escape(flow.Name)));
     }
 
@@ -33,13 +37,11 @@ public class FlowsUITests : FlowPageTest
         await OpenFlowsPage();
 
         // By its address, as a copy of it made on its board starts with its name.
-        var buildings = Page.Locator($"a[href='{WorkbenchUrls.Flow(WorkbenchSampleFlows.BuildingsId)}']");
-        var pos = Page.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.SampleFlowPos });
+        var samples = Group(WorkbenchStrings.FlowsGroupSamples);
+        var buildings = samples.Locator($"a[href='{WorkbenchUrls.Flow(WorkbenchSampleFlows.BuildingsId)}']");
+        var pos = samples.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.SampleFlowPos });
 
         await Expect(buildings).ToContainTextAsync(WorkbenchStrings.SampleFlowBuildings);
-
-        await Expect(buildings).ToContainTextAsync(WorkbenchStrings.FlowSample);
-        await Expect(pos).ToContainTextAsync(WorkbenchStrings.FlowSample);
         await Expect(pos).ToContainTextAsync(string.Format(CultureInfo.InvariantCulture, WorkbenchStrings.ScreenCount, 4));
 
         await Press(pos);
@@ -404,21 +406,55 @@ public class FlowsUITests : FlowPageTest
     }
 
     [TestMethod, EverySurface]
-    public async Task TheCrumbs_Should_LeadBackToTheListAndHome(WorkbenchSurface surface)
+    public async Task ABoard_Should_LeadBackToTheListAndHome(WorkbenchSurface surface)
     {
         var flow = await DrawThemeFlow();
 
         await OpenBoard(flow.Id, 2);
 
-        await Press(Page.Locator(".topbar a.crumb"));
+        // A desktop's header names the section, and a phone's flow bar leads back in place of the side list.
+        await Press(IsPhone
+            ? Page.Locator(".flow-bar").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.AllFlows, Exact = true })
+            : Page.Locator("header.shell-header").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.Flows, Exact = true }));
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.Flows, Level = 1 })).ToBeVisibleAsync();
         await Expect(Page.Locator("main.board")).ToHaveCountAsync(0);
 
-        await Press(Page.Locator(".topbar a.brand"));
+        await Press(Page.Locator("header.shell-header a.brand"));
 
         await Expect(Page).ToHaveURLAsync(new Uri(Server.Address, WorkbenchUrls.Home).ToString());
         await Expect(Page.Locator(".flows-page")).ToHaveCountAsync(0);
+    }
+
+    [TestMethod, OnDesktops]
+    public async Task ABoard_Should_ListTheOtherFlowsToSwitchTo(WorkbenchSurface surface)
+    {
+        var flow = await DrawThemeFlow();
+
+        await OpenBoard(flow.Id, 2);
+
+        var list = Page.GetByRole(AriaRole.Navigation, new() { Name = WorkbenchStrings.Flows, Exact = true });
+
+        await Expect(list.Locator("[aria-current='page']")).ToContainTextAsync(flow.Name);
+        await Expect(list).ToContainTextAsync(WorkbenchStrings.FlowsGroupYours);
+        await Expect(list).ToContainTextAsync(WorkbenchStrings.FlowsGroupSamples);
+
+        await Press(list.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.SampleFlowPos }));
+
+        await Expect(Page).ToHaveURLAsync(new Regex($"{Regex.Escape(WorkbenchUrls.Flow($"{WorkbenchSampleFlows.IdPrefix}pos"))}$"));
+        await Expect(Cards).ToHaveCountAsync(4);
+        await Expect(list.Locator("[aria-current='page']")).ToContainTextAsync(WorkbenchStrings.SampleFlowPos);
+    }
+
+    [TestMethod, OnPhones]
+    public async Task APhone_Should_FoldTheListOfFlowsAway(WorkbenchSurface surface)
+    {
+        var flow = await DrawThemeFlow();
+
+        await OpenBoard(flow.Id, 2);
+
+        await Expect(Page.GetByRole(AriaRole.Navigation, new() { Name = WorkbenchStrings.Flows, Exact = true })).ToBeHiddenAsync();
+        await Expect(Page.Locator(".flow-bar").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.AllFlows, Exact = true })).ToBeVisibleAsync();
     }
 
     [TestMethod, EverySurface]
