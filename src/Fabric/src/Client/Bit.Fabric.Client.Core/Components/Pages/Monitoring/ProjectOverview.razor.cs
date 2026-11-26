@@ -1,3 +1,4 @@
+using Bit.Fabric.Shared.Features.Monitoring;
 using Bit.Fabric.Shared.Features.Diagnostic;
 using Bit.Fabric.Shared.Features.Monitoring.Dtos;
 
@@ -12,6 +13,9 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectOverview
 {
+    /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
+    private string Dot => MonitoringWords.Dot(Localizer);
+
     [Parameter, EditorRequired] public ProjectDetailsDto Details { get; set; } = default!;
 
     private string? searchText;

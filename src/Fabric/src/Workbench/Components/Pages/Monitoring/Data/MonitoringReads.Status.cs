@@ -72,6 +72,7 @@ public static partial class MonitoringReads
             CheckedAt = project.CheckedAt,
             WatchedSince = project.CreatedOn,
             MedianResponseMs = page.ShowsResponseTime ? Project(project, TimeZoneInfo.Utc, now).MedianMs : null,
+            MedianVisitorMs = page.ShowsResponseTime ? Project(project, TimeZoneInfo.Utc, now).MedianVisitorMs : null,
             SupportAddress = page.SupportAddress,
             PushPublicKey = MonitoringSamples.PushPublicKey,
             Components = [.. page.Components.Where(component => component.IsShown).Select(component =>

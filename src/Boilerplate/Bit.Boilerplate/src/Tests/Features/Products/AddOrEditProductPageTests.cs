@@ -118,7 +118,7 @@ public class AddOrEditProductPageTests
     /// than zero..." - not for a value being too long. It has no <c>{0}</c>/<c>{1}</c> placeholders either, so neither
     /// the field name nor the limit was shown, in all ten cultures.
     /// <para>
-    /// The fix is the framework's own <c>MaxLengthAttribute_ValidationError</c>, now in all ten .resx files.
+    /// The fix is the framework's own <c>MaxLengthAttribute_ValidationError</c>, now in every locale's .resx file.
     /// </para>
     /// </summary>
     [TestMethod]

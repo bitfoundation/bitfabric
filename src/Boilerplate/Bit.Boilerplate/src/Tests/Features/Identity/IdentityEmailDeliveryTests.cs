@@ -107,7 +107,7 @@ public class IdentityEmailDeliveryTests
     /// <para>
     /// It is deliberate, not an oversight - putting the code in the subject is what makes the preview useful - so
     /// unblocking this needs a decision rather than a patch: either keep it and say so in the resx comments, or move
-    /// the token out of the five <c>*Subject</c> strings in all ten locales and out of each template's title.
+    /// the token out of the five <c>*Subject</c> strings in every locale and out of each template's title.
     /// </para>
     /// </summary>
     [TestMethod, Ignore("BP-154 is open: whether the code belongs in the subject line is a product decision. " +

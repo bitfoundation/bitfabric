@@ -16,7 +16,7 @@
         }
         <span class="card-title">
             <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="@($"project-{Project.Id:N}")">@Project.Name</BitText>
-            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="ltr">@Host</BitText>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="ltr app-latin-digits">@Host</BitText>
         </span>
         <BitTag Size="BitSize.Small" Variant="BitVariant.Fill" Color="@StateColor" IconName="@StateIcon" Text="@StateText" />
     </header>
@@ -68,9 +68,17 @@
         </div>
     }
 
+    @* Two numbers only when a cache in front of the app answers its home page: what visitors wait for, and the server's own. *@
     <dl class="metrics">
+        @if (Project.MedianVisitorMs is { } visitorMedian)
+        {
+            <div>
+                <dt title="@Localizer[nameof(AppStrings.MonitoringForVisitorsHelp)]">@Localizer[nameof(AppStrings.MonitoringForVisitors)]</dt>
+                <dd>@Localizer[nameof(AppStrings.AppHomeMs), visitorMedian]</dd>
+            </div>
+        }
         <div>
-            <dt title="@Localizer[nameof(AppStrings.MonitoringHomePagePastCache)]">@Localizer[nameof(AppStrings.MonitoringResponseTime)]</dt>
+            <dt title="@Localizer[nameof(AppStrings.MonitoringHomePagePastCache)]">@(Project.MedianVisitorMs is null ? Localizer[nameof(AppStrings.MonitoringResponseTime)] : Localizer[nameof(AppStrings.MonitoringServerTime)])</dt>
             <dd>@(Project.MedianMs is { } median ? Localizer[nameof(AppStrings.AppHomeMs), median] : "—")</dd>
         </div>
         <div>

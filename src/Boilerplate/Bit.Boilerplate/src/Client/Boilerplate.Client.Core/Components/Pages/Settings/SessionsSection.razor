@@ -34,10 +34,10 @@
                                 CoinVariant="@(currentSession.Privileged ? BitVariant.Fill : BitVariant.Outline)"
                                 Presence="@(IsOnline is null ? BitPersonaPresence.None : IsOnline is true ? BitPersonaPresence.Online : BitPersonaPresence.Offline)">
                         <PrimaryTextTemplate>
-                            <div class="session-address">@currentSession.DisplayAddress</div>
+                            <div class="session-address app-latin-digits">@currentSession.DisplayAddress</div>
                             @if (currentSession.DisplayIP is not null)
                             {
-                                <div class="session-ip" title="@currentSession.DisplayIP">@currentSession.DisplayIP</div>
+                                <div class="session-ip app-latin-digits" title="@currentSession.DisplayIP">@currentSession.DisplayIP</div>
                             }
                         </PrimaryTextTemplate>
                     </BitPersona>
@@ -71,10 +71,10 @@
                                             Presence="@session.GetPresence(TimeProvider.GetUtcNow())"
                                             CoinVariant="@(session.Privileged ? BitVariant.Fill : BitVariant.Outline)">
                                     <PrimaryTextTemplate>
-                                        <div class="session-address">@session.DisplayAddress</div>
+                                        <div class="session-address app-latin-digits">@session.DisplayAddress</div>
                                         @if (session.DisplayIP is not null)
                                         {
-                                            <div class="session-ip" title="@session.DisplayIP">@session.DisplayIP</div>
+                                            <div class="session-ip app-latin-digits" title="@session.DisplayIP">@session.DisplayIP</div>
                                         }
                                     </PrimaryTextTemplate>
                                 </BitPersona>
@@ -112,6 +112,7 @@
                             <BitPersona PrimaryText="@session.ApplicationName"
                                         SecondaryText="@session.GetLastSeenOn(TimeProvider.GetUtcNow(), Localizer, TimeZoneService)"
                                         TertiaryText="@session.DisplayAddress"
+                                        Classes="@(new() { TertiaryTextContainer = "app-latin-digits" })"
                                         Size="BitPersonaSize.Size72"
                                         ImageUrl="@session.ImageUrl"
                                         Class="other-session-persona"

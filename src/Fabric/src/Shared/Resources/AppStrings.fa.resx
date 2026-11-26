@@ -2312,7 +2312,7 @@
     <value>با چه چیزی شروع می‌شود</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>هر پروژه از قبل ثبت‌نام و ورود با Passkey و تأیید دومرحله‌ای، پروفایل، نقش‌ها و دسترسی‌ها، تنظیمات، ۱۱ زبان و تم روشن و تیره را دارد. علاوه بر این‌ها، می‌تواند با یک پنل ادمین یا یک فروشگاه آنلاین شروع شود.</value>
+    <value>هر پروژه از قبل ثبت‌نام و ورود با Passkey و تأیید دومرحله‌ای، پروفایل، نقش‌ها و دسترسی‌ها، تنظیمات، ۱۲ زبان و تم روشن و تیره را دارد. علاوه بر این‌ها، می‌تواند با یک پنل ادمین یا یک فروشگاه آنلاین شروع شود.</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>ابزاری برای کسب‌وکارها می‌سازید؟ با پنل ادمین شروع کنید و محصولاتش را به چیزهای خودتان تبدیل کنید. محصول می‌فروشید؟ با فروشگاه شروع کنید.</value>
@@ -2693,7 +2693,7 @@
     <value>Passkey و ورود دومرحله‌ای</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>۱۱ زبان، روشن و تیره</value>
+    <value>۱۲ زبان، روشن و تیره</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>صفحه‌های نمونه: فهرست کارها</value>
@@ -2720,7 +2720,7 @@
     <value>با چه چیزی شروع شود؟</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>هر پروژه از قبل یک Identity solution کامل، نقش‌ها و دسترسی‌ها، تنظیمات، ۱۱ زبان و تم روشن و تیره را دارد.</value>
+    <value>هر پروژه از قبل یک Identity solution کامل، نقش‌ها و دسترسی‌ها، تنظیمات، ۱۲ زبان و تم روشن و تیره را دارد.</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>فقط امکانات پایه</value>
@@ -6014,7 +6014,7 @@
     <value>بررسی‌شده در {0}</value>
   </data>
   <data name="MonitoringDeployedAt" xml:space="preserve">
-    <value>Deploy شده در {0}</value>
+    <value>در {0} Deploy شد</value>
   </data>
   <data name="MonitoringOpenTheApp" xml:space="preserve">
     <value>باز کردن اپ</value>
@@ -6086,7 +6086,7 @@
     <value>Health report</value>
   </data>
   <data name="MonitoringDeploysAndRestarts" xml:space="preserve">
-    <value>Deployها و راه‌اندازی‌های مجدد</value>
+    <value>راه‌اندازی‌های مجدد و Deployها</value>
   </data>
   <data name="MonitoringFailingOrNotAnsweringLower" xml:space="preserve">
     <value>از کار افتاده یا بی‌پاسخ</value>
@@ -6661,6 +6661,10 @@
   <data name="MonitoringDurationOneDayHours" xml:space="preserve">
     <value>۱ روز و {0} ساعت</value>
   </data>
+  <data name="MonitoringDot" xml:space="preserve">
+    <value>، </value>
+    <comment>Separates the parts of a line, such as a time and a duration. Persian takes its comma: a middle dot beside Persian digits reads as a zero.</comment>
+  </data>
   <data name="MonitoringPartsSeparator" xml:space="preserve">
     <value>، </value>
   </data>
@@ -6933,6 +6937,27 @@
   </data>
   <data name="MonitoringTypicalResponseTime" xml:space="preserve">
     <value>زمان پاسخ معمول</value>
+  </data>
+  <data name="MonitoringForVisitors" xml:space="preserve">
+    <value>برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringForVisitorsHelp" xml:space="preserve">
+    <value>صفحهٔ اصلی همان‌طور که بازدیدکننده‌ها می‌گیرند، از Cache جلوی اپ شما.</value>
+  </data>
+  <data name="MonitoringServerTime" xml:space="preserve">
+    <value>سرور</value>
+  </data>
+  <data name="MonitoringHomePageForVisitors" xml:space="preserve">
+    <value>صفحهٔ اصلی برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringTypicalForVisitors" xml:space="preserve">
+    <value>زمان معمول برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringTypicalServerTime" xml:space="preserve">
+    <value>زمان معمول سرور</value>
+  </data>
+  <data name="MonitoringConnectedVisitorsAndServer" xml:space="preserve">
+    <value>{0} برای بازدیدکننده‌ها ({1} سرور)</value>
   </data>
   <data name="MonitoringPastIncidents" xml:space="preserve">
     <value>رخدادهای گذشته</value>

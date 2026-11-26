@@ -29,7 +29,8 @@ public partial class CultureInfoManager
         ("español", CreateCultureInfo("es-ES")),
         ("français", CreateCultureInfo("fr-FR")),
         ("العربية", CreateCultureInfo("ar-SA")),
-        ("Deutsch", CreateCultureInfo("de-DE"))
+        ("Deutsch", CreateCultureInfo("de-DE")),
+        ("dansk", CreateCultureInfo("da-DK"))
         // Adding new cultures requires changing MainActivity's DataPathPrefixes.
     ];
 
@@ -120,7 +121,7 @@ public partial class CultureInfoManager
         cultureInfo.DateTimeFormat.AMDesignator = "ق.ظ";
         cultureInfo.DateTimeFormat.PMDesignator = "ب.ظ";
         cultureInfo.DateTimeFormat.ShortDatePattern = "yyyy/MM/dd";
-        cultureInfo.DateTimeFormat.LongDatePattern = "yyyy MMMM d, dddd";
+        cultureInfo.DateTimeFormat.LongDatePattern = "yyyy MMMM d، dddd";
         cultureInfo.DateTimeFormat.AbbreviatedDayNames =
         [
             "ی", "د", "س", "چ", "پ", "ج", "ش"

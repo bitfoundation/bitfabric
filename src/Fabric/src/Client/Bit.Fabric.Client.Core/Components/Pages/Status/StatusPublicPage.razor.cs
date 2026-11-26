@@ -11,6 +11,9 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Status;
 /// </summary>
 public partial class StatusPublicPage
 {
+    /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
+    private string Dot => MonitoringWords.Dot(Localizer);
+
     [Parameter] public string? Slug { get; set; }
 
     [AutoInject] private IPublicStatusController publicStatusController = default!;

@@ -196,7 +196,7 @@ else
                                         @foreach (var round in check.Recent)
                                         {
                                             <span class="@($"round {StatusClass(round.Status)}")"
-                                                  title="@($"{LocalTime(round.At, "t")} · {StatusText(ToneOf(round.Status))}{(round.DurationMs is { } ms ? $" · {FormatMs(ms)}" : "")}")"></span>
+                                                  title="@($"{LocalTime(round.At, "t")}{Dot}{StatusText(ToneOf(round.Status))}{(round.DurationMs is { } ms ? $"{Dot}{FormatMs(ms)}" : "")}")"></span>
                                         }
                                     </div>
                                 }

@@ -1042,7 +1042,9 @@ public static partial class Program
             .AddCheck<AppCertificateHealthCheck>("appCertificate", tags: [HealthCheckCategories.Platform])
             // Remote dependencies from here on are bounded and report Degraded, which keeps `/health` at 200 (See
             // MapAppHealthChecks): a provider outage must not drain an otherwise healthy instance.
-            .AddCheck<FileStorageHealthCheck>("fileStorage", failureStatus: HealthStatus.Degraded, tags: [HealthCheckCategories.Platform], timeout: TimeSpan.FromSeconds(5))
+            // Kept for half of a one-minute monitoring interval, as the websites below: the monitors that read the report,
+            // and the app's own /health, share one listing of the bucket in it.
+            .AddCachedCheck("fileStorage", HealthCheckCategories.Platform, sp => ActivatorUtilities.CreateInstance<FileStorageHealthCheck>(sp), cacheDuration: TimeSpan.FromSeconds(30), timeout: TimeSpan.FromSeconds(5))
             // Cached, as signing in on every probe can trip the mail provider's brute force protection.
             .AddCachedCheck("smtp", HealthCheckCategories.Messaging, _ => new SmtpHealthCheck(GetSmtpSettings(configuration)), cacheDuration: TimeSpan.FromMinutes(5), timeout: TimeSpan.FromSeconds(10));
 
@@ -1112,8 +1114,9 @@ public static partial class Program
         void AddCachedCheckIfConfigured(string name, string category, bool configured, string settings, Func<IServiceProvider, IHealthCheck> factory, TimeSpan cacheDuration, TimeSpan timeout)
             => AddCheckIfConfigured(name, category, configured, settings, _ => healthChecksBuilder.AddCachedCheck(name, category, factory, cacheDuration, timeout));
 
-        AddCheckIfConfigured("sms", HealthCheckCategories.Messaging, appSettings.Sms?.Configured is true, "Sms", tags =>
-            healthChecksBuilder.AddCheck<TwilioHealthCheck>("sms", failureStatus: HealthStatus.Degraded, tags: tags, timeout: TimeSpan.FromSeconds(5)));
+        // Half a minute, as file storage above: one call to the SMS provider for every monitor reading in it.
+        AddCachedCheckIfConfigured("sms", HealthCheckCategories.Messaging, appSettings.Sms?.Configured is true, "Sms",
+            sp => ActivatorUtilities.CreateInstance<TwilioHealthCheck>(sp), cacheDuration: TimeSpan.FromSeconds(30), timeout: TimeSpan.FromSeconds(5));
 
         //#if (cloudflare == true)
         AddCachedCheckIfConfigured("cloudflare", HealthCheckCategories.Platform, appSettings.Cloudflare?.Configured is true, "Cloudflare",

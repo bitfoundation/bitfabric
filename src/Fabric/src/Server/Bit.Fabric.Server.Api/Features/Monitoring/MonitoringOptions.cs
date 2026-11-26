@@ -20,6 +20,13 @@ public partial class MonitoringOptions
     public int Parallelism { get; set; } = 16;
 
     /// <summary>
+    /// How much of the minute the probe job's rounds are spread over: each project starts at its own moment in it, the same
+    /// every minute (See ProjectProbeJobRunner.OffsetOf), so they don't all reach one host, or load this server, at once.
+    /// It leaves the rest of the minute for the last ones to finish.
+    /// </summary>
+    public TimeSpan RoundSpread { get; set; } = TimeSpan.FromSeconds(30);
+
+    /// <summary>
     /// bit Fabric's own OAuth client id in customers' apps. By default the address of its client metadata document
     /// (CIMD), which every app made from the template accepts without registration; set it where the customer's app
     /// has bit Fabric pre-registered instead, as the tests do, since an app refuses a metadata document on localhost.

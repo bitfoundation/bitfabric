@@ -19,6 +19,10 @@ public partial class ProjectMonitoringMcpTools
     /// <para><c>DaysIn</c>: The time zone each project's days are counted in.</para>
     public sealed record ProjectList(string? Team, string DaysIn, ProjectSummary[] Projects);
 
+    /// <summary>
+    /// <c>TypicalResponseMs</c>, <c>Slowest5PercentResponseMs</c>: The home page over the last 24 hours past any cache: the server's own time.<br/>
+    /// <c>TypicalVisitorWaitMs</c>: The typical time a visitor waited for it, through the cache in front of the app; null when no cache answered it, so the server's time is what visitors wait for.
+    /// </summary>
     public sealed record ProjectSummary(Guid Id,
         string? Name,
         string? Address,
@@ -27,6 +31,7 @@ public partial class ProjectMonitoringMcpTools
         double? Uptime30DaysPercent,
         int? TypicalResponseMs,
         int? Slowest5PercentResponseMs,
+        int? TypicalVisitorWaitMs,
         string[] PartsNotWorking,
         OngoingIncident? OngoingIncident,
         string? CacheWarning,
@@ -77,6 +82,8 @@ public partial class ProjectMonitoringMcpTools
         DateTimeOffset? Since);
 
     /// <summary>
+    /// <c>ResponseMs</c>: How long the home page took in the newest reading, past any cache: the server's own time.<br/>
+    /// <c>VisitorMs</c>: How long a visitor waited for it in that reading, through the cache in front of the app; null when no cache answered it, or from the bitplatform Network, which times past the cache alone.<br/>
     /// <c>Answered</c>: For a location of the bitplatform Network: whether the home page answered its newest reading.
     /// </summary>
     public sealed record CheckedFrom(string Name,
@@ -85,6 +92,7 @@ public partial class ProjectMonitoringMcpTools
         DateTimeOffset? NewestReadingAt,
         string? DataCenter,
         int? ResponseMs,
+        int? VisitorMs,
         int? ReportMs,
         bool? Answered);
 

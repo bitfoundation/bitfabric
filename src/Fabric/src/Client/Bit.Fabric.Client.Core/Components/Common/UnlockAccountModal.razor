@@ -6,7 +6,8 @@
             <BitPersona Size="BitPersonaSize.Size40"
                         ImageUrl="@UserSession.GetProfileImageUrl(AbsoluteServerAddress)"
                         PrimaryText="@UserSession.DisplayName"
-                        SecondaryText="@(UserSession.Email ?? UserSession.PhoneNumber)" />
+                        SecondaryText="@(UserSession.Email ?? UserSession.PhoneNumber)"
+                        Classes="@(new() { SecondaryTextContainer = "app-latin-digits" })" />
 
             <BitSpacer />
 

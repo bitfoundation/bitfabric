@@ -10,6 +10,9 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectIncidents
 {
+    /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
+    private string Dot => MonitoringWords.Dot(Localizer);
+
     [Parameter, EditorRequired] public Guid ProjectId { get; set; }
 
     [AutoInject] private IProjectIncidentsController incidentsController = default!;
