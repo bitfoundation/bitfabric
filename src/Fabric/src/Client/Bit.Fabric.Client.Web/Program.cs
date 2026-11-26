@@ -10,6 +10,9 @@ public static partial class Program
 {
     public static async Task Main(string[] args)
     {
+        // Before any HttpClient is made: a request can then go out without the trace context (See TraceContextPropagator).
+        System.Diagnostics.DistributedContextPropagator.Current = new TraceContextPropagator(System.Diagnostics.DistributedContextPropagator.Current);
+
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 

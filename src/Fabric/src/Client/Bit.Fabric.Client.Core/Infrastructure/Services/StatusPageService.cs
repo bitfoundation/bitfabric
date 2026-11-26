@@ -52,7 +52,10 @@ public class StatusPageService(ClientCoreSettings settings, TimeProvider timePro
             using var httpClient = CreateHttpClient();
             httpClient.Timeout = Timeout;
 
-            using var response = await httpClient.GetAsync(url, cancellationToken);
+            using var request = new HttpRequestMessage(HttpMethod.Get, url);
+            // No trace context: in the browser it makes the request a preflighted one, which a Better Stack page refuses.
+            request.Options.Set(TraceContextPropagator.Leave, true);
+            using var response = await httpClient.SendAsync(request, cancellationToken);
             response.EnsureSuccessStatusCode();
 
             // A Better Stack page answers in a shape of its own (See BetterStackStatusPage), and labels its JSON text/html.
