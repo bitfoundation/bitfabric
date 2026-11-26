@@ -6086,7 +6086,7 @@
     <value>Health report</value>
   </data>
   <data name="MonitoringDeploysAndRestarts" xml:space="preserve">
-    <value>Deployها و راه‌اندازی‌های مجدد</value>
+    <value>راه‌اندازی‌های مجدد و Deployها</value>
   </data>
   <data name="MonitoringFailingOrNotAnsweringLower" xml:space="preserve">
     <value>از کار افتاده یا بی‌پاسخ</value>
