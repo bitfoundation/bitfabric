@@ -68,6 +68,12 @@
                         }
                         <GrowthDeltaChip Delta="@(r.HasBefore ? GrowthFormat.Change(r.ProjectsMade, Localizer) : null)" />
                     </span>
+                    @if (r.ProjectsMade.Now > 0)
+                    {
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                            @Localizer[nameof(WorkbenchStrings.GrowthPerDay), GrowthFormat.Average(r.ProjectsMade.Now / (double)r.PeriodDays)]
+                        </BitText>
+                    }
                 }
             </div>
             @* A first day is one point, not yet a curve. *@
@@ -129,6 +135,29 @@
                     <span class="card-figure">@GrowthFormat.Count(r.Trials)</span>
                     <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthTrialsGiven)]</BitText>
                     <GrowthTrialBar Report="r" />
+
+                    @* The two numbers Trial → License is made of in the period, and the share they make. *@
+                    @if (r.ConversionOf > 0)
+                    {
+                        <div class="flow">
+                            <div class="figure">
+                                <span class="figure-value">@GrowthFormat.Count(r.ConversionOf)</span>
+                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                                    @Localizer[r.ConversionIsSoFar ? nameof(WorkbenchStrings.GrowthFlowGiven) : nameof(WorkbenchStrings.GrowthFlowEnded)]
+                                </BitText>
+                            </div>
+                            <BitIcon IconName="@BitIconName.Forward" Class="flow-arrow" aria-hidden="true" />
+                            <div class="figure">
+                                <span class="figure-value">@GrowthFormat.Count(r.ConversionLicensed)</span>
+                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthFlowLicensed)]</BitText>
+                            </div>
+                            <BitIcon IconName="@BitIconName.Forward" Class="flow-arrow" aria-hidden="true" />
+                            <div class="figure">
+                                <span class="figure-value">@(r.Conversion is { } share ? GrowthFormat.Share(share) : "–")</span>
+                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthConversion)]</BitText>
+                            </div>
+                        </div>
+                    }
                 }
             </section>
 

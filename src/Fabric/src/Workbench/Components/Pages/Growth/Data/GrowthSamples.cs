@@ -61,7 +61,7 @@ public static class GrowthSamples
     }
 
     /// <summary>
-    /// Fourteen months: a few projects a day at first and around twenty now, fewer at weekends; about two Trials in five
+    /// Fourteen months: one or two projects a day at first and around twenty now, fewer at weekends; about two Trials in five
     /// get a License, many of them after the reminders start on day 14; some teams license several projects, and about one
     /// licensed project in five goes live with monitoring watching it.
     /// </summary>
@@ -79,7 +79,7 @@ public static class GrowthSamples
         {
             var day = first.AddDays(index);
             var progress = index / (double)(days - 1);
-            var rate = 1.4 + 19 * Math.Pow(progress, 1.7);
+            var rate = 1.2 + 21 * Math.Pow(progress, 2.4);
 
             if (day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
@@ -91,7 +91,7 @@ public static class GrowthSamples
                 rate *= 0.4;
             }
 
-            var made = (int)Math.Round(rate * (0.6 + random.NextDouble() * 0.8));
+            var made = (int)Math.Round(rate * (0.7 + random.NextDouble() * 0.6));
 
             for (var count = 0; count < made; count++)
             {

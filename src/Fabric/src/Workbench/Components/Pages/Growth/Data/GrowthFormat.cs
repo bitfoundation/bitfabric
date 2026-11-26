@@ -18,6 +18,9 @@ public static class GrowthFormat
 
     public static string Decimal(double value) => value.ToString("0.0", CultureInfo.CurrentCulture);
 
+    /// <summary>An average: one decimal under ten, whole above.</summary>
+    public static string Average(double value) => value.ToString(value < 10 ? "0.#" : "0", CultureInfo.CurrentCulture);
+
     /// <summary>A number of days, with a half when there is one.</summary>
     public static string Days(double value) => value.ToString("0.#", CultureInfo.CurrentCulture);
 

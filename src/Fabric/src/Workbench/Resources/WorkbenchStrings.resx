@@ -4654,6 +4654,19 @@
     <data name="GrowthProjects" xml:space="preserve">
         <value>Projects</value>
     </data>
+    <data name="GrowthPerDay" xml:space="preserve">
+        <value>About {0} a day</value>
+        <comment>The projects made a day on average over the period.</comment>
+    </data>
+    <data name="GrowthFlowEnded" xml:space="preserve">
+        <value>Trials ended</value>
+    </data>
+    <data name="GrowthFlowGiven" xml:space="preserve">
+        <value>Trials so far</value>
+    </data>
+    <data name="GrowthFlowLicensed" xml:space="preserve">
+        <value>Got a License</value>
+    </data>
     <data name="GrowthRealOnly" xml:space="preserve">
         <value>Automated test runs are left out.</value>
         <comment>Every figure built on projects leaves out those whose Trial bit CLI asked for from CI.</comment>

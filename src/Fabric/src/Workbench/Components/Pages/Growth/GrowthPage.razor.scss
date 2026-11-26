@@ -154,3 +154,22 @@
     font-weight: $bit-typography-h4-font-weight;
     color: $bit-color-foreground-primary;
 }
+
+// The two numbers Trial → License is made of, and the share, read in order.
+.flow {
+    gap: 0.75rem;
+    display: grid;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid $bit-color-border-secondary;
+}
+
+::deep .flow-arrow {
+    color: $bit-color-foreground-tertiary;
+
+    &:dir(rtl) {
+        transform: scaleX(-1);
+    }
+}

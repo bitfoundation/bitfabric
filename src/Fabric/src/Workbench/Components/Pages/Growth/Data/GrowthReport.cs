@@ -70,6 +70,12 @@ public sealed class GrowthReport
     /// <summary>How many Trials <see cref="Conversion"/> is taken over.</summary>
     public int ConversionOf { get; init; }
 
+    /// <summary>How many of those have a License.</summary>
+    public int ConversionLicensed { get; init; }
+
+    /// <summary>The days the period's counts are taken over: its length, or the days since the first project for All.</summary>
+    public int PeriodDays { get; init; }
+
     public double? ConversionBefore { get; init; }
 
     /// <summary>No Trial ended in the period, so <see cref="Conversion"/> is the share licensed so far.</summary>
@@ -200,9 +206,9 @@ public sealed class GrowthReport
         var endedInPeriod = trials.Where(trial => InPeriod(trial.TrialEndsOn!.Value)).ToArray();
         var endedBefore = trials.Where(trial => InBefore(trial.TrialEndsOn!.Value)).ToArray();
         var isSoFar = endedInPeriod.Length is 0;
-        double? conversion = isSoFar
-            ? trials.Length is 0 ? null : trials.Count(trial => trial.LicensedOn is not null) / (double)trials.Length
-            : endedInPeriod.Count(trial => trial.LicensedOn is not null) / (double)endedInPeriod.Length;
+        var conversionBase = isSoFar ? trials : endedInPeriod;
+        var conversionLicensed = conversionBase.Count(trial => trial.LicensedOn is not null);
+        double? conversion = conversionBase.Length is 0 ? null : conversionLicensed / (double)conversionBase.Length;
         double? conversionBefore = isSoFar || endedBefore.Length is 0 || period is GrowthPeriod.All
             ? null
             : endedBefore.Count(trial => trial.LicensedOn is not null) / (double)endedBefore.Length;
@@ -237,7 +243,9 @@ public sealed class GrowthReport
             NewAccounts = Change(world.Accounts),
             NewInProduction = Change(live),
             Conversion = conversion,
-            ConversionOf = isSoFar ? trials.Length : endedInPeriod.Length,
+            ConversionOf = conversionBase.Length,
+            ConversionLicensed = conversionLicensed,
+            PeriodDays = period is GrowthPeriod.All ? today.DayNumber - firstDay.DayNumber + 1 : length,
             ConversionBefore = conversionBefore,
             ConversionIsSoFar = isSoFar,
             MadePerBucket = PerBucket(projects.Select(project => project.MadeOn)),
