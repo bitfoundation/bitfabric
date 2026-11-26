@@ -289,7 +289,8 @@ public class ProgressUITests : ProgressPageTest
     public async Task ThePlan_Should_CountItsTasksAndReadFullScreenWithItsOutline(WorkbenchSurface surface)
     {
         var (id, _) = await Agent.Create("Claude Code", new(null, "Build the orders page", null, null, null, null, null, null, null,
-            Plan: "# Orders page\n\n## Design\n\nThe entity and its page.\n\n## Tasks\n\n- [x] The entity\n- [ ] The page\n- [ ] The tests"), CancellationToken.None);
+            // The ticked line in the code block is an example, not a task, so it isn't counted
+            Plan: "# Orders page\n\n## Design\n\nThe entity and its page.\n\n```md\n- [x] An example\n```\n\n## Tasks\n\n- [x] The entity\n- [ ] The page\n- [ ] The tests"), CancellationToken.None);
 
         await OpenProgress($"progress/{id}");
 
