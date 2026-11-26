@@ -64,6 +64,24 @@
         }
         else
         {
+            if (HasReturnUrl)
+            {
+                <BitMessage Color="BitColor.Success" Multiline>
+                    <BitStack Gap="0.5rem">
+                        @if (isTwoFactorSession)
+                        {
+                            <BitText>@Localizer[nameof(AppStrings.TfaReturnContinueMessage)]</BitText>
+                            <BitButton OnClick="WrapHandled(GoBack)">@Localizer[nameof(AppStrings.Continue)]</BitButton>
+                        }
+                        else
+                        {
+                            <BitText>@Localizer[nameof(AppStrings.TfaReturnSignInAgainMessage)]</BitText>
+                            <BitButton AutoLoading OnClick="WrapHandled(SignInAgain)">@Localizer[nameof(AppStrings.TfaReturnSignInAgain)]</BitButton>
+                        }
+                    </BitStack>
+                </BitMessage>
+            }
+
             <BitPivot Alignment="BitAlignment.Center">
                 <BitPivotItem HeaderText="@Localizer[nameof(AppStrings.TfaRecoveryCodesHeader)]">
                     <BitStack>

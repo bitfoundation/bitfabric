@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Bit.BevTools;
 using Bit.Belemetry;
 using Bit.Fabric.Client.Core;
+using Bit.Fabric.Client.Core.Components.Layout.Diagnostic;
 using Microsoft.AspNetCore.Components.WebAssembly.Services;
 using Microsoft.Extensions.Options;
 
@@ -27,6 +28,11 @@ public static partial class IClientCoreServiceCollectionExtensions
             {
                 options.RegisterAtStartup = bevToolsAtStartup;
                 options.ShowBadge = false;
+                // A BevTools attached on demand shows in its Logs panel what was logged before it too: a support session
+                // opens it after the problem, not before.
+                options.AutoStart = BevToolsAutoStart.Logs;
+                // A lambda, so this method names no Bit.BevTools type: its body is compiled once Bit.BevTools is loaded.
+                options.ConfigureBevTools(static bevToolsOptions => AppBevTools.Configure((BevToolsOptions)bevToolsOptions));
             });
             services.AddBitBelemetryServices(options =>
             {
@@ -43,6 +49,7 @@ public static partial class IClientCoreServiceCollectionExtensions
             services.AddScoped<IAuthTokenProvider, ClientSideAuthTokenProvider>();
             services.AddScoped<IExternalNavigationService, DefaultExternalNavigationService>();
             services.AddScoped<FileSaveService>();
+            services.AddScoped<ClearAppFilesService>();
             services.AddScoped<ConsentService>();
             services.AddScoped<HomeOnboardingService>();
 

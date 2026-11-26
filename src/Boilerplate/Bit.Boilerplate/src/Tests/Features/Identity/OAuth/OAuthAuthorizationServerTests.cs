@@ -765,9 +765,12 @@ public class OAuthAuthorizationServerTests
         var (_, challenge) = GeneratePkcePair();
         var oauthController = client.GetController<IOAuthController>();
 
-        await Assert.ThrowsExactlyAsync<BadRequestException>(
+        var refusal = await Assert.ThrowsExactlyAsync<BadRequestException>(
             () => oauthController.Review(BuildRequest(server, challenge), TestContext.CancellationToken),
             "The consent screen must say why rather than offer a button whose grant cannot work.");
+
+        // The consent page reads this key to show the way to turn two-factor on and come back (See ConsentPage).
+        Assert.AreEqual(nameof(AppStrings.OAuthErrorTwoFactorRequired), refusal.Key);
 
         await Assert.ThrowsExactlyAsync<BadRequestException>(
             () => oauthController.Approve(BuildRequest(server, challenge), TestContext.CancellationToken),

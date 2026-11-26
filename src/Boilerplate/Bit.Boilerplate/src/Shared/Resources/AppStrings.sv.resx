@@ -2248,4 +2248,22 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <value>Avsluta appen</value>
   </data>
   <!--#endif -->
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Tvåfaktorsautentisering krävs</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Endast ett konto som loggar in med tvåfaktorsautentisering kan auktorisera den här applikationen. Slå på den och logga in igen med den, så kommer du tillbaka hit för att slutföra.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Slå på tvåfaktorsautentisering</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>Tvåfaktorsautentisering är påslagen. Spara dina återställningskoder och logga sedan in igen med den för att komma tillbaka dit du var.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Logga in igen</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>Tvåfaktorsautentisering är påslagen och du loggade in med den. Du kan gå tillbaka dit du var.</value>
+  </data>
 </root>

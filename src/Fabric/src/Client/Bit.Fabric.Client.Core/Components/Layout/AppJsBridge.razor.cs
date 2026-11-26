@@ -27,10 +27,11 @@ public partial class AppJsBridge
     /// <summary>
     /// you can add any other method like this to utilize the bridge between js and .net code.
     /// </summary>
-    [JSInvokable(nameof(ShowDiagnostic))]
-    public async Task ShowDiagnostic()
+    /// <inheritdoc cref="ClientAppMessages.SHOW_DEV_TOOLS"/>
+    [JSInvokable(nameof(ShowDevTools))]
+    public async Task ShowDevTools(string? panel)
     {
-        PubSubService.Publish(ClientAppMessages.SHOW_DIAGNOSTIC_MODAL);
+        PubSubService.Publish(ClientAppMessages.SHOW_DEV_TOOLS, panel);
     }
 
     [JSInvokable(nameof(PublishMessage))]
