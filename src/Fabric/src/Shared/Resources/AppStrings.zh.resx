@@ -2312,7 +2312,7 @@
     <value>它从哪些内容开始</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>每个项目都已包含使用通行密钥和两步验证的注册与登录、个人资料、角色和权限、设置、11 种语言，以及浅色和深色主题。此外，还可以从管理面板或在线商店开始。</value>
+    <value>每个项目都已包含使用通行密钥和两步验证的注册与登录、个人资料、角色和权限、设置、12 种语言，以及浅色和深色主题。此外，还可以从管理面板或在线商店开始。</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>正在构建供企业使用的工具？从管理面板开始，并将其中的产品改造成您自己的内容。要销售产品？从商店开始。</value>
@@ -2693,7 +2693,7 @@
     <value>通行密钥和两步登录</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>11 种语言，浅色和深色模式</value>
+    <value>12 种语言，浅色和深色模式</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>示例页面：待办事项列表</value>
@@ -2720,7 +2720,7 @@
     <value>它应该从什么开始？</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>每个项目都已具备完整的身份认证解决方案、角色与权限、设置、11 种语言以及浅色和深色主题。</value>
+    <value>每个项目都已具备完整的身份认证解决方案、角色与权限、设置、12 种语言以及浅色和深色主题。</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>只需基本功能</value>

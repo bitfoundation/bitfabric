@@ -2312,7 +2312,7 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
     <value>Ce qui est déjà inclus</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>Chaque projet dispose déjà de l'inscription et de la connexion avec des clés d'accès et la vérification en deux étapes, de profils, de rôles et d'autorisations, de paramètres, de 11 langues, ainsi que de thèmes clair et sombre. En plus de cela, il peut démarrer avec un panneau d'administration ou une boutique en ligne.</value>
+    <value>Chaque projet dispose déjà de l'inscription et de la connexion avec des clés d'accès et la vérification en deux étapes, de profils, de rôles et d'autorisations, de paramètres, de 12 langues, ainsi que de thèmes clair et sombre. En plus de cela, il peut démarrer avec un panneau d'administration ou une boutique en ligne.</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>Vous construisez un outil destiné aux entreprises ? Commencez par le panneau d'administration et transformez ses produits en vos propres éléments. Vous vendez des produits ? Commencez par la boutique.</value>
@@ -2693,7 +2693,7 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
     <value>Clés d'accès et connexion en deux étapes</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>11 langues, thèmes clair et sombre</value>
+    <value>12 langues, thèmes clair et sombre</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>Pages d'exemple : une liste de tâches</value>
@@ -2720,7 +2720,7 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
     <value>Avec quoi commencer ?</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>Chaque projet inclut déjà une solution d'identité complète, les rôles et permissions, les paramètres, 11 langues et des thèmes clair et sombre.</value>
+    <value>Chaque projet inclut déjà une solution d'identité complète, les rôles et permissions, les paramètres, 12 langues et des thèmes clair et sombre.</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>L'essentiel</value>

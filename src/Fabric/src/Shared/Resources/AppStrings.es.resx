@@ -2312,7 +2312,7 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <value>Con qué empieza</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>Todos los proyectos ya incluyen registro e inicio de sesión con claves de acceso y verificación en dos pasos, perfiles, roles y permisos, ajustes, 11 idiomas y temas claro y oscuro. Además, puede comenzar con un panel de administración o una tienda en línea.</value>
+    <value>Todos los proyectos ya incluyen registro e inicio de sesión con claves de acceso y verificación en dos pasos, perfiles, roles y permisos, ajustes, 12 idiomas y temas claro y oscuro. Además, puede comenzar con un panel de administración o una tienda en línea.</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>¿Estás creando una herramienta para empresas? Empieza con el panel de administración y convierte sus productos en tus propias entidades. ¿Vendes productos? Empieza con la tienda.</value>
@@ -2693,7 +2693,7 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <value>Claves de acceso e inicio de sesión en dos pasos</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>11 idiomas, claro y oscuro</value>
+    <value>12 idiomas, claro y oscuro</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>Páginas de ejemplo: una lista de tareas</value>
@@ -2720,7 +2720,7 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <value>¿Con qué debería empezar?</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>Cada proyecto ya tiene una solución de identidad completa, roles y permisos, ajustes, 11 idiomas y temas claro y oscuro.</value>
+    <value>Cada proyecto ya tiene una solución de identidad completa, roles y permisos, ajustes, 12 idiomas y temas claro y oscuro.</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>Solo lo esencial</value>

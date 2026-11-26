@@ -18,8 +18,8 @@ namespace Boilerplate.Client.Maui.Platforms.Android;
                         // the following app links will be opened in app instead of browser if the app is installed on Android device.
                         DataPaths = [PageUrls.Home],
                         DataPathPrefixes = [
-                            "/en-US", "/en-GB", "/nl-NL", "/fa-IR", "/sv-SE", "/hi-IN", "/zh-CN", "/es-ES", "/fr-FR", "/ar-SA", "/de-DE",
-                            "/en-us", "/en-gb", "/nl-nl", "/fa-ir", "/sv-se", "/hi-in", "/zh-cn", "/es-es", "/fr-fr", "/ar-sa", "/de-de",
+                            "/en-US", "/en-GB", "/nl-NL", "/fa-IR", "/sv-SE", "/hi-IN", "/zh-CN", "/es-ES", "/fr-FR", "/ar-SA", "/de-DE", "/da-DK",
+                            "/en-us", "/en-gb", "/nl-nl", "/fa-ir", "/sv-se", "/hi-in", "/zh-cn", "/es-es", "/fr-fr", "/ar-sa", "/de-de", "/da-dk",
                             PageUrls.Confirm, PageUrls.ForgotPassword, PageUrls.Settings, PageUrls.ResetPassword, PageUrls.SignIn,
                             PageUrls.SignUp, PageUrls.NotAuthorized, PageUrls.NotFound, PageUrls.Terms, PageUrls.PrivacyPolicy, PageUrls.About,
                             PageUrls.Roles, PageUrls.Users, PageUrls.OAuthClients, PageUrls.OAuthConsent,

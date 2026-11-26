@@ -28,7 +28,8 @@ public partial class CultureInfoManager
         ("español", CreateCultureInfo("es-ES")),
         ("français", CreateCultureInfo("fr-FR")),
         ("العربية", CreateCultureInfo("ar-SA")),
-        ("Deutsch", CreateCultureInfo("de-DE"))
+        ("Deutsch", CreateCultureInfo("de-DE")),
+        ("dansk", CreateCultureInfo("da-DK"))
         // Adding new cultures requires changing MainActivity's DataPathPrefixes.
     ];
 
