@@ -1,0 +1,14 @@
+@* How a figure moved against the period before: an arrow and the change, or New. Its color never stands alone. *@
+@inherits WorkbenchComponentBase
+
+@if (Delta is { } delta)
+{
+    <span class="delta tone-@delta.Tone.ToString().ToLowerInvariant()">
+        @if (delta.Tone is GrowthTone.Up or GrowthTone.Down)
+        {
+            <BitIcon IconName="@(delta.Tone is GrowthTone.Up ? BitIconName.StockUp : BitIconName.StockDown)" Color="@(delta.Tone is GrowthTone.Up ? BitColor.Success : BitColor.Error)" Size="BitSize.Small" aria-hidden="true" />
+            <span class="sr-only">@Localizer[delta.Tone is GrowthTone.Up ? nameof(WorkbenchStrings.GrowthUp) : nameof(WorkbenchStrings.GrowthDown)]</span>
+        }
+        @delta.Text
+    </span>
+}

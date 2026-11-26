@@ -4614,4 +4614,233 @@
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>Open the boards</value>
     </data>
+    <data name="GrowthTitle" xml:space="preserve">
+        <value>Growth</value>
+    </data>
+    <data name="GrowthPeriodLabel" xml:space="preserve">
+        <value>Period</value>
+    </data>
+    <data name="GrowthWeek" xml:space="preserve">
+        <value>Week</value>
+    </data>
+    <data name="GrowthMonth" xml:space="preserve">
+        <value>Month</value>
+    </data>
+    <data name="GrowthQuarter" xml:space="preserve">
+        <value>Quarter</value>
+    </data>
+    <data name="GrowthYear" xml:space="preserve">
+        <value>Year</value>
+    </data>
+    <data name="GrowthAll" xml:space="preserve">
+        <value>All</value>
+    </data>
+    <data name="GrowthWindowWeek" xml:space="preserve">
+        <value>The last 7 days, against the 7 days before</value>
+    </data>
+    <data name="GrowthWindowMonth" xml:space="preserve">
+        <value>The last 30 days, against the 30 days before</value>
+    </data>
+    <data name="GrowthWindowQuarter" xml:space="preserve">
+        <value>The last 13 weeks, against the 13 weeks before</value>
+    </data>
+    <data name="GrowthWindowYear" xml:space="preserve">
+        <value>The last 12 months, against the 12 months before</value>
+    </data>
+    <data name="GrowthWindowAll" xml:space="preserve">
+        <value>Since the first project, {0}</value>
+        <comment>{0} is the day of the first project.</comment>
+    </data>
+    <data name="GrowthProjects" xml:space="preserve">
+        <value>Projects</value>
+    </data>
+    <data name="GrowthRealOnly" xml:space="preserve">
+        <value>Automated test runs are left out.</value>
+        <comment>Every figure built on projects leaves out those whose Trial bit CLI asked for from CI.</comment>
+    </data>
+    <data name="GrowthNew" xml:space="preserve">
+        <value>New</value>
+        <comment>A figure that had nothing in the period before.</comment>
+    </data>
+    <data name="GrowthUp" xml:space="preserve">
+        <value>Up</value>
+        <comment>Read before a change, for screen readers.</comment>
+    </data>
+    <data name="GrowthDown" xml:space="preserve">
+        <value>Down</value>
+        <comment>Read before a change, for screen readers.</comment>
+    </data>
+    <data name="GrowthTimes" xml:space="preserve">
+        <value>×{0}</value>
+        <comment>A count three times or more what it was in the period before.</comment>
+    </data>
+    <data name="GrowthPoint" xml:space="preserve">
+        <value>1 pt</value>
+        <comment>A change of a percentage by one percentage point.</comment>
+    </data>
+    <data name="GrowthPoints" xml:space="preserve">
+        <value>{0} pts</value>
+        <comment>A change of a percentage, in percentage points.</comment>
+    </data>
+    <data name="GrowthLicensedProjects" xml:space="preserve">
+        <value>Licensed projects</value>
+    </data>
+    <data name="GrowthConversion" xml:space="preserve">
+        <value>Trial → License</value>
+    </data>
+    <data name="GrowthConversionOf" xml:space="preserve">
+        <value>Of {0} Trials that ended</value>
+    </data>
+    <data name="GrowthConversionSoFar" xml:space="preserve">
+        <value>So far, of {0} Trials</value>
+    </data>
+    <data name="GrowthOverTime" xml:space="preserve">
+        <value>Projects over time</value>
+    </data>
+    <data name="GrowthOverTimeDescription" xml:space="preserve">
+        <value>{0} projects so far, {1} of them licensed.</value>
+    </data>
+    <data name="GrowthSeriesProjects" xml:space="preserve">
+        <value>Projects</value>
+    </data>
+    <data name="GrowthSeriesLicensed" xml:space="preserve">
+        <value>Licensed</value>
+    </data>
+    <data name="GrowthEachDay" xml:space="preserve">
+        <value>Each day</value>
+    </data>
+    <data name="GrowthEachWeek" xml:space="preserve">
+        <value>Each week</value>
+    </data>
+    <data name="GrowthEachMonth" xml:space="preserve">
+        <value>Each month</value>
+    </data>
+    <data name="GrowthEachDescription" xml:space="preserve">
+        <value>{0} projects made and {1} licensed in the period.</value>
+    </data>
+    <data name="GrowthSeriesMade" xml:space="preserve">
+        <value>Projects made</value>
+    </data>
+    <data name="GrowthSeriesNewlyLicensed" xml:space="preserve">
+        <value>Projects licensed</value>
+    </data>
+    <data name="GrowthSoFar" xml:space="preserve">
+        <value>{0}, so far</value>
+        <comment>A month that isn't over yet.</comment>
+    </data>
+    <data name="GrowthTrialSection" xml:space="preserve">
+        <value>From Trial to License</value>
+    </data>
+    <data name="GrowthTrialsNow" xml:space="preserve">
+        <value>Where every Trial is now</value>
+    </data>
+    <data name="GrowthTrialsGiven" xml:space="preserve">
+        <value>Trials given so far</value>
+    </data>
+    <data name="GrowthStateLicensed" xml:space="preserve">
+        <value>Licensed</value>
+    </data>
+    <data name="GrowthStateRunning" xml:space="preserve">
+        <value>In Trial</value>
+    </data>
+    <data name="GrowthStateEnding" xml:space="preserve">
+        <value>Ends this week</value>
+    </data>
+    <data name="GrowthStateEnded" xml:space="preserve">
+        <value>Ended, no License</value>
+    </data>
+    <data name="GrowthDaysToLicense" xml:space="preserve">
+        <value>Days to a License</value>
+    </data>
+    <data name="GrowthDays" xml:space="preserve">
+        <value>{0} days</value>
+    </data>
+    <data name="GrowthOneDay" xml:space="preserve">
+        <value>1 day</value>
+    </data>
+    <data name="GrowthHalfWithin" xml:space="preserve">
+        <value>Half get their License within this</value>
+    </data>
+    <data name="GrowthNoLicensesInPeriod" xml:space="preserve">
+        <value>No Licenses in this period yet</value>
+    </data>
+    <data name="GrowthSameDay" xml:space="preserve">
+        <value>Same day</value>
+    </data>
+    <data name="GrowthDays1To7" xml:space="preserve">
+        <value>1–7</value>
+    </data>
+    <data name="GrowthDays8To14" xml:space="preserve">
+        <value>8–14</value>
+    </data>
+    <data name="GrowthDays15To30" xml:space="preserve">
+        <value>15–30</value>
+    </data>
+    <data name="GrowthAfterTrial" xml:space="preserve">
+        <value>Later</value>
+        <comment>After the Trial ended.</comment>
+    </data>
+    <data name="GrowthReminders" xml:space="preserve">
+        <value>bit CLI reminds from day 14 of a Trial.</value>
+    </data>
+    <data name="GrowthMoreThanOne" xml:space="preserve">
+        <value>Licensed more than one</value>
+    </data>
+    <data name="GrowthAccountsCreated" xml:space="preserve">
+        <value>Accounts created</value>
+    </data>
+    <data name="GrowthAccountsCreatedNote" xml:space="preserve">
+        <value>Every account on bitfabric.co</value>
+    </data>
+    <data name="GrowthEmptyTitle" xml:space="preserve">
+        <value>No projects yet</value>
+    </data>
+    <data name="GrowthEmptyText" xml:space="preserve">
+        <value>Each project bit new makes shows here.</value>
+    </data>
+    <data name="GrowthError" xml:space="preserve">
+        <value>The figures couldn't be loaded.</value>
+    </data>
+    <data name="GrowthRetry" xml:space="preserve">
+        <value>Try again</value>
+    </data>
+    <data name="GrowthLabelWithCount" xml:space="preserve">
+        <value>{0} · {1}</value>
+        <comment>A legend's name with its count. Persian takes parentheses: a middle dot beside Persian digits reads as a zero.</comment>
+    </data>
+    <data name="GrowthTeamsWithLicense" xml:space="preserve">
+        <value>Teams with a License</value>
+        <comment>A License is a team's.</comment>
+    </data>
+    <data name="GrowthInProduction" xml:space="preserve">
+        <value>In production</value>
+        <comment>Licensed projects that monitoring watches in production.</comment>
+    </data>
+    <data name="GrowthInProductionNote" xml:space="preserve">
+        <value>{0} of licensed projects</value>
+    </data>
+    <data name="GrowthTeamsSection" xml:space="preserve">
+        <value>Teams</value>
+    </data>
+    <data name="GrowthTeamsByProjects" xml:space="preserve">
+        <value>Teams by projects licensed</value>
+    </data>
+    <data name="GrowthProjectsPerTeam" xml:space="preserve">
+        <value>Projects per team</value>
+    </data>
+    <data name="GrowthProjects3To5" xml:space="preserve">
+        <value>3–5</value>
+    </data>
+    <data name="GrowthProjects6Plus" xml:space="preserve">
+        <value>6+</value>
+    </data>
+    <data name="GrowthSeriesTeams" xml:space="preserve">
+        <value>Teams</value>
+    </data>
+    <data name="GrowthPeopleInTeams" xml:space="preserve">
+        <value>People in licensed teams</value>
+    </data>
+    <data name="GrowthPeopleInTeamsNote" xml:space="preserve">
+        <value>Members of teams that hold a License</value>
+    </data>
 </root>

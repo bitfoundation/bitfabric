@@ -1,0 +1,156 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.growth {
+    gap: 1rem;
+    width: 100%;
+    display: flex;
+    margin-inline: auto;
+    max-width: 76rem;
+    flex-direction: column;
+    padding: 1.25rem 1rem 2.5rem;
+
+    @include lt-md {
+        padding-top: 0.75rem;
+    }
+}
+
+.growth-head {
+    gap: 0.75rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.growth-title {
+    gap: 0.25rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+::deep .growth-periods {
+    @include lt-sm {
+        width: 100%;
+    }
+}
+
+::deep .growth-empty {
+    padding-block: 4rem;
+}
+
+.card {
+    gap: 0.25rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.125rem 1.25rem 1rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+}
+
+::deep .card-title {
+    margin-bottom: 0.5rem;
+}
+
+// The page's one big number, beside the curve it heads.
+.hero {
+    gap: 1rem 2rem;
+    display: grid;
+    align-items: center;
+    grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.hero-figure {
+    gap: 0.4rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-value {
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-size: clamp(3rem, 2.2rem + 3vw, 4.5rem);
+    font-weight: $bit-typography-h1-font-weight;
+    color: $bit-color-foreground-primary;
+}
+
+.hero-chart {
+    min-width: 0;
+}
+
+.tile-change {
+    gap: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.tile-added {
+    font-weight: 600;
+    font-size: $bit-typography-body1-font-size;
+    color: $bit-color-foreground-primary;
+}
+
+.tiles {
+    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    @include lt-lg {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+::deep .band-title {
+    margin-top: 1rem;
+}
+
+.pair {
+    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.stack {
+    gap: 0.75rem;
+    display: grid;
+    grid-auto-rows: 1fr;
+}
+
+.card-figure {
+    line-height: 1.1;
+    font-size: $bit-typography-h3-font-size;
+    font-weight: $bit-typography-h3-font-weight;
+    color: $bit-color-foreground-primary;
+}
+
+.figures {
+    gap: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.figure {
+    gap: 0.15rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.figure-value {
+    line-height: 1.1;
+    font-size: $bit-typography-h4-font-size;
+    font-weight: $bit-typography-h4-font-weight;
+    color: $bit-color-foreground-primary;
+}

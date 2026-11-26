@@ -275,6 +275,36 @@ public static class WorkbenchPageCatalog
                 ])
             ]
         },
+        // A global admin page of projects and licenses over time (bitfabric-internal/specs/growth.md), on made-up sample
+        // numbers in Components/Pages/Growth/Data, counted the way the server will.
+        new(Bit.Fabric.Workbench.Components.Pages.Growth.GrowthPage.PageKey,
+            nameof(WorkbenchStrings.GrowthTitle),
+            "A global admin page of projects and licenses over time: projects made each day, Trials that became Licenses and how fast, and the accounts behind them. Totals only, on made-up sample numbers",
+            BitIconName.AreaChart,
+            typeof(Bit.Fabric.Workbench.Components.Pages.Growth.GrowthPage),
+            nameof(WorkbenchStrings.CategoryBitFabric),
+            ["BitChart", "BitButtonGroup", "BitShimmer", "BitEmptyState"],
+            "Projects and licenses, over time")
+        {
+            Switches =
+            [
+                // The period, which the page's own buttons change too
+                new(Bit.Fabric.Workbench.Components.Pages.Growth.GrowthPage.PeriodSwitch, "Period",
+                [
+                    new("month", "30 days"),
+                    new("week", "7 days"),
+                    new("quarter", "13 weeks"),
+                    new("year", "12 months"),
+                    new("all", "Since the start")
+                ]),
+                new(Bit.Fabric.Workbench.Components.Pages.Growth.Data.GrowthSamples.HistorySwitch, "History",
+                [
+                    new(Bit.Fabric.Workbench.Components.Pages.Growth.Data.GrowthSamples.Months, "Months of growth"),
+                    new(Bit.Fabric.Workbench.Components.Pages.Growth.Data.GrowthSamples.FirstDay, "A first day"),
+                    new(Bit.Fabric.Workbench.Components.Pages.Growth.Data.GrowthSamples.SlowWeek, "A slow week")
+                ])
+            ]
+        },
         // Monitoring (bitfabric-internal/specs/monitoring.md): the app's own pages, rendered from Client.Core on the sample world of
         // Components/Pages/Monitoring/Data, so QA sees every state of what ships. Texts are literals, as the Workbench's own.
         new("projects",

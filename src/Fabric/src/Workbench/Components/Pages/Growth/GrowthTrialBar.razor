@@ -1,0 +1,24 @@
+@* Where every Trial is now: one tall bar split into its states, each share printed inside when it fits, and a legend with the counts. *@
+@inherits WorkbenchComponentBase
+
+<div class="trial-bar" role="img" aria-label="@AccessibleName">
+    @foreach (var part in Parts.Where(part => part.Count > 0))
+    {
+        <span class="trial-part tone-@part.Tone" style="flex-grow:@part.Count">
+            @if (Share(part) >= 0.1)
+            {
+                <span class="trial-share">@GrowthFormat.Share(Share(part))</span>
+            }
+        </span>
+    }
+</div>
+
+<ul class="trial-legend">
+    @foreach (var part in Parts)
+    {
+        <li class="trial-key tone-@part.Tone">
+            <span class="trial-swatch" aria-hidden="true"></span>
+            <span>@Localizer[nameof(WorkbenchStrings.GrowthLabelWithCount), part.Name, GrowthFormat.Count(part.Count)]</span>
+        </li>
+    }
+</ul>

@@ -1,0 +1,180 @@
+@* A global admin page of projects and licenses over time, on made-up sample data (Data/GrowthSamples). *@
+@* Until its own app feature exists, a global-admin-only one stands in for it. *@
+@attribute [Authorize(Policy = AppFeatures.System.Operations_View)]
+@inherits WorkbenchComponentBase
+
+<div class="growth">
+    <header class="growth-head">
+        <div class="growth-title">
+            @* The app's header names the page; without it, the page names itself. *@
+            @if (Scenario.Chrome is false)
+            {
+                <BitText Typography="BitTypography.H4" Element="h1">@Localizer[nameof(WorkbenchStrings.GrowthTitle)]</BitText>
+            }
+            @if (report is { IsEmpty: false })
+            {
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@WindowText</BitText>
+                @* Every figure built on projects counts real ones only (bitfabric-internal/specs/growth.md). *@
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthRealOnly)]</BitText>
+            }
+        </div>
+        @* Nothing to pick a period of before there is a project. *@
+        @if (loadFailed is false && report is not { IsEmpty: true })
+        {
+            <BitButtonGroup TItem="BitButtonGroupOption" Toggle FixedToggle Rounded Size="BitSize.Small" Variant="BitVariant.Outline" Class="growth-periods"
+                            AriaLabel="@Localizer[nameof(WorkbenchStrings.GrowthPeriodLabel)]" ToggleKey="@Period.ToString()" ToggleKeyChanged="PickPeriod">
+                @foreach (var (period, key) in Periods)
+                {
+                    <BitButtonGroupOption Key="@period.ToString()" Text="@Localizer[key]" />
+                }
+            </BitButtonGroup>
+        }
+    </header>
+
+    @if (loadFailed)
+    {
+        <BitMessage Color="BitColor.Error" Variant="BitVariant.Outline">
+            <BitStack Horizontal Wrap VerticalAlign="BitAlignment.Center" Gap="0.75rem">
+                <span>@Localizer[nameof(WorkbenchStrings.GrowthError)]</span>
+                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" OnClick="Retry">@Localizer[nameof(WorkbenchStrings.GrowthRetry)]</BitButton>
+            </BitStack>
+        </BitMessage>
+    }
+    else if (report is { IsEmpty: true })
+    {
+        <BitEmptyState IconName="@BitIconName.AreaChart" HeadingLevel="2"
+                       Title="@Localizer[nameof(WorkbenchStrings.GrowthEmptyTitle)]"
+                       Description="@Localizer[nameof(WorkbenchStrings.GrowthEmptyText)]" Class="growth-empty" />
+    }
+    else
+    {
+        var r = report;
+
+        <section class="card hero" aria-labelledby="growth-projects">
+            <div class="hero-figure">
+                <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary" Element="@SectionHeading" id="growth-projects">@Localizer[nameof(WorkbenchStrings.GrowthProjects)]</BitText>
+                @if (r is null)
+                {
+                    <BitShimmer Width="10rem" Height="4rem" />
+                    <BitShimmer Width="8rem" Height="1.25rem" />
+                }
+                else
+                {
+                    <span class="hero-value">@GrowthFormat.Count(r.Projects)</span>
+                    <span class="tile-change">
+                        @if (GrowthFormat.Added(r.ProjectsMade) is { } added)
+                        {
+                            <span class="tile-added">@added</span>
+                        }
+                        <GrowthDeltaChip Delta="@(r.HasBefore ? GrowthFormat.Change(r.ProjectsMade, Localizer) : null)" />
+                    </span>
+                }
+            </div>
+            @* A first day is one point, not yet a curve. *@
+            @if (r is null || overTimeData.Labels.Count > 1)
+            {
+                <div class="hero-chart">
+                    <BitChart Dir="ChartDir" Type="BitChartType.Line" Data="overTimeData" Options="lineOptions" Height="15rem" Loading="@(r is null)"
+                              AriaLabel="@Localizer[nameof(WorkbenchStrings.GrowthOverTime)]" Description="@OverTimeDescription" />
+                </div>
+            }
+        </section>
+
+        <div class="tiles">
+            <GrowthStatTile Label="@Localizer[nameof(WorkbenchStrings.GrowthLicensedProjects)]" HeadingElement="@CardHeading" IsLoading="@(r is null)"
+                            Value="@(r is null ? null : GrowthFormat.Count(r.LicensedProjects))"
+                            Added="@(r is null ? null : GrowthFormat.Added(r.ProjectsLicensed))"
+                            Delta="@(r is null || r.HasBefore is false ? null : GrowthFormat.Change(r.ProjectsLicensed, Localizer))"
+                            Series="@Line(r, r?.LicensedTotal)"
+                            Color="@LicensedColor" />
+
+            <GrowthStatTile Label="@Localizer[nameof(WorkbenchStrings.GrowthConversion)]" HeadingElement="@CardHeading" IsLoading="@(r is null)"
+                            Value="@(r?.Conversion is { } conversion ? GrowthFormat.Share(conversion) : "–")"
+                            Delta="@(r is null ? null : GrowthFormat.Points(r.Conversion, r.ConversionBefore, Localizer))"
+                            Note="@ConversionNote"
+                            Series="@Line(r, r?.ConversionAt)"
+                            Color="@LicensedColor" />
+
+            <GrowthStatTile Label="@Localizer[nameof(WorkbenchStrings.GrowthTeamsWithLicense)]" HeadingElement="@CardHeading" IsLoading="@(r is null)"
+                            Value="@(r is null ? null : GrowthFormat.Count(r.TeamsWithLicense))"
+                            Added="@(r is null ? null : GrowthFormat.Added(r.NewTeamsWithLicense))"
+                            Delta="@(r is null || r.HasBefore is false ? null : GrowthFormat.Change(r.NewTeamsWithLicense, Localizer))"
+                            Series="@Line(r, r?.TeamsWithLicenseTotal)" />
+
+            <GrowthStatTile Label="@Localizer[nameof(WorkbenchStrings.GrowthInProduction)]" HeadingElement="@CardHeading" IsLoading="@(r is null)"
+                            Value="@(r is null ? null : GrowthFormat.Count(r.InProduction))"
+                            Added="@(r is null ? null : GrowthFormat.Added(r.NewInProduction))"
+                            Delta="@(r is null || r.HasBefore is false ? null : GrowthFormat.Change(r.NewInProduction, Localizer))"
+                            Note="@InProductionNote"
+                            Series="@Line(r, r?.InProductionTotal)"
+                            Color="@ProductionColor" />
+        </div>
+
+        <section class="card" aria-labelledby="growth-each">
+            <BitText Typography="BitTypography.H6" Element="@SectionHeading" id="growth-each" Class="card-title">@EachTitle</BitText>
+            <BitChart Dir="ChartDir" Type="BitChartType.Bar" Data="eachData" Options="barOptions" Height="15rem" Loading="@(r is null)"
+                      AriaLabel="@EachTitle" Description="@EachDescription" />
+        </section>
+
+        <BitText Typography="BitTypography.H5" Element="@SectionHeading" Class="band-title">@Localizer[nameof(WorkbenchStrings.GrowthTrialSection)]</BitText>
+        <div class="pair">
+            <section class="card" aria-labelledby="growth-trials-now">
+                <BitText Typography="BitTypography.H6" Element="@CardHeading" id="growth-trials-now" Class="card-title">@Localizer[nameof(WorkbenchStrings.GrowthTrialsNow)]</BitText>
+                @if (r is null)
+                {
+                    <BitShimmer Width="100%" Height="1.75rem" />
+                }
+                else
+                {
+                    <span class="card-figure">@GrowthFormat.Count(r.Trials)</span>
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthTrialsGiven)]</BitText>
+                    <GrowthTrialBar Report="r" />
+                }
+            </section>
+
+            <section class="card" aria-labelledby="growth-days">
+                <BitText Typography="BitTypography.H6" Element="@CardHeading" id="growth-days" Class="card-title">@Localizer[nameof(WorkbenchStrings.GrowthDaysToLicense)]</BitText>
+                @if (r?.MedianDaysToLicense is { } median)
+                {
+                    <span class="card-figure">@MedianText(median)</span>
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthHalfWithin)]</BitText>
+                }
+                <BitChart Dir="ChartDir" Type="BitChartType.Bar" Data="daysData" Options="daysOptions" Height="12rem" Loading="@(r is null)"
+                          EmptyText="@Localizer[nameof(WorkbenchStrings.GrowthNoLicensesInPeriod)]"
+                          AriaLabel="@Localizer[nameof(WorkbenchStrings.GrowthDaysToLicense)]" />
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthReminders)]</BitText>
+            </section>
+        </div>
+
+        <BitText Typography="BitTypography.H5" Element="@SectionHeading" Class="band-title">@Localizer[nameof(WorkbenchStrings.GrowthTeamsSection)]</BitText>
+        <div class="pair">
+            <section class="card" aria-labelledby="growth-teams">
+                <BitText Typography="BitTypography.H6" Element="@CardHeading" id="growth-teams" Class="card-title">@Localizer[nameof(WorkbenchStrings.GrowthTeamsByProjects)]</BitText>
+                <div class="figures">
+                    <div class="figure">
+                        <span class="figure-value">@(r?.ProjectsPerTeam is { } perTeam ? GrowthFormat.Decimal(perTeam) : "–")</span>
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthProjectsPerTeam)]</BitText>
+                    </div>
+                    <div class="figure">
+                        <span class="figure-value">@(r?.MoreThanOneShare is { } more ? GrowthFormat.Share(more) : "–")</span>
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.GrowthMoreThanOne)]</BitText>
+                    </div>
+                </div>
+                <BitChart Dir="ChartDir" Type="BitChartType.Bar" Data="teamsData" Options="teamsOptions" Height="11rem" Loading="@(r is null)"
+                          AriaLabel="@Localizer[nameof(WorkbenchStrings.GrowthTeamsByProjects)]" />
+            </section>
+
+            <div class="stack">
+                <GrowthStatTile Label="@Localizer[nameof(WorkbenchStrings.GrowthPeopleInTeams)]" HeadingElement="@CardHeading" IsLoading="@(r is null)"
+                                Value="@(r is null ? null : GrowthFormat.Count(r.PeopleInLicensedTeams))"
+                                Note="@Localizer[nameof(WorkbenchStrings.GrowthPeopleInTeamsNote)]" />
+
+                <GrowthStatTile Label="@Localizer[nameof(WorkbenchStrings.GrowthAccountsCreated)]" HeadingElement="@CardHeading" IsLoading="@(r is null)"
+                                Value="@(r is null ? null : GrowthFormat.Count(r.Accounts))"
+                                Added="@(r is null ? null : GrowthFormat.Added(r.NewAccounts))"
+                                Delta="@(r is null || r.HasBefore is false ? null : GrowthFormat.Change(r.NewAccounts, Localizer))"
+                                Note="@Localizer[nameof(WorkbenchStrings.GrowthAccountsCreatedNote)]" />
+            </div>
+        </div>
+    }
+</div>
