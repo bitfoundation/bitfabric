@@ -11,6 +11,7 @@ public partial class ProjectProbeJobRunner
     [AutoInject] private AppDbContext dbContext = default!;
     [AutoInject] private IServiceScopeFactory serviceScopeFactory = default!;
     [AutoInject] private ServerApiSettings settings = default!;
+    [AutoInject] private TimeProvider timeProvider = default!;
     [AutoInject] private ILogger<ProjectProbeJobRunner> logger = default!;
 
     /// <summary>A run that takes longer than a minute must not overlap the next, which would check each project twice.</summary>
@@ -22,25 +23,39 @@ public partial class ProjectProbeJobRunner
                                                  .Select(project => project.Id)
                                                  .ToListAsync(cancellationToken);
 
-        await Parallel.ForEachAsync(projectIds, new ParallelOptions
+        using var slots = new SemaphoreSlim(settings.Monitoring.Parallelism);
+
+        await Task.WhenAll(projectIds.Select(async projectId =>
         {
-            MaxDegreeOfParallelism = settings.Monitoring.Parallelism,
-            CancellationToken = cancellationToken
-        }, async (projectId, token) =>
-        {
-            // A DbContext per project: they run side by side, and one project's failure stays its own.
-            await using var scope = serviceScopeFactory.CreateAsyncScope();
+            // Each project at its own moment of the minute; the slot is taken only then, so a project waiting for its
+            // moment doesn't hold one.
+            await Task.Delay(OffsetOf(projectId, settings.Monitoring.RoundSpread), timeProvider, cancellationToken);
+            await slots.WaitAsync(cancellationToken);
 
             try
             {
-                await scope.ServiceProvider.GetRequiredService<ProjectProber>().ProbeUnlessUnderway(projectId, token);
+                // A DbContext per project: they run side by side, and one project's failure stays its own.
+                await using var scope = serviceScopeFactory.CreateAsyncScope();
+                await scope.ServiceProvider.GetRequiredService<ProjectProber>().ProbeUnlessUnderway(projectId, cancellationToken);
             }
             catch (Exception exp) when (exp is not OperationCanceledException)
             {
                 logger.LogError(exp, "Checking project {ProjectId} failed.", projectId);
             }
-        });
+            finally
+            {
+                slots.Release();
+            }
+        }));
     }
+
+    /// <summary>
+    /// When in the minute the project's round starts, within <paramref name="spread"/>: from its id, so it is the same moment
+    /// every minute and on every instance, and the projects of one host, or of Test and Production, fall apart. A Guid's
+    /// hash is made from its bytes, the same in every process.
+    /// </summary>
+    public static TimeSpan OffsetOf(Guid projectId, TimeSpan spread)
+        => spread <= TimeSpan.Zero ? TimeSpan.Zero : TimeSpan.FromMilliseconds((uint)projectId.GetHashCode() % (ulong)spread.TotalMilliseconds);
 }
 
 /// <summary>

@@ -149,10 +149,16 @@ public partial class ProjectDto
     /// <summary>The share of the last 30 days the app worked, of the time it was watched; null before the first round.</summary>
     public double? Uptime30Days { get; set; }
 
-    /// <summary>The median time the home page took over the last 24 hours, in milliseconds.</summary>
+    /// <summary>The median time the home page took over the last 24 hours, in milliseconds, past any cache: the server's own.</summary>
     public int? MedianMs { get; set; }
 
     public int? P95Ms { get; set; }
+
+    /// <summary>
+    /// The median time a visitor waited for the home page over the last 24 hours, through the cache in front of the app;
+    /// null when no cache answered it, which leaves one number, <see cref="MedianMs"/>.
+    /// </summary>
+    public int? MedianVisitorMs { get; set; }
 
     /// <summary>The last 24 hours' hourly medians, oldest first, 0 for an hour without a round.</summary>
     public int[] ResponseLast24Hours { get; set; } = [];
@@ -283,6 +289,9 @@ public partial class ProjectDetailsDto
     /// <summary>How long the home page took in the round that read the newest report, from bit Fabric's own server.</summary>
     public int? HomePageMs { get; set; }
 
+    /// <summary>How long a visitor waited for it in that round, through the cache in front of the app; null when no cache answered.</summary>
+    public int? HomePageVisitorMs { get; set; }
+
     /// <summary>The build the app runs, from its report (the commit after a '+').</summary>
     public string? ApplicationVersion { get; set; }
 
@@ -392,8 +401,11 @@ public partial class ProjectStartDto
 /// <summary>The series of a project's performance that aren't report entries.</summary>
 public static class ProjectRollupKeys
 {
-    /// <summary>The home page, or a static front end's server's <c>/health</c>, as a visitor waits for it.</summary>
+    /// <summary>The home page, or a static front end's server's <c>/health</c>, past any cache: the server's own time.</summary>
     public const string HomePage = "$home";
+
+    /// <summary>The home page as a visitor gets it, through the cache in front of the app, when one answered it.</summary>
+    public const string HomePageForVisitors = "$home-visitors";
 
     /// <summary>The health report as a whole: reading it, and its overall status.</summary>
     public const string Report = "$report";

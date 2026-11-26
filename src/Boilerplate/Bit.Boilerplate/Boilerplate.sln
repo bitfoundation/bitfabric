@@ -119,7 +119,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{8A72BF22
         .docs\20- .NET Aspire.md = .docs\20- .NET Aspire.md
         .docs\21- .NET MAUI - Blazor Hybrid.md = .docs\21- .NET MAUI - Blazor Hybrid.md
         .docs\22- Messaging.md = .docs\22- Messaging.md
-        .docs\23- Diagnostic Modal.md = .docs\23- Diagnostic Modal.md
+        .docs\23- In-App Dev Tools.md = .docs\23- In-App Dev Tools.md
         .docs\24- WebAuthn and Passwordless Authentication (Advanced).md = .docs\24- WebAuthn and Passwordless Authentication (Advanced).md
 #if ((database == "PostgreSQL" || database == "SqlServer") && (module == "Admin" || module == "Sales"))
         .docs\25- RAG - Semantic Search with Vector Embeddings (Advanced).md = .docs\25- RAG - Semantic Search with Vector Embeddings (Advanced).md

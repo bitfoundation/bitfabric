@@ -1327,6 +1327,9 @@ partial class _20261125234833_ProbeCheckDependency
                 b.Property<Guid>("TenantId")
                     .HasColumnType("uuid");
 
+                b.Property<int?>("VisitorMs")
+                    .HasColumnType("integer");
+
                 b.HasKey("Id");
 
                 b.HasIndex("At");

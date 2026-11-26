@@ -12,7 +12,10 @@ export interface Env {
 /** The outside requests one invocation may make on the Workers free plan: a target, a redirect, bit Fabric and the trace alike. */
 const SUBREQUESTS_PER_INVOCATION = 50;
 
-/** Redirects within the app are followed as a visitor's browser follows them: the template sends / to /en-US/ (MonitoringHttp in Server.Api). */
+/**
+ * Redirects within the app are followed as a visitor's browser follows them, and only the last request is timed (MonitoringHttp
+ * in Server.Api). bit Fabric gives the page the front door lands on once its own rounds found it, so there is rarely one.
+ */
 const MAX_REDIRECTS = 3;
 
 /** Six requests may wait for their headers at once in an invocation, and a seventh would queue and time its wait too. */
@@ -210,10 +213,11 @@ export class NetworkLocation extends DurableObject<Env> {
 }
 
 /**
- * How long a visitor waits for the target: the home page with a query string no one else uses, so any cache that honors
- * it has to miss, or a static front end's server's /health as is (ProjectProber.TimeFrontDoor in Server.Api does the same
- * from Germany). Redirects within the app are followed; one to another address is the answer, as bit Fabric approved only
- * this one. Any answer counts, whatever its status: the health report says what's wrong with the app.
+ * How long a visitor waits for the target: the page the app's home page lands on with a query string no one else uses, so
+ * any cache that honors it has to miss, or a static front end's server's /health as is (ProjectProber.TimeFrontDoor in
+ * Server.Api does the same from Germany). One request is timed: a redirect within the app is followed and only the request
+ * after it counts, with a query string of its own; one to another address is the answer, as bit Fabric approved only this
+ * one. Any answer counts, whatever its status: the health report says what's wrong with the app.
  */
 async function time(target: Target): Promise<{ result: Result; requests: number }> {
     const at = new Date().toISOString();
@@ -234,16 +238,16 @@ async function time(target: Target): Promise<{ result: Result; requests: number 
     if (url.protocol !== 'https:')
         return answer(null, 'not https');
 
-    if (!target.isServerHealth) {
-        url.searchParams.set('bf', crypto.randomUUID().replaceAll('-', ''));
-    }
-
     const signal = AbortSignal.timeout(TIMEOUT_MS);
-    const started = Date.now();
 
     try {
         while (true) {
+            if (!target.isServerHealth) {
+                url.searchParams.set('bf', crypto.randomUUID().replaceAll('-', ''));
+            }
+
             requests++;
+            const started = Date.now();
             const response = await fetch(url, { redirect: 'manual', signal, headers: { 'User-Agent': USER_AGENT } });
             // The clock of a Worker moves with its I/O, so this is when the headers came.
             const responseMs = Date.now() - started;

@@ -62,7 +62,7 @@ public partial class ProjectsService(AppDbContext dbContext,
         // The percentiles need every round of the day; the project ids keep it on the (ProjectId, At) index.
         var responseTimes = (await dbContext.ProjectProbes
             .Where(probe => projectIds.Contains(probe.ProjectId) && probe.At >= since24Hours && probe.ResponseMs != null)
-            .Select(probe => new { probe.ProjectId, probe.At, Ms = probe.ResponseMs!.Value })
+            .Select(probe => new { probe.ProjectId, probe.At, Ms = probe.ResponseMs!.Value, probe.VisitorMs })
             .ToListAsync(cancellationToken))
             .ToLookup(row => row.ProjectId);
 
@@ -111,6 +111,12 @@ public partial class ProjectsService(AppDbContext dbContext,
             {
                 dto.MedianMs = times[times.Length / 2];
                 dto.P95Ms = times[Math.Min(times.Length - 1, (int)(times.Length * 0.95))];
+            }
+
+            var visitorTimes = responseTimes[project.Id].Where(row => row.VisitorMs is not null).Select(row => row.VisitorMs!.Value).Order().ToArray();
+            if (visitorTimes.Length > 0)
+            {
+                dto.MedianVisitorMs = visitorTimes[visitorTimes.Length / 2];
             }
 
             dto.ResponseLast24Hours = [.. Enumerable.Range(0, 24).Select(hour =>
@@ -245,6 +251,7 @@ public partial class ProjectsService(AppDbContext dbContext,
             CheckedAt = lastReport?.At,
             ReportMs = lastReport?.ReportMs,
             HomePageMs = lastReport?.ResponseMs,
+            HomePageVisitorMs = lastReport?.VisitorMs,
             ApplicationVersion = lastReport?.ApplicationVersion,
             LastDeployedAt = lastStarts.FirstOrDefault(start => start.IsDeploy)?.At,
             LastRestartedAt = lastStarts.FirstOrDefault(start => start.IsDeploy is false)?.At,

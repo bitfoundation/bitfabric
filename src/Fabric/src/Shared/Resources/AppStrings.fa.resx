@@ -6934,6 +6934,27 @@
   <data name="MonitoringTypicalResponseTime" xml:space="preserve">
     <value>زمان پاسخ معمول</value>
   </data>
+  <data name="MonitoringForVisitors" xml:space="preserve">
+    <value>برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringForVisitorsHelp" xml:space="preserve">
+    <value>صفحهٔ اصلی همان‌طور که بازدیدکننده‌ها می‌گیرند، از Cache جلوی اپ شما.</value>
+  </data>
+  <data name="MonitoringServerTime" xml:space="preserve">
+    <value>سرور</value>
+  </data>
+  <data name="MonitoringHomePageForVisitors" xml:space="preserve">
+    <value>صفحهٔ اصلی برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringTypicalForVisitors" xml:space="preserve">
+    <value>زمان معمول برای بازدیدکننده‌ها</value>
+  </data>
+  <data name="MonitoringTypicalServerTime" xml:space="preserve">
+    <value>زمان معمول سرور</value>
+  </data>
+  <data name="MonitoringConnectedVisitorsAndServer" xml:space="preserve">
+    <value>{0} برای بازدیدکننده‌ها ({1} سرور)</value>
+  </data>
   <data name="MonitoringPastIncidents" xml:space="preserve">
     <value>رخدادهای گذشته</value>
   </data>
@@ -11240,6 +11261,9 @@
   <data name="CliRefRun" xml:space="preserve">
     <value>پروژه را build و اجرا می‌کند: وب‌سایت و سرورش، یا اپ Android، iOS، macOS یا Windows.</value>
   </data>
+  <data name="CliRefCodespace" xml:space="preserve">
+    <value>پروژه را روی GitHub Codespaces اجرا می‌کند، در codespace همان branch که دوباره به کارش می‌گیرد و فقط وقتی نباشد آن را می‌سازد، و نشانی‌های اپ روی همین کامپیوتر کار می‌کنند.</value>
+  </data>
   <data name="CliRefDiff" xml:space="preserve">
     <value>نشان می‌دهد نقطهٔ شروع پروژه بین دو نسخه چه تغییری کرده، در قالب یک commit که AI شما به پروژه‌تان می‌آورد.</value>
   </data>
@@ -11256,7 +11280,7 @@
     <value>نام پروژه را هر جا که آمده عوض می‌کند: فایل‌ها، پوشه‌ها، کد، پایگاه‌داده و id اپ.</value>
   </data>
   <data name="CliRefRemove" xml:space="preserve">
-    <value>پوشه‌ای را برای همیشه پاک می‌کند، پس از بستن اپ‌هایی که فایل‌هایش را در دست دارند.</value>
+    <value>پوشه‌ای را حداکثر در ۱۰ ثانیه برای همیشه پاک می‌کند و اپ‌هایی را که فایل‌هایش را در دست دارند می‌بندد.</value>
   </data>
   <data name="CliRefMigration" xml:space="preserve">
     <value>migrationهای پایگاه‌داده را اضافه و حذف می‌کند و آن‌ها را برای پایگاه‌دادهٔ روی سرورتان بسته‌بندی می‌کند.</value>
@@ -11419,5 +11443,23 @@
   </data>
   <data name="MonitoringShowEveryPart" xml:space="preserve">
     <value>نمایش همهٔ بخش‌ها</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>ورود دو مرحله‌ای لازم است</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>فقط حسابی که با ورود دو مرحله‌ای وارد می‌شود می‌تواند به این برنامه اجازه بدهد. آن را روشن کنید و دوباره با آن وارد شوید تا به همین‌جا برگردید و کار را تمام کنید.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>روشن کردن ورود دو مرحله‌ای</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>ورود دو مرحله‌ای روشن است. کدهای بازیابی را نگه دارید، بعد دوباره با آن وارد شوید تا به جایی که بودید برگردید.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>دوباره وارد شوید</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>ورود دو مرحله‌ای روشن است و با آن وارد شده‌اید. می‌توانید به جایی که بودید برگردید.</value>
   </data>
 </root>

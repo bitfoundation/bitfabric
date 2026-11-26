@@ -1329,6 +1329,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<Guid>("TenantId")
                     .HasColumnType("uuid");
 
+                b.Property<int?>("VisitorMs")
+                    .HasColumnType("integer");
+
                 b.HasKey("Id");
 
                 b.HasIndex("At");

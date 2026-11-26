@@ -17,6 +17,9 @@ public partial class ProjectRollup : ITenantAware
     /// <inheritdoc cref="ProjectRollupKeys.HomePage"/>
     public const string HomePageKey = ProjectRollupKeys.HomePage;
 
+    /// <inheritdoc cref="ProjectRollupKeys.HomePageForVisitors"/>
+    public const string HomePageForVisitorsKey = ProjectRollupKeys.HomePageForVisitors;
+
     /// <inheritdoc cref="ProjectRollupKeys.Report"/>
     public const string ReportKey = ProjectRollupKeys.Report;
 

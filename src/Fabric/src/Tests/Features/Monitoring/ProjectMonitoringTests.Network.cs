@@ -58,7 +58,7 @@ public partial class ProjectMonitoringTests
         Assert.AreSequenceEqual(new[] { "enam", "oc" }, project.Locations);
 
         var target = (await Targets(server, "enam")).Single(target => target.ProjectId == project.Id);
-        Assert.AreEqual("https://customer.example/", target.Url, "The home page, which the Network asks for with a query string of its own.");
+        Assert.AreEqual("https://customer.example/en-US/", target.Url, "The page the home page lands on, as the first round found it, which the Network asks for with a query string of its own.");
         Assert.IsFalse(target.IsServerHealth);
         Assert.Contains(target => target.ProjectId == project.Id, await Targets(server, "oc"));
         Assert.DoesNotContain(target => target.ProjectId == project.Id, await Targets(server, "weur"));

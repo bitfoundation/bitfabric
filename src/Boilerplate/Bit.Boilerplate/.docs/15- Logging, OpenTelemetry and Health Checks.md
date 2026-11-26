@@ -167,66 +167,19 @@ The logging configuration is centralized in [`src/Shared/appsettings.json`](/src
 - **Default Log Level**: `Warning` - Only warnings and above are logged by default
 - **EF Core Commands**: `Information` - Shows SQL queries in logs (useful for debugging)
 - **Belemetry**: What reaches OTLP and Application Insights, `Warning` level (Sentry takes errors only)
-- **DiagnosticLogger**: `Information` level for in-app diagnostics
+- **DiagnosticLogger**: `Information` level for the recent entries the chatbot's `CheckLastError` tool reads
 - **BevTools**: `Information` level for the Logs panel of the in-app dev tools
 - **Console**: Logs to device log/logcat on mobile platforms
 
 ---
 
-## 4. In-App Diagnostic Logger
+## 4. Logs in the App
 
-One of the **most useful troubleshooting features** in this project is the **Diagnostic Logger** - a custom in-memory logger that helps debug issues in real-time.
+What the app logs can be read **inside the app**, on any device and in every environment, in the **Logs** panel of [bit BevTools](/.docs/23-%20In-App%20Dev%20Tools.md), the app's in-app dev tools. Tap 7 times on the empty space of the header, or press `Ctrl+Shift+D`, then open **Logs**: entries filter by text, `/regex/`, `level:warning`, `category:` and `trace:`, and each one opens with its exception, scopes and trace id.
 
-### What is the Diagnostic Logger?
-
-The Diagnostic Logger is a custom `ILogger` implementation that:
-- Stores logs **in memory** on the client device
-- Defaults to **`Information` level** (captures more details than production loggers)
-- Allows viewing logs directly in the application UI
-- Can be accessed by support staff to troubleshoot user issues remotely
-
-### Implementation
-
-### Accessing the Diagnostic Modal
-
-There are **three ways** to open the Diagnostic Modal:
-
-1. **Click 7 times** on the spacer in the running app's header
-2. **Press** `Ctrl+Shift+X` (keyboard shortcut)
-3. **Run JavaScript** in browser dev tools: `App.showDiagnostic()`
-
-### Diagnostic Modal UI
-
-**Environment-Specific Behavior:**
-- The diagnostic modal shows **client-side logs** from the in-memory `DiagnosticLogger.Store`
-- This is useful for support staff who have remote access to a user's machine/device to troubleshoot issues
-
-### Remote Troubleshooting
-
-For **live support scenarios**, support staff can request diagnostic logs from a user's active session:
-
-1. Support staff opens the users page and find the user
-2. Clicks "View Diagnostic Logs" button
-3. The server sends a SignalR message to the user's device
-4. The device uploads its in-memory logs to the server
-5. Support staff can view the logs in real-time
-
-This is implemented in [`src/Server/Boilerplate.Server.Api/Infrastructure/SignalR/AppHub.cs`](/src/Server/Boilerplate.Server.Api/Infrastructure/SignalR/AppHub.cs):
-
-```csharp
-/// <inheritdoc cref="SharedAppMessages.UPLOAD_DIAGNOSTIC_LOGGER_STORE"/>
-[HubMethodName(SharedAppMessages.GetUserSessionLogs)]
-public async Task<DiagnosticLogDto[]> GetUserSessionLogs(Guid userSessionId, [FromServices] AppDbContext dbContext, [FromServices] IAuthorizationService authorizationService)
-{
-    var user = Context.GetHttpContext()!.User;
-
-    if ((await authorizationService.AuthorizeAsync(user, AppFeatures.System.Logs_View)).Succeeded is false)
-        throw new HubException(nameof(AppStrings.UnauthorizedException)).WithData("ConnectionId", Context.ConnectionId);
-
-    // ... resolves the session's SignalRConnectionId, scoped to the caller's tenant, then:
-    return await Clients.Client(connectionId).InvokeAsync<DiagnosticLogDto[]>(SharedAppMessages.UPLOAD_DIAGNOSTIC_LOGGER_STORE, Context.ConnectionAborted);
-}
-```
+- The `BevTools` section of `Logging` decides what the panel gets, `Information` and above by default.
+- In the browser outside Development, BevTools itself is downloaded the first time it is opened, but `BevToolsAutoStart.Logs` keeps what was logged from the app's start, so the panel shows what happened before the support session began.
+- The `DiagnosticLogger` provider keeps the recent entries in memory as well, on the client runtimes (Blazor WebAssembly, MAUI, Windows) in every environment and on a Blazor Server host in Development only. With `signalR`, the chatbot's `CheckLastError` tool reads the device's last error from it (`SharedAppMessages.UPLOAD_LAST_ERROR`).
 
 ---
 

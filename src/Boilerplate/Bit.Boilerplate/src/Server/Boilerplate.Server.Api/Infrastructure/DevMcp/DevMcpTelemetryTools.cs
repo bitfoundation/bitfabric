@@ -64,7 +64,7 @@ public partial class DevMcpTelemetryTools
     }
 
     [McpServerTool(Name = nameof(ListTraces))]
-    [Description("Lists the newest traces that the Aspire dashboard running next to this deployment keeps, newest first, one entry each: the root span's name, the services the trace crossed, its start, duration and span count, and whether a span failed, with the failed spans' names. hasError=true keeps the failed traces only. Pass a trace id from here, from an error or from the diagnostic modal to GetTrace for its spans and logs. " + SamplingNote + " " + ForgeryNote + " Answers that no dashboard is configured when AspireDashboard:Url is empty, as it is outside a Docker Compose deployment. Read-only.")]
+    [Description("Lists the newest traces that the Aspire dashboard running next to this deployment keeps, newest first, one entry each: the root span's name, the services the trace crossed, its start, duration and span count, and whether a span failed, with the failed spans' names. hasError=true keeps the failed traces only. Pass a trace id from here, from an error or from BevTools' Logs panel to GetTrace for its spans and logs. " + SamplingNote + " " + ForgeryNote + " Answers that no dashboard is configured when AspireDashboard:Url is empty, as it is outside a Docker Compose deployment. Read-only.")]
     public async Task<string> ListTraces(
         [Description("One service name, such as Boilerplate.Server.Web or Boilerplate.Server.Api; every instance of it, across restarts, is read")] string? resource = null,
         [Description("true for the traces with a failed span only, false for those without one")] bool? hasError = null,

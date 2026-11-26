@@ -68,9 +68,17 @@
         </div>
     }
 
+    @* Two numbers only when a cache in front of the app answers its home page: what visitors wait for, and the server's own. *@
     <dl class="metrics">
+        @if (Project.MedianVisitorMs is { } visitorMedian)
+        {
+            <div>
+                <dt title="@Localizer[nameof(AppStrings.MonitoringForVisitorsHelp)]">@Localizer[nameof(AppStrings.MonitoringForVisitors)]</dt>
+                <dd>@Localizer[nameof(AppStrings.AppHomeMs), visitorMedian]</dd>
+            </div>
+        }
         <div>
-            <dt title="@Localizer[nameof(AppStrings.MonitoringHomePagePastCache)]">@Localizer[nameof(AppStrings.MonitoringResponseTime)]</dt>
+            <dt title="@Localizer[nameof(AppStrings.MonitoringHomePagePastCache)]">@(Project.MedianVisitorMs is null ? Localizer[nameof(AppStrings.MonitoringResponseTime)] : Localizer[nameof(AppStrings.MonitoringServerTime)])</dt>
             <dd>@(Project.MedianMs is { } median ? Localizer[nameof(AppStrings.AppHomeMs), median] : "—")</dd>
         </div>
         <div>

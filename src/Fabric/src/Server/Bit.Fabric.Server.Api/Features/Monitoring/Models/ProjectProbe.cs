@@ -38,8 +38,14 @@ public partial class ProjectProbe : ITenantAware
     /// </summary>
     public HealthCheckStatus? Status { get; set; }
 
-    /// <summary>How long the home page (or a static front end's server's <c>/health</c>) took, in milliseconds.</summary>
+    /// <summary>How long the home page (or a static front end's server's <c>/health</c>) took, in milliseconds, past any cache.</summary>
     public int? ResponseMs { get; set; }
+
+    /// <summary>
+    /// How long the same page took asked for as a visitor asks for it, with no query string of bit Fabric's, when a cache in
+    /// front of the app answered it; null when none did, as the two numbers are then the same.
+    /// </summary>
+    public int? VisitorMs { get; set; }
 
     /// <summary>How long reading <c>/healthz</c> took, in milliseconds.</summary>
     public int? ReportMs { get; set; }
