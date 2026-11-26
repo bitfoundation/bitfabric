@@ -1,0 +1,37 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.delta {
+    gap: 0.15rem;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: $bit-typography-body2-font-size;
+    padding: 0.05rem 0.45rem;
+    border-radius: $bit-shape-radius-full;
+    --tone: #{$bit-color-foreground-secondary};
+    // The text keeps the text color, so it reads on the tint; the arrow and the tint carry the direction.
+    color: $bit-color-foreground-primary;
+    background-color: color-mix(in srgb, var(--tone) 14%, transparent);
+}
+
+.tone-up {
+    --tone: #{$bit-color-success};
+}
+
+.tone-down {
+    --tone: #{$bit-color-error};
+}
+
+.tone-new {
+    --tone: #{$bit-color-info};
+}
+
+.sr-only {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    clip-path: inset(50%);
+}

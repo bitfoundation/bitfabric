@@ -405,6 +405,231 @@
         }
       }
     },
+    "/api/v1/Projects/GetProjects": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Read the same way by the AI tools (See ProjectsService).",
+        "parameters": [
+          {
+            "name": "timeZone",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Projects/GetProject/{id}": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "timeZone",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Projects/Rename": {
+      "post": {
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenameProjectRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Projects/GetMembers/{id}": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectMemberDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Projects/AddMember": {
+      "post": {
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectMemberRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectMemberDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Projects/RemoveMember": {
+      "post": {
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectMemberRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectMemberDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/MonitoringClient/Metadata": {
       "get": {
         "tags": [
@@ -522,6 +747,383 @@
         }
       }
     },
+    "/api/v1/Monitorings/GetMonitorings": {
+      "get": {
+        "tags": [
+          "Monitorings"
+        ],
+        "summary": "Read the same way by the AI tools (See MonitoringsService).",
+        "parameters": [
+          {
+            "name": "timeZone",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MonitoringDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/GetMonitoring/{id}": {
+      "get": {
+        "tags": [
+          "Monitorings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonitoringDetailsDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/GetMap/{id}": {
+      "get": {
+        "tags": [
+          "Monitorings"
+        ],
+        "summary": "Read the same way by the AI tools (See MonitoringsService.GetMap).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectMapDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/GetPerformance": {
+      "post": {
+        "tags": [
+          "Monitorings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectPerformanceRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectPerformanceDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/ProbeAddress": {
+      "post": {
+        "tags": [
+          "Monitorings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProbeAddressRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddressProbeResultDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/StartConnect": {
+      "post": {
+        "tags": [
+          "Monitorings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartConnectRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartConnectResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/CompleteConnect": {
+      "post": {
+        "tags": [
+          "Monitorings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteConnectRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonitoringDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/SetLocations": {
+      "post": {
+        "tags": [
+          "Monitorings"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetProjectLocationsRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonitoringDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/Disconnect/{id}": {
+      "post": {
+        "tags": [
+          "Monitorings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonitoringDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/ExportHistory/{monitoringId}/{format}": {
+      "get": {
+        "tags": [
+          "Monitorings"
+        ],
+        "parameters": [
+          {
+            "name": "monitoringId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "format",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/Monitorings/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Monitorings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/ProjectIncidents/GetHistory": {
       "post": {
         "tags": [
@@ -556,14 +1158,14 @@
         ]
       }
     },
-    "/api/v1/ProjectIncidents/GetIncidents/{projectId}": {
+    "/api/v1/ProjectIncidents/GetIncidents/{monitoringId}": {
       "get": {
         "tags": [
           "ProjectIncidents"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -663,14 +1265,14 @@
         ]
       }
     },
-    "/api/v1/ProjectIncidents/GetMaintenanceWindows/{projectId}": {
+    "/api/v1/ProjectIncidents/GetMaintenanceWindows/{monitoringId}": {
       "get": {
         "tags": [
           "ProjectIncidents"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -776,14 +1378,14 @@
         ]
       }
     },
-    "/api/v1/ProjectIncidents/GetAlertSettings/{projectId}": {
+    "/api/v1/ProjectIncidents/GetAlertSettings/{monitoringId}": {
       "get": {
         "tags": [
           "ProjectIncidents"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -845,14 +1447,14 @@
         ]
       }
     },
-    "/api/v1/ProjectIncidents/SendTestAlert/{projectId}": {
+    "/api/v1/ProjectIncidents/SendTestAlert/{monitoringId}": {
       "post": {
         "tags": [
           "ProjectIncidents"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -883,14 +1485,14 @@
         ]
       }
     },
-    "/api/v1/ProjectIncidents/GetSettings/{projectId}": {
+    "/api/v1/ProjectIncidents/GetSettings/{monitoringId}": {
       "get": {
         "tags": [
           "ProjectIncidents"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -952,14 +1554,14 @@
         ]
       }
     },
-    "/api/v1/ProjectScans/GetScans/{projectId}": {
+    "/api/v1/ProjectScans/GetScans/{monitoringId}": {
       "get": {
         "tags": [
           "ProjectScans"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1093,14 +1695,14 @@
         ]
       }
     },
-    "/api/v1/ProjectScans/GetSettings/{projectId}": {
+    "/api/v1/ProjectScans/GetSettings/{monitoringId}": {
       "get": {
         "tags": [
           "ProjectScans"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1189,355 +1791,14 @@
         ]
       }
     },
-    "/api/v1/Projects/GetProjects": {
-      "get": {
-        "tags": [
-          "Projects"
-        ],
-        "summary": "Read the same way by the AI tools (See ProjectsService).",
-        "parameters": [
-          {
-            "name": "timeZone",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ProjectDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/GetProject/{id}": {
-      "get": {
-        "tags": [
-          "Projects"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProjectDetailsDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/GetPerformance": {
-      "post": {
-        "tags": [
-          "Projects"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProjectPerformanceRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProjectPerformanceDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/ProbeAddress": {
-      "post": {
-        "tags": [
-          "Projects"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProbeAddressRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AddressProbeResultDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/StartConnect": {
-      "post": {
-        "tags": [
-          "Projects"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StartConnectRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StartConnectResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/CompleteConnect": {
-      "post": {
-        "tags": [
-          "Projects"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CompleteConnectRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProjectDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/SetLocations": {
-      "post": {
-        "tags": [
-          "Projects"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SetProjectLocationsRequestDto"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProjectDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/Disconnect/{id}": {
-      "post": {
-        "tags": [
-          "Projects"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProjectDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/ExportHistory/{projectId}/{format}": {
-      "get": {
-        "tags": [
-          "Projects"
-        ],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "format",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/Projects/Delete/{id}": {
-      "delete": {
-        "tags": [
-          "Projects"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "Bearer": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/ProjectSla/GetSettings/{projectId}": {
+    "/api/v1/ProjectSla/GetSettings/{monitoringId}": {
       "get": {
         "tags": [
           "ProjectSla"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1633,14 +1894,14 @@
         ]
       }
     },
-    "/api/v1/ProjectSla/ExportCsv/{projectId}/{year}/{month}": {
+    "/api/v1/ProjectSla/ExportCsv/{monitoringId}/{year}/{month}": {
       "get": {
         "tags": [
           "ProjectSla"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1681,14 +1942,14 @@
         ]
       }
     },
-    "/api/v1/ProjectSla/ExportPdf/{projectId}/{year}/{month}": {
+    "/api/v1/ProjectSla/ExportPdf/{monitoringId}/{year}/{month}": {
       "get": {
         "tags": [
           "ProjectSla"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1997,14 +2258,14 @@
         }
       }
     },
-    "/api/v1/StatusPages/GetStatusPage/{projectId}": {
+    "/api/v1/StatusPages/GetStatusPage/{monitoringId}": {
       "get": {
         "tags": [
           "StatusPages"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -2100,14 +2361,14 @@
         ]
       }
     },
-    "/api/v1/StatusPages/RefreshCustomHostname/{projectId}": {
+    "/api/v1/StatusPages/RefreshCustomHostname/{monitoringId}": {
       "post": {
         "tags": [
           "StatusPages"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -2135,14 +2396,14 @@
         ]
       }
     },
-    "/api/v1/StatusPages/DisconnectCustomHostname/{projectId}": {
+    "/api/v1/StatusPages/DisconnectCustomHostname/{monitoringId}": {
       "post": {
         "tags": [
           "StatusPages"
         ],
         "parameters": [
           {
-            "name": "projectId",
+            "name": "monitoringId",
             "in": "path",
             "required": true,
             "schema": {
@@ -2292,6 +2553,60 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/IssuedLicenseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/License/GetTeams": {
+      "get": {
+        "tags": [
+          "License"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LicenseTeamDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/License/GetLicenses": {
+      "get": {
+        "tags": [
+          "License"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LicenseDto"
+                  }
                 }
               }
             }
@@ -4699,6 +5014,39 @@
         ]
       }
     },
+    "/api/v1/Growth/GetData": {
+      "get": {
+        "tags": [
+          "Growth"
+        ],
+        "parameters": [
+          {
+            "name": "timeZone",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GrowthDataDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/Diagnostic/PerformDiagnostic": {
       "get": {
         "tags": [
@@ -5934,7 +6282,7 @@
         ],
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -6402,6 +6750,168 @@
       "Gender": {
         "type": "integer"
       },
+      "GrowthDataDto": {
+        "type": "object",
+        "properties": {
+          "today": {
+            "type": "string",
+            "description": "Today, in the time zone the counts were asked for.",
+            "format": "date"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrowthDayDto"
+            },
+            "description": "Every day with something to count, oldest first, the days Trials still running will end on included."
+          },
+          "licenseDelays": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GrowthLicenseDelayDto"
+            },
+            "description": "Every project licensed after its Trial, by the day it was licensed and the days since its Trial began: how many\r\nprojects each pair has."
+          },
+          "teamsByProjects": {
+            "type": "array",
+            "items": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            },
+            "description": "Teams with a License by how many projects they licensed: one, two, three to five, six or more."
+          },
+          "teamProjects": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "The projects those teams licensed, each team's counted once per project.",
+            "format": "int32"
+          },
+          "peopleInLicensedTeams": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "The people who are accepted members of a team with a License, each counted once.",
+            "format": "int32"
+          }
+        },
+        "description": "Everything the growth page counts, from the first day there was anything to count to the last Trial's end."
+      },
+      "GrowthDayDto": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date"
+          },
+          "projectsMade": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Projects bit Fabric first heard of that day: by their Trial, or by their first License when they had none.",
+            "format": "int32"
+          },
+          "projectsLicensed": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Projects that got their first License that day.",
+            "format": "int32"
+          },
+          "teamsLicensed": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Teams that got their first License that day.",
+            "format": "int32"
+          },
+          "accountsCreated": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "inProduction": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Licensed projects whose production environment monitoring started watching that day, and still watches.",
+            "format": "int32"
+          },
+          "trialsEnded": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Trials that end that day.",
+            "format": "int32"
+          },
+          "trialsEndedLicensed": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Of those, the ones whose project holds a License now.",
+            "format": "int32"
+          },
+          "trialsConverted": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "Trials counted as converted on that day: the later of the Trial's end and the project's first License, so a share\r\ntaken as of any day knows only what had happened by then.",
+            "format": "int32"
+          }
+        },
+        "description": "One day's counts. A Trial bit CLI asked for from CI counts in none of them."
+      },
+      "GrowthLicenseDelayDto": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date"
+          },
+          "days": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "count": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          }
+        },
+        "description": "How many projects got their first License on DateOnly GrowthLicenseDelayDto.Day, int GrowthLicenseDelayDto.Days days after their Trial began."
+      },
       "HealthCheckStatus": {
         "enum": [
           "Unhealthy",
@@ -6497,7 +7007,7 @@
               "null",
               "string"
             ],
-            "description": "Whom the license names: the account's full name, or empty. Never an email address, since the license goes into git."
+            "description": "Whom the license names: the team that holds it, by its title. Never a person, since the license goes into git."
           },
           "issuedOn": {
             "type": "string",
@@ -6506,6 +7016,11 @@
           "expiresOn": {
             "type": "string",
             "format": "date-time"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The team's project the license is for, whose page shows it.",
+            "format": "uuid"
           }
         },
         "description": "A free license the license page issued, with what it says, for the page to show."
@@ -6542,6 +7057,11 @@
               "string"
             ],
             "description": "The one-time code bit CLI made for the link and waits with: it reads the license once with it (See\r\nILicenseController.Claim). Empty when there is no bit CLI waiting."
+          },
+          "teamId": {
+            "type": "string",
+            "description": "The team that holds the license, one the signed-in account is a member of (See ILicenseController.GetTeams).",
+            "format": "uuid"
           }
         },
         "description": "What the license page sends for a project's free license, from the link bit CLI printed."
@@ -6579,6 +7099,80 @@
           null
         ]
       },
+      "LicenseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teamTitle": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The team's project it is for.",
+            "format": "uuid"
+          },
+          "projectName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "bitProjectId": {
+            "type": "string",
+            "description": "The project's id in its bit.json, which the license names.",
+            "format": "uuid"
+          },
+          "plan": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "`free`."
+          },
+          "firstCommit": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "issuedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "$ref": "#/components/schemas/LicenseState"
+          },
+          "issuedBy": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Who got it; null once their account is gone."
+          },
+          "license": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The license itself, for the prompt the page copies again."
+          }
+        },
+        "description": "A license a team holds, as the Licenses page lists it."
+      },
       "LicenseResponseDto": {
         "type": "object",
         "properties": {
@@ -6591,11 +7185,334 @@
         },
         "description": "A license as bit CLI writes it into bit.json; null when there is none to give."
       },
+      "LicenseState": {
+        "enum": [
+          "InForce",
+          "EndingSoon",
+          "InGrace",
+          "Ended",
+          null
+        ]
+      },
+      "LicenseTeamDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The team's title, or its name when it has none: what the license names as its holder."
+          }
+        },
+        "description": "A team the signed-in account may get a license for: an active one it accepted, the one it accepted first first."
+      },
+      "MonitoringDetailsDto": {
+        "type": "object",
+        "properties": {
+          "monitoring": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/MonitoringDto"
+              }
+            ]
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectCheckDto"
+            }
+          },
+          "checkedAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "When the newest report was read.",
+            "format": "date-time"
+          },
+          "reportMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "How long reading the newest report took.",
+            "format": "int32"
+          },
+          "homePageMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "How long the home page took in the round that read the newest report, from bit Fabric's own server.",
+            "format": "int32"
+          },
+          "homePageVisitorMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "How long a visitor waited for it in that round, through the cache in front of the app; null when no cache answered.",
+            "format": "int32"
+          },
+          "applicationVersion": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The build the app runs, from its report (the commit after a '+')."
+          },
+          "lastDeployedAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "lastRestartedAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "When the same build last started again on a new instance (See ProjectStartDto.IsDeploy).",
+            "format": "date-time"
+          },
+          "regions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The regions whose last round counts, such as \"Germany\"."
+          },
+          "networkReadings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectNetworkReadingDto"
+            },
+            "description": "The newest reading of each of the bitplatform Network's locations, with the data center it ran in."
+          }
+        },
+        "description": "A project's page: the project and its last report, entry by entry."
+      },
+      "MonitoringDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "What alerts and status pages call it: the project's name, with the environment after it unless that is Production."
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The project it is an environment of.",
+            "format": "uuid"
+          },
+          "projectName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "environment": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Production, Test, Staging or a name the team gave."
+          },
+          "address": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "`https://host`."
+          },
+          "serverAddress": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Null when the report is read on the address itself."
+          },
+          "templateVersion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "iconId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The app's own icon, served as an attachment (`api/v1/Attachment/GetAttachment/{IconId}/ProjectIcon`); null for none.",
+            "format": "uuid"
+          },
+          "health": {
+            "$ref": "#/components/schemas/ProjectHealth"
+          },
+          "connectionStatus": {
+            "$ref": "#/components/schemas/ProjectConnectionStatus"
+          },
+          "connectionProblem": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Why the connection was lost, for one that needs reconnecting, in the reader's language (See ProjectConnectionProblems)."
+          },
+          "lastCheckedAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "uptime30Days": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
+            "type": [
+              "null",
+              "number",
+              "string"
+            ],
+            "description": "The share of the last 30 days the app worked, of the time it was watched; null before the first round.",
+            "format": "double"
+          },
+          "medianMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "The median time the home page took over the last 24 hours, in milliseconds, past any cache: the server's own.",
+            "format": "int32"
+          },
+          "p95Ms": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "format": "int32"
+          },
+          "medianVisitorMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "The median time a visitor waited for the home page over the last 24 hours, through the cache in front of the app;\r\nnull when no cache answered it, which leaves one number, int? MonitoringDto.MedianMs.",
+            "format": "int32"
+          },
+          "responseLast24Hours": {
+            "type": "array",
+            "items": {
+              "pattern": "^-?(?:0|[1-9]\\d*)$",
+              "type": [
+                "integer",
+                "string"
+              ],
+              "format": "int32"
+            },
+            "description": "The last 24 hours' hourly medians, oldest first, 0 for an hour without a round."
+          },
+          "last30Days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectDayDto"
+            },
+            "description": "The last 30 days in the time zone the cards were asked for, oldest first, today last, each colored by how its rounds\r\nwent (bitfabric-internal/specs/monitoring.md, The projects page): the card's day bars."
+          },
+          "failingChecks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The checks failing or slow right now, by what the app calls them."
+          },
+          "ongoingIncidentId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The open incident, when one is open, which \"I'm on it\" and the team's updates name.",
+            "format": "uuid"
+          },
+          "ongoingIncident": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The open incident's title in the reader's language, when one is open."
+          },
+          "ongoingIncidentSince": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "hasCacheWarning": {
+            "type": "boolean",
+            "description": "Whether the last answer came from a cache that ignored the query string (bitfabric-internal/specs/monitoring.md, Response time)."
+          },
+          "locations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The bitplatform Network's locations the project is checked from besides Germany, by code (See NetworkLocations)."
+          },
+          "scans": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectScanSummaryDto"
+            },
+            "description": "The newest scan of each kind bit Fabric runs, as the card's scans row shows it (bitfabric-internal/specs/scanners.md)."
+          },
+          "version": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "format": "int64"
+          }
+        },
+        "description": "One environment of a project as its card shows it, and as the top of its page does."
+      },
       "NetworkResultDto": {
         "type": "object",
         "properties": {
           "projectId": {
             "type": "string",
+            "description": "The environment's id, under the name the Network's code writes (src/Network).",
             "format": "uuid"
           },
           "at": {
@@ -6671,6 +7588,7 @@
         "properties": {
           "projectId": {
             "type": "string",
+            "description": "The environment's id, under the name the Network's code reads (src/Network), which deploys on its own.",
             "format": "uuid"
           },
           "url": {
@@ -7069,7 +7987,7 @@
       "ProjectAlertSettingsDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -7158,6 +8076,27 @@
               "string"
             ],
             "description": "What a pass proves, from the report."
+          },
+          "provider": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "What the check talks to, such as \"Twilio\", from the report."
+          },
+          "host": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The host the check reaches, from the report."
+          },
+          "model": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The model an AI check uses, from the report."
           },
           "isNotConfigured": {
             "type": "boolean",
@@ -7270,92 +8209,6 @@
         ],
         "description": "How a day of a project went, as History's day bars color it: down beats degraded beats maintenance."
       },
-      "ProjectDetailsDto": {
-        "type": "object",
-        "properties": {
-          "project": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/ProjectDto"
-              }
-            ]
-          },
-          "checks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProjectCheckDto"
-            }
-          },
-          "checkedAt": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "When the newest report was read.",
-            "format": "date-time"
-          },
-          "reportMs": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "null",
-              "integer",
-              "string"
-            ],
-            "description": "How long reading the newest report took.",
-            "format": "int32"
-          },
-          "homePageMs": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "null",
-              "integer",
-              "string"
-            ],
-            "description": "How long the home page took in the round that read the newest report, from bit Fabric's own server.",
-            "format": "int32"
-          },
-          "applicationVersion": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The build the app runs, from its report (the commit after a '+')."
-          },
-          "lastDeployedAt": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          },
-          "lastRestartedAt": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "When the same build last started again on a new instance (See ProjectStartDto.IsDeploy).",
-            "format": "date-time"
-          },
-          "regions": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "The regions whose last round counts, such as \"Germany\"."
-          },
-          "networkReadings": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProjectNetworkReadingDto"
-            },
-            "description": "The newest reading of each of the bitplatform Network's locations, with the data center it ran in."
-          }
-        },
-        "description": "A project's page: the project and its last report, entry by entry."
-      },
       "ProjectDto": {
         "type": "object",
         "properties": {
@@ -7369,152 +8222,35 @@
               "string"
             ]
           },
-          "address": {
+          "bitProjectId": {
             "type": [
               "null",
               "string"
             ],
-            "description": "`https://host`."
-          },
-          "serverAddress": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "Null when the report is read on the address itself."
-          },
-          "templateVersion": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "iconId": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The app's own icon, served as an attachment (`api/v1/Attachment/GetAttachment/{IconId}/ProjectIcon`); null for none.",
+            "description": "The id in the project's bit.json, once its app or a license named it.",
             "format": "uuid"
           },
-          "health": {
-            "$ref": "#/components/schemas/ProjectHealth"
+          "monitorings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MonitoringDto"
+            },
+            "description": "Its environments, Production first, then by name; each as its card shows it."
           },
-          "connectionStatus": {
-            "$ref": "#/components/schemas/ProjectConnectionStatus"
+          "license": {
+            "$ref": "#/components/schemas/ProjectLicenseDto"
           },
-          "connectionProblem": {
+          "memberCount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
-              "null",
+              "integer",
               "string"
             ],
-            "description": "Why the connection was lost, for one that needs reconnecting, in the reader's language (See ProjectConnectionProblems)."
-          },
-          "lastCheckedAt": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
+            "format": "int32"
           },
           "createdOn": {
             "type": "string",
             "format": "date-time"
-          },
-          "uptime30Days": {
-            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
-            "type": [
-              "null",
-              "number",
-              "string"
-            ],
-            "description": "The share of the last 30 days the app worked, of the time it was watched; null before the first round.",
-            "format": "double"
-          },
-          "medianMs": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "null",
-              "integer",
-              "string"
-            ],
-            "description": "The median time the home page took over the last 24 hours, in milliseconds.",
-            "format": "int32"
-          },
-          "p95Ms": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "null",
-              "integer",
-              "string"
-            ],
-            "format": "int32"
-          },
-          "responseLast24Hours": {
-            "type": "array",
-            "items": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
-              "format": "int32"
-            },
-            "description": "The last 24 hours' hourly medians, oldest first, 0 for an hour without a round."
-          },
-          "last30Days": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProjectDayDto"
-            },
-            "description": "The last 30 days in the time zone the cards were asked for, oldest first, today last, each colored by how its rounds\r\nwent (bitfabric-internal/specs/monitoring.md, The projects page): the card's day bars."
-          },
-          "failingChecks": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "The checks failing or slow right now, by what the app calls them."
-          },
-          "ongoingIncidentId": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The open incident, when one is open, which \"I'm on it\" and the team's updates name.",
-            "format": "uuid"
-          },
-          "ongoingIncident": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The open incident's title in the reader's language, when one is open."
-          },
-          "ongoingIncidentSince": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          },
-          "hasCacheWarning": {
-            "type": "boolean",
-            "description": "Whether the last answer came from a cache that ignored the query string (bitfabric-internal/specs/monitoring.md, Response time)."
-          },
-          "locations": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "The bitplatform Network's locations the project is checked from besides Germany, by code (See NetworkLocations)."
-          },
-          "scans": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ProjectScanSummaryDto"
-            },
-            "description": "The newest scan of each kind bit Fabric runs, as the card's scans row shows it (bitfabric-internal/specs/scanners.md)."
           },
           "version": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
@@ -7525,7 +8261,7 @@
             "format": "int64"
           }
         },
-        "description": "A project as its card shows it, and as the top of its page does."
+        "description": "A team's project (bitfabric-internal/specs/monitoring.md, Projects, environments and their people): its card on the\r\nprojects page, its row on their Licenses tab, and the head of its page."
       },
       "ProjectHealth": {
         "enum": [
@@ -7615,7 +8351,7 @@
       "ProjectHistoryRequestDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -7637,7 +8373,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -7804,6 +8540,59 @@
           }
         }
       },
+      "ProjectLicenseDto": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/ProjectLicenseKind"
+          },
+          "until": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "When the trial or the newest license ends or ended; null for none.",
+            "format": "date-time"
+          },
+          "state": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "description": "Where the newest license stands; null without one.",
+                "$ref": "#/components/schemas/LicenseState"
+              }
+            ]
+          },
+          "licenseId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The newest license's id, for the Licenses page; null without one.",
+            "format": "uuid"
+          },
+          "firstCommit": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "description": "A project's license as the projects' Licenses tab shows it."
+      },
+      "ProjectLicenseKind": {
+        "enum": [
+          "Unknown",
+          "None",
+          "Trial",
+          "TrialEnded",
+          "Licensed",
+          "LicenseEnded"
+        ],
+        "description": "What a project's license is today: what the projects' Licenses tab and the AI tools say of it."
+      },
       "ProjectMaintenanceWindowDto": {
         "required": [
           "title"
@@ -7814,7 +8603,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -7843,6 +8632,228 @@
               "string"
             ],
             "format": "int64"
+          }
+        }
+      },
+      "ProjectMapDto": {
+        "type": "object",
+        "properties": {
+          "checkedAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "When the newest report was read; null before the first one.",
+            "format": "date-time"
+          },
+          "homePageMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "How long the app's own page took in that round.",
+            "format": "int32"
+          },
+          "parts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectMapPartDto"
+            },
+            "description": "The parts of the app, by the report's categories, as its last report lists them."
+          }
+        },
+        "description": "A project's application map (bitfabric-internal/specs/monitoring.md, Application map): everything its last health report\r\nsays the app talks to, each part with how it's doing now and over the last 24 hours."
+      },
+      "ProjectMapPartDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The entry's name in the report, such as `smtp`."
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "What the app calls it, such as \"Database\", in its own words."
+          },
+          "category": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The kind of dependency, from the report: Platform, Messaging, Identity, AI, Integrations or the app's own."
+          },
+          "iconName": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The part's `BitIconName`, from the report."
+          },
+          "about": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "What a pass proves, from the report."
+          },
+          "provider": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "What lies behind the part, such as \"Twilio\" behind \"SMS\": the outside service the app's report says the check talks\r\nto. Null when the report names none; bit Fabric never guesses it."
+          },
+          "host": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The host the check reaches, from the report."
+          },
+          "model": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The model an AI check uses, from the report."
+          },
+          "status": {
+            "$ref": "#/components/schemas/HealthCheckStatus"
+          },
+          "isNotConfigured": {
+            "type": "boolean",
+            "description": "Its settings are missing: a setup finding, not an outage."
+          },
+          "since": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Since when it has been in this status.",
+            "format": "date-time"
+          },
+          "checkedAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "When the app last really ran it: the round's time, or earlier for a result the app reuses.",
+            "format": "date-time"
+          },
+          "lastMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "How long its last real run took.",
+            "format": "int32"
+          },
+          "typicalMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "The average of its timed runs over the last 24 hours.",
+            "format": "int32"
+          },
+          "slowestMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "Its slowest run over the last 24 hours.",
+            "format": "int32"
+          },
+          "rounds": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "The rounds that looked at it over the last 24 hours.",
+            "format": "int32"
+          },
+          "problemRounds": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "The rounds of the last 24 hours it failed or was degraded in.",
+            "format": "int32"
+          },
+          "ongoingIncidentId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The ongoing incident about it, if there is one.",
+            "format": "uuid"
+          }
+        },
+        "description": "One thing the app depends on, such as its database or its email service, as its report names it."
+      },
+      "ProjectMemberDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "isMember": {
+            "type": "boolean",
+            "description": "A member of the project; otherwise someone of the team who can be added."
+          },
+          "addedOn": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "When they became a member; null for one who isn't.",
+            "format": "date-time"
+          },
+          "alertRouteCount": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "integer",
+              "string"
+            ],
+            "description": "The project's environments whose alerts reach them.",
+            "format": "int32"
+          }
+        },
+        "description": "Someone of the team, and whether they work on the project."
+      },
+      "ProjectMemberRequestDto": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -7965,7 +8976,7 @@
       "ProjectPerformanceRequestDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -8064,7 +9075,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -8231,7 +9242,7 @@
       "ProjectScanHistoryRequestDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -8349,7 +9360,7 @@
       "ProjectScansDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -8391,7 +9402,7 @@
       "ProjectScanSettingsDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -8527,6 +9538,7 @@
       "ProjectSettingsDto": {
         "required": [
           "name",
+          "environment",
           "timeZoneId"
         ],
         "type": "object",
@@ -8541,6 +9553,19 @@
               "null",
               "string"
             ]
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The project it is an environment of, whose name string? ProjectSettingsDto.Name is.",
+            "format": "uuid"
+          },
+          "environment": {
+            "maxLength": 50,
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "This environment's name: Production, Test, Staging or one the team gives."
           },
           "timeZoneId": {
             "maxLength": 64,
@@ -8672,7 +9697,7 @@
       "ProjectSlaReportDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -8819,7 +9844,7 @@
       "ProjectSlaRequestDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -8920,7 +9945,7 @@
       "ProjectSlaSettingsDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -9241,7 +10266,7 @@
               "null",
               "string"
             ],
-            "description": "The app's own icon, an attachment of its own (See ProjectDto.IconId); null for none, and the page shows a monogram.",
+            "description": "The app's own icon, an attachment of its own (See MonitoringDto.IconId); null for none, and the page shows a monogram.",
             "format": "uuid"
           },
           "state": {
@@ -9283,6 +10308,17 @@
               "integer",
               "string"
             ],
+            "description": "The home page's median time over the last 24 hours, past any cache: the server's own.",
+            "format": "int32"
+          },
+          "medianVisitorMs": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": [
+              "null",
+              "integer",
+              "string"
+            ],
+            "description": "The median time a visitor waited for it, through the cache in front of the app; null when no cache answered.",
             "format": "int32"
           },
           "supportAddress": {
@@ -9441,6 +10477,25 @@
           }
         }
       },
+      "RenameProjectRequestDto": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "maxLength": 100,
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "ReportScanFindingRequestDto": {
         "type": "object",
         "properties": {
@@ -9577,7 +10632,7 @@
       "RunProjectScansRequestDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           }
@@ -9692,7 +10747,7 @@
         ],
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -9884,6 +10939,22 @@
               "string"
             ]
           },
+          "projectId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The project the environment joins, from its page's \"Add an environment\"; null for a new project named\r\nstring? StartConnectRequestDto.Name. Either way, a project of the team with the id the app reports takes it instead.",
+            "format": "uuid"
+          },
+          "environment": {
+            "maxLength": 50,
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Production, Test, Staging or a name the team gives; Production when empty."
+          },
           "localHttpPort": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
@@ -10036,7 +11107,7 @@
         ],
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -10132,7 +11203,7 @@
       "StatusPostRequestDto": {
         "type": "object",
         "properties": {
-          "projectId": {
+          "monitoringId": {
             "type": "string",
             "format": "uuid"
           },
@@ -10357,6 +11428,14 @@
               "string"
             ],
             "description": "The full sha of the project's first git commit."
+          },
+          "ci": {
+            "maxLength": 40,
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The CI bit CLI asks from, by the name it gives it (`github-actions`, `other`, ...); null outside CI. bit\r\nFabric keeps it only to count such trials apart: the trial is the same, as long, and allows the same."
           }
         },
         "description": "What `bit new` sends for a new project's trial, right after the project's first commit."
@@ -10749,6 +11828,9 @@
       "name": "Diagnostic"
     },
     {
+      "name": "Growth"
+    },
+    {
       "name": "Identity"
     },
     {
@@ -10759,6 +11841,9 @@
     },
     {
       "name": "MonitoringNetwork"
+    },
+    {
+      "name": "Monitorings"
     },
     {
       "name": "OAuth"
