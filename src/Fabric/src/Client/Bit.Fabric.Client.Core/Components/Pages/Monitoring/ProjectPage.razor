@@ -51,22 +51,22 @@
                 @if (project is not null)
                 {
                     <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="head-meta">
-                        <span class="ltr app-latin-digits">@Host(project.Address)</span>
+                        <span class="part ltr app-latin-digits">@Host(project.Address)</span>
                         @if (project.ServerAddress is not null && project.ServerAddress != project.Address)
                         {
-                            <span>@Dot@Localizer[nameof(AppStrings.MonitoringServerLabel)] <span class="ltr app-latin-digits">@Host(project.ServerAddress)</span></span>
+                            <span class="part">@Dot@Localizer[nameof(AppStrings.MonitoringServerLabel)] <span class="ltr app-latin-digits">@Host(project.ServerAddress)</span></span>
                         }
                         @if (details!.Regions.Length > 0)
                         {
-                            <span>@Dot@Localizer[nameof(AppStrings.MonitoringFromRegions), RegionsText(details.Regions)]</span>
+                            <span class="part">@Dot@Localizer[nameof(AppStrings.MonitoringFromRegions), RegionsText(details.Regions)]</span>
                         }
                         @if (project.LastCheckedAt is { } checkedAt)
                         {
-                            <span>@Dot@Localizer[nameof(AppStrings.MonitoringCheckedAtTime), TimeZoneService.ToLocalTime(checkedAt).ToString("t", CultureInfo.CurrentUICulture)]</span>
+                            <span class="part">@Dot@Localizer[nameof(AppStrings.MonitoringCheckedAtTime), TimeZoneService.ToLocalTime(checkedAt).ToString("t", CultureInfo.CurrentUICulture)]</span>
                         }
                         @if (details.LastDeployedAt is { } deployedAt)
                         {
-                            <span>@Dot@Localizer[nameof(AppStrings.MonitoringDeployedAt), TimeZoneService.ToLocalTime(deployedAt).ToString("g", CultureInfo.CurrentUICulture)]</span>
+                            <span class="part">@Dot@Localizer[nameof(AppStrings.MonitoringDeployedAt), TimeZoneService.ToLocalTime(deployedAt).ToString("g", CultureInfo.CurrentUICulture)]</span>
                         }
                     </BitText>
                 }

@@ -45,10 +45,14 @@
     font-weight: $bit-typography-fw-semibold;
 }
 
+// Text that wraps between words, so a separator stays with the word before it: Persian's comma never starts a line.
 ::deep .row-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
+    display: block;
+}
+
+// Each part on its own, so a separator between two English words keeps the page's direction.
+.part {
+    unicode-bidi: isolate;
 }
 
 .mono {

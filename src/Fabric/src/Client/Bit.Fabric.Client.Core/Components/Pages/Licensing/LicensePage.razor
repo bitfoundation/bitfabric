@@ -42,7 +42,7 @@
                 <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.LicenseNameYourTeam)]</BitText>
                 <div class="team-form">
                     <BitTextField Value="@teamTitle" ValueChanged="@((string? title) => TitleChanged(title))" Immediate
-                                  Label="@Localizer[nameof(AppStrings.MonitoringTeamName)]" Placeholder="@Localizer[nameof(AppStrings.LicenseTeamNameExample)]" MaxLength="64" Class="team-field" />
+                                  Label="@Localizer[nameof(AppStrings.LicenseTeamName)]" Placeholder="@Localizer[nameof(AppStrings.LicenseTeamNameExample)]" MaxLength="64" Class="team-field" />
                     <BitTextField @bind-Value="teamName" Immediate Label="@Localizer[nameof(AppStrings.LicenseTeamShortName)]" Description="@Localizer[nameof(AppStrings.LicenseTeamShortNameHelp)]"
                                   MaxLength="63" Class="team-field" Styles="@(new() { Input = "direction: ltr" })" />
                 </div>
@@ -57,7 +57,7 @@
             else
             {
                 <BitDropdown TItem="BitDropdownItem<string>" TValue="string" Items="TeamItems" @bind-Value="selectedTeamId"
-                             Label="@Localizer[nameof(AppStrings.Tenant)]" AriaLabel="@Localizer[nameof(AppStrings.LicenseTeamThatHoldsIt)]" Responsive Class="team-picker" />
+                             Label="@Localizer[nameof(AppStrings.LicenseTeam)]" AriaLabel="@Localizer[nameof(AppStrings.LicenseTeamThatHoldsIt)]" Responsive Class="team-picker" />
             }
         </div>
 
@@ -79,7 +79,7 @@
         <div class="license-intro">
             <BitText Typography="BitTypography.H4" Element="h1" Class="license-title">@Localizer[nameof(AppStrings.LicenseHasItsLicense), issued.ProjectName!]</BitText>
             <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
-                @Localizer[nameof(AppStrings.LicenseFreeForUntil), issued.Holder!, issued.ExpiresOn.ToString("D", CultureInfo.CurrentUICulture)]
+                @Localizer[nameof(AppStrings.LicenseFreeForUntil), issued.Holder!, TimeZoneService.ToLocalTime(issued.ExpiresOn).ToString("d", CultureInfo.CurrentUICulture)]
             </BitText>
         </div>
 

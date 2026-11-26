@@ -16,7 +16,7 @@
             @foreach (var person in people)
             {
                 <li @key="person.UserId" class="@(person.IsMember ? "person" : "person not-member")">
-                    <BitPersona PrimaryText="@person.Name" Size="BitPersonaSize.Size32"
+                    <BitPersona PrimaryText="@person.Name" Size="BitPersonaSize.Size32" ShowSecondaryText
                                 SecondaryText="@(person.IsMember ? (person.AlertRouteCount > 0 ? Localizer[nameof(AppStrings.MonitoringGetsItsAlerts)] : Localizer[nameof(AppStrings.MonitoringWorksOnIt)]) : Localizer[nameof(AppStrings.MonitoringInTheTeam)])" />
                     @if (person.IsMember)
                     {

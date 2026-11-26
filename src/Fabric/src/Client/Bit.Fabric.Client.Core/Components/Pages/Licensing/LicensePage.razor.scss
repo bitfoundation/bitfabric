@@ -71,9 +71,10 @@
 
 .license-text {
     min-width: 0;
-    max-height: 9rem;
+    // Eight whole lines, so a long license never shows half a line before it scrolls.
+    max-height: calc(1.6em * 8);
     overflow-y: auto;
-    padding-top: 4px;
+    margin-top: 4px;
     color: $bit-color-foreground-primary;
     font-family: $bit-typography-font-family-mono;
     font-size: $bit-typography-fs-xs;
