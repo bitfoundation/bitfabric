@@ -2248,6 +2248,51 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
     <value>Quitter l'application</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Quelque chose ne fonctionne pas en ce moment</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Maintenance planifiée</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>L'équipe est au courant. Inutile de le signaler.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Page d'état</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Analyse en cours</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Cause trouvée</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Correctif appliqué</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Résolu</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Commencé {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Commencé {0}, mis à jour {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>à l'instant</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>il y a {0} min</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>il y a {0} h</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>En cours jusqu'à {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>De {0} à {1}</value>
+  </data>
   <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
     <value>L'authentification à deux facteurs est requise</value>
   </data>

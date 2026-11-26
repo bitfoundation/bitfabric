@@ -1894,7 +1894,7 @@
         <value>添加此视图</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>打开画板</value>
+        <value>打开流程</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>在工作台中打开</value>
@@ -4161,15 +4161,6 @@
     <data name="ProgressTasks" xml:space="preserve">
         <value>任务</value>
     </data>
-    <data name="ProgressSamplesTitle" xml:space="preserve">
-        <value>这些是示例</value>
-    </data>
-    <data name="ProgressSamplesText" xml:space="preserve">
-        <value>智能体的任务一开始就会显示在这里。在此之前，可以先试试这些：回答一个问题、勾掉一个步骤或给智能体留言。</value>
-    </data>
-    <data name="ProgressSamplesVisitorText" xml:space="preserve">
-        <value>此工作台上智能体的任务只在运行它的电脑上显示。这些示例展示了您在那里会看到的内容。</value>
-    </data>
     <data name="ProgressGroupNeedsYou" xml:space="preserve">
         <value>等您处理</value>
     </data>
@@ -4214,9 +4205,6 @@
     </data>
     <data name="ProgressUpdated" xml:space="preserve">
         <value>更新于 {0}</value>
-    </data>
-    <data name="ProgressSample" xml:space="preserve">
-        <value>示例</value>
     </data>
     <data name="ProgressYourTurn" xml:space="preserve">
         <value>轮到您了</value>
@@ -4326,15 +4314,6 @@
     <data name="ProgressSent" xml:space="preserve">
         <value>已发送给 {0}。</value>
     </data>
-    <data name="ProgressSampleSentTitle" xml:space="preserve">
-        <value>这是一个示例</value>
-    </data>
-    <data name="ProgressSampleSent" xml:space="preserve">
-        <value>在真实任务中，{0} 会立即收到并继续。</value>
-    </data>
-    <data name="ProgressSampleSecret" xml:space="preserve">
-        <value>在真实任务中，它会存到问题指定的位置，{0} 会继续，且看不到它。</value>
-    </data>
     <data name="ProgressSecretToGitHubEnvironment" xml:space="preserve">
         <value>它会直接存入 GitHub，作为 {1} 环境的 secret {0}。{2} 永远看不到它。</value>
     </data>
@@ -4443,189 +4422,6 @@
     <data name="TimeHoursAgo" xml:space="preserve">
         <value>{0} 小时前</value>
     </data>
-    <data name="SampleDeployTitle" xml:space="preserve">
-        <value>部署到测试和生产环境</value>
-    </data>
-    <data name="SampleDeploySummary" xml:space="preserve">
-        <value>在您自己的服务器上搭建测试和生产环境，并让应用运行在您的域名上。</value>
-    </data>
-    <data name="SampleDeployStepServices" xml:space="preserve">
-        <value>找出应用所需的外部服务及其密钥</value>
-    </data>
-    <data name="SampleDeployStepEnvironments" xml:space="preserve">
-        <value>在 GitHub 上创建测试和生产环境</value>
-    </data>
-    <data name="SampleDeployStepServer" xml:space="preserve">
-        <value>准备一台 Linux 服务器并提供地址</value>
-    </data>
-    <data name="SampleDeployStepToken" xml:space="preserve">
-        <value>创建 Cloudflare API 令牌</value>
-    </data>
-    <data name="SampleDeployStepTokenDetail" xml:space="preserve">
-        <value>在 Cloudflare 控制台中打开 My Profile，再打开 API Tokens，创建一个可以编辑 DNS 和 Cloudflare Tunnel 的令牌。然后把它粘贴到下方。</value>
-    </data>
-    <data name="SampleDeployStepRunner" xml:space="preserve">
-        <value>在服务器上安装 Docker 和 GitHub Actions 运行器</value>
-    </data>
-    <data name="SampleDeployStepTunnel" xml:space="preserve">
-        <value>通过 Cloudflare Tunnel 在您的域名上提供应用</value>
-    </data>
-    <data name="SampleDeployStepFirst" xml:space="preserve">
-        <value>先部署到测试环境，再部署到生产环境</value>
-    </data>
-    <data name="SampleDeployAskEmail" xml:space="preserve">
-        <value>应用的邮件由哪个服务发送？</value>
-    </data>
-    <data name="SampleDeployAskEmailDetail" xml:space="preserve">
-        <value>应用会通过邮件发送登录验证码和密码重置邮件。之后也可以更改。</value>
-    </data>
-    <data name="SampleDeployAskEmailOption1" xml:space="preserve">
-        <value>邮件服务的免费账户</value>
-    </data>
-    <data name="SampleDeployAskEmailOption2" xml:space="preserve">
-        <value>我们公司的邮件服务器</value>
-    </data>
-    <data name="SampleDeployAskEmailOption3" xml:space="preserve">
-        <value>暂不使用：在日志中显示邮件</value>
-    </data>
-    <data name="SampleDeployAskSsh" xml:space="preserve">
-        <value>隧道可用后关闭服务器的 SSH 端口吗？</value>
-    </data>
-    <data name="SampleDeployAskSshDetail" xml:space="preserve">
-        <value>您仍然可以通过隧道和服务商的网页控制台访问服务器。</value>
-    </data>
-    <data name="SampleDeployAskToken" xml:space="preserve">
-        <value>粘贴 Cloudflare 令牌</value>
-    </data>
-    <data name="SampleDeployNoteSecrets" xml:space="preserve">
-        <value>密钥和密码绝不会出现在聊天中。您把它们粘贴到这里，每一个都会直接存到该去的地方，我看不到。</value>
-    </data>
-    <data name="SampleDeployNoteOneServer" xml:space="preserve">
-        <value>两个环境共用一台服务器，以降低成本。</value>
-    </data>
-    <data name="SampleDeployLinkCloudflare" xml:space="preserve">
-        <value>Cloudflare 控制台</value>
-    </data>
-    <data name="SampleDeployFeed1" xml:space="preserve">
-        <value>应用使用了 6 个外部服务，其中 3 个需要您自己账户的密钥。</value>
-    </data>
-    <data name="SampleDeployFeed2" xml:space="preserve">
-        <value>服务器已就绪：203.0.113.24。</value>
-    </data>
-    <data name="SampleDeployFeed3" xml:space="preserve">
-        <value>已用您添加的密钥登录服务器，并关闭了密码登录。</value>
-    </data>
-    <data name="SampleDeployFeed4" xml:space="preserve">
-        <value>正在等待 Cloudflare 令牌来设置隧道。</value>
-    </data>
-    <data name="SampleFeatureTitle" xml:space="preserve">
-        <value>新功能：会员积分</value>
-    </data>
-    <data name="SampleFeatureSummary" xml:space="preserve">
-        <value>顾客每次下单都能获得积分，并在结账时使用。您已批准设计，现在正在开发。</value>
-    </data>
-    <data name="SampleFeatureStepRequirements" xml:space="preserve">
-        <value>确定需求并写入规格文档</value>
-    </data>
-    <data name="SampleFeatureStepPlan" xml:space="preserve">
-        <value>把工作拆分为 6 个任务</value>
-    </data>
-    <data name="SampleFeatureStepDesign" xml:space="preserve">
-        <value>在工作台中批准设计</value>
-    </data>
-    <data name="SampleFeatureStepLedger" xml:space="preserve">
-        <value>开发积分账本及其 API</value>
-    </data>
-    <data name="SampleFeatureStepCheckout" xml:space="preserve">
-        <value>结账时使用积分</value>
-    </data>
-    <data name="SampleFeatureStepTests" xml:space="preserve">
-        <value>在手机和桌面上测试</value>
-    </data>
-    <data name="SampleStepTryOnTest" xml:space="preserve">
-        <value>在测试环境中试用</value>
-    </data>
-    <data name="SampleFeatureAskWorth" xml:space="preserve">
-        <value>结账时一个积分值多少钱？</value>
-    </data>
-    <data name="SampleFeatureAskWorthDetail" xml:space="preserve">
-        <value>它会放在设置中，之后可以修改。</value>
-    </data>
-    <data name="SampleFeatureAskWorthPlaceholder" xml:space="preserve">
-        <value>例如：100 积分 = 1 元</value>
-    </data>
-    <data name="SampleFeatureAskOrders" xml:space="preserve">
-        <value>哪些订单可以获得积分？</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption1" xml:space="preserve">
-        <value>线上订单</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption2" xml:space="preserve">
-        <value>门店订单</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption3" xml:space="preserve">
-        <value>用礼品卡支付的订单</value>
-    </data>
-    <data name="SampleFeatureNoteExpiry" xml:space="preserve">
-        <value>积分在获得 12 个月后过期。</value>
-    </data>
-    <data name="SampleFeatureNoteSpec" xml:space="preserve">
-        <value>目前确定的所有内容以及仍未解决的问题都在该功能的规格文档中。</value>
-    </data>
-    <data name="SampleFeatureLinkDesign" xml:space="preserve">
-        <value>已批准的设计</value>
-    </data>
-    <data name="SampleFeatureFeed1" xml:space="preserve">
-        <value>已把需求写入规格文档，还有 3 个问题等您回答。</value>
-    </data>
-    <data name="SampleFeatureFeed2" xml:space="preserve">
-        <value>看起来不错。把积分徽章再调小一点。</value>
-    </data>
-    <data name="SampleFeatureFeed3" xml:space="preserve">
-        <value>已调小徽章并开始开发。</value>
-    </data>
-    <data name="SampleFeatureFeed4" xml:space="preserve">
-        <value>积分账本及其数据库迁移已完成，正在编写 API。</value>
-    </data>
-    <data name="SampleFixTitle" xml:space="preserve">
-        <value>修复：每日销售报表缺少退款</value>
-    </data>
-    <data name="SampleFixSummary" xml:space="preserve">
-        <value>午夜后的退款被算到了错误的日期。已修复、在测试环境验证并合并。</value>
-    </data>
-    <data name="SampleFixStepLogs" xml:space="preserve">
-        <value>在生产环境日志中找到原因</value>
-    </data>
-    <data name="SampleFixStepTest" xml:space="preserve">
-        <value>编写一个没有修复就会失败的测试</value>
-    </data>
-    <data name="SampleFixStepFix" xml:space="preserve">
-        <value>按门店所在时区统计退款</value>
-    </data>
-    <data name="SampleFixStepMerge" xml:space="preserve">
-        <value>合并，从而更新生产环境</value>
-    </data>
-    <data name="SampleFixAskMerge" xml:space="preserve">
-        <value>合并到 main 吗？这会更新生产环境。</value>
-    </data>
-    <data name="SampleFixNoteDone" xml:space="preserve">
-        <value>生产环境已运行修复版本，测试会防止此问题再次出现。</value>
-    </data>
-    <data name="SampleFixLinkPullRequest" xml:space="preserve">
-        <value>拉取请求</value>
-    </data>
-    <data name="SampleFixLinkTest" xml:space="preserve">
-        <value>测试环境</value>
-    </data>
-    <data name="SampleFixFeed1" xml:space="preserve">
-        <value>找到了：报表用的是服务器时区，而不是门店时区。</value>
-    </data>
-    <data name="SampleFixFeed2" xml:space="preserve">
-        <value>已在测试环境上线，请试一笔午夜后的退款。</value>
-    </data>
-    <data name="SampleFixFeed3" xml:space="preserve">
-        <value>已合并，生产环境已更新。</value>
-    </data>
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>跟进长任务，一键作答</value>
     </data>
@@ -4633,7 +4429,7 @@
         <value>一次部署或一个新功能需要很多步骤，其中有些只有您能完成。每个智能体对话都会在这里显示完成了什么、还剩什么以及需要您做什么，长对话里不再遗漏任何事。您在那里粘贴的密钥和密码会直接存到该去的地方，从不经过聊天。</value>
     </data>
     <data name="TourProgressText" xml:space="preserve">
-        <value>一次部署或一个新功能需要很多步骤，其中有些只有您能完成。每个智能体对话都会在这里显示完成了什么、还剩什么以及需要您做什么。用一次点击、几句话或语音作答，它会立即继续。在示例上试试吧。</value>
+        <value>一次部署或一个新功能需要很多步骤，其中有些只有您能完成。每个智能体对话都会在这里显示完成了什么、还剩什么以及需要您做什么。用一次点击、几句话或语音作答，它会立即继续。</value>
     </data>
     <data name="HomeFactAgent" xml:space="preserve">
         <value>智能体的进度和问题集中在一处</value>
@@ -4667,17 +4463,6 @@
     </data>
     <data name="ProgressReport" xml:space="preserve">
         <value>报告</value>
-    </data>
-    <data name="SampleFixReport" xml:space="preserve">
-        <value>**原因：** 报表按服务器的日期（UTC）汇总销售，所以门店午夜之后的退款被算到了前一天。
-
-**修复：** 退款现在按门店自己的时区统计；新增的测试在门店时间 00:30 发起退款，并检查它落在哪一天。
-
-| 检查 | 结果 |
-| --- | --- |
-| 全部测试 | 通过 |
-| 在 Test 上午夜之后退款 | 在正确的日期 |
-| 合并后的 Production | 已更新 |</value>
     </data>
     <data name="PosNoDataYet" xml:space="preserve">
         <value>暂无内容</value>

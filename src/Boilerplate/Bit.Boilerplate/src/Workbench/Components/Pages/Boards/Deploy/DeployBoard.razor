@@ -1,0 +1,182 @@
+@*+:cnd:noEmit*@
+@inherits WorkbenchComponentBase
+
+<BoardFrame Title="@Localizer[nameof(WorkbenchStrings.DeployBoardTitle)]"
+            Lead="@Localizer[nameof(WorkbenchStrings.DeployLead)]"
+            IconName="@BitIconName.Rocket" Tone="primary"
+            Note="@Localizer[nameof(WorkbenchStrings.DeployNote)]"
+            Sources="DeployFacts.Sources" SourcesTitle="@Localizer[nameof(WorkbenchStrings.DeploySources)]">
+    <Aside>
+        <BoardNumbers Items="Numbers" />
+    </Aside>
+    <ChildContent>
+        <BoardBlock Id="pipeline">
+            <div class="pipeline" style="--count: @DeployFacts.Stops.Length">
+                <div class="places" aria-hidden="true">
+                    @foreach (var (place, count) in Places)
+                    {
+                        <span class="place" style="grid-column: span @count">@PlaceName(place)</span>
+                    }
+                </div>
+                <div class="stops-wrap">
+                    <div class="track" aria-hidden="true">
+                        <span class="pulse"></span>
+                        <span class="pulse"></span>
+                        <span class="pulse"></span>
+                    </div>
+                    <ol class="stops">
+                        @for (var i = 0; i < DeployFacts.Stops.Length; i++)
+                        {
+                            var stop = DeployFacts.Stops[i];
+                            <li class="stop" style="--i: @i">
+                                <span class="stop-icon"><BitIcon IconName="@stop.IconName" /></span>
+                                <span class="stop-text">
+                                    <span class="stop-place">@PlaceName(stop.Place)</span>
+                                    <span class="stop-name">@Localizer[stop.NameKey]</span>
+                                    <span class="stop-note">@Localizer[stop.NoteKey]</span>
+                                </span>
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </div>
+        </BoardBlock>
+
+        <BoardBlock Id="copies" Title="@Localizer[nameof(WorkbenchStrings.DeployCopiesTitle)]">
+            <div class="envs">
+                <div class="env test">
+                    <svg class="env-art" viewBox="0 0 300 84" aria-hidden="true">
+                        <path class="line main" d="M 12 64 H 288" />
+                        <path class="line branch" d="M 62 64 C 96 64 92 24 132 24 H 252" />
+                        <circle class="commit" cx="62" cy="64" r="6" />
+                        <circle class="commit on-branch" cx="168" cy="24" r="6" />
+                        <circle class="commit on-branch" cx="210" cy="24" r="6" />
+                        <circle class="tip" cx="252" cy="24" r="9" />
+                        <circle class="runner" r="5"><animateMotion dur="3.2s" repeatCount="indefinite" path="M 62 64 C 96 64 92 24 132 24 H 252" /></circle>
+                    </svg>
+                    <div class="env-body">
+                        <span class="env-icon"><BitIcon IconName="@BitIconName.TestBeaker" /></span>
+                        <div class="env-text">
+                            <BitText Element="h3" Class="env-name">@Localizer[nameof(WorkbenchStrings.DeployTestName)]</BitText>
+                            <span class="env-from">@Localizer[nameof(WorkbenchStrings.DeployTestFrom)]</span>
+                            <span class="env-when">@Localizer[nameof(WorkbenchStrings.DeployTestWhen)]</span>
+                        </div>
+                    </div>
+                    <code class="env-command" dir="ltr">gh workflow run cd-test.yml --ref &lt;branch&gt;</code>
+                </div>
+                <div class="env production">
+                    <svg class="env-art" viewBox="0 0 300 84" aria-hidden="true">
+                        <path class="line feature" d="M 24 22 C 70 22 74 58 116 58" />
+                        <path class="line main" d="M 12 58 H 288" />
+                        <circle class="commit" cx="116" cy="58" r="6" />
+                        <circle class="commit" cx="178" cy="58" r="6" />
+                        <circle class="commit" cx="222" cy="58" r="6" />
+                        <circle class="tip" cx="264" cy="58" r="9" />
+                        <circle class="runner" r="5"><animateMotion dur="3.2s" repeatCount="indefinite" path="M 24 22 C 70 22 74 58 116 58 H 264" /></circle>
+                    </svg>
+                    <div class="env-body">
+                        <span class="env-icon"><BitIcon IconName="@BitIconName.Rocket" /></span>
+                        <div class="env-text">
+                            <BitText Element="h3" Class="env-name">@Localizer[nameof(WorkbenchStrings.DeployLiveName)]</BitText>
+                            <span class="env-from">@Localizer[nameof(WorkbenchStrings.DeployLiveFrom)]</span>
+                            <span class="env-when">@Localizer[nameof(WorkbenchStrings.DeployLiveWhen)]</span>
+                        </div>
+                    </div>
+                    <code class="env-command" dir="ltr">main · cd-production.yml</code>
+                </div>
+            </div>
+        </BoardBlock>
+
+        @*#if (aspire == true)*@
+        <BoardBlock Id="switch" Title="@Localizer[nameof(WorkbenchStrings.DeployServerTitle)]" Kicker="@Localizer[nameof(WorkbenchStrings.DeployServerKicker)]">
+            <div class="server">
+                <div class="server-frame">
+                    <div class="server-bar" aria-hidden="true">
+                        <span class="light"></span><span class="light"></span><span class="light"></span>
+                        <span class="server-name">@Localizer[nameof(WorkbenchStrings.DeployServerBar), DeployFacts.Boxes.Count(box => box.IsApp), DeployFacts.Boxes.Count(box => box.IsApp is false)]</span>
+                    </div>
+                    <div class="row">
+                        <span class="row-label">@Localizer[nameof(WorkbenchStrings.DeployReplaced)]</span>
+                        <div class="boxes">
+                            @foreach (var box in DeployFacts.Boxes.Where(box => box.IsApp))
+                            {
+                                <div class="box app">
+                                    <div class="layer old">
+                                        <BitIcon IconName="@box.IconName" />
+                                        <span class="box-name">@Localizer[box.Name]</span>
+                                        <span class="state serving">@Localizer[nameof(WorkbenchStrings.DeployStateLive)]</span>
+                                    </div>
+                                    <div class="layer new">
+                                        <BitIcon IconName="@box.IconName" />
+                                        <span class="box-name">@Localizer[box.Name]</span>
+                                        <span class="state starting">@Localizer[nameof(WorkbenchStrings.DeployStateStarting)]</span>
+                                        <span class="state healthy"><BitIcon IconName="@BitIconName.CheckMark" />@Localizer[nameof(WorkbenchStrings.DeployStateReady)]</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <span class="row-label">@Localizer[nameof(WorkbenchStrings.DeployKept)]</span>
+                        <div class="boxes">
+                            @foreach (var box in DeployFacts.Boxes.Where(box => box.IsApp is false))
+                            {
+                                <div class="box service">
+                                    <div class="layer">
+                                        <BitIcon IconName="@box.IconName" />
+                                        <span class="box-name">@Localizer[box.Name]</span>
+                                        <span class="heartbeat" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <ol class="steps" style="--steps: @DeployFacts.Steps.Length">
+                    @for (var i = 0; i < DeployFacts.Steps.Length; i++)
+                    {
+                        var step = DeployFacts.Steps[i];
+                        <li class="step" style="--i: @i">
+                            <span class="step-icon"><BitIcon IconName="@step.IconName" /></span>
+                            <span class="step-name">@Localizer[step.NameKey]</span>
+                        </li>
+                    }
+                </ol>
+            </div>
+        </BoardBlock>
+        @*#endif*@
+
+        <BoardBlock Id="apps" Title="@Localizer[nameof(WorkbenchStrings.DeployAppsTitle)]">
+            <div class="apps">
+                @foreach (var app in Apps)
+                {
+                    <div class="app-tile">
+                        <span class="app-icon"><BitIcon IconName="@app.IconName" /></span>
+                        <span class="app-name">@app.Name</span>
+                        <span class="app-what">@Localizer[app.WhatKey]</span>
+                        <span class="app-off"><BitIcon IconName="@BitIconName.Info" />@Localizer[nameof(WorkbenchStrings.DeployAppOff)]</span>
+                    </div>
+                }
+            </div>
+        </BoardBlock>
+
+        @* The settings' names are for whoever sets them up, so they wait folded, out of the story. *@
+        <BitAccordion Title="@Localizer[nameof(WorkbenchStrings.DeploySettingsTitle), DeployFacts.Settings.Length]"
+                      Description="@Localizer[nameof(WorkbenchStrings.DeploySettingsKicker)]"
+                      IconName="@BitIconName.Settings" NoBorder Class="settings-fold">
+            <ul class="settings" dir="ltr">
+                @foreach (var setting in DeployFacts.Settings)
+                {
+                    <li class="setting @(setting.IsSecret ? "secret" : "variable")">
+                        <BitIcon IconName="@(setting.IsSecret ? BitIconName.Lock : BitIconName.Tag)" />
+                        <code>@setting.Name</code>
+                    </li>
+                }
+            </ul>
+            <div class="legend">
+                <span><BitIcon IconName="@BitIconName.Lock" />@Localizer[nameof(WorkbenchStrings.DeploySecret)]</span>
+                <span><BitIcon IconName="@BitIconName.Tag" />@Localizer[nameof(WorkbenchStrings.DeploySetting)]</span>
+            </div>
+        </BitAccordion>
+    </ChildContent>
+</BoardFrame>

@@ -1,0 +1,794 @@
+@import '../../../../../Client/Boilerplate.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../../Client/Boilerplate.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// Calm on purpose: the theme's neutrals, and the board's tone as its one accent, for what moves.
+
+// ---- The pipeline: stops on a track, grouped by where they run, with lights running from a push to the users.
+.pipeline {
+    --dur: 4.8s;
+    --track-top: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    padding: 2.25rem 1.5rem 2rem;
+    border-radius: 2rem;
+    border: 1px solid $bit-color-border-tertiary;
+    background: radial-gradient(color-mix(in srgb, #{$bit-color-foreground-primary} 7%, transparent) 1px, transparent 1.5px) 0 0 / 1.375rem 1.375rem,
+                $bit-color-background-secondary;
+
+    @include lt-md {
+        padding: 1.75rem 1.25rem;
+        border-radius: 1.5rem;
+    }
+}
+
+.places,
+.stops {
+    gap: 0 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+}
+
+.places {
+    margin-bottom: 1.5rem;
+
+    @include lt-md {
+        display: none;
+    }
+}
+
+.place {
+    margin: 0 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-align: center;
+    padding-bottom: 0.625rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: $bit-color-foreground-tertiary;
+    border-bottom: 1px solid $bit-color-border-secondary;
+}
+
+.stops-wrap {
+    position: relative;
+}
+
+.stops {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+
+    @include lt-md {
+        gap: 1.5rem;
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.track {
+    height: 2px;
+    position: absolute;
+    top: calc(var(--track-top) - 1px);
+    inset-inline: calc(50% / var(--count));
+    background-color: $bit-color-border-secondary;
+
+    @include lt-md {
+        --track-top: 2rem;
+        width: 2px;
+        height: auto;
+        top: var(--track-top);
+        bottom: var(--track-top);
+        inset-inline: calc(var(--track-top) - 1px) auto;
+    }
+}
+
+.pulse {
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    opacity: 0;
+    position: absolute;
+    margin-top: -5px;
+    border-radius: 50%;
+    margin-inline-start: -5px;
+    background-color: var(--tone);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--tone) 18%, transparent);
+    animation: travel var(--dur) linear infinite;
+
+    &:nth-child(2) {
+        animation-delay: calc(var(--dur) / 3);
+    }
+
+    &:nth-child(3) {
+        animation-delay: calc(var(--dur) * 2 / 3);
+    }
+
+    @include lt-md {
+        top: 0;
+        left: 50%;
+        margin-inline-start: 0;
+        margin-left: -5px;
+        animation-name: travel-down;
+    }
+}
+
+@keyframes travel {
+    0% {
+        opacity: 0;
+        inset-inline-start: 0;
+    }
+
+    5%,
+    95% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        inset-inline-start: 100%;
+    }
+}
+
+@keyframes travel-down {
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+
+    5%,
+    95% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+.stop {
+    z-index: 1;
+    gap: 0.75rem;
+    min-width: 0;
+    display: flex;
+    text-align: center;
+    position: relative;
+    align-items: center;
+    flex-direction: column;
+
+    @include lt-md {
+        gap: 1rem;
+        text-align: start;
+        flex-direction: row;
+    }
+}
+
+.stop-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1.75rem;
+    --bit-Icon-color: currentColor;
+    width: 5rem;
+    height: 5rem;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: $bit-color-foreground-secondary;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+    box-shadow: $bit-box-shadow-sm;
+    // Lit as each light reaches it: lights are a third of the run apart, and reach stop i at i/(count-1) of it.
+    animation: arrive calc(var(--dur) / 3) ease-out infinite;
+    animation-delay: calc(var(--dur) * var(--i) / (var(--count) - 1));
+
+    @include lt-md {
+        width: 4rem;
+        height: 4rem;
+        --bit-Icon-size: 1.375rem;
+    }
+}
+
+@keyframes arrive {
+    0% {
+        transform: scale(1);
+    }
+
+    10% {
+        color: var(--tone);
+        transform: scale(1.06);
+        border-color: var(--tone);
+    }
+
+    40%,
+    100% {
+        transform: scale(1);
+    }
+}
+
+.stop-text {
+    gap: 0.125rem;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
+.stop-place {
+    display: none;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $bit-color-foreground-tertiary;
+
+    @include lt-md {
+        display: block;
+    }
+}
+
+.stop-name {
+    font-weight: 750;
+    font-size: 1.0625rem;
+    line-height: 1.25;
+}
+
+.stop-note {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: $bit-color-foreground-secondary;
+}
+
+// ---- The two environments, each with its branch drawn above it and a light running to where it deploys from.
+.envs {
+    gap: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.env {
+    gap: 1.125rem;
+    display: flex;
+    padding: 1.5rem;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+}
+
+.env-art {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+
+    // A branch grows the way the reading goes.
+    [dir="rtl"] & {
+        transform: scaleX(-1);
+    }
+
+    .line {
+        fill: none;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke: $bit-color-border-secondary;
+    }
+
+    .branch {
+        stroke: $bit-color-foreground-secondary;
+    }
+
+    .production & .main {
+        stroke: $bit-color-foreground-secondary;
+    }
+
+    .commit {
+        stroke-width: 2.5;
+        fill: $bit-color-background-primary;
+        stroke: $bit-color-border-secondary;
+    }
+
+    .on-branch,
+    .production & .commit {
+        stroke: $bit-color-foreground-secondary;
+    }
+
+    .tip {
+        fill: var(--tone);
+        stroke-width: 5;
+        stroke: color-mix(in srgb, var(--tone) 20%, transparent);
+    }
+
+    .runner {
+        fill: var(--tone);
+    }
+}
+
+.env-body {
+    gap: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.env-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1.375rem;
+    --bit-Icon-color: #{$bit-color-foreground-secondary};
+    width: 3.25rem;
+    height: 3.25rem;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 1rem;
+    background-color: $bit-color-background-secondary;
+}
+
+.env-text {
+    gap: 0.125rem;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
+::deep .env-name {
+    margin: 0;
+    font-weight: 750;
+    font-size: 1.375rem;
+}
+
+.env-from {
+    font-weight: 650;
+}
+
+.env-when {
+    font-size: 0.875rem;
+    color: $bit-color-foreground-secondary;
+}
+
+.env-command {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+    overflow-wrap: anywhere;
+    border-radius: 0.625rem;
+    color: $bit-color-foreground-secondary;
+    background-color: $bit-color-background-secondary;
+}
+
+// ---- The server: the app's containers swapped for new ones while the services keep running, and the steps under it.
+.server {
+    --swap: 8s;
+    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.server-frame {
+    overflow: hidden;
+    border-radius: 1.5rem;
+    border: 1px solid $bit-color-border-tertiary;
+    background-color: $bit-color-background-primary;
+}
+
+.server-bar {
+    gap: 0.4rem;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.125rem;
+    border-bottom: 1px solid $bit-color-border-tertiary;
+    background-color: $bit-color-background-secondary;
+
+    .light {
+        width: 0.625rem;
+        height: 0.625rem;
+        border-radius: 50%;
+        background-color: $bit-color-border-secondary;
+    }
+}
+
+.server-name {
+    font-size: 0.75rem;
+    margin-inline-start: 0.625rem;
+    color: $bit-color-foreground-secondary;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.row {
+    gap: 1rem;
+    display: grid;
+    padding: 1.25rem 1.25rem 0;
+    align-items: center;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+
+    &:last-child {
+        padding-bottom: 1.25rem;
+    }
+
+    @include lt-sm {
+        gap: 0.5rem;
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.row-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $bit-color-foreground-tertiary;
+}
+
+.boxes {
+    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr));
+}
+
+.box {
+    height: 3.5rem;
+    position: relative;
+}
+
+.layer {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1.125rem;
+    --bit-Icon-color: #{$bit-color-foreground-secondary};
+    inset: 0;
+    gap: 0.625rem;
+    display: flex;
+    position: absolute;
+    align-items: center;
+    padding: 0 0.875rem;
+    border-radius: 0.875rem;
+    font-size: 0.9375rem;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+}
+
+.box-name {
+    flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-weight: 650;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.state {
+    --bit-Icon-size: 0.75rem;
+    --bit-Icon-color: currentColor;
+    gap: 0.25rem;
+    display: inline-flex;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    align-items: center;
+    padding: 0.1875rem 0.5rem;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+    background-color: $bit-color-background-secondary;
+
+    &.healthy {
+        color: var(--tone);
+        background-color: color-mix(in srgb, var(--tone) 11%, transparent);
+    }
+}
+
+.app {
+    .old {
+        animation: old-out var(--swap) ease-in-out infinite;
+    }
+
+    .new {
+        opacity: 0;
+        border-style: dashed;
+        border-color: $bit-color-border-secondary;
+        animation: new-in var(--swap) ease-in-out infinite;
+
+        .starting,
+        .healthy {
+            position: absolute;
+            inset-inline-end: 0.875rem;
+        }
+
+        .starting {
+            animation: starting var(--swap) step-end infinite;
+        }
+
+        .healthy {
+            opacity: 0;
+            animation: healthy var(--swap) step-end infinite;
+        }
+    }
+}
+
+// One deployment every 8 seconds: the new container comes up beside the old one, turns healthy, then takes its place.
+@keyframes old-out {
+    0%,
+    55% {
+        opacity: 1;
+        transform: none;
+    }
+
+    66%,
+    94% {
+        opacity: 0;
+        transform: translateY(0.5rem) scale(0.96);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes new-in {
+    0%,
+    12% {
+        opacity: 0;
+        transform: translate(0.75rem, -0.5rem);
+    }
+
+    24% {
+        opacity: 1;
+        border-style: dashed;
+        transform: translate(0.375rem, -0.375rem);
+    }
+
+    42% {
+        border-style: solid;
+        border-color: color-mix(in srgb, var(--tone) 45%, transparent);
+    }
+
+    58%,
+    88% {
+        opacity: 1;
+        transform: none;
+        border-style: solid;
+        border-color: color-mix(in srgb, var(--tone) 35%, transparent);
+    }
+
+    96%,
+    100% {
+        opacity: 0;
+        transform: none;
+    }
+}
+
+@keyframes starting {
+    0% {
+        opacity: 1;
+    }
+
+    42% {
+        opacity: 0;
+    }
+}
+
+@keyframes healthy {
+    0% {
+        opacity: 0;
+    }
+
+    42% {
+        opacity: 1;
+    }
+}
+
+.service .layer {
+    background-color: $bit-color-background-secondary;
+}
+
+.heartbeat {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: var(--tone);
+    animation: heartbeat 1.6s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--tone) 45%, transparent);
+    }
+
+    50% {
+        box-shadow: 0 0 0 0.375rem color-mix(in srgb, var(--tone) 0%, transparent);
+    }
+}
+
+.steps {
+    margin: 0;
+    padding: 0;
+    gap: 0.5rem;
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.step {
+    gap: 0.5rem;
+    display: flex;
+    font-weight: 650;
+    font-size: 0.875rem;
+    align-items: center;
+    padding: 0.5rem 0.875rem 0.5rem 0.5rem;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+    background-color: $bit-color-background-secondary;
+    // Lit in turn, through the same 8 seconds as the swap.
+    animation: step-lit var(--swap) linear infinite;
+    animation-delay: calc(var(--swap) * var(--i) / var(--steps));
+}
+
+.step-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 0.875rem;
+    --bit-Icon-color: currentColor;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+@keyframes step-lit {
+    0%,
+    14% {
+        color: var(--tone-text);
+        background-color: var(--tone);
+    }
+
+    15%,
+    100% {
+        color: $bit-color-foreground-secondary;
+        background-color: $bit-color-background-secondary;
+    }
+}
+
+// ---- The apps: built on GitHub's runners in the same run, waiting to be turned on.
+.apps {
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.app-tile {
+    gap: 0.25rem;
+    display: flex;
+    padding: 1.5rem;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+}
+
+.app-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1.5rem;
+    --bit-Icon-color: #{$bit-color-foreground-secondary};
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.75rem;
+    border-radius: 0.875rem;
+    background-color: $bit-color-background-secondary;
+}
+
+.app-name {
+    font-weight: 750;
+    font-size: 1.125rem;
+}
+
+.app-what {
+    font-size: 0.875rem;
+    color: $bit-color-foreground-secondary;
+}
+
+.app-off {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 0.875rem;
+    --bit-Icon-color: currentColor;
+    gap: 0.375rem;
+    display: inline-flex;
+    margin-top: 0.875rem;
+    font-size: 0.75rem;
+    align-items: center;
+    color: $bit-color-foreground-tertiary;
+}
+
+// ---- The settings: folded at the foot, a chip each, secrets with a lock.
+::deep .settings-fold {
+    border-radius: $bit-shape-radius-surface;
+    background-color: $bit-color-background-secondary;
+}
+
+.settings {
+    margin: 0;
+    padding: 0;
+    gap: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.setting {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 0.875rem;
+    --bit-Icon-color: currentColor;
+    gap: 0.375rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-foreground-secondary;
+    border: 1px solid $bit-color-border-tertiary;
+    background-color: $bit-color-background-primary;
+
+    code {
+        font-size: 0.75rem;
+        color: $bit-color-foreground-primary;
+    }
+
+    &.secret {
+        background-color: $bit-color-background-secondary;
+    }
+}
+
+.legend {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 0.875rem;
+    --bit-Icon-color: currentColor;
+    gap: 1.25rem;
+    display: flex;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: $bit-color-foreground-tertiary;
+
+    span {
+        gap: 0.375rem;
+        display: inline-flex;
+        align-items: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pulse,
+    .env-art .runner {
+        display: none;
+    }
+
+    .stop-icon,
+    .step,
+    .heartbeat,
+    .app .old,
+    .app .new,
+    .app .new .starting,
+    .app .new .healthy {
+        animation: none;
+    }
+
+    .app .old {
+        opacity: 0;
+    }
+
+    .app .new {
+        opacity: 1;
+        border-style: solid;
+    }
+
+    .app .new .starting {
+        opacity: 0;
+    }
+
+    .app .new .healthy {
+        opacity: 1;
+    }
+}

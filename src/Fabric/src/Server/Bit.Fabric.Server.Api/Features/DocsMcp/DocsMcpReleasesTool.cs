@@ -35,11 +35,10 @@ public partial class DocsMcpReleasesTool(BitPlatformTags bitPlatformTags, BitPla
             changed in each, newest first. Prereleases count: bit platform ships one often, and its MCP servers answer from
             the newest code, so a project on an older prerelease is behind. bit Boilerplate, bit BlazorUI and every other
             bit library ship together under one version number, so one answer covers all of them. Pass the version a
-            project is on as its bit.json records it; without one, the version this connection asked for (the v query of
-            this endpoint) is checked. The versions are the tags of bitfoundation/bitplatform. The notes are those of the
-            GitHub releases of bitfoundation/bitplatform, for a stable version, and of bitfoundation/bitfabric, which holds
-            bit Boilerplate and bit CLI, for every version from 11.0.0-pre-24 on; a version neither has a release for is
-            listed with its tag and date alone.
+            project is on as its bit.json records it. The versions are the tags of bitfoundation/bitplatform. The notes are
+            those of the GitHub releases of bitfoundation/bitplatform, for a stable version, and of bitfoundation/bitfabric,
+            which holds bit Boilerplate and bit CLI, for every version from 11.0.0-pre-24 on; a version neither has a
+            release for is listed with its tag and date alone.
             """,
         InputSchema = JsonSerializer.SerializeToElement(new JsonObject
         {
@@ -51,7 +50,8 @@ public partial class DocsMcpReleasesTool(BitPlatformTags bitPlatformTags, BitPla
                     ["type"] = "string",
                     ["description"] = "The version to check, as bit.json records it, such as 11.0.0-pre-24 or 11.0.0."
                 }
-            }
+            },
+            ["required"] = new JsonArray("version")
         }),
         Annotations = new()
         {
@@ -62,14 +62,13 @@ public partial class DocsMcpReleasesTool(BitPlatformTags bitPlatformTags, BitPla
         }
     };
 
-    /// <param name="request">The call, with the version to check, if it names one.</param>
-    /// <param name="requestedVersion">The v query of the connection, checked when the call names no version.</param>
+    /// <param name="request">The call, with the version to check.</param>
     /// <param name="cancellationToken">Ends the call.</param>
-    public async ValueTask<CallToolResult> Call(CallToolRequestParams request, string? requestedVersion, CancellationToken cancellationToken)
+    public async ValueTask<CallToolResult> Call(CallToolRequestParams request, CancellationToken cancellationToken)
     {
-        var version = DocsMcpToolResults.Argument(request, "version") ?? requestedVersion?.Trim();
+        var version = DocsMcpToolResults.Argument(request, "version");
 
-        if (string.IsNullOrEmpty(version))
+        if (version is null)
             return DocsMcpToolResults.Failed("Pass version: the bit platform version the project is on, as its bit.json records it.");
 
         if (VersionRegex().Match(version) is not { Success: true } match)

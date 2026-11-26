@@ -427,8 +427,8 @@ public class LicenseTests
                     }
                 }
                 """);
-            File.WriteAllText(Path.Combine(directory, ".mcp.json"), """{ "mcpServers": { "bitplatform": { "type": "http", "url": "https://api.bitfabric.co/docs-mcp?v=11.0.0" }, "dev-mcp-test": { "type": "http", "url": "https://test.example.com/dev-mcp" } } }""");
-            File.WriteAllText(Path.Combine(Directory.CreateDirectory(Path.Combine(directory, ".codex")).FullName, "config.toml"), "[mcp_servers.bitplatform]\nurl = \"https://api.bitfabric.co/docs-mcp?v=11.0.0&project=old\"\n");
+            File.WriteAllText(Path.Combine(directory, ".mcp.json"), """{ "mcpServers": { "bitplatform": { "type": "http", "url": "https://api.bitfabric.co/docs-mcp" }, "dev-mcp-test": { "type": "http", "url": "https://test.example.com/dev-mcp" } } }""");
+            File.WriteAllText(Path.Combine(Directory.CreateDirectory(Path.Combine(directory, ".codex")).FullName, "config.toml"), "[mcp_servers.bitplatform]\nurl = \"https://api.bitfabric.co/docs-mcp?project=old\"\n");
 
             return new ProcessResult { ExitCode = 0 };
         });
@@ -463,9 +463,9 @@ public class LicenseTests
         Assert.IsTrue(host.Runner.Calls.Any(call => call.FileName is "git" && string.Join(' ', call.Arguments).StartsWith("commit -q -m Add the project's trial license", StringComparison.Ordinal)), "The trial is committed.");
         StringAssert.Contains(host.FlatOutput, "Got a trial license");
 
-        StringAssert.Contains(File.ReadAllText(Path.Combine(directory, ".mcp.json")), $"https://api.bitfabric.co/docs-mcp?v=11.0.0&project={id:D}\"");
+        StringAssert.Contains(File.ReadAllText(Path.Combine(directory, ".mcp.json")), $"https://api.bitfabric.co/docs-mcp?project={id:D}\"");
         StringAssert.Contains(File.ReadAllText(Path.Combine(directory, ".mcp.json")), "https://test.example.com/dev-mcp\"", "Only the docs MCP server's address names the project.");
-        StringAssert.Contains(File.ReadAllText(Path.Combine(directory, ".codex", "config.toml")), $"https://api.bitfabric.co/docs-mcp?v=11.0.0&project={id:D}\"");
+        StringAssert.Contains(File.ReadAllText(Path.Combine(directory, ".codex", "config.toml")), $"https://api.bitfabric.co/docs-mcp?project={id:D}\"");
     }
 
     [TestMethod]
@@ -496,9 +496,9 @@ public class LicenseTests
 
     [TestMethod]
     [DataRow("https://api.bitfabric.co/docs-mcp", "https://api.bitfabric.co/docs-mcp?project={0}")]
-    [DataRow("https://api.bitfabric.co/docs-mcp?v=11.0.0", "https://api.bitfabric.co/docs-mcp?v=11.0.0&project={0}")]
-    [DataRow("https://api.bitfabric.co/docs-mcp?project=x&v=11.0.0", "https://api.bitfabric.co/docs-mcp?v=11.0.0&project={0}")]
-    [DataRow("https://localhost:5031/docs-mcp/?v=1", "https://localhost:5031/docs-mcp/?v=1&project={0}")]
+    [DataRow("https://api.bitfabric.co/docs-mcp?project=x", "https://api.bitfabric.co/docs-mcp?project={0}")]
+    [DataRow("https://api.bitfabric.co/docs-mcp?project=x&libraries=all", "https://api.bitfabric.co/docs-mcp?libraries=all&project={0}")]
+    [DataRow("https://localhost:5031/docs-mcp/", "https://localhost:5031/docs-mcp/?project={0}")]
     public void TheDocsMcpAddress_Should_NameTheProjectOnce(string address, string expected)
     {
         var id = Guid.NewGuid();

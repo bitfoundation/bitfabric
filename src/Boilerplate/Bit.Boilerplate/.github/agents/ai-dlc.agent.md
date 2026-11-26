@@ -73,6 +73,7 @@ port, rebrand, landing-page, bitify-ui, template-diff and scaffold-entity, and t
 - On the full track, commit the specs and the plan with the work. Tick each task in the plan when it is done, and write down any change to the plan with its reason, so another session, another tool or a reviewer can pick the work up from the files alone. When you hand back, the specs, the plan and the diff agree: every acceptance criterion has its change and its test, and nothing in the diff goes unexplained
 - Before the first task, run the tests once the way the **write-tests** skill describes, so you know what already fails
 - Execute tasks one at a time in the planned order, with the app running as the **run-app** skill (`.github/agents/run-app.agent.md`) describes: hot reload brings most edits to the open page, and run-app says which ones need a restart
+- Give everything the change adds that can fail on its own - an external service, a background job, a queue, a site it depends on - a health check wherever one makes sense, registered the way `.docs/15- Logging, OpenTelemetry and Health Checks.md` describes
 - After each task: verify correctness, run relevant checks
 
 ### 5. Validation

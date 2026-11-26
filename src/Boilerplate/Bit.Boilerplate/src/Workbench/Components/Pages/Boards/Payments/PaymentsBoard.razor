@@ -1,0 +1,150 @@
+@inherits WorkbenchComponentBase
+
+<BoardFrame Title="Taking payments" Language="en"
+            Lead="Who keeps what from a sale: on the web, and inside the store apps."
+            IconName="@BitIconName.PaymentCard" Tone="success"
+            Meta="@($"Read on {PaymentsFacts.ReadOn}")"
+            Note="An example board: not every provider or country"
+            Sources="PaymentsFacts.Sources" SourcesTitle="Each provider's and store's own page">
+    <Aside>
+        <BoardNumbers Items="Kept" />
+    </Aside>
+    <ChildContent>
+    <BoardBlock Id="where" Title="Where the buyer pays decides who you pay">
+        <div class="routes">
+            @foreach (var route in PaymentsFacts.Routes)
+            {
+                <div class="route @(route.High == 0 ? "free" : null)">
+                    <span class="route-icon"><BitIcon IconName="@route.IconName" /></span>
+                    <span class="route-where">@route.Where</span>
+                    <span class="route-share">@route.Share</span>
+                    <span class="route-meter" aria-hidden="true"><span class="route-range" style="@RangeStyle(route)"></span></span>
+                    <span class="route-caption">@route.Caption</span>
+                </div>
+            }
+        </div>
+        <p class="scale">Each bar is the share of a sale, from 0 to 30%.</p>
+    </BoardBlock>
+
+    <BoardBlock Id="one-sale" Title="What each one keeps from a sale" Kicker="Move the price: a fixed fee weighs most on a small sale, a percentage on a large one.">
+        <div class="calculator">
+            <div class="calculator-controls">
+                <BitSlider Label="Price" Min="1" Max="100" Step="1" ShowValue ValueFormat="€0"
+                           Value="store.Price" ValueChanged="(double price) => store.SetPrice(price)" Class="price" />
+                <BitChoiceGroup Items="saleKinds" Value="@(store.IsSubscription ? SubscriptionKind : OneOffKind)"
+                                ValueChanged="(string? kind) => store.SetSubscription(kind == SubscriptionKind)"
+                                Horizontal NoCircle Variant="BitVariant.Fill" AriaLabel="Kind of sale" Class="sale-kind" />
+            </div>
+            <p class="calculator-summary" aria-live="polite">@Summary</p>
+            <ul class="fees">
+                @foreach (var row in Rows)
+                {
+                    <li class="fee @(row.Fee.IsStore ? "store" : null)">
+                        <div class="fee-name">
+                            <span class="fee-provider">@row.Fee.Name</span>
+                            <span class="fee-basis">@row.Fee.Basis</span>
+                        </div>
+                        <div class="fee-track" aria-hidden="true"><span class="fee-bar" style="width:@Width(row.Amount)"></span></div>
+                        <div class="fee-amounts">
+                            <strong>@Money(row.Amount)</strong>
+                            <span>@Share(row.Amount)</span>
+                            <span class="fee-keep">you keep @Money(Price - row.Amount)</span>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="calculator-note">
+                A sale in euros to a customer in the EU, by a small business that earns under $1M a year. Card fees change with the card, and the stores' with the country and your yearly earnings.
+            </BitText>
+        </div>
+    </BoardBlock>
+
+    <BoardBlock Id="providers" Title="On the web, any provider">
+        <div class="providers">
+            @foreach (var provider in PaymentsFacts.Providers)
+            {
+                <div class="provider @(provider.IsMerchantOfRecord ? "mor" : null)">
+                    <div class="provider-head">
+                        <span class="monogram" aria-hidden="true">@provider.Name[0]</span>
+                        <div class="provider-title">
+                            <BitText Element="h3" Class="provider-name">@provider.Name</BitText>
+                            <span class="provider-kind">@(provider.IsMerchantOfRecord ? "Merchant of record" : "Payment processor")</span>
+                        </div>
+                    </div>
+                    <div class="provider-fee">
+                        <span class="fee-figure">@provider.Fee</span>
+                        <span class="fee-case">@provider.FeeCase</span>
+                    </div>
+                    <ul class="gives">
+                        @foreach (var give in provider.Gives)
+                        {
+                            <li><BitIcon IconName="@BitIconName.CheckMark" Size="BitSize.Small" />@give</li>
+                        }
+                    </ul>
+                    <span class="good-for">Good for <strong>@provider.GoodFor</strong></span>
+                </div>
+            }
+        </div>
+    </BoardBlock>
+
+    <BoardBlock Id="stores" Title="Inside the store apps">
+        <div class="decide">
+            <span class="question"><BitIcon IconName="@BitIconName.Help" />What does the app sell?</span>
+            <svg class="fork" viewBox="0 0 400 56" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M 200 0 C 200 30 100 26 100 56" />
+                <path d="M 200 0 C 200 30 300 26 300 56" />
+            </svg>
+            <div class="answers">
+                <div class="answer physical">
+                    <span class="answer-what">Physical goods or services</span>
+                    <span class="answer-share">0%</span>
+                    <span class="answer-note">Any provider. The stores may not bill them.</span>
+                </div>
+                <div class="answer digital">
+                    <span class="answer-what">Digital goods</span>
+                    <span class="answer-share">10–30%</span>
+                    <span class="answer-note">The store's terms, by where the buyer is</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="regions">
+            <BitChoiceGroup Items="regionItems" Value="@Region.Key" ValueChanged="(string? key) => store.PickRegion(key)"
+                            Horizontal NoCircle Variant="BitVariant.Fill" AriaLabel="Where the buyer is" Class="region-pick" />
+            <span class="region-since" title="@Region.Since">@Region.Since</span>
+        </div>
+
+        <div class="ways">
+            @foreach (var way in Region.Ways)
+            {
+                <div class="way">
+                    <div class="way-head"><span class="way-icon"><BitIcon IconName="@way.IconName" /></span>@way.Name</div>
+                    <div class="terms">
+                        @foreach (var (storeName, term) in Terms(way))
+                        {
+                            <div class="term allowed-@term.Allowed.ToString().ToLowerInvariant()">
+                                <span class="term-store">@storeName</span>
+                                <span class="term-share">@term.Share</span>
+                                <span class="term-note"><BitIcon IconName="@AllowedIcon(term.Allowed)" Size="BitSize.Small" />@term.Note</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </BoardBlock>
+
+    <BoardBlock Id="before" Title="Before you decide">
+        <div class="points">
+            @foreach (var point in PaymentsFacts.Points)
+            {
+                <div class="point">
+                    <span class="point-icon"><BitIcon IconName="@point.IconName" /></span>
+                    <span>@point.Text</span>
+                </div>
+            }
+        </div>
+    </BoardBlock>
+    </ChildContent>
+</BoardFrame>
+

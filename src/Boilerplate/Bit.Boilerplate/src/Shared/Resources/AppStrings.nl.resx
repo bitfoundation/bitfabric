@@ -2248,6 +2248,51 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <value>App afsluiten</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Er werkt nu iets niet</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Gepland onderhoud</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>Het team weet ervan. Je hoeft het niet te melden.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Statuspagina</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Wordt onderzocht</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Oorzaak gevonden</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Oplossing toegepast</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Opgelost</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Begonnen {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Begonnen {0}, bijgewerkt {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>zojuist</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} min geleden</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} uur geleden</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>Bezig tot {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} tot {1}</value>
+  </data>
   <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
     <value>Tweefactorauthenticatie is nodig</value>
   </data>

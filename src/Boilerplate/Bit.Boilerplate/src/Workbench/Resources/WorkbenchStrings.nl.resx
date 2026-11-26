@@ -2611,7 +2611,7 @@
         <value>Deze weergave toevoegen</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Het bord openen</value>
+        <value>De flow openen</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Openen in de werkbank</value>
@@ -5455,5 +5455,242 @@
 | Alle tests | Geslaagd |
 | Terugbetaling na middernacht op Test | Op de juiste dag |
 | Production na de merge | Bijgewerkt |</value>
+    </data>
+    <data name="Boards" xml:space="preserve">
+        <value>Borden</value>
+    </data>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>Wat je agent je laat zien als pagina in plaats van een lang antwoord: een getekende flow, opties naast elkaar, getallen om te proberen.</value>
+    </data>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>Maak een bord van hoe onze app wordt uitgerold.</value>
+    </data>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>Nog geen borden. Vraag je agent om een bord, en het verschijnt hier.</value>
+    </data>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>Op dit adres staat geen bord.</value>
+    </data>
+    <data name="DeployBoardTitle" xml:space="preserve">
+        <value>Zo wordt dit project uitgerold</value>
+    </data>
+    <data name="DeployBoardSummary" xml:space="preserve">
+        <value>Van je wijzigingen tot je gebruikers, getekend voor dit project.</value>
+    </data>
+    <data name="PaymentsBoardTitle" xml:space="preserve">
+        <value>Betalingen ontvangen</value>
+    </data>
+    <data name="PaymentsBoardSummary" xml:space="preserve">
+        <value>Wie wat houdt van een verkoop, op het web en in de stores.</value>
+    </data>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>Borden, geen muren van tekst</value>
+    </data>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>Vraag je agent iets uit te leggen, en hij bouwt hier een bord in plaats van een lang antwoord, met de eigen componenten en het thema van je app.</value>
+    </data>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>Een flow of een architectuur, getekend en in beweging</value>
+    </data>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>Opties naast elkaar, in één oogopslag</value>
+    </data>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>Getallen om te proberen, zoals een rekenmachine</value>
+    </data>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>Licht en donker, op elk scherm</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>De borden openen</value>
+    </data>
+    <data name="DeployLead" xml:space="preserve">
+        <value>Je stuurt je wijzigingen. GitHub test en verpakt ze. Je server draait alleen het resultaat.</value>
+    </data>
+    <data name="DeployNote" xml:space="preserve">
+        <value>Een voorbeeldbord, niet het hele verhaal</value>
+    </data>
+    <data name="DeploySources" xml:space="preserve">
+        <value>Gelezen uit de eigen bestanden van het project</value>
+    </data>
+    <data name="DeployNumberBuilds" xml:space="preserve">
+        <value>builds op je server</value>
+    </data>
+    <data name="DeployNumberDoors" xml:space="preserve">
+        <value>open deuren op je server</value>
+    </data>
+    <data name="DeployNumberDoorsCaddy" xml:space="preserve">
+        <value>open deuren, allebei voor de website</value>
+    </data>
+    <data name="DeployNumberTested" xml:space="preserve">
+        <value>van de updates eerst getest</value>
+    </data>
+    <data name="DeployNumberCopies" xml:space="preserve">
+        <value>kopieën van je app: één om te proberen, één live</value>
+    </data>
+    <data name="DeployPlaceYou" xml:space="preserve">
+        <value>Jij</value>
+    </data>
+    <data name="DeployPlaceGitHub" xml:space="preserve">
+        <value>GitHub</value>
+    </data>
+    <data name="DeployPlaceServer" xml:space="preserve">
+        <value>Je server</value>
+    </data>
+    <data name="DeployPlaceOnline" xml:space="preserve">
+        <value>Online</value>
+    </data>
+    <data name="DeployStopChanges" xml:space="preserve">
+        <value>Je wijzigingen</value>
+    </data>
+    <data name="DeployStopChangesNote" xml:space="preserve">
+        <value>Verstuurd vanaf elke branch</value>
+    </data>
+    <data name="DeployStopTested" xml:space="preserve">
+        <value>Automatisch getest</value>
+    </data>
+    <data name="DeployStopTestedNote" xml:space="preserve">
+        <value>Gebouwd en gecontroleerd op GitHub</value>
+    </data>
+    <data name="DeployStopPackaged" xml:space="preserve">
+        <value>Verpakt</value>
+    </data>
+    <data name="DeployStopPackagedNote" xml:space="preserve">
+        <value>Klaar om te installeren</value>
+    </data>
+    <data name="DeployStopLive" xml:space="preserve">
+        <value>Overgeschakeld</value>
+    </data>
+    <data name="DeployStopLiveNote" xml:space="preserve">
+        <value>Je server schakelt over naar de nieuwe versie</value>
+    </data>
+    <data name="DeployStopSafe" xml:space="preserve">
+        <value>Veilig bereikbaar</value>
+    </data>
+    <data name="DeployStopSafeNote" xml:space="preserve">
+        <value>Niets blijft openstaan</value>
+    </data>
+    <data name="DeployStopSafeCaddyNote" xml:space="preserve">
+        <value>Via een beveiligde verbinding</value>
+    </data>
+    <data name="DeployStopUsers" xml:space="preserve">
+        <value>Je gebruikers</value>
+    </data>
+    <data name="DeployStopUsersNote" xml:space="preserve">
+        <value>Op de nieuwe versie</value>
+    </data>
+    <data name="DeployStopApps" xml:space="preserve">
+        <value>Je apps</value>
+    </data>
+    <data name="DeployStopAppsNote" xml:space="preserve">
+        <value>Klaar om te downloaden</value>
+    </data>
+    <data name="DeployCopiesTitle" xml:space="preserve">
+        <value>Twee kopieën van je app: één om te proberen, één live</value>
+    </data>
+    <data name="DeployTestName" xml:space="preserve">
+        <value>Test</value>
+    </data>
+    <data name="DeployTestFrom" xml:space="preserve">
+        <value>Elke versie die je wilt proberen</value>
+    </data>
+    <data name="DeployTestWhen" xml:space="preserve">
+        <value>Wanneer je erom vraagt</value>
+    </data>
+    <data name="DeployLiveName" xml:space="preserve">
+        <value>Live</value>
+    </data>
+    <data name="DeployLiveFrom" xml:space="preserve">
+        <value>De hoofdversie</value>
+    </data>
+    <data name="DeployLiveWhen" xml:space="preserve">
+        <value>Elke keer dat een wijziging wordt aangenomen</value>
+    </data>
+    <data name="DeployServerTitle" xml:space="preserve">
+        <value>Geen onderbreking: de nieuwe versie start naast de oude</value>
+    </data>
+    <data name="DeployServerKicker" xml:space="preserve">
+        <value>Bezoekers blijven de oude gebruiken tot de nieuwe klaar is.</value>
+    </data>
+    <data name="DeployServerBar" xml:space="preserve">
+        <value>je server · {0} apps, {1} diensten</value>
+    </data>
+    <data name="DeployReplaced" xml:space="preserve">
+        <value>Vervangen</value>
+    </data>
+    <data name="DeployKept" xml:space="preserve">
+        <value>Blijft draaien</value>
+    </data>
+    <data name="DeployStateLive" xml:space="preserve">
+        <value>live</value>
+    </data>
+    <data name="DeployStateStarting" xml:space="preserve">
+        <value>start</value>
+    </data>
+    <data name="DeployStateReady" xml:space="preserve">
+        <value>klaar</value>
+    </data>
+    <data name="DeployBoxWebApp" xml:space="preserve">
+        <value>Web-app</value>
+    </data>
+    <data name="DeployBoxLandingPage" xml:space="preserve">
+        <value>Landingspagina</value>
+    </data>
+    <data name="DeployBoxCache" xml:space="preserve">
+        <value>Cache (Redis)</value>
+    </data>
+    <data name="DeployBoxStorage" xml:space="preserve">
+        <value>Opslag (Redis)</value>
+    </data>
+    <data name="DeployBoxFiles" xml:space="preserve">
+        <value>Bestanden</value>
+    </data>
+    <data name="DeployStepDownload" xml:space="preserve">
+        <value>Downloaden</value>
+    </data>
+    <data name="DeployStepSettings" xml:space="preserve">
+        <value>Instellingen</value>
+    </data>
+    <data name="DeployStepData" xml:space="preserve">
+        <value>Gegevens bijwerken</value>
+    </data>
+    <data name="DeployStepStart" xml:space="preserve">
+        <value>Starten</value>
+    </data>
+    <data name="DeployStepSwitch" xml:space="preserve">
+        <value>Overschakelen</value>
+    </data>
+    <data name="DeployStepCheck" xml:space="preserve">
+        <value>Controleren</value>
+    </data>
+    <data name="DeployStepRefresh" xml:space="preserve">
+        <value>Cache vernieuwen</value>
+    </data>
+    <data name="DeployAppsTitle" xml:space="preserve">
+        <value>De apps voor telefoon en desktop komen uit dezelfde update</value>
+    </data>
+    <data name="DeployAppWindows" xml:space="preserve">
+        <value>Een installatieprogramma dat zichzelf bijwerkt</value>
+    </data>
+    <data name="DeployAppAndroid" xml:space="preserve">
+        <value>Klaar voor Google Play</value>
+    </data>
+    <data name="DeployAppIos" xml:space="preserve">
+        <value>Klaar voor de App Store, zonder Mac</value>
+    </data>
+    <data name="DeployAppOff" xml:space="preserve">
+        <value>Uit tot je het publiceert</value>
+    </data>
+    <data name="DeploySettingsTitle" xml:space="preserve">
+        <value>De {0} instellingen die elke kopie nodig heeft</value>
+    </data>
+    <data name="DeploySettingsKicker" xml:space="preserve">
+        <value>bit pipeline vult ze voor je in</value>
+    </data>
+    <data name="DeploySecret" xml:space="preserve">
+        <value>Geheim</value>
+    </data>
+    <data name="DeploySetting" xml:space="preserve">
+        <value>Instelling</value>
     </data>
 </root>

@@ -1,0 +1,11 @@
+@inherits WorkbenchComponentBase
+
+<dl class="numbers">
+    @foreach (var number in Items)
+    {
+        <div class="number">
+            <dt class="number-value">@number.Value</dt>
+            <dd class="number-label">@number.Label</dd>
+        </div>
+    }
+</dl>

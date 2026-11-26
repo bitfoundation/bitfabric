@@ -2248,6 +2248,51 @@
     <value>退出应用</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>目前有功能无法正常使用</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>计划维护</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>团队已知晓此问题，无需报告。</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>状态页</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>调查中</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>已找到原因</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>已应用修复</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>已解决</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>开始于 {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>开始于 {0}，更新于 {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>刚刚</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} 分钟前</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} 小时前</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>进行中，至 {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} 至 {1}</value>
+  </data>
   <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
     <value>需要双重验证</value>
   </data>

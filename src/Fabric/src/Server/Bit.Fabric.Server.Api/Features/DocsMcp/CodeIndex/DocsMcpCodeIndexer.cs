@@ -2,9 +2,9 @@ namespace Bit.Fabric.Server.Api.Features.DocsMcp.CodeIndex;
 
 /// <summary>
 /// Keeps an index of the newest bit platform code: the newest tag of bitfoundation/bitplatform, a prerelease included, which
-/// every source code tool call of /docs-mcp reads, whatever ?v= it names. A newer tag replaces it once it is indexed, and the
-/// sources and index of the one it replaces are deleted. Runs in the background: startup never waits for it, a tag that can't be
-/// prepared leaves the one served before answering and is tried again later, and without
+/// every source code tool call of /docs-mcp reads. A newer tag replaces it once it is indexed, and the sources and index of
+/// the one it replaces are deleted. Runs in the background: startup never waits for it, a tag that can't be prepared leaves
+/// the one served before answering and is tried again later, and without
 /// <see cref="DocsMcpCodeIndexOptions.DataDirectoryPath"/> it does nothing at all.
 /// <para>
 /// The data directory holds <c>cli/&lt;version&gt;/</c> (the installed command line), <c>sources/&lt;tag&gt;/</c> (the

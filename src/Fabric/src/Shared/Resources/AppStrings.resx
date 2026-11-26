@@ -11448,6 +11448,36 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="MonitoringShowEveryPart" xml:space="preserve">
     <value>Show every part</value>
   </data>
+  <data name="AppHomeDayOneStatusNotice" xml:space="preserve">
+    <value>Tells users when something breaks</value>
+  </data>
+  <data name="AppHomeDayOneStatusNoticeText" xml:space="preserve">
+    <value>When sign-in or payments break, the app tells its users what's wrong and that the team is on it.</value>
+  </data>
+  <data name="AppHomeStatusNoticeLead" xml:space="preserve">
+    <value>The app reads its status page and tells its users, right inside the app, when something is wrong.</value>
+  </data>
+  <data name="AppHomeStatusNoticeWhenTerm" xml:space="preserve">
+    <value>When it asks</value>
+  </data>
+  <data name="AppHomeStatusNoticeWhen" xml:space="preserve">
+    <value>a few seconds after the app opens, when it comes back after a while, and when a request to your server fails; it never keeps asking</value>
+  </data>
+  <data name="AppHomeStatusNoticeShowsTerm" xml:space="preserve">
+    <value>What it shows</value>
+  </data>
+  <data name="AppHomeStatusNoticeShows" xml:space="preserve">
+    <value>what broke, the latest update and how far the fix has come, or planned maintenance a day ahead, with a close button</value>
+  </data>
+  <data name="AppHomeStatusNoticeWhereTerm" xml:space="preserve">
+    <value>Where</value>
+  </data>
+  <data name="AppHomeStatusNoticeWhere" xml:space="preserve">
+    <value>on the web and in the Android, iOS and Windows apps, in each user's language</value>
+  </data>
+  <data name="AppHomeStatusNoticeAfter" xml:space="preserve">
+    <value>It reads your project's status page in bit Fabric, or any Statuspage-compatible one.</value>
+  </data>
   <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
     <value>Two-factor authentication is needed</value>
   </data>

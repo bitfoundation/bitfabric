@@ -2248,6 +2248,51 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Exit the app</value>
   </data>
   <!--#endif -->
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Something isn't working right now</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Planned maintenance</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>The team knows about it. No need to report it.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Status page</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Investigating</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Cause found</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Fix applied</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Resolved</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Started {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Started {0}, updated {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>just now</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} min ago</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} h ago</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>Under way until {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} to {1}</value>
+  </data>
   <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
     <value>Two-factor authentication is needed</value>
   </data>
