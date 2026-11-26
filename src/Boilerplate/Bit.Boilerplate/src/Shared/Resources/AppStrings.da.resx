@@ -2248,6 +2248,51 @@ Når du har nået {0}, vil yderligere log-ind have begrænsede funktioner.</valu
     <value>Afslut appen</value>
   </data>
   <!--#endif -->
+  <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Noget virker ikke lige nu</value>
+  </data>
+  <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Planlagt vedligeholdelse</value>
+  </data>
+  <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>Teamet kender til det. Du behøver ikke at melde det.</value>
+  </data>
+  <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Statusside</value>
+  </data>
+  <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Undersøges</value>
+  </data>
+  <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Årsagen fundet</value>
+  </data>
+  <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Rettelse udført</value>
+  </data>
+  <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Løst</value>
+  </data>
+  <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Startede {0}</value>
+  </data>
+  <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Startede {0}, opdateret {1}</value>
+  </data>
+  <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>lige nu</value>
+  </data>
+  <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>for {0} min. siden</value>
+  </data>
+  <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>for {0} t. siden</value>
+  </data>
+  <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>I gang indtil {0}</value>
+  </data>
+  <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} til {1}</value>
+  </data>
   <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
     <value>Totrinsbekræftelse er påkrævet</value>
   </data>
