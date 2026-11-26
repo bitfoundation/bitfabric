@@ -349,6 +349,12 @@ public class WorkbenchProgressDocumentTests
 
         Assert.AreEqual(plan, Task().Plan);
 
+        const string indented = "    an indented block\n";
+
+        Edit(() => WorkbenchProgressDocument.Apply(Progress, "t", "Claude Code", new(null, null, null, null, null, null, null, null, null, Plan: indented)));
+
+        Assert.AreEqual(indented, Task().Plan, "A plan keeps its Markdown as sent, leading spaces included.");
+
         Edit(() => WorkbenchProgressDocument.Apply(Progress, "t", "Claude Code", new(null, null, null, null, null, null, null, null, null, Plan: new string('a', WorkbenchProgressDocument.MaxPlanLength + 10))));
 
         Assert.AreEqual(WorkbenchProgressDocument.MaxPlanLength, Task().Plan!.Length, "A plan past its limit is cut.");

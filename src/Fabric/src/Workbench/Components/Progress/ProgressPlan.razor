@@ -21,7 +21,7 @@
     }
 
     <div class="plan-preview as-written @(IsLong && isExpanded is false ? "is-collapsed" : null)" dir="@Direction">
-        <BitMarkdownViewer Markdown="@Markdown" Pipeline="pipeline" HeadingLevelOffset="3" HeadingIdPrefix="plan-" Dir="@BitDirection" />
+        <BitMarkdownViewer Markdown="@Markdown" Pipeline="pipeline" HeadingLevelOffset="3" HeadingIdPrefix="plan-" OnParsed="ReadDocument" Dir="@BitDirection" />
     </div>
 
     @if (IsLong)
@@ -60,7 +60,7 @@
             }
 
             <article class="reader-doc as-written">
-                <BitMarkdownViewer Markdown="@Markdown" Pipeline="pipeline" HeadingIdPrefix="plan-full-" OnParsed="ReadOutline" Dir="@BitDirection" />
+                <BitMarkdownViewer Markdown="@Markdown" Pipeline="pipeline" HeadingIdPrefix="plan-full-" OnParsed="ReadDocument" Dir="@BitDirection" />
             </article>
         </div>
     </div>

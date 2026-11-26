@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace Boilerplate.Workbench.Components.Progress;
 
 /// <summary>
@@ -20,7 +18,6 @@ public partial class ProgressPlan
     private int taskCount;
     private int doneCount;
     private string? title;
-    private string? readMarkdown;
     private List<OutlineEntry> outline = [];
 
     [Parameter, EditorRequired] public string Markdown { get; set; } = default!;
@@ -41,22 +38,17 @@ public partial class ProgressPlan
 
     private string TasksDoneText => Localizer[nameof(WorkbenchStrings.ProgressPlanTasksDone), doneCount, taskCount];
 
-    protected override void OnParametersSet()
-    {
-        if (Markdown == readMarkdown)
-            return;
-
-        readMarkdown = Markdown;
-        var tasks = TaskItem().Matches(Markdown);
-        taskCount = tasks.Count;
-        doneCount = tasks.Count(task => task.Groups[1].Value is not " ");
-    }
-
     private void Open() => isOpen = true;
 
-    private void ReadOutline(BitMarkdownDocumentNode document)
+    /// <summary>The plan's title, outline and task list, as the viewer parsed it, so a box in a code example isn't counted.</summary>
+    private void ReadDocument(BitMarkdownDocumentNode document)
     {
-        var headings = BitMarkdownAstHelper.Descendants(document).OfType<BitMarkdownHeadingNode>().ToArray();
+        var nodes = BitMarkdownAstHelper.Descendants(document).ToArray();
+        var tasks = nodes.OfType<BitMarkdownTaskCheckboxNode>().ToArray();
+        var headings = nodes.OfType<BitMarkdownHeadingNode>().ToArray();
+
+        taskCount = tasks.Length;
+        doneCount = tasks.Count(task => task.Checked);
 
         // The plan's own title is its first level-one heading, as it renders: an emoji's shortcode as the emoji.
         title = headings.FirstOrDefault(heading => heading.Level is 1) is { } first ? BitMarkdownInlineHelpers.PlainText(first.Inlines) : null;
@@ -66,7 +58,4 @@ public partial class ProgressPlan
 
     private sealed record OutlineEntry(int Level, string Id, string Text);
 
-    // A task list's item: "- [ ]" or "- [x]", as GitHub ticks them.
-    [GeneratedRegex(@"^\s*[-*+]\s+\[([ xX])\]\s", RegexOptions.Multiline)]
-    private static partial Regex TaskItem();
 }

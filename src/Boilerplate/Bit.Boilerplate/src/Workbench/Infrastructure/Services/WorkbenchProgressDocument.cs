@@ -282,7 +282,7 @@ public static partial class WorkbenchProgressDocument
         if (update.Summary is not null) task.Set("summary", Trim(update.Summary, MaxSummaryLength));
         if (update.Status is { } status && TryParse<WorkbenchProgressStatus>(status, out var parsed)) task.Set("status", parsed.ToString());
         if (update.Report is not null) task.Set("report", Blank(Trim(update.Report, MaxReportLength)));
-        if (update.Plan is not null) task.Set("plan", Blank(Trim(update.Plan, MaxPlanLength)));
+        if (update.Plan is not null) task.Set("plan", string.IsNullOrWhiteSpace(update.Plan) ? null : update.Plan[..Math.Min(update.Plan.Length, MaxPlanLength)]); // Not trimmed: a plan may start with an indented block
         if (update.Language is not null) task.Set("language", Blank(update.Language.Trim()));
 
         if (task.GetArray("steps") is { } steps)
