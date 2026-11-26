@@ -319,7 +319,8 @@ The **Hangfire dashboard** is at `/hangfire`, for a user who holds `AppFeatures.
 [`HangfireDashboardAuthorizationFilter`](/src/Server/Boilerplate.Server.Api/Infrastructure/RequestPipeline/HangfireDashboardAuthorizationFilter.cs)
 checks. A plain browser navigation carries only a cookie: the `access_token` cookie, which `IUserController.UpdateSession`
 writes with the token's own expiry when a browser app served by the server starts or signs in. Open it in the browser
-that runs the app; a hybrid app's web view shares no cookie jar with the system browser.
+that runs the app; a hybrid app's web view shares no cookie jar with the system browser. BevTools' **App** tab has a
+**Hangfire dashboard** button for such a user, which writes the cookie again with a fresh token and opens it.
 
 No check can prove a delivery, so `IDiagnosticController` sends test messages: `SendTestPushNotification` to a device's
 subscription, and `SendTestEmail` and `SendTestSms`, which need `Operations_View` too, to the signed-in user's own address

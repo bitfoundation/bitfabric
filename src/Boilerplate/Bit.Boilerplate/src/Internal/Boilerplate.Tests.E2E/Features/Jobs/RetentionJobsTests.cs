@@ -205,7 +205,7 @@ public partial class RetentionJobsTests
 
     /// <summary>
     /// The dashboard is behind <c>System.Jobs_Manage</c>, which only the global admin role implies, and the bearer
-    /// handler reads the access_token cookie - which is how the app's diagnostics modal opens it in a browser tab.
+    /// handler reads the access_token cookie - which is how BevTools' App tab opens it in a browser tab.
     /// </summary>
     private static async Task<RecurringJobsPage> OpenRecurringJobs(string deployment, CancellationToken cancellationToken)
     {

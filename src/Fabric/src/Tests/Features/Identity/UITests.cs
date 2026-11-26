@@ -63,6 +63,17 @@ public partial class UITests : AppPageTest
         await Expect(AppShellPage.CurrentTenant(Page)).ToBeVisibleAsync();
         await Expect(AppShellPage.NavPanelLink(Page, AppStrings.SignIn)).ToHaveCountAsync(0);
 
+        await AppShellPage.NavPanelGroup(Page, AppStrings.Management).ClickAsync();
+
+        foreach (var title in new[] { AppStrings.UserGroups, AppStrings.Users, AppStrings.OAuthClients, AppStrings.SystemPromptsTitle, AppStrings.ManageAllTenants })
+        {
+            await Expect(AppShellPage.NavPanelItem(Page, title)).ToBeVisibleAsync();
+        }
+
+        // bit Fabric's health is seen in its own monitoring, like any other app's (bitfabric-internal/specs/monitoring.md),
+        // so the app has no page of its own for it.
+        await Expect(AppShellPage.NavPanel(Page).Locator("a[href$='/operations']")).ToHaveCountAsync(0);
+
         await AppShellPage.SignOut(Page, TestData.DefaultTestFullName);
 
         await AppShellPage.ExpectAVisitorsShell(Page);

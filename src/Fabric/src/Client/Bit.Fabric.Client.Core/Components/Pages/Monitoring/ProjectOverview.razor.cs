@@ -5,11 +5,10 @@ using Bit.Fabric.Shared.Features.Monitoring.Dtos;
 namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 
 /// <summary>
-/// A project's parts as its last report shows them, laid out like bit Fabric's own Operations page
-/// (bitfabric-internal/specs/monitoring.md, the project page's cards take after it): a ring of the parts by status, the
-/// counts that filter them, the parts that need attention, a search, and a card per part with how long it took against
-/// its limit and its last results. Everything a card says about a part comes from the app's report, in the app's own
-/// words; a part that only misses its settings is a setup finding, not a failure.
+/// A project's parts as its last report shows them (bitfabric-internal/specs/monitoring.md, A project's operations
+/// page): a ring of the parts by status, the counts that filter them, the parts that need attention, a search, and a card
+/// per part with how long it took against its limit and its last results. Everything a card says about a part comes from
+/// the app's report, in the app's own words; a part that only misses its settings is a setup finding, not a failure.
 /// </summary>
 public partial class ProjectOverview
 {

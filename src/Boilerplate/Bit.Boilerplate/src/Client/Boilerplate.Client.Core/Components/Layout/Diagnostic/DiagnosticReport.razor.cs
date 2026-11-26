@@ -60,6 +60,7 @@ public partial class DiagnosticReport
     private void BuildContext()
     {
         context = telemetryContext.ToDictionary();
+        context.Remove(nameof(ITelemetryContext.PageUrl));
 
         if (InPrerenderSession)
         {
@@ -143,8 +144,6 @@ public partial class DiagnosticReport
             runtime.AppendLine($"IsDynamicCodeCompiled: {RuntimeFeature.IsDynamicCodeCompiled}");
             runtime.AppendLine($"IsDynamicCodeSupported: {RuntimeFeature.IsDynamicCodeSupported}");
             runtime.AppendLine($"Is Aot: {AppPlatform.IsAot}");
-            runtime.AppendLine($"Env version: {Environment.Version}");
-            runtime.AppendLine($"64 bit process: {Environment.Is64BitProcess}");
             runtime.AppendLine($"Privilaged process: {Environment.IsPrivilegedProcess}");
 
             if (GC.GetConfigurationVariables().TryGetValue("ServerGC", out var serverGC))

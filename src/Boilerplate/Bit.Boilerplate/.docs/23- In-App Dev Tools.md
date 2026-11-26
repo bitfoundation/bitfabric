@@ -89,6 +89,11 @@ The two are meant to read almost identically, so the page shows one at a time: t
 ### 🔄 Update app
 - Checks for an update and installs it now, through `IAppUpdateService.ForceUpdate()`
 
+### 🗓️ Hangfire dashboard
+- For a user who holds `AppFeatures.System.Jobs_Manage`, the feature the dashboard asks for
+- Only where the browser itself runs the app and the app's server serves it, Blazor WebAssembly or Auto: the dashboard signs the user in by the `access_token` cookie, which has to land on the app's own origin. Blazor Server, a hybrid app and a statically hosted web app don't show it
+- Refreshes the token, has `IUserController.UpdateSession` write the cookie, then opens `/hangfire` in a new tab
+
 ---
 
 ## Adding a tab of your own

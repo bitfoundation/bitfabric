@@ -166,9 +166,6 @@ public static partial class PageUrls
     [Description("Review and revoke the external applications authorized over OAuth. Requires sign-in.")]
     public const string OAuthClients = "/oauth-clients";
 
-    [Description("Run this deployment: the status of every dependency it relies on, and its background jobs. Requires sign-in.")]
-    public const string Operations = "/operations";
-
     [Description("Projects, Trials and Licenses over time, every team's together, as totals only. Requires sign-in.")]
     public const string Growth = "/growth";
 

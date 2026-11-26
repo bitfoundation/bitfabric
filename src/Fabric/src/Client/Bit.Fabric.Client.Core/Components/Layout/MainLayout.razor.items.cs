@@ -90,8 +90,6 @@ public partial class MainLayout
 
         var manageOAuthClients = await authorizationService.IsAuthorized(authUser!, AppFeatures.System.OAuthClients_Manage);
 
-        var viewOperations = await authorizationService.IsAuthorized(authUser!, AppFeatures.System.Operations_View);
-
         var viewGrowth = await authorizationService.IsAuthorized(authUser!, AppFeatures.System.Growth_View);
 
         var manageAiPrompt = await authorizationService.IsAuthorized(authUser!, AppFeatures.Management.SystemPrompts_Write);
@@ -105,7 +103,7 @@ public partial class MainLayout
         var manageTenantsGlobally = await authorizationService.IsAuthorized(authUser!, AppFeatures.Management.Tenants_Manage_Global);
 
         // Every flag in this condition has to be able to contribute a child item below, or the group renders empty.
-        if (manageRoles || manageUsers || manageOAuthClients || viewOperations || viewGrowth
+        if (manageRoles || manageUsers || manageOAuthClients || viewGrowth
             || manageAiPrompt
             || manageTenantsGlobally
             )
@@ -146,16 +144,6 @@ public partial class MainLayout
                     Text = localizer[nameof(AppStrings.OAuthClients)],
                     IconName = BitIconName.PlugConnected,
                     Url = PageUrls.OAuthClients,
-                });
-            }
-
-            if (viewOperations)
-            {
-                managementItem.ChildItems.Add(new()
-                {
-                    Text = localizer[nameof(AppStrings.Operations)],
-                    IconName = BitIconName.ServerProcesses,
-                    Url = PageUrls.Operations,
                 });
             }
 
