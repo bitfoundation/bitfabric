@@ -162,7 +162,7 @@ public partial class DevMcpDiagnosticTools
         var ai = settings.AI;
         return new
         {
-            Chat = new { Model = ai?.OpenAI?.ChatModel, EndpointConfigured = ai?.OpenAI?.ChatEndpoint is not null, KeyConfigured = string.IsNullOrWhiteSpace(ai?.OpenAI?.ChatApiKey) is false },
+            Chat = new { Provider = ai?.ChatUsesAnthropic is true ? "Anthropic" : "OpenAI", Model = ai?.ChatModel, EndpointConfigured = (ai?.ChatUsesAnthropic is true ? ai.Anthropic?.ChatEndpoint : ai?.OpenAI?.ChatEndpoint) is not null, KeyConfigured = ai?.ChatConfigured is true },
             Embedding = new { Model = ai?.OpenAI?.EmbeddingModel, EndpointConfigured = ai?.OpenAI?.EmbeddingEndpoint is not null || string.IsNullOrWhiteSpace(ai?.HuggingFace?.EmbeddingEndpoint) is false, KeyConfigured = string.IsNullOrWhiteSpace(ai?.OpenAI?.EmbeddingApiKey) is false || string.IsNullOrWhiteSpace(ai?.HuggingFace?.EmbeddingApiKey) is false },
             SpeechToText = new { Model = ai?.OpenAI?.SpeechToTextModel, EndpointConfigured = ai?.OpenAI?.SpeechToTextEndpoint is not null, KeyConfigured = string.IsNullOrWhiteSpace(ai?.OpenAI?.SpeechToTextApiKey) is false },
             TextToSpeech = new { Model = ai?.OpenAI?.TextToSpeechModel, EndpointConfigured = ai?.OpenAI?.TextToSpeechEndpoint is not null, KeyConfigured = string.IsNullOrWhiteSpace(ai?.OpenAI?.TextToSpeechApiKey) is false, Voice = ai?.OpenAI?.TextToSpeechVoice },

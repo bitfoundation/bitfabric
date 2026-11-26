@@ -30,8 +30,11 @@ public class EvaluationMcpServer
     /// <summary>The longest each argument may be: a business and its needs take a few lines.</summary>
     public const int MaxArgumentLength = 1000;
 
-    /// <summary>The longest answer of each round, and how many tool calls the agent may make, so one evaluation can't run away.</summary>
-    private const int MaxOutputTokens = 3000;
+    /// <summary>
+    /// The longest answer of each round, its thinking included, and how many tool calls the agent may make, so one evaluation
+    /// can't run away.
+    /// </summary>
+    private const int MaxOutputTokens = 8000;
     private const int MaxToolCalls = 6;
 
     private readonly PartitionedRateLimiter<HttpContext> everyone = PartitionedRateLimiter.Create<HttpContext, string>(_ =>
@@ -151,7 +154,7 @@ public class EvaluationMcpServer
         }, new AIFunctionFactoryOptions { Name = EvaluationPrompt.RecordToolName, Description = EvaluationPrompt.RecordToolDescription });
 
         var agent = services.GetRequiredService<IChatClient>().AsAIAgent(
-            instructions: $"{EvaluationPrompt.Instructions}\n{EvaluationPrompt.McpRecording}\n\n{EvaluationPrompt.Sources(site, license)}",
+            instructions: $"{EvaluationPrompt.Instructions}\n{EvaluationPrompt.McpRecording}",
             name: "EvaluationAgent",
             description: "Weighs bit Fabric against a visitor's business and needs",
             tools: [.. Limited([.. DocsMcpChatbotTools.AIFunctions(services), record], MaxToolCalls)]);
@@ -162,7 +165,15 @@ public class EvaluationMcpServer
             {(question is null ? "" : $"Check first: {question}")}
             """;
 
-        var response = await agent.RunAsync(message, options: new ChatClientAgentRunOptions(new ChatOptions { MaxOutputTokens = MaxOutputTokens }), cancellationToken: cancellationToken);
+        // The site and the license first, as the chat sends them, so both read them from the provider's prompt cache; the agent
+        // thinks as the chat does (AI:ChatOptions).
+        ChatMessage[] messages = [new(ChatRole.System, EvaluationPrompt.Sources(site, license)), new(ChatRole.User, message)];
+
+        var options = new ChatOptions();
+        services.GetRequiredService<IConfiguration>().GetSection("AI:ChatOptions").Bind(options);
+        options.MaxOutputTokens = MaxOutputTokens;
+
+        var response = await agent.RunAsync(messages, options: new ChatClientAgentRunOptions(options), cancellationToken: cancellationToken);
 
         return response.Text;
     }

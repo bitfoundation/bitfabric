@@ -156,6 +156,7 @@
         <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="11.0.1" />
         <PackageVersion Include="Microsoft.Extensions.AI" Version="11.0.1" />
         <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="11.0.1" />
+        <PackageVersion Include="Anthropic" Version="13.14.0" />
         <PackageVersion Include="AspNet.Security.OAuth.Apple" Version="11.0.0" />
         <PackageVersion Include="AspNet.Security.OAuth.GitHub" Version="11.0.0" />
         <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="11.0.1" />

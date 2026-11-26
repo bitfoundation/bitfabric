@@ -194,7 +194,25 @@ public partial class AppIdentityOptions : IdentityOptions
 public partial class AIOptions
 {
     public OpenAIOptions? OpenAI { get; set; }
+    public AnthropicOptions? Anthropic { get; set; }
     public HuggingFaceOptions? HuggingFace { get; set; }
+
+    /// <summary>Whether the chat answers with Claude: AI:Anthropic:ChatApiKey is set, so AI:OpenAI's chat settings aren't used.</summary>
+    public bool ChatUsesAnthropic => string.IsNullOrWhiteSpace(Anthropic?.ChatApiKey) is false;
+
+    /// <summary>The chat's model, whichever provider answers.</summary>
+    public string? ChatModel => ChatUsesAnthropic ? Anthropic!.ChatModel : OpenAI?.ChatModel;
+
+    /// <summary>Whether the chat has a model to answer with.</summary>
+    public bool ChatConfigured => ChatUsesAnthropic || string.IsNullOrWhiteSpace(OpenAI?.ChatApiKey) is false;
+}
+
+/// <summary>The chat on Claude, through Anthropic's own Messages api (See AI:Anthropic's comment in Server.Api's appsettings.json).</summary>
+public class AnthropicOptions
+{
+    public string? ChatModel { get; set; }
+    public Uri? ChatEndpoint { get; set; }
+    public string? ChatApiKey { get; set; }
 }
 
 public class OpenAIOptions

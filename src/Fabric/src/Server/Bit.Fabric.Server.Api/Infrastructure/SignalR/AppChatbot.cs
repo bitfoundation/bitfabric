@@ -234,7 +234,7 @@ public partial class AppChatbot
         {
             foreach (var usage in update.Contents.OfType<UsageContent>())
             {
-                ChatbotMetrics.RecordChatUsage(usage.Details, supportAgent?.Name, appSettings.AI?.OpenAI?.ChatModel);
+                ChatbotMetrics.RecordChatUsage(usage.Details, supportAgent?.Name, appSettings.AI?.ChatModel);
             }
 
             yield return update;

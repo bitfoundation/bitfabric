@@ -4,6 +4,7 @@ using Bit.Fabric.Server.Api.Features.Evaluation;
 using Bit.Fabric.Server.Api.Features.Evaluation.Models;
 using Microsoft.Extensions.AI;
 using ModelContextProtocol.Client;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace Bit.Fabric.Tests.Features.Evaluation;
 
@@ -108,6 +109,9 @@ public partial class EvaluationTests
             services.Replace(ServiceDescriptor.Singleton<IChatClient>(new ChatClientBuilder(model).UseFunctionInvocation().Build()));
             services.AddHttpClient(SiteContent.HttpClientName).AddHttpMessageHandler(() => new LicenseHandler());
         }, configureTestConfiguration: configuration => configuration["WebAppRender:PrerenderEnabled"] = "true").Start(TestContext.CancellationToken);
+
+        // The distributed cache outlives a run: a test that read the real license an hour ago would otherwise hand it to this one.
+        await server.ApiApp.Services.GetRequiredService<IFusionCache>().RemoveAsync($"SiteContent:{SiteContent.LicenseUrl}", token: TestContext.CancellationToken);
 
         return server;
     }

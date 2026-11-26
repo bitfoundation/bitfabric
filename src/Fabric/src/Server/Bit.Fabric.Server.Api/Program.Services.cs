@@ -497,16 +497,33 @@ public static partial class Program
         services.AddHttpClient("AI").RemoveAllResilienceHandlers();
 #pragma warning restore EXTEXP0001
 
-        if (string.IsNullOrWhiteSpace(appSettings.AI?.OpenAI?.ChatApiKey) is false)
+        if (appSettings.AI?.ChatConfigured is true)
         {
             // https://github.com/dotnet/extensions/tree/main/src/Libraries/Microsoft.Extensions.AI.OpenAI#microsoftextensionsaiopenai
 #pragma warning disable OPENAI001 // The Responses api's client is still marked experimental.
             var chatClient = services.AddChatClient(sp =>
             {
-                var transport = new HttpClientPipelineTransport(sp.GetRequiredService<IHttpClientFactory>().CreateClient("AI"));
+                var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("AI");
+
+                // Claude through Anthropic's own api, which thinks at AI:ChatOptions:Reasoning:Effort and caches the prompt
+                // where AnthropicPromptCache marks it: its OpenAI compatible endpoint does neither (See AI:Anthropic's comment).
+                if (appSettings.AI.ChatUsesAnthropic)
+                {
+                    var anthropic = appSettings.AI.Anthropic!;
+                    var claude = new Anthropic.AnthropicClient
+                    {
+                        ApiKey = anthropic.ChatApiKey,
+                        BaseUrl = (anthropic.ChatEndpoint ?? new Uri("https://api.anthropic.com")).ToString().TrimEnd('/'),
+                        HttpClient = httpClient
+                    };
+
+                    return new AnthropicPromptCache(claude.AsIChatClient(anthropic.ChatModel, AnthropicPromptCache.DefaultMaxOutputTokens), anthropic.ChatModel!);
+                }
+
+                var transport = new HttpClientPipelineTransport(httpClient);
 
                 // See AI:OpenAI:ChatUseResponsesApi comment in Server.Api's appsettings.json
-                return appSettings.AI.OpenAI.ChatUseResponsesApi
+                return appSettings.AI.OpenAI!.ChatUseResponsesApi
                     ? new OpenAI.Responses.ResponsesClient(credential: new(appSettings.AI.OpenAI.ChatApiKey), options: new()
                     {
                         Endpoint = appSettings.AI.OpenAI.ChatEndpoint,
@@ -519,7 +536,7 @@ public static partial class Program
                     }).AsIChatClient();
             });
 
-            if (appSettings.AI.OpenAI.ChatUseResponsesApi)
+            if (appSettings.AI.ChatUsesAnthropic is false && appSettings.AI.OpenAI!.ChatUseResponsesApi)
             {
                 // Nothing is kept on the provider's side, as with /v1/chat/completions: the app sends the conversation every time
                 // and stores it nowhere but the user's device
@@ -1033,7 +1050,7 @@ public static partial class Program
         void AddAICheck<THealthCheck>(string name, bool configured, string settings) where THealthCheck : IHealthCheck
             => AddCachedCheckIfConfigured(name, HealthCheckCategories.AI, configured, settings, sp => ActivatorUtilities.CreateInstance<THealthCheck>(sp), cacheDuration: TimeSpan.FromMinutes(5), timeout: TimeSpan.FromSeconds(20));
 
-        AddAICheck<AIChatAgentHealthCheck>("aiChat", string.IsNullOrWhiteSpace(ai?.OpenAI?.ChatApiKey) is false, "AI:OpenAI:ChatApiKey");
+        AddAICheck<AIChatAgentHealthCheck>("aiChat", ai?.ChatConfigured is true, "AI:Anthropic:ChatApiKey or AI:OpenAI:ChatApiKey");
         AddAICheck<AIEmbeddingHealthCheck>("aiEmbedding", string.IsNullOrWhiteSpace(ai?.OpenAI?.EmbeddingApiKey) is false || string.IsNullOrWhiteSpace(ai?.HuggingFace?.EmbeddingEndpoint) is false, "AI:OpenAI:EmbeddingApiKey or AI:HuggingFace:EmbeddingEndpoint");
         AddAICheck<SpeechToTextHealthCheck>("aiSpeechToText", string.IsNullOrWhiteSpace(ai?.OpenAI?.SpeechToTextApiKey) is false, "AI:OpenAI:SpeechToTextApiKey");
         AddAICheck<TextToSpeechHealthCheck>("aiTextToSpeech", string.IsNullOrWhiteSpace(ai?.OpenAI?.TextToSpeechApiKey) is false, "AI:OpenAI:TextToSpeechApiKey");
@@ -1046,7 +1063,14 @@ public static partial class Program
             healthChecksBuilder.TalksTo(name, host.Equals("api.openai.com", StringComparison.OrdinalIgnoreCase) ? "OpenAI" : "OpenAI-compatible API", host, model);
         }
 
-        TalksToOpenAI("aiChat", ai?.OpenAI?.ChatEndpoint, ai?.OpenAI?.ChatModel);
+        if (ai?.ChatUsesAnthropic is true)
+        {
+            healthChecksBuilder.TalksTo("aiChat", "Anthropic", HealthCheckDependency.HostOf(ai.Anthropic!.ChatEndpoint) ?? "api.anthropic.com", ai.Anthropic.ChatModel);
+        }
+        else
+        {
+            TalksToOpenAI("aiChat", ai?.OpenAI?.ChatEndpoint, ai?.OpenAI?.ChatModel);
+        }
         if (string.IsNullOrWhiteSpace(ai?.OpenAI?.EmbeddingApiKey) is false)
         {
             TalksToOpenAI("aiEmbedding", ai?.OpenAI?.EmbeddingEndpoint, ai?.OpenAI?.EmbeddingModel);
