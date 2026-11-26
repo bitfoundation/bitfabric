@@ -38,6 +38,6 @@ public partial class ProjectSwitcher
 
     /// <summary>"Production, Test", in the language's own way of listing; nothing yet for a project with none.</summary>
     private string EnvironmentsOf(ProjectDto project) => project.Monitorings.Count is 0
-        ? Localizer["No environment yet"]
+        ? Localizer[nameof(AppStrings.MonitoringNoEnvironmentYet)]
         : MonitoringWords.Parts(Localizer, [.. project.Monitorings.Select(environment => environment.Environment ?? "")]);
 }

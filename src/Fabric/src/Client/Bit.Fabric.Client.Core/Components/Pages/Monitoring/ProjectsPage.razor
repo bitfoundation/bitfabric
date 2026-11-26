@@ -59,7 +59,7 @@
                 @* The tabs' headers only; the page draws the open one below, in the address so it can be shared. *@
                 <BitPivot HeaderOnly SelectedKey="@SelectedTab" SelectedKeyChanged="@((string? key) => OpenTab(key))" Class="tabs">
                     <BitPivotItem Key="@ProjectsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringProjects)]" IconName="@BitIconName.Health" />
-                    <BitPivotItem Key="@LicensesTab" HeaderText="@Localizer["Licenses"]" IconName="@BitIconName.Certificate" />
+                    <BitPivotItem Key="@LicensesTab" HeaderText="@Localizer[nameof(AppStrings.Licenses)]" IconName="@BitIconName.Certificate" />
                 </BitPivot>
 
                 @if (SelectedTab == LicensesTab)
@@ -118,8 +118,8 @@
                                             <article @key="project.Id" class="project-stub" aria-labelledby="@($"stub-{project.Id:N}")">
                                                 <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="@($"stub-{project.Id:N}")">@project.Name</BitText>
                                                 <ProjectLicenseTag License="project.License" />
-                                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["bit Fabric doesn't watch its app yet."]</BitText>
-                                                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Add" Href="@($"{PageUrls.AddProject}?project={project.Id}")">@Localizer["Add an environment"]</BitButton>
+                                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringAppNotWatchedYet)]</BitText>
+                                                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Add" Href="@($"{PageUrls.AddProject}?project={project.Id}")">@Localizer[nameof(AppStrings.MonitoringAddAnEnvironment)]</BitButton>
                                             </article>
                                         }
                                     }

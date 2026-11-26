@@ -63,11 +63,11 @@ public partial class LicensePage
 
         if (Guid.TryParse(Id, out var id) is false || id == Guid.Empty || string.IsNullOrWhiteSpace(ProjectName))
         {
-            missing = Localizer["This page opens from the link bit prints in a project's folder. Run any bit command there, such as bit license, for the link."];
+            missing = Localizer[nameof(AppStrings.LicenseOpensFromTheLink)];
         }
         else if (string.IsNullOrWhiteSpace(Commit))
         {
-            missing = Localizer["A license names the project's first git commit, and this link has none. Commit the project to git, then run bit license in its folder for a new link."];
+            missing = Localizer[nameof(AppStrings.LicenseLinkHasNoFirstCommit)];
         }
 
         redirectToSignIn = missing is null && (await AuthenticationStateTask).User.IsAuthenticated() is false;

@@ -4,8 +4,8 @@
    Licenses tab): each of the team's projects and its license, the ones that need something first. *@
 <div class="licenses-tab">
     <div class="toolbar">
-        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["Each project's license. bit prints the link that renews one, free, a month before it ends."]</BitText>
-        <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Certificate" Href="@PageUrls.Licenses">@Localizer["Every license of your teams"]</BitButton>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringEachProjectsLicense)]</BitText>
+        <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Certificate" Href="@PageUrls.Licenses">@Localizer[nameof(AppStrings.MonitoringEveryLicenseOfYourTeams)]</BitButton>
     </div>
 
     <ul class="rows">
@@ -19,11 +19,11 @@
                 <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="row-meta">
                     @if (project.BitProjectId is { } bitId)
                     {
-                        <span>@Localizer["Project id"] <bdi class="mono">@bitId.ToString()[..8]</bdi></span>
+                        <span>@Localizer[nameof(AppStrings.LicenseProjectId)] <bdi class="mono">@bitId.ToString()[..8]</bdi></span>
                     }
                     @if (project.License.FirstCommit is { Length: >= 7 } commit)
                     {
-                        <span>@Dot@Localizer["First commit"] <bdi class="mono">@commit[..7]</bdi></span>
+                        <span>@Dot@Localizer[nameof(AppStrings.LicenseFirstCommit)] <bdi class="mono">@commit[..7]</bdi></span>
                     }
                     <span>@Dot@EnvironmentsOf(project)</span>
                 </BitText>

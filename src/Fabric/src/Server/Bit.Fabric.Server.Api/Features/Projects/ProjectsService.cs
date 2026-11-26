@@ -119,7 +119,7 @@ public partial class ProjectsService(AppDbContext dbContext,
         var hasAccepted = await dbContext.TenantMemberships.AnyAsync(membership => membership.TenantId == tenantId && membership.UserId == userId && membership.AcceptedOn != null, cancellationToken);
 
         if (hasAccepted is false)
-            throw new BadRequestException(localizer["Only someone who has joined the team can work on its projects."]);
+            throw new BadRequestException(localizer[nameof(AppStrings.ProjectsOnlyTeamMembers)]);
 
         await dbContext.ProjectMembers.AddAsync(new() { ProjectId = projectId, TenantId = tenantId, UserId = userId, AddedOn = timeProvider.GetUtcNow() }, cancellationToken);
     }

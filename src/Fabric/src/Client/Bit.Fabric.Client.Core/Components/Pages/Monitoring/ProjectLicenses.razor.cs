@@ -25,6 +25,6 @@ public partial class ProjectLicenses
         .ThenBy(project => project.Name, StringComparer.CurrentCultureIgnoreCase);
 
     private string EnvironmentsOf(ProjectDto project) => project.Monitorings.Count is 0
-        ? Localizer["No environment yet"]
+        ? Localizer[nameof(AppStrings.MonitoringNoEnvironmentYet)]
         : MonitoringWords.Parts(Localizer, [.. project.Monitorings.Select(environment => environment.Environment ?? "")]);
 }

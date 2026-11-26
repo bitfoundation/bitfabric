@@ -3,7 +3,7 @@
 @attribute [Authorize]
 @inherits AppPageBase
 
-<AppPageData Title="@Localizer["Licenses"]" PageTitle="@Localizer["Your teams' licenses"]" />
+<AppPageData Title="@Localizer[nameof(AppStrings.Licenses)]" PageTitle="@Localizer[nameof(AppStrings.LicensesYourTeams)]" />
 
 <section class="licenses-page">
     <div class="back">
@@ -11,8 +11,8 @@
     </div>
 
     <header class="head">
-        <BitText Typography="BitTypography.H5" Element="h1">@Localizer["Your teams' licenses"]</BitText>
-        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["Every license your teams hold, newest first. bit keeps each in its project's bit.json."]</BitText>
+        <BitText Typography="BitTypography.H5" Element="h1">@Localizer[nameof(AppStrings.LicensesYourTeams)]</BitText>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.LicensesEveryLicenseHelp)]</BitText>
     </header>
 
     @if (isLoading)
@@ -20,7 +20,7 @@
         <div class="list" aria-busy="true">
             @for (var i = 0; i < 3; i++)
             {
-                <BitShimmer Height="6rem" Radius="0.75rem" Label="@(i is 0 ? Localizer["Loading your licenses"] : null)" />
+                <BitShimmer Height="6rem" Radius="0.75rem" Label="@(i is 0 ? Localizer[nameof(AppStrings.LicensesLoading)] : null)" />
             }
         </div>
     }
@@ -28,8 +28,8 @@
     {
         <section class="empty" aria-labelledby="empty-title">
             <span class="empty-mark" aria-hidden="true"><BitIcon IconName="@BitIconName.Certificate" Size="BitSize.Large" /></span>
-            <BitText Typography="BitTypography.H6" Element="h2" Id="empty-title">@Localizer["No license yet"]</BitText>
-            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["Run bit license in a project's folder for the link that gets it one, free."]</BitText>
+            <BitText Typography="BitTypography.H6" Element="h2" Id="empty-title">@Localizer[nameof(AppStrings.LicensesNoneYet)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.LicensesHowToGetOne)]</BitText>
         </section>
     }
     else
@@ -50,18 +50,18 @@
                                 <ProjectLicenseTag License="@AsProjectLicense(license)" />
                             </div>
                             <dl class="facts">
-                                <div><dt>@Localizer["Issued"]</dt><dd>@Day(license.IssuedOn)</dd></div>
-                                <div><dt>@Localizer["Until"]</dt><dd>@Day(license.ExpiresOn)</dd></div>
+                                <div><dt>@Localizer[nameof(AppStrings.LicensesIssued)]</dt><dd>@Day(license.IssuedOn)</dd></div>
+                                <div><dt>@Localizer[nameof(AppStrings.LicensesUntil)]</dt><dd>@Day(license.ExpiresOn)</dd></div>
                                 @if (license.IssuedBy is { } by)
                                 {
-                                    <div><dt>@Localizer["Got by"]</dt><dd>@by</dd></div>
+                                    <div><dt>@Localizer[nameof(AppStrings.LicensesGotBy)]</dt><dd>@by</dd></div>
                                 }
-                                <div><dt>@Localizer["First commit"]</dt><dd class="mono" dir="ltr">@license.FirstCommit?[..Math.Min(12, license.FirstCommit.Length)]</dd></div>
+                                <div><dt>@Localizer[nameof(AppStrings.LicenseFirstCommit)]</dt><dd class="mono" dir="ltr">@license.FirstCommit?[..Math.Min(12, license.FirstCommit.Length)]</dd></div>
                             </dl>
                             <div class="actions">
                                 <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@(copied == license.Id ? BitIconName.CheckMark : BitIconName.Copy)"
                                            OnClick="WrapHandled(() => CopyPrompt(license))">
-                                    @(copied == license.Id ? Localizer["Copied"] : Localizer["Copy the prompt for your AI"])
+                                    @(copied == license.Id ? Localizer[nameof(AppStrings.Copied)] : Localizer[nameof(AppStrings.MonitoringScanCopyPrompt)])
                                 </BitButton>
                             </div>
                         </li>

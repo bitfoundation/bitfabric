@@ -183,7 +183,7 @@ public partial class MonitoringsController : AppControllerBase, IMonitoringsCont
 
         if (existing is null && request.ProjectId is { } joining
             && await DbContext.Monitorings.AnyAsync(monitoring => monitoring.ProjectId == joining && monitoring.Environment!.ToLower() == environment.ToLower(), cancellationToken))
-            throw new BadRequestException(Localizer["This project already has an environment named {0}.", environment]);
+            throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringEnvironmentTaken), environment]);
 
         if (existing is null && await DbContext.Monitorings.CountAsync(cancellationToken) >= MaxProjectsPerTenant)
             throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringProjectsLimit), MaxProjectsPerTenant]);

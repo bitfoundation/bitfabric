@@ -14,14 +14,14 @@ public partial class ProjectLicenseTag
 
     private (BitColor Color, string Icon, string Text, string? Help) Look => (License.Kind, License.State) switch
     {
-        (ProjectLicenseKind.Licensed, LicenseState.EndingSoon) => (BitColor.Warning, BitIconName.Certificate, Localizer["License ends {0}", Day(License.Until)], Localizer["Renew it, free, from the link bit prints in the project's folder."]),
-        (ProjectLicenseKind.Licensed, LicenseState.InGrace) => (BitColor.SevereWarning, BitIconName.Certificate, Localizer["License ended {0}", Day(License.Until)], Localizer["bit keeps working for two weeks after. Renew it, free, from the link bit prints."]),
-        (ProjectLicenseKind.Licensed, _) => (BitColor.Success, BitIconName.Certificate, Localizer["Licensed until {0}", Day(License.Until)], null),
-        (ProjectLicenseKind.LicenseEnded, _) => (BitColor.Error, BitIconName.Certificate, Localizer["License ended {0}", Day(License.Until)], Localizer["Renew it, free, from the link bit prints in the project's folder."]),
-        (ProjectLicenseKind.Trial, _) => (BitColor.Info, BitIconName.Clock, Localizer["Trial until {0}", Day(License.Until)], null),
-        (ProjectLicenseKind.TrialEnded, _) => (BitColor.Warning, BitIconName.Clock, Localizer["Trial ended {0}", Day(License.Until)], Localizer["Get its free license from the link bit prints in the project's folder."]),
-        (ProjectLicenseKind.None, _) => (BitColor.SecondaryForeground, BitIconName.Certificate, Localizer["No license"], Localizer["Run bit license in the project's folder for the link that gets it one, free."]),
-        _ => (BitColor.SecondaryForeground, BitIconName.Unknown, Localizer["License not known yet"], Localizer["bit Fabric learns it once the app is on the newest bit Boilerplate, or once your team gets its license."])
+        (ProjectLicenseKind.Licensed, LicenseState.EndingSoon) => (BitColor.Warning, BitIconName.Certificate, Localizer[nameof(AppStrings.LicenseEnds), Day(License.Until)], Localizer[nameof(AppStrings.LicenseRenewFromTheLink)]),
+        (ProjectLicenseKind.Licensed, LicenseState.InGrace) => (BitColor.SevereWarning, BitIconName.Certificate, Localizer[nameof(AppStrings.LicenseEnded), Day(License.Until)], Localizer[nameof(AppStrings.LicenseInGraceHelp)]),
+        (ProjectLicenseKind.Licensed, _) => (BitColor.Success, BitIconName.Certificate, Localizer[nameof(AppStrings.LicensedUntil), Day(License.Until)], null),
+        (ProjectLicenseKind.LicenseEnded, _) => (BitColor.Error, BitIconName.Certificate, Localizer[nameof(AppStrings.LicenseEnded), Day(License.Until)], Localizer[nameof(AppStrings.LicenseRenewFromTheLink)]),
+        (ProjectLicenseKind.Trial, _) => (BitColor.Info, BitIconName.Clock, Localizer[nameof(AppStrings.LicenseTrialUntil), Day(License.Until)], null),
+        (ProjectLicenseKind.TrialEnded, _) => (BitColor.Warning, BitIconName.Clock, Localizer[nameof(AppStrings.LicenseTrialEnded), Day(License.Until)], Localizer[nameof(AppStrings.LicenseGetFromTheLink)]),
+        (ProjectLicenseKind.None, _) => (BitColor.SecondaryForeground, BitIconName.Certificate, Localizer[nameof(AppStrings.LicenseNone)], Localizer[nameof(AppStrings.LicenseRunBitLicense)]),
+        _ => (BitColor.SecondaryForeground, BitIconName.Unknown, Localizer[nameof(AppStrings.LicenseNotKnownYet)], Localizer[nameof(AppStrings.LicenseNotKnownYetHelp)])
     };
 
     private string Day(DateTimeOffset? at) => at is { } value ? TimeZoneService.ToLocalTime(value).ToString("d", CultureInfo.CurrentUICulture) : "";

@@ -185,7 +185,7 @@ public partial class ProjectIncidentsController : AppControllerBase, IProjectInc
         var environment = projectSettings.Environment!.Trim();
 
         if (await DbContext.Monitorings.AnyAsync(other => other.ProjectId == monitoring.ProjectId && other.Id != monitoring.Id && other.Environment!.ToLower() == environment.ToLower(), cancellationToken))
-            throw new BadRequestException(Localizer["This project already has an environment named {0}.", environment]);
+            throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringEnvironmentTaken), environment]);
 
         await DbContext.Monitorings
             .Where(project => project.Id == projectSettings.Id)

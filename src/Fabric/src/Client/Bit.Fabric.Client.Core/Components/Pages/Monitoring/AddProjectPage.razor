@@ -5,8 +5,8 @@
 @attribute [Authorize(Policy = AuthPolicies.TENANT_SELECTED)]
 @inherits AppPageBase
 
-<AppPageData Title="@(joining is null ? Localizer[nameof(AppStrings.MonitoringAddAProject)] : Localizer["Add an environment to {0}", joining.Name ?? ""])"
-             PageTitle="@(joining is null ? Localizer[nameof(AppStrings.MonitoringAddAProject)] : Localizer["Add an environment to {0}", joining.Name ?? ""])" />
+<AppPageData Title="@(joining is null ? Localizer[nameof(AppStrings.MonitoringAddAProject)] : Localizer[nameof(AppStrings.MonitoringAddAnEnvironmentTo), joining.Name ?? ""])"
+             PageTitle="@(joining is null ? Localizer[nameof(AppStrings.MonitoringAddAProject)] : Localizer[nameof(AppStrings.MonitoringAddAnEnvironmentTo), joining.Name ?? ""])" />
 
 <div class="add-page">
     <div class="back">
@@ -79,8 +79,8 @@
                                     <BitTextField @bind-Value="name" Label="@Localizer[nameof(AppStrings.MonitoringProjectName)]" MaxLength="100" Class="name" Disabled="isWaitingForApproval" />
                                 }
                                 @* Production, Test, Staging or a name of the team's own; a project has one of each. *@
-                                <BitTextField @bind-Value="environment" Label="@Localizer["Environment"]" MaxLength="50" Class="name" Disabled="isWaitingForApproval" />
-                                <div class="environment-choices" role="group" aria-label="@Localizer["Environment"]">
+                                <BitTextField @bind-Value="environment" Label="@Localizer[nameof(AppStrings.MonitoringEnvironment)]" MaxLength="50" Class="name" Disabled="isWaitingForApproval" />
+                                <div class="environment-choices" role="group" aria-label="@Localizer[nameof(AppStrings.MonitoringEnvironment)]">
                                     @foreach (var choice in environmentChoices)
                                     {
                                         <BitTag @key="choice" Size="BitSize.Small" Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="BitColor.Primary" Text="@choice"

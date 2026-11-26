@@ -6,7 +6,7 @@
 <BitDropMenu @bind-IsOpen="isOpen" Transparent Responsive LazyRender NoChevron
              Width="22rem" MaxWidth="calc(100vw - 1rem)"
              OnOpen="WrapHandled(Load)"
-             Title="@Localizer["Switch project"]"
+             Title="@Localizer[nameof(AppStrings.MonitoringSwitchProject)]"
              Classes="@(new() { Root = "project-switcher", Callout = "project-switcher-callout" })">
     <Template>
         <BitText Typography="BitTypography.H5" Element="span" Class="switcher-name">@Current.Name</BitText>
@@ -14,12 +14,12 @@
     </Template>
     <Body>
         <BitCard FullSize Class="switcher-card">
-            <BitText Typography="BitTypography.Subtitle2" Element="h2" Class="switcher-title">@Localizer["Switch project"]</BitText>
-            <BitSearchBox @bind-Value="search" Immediate DebounceTime="100" Placeholder="@Localizer["Find a project"]"
-                          AriaLabel="@Localizer["Find a project"]" Class="switcher-search" />
+            <BitText Typography="BitTypography.Subtitle2" Element="h2" Class="switcher-title">@Localizer[nameof(AppStrings.MonitoringSwitchProject)]</BitText>
+            <BitSearchBox @bind-Value="search" Immediate DebounceTime="100" Placeholder="@Localizer[nameof(AppStrings.MonitoringFindAProject)]"
+                          AriaLabel="@Localizer[nameof(AppStrings.MonitoringFindAProject)]" Class="switcher-search" />
             @if (projects is null)
             {
-                <BitShimmer Height="8rem" Radius="0.5rem" Label="@Localizer["Loading your projects"]" />
+                <BitShimmer Height="8rem" Radius="0.5rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingYourProjects)]" />
             }
             else if (Matches().ToArray() is { Length: > 0 } matches)
             {
@@ -47,9 +47,9 @@
             }
             else
             {
-                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="switcher-none">@Localizer["No project matches."]</BitText>
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="switcher-none">@Localizer[nameof(AppStrings.MonitoringNoProjectMatchesShort)]</BitText>
             }
-            <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.ViewAll" Href="@PageUrls.Projects">@Localizer["All projects"]</BitButton>
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.ViewAll" Href="@PageUrls.Projects">@Localizer[nameof(AppStrings.MonitoringAllProjects)]</BitButton>
         </BitCard>
     </Body>
 </BitDropMenu>

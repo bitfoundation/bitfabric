@@ -33,7 +33,7 @@ public partial class LicenseController : AppControllerBase, ILicenseController
 
         // A project licensed before it ever had a trial, through the license page and bit license, gets none afterwards.
         if (await DbContext.IssuedLicenses.IgnoreQueryFilters().AnyAsync(license => license.Project!.BitProjectId == request.Project, cancellationToken))
-            throw new ConflictException(Localizer["This project already has its license."]);
+            throw new ConflictException(Localizer[nameof(AppStrings.LicenseProjectAlreadyLicensed)]);
 
         var now = LicenseSigner.ToSeconds(TimeProvider.GetUtcNow());
         var expires = now.AddDays(AppSettings.Licensing.TrialDays);
@@ -79,13 +79,13 @@ public partial class LicenseController : AppControllerBase, ILicenseController
         var code = request.Code?.Trim();
 
         if (string.IsNullOrEmpty(code) is false && OneTimeCode().IsMatch(code) is false)
-            throw new BadRequestException(Localizer["This link's code isn't one bit CLI makes. Run the bit command again for a new link."]);
+            throw new BadRequestException(Localizer[nameof(AppStrings.LicenseCodeNotFromBit)]);
 
         var userId = User.GetUserId();
 
         // Only a team the account has joined, whichever team it is signed into now.
         var team = await TeamsOf(userId).FirstOrDefaultAsync(team => team.Id == request.TeamId, cancellationToken)
-            ?? throw new BadRequestException(Localizer["Pick one of your teams to hold the license."]);
+            ?? throw new BadRequestException(Localizer[nameof(AppStrings.LicensePickATeam)]);
 
         var now = LicenseSigner.ToSeconds(TimeProvider.GetUtcNow());
 
@@ -244,12 +244,12 @@ public partial class LicenseController : AppControllerBase, ILicenseController
     private (string Name, string Commit) Validate(Guid project, string? name, string? commit)
     {
         if (project == Guid.Empty)
-            throw new BadRequestException(Localizer["The project's id is missing. Run the bit command in the project's folder again for a new link."]);
+            throw new BadRequestException(Localizer[nameof(AppStrings.LicenseProjectIdMissing)]);
 
         commit = commit?.Trim().ToLowerInvariant();
 
         if (commit is null || CommitSha().IsMatch(commit) is false)
-            throw new BadRequestException(Localizer["The project's first commit is missing. Commit the project to git, then run the bit command in its folder again."]);
+            throw new BadRequestException(Localizer[nameof(AppStrings.LicenseFirstCommitMissing)]);
 
         return (name!.Trim(), commit);
     }

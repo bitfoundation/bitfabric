@@ -81,7 +81,7 @@
         </header>
 
         @* Each environment of the project, with its health: Production, Test, Staging or one the team named. *@
-        <nav class="environments" aria-label="@Localizer["Environments"]">
+        <nav class="environments" aria-label="@Localizer[nameof(AppStrings.MonitoringEnvironments)]">
             @foreach (var environment in parent.Monitorings)
             {
                 var isSelected = environment.Id == project?.Id;
@@ -91,7 +91,7 @@
                     <span>@environment.Environment</span>
                 </BitButton>
             }
-            <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.Add" Href="@($"{PageUrls.AddProject}?project={parent.Id}")">@Localizer["Add an environment"]</BitButton>
+            <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.Add" Href="@($"{PageUrls.AddProject}?project={parent.Id}")">@Localizer[nameof(AppStrings.MonitoringAddAnEnvironment)]</BitButton>
         </nav>
 
         @if (project is null)
@@ -101,9 +101,9 @@
                 @* A project the team licensed on the license page, whose app bit Fabric doesn't watch yet. *@
                 <section class="no-environment" aria-labelledby="no-environment-title">
                     <span class="no-environment-mark" aria-hidden="true"><BitIcon IconName="@BitIconName.Health" Size="BitSize.Large" /></span>
-                    <BitText Typography="BitTypography.H6" Element="h2" Id="no-environment-title">@Localizer["Watch its app"]</BitText>
-                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["Add the address of its Production or Test deployment, and approve bit Fabric in the app."]</BitText>
-                    <BitButton IconName="@BitIconName.Add" Href="@($"{PageUrls.AddProject}?project={parent.Id}")">@Localizer["Add an environment"]</BitButton>
+                    <BitText Typography="BitTypography.H6" Element="h2" Id="no-environment-title">@Localizer[nameof(AppStrings.MonitoringWatchItsApp)]</BitText>
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringWatchItsAppHelp)]</BitText>
+                    <BitButton IconName="@BitIconName.Add" Href="@($"{PageUrls.AddProject}?project={parent.Id}")">@Localizer[nameof(AppStrings.MonitoringAddAnEnvironment)]</BitButton>
                 </section>
             }
             else
