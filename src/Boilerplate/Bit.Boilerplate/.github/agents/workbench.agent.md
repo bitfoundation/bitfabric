@@ -12,6 +12,10 @@ the API, the database or a session. A page designed here is built from the compo
 what the user approves is how the real page will look, and a page the app already has is shown as the app's own
 component, so what the user reviews is what ships.
 
+A page that shows the user something, rather than a page of the app, such as options compared side by side, an
+architecture or a report, is a board, in the Workbench's Boards section: the **boards** skill
+(`.github/agents/boards.agent.md`) builds it.
+
 ## 1. Run it
 
 - The Workbench is the user's desk for the whole project, not a tool of one chat: one runs at a time, on the address in

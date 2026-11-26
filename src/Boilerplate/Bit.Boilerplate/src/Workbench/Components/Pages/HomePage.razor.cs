@@ -1,8 +1,8 @@
 namespace Boilerplate.Workbench.Components.Pages;
 
 /// <summary>
-/// The Workbench's landing page: why it exists, the agents' long tasks, how to use it, the catalog of pages with their review
-/// status, and the flows.
+/// The Workbench's landing page: why it exists, the agents' long tasks, the boards they build, how to use it, the catalog
+/// of pages with their review status, and the flows.
 /// </summary>
 public partial class HomePage
 {
@@ -31,6 +31,15 @@ public partial class HomePage
         (BitIconName.Microphone, nameof(WorkbenchStrings.HomeWhyVoiceTitle), nameof(WorkbenchStrings.HomeWhyVoiceText)),
         (BitIconName.TaskList, nameof(WorkbenchStrings.HomeWhyProgressTitle), nameof(WorkbenchStrings.HomeWhyProgressText)),
         (BitIconName.Repair, nameof(WorkbenchStrings.HomeWhyCustomizeTitle), nameof(WorkbenchStrings.HomeWhyCustomizeText))
+    ];
+
+    // What an agent can show as a board instead of telling it in the chat.
+    private static readonly (string IconName, string TextKey)[] boardPoints =
+    [
+        (BitIconName.Flow, nameof(WorkbenchStrings.HomeBoardsPointDiagram)),
+        (BitIconName.Split, nameof(WorkbenchStrings.HomeBoardsPointCompare)),
+        (BitIconName.Calculator, nameof(WorkbenchStrings.HomeBoardsPointTry)),
+        (BitIconName.Devices3, nameof(WorkbenchStrings.HomeBoardsPointAnywhere))
     ];
 
     private static readonly (string TitleKey, string TextKey)[] steps =

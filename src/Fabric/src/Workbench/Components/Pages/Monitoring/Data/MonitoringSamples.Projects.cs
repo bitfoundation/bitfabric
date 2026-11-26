@@ -10,6 +10,8 @@ public static partial class MonitoringSamples
     private static SampleProject Brightcart(DateTimeOffset now)
     {
         var project = NewProject(now, "brightcart", "Brightcart", "brightcart.shop", "America/New_York", 140, hasIcon: true, templateVersion: "10.7.0", baseMs: 240);
+        // Its pages come from Cloudflare's cache, so visitors wait far less than its server takes.
+        project.VisitorBaseMs = 46;
         project.Locations = ["wnam", "enam", "weur"];
         AddParts(project, now, [.. usualParts, "paymentGateway"]);
 
@@ -221,6 +223,7 @@ public static partial class MonitoringSamples
     private static SampleProject YourApp(DateTimeOffset now)
     {
         var project = NewProject(now, "yourapp", "Your app", "yourapp.com", "Europe/Berlin", 400, hasIcon: true, baseMs: 160);
+        project.VisitorBaseMs = 38;
         project.Locations = ["enam", "weur", "oc"];
         AddParts(project, now, [.. usualParts, "reCaptcha", "websites", "aiRealtime"]);
         AddNotConfigured(project, "googleSignIn");

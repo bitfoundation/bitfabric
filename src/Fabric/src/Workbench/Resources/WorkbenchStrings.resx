@@ -1894,7 +1894,7 @@
         <value>Add this view</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Open the board</value>
+        <value>Open the flow</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Open in the Workbench</value>
@@ -4161,15 +4161,6 @@
     <data name="ProgressTasks" xml:space="preserve">
         <value>Tasks</value>
     </data>
-    <data name="ProgressSamplesTitle" xml:space="preserve">
-        <value>These are samples</value>
-    </data>
-    <data name="ProgressSamplesText" xml:space="preserve">
-        <value>Your agents' tasks show here as soon as one starts. Until then, try these: answer a question, tick off a step or write to the agent.</value>
-    </data>
-    <data name="ProgressSamplesVisitorText" xml:space="preserve">
-        <value>The tasks of the agents working on this Workbench show only on the computer it runs on. These samples show what you would see there.</value>
-    </data>
     <data name="ProgressGroupNeedsYou" xml:space="preserve">
         <value>Needs you</value>
     </data>
@@ -4214,9 +4205,6 @@
     </data>
     <data name="ProgressUpdated" xml:space="preserve">
         <value>Updated {0}</value>
-    </data>
-    <data name="ProgressSample" xml:space="preserve">
-        <value>Sample</value>
     </data>
     <data name="ProgressYourTurn" xml:space="preserve">
         <value>Your turn</value>
@@ -4326,15 +4314,6 @@
     <data name="ProgressSent" xml:space="preserve">
         <value>Sent to {0}.</value>
     </data>
-    <data name="ProgressSampleSentTitle" xml:space="preserve">
-        <value>This is a sample</value>
-    </data>
-    <data name="ProgressSampleSent" xml:space="preserve">
-        <value>On a real task, {0} gets this at once and goes on.</value>
-    </data>
-    <data name="ProgressSampleSecret" xml:space="preserve">
-        <value>On a real task, it goes where the question says, and {0} goes on without seeing it.</value>
-    </data>
     <data name="ProgressSecretToGitHubEnvironment" xml:space="preserve">
         <value>It goes straight into GitHub as {0}, a secret of the {1} environment. {2} never sees it.</value>
     </data>
@@ -4443,189 +4422,6 @@
     <data name="TimeHoursAgo" xml:space="preserve">
         <value>{0} h ago</value>
     </data>
-    <data name="SampleDeployTitle" xml:space="preserve">
-        <value>Deploy to Test and Production</value>
-    </data>
-    <data name="SampleDeploySummary" xml:space="preserve">
-        <value>Setting up the Test and Production environments on your own server, with the app on your domain.</value>
-    </data>
-    <data name="SampleDeployStepServices" xml:space="preserve">
-        <value>Find the outside services the app needs, and their keys</value>
-    </data>
-    <data name="SampleDeployStepEnvironments" xml:space="preserve">
-        <value>Create the Test and Production environments on GitHub</value>
-    </data>
-    <data name="SampleDeployStepServer" xml:space="preserve">
-        <value>Get a Linux server and share its address</value>
-    </data>
-    <data name="SampleDeployStepToken" xml:space="preserve">
-        <value>Create a Cloudflare API token</value>
-    </data>
-    <data name="SampleDeployStepTokenDetail" xml:space="preserve">
-        <value>In the Cloudflare dashboard, open My Profile, then API Tokens, and create one that can edit DNS and Cloudflare Tunnel. Then paste it below.</value>
-    </data>
-    <data name="SampleDeployStepRunner" xml:space="preserve">
-        <value>Install Docker and the GitHub Actions runner on the server</value>
-    </data>
-    <data name="SampleDeployStepTunnel" xml:space="preserve">
-        <value>Serve the app on your domain through a Cloudflare Tunnel</value>
-    </data>
-    <data name="SampleDeployStepFirst" xml:space="preserve">
-        <value>Deploy to Test, then to Production</value>
-    </data>
-    <data name="SampleDeployAskEmail" xml:space="preserve">
-        <value>Which service should send the app's emails?</value>
-    </data>
-    <data name="SampleDeployAskEmailDetail" xml:space="preserve">
-        <value>The app emails sign-in codes and password resets. You can change this later.</value>
-    </data>
-    <data name="SampleDeployAskEmailOption1" xml:space="preserve">
-        <value>A free account at an email service</value>
-    </data>
-    <data name="SampleDeployAskEmailOption2" xml:space="preserve">
-        <value>Our company's mail server</value>
-    </data>
-    <data name="SampleDeployAskEmailOption3" xml:space="preserve">
-        <value>None for now: show emails in the logs</value>
-    </data>
-    <data name="SampleDeployAskSsh" xml:space="preserve">
-        <value>Close the server's SSH port once the tunnel works?</value>
-    </data>
-    <data name="SampleDeployAskSshDetail" xml:space="preserve">
-        <value>You will still reach the server through the tunnel and through your provider's web console.</value>
-    </data>
-    <data name="SampleDeployAskToken" xml:space="preserve">
-        <value>Paste the Cloudflare token</value>
-    </data>
-    <data name="SampleDeployNoteSecrets" xml:space="preserve">
-        <value>Keys and passwords never go into a chat. You paste them here, and each goes straight where it belongs without me seeing it.</value>
-    </data>
-    <data name="SampleDeployNoteOneServer" xml:space="preserve">
-        <value>One server for both environments, to keep the cost down.</value>
-    </data>
-    <data name="SampleDeployLinkCloudflare" xml:space="preserve">
-        <value>Cloudflare dashboard</value>
-    </data>
-    <data name="SampleDeployFeed1" xml:space="preserve">
-        <value>The app uses 6 outside services; 3 of them need keys from your own accounts.</value>
-    </data>
-    <data name="SampleDeployFeed2" xml:space="preserve">
-        <value>The server is ready at 203.0.113.24.</value>
-    </data>
-    <data name="SampleDeployFeed3" xml:space="preserve">
-        <value>Signed in to the server with the key you added, and turned password sign-in off.</value>
-    </data>
-    <data name="SampleDeployFeed4" xml:space="preserve">
-        <value>Waiting for the Cloudflare token to set up the tunnel.</value>
-    </data>
-    <data name="SampleFeatureTitle" xml:space="preserve">
-        <value>New feature: loyalty points</value>
-    </data>
-    <data name="SampleFeatureSummary" xml:space="preserve">
-        <value>Customers earn points on every order and spend them at checkout. Building it now that you approved the design.</value>
-    </data>
-    <data name="SampleFeatureStepRequirements" xml:space="preserve">
-        <value>Settle the requirements and write them into the spec</value>
-    </data>
-    <data name="SampleFeatureStepPlan" xml:space="preserve">
-        <value>Plan the work in 6 tasks</value>
-    </data>
-    <data name="SampleFeatureStepDesign" xml:space="preserve">
-        <value>Approve the design in the Workbench</value>
-    </data>
-    <data name="SampleFeatureStepLedger" xml:space="preserve">
-        <value>Build the points ledger and its API</value>
-    </data>
-    <data name="SampleFeatureStepCheckout" xml:space="preserve">
-        <value>Spend points at checkout</value>
-    </data>
-    <data name="SampleFeatureStepTests" xml:space="preserve">
-        <value>Tests on phones and desktops</value>
-    </data>
-    <data name="SampleStepTryOnTest" xml:space="preserve">
-        <value>Try it on the Test environment</value>
-    </data>
-    <data name="SampleFeatureAskWorth" xml:space="preserve">
-        <value>How much is a point worth at checkout?</value>
-    </data>
-    <data name="SampleFeatureAskWorthDetail" xml:space="preserve">
-        <value>It goes into the settings, so you can change it later.</value>
-    </data>
-    <data name="SampleFeatureAskWorthPlaceholder" xml:space="preserve">
-        <value>For example: 100 points = $1</value>
-    </data>
-    <data name="SampleFeatureAskOrders" xml:space="preserve">
-        <value>Which orders earn points?</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption1" xml:space="preserve">
-        <value>Online orders</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption2" xml:space="preserve">
-        <value>In-store orders</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption3" xml:space="preserve">
-        <value>Orders paid with a gift card</value>
-    </data>
-    <data name="SampleFeatureNoteExpiry" xml:space="preserve">
-        <value>Points expire 12 months after they are earned.</value>
-    </data>
-    <data name="SampleFeatureNoteSpec" xml:space="preserve">
-        <value>Everything decided so far is in the feature's spec, with the questions still open.</value>
-    </data>
-    <data name="SampleFeatureLinkDesign" xml:space="preserve">
-        <value>Approved design</value>
-    </data>
-    <data name="SampleFeatureFeed1" xml:space="preserve">
-        <value>Wrote the requirements into the spec; 3 questions are left for you.</value>
-    </data>
-    <data name="SampleFeatureFeed2" xml:space="preserve">
-        <value>Looks good. Make the points badge a bit smaller.</value>
-    </data>
-    <data name="SampleFeatureFeed3" xml:space="preserve">
-        <value>Made the badge smaller and started building.</value>
-    </data>
-    <data name="SampleFeatureFeed4" xml:space="preserve">
-        <value>The ledger and its database migration are in. Writing its API now.</value>
-    </data>
-    <data name="SampleFixTitle" xml:space="preserve">
-        <value>Fix: refunds missing from the daily sales report</value>
-    </data>
-    <data name="SampleFixSummary" xml:space="preserve">
-        <value>Refunds made after midnight were counted on the wrong day. Fixed, tried on Test and merged.</value>
-    </data>
-    <data name="SampleFixStepLogs" xml:space="preserve">
-        <value>Find the cause in Production's logs</value>
-    </data>
-    <data name="SampleFixStepTest" xml:space="preserve">
-        <value>Write a test that fails without the fix</value>
-    </data>
-    <data name="SampleFixStepFix" xml:space="preserve">
-        <value>Count refunds in the store's own time zone</value>
-    </data>
-    <data name="SampleFixStepMerge" xml:space="preserve">
-        <value>Merge it, which updates Production</value>
-    </data>
-    <data name="SampleFixAskMerge" xml:space="preserve">
-        <value>Merge it into main? That updates Production.</value>
-    </data>
-    <data name="SampleFixNoteDone" xml:space="preserve">
-        <value>Production runs the fix. The test keeps the bug from coming back.</value>
-    </data>
-    <data name="SampleFixLinkPullRequest" xml:space="preserve">
-        <value>Pull request</value>
-    </data>
-    <data name="SampleFixLinkTest" xml:space="preserve">
-        <value>Test environment</value>
-    </data>
-    <data name="SampleFixFeed1" xml:space="preserve">
-        <value>Found it: the report used the server's time zone, not the store's.</value>
-    </data>
-    <data name="SampleFixFeed2" xml:space="preserve">
-        <value>On Test now. Try a refund after midnight.</value>
-    </data>
-    <data name="SampleFixFeed3" xml:space="preserve">
-        <value>Merged. Production is updated.</value>
-    </data>
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>Follow long tasks, answer in a click</value>
     </data>
@@ -4633,7 +4429,7 @@
         <value>A deployment or a new feature takes many steps, and some only you can take. Every agent chat shows here what it did, what is left and what it needs from you, so nothing gets lost in a long chat. Keys and passwords you paste there go straight where they belong, never through the chat.</value>
     </data>
     <data name="TourProgressText" xml:space="preserve">
-        <value>A deployment or a new feature takes many steps, and some only you can take. Every agent chat shows here what it did, what is left and what it needs from you. Answer with a click, a few words or your voice, and it goes on at once. Try it on the samples.</value>
+        <value>A deployment or a new feature takes many steps, and some only you can take. Every agent chat shows here what it did, what is left and what it needs from you. Answer with a click, a few words or your voice, and it goes on at once.</value>
     </data>
     <data name="HomeFactAgent" xml:space="preserve">
         <value>Your agents' progress and questions in one place</value>
@@ -4667,17 +4463,6 @@
     </data>
     <data name="ProgressReport" xml:space="preserve">
         <value>Report</value>
-    </data>
-    <data name="SampleFixReport" xml:space="preserve">
-        <value>**Cause:** the report grouped sales by the server's day, which runs on UTC, so a refund made after midnight in the store counted on the day before.
-
-**Fix:** refunds are counted in the store's own time zone, and a new test makes a refund at 00:30 store time and checks the day it lands on.
-
-| Check | Result |
-| --- | --- |
-| All tests | Passed |
-| A refund after midnight on Test | On the right day |
-| Production after the merge | Updated |</value>
     </data>
     <data name="PosNoDataYet" xml:space="preserve">
         <value>Nothing here yet</value>
@@ -4783,5 +4568,50 @@
     </data>
     <data name="HomeCardCustomizeText" xml:space="preserve">
         <value>Ask your agent to add the tools, devices and states your team needs.</value>
+    </data>
+    <data name="ProgressEmptyText" xml:space="preserve">
+        <value>No task yet. When an agent works on something long, like a deployment or a new feature, its steps and its questions for you show up here.</value>
+    </data>
+    <data name="ProgressVisitorText" xml:space="preserve">
+        <value>The agents' tasks show only on the computer this Workbench runs on.</value>
+    </data>
+    <data name="ProgressNoTask" xml:space="preserve">
+        <value>No task yet</value>
+    </data>
+    <data name="Boards" xml:space="preserve">
+        <value>Boards</value>
+    </data>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>What your agent shows you as a page instead of a long answer: a flow drawn, options side by side, numbers to try.</value>
+    </data>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>Make a board of how bit Fabric's monitoring works.</value>
+    </data>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>No boards yet. Ask your agent for one, and it shows up here.</value>
+    </data>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>There's no board at this address.</value>
+    </data>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>Boards, not walls of text</value>
+    </data>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>Ask your agent to explain something, and it builds a board here instead of a long answer, with the app's own components and theme.</value>
+    </data>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>A flow or an architecture, drawn and moving</value>
+    </data>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>Options side by side, at a glance</value>
+    </data>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>Numbers you can try, like a calculator</value>
+    </data>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>Light and dark, on any screen</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>Open the boards</value>
     </data>
 </root>

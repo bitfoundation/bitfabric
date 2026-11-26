@@ -1,0 +1,24 @@
+@inherits WorkbenchComponentBase
+
+@* Folded away: a board shows, and its sources are there for whoever wants to check it. *@
+<BitAccordion Title="@Title" Description="@Items.Length.ToString(CultureInfo.InvariantCulture)" IconName="@BitIconName.Library" NoBorder Class="sources">
+    <ul class="source-list">
+        @foreach (var source in Items)
+        {
+            <li class="source">
+                @if (source.Url is not null)
+                {
+                    <BitLink Href="@source.Url" Target="_blank" Rel="BitLinkRels.NoOpener" Class="source-title">@source.Title</BitLink>
+                }
+                else
+                {
+                    <code class="source-file">@source.Title</code>
+                }
+                @if (source.ReadOn is not null)
+                {
+                    <span class="source-date">@source.ReadOn</span>
+                }
+            </li>
+        }
+    </ul>
+</BitAccordion>

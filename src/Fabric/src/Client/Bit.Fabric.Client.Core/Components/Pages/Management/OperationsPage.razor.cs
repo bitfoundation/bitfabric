@@ -1,3 +1,4 @@
+using Bit.Fabric.Shared.Features.Monitoring;
 using System.Net;
 using System.Text;
 using Bit.Fabric.Shared.Features.Diagnostic;
@@ -10,6 +11,9 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Management;
 /// </summary>
 public partial class OperationsPage
 {
+    /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
+    private string Dot => MonitoringWords.Dot(Localizer);
+
     private const int MaxProbesPerCheck = 24;
 
     [AutoInject] private HttpClient httpClient = default!;

@@ -14,6 +14,7 @@ public static class MonitoringHttp
         services.AddScoped<ProjectIcons>();
         services.AddScoped<MonitoringOAuthClient>();
         services.AddScoped<ProjectProber>();
+        services.AddSingleton<ProjectLandings>();
         services.AddScoped<ProjectTexts>();
         services.AddScoped<ProjectIncidentTracker>();
         services.AddScoped<ProjectAlerter>();
@@ -93,9 +94,14 @@ public static class MonitoringHttp
             // A redirect would arrive somewhere the guard never saw; the app's own address must answer.
             handler.AllowAutoRedirect = false;
             handler.ConnectCallback = (context, cancellationToken) => PublicAddressGuard.Connect(context, allowLocalAddresses, cancellationToken);
-            // Each round is a fresh look, not a reused connection's: DNS and TLS count, as for a visitor.
-            handler.PooledConnectionLifetime = TimeSpan.FromMinutes(2);
+            // A round reuses the connection the one before it left open, so it times the app's server and the way to it,
+            // not DNS, TCP and TLS every minute: an idle connection outlives the minute between rounds, and the handler is
+            // kept for good below. Every connection still ends after 15 minutes, so a changed DNS record is followed, and
+            // the guard sees each new connection's address.
+            handler.PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5);
+            handler.PooledConnectionLifetime = TimeSpan.FromMinutes(15);
         })
+        .SetHandlerLifetime(Timeout.InfiniteTimeSpan)
         // No retries and no circuit breaker: a round measures one attempt, as a visitor makes it, and one client name
         // serves every customer's app, so a breaker opened by one app that doesn't answer would fail all the others.
         .RemoveAllResilienceHandlers();
@@ -104,12 +110,15 @@ public static class MonitoringHttp
         return services;
     }
 
+    /// <summary>How many redirects within the app a request follows: the template's <c>/</c> to <c>/en-US/</c> takes one.</summary>
+    public const int MaxRedirects = 3;
+
     /// <summary>
     /// A GET that follows redirects within the same origin, as a visitor's browser would: an app made from the template
     /// sends <c>/</c> to <c>/en-US/</c>. One to another origin isn't followed, since the guard approved only this one,
     /// and the response that asks for it is returned instead.
     /// </summary>
-    public static async Task<HttpResponseMessage> GetFollowingSameOriginRedirects(this HttpClient http, string url, CancellationToken cancellationToken, int maxRedirects = 3)
+    public static async Task<HttpResponseMessage> GetFollowingSameOriginRedirects(this HttpClient http, string url, CancellationToken cancellationToken, int maxRedirects = MaxRedirects)
     {
         var uri = new Uri(url);
 
@@ -117,16 +126,22 @@ public static class MonitoringHttp
         {
             var response = await http.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-            if ((int)response.StatusCode is < 300 or >= 400 || response.Headers.Location is null || redirects == maxRedirects)
-                return response;
-
-            var next = new Uri(uri, response.Headers.Location);
-
-            if (string.Equals(next.GetLeftPart(UriPartial.Authority), uri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase) is false)
+            if (redirects == maxRedirects || SameOriginRedirect(uri, response) is not { } next)
                 return response;
 
             response.Dispose();
             uri = next;
         }
+    }
+
+    /// <summary>Where <paramref name="response"/> to <paramref name="asked"/> sends the client within the same origin, if it does.</summary>
+    public static Uri? SameOriginRedirect(Uri asked, HttpResponseMessage response)
+    {
+        if ((int)response.StatusCode is < 300 or >= 400 || response.Headers.Location is null)
+            return null;
+
+        var next = new Uri(asked, response.Headers.Location);
+
+        return string.Equals(next.GetLeftPart(UriPartial.Authority), asked.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase) ? next : null;
     }
 }

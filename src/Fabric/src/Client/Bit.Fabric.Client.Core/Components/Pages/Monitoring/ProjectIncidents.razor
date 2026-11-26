@@ -27,10 +27,10 @@
                         <span class="incident-title">
                             <BitText Typography="BitTypography.Subtitle2" Element="span">@incident.Title</BitText>
                             <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Element="span">
-                                @LocalTime(incident.StartedAt, "g") · @Duration((incident.EndedAt ?? DateTimeOffset.UtcNow) - incident.StartedAt)
+                                @LocalTime(incident.StartedAt, "g")@Dot@Duration((incident.EndedAt ?? DateTimeOffset.UtcNow) - incident.StartedAt)
                                 @if (incident.CheckTitles.Length > 0)
                                 {
-                                    <text> · @string.Join(", ", incident.CheckTitles)</text>
+                                    <text>@Dot@string.Join(", ", incident.CheckTitles)</text>
                                 }
                             </BitText>
                         </span>
@@ -119,10 +119,10 @@
                                             <li>
                                                 <BitIcon IconName="@ChannelIcon(alert.Channel)" Size="BitSize.Small" Color="@(alert.Succeeded ? BitColor.Success : BitColor.Error)" />
                                                 <BitText Typography="BitTypography.Caption1" Element="span">
-                                                    @LocalTime(alert.SentAt, "t") · @ChannelText(alert.Channel) · <span class="ltr">@alert.Target</span>
+                                                    @LocalTime(alert.SentAt, "t")@Dot@ChannelText(alert.Channel)@Dot<span class="ltr app-latin-digits">@alert.Target</span>
                                                     @if (ProblemText(alert) is { } problem)
                                                     {
-                                                        <text> · @problem</text>
+                                                        <text>@Dot@problem</text>
                                                     }
                                                 </BitText>
                                             </li>

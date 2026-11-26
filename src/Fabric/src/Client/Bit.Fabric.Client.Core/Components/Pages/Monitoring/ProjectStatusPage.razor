@@ -69,7 +69,7 @@
                 <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="page-title">@Localizer[nameof(AppStrings.MonitoringThePage)]</BitText>
                 @if (statusPage.PublicUrl is { } url)
                 {
-                    <BitLink Href="@url" Target="_blank"><span class="ltr">@url</span></BitLink>
+                    <BitLink Href="@url" Target="_blank"><span class="ltr app-latin-digits">@url</span></BitLink>
                 }
             </div>
             <div class="fields">
@@ -150,7 +150,7 @@
                 <div class="snippet">
                     <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@label</BitText>
                     <div class="snippet-row">
-                        <code class="ltr">@snippet</code>
+                        <code class="ltr app-latin-digits">@snippet</code>
                         <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@(copied == snippet ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(snippet))">@Localizer[nameof(AppStrings.Copy)]</BitButton>
                     </div>
                 </div>

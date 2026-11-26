@@ -38,6 +38,9 @@ public sealed class SampleProject
     /// <summary>How long its home page usually takes, in milliseconds.</summary>
     public int BaseMs { get; init; } = 180;
 
+    /// <summary>How long a visitor usually waits for it through the cache in front of the app; null when nothing caches it.</summary>
+    public int? VisitorBaseMs { get; set; }
+
     public string[] Locations { get; set; } = [];
 
     public bool HasCacheWarning { get; set; }

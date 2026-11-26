@@ -147,7 +147,11 @@ public partial class PublicStatusDto
 
     public DateTimeOffset WatchedSince { get; set; }
 
+    /// <summary>The home page's median time over the last 24 hours, past any cache: the server's own.</summary>
     public int? MedianResponseMs { get; set; }
+
+    /// <summary>The median time a visitor waited for it, through the cache in front of the app; null when no cache answered.</summary>
+    public int? MedianVisitorMs { get; set; }
 
     public string? SupportAddress { get; set; }
 

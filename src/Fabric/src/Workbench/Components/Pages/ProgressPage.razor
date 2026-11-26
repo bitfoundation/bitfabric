@@ -30,14 +30,14 @@
                    OnClick="ToggleShellTheme" />
     </header>
 
-    @* Who may see the real tasks waits for them, so the samples never flash by first. *@
+    @* Who may see the tasks waits for them, so the empty note never flashes by first. *@
     @if (reviewSession.CanSeeTasks && reviewSession.IsOpen is false && isOpenFailed is false)
     {
         <div class="loading"><BitRingLoading /></div>
     }
     else if (reviewSession.CanSeeTasks && reviewSession.IsOpen is false)
     {
-        @* The real tasks couldn't be read, so no samples stand in for them. *@
+        @* The tasks couldn't be read. *@
         <div class="loading open-failed" role="alert">
             <span>@Localizer[nameof(WorkbenchStrings.LoadFailed)]</span>
             <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Refresh" OnClick="Reload">@Localizer[nameof(WorkbenchStrings.ReloadPage)]</BitButton>
@@ -57,14 +57,11 @@
                     }
                 </div>
 
-                @if (reviewSession.ShowsSampleTasks)
+                @if (reviewSession.ShownTasks.Count == 0)
                 {
-                    <div class="samples-note" role="note">
-                        <BitIcon IconName="@BitIconName.Lightbulb" Color="BitColor.Primary" />
-                        <div>
-                            <strong>@Localizer[nameof(WorkbenchStrings.ProgressSamplesTitle)]</strong>
-                            <span>@Localizer[reviewSession.CanSeeTasks ? nameof(WorkbenchStrings.ProgressSamplesText) : nameof(WorkbenchStrings.ProgressSamplesVisitorText)]</span>
-                        </div>
+                    <div class="empty-note" role="note">
+                        <BitIcon IconName="@BitIconName.TaskList" Color="BitColor.Primary" />
+                        <span>@Localizer[reviewSession.CanSeeTasks ? nameof(WorkbenchStrings.ProgressEmptyText) : nameof(WorkbenchStrings.ProgressVisitorText)]</span>
                     </div>
                 }
 
@@ -113,10 +110,6 @@
                                 </span>
                                 <span class="meta-item">@Localizer[nameof(WorkbenchStrings.ProgressStarted), WorkbenchTimes.Ago(task.CreatedAt, Localizer)]</span>
                                 <span class="meta-item">@Localizer[nameof(WorkbenchStrings.ProgressUpdated), WorkbenchTimes.Ago(task.UpdatedAt, Localizer)]</span>
-                                @if (task.IsSample)
-                                {
-                                    <BitTag Text="@Localizer[nameof(WorkbenchStrings.ProgressSample)]" Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.Lightbulb" />
-                                }
                             </div>
                             <div class="overall">
                                 <BitProgress Percent="task.Percent" Thickness="8" Rounded
@@ -341,7 +334,7 @@
                 {
                     <div class="gone">
                         <BitIcon IconName="@BitIconName.TaskList" />
-                        <BitText Typography="BitTypography.Body1">@Localizer[TaskId is null ? nameof(WorkbenchStrings.ProgressPickTask) : nameof(WorkbenchStrings.ProgressTaskGone)]</BitText>
+                        <BitText Typography="BitTypography.Body1">@Localizer[TaskId is not null ? nameof(WorkbenchStrings.ProgressTaskGone) : reviewSession.ShownTasks.Count == 0 ? nameof(WorkbenchStrings.ProgressNoTask) : nameof(WorkbenchStrings.ProgressPickTask)]</BitText>
                     </div>
                 }
             </main>

@@ -1,0 +1,17 @@
+@inherits WorkbenchComponentBase
+
+<section class="block" id="@Id">
+    @if (Title is not null)
+    {
+        <header class="block-head">
+            <BitText Element="h2" Class="block-title">@Title</BitText>
+            @if (Kicker is not null)
+            {
+                <BitText Typography="BitTypography.Body1" Class="block-kicker">@Kicker</BitText>
+            }
+        </header>
+    }
+    <Bmotion Preset="BmotionPresets.Reveal(distance: 28)">
+        <div class="block-body">@ChildContent</div>
+    </Bmotion>
+</section>

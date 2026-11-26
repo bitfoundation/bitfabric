@@ -2312,7 +2312,7 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <value>Waarmee het begint</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>Elk project heeft al registratie en aanmelden met passkeys en tweestapsverificatie, profielen, rollen en machtigingen, instellingen, 11 talen en lichte en donkere thema's. Daarbovenop kan het beginnen met een beheerpaneel of een online winkel.</value>
+    <value>Elk project heeft al registratie en aanmelden met passkeys en tweestapsverificatie, profielen, rollen en machtigingen, instellingen, 12 talen en lichte en donkere thema's. Daarbovenop kan het beginnen met een beheerpaneel of een online winkel.</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>Bouw je een hulpmiddel dat bedrijven gebruiken? Begin dan met het beheerpaneel en maak van de producten daarin je eigen producten. Verkoop je producten? Begin dan met de winkel.</value>
@@ -2693,7 +2693,7 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <value>Passkeys en inloggen in twee stappen</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>11 talen, licht en donker</value>
+    <value>12 talen, licht en donker</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>Voorbeeldpagina's: een takenlijst</value>
@@ -2720,7 +2720,7 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <value>Waar moet het mee beginnen?</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>Elk project heeft al een complete identiteitsoplossing, rollen en rechten, instellingen, 11 talen en lichte en donkere thema's.</value>
+    <value>Elk project heeft al een complete identiteitsoplossing, rollen en rechten, instellingen, 12 talen en lichte en donkere thema's.</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>Alleen de essentie</value>

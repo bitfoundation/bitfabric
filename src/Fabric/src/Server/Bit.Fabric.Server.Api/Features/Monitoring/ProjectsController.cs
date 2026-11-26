@@ -79,6 +79,12 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
                 var minute = Floor(round.At, 1);
                 points.Add(PerformancePoint.Of(ProjectRollup.HomePageKey, round.Region!, minute, round.ResponseMs is null, false, round.ResponseMs));
 
+                // Through the cache in front of the app, in the rounds a cache answered (See ProjectProbe.VisitorMs).
+                if (round.VisitorMs is { } visitorMs)
+                {
+                    points.Add(PerformancePoint.Of(ProjectRollup.HomePageForVisitorsKey, round.Region!, minute, false, false, visitorMs));
+                }
+
                 // The bitplatform Network times the front door alone (See ProjectProbe.Colo).
                 if (round.Outcome is not ProjectProbeOutcome.Unauthorized && round.Colo is null)
                 {

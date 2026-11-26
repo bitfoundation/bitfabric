@@ -216,7 +216,7 @@
                         <BitTag Variant="BitVariant.Outline"
                                 Shape="BitShape.Pill"
                                 Color="@(tone is Tone.Neutral ? BitColor.Primary : ToneColor(tone))"
-                                Text="@($"{label} · {count}")"
+                                Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), label, count]"
                                 Disabled="@(filter is not StatusFilter.All && count is 0)"
                                 Selected="@(statusFilter == filter)"
                                 SelectedChanged="@(_ => SetFilter(filter))" />
@@ -321,7 +321,7 @@
                                                 @foreach (var probe in ProbesOf(check))
                                                 {
                                                     <span class="probe @probe.Status.ToString().ToLowerInvariant()"
-                                                          title="@($"{LocalTime(probe.At, "HH:mm:ss")} · {probe.Status} · {FormatDuration(probe.Duration)}")"></span>
+                                                          title="@($"{LocalTime(probe.At, "HH:mm:ss")}{Dot}{probe.Status}{Dot}{FormatDuration(probe.Duration)}")"></span>
                                                 }
                                             </div>
                                         }

@@ -307,7 +307,7 @@ chmod +x Clean.sh  # Make it executable (first time only)
 ```json
 {
     "DefaultLanguage": "en",
-    "SupportedLanguages": [ "nl", "fa", "sv", "hi", "zh", "es", "fr", "ar", "de" ],
+    "SupportedLanguages": [ "nl", "fa", "sv", "hi", "zh", "es", "fr", "ar", "de", "da" ],
     "ResxPaths": [ "/src/Shared/**/*.resx", "/src/Server/**/*.resx", "/src/Client/**/*.resx", "/src/Workbench/**/*.resx" ],
     "OpenAI": {
         "Model": "gpt-4.1-mini",
@@ -329,7 +329,7 @@ chmod +x Clean.sh  # Make it executable (first time only)
    - `AppStrings.zh.resx` (Chinese)
    - And more...
 
-**Supported Languages**: Currently configured for 9 languages (Dutch, Persian, Swedish, Hindi, Chinese, Spanish, French, Arabic, German)
+**Supported Languages**: Currently configured for 10 languages (Dutch, Persian, Swedish, Hindi, Chinese, Spanish, French, Arabic, German, Danish)
 
 **AI Provider**: Uses OpenAI's GPT-4.1-mini model (or Azure OpenAI)
 

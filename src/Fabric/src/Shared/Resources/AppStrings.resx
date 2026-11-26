@@ -2312,7 +2312,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>What it starts with</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>Every project already has sign-up and sign-in with passkeys and two-step verification, profiles, roles and permissions, settings, 11 languages, and light and dark themes. On top of that, it can start with an admin panel or an online store.</value>
+    <value>Every project already has sign-up and sign-in with passkeys and two-step verification, profiles, roles and permissions, settings, 12 languages, and light and dark themes. On top of that, it can start with an admin panel or an online store.</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>Building a tool businesses use? Start with the admin panel and turn its products into your own things. Selling products? Start with the store.</value>
@@ -2693,7 +2693,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Passkeys and two-step sign-in</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>11 languages, light and dark</value>
+    <value>12 languages, light and dark</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>Sample pages: a to-do list</value>
@@ -2720,7 +2720,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>What should it start with?</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>Every project already has a complete identity solution, roles and permissions, settings, 11 languages and light and dark themes.</value>
+    <value>Every project already has a complete identity solution, roles and permissions, settings, 12 languages and light and dark themes.</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>Just the essentials</value>
@@ -6661,6 +6661,10 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="MonitoringDurationOneDayHours" xml:space="preserve">
     <value>1 day {0} h</value>
   </data>
+  <data name="MonitoringDot" xml:space="preserve">
+    <value> · </value>
+    <comment>Separates the parts of a line, such as a time and a duration. Persian takes its comma: a middle dot beside Persian digits reads as a zero.</comment>
+  </data>
   <data name="MonitoringPartsSeparator" xml:space="preserve">
     <value>, </value>
   </data>
@@ -6933,6 +6937,27 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   </data>
   <data name="MonitoringTypicalResponseTime" xml:space="preserve">
     <value>Typical response time</value>
+  </data>
+  <data name="MonitoringForVisitors" xml:space="preserve">
+    <value>For visitors</value>
+  </data>
+  <data name="MonitoringForVisitorsHelp" xml:space="preserve">
+    <value>The home page as visitors get it, through the cache in front of your app.</value>
+  </data>
+  <data name="MonitoringServerTime" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="MonitoringHomePageForVisitors" xml:space="preserve">
+    <value>Home page for visitors</value>
+  </data>
+  <data name="MonitoringTypicalForVisitors" xml:space="preserve">
+    <value>Typical for visitors</value>
+  </data>
+  <data name="MonitoringTypicalServerTime" xml:space="preserve">
+    <value>Typical server time</value>
+  </data>
+  <data name="MonitoringConnectedVisitorsAndServer" xml:space="preserve">
+    <value>{0} for visitors ({1} server)</value>
   </data>
   <data name="MonitoringPastIncidents" xml:space="preserve">
     <value>Past incidents</value>

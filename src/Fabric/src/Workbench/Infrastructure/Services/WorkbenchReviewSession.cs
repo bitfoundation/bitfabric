@@ -341,7 +341,6 @@ public sealed partial class WorkbenchReviewSession : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         visitorComments.Dispose();
-        samples?.Dispose();
 
         if (document is null)
             return;

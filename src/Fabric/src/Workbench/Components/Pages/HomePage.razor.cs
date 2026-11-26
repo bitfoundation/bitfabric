@@ -2,7 +2,7 @@ namespace Bit.Fabric.Workbench.Components.Pages;
 
 /// <summary>
 /// The Workbench's landing page: who it is for, in one big card (mostly the AI agent, then you) and small cards for the rest, the
-/// agents' long tasks, how to use it, the catalog of pages with their review status, and the flows.
+/// agents' long tasks, the boards they build, how to use it, the catalog of pages with their review status, and the flows.
 /// </summary>
 public partial class HomePage
 {
@@ -35,6 +35,15 @@ public partial class HomePage
         (BitIconName.Tiles, nameof(WorkbenchStrings.HomeCardManyAppsTitle), nameof(WorkbenchStrings.HomeCardManyAppsText)),
         (BitIconName.Robot, nameof(WorkbenchStrings.HomeCardAgentsTitle), nameof(WorkbenchStrings.HomeCardAgentsText)),
         (BitIconName.Repair, nameof(WorkbenchStrings.HomeCardCustomizeTitle), nameof(WorkbenchStrings.HomeCardCustomizeText))
+    ];
+
+    // What an agent can show as a board instead of telling it in the chat.
+    private static readonly (string IconName, string TextKey)[] boardPoints =
+    [
+        (BitIconName.Flow, nameof(WorkbenchStrings.HomeBoardsPointDiagram)),
+        (BitIconName.Split, nameof(WorkbenchStrings.HomeBoardsPointCompare)),
+        (BitIconName.Calculator, nameof(WorkbenchStrings.HomeBoardsPointTry)),
+        (BitIconName.Devices3, nameof(WorkbenchStrings.HomeBoardsPointAnywhere))
     ];
 
     private static readonly (string TitleKey, string TextKey)[] steps =
