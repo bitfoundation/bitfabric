@@ -42,6 +42,19 @@ public partial class AddProjectPage
     /// <summary>The app's address, from Settings' "Reconnect as someone else", looked for at once.</summary>
     [Parameter, SupplyParameterFromQuery(Name = "address")] public string? Address { get; set; }
 
+    /// <summary>The project the environment joins, from its page's "Add an environment"; empty for a new project.</summary>
+    [Parameter, SupplyParameterFromQuery(Name = "project")] public Guid? ProjectId { get; set; }
+
+    [AutoInject] private Bit.Fabric.Shared.Features.Projects.IProjectsController projectsController = default!;
+
+    /// <summary>The project the environment joins, by its name; null for a new project.</summary>
+    private Bit.Fabric.Shared.Features.Projects.Dtos.ProjectDto? joining;
+
+    /// <summary>Production, unless the project has it: then Test, then Staging (bitfabric-internal/specs/monitoring.md).</summary>
+    private string environment = "Production";
+
+    private static readonly string[] environmentChoices = ["Production", "Test", "Staging"];
+
     private bool IsCallback => string.IsNullOrEmpty(State) is false;
 
     private static string BackIcon => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? BitIconName.Forward : BitIconName.Back;
@@ -53,6 +66,12 @@ public partial class AddProjectPage
         await base.OnInitAsync();
 
         address ??= Address;
+
+        if (ProjectId is { } projectId && Connected is null && IsCallback is false)
+        {
+            joining = await projectsController.GetProject(projectId, null, CurrentCancellationToken);
+            environment = environmentChoices.FirstOrDefault(choice => joining.Monitorings.Any(taken => string.Equals(taken.Environment, choice, StringComparison.OrdinalIgnoreCase)) is false) ?? "";
+        }
     }
 
     protected override async Task OnAfterFirstRenderAsync()
@@ -123,6 +142,8 @@ public partial class AddProjectPage
             {
                 Address = probe.Address,
                 Name = name,
+                ProjectId = joining?.Id,
+                Environment = string.IsNullOrWhiteSpace(environment) ? null : environment.Trim(),
                 LocalHttpPort = port is -1 ? null : port,
                 LocalHttpNonce = localHttpServer.CreateExternalSignInNonce()
             }, CurrentCancellationToken);

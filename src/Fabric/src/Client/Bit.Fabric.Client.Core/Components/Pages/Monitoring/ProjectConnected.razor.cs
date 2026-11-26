@@ -122,7 +122,10 @@ public partial class ProjectConnected
         _ => "tone-ok"
     };
 
-    private string TabHref(string tab) => $"{PageUrls.Projects}/{MonitoringId}?tab={tab}";
+    private string TabHref(string tab) => $"{ProjectHref}?tab={tab}";
+
+    /// <summary>The environment's page, in the project the first round linked it to (See ProjectLinker).</summary>
+    private string ProjectHref => details?.Monitoring is { } monitoring ? PageUrls.ProjectEnvironment(monitoring.ProjectId, monitoring.Id) : PageUrls.Projects;
 
     /// <summary>
     /// The same steps the app menu's notifications switch takes when turned on (See AppMenu.ToggleNotifications): the

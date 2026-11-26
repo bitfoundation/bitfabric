@@ -16,6 +16,9 @@ public partial class ProjectSettings
 
     [Parameter, EditorRequired] public MonitoringDetailsDto Details { get; set; } = default!;
 
+    /// <summary>The project this environment is of, whose people its Members section lists.</summary>
+    [Parameter, EditorRequired] public Guid ProjectId { get; set; }
+
     [Parameter] public EventCallback<string> OnRenamed { get; set; }
 
     /// <summary>The project as it is once disconnected, for the page's head and banner.</summary>

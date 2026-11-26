@@ -24,7 +24,7 @@ public class ProjectConnectedTests
 
         MonitoringDetailsDto Details(params ProjectNetworkReadingDto[] readings) => new()
         {
-            Monitoring = new() { Id = monitoringId, Name = "Customer app", Address = "https://customer.example", Locations = ["enam", "oc"], ConnectionStatus = ProjectConnectionStatus.Connected, Health = ProjectHealth.Operational },
+            Monitoring = new() { Id = monitoringId, ProjectId = monitoringId, Name = "Customer app", Address = "https://customer.example", Locations = ["enam", "oc"], ConnectionStatus = ProjectConnectionStatus.Connected, Health = ProjectHealth.Operational },
             Checks =
             [
                 new() { Key = "AppDbContext", Title = "Database", Category = "Platform", IconName = "Database", Status = HealthCheckStatus.Healthy },
@@ -62,12 +62,12 @@ public class ProjectConnectedTests
         // The three next steps, each leading to where it is done.
         Assert.Contains("Alerts on this device", markup);
         Assert.Contains("Turn on", markup);
-        Assert.Contains($"href=\"/projects/{monitoringId}?tab=alerts\"", markup);
+        Assert.Contains($"href=\"/projects/{monitoringId}/{monitoringId}?tab=alerts\"", markup, "The environment's page, in its project (an environment's own project has its id).");
         Assert.Contains("Your status page", markup);
-        Assert.Contains($"href=\"/projects/{monitoringId}?tab=status\"", markup);
+        Assert.Contains($"href=\"/projects/{monitoringId}/{monitoringId}?tab=status\"", markup);
         Assert.Contains("Your team", markup);
         Assert.Contains($"href=\"{PageUrls.ManageMyTenants}\"", markup);
-        Assert.Contains($"href=\"/projects/{monitoringId}\"", markup, "Open the project.");
+        Assert.Contains($"href=\"/projects/{monitoringId}/{monitoringId}\"", markup, "Open the project.");
 
         // Oceania's first reading comes in a minute later: the page looks again on its own.
         current = Details(eastern, oceania);
@@ -113,7 +113,7 @@ public class ProjectConnectedTests
         Assert.Contains("tone-degraded", bars[25].ClassName!);
         Assert.Contains("12 min down", bars[20].GetAttribute("title")!, "Each bar's tooltip says how its day went.");
 
-        Assert.AreEqual($"/projects/{monitoringId}?tab=history", cut.Find(".day-bars").GetAttribute("href"));
+        Assert.AreEqual($"/projects/{project.ProjectId}/{monitoringId}?tab=history", cut.Find(".day-bars").GetAttribute("href"));
         Assert.Contains("30 days", cut.Markup);
         Assert.Contains("Uptime 99.50%", cut.Markup);
     }

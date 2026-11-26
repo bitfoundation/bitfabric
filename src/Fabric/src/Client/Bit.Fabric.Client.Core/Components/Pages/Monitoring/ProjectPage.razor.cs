@@ -1,5 +1,7 @@
 using Bit.Fabric.Shared.Features.Monitoring;
 using Bit.Fabric.Shared.Features.Monitoring.Dtos;
+using Bit.Fabric.Shared.Features.Projects;
+using Bit.Fabric.Shared.Features.Projects.Dtos;
 
 namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 
@@ -13,9 +15,17 @@ public partial class ProjectPage
 {
     private bool isLoading = true;
     private bool isLoadFailed;
+    private ProjectDto? parent;
     private MonitoringDetailsDto? details;
 
-    [Parameter] public Guid Id { get; set; }
+    /// <summary>What the page shows now, so a switch to another project or environment loads it.</summary>
+    private (Guid ProjectId, Guid? MonitoringId)? loaded;
+
+    /// <summary>The project (bitfabric-internal/specs/monitoring.md, Projects, environments and their people).</summary>
+    [Parameter] public Guid ProjectId { get; set; }
+
+    /// <summary>Its environment the page shows: its Production, or its first, when the address names none.</summary>
+    [Parameter] public Guid? MonitoringId { get; set; }
 
     /// <summary>The open tab, in the address so it can be shared and survives a refresh.</summary>
     [Parameter, SupplyParameterFromQuery(Name = "tab")] public string? Tab { get; set; }
@@ -52,22 +62,48 @@ public partial class ProjectPage
         }), replace: true);
     }
 
-    private void Renamed(string? name)
+    /// <summary>The project's new name, and with it what its environments are called.</summary>
+    private async Task Renamed(string? name)
     {
-        if (details?.Monitoring is { } project)
+        if (parent is not null)
         {
-            project.Name = name;
+            parent.Name = name;
         }
+
+        await Load();
     }
 
     [AutoInject] private IMonitoringsController monitoringsController = default!;
 
+    [AutoInject] private IProjectsController projectsController = default!;
+
+    /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
+    private string Dot => MonitoringWords.Dot(Localizer);
+
+    /// <summary>An environment's page, on the tab this one shows.</summary>
+    private string EnvironmentHref(MonitoringDto environment)
+        => string.IsNullOrEmpty(Tab) ? PageUrls.ProjectEnvironment(environment.ProjectId, environment.Id) : $"{PageUrls.ProjectEnvironment(environment.ProjectId, environment.Id)}?tab={Uri.EscapeDataString(Tab)}";
+
+    private static string ToneOf(MonitoringDto environment) => (environment.ConnectionStatus, environment.Health) switch
+    {
+        (ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected, _) => "tone-nodata",
+        (_, ProjectHealth.Down) => "tone-down",
+        (_, ProjectHealth.Degraded) => "tone-degraded",
+        (_, ProjectHealth.Operational) => "tone-ok",
+        _ => "tone-nodata"
+    };
+
     private static string BackIcon => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? BitIconName.Forward : BitIconName.Back;
 
-    protected override async Task OnInitAsync()
+    protected override async Task OnParamsSetAsync()
     {
-        await base.OnInitAsync();
-        await Load();
+        await base.OnParamsSetAsync();
+
+        // The switcher and the environments lead here again with other ids: the same page, another project.
+        if (loaded != (ProjectId, MonitoringId))
+        {
+            await Load();
+        }
     }
 
     private async Task Load()
@@ -76,19 +112,30 @@ public partial class ProjectPage
 
         try
         {
-            details = await monitoringsController.GetMonitoring(Id, CurrentCancellationToken);
+            if (parent?.Id != ProjectId)
+            {
+                parent = null;
+                details = null;
+            }
+
+            parent = await projectsController.GetProject(ProjectId, TimeZoneService.CurrentTimeZone.Id, CurrentCancellationToken);
+            var environmentId = MonitoringId ?? parent.Monitorings.FirstOrDefault()?.Id;
+            details = environmentId is { } id ? await monitoringsController.GetMonitoring(id, CurrentCancellationToken) : null;
+            loaded = (ProjectId, MonitoringId);
             isLoadFailed = false;
         }
         catch (ResourceNotFoundException)
         {
-            // Only the server saying so means the project is gone.
+            // Only the server saying so means the project, or the environment, is gone.
+            parent = null;
             details = null;
+            loaded = (ProjectId, MonitoringId);
             isLoadFailed = false;
         }
         catch (Exception exp) when (exp is not OperationCanceledException)
         {
             // Didn't load: the page offers to try again, the project it showed stays, and the handler still reports it.
-            isLoadFailed = details is null;
+            isLoadFailed = parent is null;
             ExceptionHandler.Handle(exp);
         }
         finally

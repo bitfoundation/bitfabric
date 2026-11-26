@@ -1,0 +1,9 @@
+@inherits AppComponentBase
+
+@* What bit Fabric knows of a project, in one line (bitfabric-internal/specs/product.md, The license page says what bit Fabric knows). *@
+<p class="privacy-line">
+    <BitIcon IconName="@BitIconName.Lock" Size="BitSize.Small" Color="BitColor.SecondaryForeground" Class="privacy-icon" />
+    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Element="span">
+        @Localizer["Your project's name and whether it has a license are all we know about it. Its source code, prompts and data are never available to us."]
+    </BitText>
+</p>

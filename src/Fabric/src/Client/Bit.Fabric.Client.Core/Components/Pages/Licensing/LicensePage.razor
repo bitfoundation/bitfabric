@@ -34,25 +34,52 @@
             <dd class="license-mono">@Commit</dd>
         </dl>
 
+        @* A license belongs to a team (bitfabric-internal/specs/product.md, A License belongs to a Team). *@
+        <div class="license-step" role="group" aria-labelledby="team-title">
+            <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="team-title">@Localizer["The team that holds it"]</BitText>
+            @if (teams.Count is 0)
+            {
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["A license belongs to a team. Name yours; you can invite the others later."]</BitText>
+                <div class="team-form">
+                    <BitTextField Value="@teamTitle" ValueChanged="@((string? title) => TitleChanged(title))" Immediate
+                                  Label="@Localizer["Team name"]" Placeholder="@Localizer["Such as Contoso"]" MaxLength="64" Class="team-field" />
+                    <BitTextField @bind-Value="teamName" Immediate Label="@Localizer["Short name"]" Description="@Localizer["Lowercase letters, digits and dashes."]"
+                                  MaxLength="63" Class="team-field" Styles="@(new() { Input = "direction: ltr" })" />
+                </div>
+            }
+            else if (teams.Count is 1)
+            {
+                <div class="team-one">
+                    <BitIcon IconName="@BitIconName.People" Color="BitColor.Primary" />
+                    <BitText Typography="BitTypography.Body1" Weight="BitFontWeight.Semibold">@teams[0].Title</BitText>
+                </div>
+            }
+            else
+            {
+                <BitDropdown TItem="BitDropdownItem<string>" TValue="string" Items="TeamItems" @bind-Value="selectedTeamId"
+                             Label="@Localizer["Team"]" AriaLabel="@Localizer["The team that holds it"]" Responsive Class="team-picker" />
+            }
+        </div>
+
         @if (error is not null)
         {
             <BitMessage Color="BitColor.Error" Variant="BitVariant.Outline" Tinted Multiline>@error</BitMessage>
         }
 
         <div>
-            <BitButton IconName="@BitIconName.Certificate" Loading="isIssuing" OnClick="WrapHandled(Issue)">
-                @Localizer["Get the free license"]
+            <BitButton IconName="@BitIconName.Certificate" Loading="isIssuing" Disabled="@(CanIssue is false)" OnClick="WrapHandled(Issue)">
+                @(teams.Count is 0 ? Localizer["Create the team and get the license"] : Localizer["Get the free license"])
             </BitButton>
         </div>
+
+        <PrivacyLine />
     }
     else
     {
         <div class="license-intro">
             <BitText Typography="BitTypography.H4" Element="h1" Class="license-title">@Localizer["{0} has its license", issued.ProjectName!]</BitText>
             <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
-                @(string.IsNullOrEmpty(issued.Holder)
-                    ? Localizer["Free, until {0}.", issued.ExpiresOn.ToString("D", CultureInfo.CurrentUICulture)]
-                    : Localizer["Free, for {0}, until {1}.", issued.Holder, issued.ExpiresOn.ToString("D", CultureInfo.CurrentUICulture)])
+                @Localizer["Free, for {0}, until {1}.", issued.Holder!, issued.ExpiresOn.ToString("D", CultureInfo.CurrentUICulture)]
             </BitText>
         </div>
 
@@ -63,27 +90,32 @@
             </BitMessage>
         }
 
+        @* The prompt first, for the customer's own AI; the command second; never the bare license alone (the founder's call, 2026-11-26). *@
         <div class="license-step">
-            <BitText Typography="BitTypography.Subtitle1" Element="h2">@Localizer["Otherwise, run this in the project's folder"]</BitText>
+            <BitText Typography="BitTypography.Subtitle1" Element="h2">@Localizer["Paste this into your AI"]</BitText>
             <div class="license-box">
-                <code class="license-text">@Command</code>
-                <BitButton Size="BitSize.Small" IconName="@(copied == Command ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(Command))" Class="license-copy">
+                <code class="license-text" dir="ltr">@Prompt</code>
+                <BitButton Size="BitSize.Small" IconName="@(copied == Prompt ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(Prompt))" Class="license-copy">
+                    @(copied == Prompt ? Localizer["Copied"] : Localizer["Copy"])
+                </BitButton>
+            </div>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["It saves the license in the project's bit.json, which bit checks without asking anyone."]</BitText>
+        </div>
+
+        <div class="license-step">
+            <BitText Typography="BitTypography.Subtitle1" Element="h2">@Localizer["Or run this in the project's folder"]</BitText>
+            <div class="license-box">
+                <code class="license-text" dir="ltr">@Command</code>
+                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@(copied == Command ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(Command))" Class="license-copy">
                     @(copied == Command ? Localizer["Copied"] : Localizer["Copy"])
                 </BitButton>
             </div>
         </div>
 
-        <div class="license-step">
-            <BitText Typography="BitTypography.Subtitle1" Element="h2">@Localizer["The license"]</BitText>
-            <div class="license-box">
-                <code class="license-text">@issued.License</code>
-                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@(copied == issued.License ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(() => Copy(issued.License!))" Class="license-copy">
-                    @(copied == issued.License ? Localizer["Copied"] : Localizer["Copy"])
-                </BitButton>
-            </div>
-            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
-                @Localizer["bit keeps it in the project's bit.json, and checks it there without asking anyone."]
-            </BitText>
+        <div>
+            <BitButton Variant="BitVariant.Text" IconName="@BitIconName.Certificate" Href="@PageUrls.Licenses">@Localizer["See your teams' licenses"]</BitButton>
         </div>
+
+        <PrivacyLine />
     }
 </section>

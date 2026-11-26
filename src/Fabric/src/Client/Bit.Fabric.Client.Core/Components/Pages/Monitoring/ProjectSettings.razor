@@ -77,6 +77,8 @@
                 <AppDataAnnotationsValidator />
                 <BitTextField @bind-Value="settings.Name" Label="@Localizer[nameof(AppStrings.MonitoringProjectName)]" MaxLength="100" />
                 <ValidationMessage For="() => settings.Name" />
+                <BitTextField @bind-Value="settings.Environment" Label="@Localizer["This environment"]" Placeholder="@Localizer["Production, Test or Staging"]" MaxLength="50" />
+                <ValidationMessage For="() => settings.Environment" />
                 <BitTimeZonePicker TValue="string"
                                    @bind-Value="settings.TimeZoneId"
                                    Label="@Localizer[nameof(AppStrings.MonitoringItsTimeZone)]"
@@ -92,6 +94,8 @@
                 </div>
             </EditForm>
         </section>
+
+        <ProjectMembers ProjectId="ProjectId" />
 
         <section class="panel" aria-labelledby="windows-title">
             <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="windows-title">@Localizer[nameof(AppStrings.MonitoringMaintenanceWindows)]</BitText>
@@ -133,8 +137,8 @@
         </section>
 
         <section class="panel danger" aria-labelledby="remove-title">
-            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="remove-title">@Localizer[nameof(AppStrings.MonitoringRemoveThisProject)]</BitText>
-            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringRemoveThisProjectHelp)]</BitText>
+            <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="remove-title">@Localizer["Remove this environment"]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["bit Fabric stops watching it and deletes its history. A project goes with its last environment, unless it holds a license."]</BitText>
             <div class="actions">
                 @if (isConfirmingRemove)
                 {

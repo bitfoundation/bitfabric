@@ -1,0 +1,33 @@
+@inherits AppComponentBase
+
+@* The Projects page's Licenses tab (bitfabric-internal/specs/monitoring.md, A card per project, its environments on it, and a
+   Licenses tab): each of the team's projects and its license, the ones that need something first. *@
+<div class="licenses-tab">
+    <div class="toolbar">
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer["Each project's license. bit prints the link that renews one, free, a month before it ends."]</BitText>
+        <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Certificate" Href="@PageUrls.Licenses">@Localizer["Every license of your teams"]</BitButton>
+    </div>
+
+    <ul class="rows">
+        @foreach (var project in Ordered())
+        {
+            <li @key="project.Id" class="row">
+                <div class="row-head">
+                    <BitButton Variant="BitVariant.Text" Href="@($"{PageUrls.Projects}/{project.Id}")" Class="row-name">@project.Name</BitButton>
+                    <ProjectLicenseTag License="project.License" />
+                </div>
+                <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="row-meta">
+                    @if (project.BitProjectId is { } bitId)
+                    {
+                        <span>@Localizer["Project id"] <bdi class="mono">@bitId.ToString()[..8]</bdi></span>
+                    }
+                    @if (project.License.FirstCommit is { Length: >= 7 } commit)
+                    {
+                        <span>@Dot@Localizer["First commit"] <bdi class="mono">@commit[..7]</bdi></span>
+                    }
+                    <span>@Dot@EnvironmentsOf(project)</span>
+                </BitText>
+            </li>
+        }
+    </ul>
+</div>

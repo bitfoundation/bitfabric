@@ -55,7 +55,7 @@ public partial class MainLayout
                 Text = localizer[nameof(AppStrings.MonitoringProjects)],
                 IconName = BitIconName.Health,
                 Url = PageUrls.Projects,
-                AdditionalUrls = [PageUrls.AddProject]
+                AdditionalUrls = [PageUrls.AddProject, PageUrls.Licenses]
             }
         ];
 

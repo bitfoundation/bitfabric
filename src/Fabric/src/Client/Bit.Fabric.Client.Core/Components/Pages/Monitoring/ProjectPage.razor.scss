@@ -50,3 +50,54 @@
     direction: ltr;
     unicode-bidi: isolate;
 }
+
+// The project's name, which opens the switcher, and its license
+.head-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    min-width: 0;
+}
+
+// Its environments, each with its health
+.environments {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.environment-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: none;
+    border-radius: 50%;
+    background-color: var(--tone, #{$bit-color-foreground-secondary});
+    box-shadow: 0 0 0 2px $bit-color-background-primary;
+}
+
+.no-environment {
+    max-width: 36rem;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-card;
+}
+
+.no-environment-mark {
+    width: 3.5rem;
+    height: 3.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1rem;
+    --bit-Icon-color: #{$bit-color-success};
+    background-color: color-mix(in srgb, #{$bit-color-success} 12%, transparent);
+}
