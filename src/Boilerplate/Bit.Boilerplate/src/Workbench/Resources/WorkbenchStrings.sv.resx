@@ -2611,7 +2611,7 @@
         <value>Lägg till den här vyn</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Öppna tavlan</value>
+        <value>Öppna flödet</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Öppna i arbetsbänken</value>
@@ -5455,5 +5455,242 @@
 | Alla tester | Godkända |
 | Återbetalning efter midnatt på Test | På rätt dag |
 | Production efter merge | Uppdaterad |</value>
+    </data>
+    <data name="Boards" xml:space="preserve">
+        <value>Tavlor</value>
+    </data>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>Det din agent visar dig som en sida i stället för ett långt svar: ett ritat flöde, alternativ sida vid sida, siffror att pröva.</value>
+    </data>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>Gör en tavla över hur vår app driftsätts.</value>
+    </data>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>Inga tavlor än. Be din agent om en, så dyker den upp här.</value>
+    </data>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>Det finns ingen tavla på den här adressen.</value>
+    </data>
+    <data name="DeployBoardTitle" xml:space="preserve">
+        <value>Så levereras det här projektet</value>
+    </data>
+    <data name="DeployBoardSummary" xml:space="preserve">
+        <value>Från dina ändringar till dina användare, ritat för det här projektet.</value>
+    </data>
+    <data name="PaymentsBoardTitle" xml:space="preserve">
+        <value>Ta emot betalningar</value>
+    </data>
+    <data name="PaymentsBoardSummary" xml:space="preserve">
+        <value>Vem som behåller vad av en försäljning, på webben och i butikerna.</value>
+    </data>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>Tavlor, inte textväggar</value>
+    </data>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>Be din agent förklara något, så bygger den en tavla här i stället för ett långt svar, med appens egna komponenter och tema.</value>
+    </data>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>Ett flöde eller en arkitektur, ritat och i rörelse</value>
+    </data>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>Alternativ sida vid sida, med en blick</value>
+    </data>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>Siffror att pröva, som en kalkylator</value>
+    </data>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>Ljust och mörkt, på alla skärmar</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>Öppna tavlorna</value>
+    </data>
+    <data name="DeployLead" xml:space="preserve">
+        <value>Du skickar dina ändringar. GitHub testar och paketerar dem. Din server kör bara resultatet.</value>
+    </data>
+    <data name="DeployNote" xml:space="preserve">
+        <value>En exempeltavla, inte hela historien</value>
+    </data>
+    <data name="DeploySources" xml:space="preserve">
+        <value>Läst från projektets egna filer</value>
+    </data>
+    <data name="DeployNumberBuilds" xml:space="preserve">
+        <value>byggen på din server</value>
+    </data>
+    <data name="DeployNumberDoors" xml:space="preserve">
+        <value>öppna dörrar på din server</value>
+    </data>
+    <data name="DeployNumberDoorsCaddy" xml:space="preserve">
+        <value>öppna dörrar, båda för webbplatsen</value>
+    </data>
+    <data name="DeployNumberTested" xml:space="preserve">
+        <value>av uppdateringarna testas först</value>
+    </data>
+    <data name="DeployNumberCopies" xml:space="preserve">
+        <value>kopior av din app: en att prova, en live</value>
+    </data>
+    <data name="DeployPlaceYou" xml:space="preserve">
+        <value>Du</value>
+    </data>
+    <data name="DeployPlaceGitHub" xml:space="preserve">
+        <value>GitHub</value>
+    </data>
+    <data name="DeployPlaceServer" xml:space="preserve">
+        <value>Din server</value>
+    </data>
+    <data name="DeployPlaceOnline" xml:space="preserve">
+        <value>Online</value>
+    </data>
+    <data name="DeployStopChanges" xml:space="preserve">
+        <value>Dina ändringar</value>
+    </data>
+    <data name="DeployStopChangesNote" xml:space="preserve">
+        <value>Skickade från vilken gren som helst</value>
+    </data>
+    <data name="DeployStopTested" xml:space="preserve">
+        <value>Testat automatiskt</value>
+    </data>
+    <data name="DeployStopTestedNote" xml:space="preserve">
+        <value>Byggt och kontrollerat på GitHub</value>
+    </data>
+    <data name="DeployStopPackaged" xml:space="preserve">
+        <value>Paketerat</value>
+    </data>
+    <data name="DeployStopPackagedNote" xml:space="preserve">
+        <value>Klart att installera</value>
+    </data>
+    <data name="DeployStopLive" xml:space="preserve">
+        <value>Bytt</value>
+    </data>
+    <data name="DeployStopLiveNote" xml:space="preserve">
+        <value>Din server byter till den nya versionen</value>
+    </data>
+    <data name="DeployStopSafe" xml:space="preserve">
+        <value>Säkert nåbar</value>
+    </data>
+    <data name="DeployStopSafeNote" xml:space="preserve">
+        <value>Inget lämnas öppet</value>
+    </data>
+    <data name="DeployStopSafeCaddyNote" xml:space="preserve">
+        <value>Via en säker anslutning</value>
+    </data>
+    <data name="DeployStopUsers" xml:space="preserve">
+        <value>Dina användare</value>
+    </data>
+    <data name="DeployStopUsersNote" xml:space="preserve">
+        <value>På den nya versionen</value>
+    </data>
+    <data name="DeployStopApps" xml:space="preserve">
+        <value>Dina appar</value>
+    </data>
+    <data name="DeployStopAppsNote" xml:space="preserve">
+        <value>Klara att ladda ner</value>
+    </data>
+    <data name="DeployCopiesTitle" xml:space="preserve">
+        <value>Två kopior av din app: en att prova, en live</value>
+    </data>
+    <data name="DeployTestName" xml:space="preserve">
+        <value>Test</value>
+    </data>
+    <data name="DeployTestFrom" xml:space="preserve">
+        <value>Vilken version du vill prova</value>
+    </data>
+    <data name="DeployTestWhen" xml:space="preserve">
+        <value>När du ber om det</value>
+    </data>
+    <data name="DeployLiveName" xml:space="preserve">
+        <value>Live</value>
+    </data>
+    <data name="DeployLiveFrom" xml:space="preserve">
+        <value>Huvudversionen</value>
+    </data>
+    <data name="DeployLiveWhen" xml:space="preserve">
+        <value>Varje gång en ändring godkänns</value>
+    </data>
+    <data name="DeployServerTitle" xml:space="preserve">
+        <value>Inget avbrott: den nya versionen startar bredvid den gamla</value>
+    </data>
+    <data name="DeployServerKicker" xml:space="preserve">
+        <value>Besökarna använder den gamla tills den nya är redo.</value>
+    </data>
+    <data name="DeployServerBar" xml:space="preserve">
+        <value>din server · {0} appar, {1} tjänster</value>
+    </data>
+    <data name="DeployReplaced" xml:space="preserve">
+        <value>Byts ut</value>
+    </data>
+    <data name="DeployKept" xml:space="preserve">
+        <value>Fortsätter köra</value>
+    </data>
+    <data name="DeployStateLive" xml:space="preserve">
+        <value>live</value>
+    </data>
+    <data name="DeployStateStarting" xml:space="preserve">
+        <value>startar</value>
+    </data>
+    <data name="DeployStateReady" xml:space="preserve">
+        <value>redo</value>
+    </data>
+    <data name="DeployBoxWebApp" xml:space="preserve">
+        <value>Webbapp</value>
+    </data>
+    <data name="DeployBoxLandingPage" xml:space="preserve">
+        <value>Landningssida</value>
+    </data>
+    <data name="DeployBoxCache" xml:space="preserve">
+        <value>Cache (Redis)</value>
+    </data>
+    <data name="DeployBoxStorage" xml:space="preserve">
+        <value>Lagring (Redis)</value>
+    </data>
+    <data name="DeployBoxFiles" xml:space="preserve">
+        <value>Filer</value>
+    </data>
+    <data name="DeployStepDownload" xml:space="preserve">
+        <value>Hämta</value>
+    </data>
+    <data name="DeployStepSettings" xml:space="preserve">
+        <value>Inställningar</value>
+    </data>
+    <data name="DeployStepData" xml:space="preserve">
+        <value>Uppdatera data</value>
+    </data>
+    <data name="DeployStepStart" xml:space="preserve">
+        <value>Starta</value>
+    </data>
+    <data name="DeployStepSwitch" xml:space="preserve">
+        <value>Byt</value>
+    </data>
+    <data name="DeployStepCheck" xml:space="preserve">
+        <value>Kontrollera</value>
+    </data>
+    <data name="DeployStepRefresh" xml:space="preserve">
+        <value>Uppdatera cache</value>
+    </data>
+    <data name="DeployAppsTitle" xml:space="preserve">
+        <value>Mobil- och datorapparna kommer från samma uppdatering</value>
+    </data>
+    <data name="DeployAppWindows" xml:space="preserve">
+        <value>En installerare som uppdaterar sig själv</value>
+    </data>
+    <data name="DeployAppAndroid" xml:space="preserve">
+        <value>Klar för Google Play</value>
+    </data>
+    <data name="DeployAppIos" xml:space="preserve">
+        <value>Klar för App Store, utan Mac</value>
+    </data>
+    <data name="DeployAppOff" xml:space="preserve">
+        <value>Av tills du publicerar den</value>
+    </data>
+    <data name="DeploySettingsTitle" xml:space="preserve">
+        <value>De {0} inställningar varje kopia behöver</value>
+    </data>
+    <data name="DeploySettingsKicker" xml:space="preserve">
+        <value>bit pipeline fyller i dem åt dig</value>
+    </data>
+    <data name="DeploySecret" xml:space="preserve">
+        <value>Hemlig</value>
+    </data>
+    <data name="DeploySetting" xml:space="preserve">
+        <value>Inställning</value>
     </data>
 </root>

@@ -21,6 +21,11 @@ public static class WorkbenchUrls
 
     public const string Flows = "/flows";
 
+    /// <summary>The boards: what an agent shows as a page instead of telling it in the chat (the boards skill).</summary>
+    public const string Boards = "/boards";
+
+    public static string Board(string boardId) => $"{Boards}/{boardId}";
+
     /// <summary>The page of the agents' long tasks: what each one does, what is left and what it needs from the user.</summary>
     public const string Progress = "/progress";
 

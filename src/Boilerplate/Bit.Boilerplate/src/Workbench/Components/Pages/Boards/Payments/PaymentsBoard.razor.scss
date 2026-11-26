@@ -1,0 +1,591 @@
+@import '../../../../../Client/Boilerplate.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../../Client/Boilerplate.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// ---- Where the buyer pays: a big share each, on a 0 to 30% meter, so the web and the stores compare at a glance.
+.routes {
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    @include lt-lg {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.route {
+    --route: #{$bit-color-warning};
+    gap: 0.375rem;
+    display: flex;
+    padding: 1.5rem;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+    box-shadow: 0 1rem 2rem -1.75rem color-mix(in srgb, var(--route) 80%, transparent);
+
+    &:first-child {
+        --route: #{$bit-color-primary};
+    }
+
+    &.free {
+        --route: var(--tone);
+    }
+}
+
+.route-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1.25rem;
+    --bit-Icon-color: var(--route);
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    font-size: 1.25rem;
+    place-items: center;
+    margin-bottom: 0.5rem;
+    border-radius: 0.875rem;
+    color: var(--route);
+    background-color: color-mix(in srgb, var(--route) 14%, transparent);
+}
+
+.route-where {
+    font-weight: 650;
+    color: $bit-color-foreground-secondary;
+}
+
+.route-share {
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-size: clamp(2.25rem, 3.6vw, 2.875rem);
+    font-variant-numeric: tabular-nums;
+}
+
+.route-meter {
+    height: 0.5rem;
+    margin: 0.5rem 0;
+    position: relative;
+    border-radius: $bit-shape-radius-full;
+    background-color: $bit-color-background-secondary;
+}
+
+.route-range {
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    border-radius: $bit-shape-radius-full;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--route) 55%, transparent), var(--route));
+}
+
+.route-caption {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: $bit-color-foreground-secondary;
+}
+
+.scale {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: $bit-color-foreground-tertiary;
+}
+
+// The calculator: the controls, a sentence, then one bar per provider, drawn to the scale of the largest fee.
+.calculator {
+    gap: 1.25rem;
+    display: flex;
+    padding: 1.5rem;
+    flex-direction: column;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-tertiary;
+
+    @include lt-sm {
+        padding: 1rem;
+    }
+}
+
+.calculator-controls {
+    gap: 1rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+::deep .price {
+    flex: 1 1 16rem;
+    max-width: 28rem;
+}
+
+.calculator-summary {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.fees {
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+}
+
+.fee {
+    gap: 0.375rem 1.25rem;
+    display: grid;
+    padding: 0.625rem 0;
+    align-items: center;
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 15rem);
+    border-bottom: 1px solid $bit-color-border-tertiary;
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+}
+
+.fee-name {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
+.fee-provider {
+    font-weight: 650;
+}
+
+.fee-basis {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: $bit-color-foreground-secondary;
+}
+
+.fee-track {
+    height: 0.75rem;
+    overflow: hidden;
+    border-radius: $bit-shape-radius-full;
+    background-color: $bit-color-background-secondary;
+
+    @include lt-md {
+        grid-row: 2;
+        grid-column: 1 / -1;
+    }
+}
+
+.fee-bar {
+    height: 100%;
+    display: block;
+    border-radius: $bit-shape-radius-full;
+    background-color: $bit-color-primary;
+    transition: width $bit-motion-duration $bit-motion-easing;
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.store .fee-bar {
+    background-color: $bit-color-warning;
+}
+
+.fee-amounts {
+    gap: 0.125rem 0.625rem;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.875rem;
+    align-items: baseline;
+    justify-content: flex-end;
+    font-variant-numeric: tabular-nums;
+    color: $bit-color-foreground-secondary;
+
+    strong {
+        font-size: 1rem;
+        color: $bit-color-foreground-primary;
+    }
+}
+
+.fee-keep {
+    @include lt-md {
+        display: none;
+    }
+}
+
+::deep .calculator-note {
+    margin: 0;
+}
+
+
+// ---- The web providers: the fee in big type, what each gives as ticks, and who it suits.
+.providers {
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    @include lt-lg {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.provider {
+    --provider: #{$bit-color-info};
+    gap: 1rem;
+    display: flex;
+    padding: 1.5rem;
+    position: relative;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+
+    &.mor {
+        --provider: var(--tone);
+        border-color: color-mix(in srgb, var(--tone) 40%, transparent);
+        background: linear-gradient(180deg, color-mix(in srgb, var(--tone) 7%, #{$bit-color-background-primary}), $bit-color-background-primary 60%);
+    }
+}
+
+.provider-head {
+    gap: 0.875rem;
+    display: flex;
+    align-items: center;
+}
+
+.monogram {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    display: grid;
+    font-weight: 800;
+    font-size: 1.25rem;
+    place-items: center;
+    border-radius: 0.875rem;
+    color: var(--provider);
+    background-color: color-mix(in srgb, var(--provider) 14%, transparent);
+}
+
+.provider-title {
+    gap: 0.0625rem;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
+::deep .provider-name {
+    margin: 0;
+    font-weight: 750;
+    font-size: 1.125rem;
+}
+
+.provider-kind {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--provider);
+}
+
+.provider-fee {
+    gap: 0.125rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.fee-figure {
+    font-weight: 800;
+    line-height: 1.1;
+    font-size: 1.625rem;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.fee-case {
+    font-size: 0.8125rem;
+    color: $bit-color-foreground-secondary;
+}
+
+.gives {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 0.75rem;
+    --bit-Icon-color: #{$bit-color-success};
+    margin: 0;
+    padding: 0;
+    gap: 0.375rem;
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+
+    li {
+        gap: 0.25rem;
+        display: inline-flex;
+        font-size: 0.75rem;
+        align-items: center;
+        padding: 0.25rem 0.625rem;
+        border-radius: $bit-shape-radius-full;
+        background-color: $bit-color-background-secondary;
+    }
+}
+
+.good-for {
+    margin-top: auto;
+    font-size: 0.8125rem;
+    color: $bit-color-foreground-secondary;
+
+    strong {
+        color: $bit-color-foreground-primary;
+    }
+}
+
+// ---- Inside the store apps: what the app sells forks the way, then the picked region's terms, a figure per store.
+.decide {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 2.5rem;
+}
+
+.question {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1rem;
+    --bit-Icon-color: currentColor;
+    gap: 0.5rem;
+    display: inline-flex;
+    font-weight: 700;
+    align-items: center;
+    padding: 0.625rem 1.25rem;
+    border-radius: $bit-shape-radius-full;
+    color: $bit-color-background-primary;
+    background-color: $bit-color-foreground-primary;
+}
+
+.fork {
+    width: 50%;
+    height: 3.5rem;
+    display: block;
+
+    path {
+        fill: none;
+        stroke-width: 2.5;
+        stroke-dasharray: 5 6;
+        vector-effect: non-scaling-stroke;
+        stroke: $bit-color-border-secondary;
+    }
+
+    @include lt-sm {
+        display: none;
+    }
+}
+
+.answers {
+    gap: 1rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @include lt-sm {
+        margin-top: 1rem;
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.answer {
+    --answer: #{$bit-color-warning};
+    gap: 0.25rem;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    border: 1.5px solid color-mix(in srgb, var(--answer) 45%, transparent);
+    background-color: color-mix(in srgb, var(--answer) 7%, #{$bit-color-background-primary});
+
+    &.physical {
+        --answer: var(--tone);
+    }
+}
+
+.answer-what {
+    font-weight: 650;
+}
+
+.answer-share {
+    font-weight: 800;
+    line-height: 1.1;
+    font-size: 2.25rem;
+    color: var(--answer);
+}
+
+.answer-note {
+    font-size: 0.8125rem;
+    color: $bit-color-foreground-secondary;
+}
+
+.regions {
+    gap: 0.75rem 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+// One line whatever region is picked, so nothing under it moves; the whole line is in its tooltip.
+.region-since {
+    flex: 1 1 12rem;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: $bit-color-foreground-tertiary;
+}
+
+.ways {
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    @include lt-md {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.way {
+    gap: 1rem;
+    display: flex;
+    padding: 1.25rem;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    background-color: $bit-color-background-secondary;
+}
+
+.way-head {
+    gap: 0.625rem;
+    display: flex;
+    font-weight: 700;
+    align-items: center;
+}
+
+.way-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1rem;
+    --bit-Icon-color: var(--tone);
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: 0.75rem;
+    background-color: $bit-color-background-primary;
+}
+
+.terms {
+    gap: 0.625rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+// Every term is the same box in every region: a one-line figure and a note of two lines at most, so picking another
+// region changes the words, never the sizes.
+.term {
+    --term: #{$bit-color-success};
+    gap: 0.125rem;
+    display: flex;
+    min-width: 0;
+    height: 8rem;
+    padding: 0.875rem;
+    overflow: hidden;
+    flex-direction: column;
+    border-radius: 1rem;
+    border-top: 3px solid var(--term);
+    background-color: $bit-color-background-primary;
+
+    &.allowed-limited {
+        --term: #{$bit-color-warning};
+    }
+
+    &.allowed-no {
+        --term: #{$bit-color-error};
+
+        .term-share {
+            font-size: 1rem;
+            color: $bit-color-foreground-secondary;
+        }
+    }
+}
+
+.term-store {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: $bit-color-foreground-tertiary;
+}
+
+.term-share {
+    display: flex;
+    height: 1.875rem;
+    overflow: hidden;
+    font-weight: 800;
+    line-height: 1.2;
+    font-size: 1.5rem;
+    white-space: nowrap;
+    align-items: flex-end;
+    letter-spacing: -0.02em;
+    text-overflow: ellipsis;
+    font-variant-numeric: tabular-nums;
+}
+
+.term-note {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 0.75rem;
+    --bit-Icon-color: var(--term);
+    gap: 0.25rem;
+    display: flex;
+    margin-top: auto;
+    overflow: hidden;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    max-height: 2.7em;
+    align-items: baseline;
+    color: $bit-color-foreground-secondary;
+}
+
+// ---- Before you decide: a line each.
+.points {
+    gap: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.point {
+    gap: 0.875rem;
+    display: flex;
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+    align-items: center;
+    border-radius: 1.25rem;
+    border: 1px solid $bit-color-border-tertiary;
+}
+
+.point-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1.125rem;
+    --bit-Icon-color: var(--tone);
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 0.75rem;
+    color: var(--tone);
+    background-color: color-mix(in srgb, var(--tone) 12%, transparent);
+}

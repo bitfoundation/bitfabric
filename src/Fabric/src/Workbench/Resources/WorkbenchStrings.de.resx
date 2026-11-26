@@ -1894,7 +1894,7 @@
         <value>Diese Ansicht hinzufügen</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>Board öffnen</value>
+        <value>Ablauf öffnen</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>In der Werkbank öffnen</value>
@@ -4161,15 +4161,6 @@
     <data name="ProgressTasks" xml:space="preserve">
         <value>Aufgaben</value>
     </data>
-    <data name="ProgressSamplesTitle" xml:space="preserve">
-        <value>Das sind Beispiele</value>
-    </data>
-    <data name="ProgressSamplesText" xml:space="preserve">
-        <value>Die Aufgaben Ihrer Agenten erscheinen hier, sobald eine beginnt. Bis dahin probieren Sie diese aus: Beantworten Sie eine Frage, haken Sie einen Schritt ab oder schreiben Sie dem Agenten.</value>
-    </data>
-    <data name="ProgressSamplesVisitorText" xml:space="preserve">
-        <value>Die Aufgaben der Agenten dieser Werkbank erscheinen nur auf dem Computer, auf dem sie läuft. Diese Beispiele zeigen, was Sie dort sehen würden.</value>
-    </data>
     <data name="ProgressGroupNeedsYou" xml:space="preserve">
         <value>Wartet auf Sie</value>
     </data>
@@ -4214,9 +4205,6 @@
     </data>
     <data name="ProgressUpdated" xml:space="preserve">
         <value>Aktualisiert {0}</value>
-    </data>
-    <data name="ProgressSample" xml:space="preserve">
-        <value>Beispiel</value>
     </data>
     <data name="ProgressYourTurn" xml:space="preserve">
         <value>Sie sind dran</value>
@@ -4326,15 +4314,6 @@
     <data name="ProgressSent" xml:space="preserve">
         <value>An {0} gesendet.</value>
     </data>
-    <data name="ProgressSampleSentTitle" xml:space="preserve">
-        <value>Das ist ein Beispiel</value>
-    </data>
-    <data name="ProgressSampleSent" xml:space="preserve">
-        <value>Bei einer echten Aufgabe bekommt {0} das sofort und macht weiter.</value>
-    </data>
-    <data name="ProgressSampleSecret" xml:space="preserve">
-        <value>Bei einer echten Aufgabe geht es dorthin, wo die Frage sagt, und {0} macht weiter, ohne es zu sehen.</value>
-    </data>
     <data name="ProgressSecretToGitHubEnvironment" xml:space="preserve">
         <value>Es geht direkt als {0} zu GitHub, als Secret der Umgebung {1}. {2} sieht es nie.</value>
     </data>
@@ -4443,189 +4422,6 @@
     <data name="TimeHoursAgo" xml:space="preserve">
         <value>vor {0} Std.</value>
     </data>
-    <data name="SampleDeployTitle" xml:space="preserve">
-        <value>Auf Test und Produktion bereitstellen</value>
-    </data>
-    <data name="SampleDeploySummary" xml:space="preserve">
-        <value>Die Test- und Produktionsumgebung auf Ihrem eigenen Server einrichten, mit der App unter Ihrer Domain.</value>
-    </data>
-    <data name="SampleDeployStepServices" xml:space="preserve">
-        <value>Die externen Dienste der App und ihre Schlüssel finden</value>
-    </data>
-    <data name="SampleDeployStepEnvironments" xml:space="preserve">
-        <value>Test- und Produktionsumgebung auf GitHub anlegen</value>
-    </data>
-    <data name="SampleDeployStepServer" xml:space="preserve">
-        <value>Einen Linux-Server besorgen und seine Adresse teilen</value>
-    </data>
-    <data name="SampleDeployStepToken" xml:space="preserve">
-        <value>Ein Cloudflare-API-Token erstellen</value>
-    </data>
-    <data name="SampleDeployStepTokenDetail" xml:space="preserve">
-        <value>Öffnen Sie im Cloudflare-Dashboard My Profile und dann API Tokens, und erstellen Sie eines, das DNS und Cloudflare Tunnel bearbeiten darf. Fügen Sie es dann unten ein.</value>
-    </data>
-    <data name="SampleDeployStepRunner" xml:space="preserve">
-        <value>Docker und den GitHub-Actions-Runner auf dem Server installieren</value>
-    </data>
-    <data name="SampleDeployStepTunnel" xml:space="preserve">
-        <value>Die App über einen Cloudflare Tunnel unter Ihrer Domain bereitstellen</value>
-    </data>
-    <data name="SampleDeployStepFirst" xml:space="preserve">
-        <value>Erst auf Test, dann auf Produktion bereitstellen</value>
-    </data>
-    <data name="SampleDeployAskEmail" xml:space="preserve">
-        <value>Welcher Dienst soll die E-Mails der App senden?</value>
-    </data>
-    <data name="SampleDeployAskEmailDetail" xml:space="preserve">
-        <value>Die App verschickt Anmeldecodes und Links zum Zurücksetzen des Passworts per E-Mail. Sie können das später ändern.</value>
-    </data>
-    <data name="SampleDeployAskEmailOption1" xml:space="preserve">
-        <value>Ein kostenloses Konto bei einem E-Mail-Dienst</value>
-    </data>
-    <data name="SampleDeployAskEmailOption2" xml:space="preserve">
-        <value>Der Mailserver unserer Firma</value>
-    </data>
-    <data name="SampleDeployAskEmailOption3" xml:space="preserve">
-        <value>Vorerst keiner: E-Mails im Protokoll anzeigen</value>
-    </data>
-    <data name="SampleDeployAskSsh" xml:space="preserve">
-        <value>Den SSH-Port des Servers schließen, sobald der Tunnel läuft?</value>
-    </data>
-    <data name="SampleDeployAskSshDetail" xml:space="preserve">
-        <value>Sie erreichen den Server weiterhin über den Tunnel und über die Webkonsole Ihres Anbieters.</value>
-    </data>
-    <data name="SampleDeployAskToken" xml:space="preserve">
-        <value>Fügen Sie das Cloudflare-Token ein</value>
-    </data>
-    <data name="SampleDeployNoteSecrets" xml:space="preserve">
-        <value>Schlüssel und Passwörter kommen nie in einen Chat. Sie fügen sie hier ein, und jedes geht direkt dorthin, wo es hingehört, ohne dass ich es sehe.</value>
-    </data>
-    <data name="SampleDeployNoteOneServer" xml:space="preserve">
-        <value>Ein Server für beide Umgebungen, damit die Kosten niedrig bleiben.</value>
-    </data>
-    <data name="SampleDeployLinkCloudflare" xml:space="preserve">
-        <value>Cloudflare-Dashboard</value>
-    </data>
-    <data name="SampleDeployFeed1" xml:space="preserve">
-        <value>Die App nutzt 6 externe Dienste; 3 davon brauchen Schlüssel aus Ihren eigenen Konten.</value>
-    </data>
-    <data name="SampleDeployFeed2" xml:space="preserve">
-        <value>Der Server ist unter 203.0.113.24 bereit.</value>
-    </data>
-    <data name="SampleDeployFeed3" xml:space="preserve">
-        <value>Mit dem von Ihnen hinzugefügten Schlüssel am Server angemeldet und die Anmeldung per Passwort abgeschaltet.</value>
-    </data>
-    <data name="SampleDeployFeed4" xml:space="preserve">
-        <value>Ich warte auf das Cloudflare-Token, um den Tunnel einzurichten.</value>
-    </data>
-    <data name="SampleFeatureTitle" xml:space="preserve">
-        <value>Neue Funktion: Treuepunkte</value>
-    </data>
-    <data name="SampleFeatureSummary" xml:space="preserve">
-        <value>Kunden sammeln bei jeder Bestellung Punkte und lösen sie an der Kasse ein. Jetzt, wo Sie das Design freigegeben haben, wird gebaut.</value>
-    </data>
-    <data name="SampleFeatureStepRequirements" xml:space="preserve">
-        <value>Anforderungen klären und in die Spezifikation schreiben</value>
-    </data>
-    <data name="SampleFeatureStepPlan" xml:space="preserve">
-        <value>Die Arbeit in 6 Aufgaben planen</value>
-    </data>
-    <data name="SampleFeatureStepDesign" xml:space="preserve">
-        <value>Das Design in der Werkbank freigeben</value>
-    </data>
-    <data name="SampleFeatureStepLedger" xml:space="preserve">
-        <value>Das Punktekonto und seine API bauen</value>
-    </data>
-    <data name="SampleFeatureStepCheckout" xml:space="preserve">
-        <value>Punkte an der Kasse einlösen</value>
-    </data>
-    <data name="SampleFeatureStepTests" xml:space="preserve">
-        <value>Tests auf Smartphones und Desktops</value>
-    </data>
-    <data name="SampleStepTryOnTest" xml:space="preserve">
-        <value>Auf der Testumgebung ausprobieren</value>
-    </data>
-    <data name="SampleFeatureAskWorth" xml:space="preserve">
-        <value>Wie viel ist ein Punkt an der Kasse wert?</value>
-    </data>
-    <data name="SampleFeatureAskWorthDetail" xml:space="preserve">
-        <value>Der Wert kommt in die Einstellungen, damit Sie ihn später ändern können.</value>
-    </data>
-    <data name="SampleFeatureAskWorthPlaceholder" xml:space="preserve">
-        <value>Zum Beispiel: 100 Punkte = 1 €</value>
-    </data>
-    <data name="SampleFeatureAskOrders" xml:space="preserve">
-        <value>Für welche Bestellungen gibt es Punkte?</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption1" xml:space="preserve">
-        <value>Online-Bestellungen</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption2" xml:space="preserve">
-        <value>Bestellungen im Laden</value>
-    </data>
-    <data name="SampleFeatureAskOrdersOption3" xml:space="preserve">
-        <value>Mit Geschenkkarte bezahlte Bestellungen</value>
-    </data>
-    <data name="SampleFeatureNoteExpiry" xml:space="preserve">
-        <value>Punkte verfallen 12 Monate, nachdem sie gesammelt wurden.</value>
-    </data>
-    <data name="SampleFeatureNoteSpec" xml:space="preserve">
-        <value>Alles bisher Entschiedene steht in der Spezifikation der Funktion, zusammen mit den offenen Fragen.</value>
-    </data>
-    <data name="SampleFeatureLinkDesign" xml:space="preserve">
-        <value>Freigegebenes Design</value>
-    </data>
-    <data name="SampleFeatureFeed1" xml:space="preserve">
-        <value>Anforderungen in die Spezifikation geschrieben; 3 Fragen sind noch offen für Sie.</value>
-    </data>
-    <data name="SampleFeatureFeed2" xml:space="preserve">
-        <value>Sieht gut aus. Machen Sie das Punkte-Abzeichen etwas kleiner.</value>
-    </data>
-    <data name="SampleFeatureFeed3" xml:space="preserve">
-        <value>Abzeichen verkleinert und mit dem Bauen begonnen.</value>
-    </data>
-    <data name="SampleFeatureFeed4" xml:space="preserve">
-        <value>Das Punktekonto und seine Datenbankmigration sind drin. Jetzt kommt die API.</value>
-    </data>
-    <data name="SampleFixTitle" xml:space="preserve">
-        <value>Fehler: Erstattungen fehlen im täglichen Umsatzbericht</value>
-    </data>
-    <data name="SampleFixSummary" xml:space="preserve">
-        <value>Erstattungen nach Mitternacht wurden dem falschen Tag zugerechnet. Behoben, auf Test ausprobiert und gemergt.</value>
-    </data>
-    <data name="SampleFixStepLogs" xml:space="preserve">
-        <value>Die Ursache in den Protokollen der Produktion finden</value>
-    </data>
-    <data name="SampleFixStepTest" xml:space="preserve">
-        <value>Einen Test schreiben, der ohne die Korrektur fehlschlägt</value>
-    </data>
-    <data name="SampleFixStepFix" xml:space="preserve">
-        <value>Erstattungen in der Zeitzone des Ladens zählen</value>
-    </data>
-    <data name="SampleFixStepMerge" xml:space="preserve">
-        <value>Mergen, wodurch die Produktion aktualisiert wird</value>
-    </data>
-    <data name="SampleFixAskMerge" xml:space="preserve">
-        <value>In main mergen? Das aktualisiert die Produktion.</value>
-    </data>
-    <data name="SampleFixNoteDone" xml:space="preserve">
-        <value>Die Produktion läuft mit der Korrektur. Der Test verhindert, dass der Fehler zurückkommt.</value>
-    </data>
-    <data name="SampleFixLinkPullRequest" xml:space="preserve">
-        <value>Pull-Request</value>
-    </data>
-    <data name="SampleFixLinkTest" xml:space="preserve">
-        <value>Testumgebung</value>
-    </data>
-    <data name="SampleFixFeed1" xml:space="preserve">
-        <value>Gefunden: Der Bericht nutzte die Zeitzone des Servers, nicht die des Ladens.</value>
-    </data>
-    <data name="SampleFixFeed2" xml:space="preserve">
-        <value>Jetzt auf Test. Probieren Sie eine Erstattung nach Mitternacht.</value>
-    </data>
-    <data name="SampleFixFeed3" xml:space="preserve">
-        <value>Gemergt. Die Produktion ist aktualisiert.</value>
-    </data>
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>Lange Aufgaben verfolgen, mit einem Klick antworten</value>
     </data>
@@ -4633,7 +4429,7 @@
         <value>Eine Bereitstellung oder eine neue Funktion braucht viele Schritte, und manche kann nur Sie tun. Jeder Agenten-Chat zeigt hier, was erledigt ist, was fehlt und was er von Ihnen braucht, damit nichts in einem langen Chat untergeht. Schlüssel und Passwörter, die Sie dort einfügen, gehen direkt dorthin, wo sie hingehören, nie durch den Chat.</value>
     </data>
     <data name="TourProgressText" xml:space="preserve">
-        <value>Eine Bereitstellung oder eine neue Funktion braucht viele Schritte, und manche kann nur Sie tun. Jeder Agenten-Chat zeigt hier, was erledigt ist, was fehlt und was er von Ihnen braucht. Antworten Sie mit einem Klick, ein paar Worten oder Ihrer Stimme, und er macht sofort weiter. Probieren Sie es an den Beispielen aus.</value>
+        <value>Eine Bereitstellung oder eine neue Funktion braucht viele Schritte, und manche kann nur Sie tun. Jeder Agenten-Chat zeigt hier, was erledigt ist, was fehlt und was er von Ihnen braucht. Antworten Sie mit einem Klick, ein paar Worten oder Ihrer Stimme, und er macht sofort weiter.</value>
     </data>
     <data name="HomeFactAgent" xml:space="preserve">
         <value>Fortschritt und Fragen Ihrer Agenten an einem Ort</value>
@@ -4667,17 +4463,6 @@
     </data>
     <data name="ProgressReport" xml:space="preserve">
         <value>Bericht</value>
-    </data>
-    <data name="SampleFixReport" xml:space="preserve">
-        <value>**Ursache:** Der Bericht ordnete Verkäufe nach dem Tag des Servers, der in UTC läuft, sodass eine Rückerstattung nach Mitternacht im Laden auf den Vortag fiel.
-
-**Lösung:** Rückerstattungen zählen jetzt in der Zeitzone des Ladens, und ein neuer Test erstattet um 00:30 Uhr Ladenzeit und prüft, auf welchen Tag sie fällt.
-
-| Prüfung | Ergebnis |
-| --- | --- |
-| Alle Tests | Bestanden |
-| Rückerstattung nach Mitternacht auf Test | Am richtigen Tag |
-| Production nach dem Merge | Aktualisiert |</value>
     </data>
     <data name="PosNoDataYet" xml:space="preserve">
         <value>Noch nichts vorhanden</value>

@@ -1,0 +1,44 @@
+@import '../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.numbers {
+    margin: 0;
+    gap: 1rem 2.25rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(7.5rem, auto));
+
+    @include lt-md {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @include lt-sm {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.number {
+    gap: 0.125rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.number-value {
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    font-variant-numeric: tabular-nums;
+    color: var(--tone);
+    background: linear-gradient(160deg, var(--tone), var(--tone-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.number-label {
+    margin: 0;
+    max-width: 11rem;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: $bit-color-foreground-secondary;
+}

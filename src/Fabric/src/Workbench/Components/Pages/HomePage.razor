@@ -118,7 +118,7 @@
         </div>
     </section>
 
-    @* The agents' long tasks as the Progress page lists them, or its samples until one starts. *@
+    @* The agents' long tasks as the Progress page lists them, or a line on what shows here until one starts. *@
     <section id="progress" class="section agents">
         <div class="agents-grid">
             <div class="agents-text">
@@ -138,7 +138,7 @@
                     }
                 </div>
             </div>
-            @* Who may see the real tasks waits for them, so the samples never flash by first. *@
+            @* Who may see the tasks waits for them, so the empty state never flashes by first. *@
             <div class="agents-tasks">
                 @if (reviewSession.IsOpen is false && reviewSession.CanSeeTasks && isOpenFailed)
                 {
@@ -149,9 +149,12 @@
                 {
                     <BitRingLoading />
                 }
-                else if (reviewSession.ShowsSampleTasks)
+                else if (reviewSession.ShownTasks.Count == 0)
                 {
-                    <span class="samples-badge"><BitIcon IconName="@BitIconName.Lightbulb" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.ProgressSamplesTitle)]</span>
+                    <div class="agents-empty">
+                        <BitIcon IconName="@BitIconName.TaskList" Color="BitColor.Primary" />
+                        <span>@Localizer[reviewSession.CanSeeTasks ? nameof(WorkbenchStrings.ProgressEmptyText) : nameof(WorkbenchStrings.ProgressVisitorText)]</span>
+                    </div>
                 }
                 @foreach (var task in reviewSession.IsOpen || reviewSession.CanSeeTasks is false ? reviewSession.ShownTasks.OrderByDescending(t => t.NeedsYouCount > 0).ThenBy(t => t.IsFinished).ThenByDescending(t => t.UpdatedAt).Take(3) : [])
                 {
@@ -163,6 +166,47 @@
         </div>
     </section>
 
+    @* What an agent shows as a board instead of telling it in the chat: the points, a prompt to try, and the boards, or how to get the first one. *@
+    <section id="boards" class="section boards">
+        <div class="boards-grid">
+            <div class="boards-text">
+                <h2>@Localizer[nameof(WorkbenchStrings.HomeBoardsTitle)]</h2>
+                <p>@Localizer[nameof(WorkbenchStrings.HomeBoardsSubtitle)]</p>
+                <ul class="agents-points">
+                    @foreach (var point in boardPoints)
+                    {
+                        <li><span class="point-icon"><BitIcon IconName="@point.IconName" Size="BitSize.Small" /></span>@Localizer[point.TextKey]</li>
+                    }
+                </ul>
+                <figure class="prompt boards-prompt">
+                    <figcaption class="prompt-label"><BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.HomeCtaPromptLabel)]</figcaption>
+                    <blockquote class="prompt-text">@Localizer[nameof(WorkbenchStrings.BoardsPrompt)]</blockquote>
+                </figure>
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.ViewDashboard" Href="@WorkbenchUrls.Boards" Class="boards-open">@Localizer[nameof(WorkbenchStrings.HomeBoardsOpen)]</BitButton>
+            </div>
+            <div class="boards-cards">
+                @if (WorkbenchBoardCatalog.Boards.Count == 0)
+                {
+                    <div class="boards-empty">
+                        <BitIcon IconName="@BitIconName.Lightbulb" Color="BitColor.Primary" />
+                        <span>@Localizer[nameof(WorkbenchStrings.BoardsEmpty)]</span>
+                    </div>
+                }
+                @foreach (var board in WorkbenchBoardCatalog.Boards.Take(3))
+                {
+                    <Bmotion Preset="BmotionPresets.Reveal(distance: 24)" WhileHover="Bm.To(y: -6)">
+                        <a class="board-card tone-@board.Tone" href="@WorkbenchUrls.Board(board.Id)">
+                            <span class="board-art" aria-hidden="true"><span class="board-icon"><BitIcon IconName="@board.IconName" /></span></span>
+                            <span class="board-body">
+                                <span class="board-title">@Localizer[board.TitleKey]</span>
+                                <span class="board-summary">@Localizer[board.SummaryKey]</span>
+                            </span>
+                        </a>
+                    </Bmotion>
+                }
+            </div>
+        </div>
+    </section>
 
     <section class="section how">
         <div class="section-head">

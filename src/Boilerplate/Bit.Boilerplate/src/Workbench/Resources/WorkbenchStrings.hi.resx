@@ -2611,7 +2611,7 @@
         <value>यह व्यू जोड़ें</value>
     </data>
     <data name="OpenBoard" xml:space="preserve">
-        <value>बोर्ड खोलें</value>
+        <value>फ़्लो खोलें</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>वर्कबेंच में खोलें</value>
@@ -5455,5 +5455,242 @@
 | सभी टेस्ट | पास |
 | Test पर आधी रात के बाद रिफ़ंड | सही दिन में |
 | merge के बाद Production | अपडेट हो गया |</value>
+    </data>
+    <data name="Boards" xml:space="preserve">
+        <value>बोर्ड</value>
+    </data>
+    <data name="BoardsLead" xml:space="preserve">
+        <value>आपका एजेंट लंबे जवाब के बजाय पेज के रूप में जो दिखाता है: खींचा हुआ फ़्लो, आमने-सामने विकल्प, आज़माने के लिए आँकड़े।</value>
+    </data>
+    <data name="BoardsPrompt" xml:space="preserve">
+        <value>एक बोर्ड बनाओ जो दिखाए कि हमारा ऐप कैसे डिप्लॉय होता है।</value>
+    </data>
+    <data name="BoardsEmpty" xml:space="preserve">
+        <value>अभी कोई बोर्ड नहीं है। अपने एजेंट से एक माँगें, और वह यहाँ दिखेगा।</value>
+    </data>
+    <data name="BoardNotFound" xml:space="preserve">
+        <value>इस पते पर कोई बोर्ड नहीं है।</value>
+    </data>
+    <data name="DeployBoardTitle" xml:space="preserve">
+        <value>यह प्रोजेक्ट कैसे शिप होता है</value>
+    </data>
+    <data name="DeployBoardSummary" xml:space="preserve">
+        <value>आपके बदलावों से आपके यूज़र्स तक, इसी प्रोजेक्ट के लिए बनाया गया।</value>
+    </data>
+    <data name="PaymentsBoardTitle" xml:space="preserve">
+        <value>भुगतान लेना</value>
+    </data>
+    <data name="PaymentsBoardSummary" xml:space="preserve">
+        <value>वेब पर और स्टोर्स में, हर बिक्री से कौन कितना रखता है।</value>
+    </data>
+    <data name="HomeBoardsTitle" xml:space="preserve">
+        <value>टेक्स्ट की दीवार नहीं, बोर्ड</value>
+    </data>
+    <data name="HomeBoardsSubtitle" xml:space="preserve">
+        <value>अपने एजेंट से कुछ समझाने को कहें, और वह लंबे जवाब के बजाय यहाँ एक बोर्ड बनाता है, आपके ऐप के अपने कंपोनेंट्स और थीम के साथ।</value>
+    </data>
+    <data name="HomeBoardsPointDiagram" xml:space="preserve">
+        <value>खींचा हुआ और चलता हुआ फ़्लो या आर्किटेक्चर</value>
+    </data>
+    <data name="HomeBoardsPointCompare" xml:space="preserve">
+        <value>विकल्प आमने-सामने, एक नज़र में</value>
+    </data>
+    <data name="HomeBoardsPointTry" xml:space="preserve">
+        <value>आज़माने लायक आँकड़े, कैलकुलेटर की तरह</value>
+    </data>
+    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
+        <value>लाइट और डार्क, हर स्क्रीन पर</value>
+    </data>
+    <data name="HomeBoardsOpen" xml:space="preserve">
+        <value>बोर्ड खोलें</value>
+    </data>
+    <data name="DeployLead" xml:space="preserve">
+        <value>आप अपने बदलाव भेजते हैं। GitHub उन्हें टेस्ट करके पैक करता है। आपका सर्वर बस नतीजा चलाता है।</value>
+    </data>
+    <data name="DeployNote" xml:space="preserve">
+        <value>एक उदाहरण बोर्ड, पूरी कहानी नहीं</value>
+    </data>
+    <data name="DeploySources" xml:space="preserve">
+        <value>प्रोजेक्ट की अपनी फ़ाइलों से पढ़ा गया</value>
+    </data>
+    <data name="DeployNumberBuilds" xml:space="preserve">
+        <value>बिल्ड आपके सर्वर पर</value>
+    </data>
+    <data name="DeployNumberDoors" xml:space="preserve">
+        <value>दरवाज़े खुले आपके सर्वर पर</value>
+    </data>
+    <data name="DeployNumberDoorsCaddy" xml:space="preserve">
+        <value>दरवाज़े खुले, दोनों वेबसाइट के लिए</value>
+    </data>
+    <data name="DeployNumberTested" xml:space="preserve">
+        <value>अपडेट पहले टेस्ट होते हैं</value>
+    </data>
+    <data name="DeployNumberCopies" xml:space="preserve">
+        <value>आपके ऐप की कॉपियाँ: एक आज़माने को, एक लाइव</value>
+    </data>
+    <data name="DeployPlaceYou" xml:space="preserve">
+        <value>आप</value>
+    </data>
+    <data name="DeployPlaceGitHub" xml:space="preserve">
+        <value>GitHub</value>
+    </data>
+    <data name="DeployPlaceServer" xml:space="preserve">
+        <value>आपका सर्वर</value>
+    </data>
+    <data name="DeployPlaceOnline" xml:space="preserve">
+        <value>ऑनलाइन</value>
+    </data>
+    <data name="DeployStopChanges" xml:space="preserve">
+        <value>आपके बदलाव</value>
+    </data>
+    <data name="DeployStopChangesNote" xml:space="preserve">
+        <value>किसी भी ब्रांच से भेजे गए</value>
+    </data>
+    <data name="DeployStopTested" xml:space="preserve">
+        <value>अपने आप टेस्ट</value>
+    </data>
+    <data name="DeployStopTestedNote" xml:space="preserve">
+        <value>GitHub पर बनाया और जाँचा गया</value>
+    </data>
+    <data name="DeployStopPackaged" xml:space="preserve">
+        <value>पैक किया गया</value>
+    </data>
+    <data name="DeployStopPackagedNote" xml:space="preserve">
+        <value>इंस्टॉल के लिए तैयार</value>
+    </data>
+    <data name="DeployStopLive" xml:space="preserve">
+        <value>बदल दिया गया</value>
+    </data>
+    <data name="DeployStopLiveNote" xml:space="preserve">
+        <value>आपका सर्वर नए वर्ज़न पर जाता है</value>
+    </data>
+    <data name="DeployStopSafe" xml:space="preserve">
+        <value>सुरक्षित पहुँच</value>
+    </data>
+    <data name="DeployStopSafeNote" xml:space="preserve">
+        <value>कुछ भी खुला नहीं रहता</value>
+    </data>
+    <data name="DeployStopSafeCaddyNote" xml:space="preserve">
+        <value>सुरक्षित कनेक्शन से</value>
+    </data>
+    <data name="DeployStopUsers" xml:space="preserve">
+        <value>आपके यूज़र</value>
+    </data>
+    <data name="DeployStopUsersNote" xml:space="preserve">
+        <value>नए वर्ज़न पर</value>
+    </data>
+    <data name="DeployStopApps" xml:space="preserve">
+        <value>आपके ऐप</value>
+    </data>
+    <data name="DeployStopAppsNote" xml:space="preserve">
+        <value>डाउनलोड के लिए तैयार</value>
+    </data>
+    <data name="DeployCopiesTitle" xml:space="preserve">
+        <value>आपके ऐप की दो कॉपियाँ: एक आज़माने को, एक लाइव</value>
+    </data>
+    <data name="DeployTestName" xml:space="preserve">
+        <value>टेस्ट</value>
+    </data>
+    <data name="DeployTestFrom" xml:space="preserve">
+        <value>कोई भी वर्ज़न जिसे आप आज़माना चाहें</value>
+    </data>
+    <data name="DeployTestWhen" xml:space="preserve">
+        <value>जब भी आप कहें</value>
+    </data>
+    <data name="DeployLiveName" xml:space="preserve">
+        <value>लाइव</value>
+    </data>
+    <data name="DeployLiveFrom" xml:space="preserve">
+        <value>मुख्य वर्ज़न</value>
+    </data>
+    <data name="DeployLiveWhen" xml:space="preserve">
+        <value>हर बार जब कोई बदलाव मंज़ूर होता है</value>
+    </data>
+    <data name="DeployServerTitle" xml:space="preserve">
+        <value>बिना रुकावट: नया वर्ज़न पुराने के बगल में शुरू होता है</value>
+    </data>
+    <data name="DeployServerKicker" xml:space="preserve">
+        <value>नया तैयार होने तक विज़िटर पुराना ही इस्तेमाल करते हैं।</value>
+    </data>
+    <data name="DeployServerBar" xml:space="preserve">
+        <value>आपका सर्वर · {0} ऐप, {1} सर्विस</value>
+    </data>
+    <data name="DeployReplaced" xml:space="preserve">
+        <value>बदला जाता है</value>
+    </data>
+    <data name="DeployKept" xml:space="preserve">
+        <value>चलता रहता है</value>
+    </data>
+    <data name="DeployStateLive" xml:space="preserve">
+        <value>लाइव</value>
+    </data>
+    <data name="DeployStateStarting" xml:space="preserve">
+        <value>शुरू हो रहा</value>
+    </data>
+    <data name="DeployStateReady" xml:space="preserve">
+        <value>तैयार</value>
+    </data>
+    <data name="DeployBoxWebApp" xml:space="preserve">
+        <value>वेब ऐप</value>
+    </data>
+    <data name="DeployBoxLandingPage" xml:space="preserve">
+        <value>लैंडिंग पेज</value>
+    </data>
+    <data name="DeployBoxCache" xml:space="preserve">
+        <value>कैश (Redis)</value>
+    </data>
+    <data name="DeployBoxStorage" xml:space="preserve">
+        <value>स्टोरेज (Redis)</value>
+    </data>
+    <data name="DeployBoxFiles" xml:space="preserve">
+        <value>फ़ाइलें</value>
+    </data>
+    <data name="DeployStepDownload" xml:space="preserve">
+        <value>डाउनलोड</value>
+    </data>
+    <data name="DeployStepSettings" xml:space="preserve">
+        <value>सेटिंग्स</value>
+    </data>
+    <data name="DeployStepData" xml:space="preserve">
+        <value>डेटा अपडेट</value>
+    </data>
+    <data name="DeployStepStart" xml:space="preserve">
+        <value>शुरू</value>
+    </data>
+    <data name="DeployStepSwitch" xml:space="preserve">
+        <value>बदलें</value>
+    </data>
+    <data name="DeployStepCheck" xml:space="preserve">
+        <value>जाँचें</value>
+    </data>
+    <data name="DeployStepRefresh" xml:space="preserve">
+        <value>कैश रिफ़्रेश</value>
+    </data>
+    <data name="DeployAppsTitle" xml:space="preserve">
+        <value>फ़ोन और डेस्कटॉप ऐप भी इसी अपडेट से आते हैं</value>
+    </data>
+    <data name="DeployAppWindows" xml:space="preserve">
+        <value>एक इंस्टॉलर जो खुद अपडेट होता है</value>
+    </data>
+    <data name="DeployAppAndroid" xml:space="preserve">
+        <value>Google Play के लिए तैयार</value>
+    </data>
+    <data name="DeployAppIos" xml:space="preserve">
+        <value>App Store के लिए तैयार, Mac के बिना</value>
+    </data>
+    <data name="DeployAppOff" xml:space="preserve">
+        <value>जब तक आप प्रकाशित न करें, बंद</value>
+    </data>
+    <data name="DeploySettingsTitle" xml:space="preserve">
+        <value>{0} सेटिंग्स जो हर कॉपी को चाहिए</value>
+    </data>
+    <data name="DeploySettingsKicker" xml:space="preserve">
+        <value>bit pipeline इन्हें आपके लिए भरता है</value>
+    </data>
+    <data name="DeploySecret" xml:space="preserve">
+        <value>गुप्त</value>
+    </data>
+    <data name="DeploySetting" xml:space="preserve">
+        <value>सेटिंग</value>
     </data>
 </root>

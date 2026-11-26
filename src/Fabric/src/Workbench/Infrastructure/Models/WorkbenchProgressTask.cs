@@ -18,9 +18,6 @@ public sealed record WorkbenchProgressTask(string Id,
                                            WorkbenchProgressAsk[] Asks,
                                            WorkbenchProgressEntry[] Feed)
 {
-    /// <summary>One of the samples the page shows while no agent has started a task.</summary>
-    public bool IsSample { get; init; }
-
     /// <summary>The agent's write-up of the task in Markdown, like the report a long run ends with.</summary>
     public string? Report { get; init; }
 

@@ -1,0 +1,42 @@
+@inherits WorkbenchComponentBase
+
+@* A board reads in the language it is written in, right to left for one that is, whatever language the Workbench is in:
+   its direction cascades to the components in it, and its digits are Latin unless it is in Persian. *@
+<CascadingValue Value="dir">
+    <article class="board tone-@Tone @(IsPersian ? null : "app-latin-digits")" lang="@BoardLanguage" dir="@(dir is BitDir.Rtl ? "rtl" : "ltr")">
+        <header class="hero">
+            <span class="hero-icon" aria-hidden="true"><BitIcon IconName="@IconName" /></span>
+            <div class="hero-text">
+                <BitText Element="h1" Class="hero-title">@Title</BitText>
+                @if (Lead is not null)
+                {
+                    <BitText Typography="BitTypography.Body1" Class="hero-lead">@Lead</BitText>
+                }
+                @if (Meta is not null || Note is not null)
+                {
+                    <div class="hero-meta">
+                        @if (Meta is not null)
+                        {
+                            <span class="meta-chip"><BitIcon IconName="@BitIconName.Calendar" Size="BitSize.Small" />@Meta</span>
+                        }
+                        @if (Note is not null)
+                        {
+                            <span class="meta-chip note"><BitIcon IconName="@BitIconName.Lightbulb" Size="BitSize.Small" />@Note</span>
+                        }
+                    </div>
+                }
+            </div>
+            @if (Aside is not null)
+            {
+                <div class="hero-aside">@Aside</div>
+            }
+        </header>
+
+        @ChildContent
+
+        @if (Sources is { Length: > 0 })
+        {
+            <BoardSources Items="Sources" Title="@SourcesTitle" />
+        }
+    </article>
+</CascadingValue>

@@ -224,10 +224,6 @@ public partial class ProgressPage
         {
             SnackBarService.Error(problem);
         }
-        else if (task.IsSample)
-        {
-            SnackBarService.Show(Localizer[nameof(WorkbenchStrings.ProgressSampleSentTitle)], Localizer[nameof(WorkbenchStrings.ProgressSampleSecret), task.Agent]);
-        }
         else
         {
             SnackBarService.Success(Localizer[nameof(WorkbenchStrings.ProgressSecretStored), task.Agent]);
@@ -284,17 +280,10 @@ public partial class ProgressPage
         return e.Key is "Enter" && (e.CtrlKey || e.MetaKey) ? SendMessage(task) : Task.CompletedTask;
     }
 
-    /// <summary>Tells the user where what they sent went: to the agent, or nowhere for a sample.</summary>
+    /// <summary>Tells the user that what they sent reached the agent.</summary>
     private void Sent(WorkbenchProgressTask task)
     {
-        if (task.IsSample)
-        {
-            SnackBarService.Show(Localizer[nameof(WorkbenchStrings.ProgressSampleSentTitle)], Localizer[nameof(WorkbenchStrings.ProgressSampleSent), task.Agent]);
-        }
-        else
-        {
-            SnackBarService.Success(Localizer[nameof(WorkbenchStrings.ProgressSent), task.Agent]);
-        }
+        SnackBarService.Success(Localizer[nameof(WorkbenchStrings.ProgressSent), task.Agent]);
     }
 
     /// <summary>Deletes the task on the second press for that same task; the first turns its button into a question.</summary>
