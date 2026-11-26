@@ -4,7 +4,8 @@ namespace Bit.Fabric.Server.Api.Features.DocsMcp;
 /// The bit platform libraries, each of which answers for itself through an MCP server of its own at
 /// https://{name in lowercase}.bitplatform.dev/mcp, which /docs-mcp proxies. Every list of them an agent reads - the server
 /// instructions, the descriptions of the tools that point at them, the chatbot's library tools - is written from here, so
-/// adding or renaming a library is one edit.
+/// adding or renaming a library is one edit. A library merged into BlazorUI leaves this list: it is one of BlazorUI's
+/// components then, which BlazorUI's tools answer for, as Balette became BitCommandPalette.
 /// </summary>
 public static class BitLibraries
 {
@@ -23,7 +24,6 @@ public static class BitLibraries
         new("Brouter", "routing"),
         new("Bmage", "an image editor or image processing"),
         new("Bink", "a drawing canvas"),
-        new("Balette", "a command palette"),
         new("BbScanner", "a barcode scanner"),
         new("Bdnd", "drag and drop"),
         new("BlazeDb", "a browser database"),
