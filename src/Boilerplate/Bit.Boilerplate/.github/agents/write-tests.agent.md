@@ -86,4 +86,4 @@ from rising over time.
 
 - Every acceptance criterion and every bug fix has its test, and you saw each new test fail before its change made it
   pass.
-- The suite passes, apart from the failures on the list from before the change.
+- The tests that cover the change pass, apart from the failures on the list from before the change.
