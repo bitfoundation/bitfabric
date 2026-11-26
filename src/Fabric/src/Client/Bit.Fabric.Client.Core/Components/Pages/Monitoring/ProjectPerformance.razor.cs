@@ -12,7 +12,7 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectPerformance
 {
-    [Parameter, EditorRequired] public ProjectDto Project { get; set; } = default!;
+    [Parameter, EditorRequired] public MonitoringDto Project { get; set; } = default!;
 
     /// <summary>The parts of the last report, which make the rows.</summary>
     [Parameter] public ProjectCheckDto[] Checks { get; set; } = [];
@@ -32,7 +32,7 @@ public partial class ProjectPerformance
     /// <summary>The part the tab shows alone, when the last report has it.</summary>
     private ProjectCheckDto? OnlyPart => Check is null ? null : Checks.FirstOrDefault(check => check.Key == Check && check.IsNotConfigured is false);
 
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
 
     private const string StartsRow = "starts";
 
@@ -69,7 +69,7 @@ public partial class ProjectPerformance
         :
         [
             .. regions.Select(region => new BitResourceTimelineResource { Id = $"{ProjectRollupKeys.HomePage}|{region}", Name = Localizer[nameof(AppStrings.MonitoringHomePageRegion), MonitoringWords.Region(Localizer, region)] }),
-            // Through the cache in front of the app, a row only when a cache answers the home page (See ProjectDto.MedianVisitorMs).
+            // Through the cache in front of the app, a row only when a cache answers the home page (See MonitoringDto.MedianVisitorMs).
             .. Project.MedianVisitorMs is null ? Array.Empty<BitResourceTimelineResource>() : [new BitResourceTimelineResource { Id = ProjectRollupKeys.HomePageForVisitors, Name = Localizer[nameof(AppStrings.MonitoringHomePageForVisitors)] }],
             new() { Id = ProjectRollupKeys.Report, Name = Localizer[nameof(AppStrings.MonitoringHealthReport)] },
             // Right under the timings, so a slower stretch that starts at a deployment reads as its likely cause.
@@ -125,9 +125,9 @@ public partial class ProjectPerformance
     /// <summary>The bars of a window, at the width the zoom asked for (See OnViewChanged).</summary>
     private async Task<IReadOnlyList<BitResourceTimelineAllocation>> Load(BitResourceTimelineWindow window)
     {
-        var performance = await projectsController.GetPerformance(new()
+        var performance = await monitoringsController.GetPerformance(new()
         {
-            ProjectId = Project.Id,
+            MonitoringId = Project.Id,
             From = window.Start,
             To = window.End,
             StepMinutes = wantedStep

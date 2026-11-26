@@ -36,10 +36,10 @@ public partial class ProjectIcons(AppDbContext dbContext,
     /// <summary>The formats a manifest's icon is taken in: raster ones Bmage decodes. An SVG can carry script, so it isn't.</summary>
     private static readonly BmageImageFormat[] formats = [.. AttachmentController.AllowedImageFormats, BmageImageFormat.Ico];
 
-    public static bool IsDue(Project project, DateTimeOffset now) => project.IconReadAt is not { } readAt || now - readAt >= ReadEvery;
+    public static bool IsDue(ProjectMonitoring project, DateTimeOffset now) => project.IconReadAt is not { } readAt || now - readAt >= ReadEvery;
 
     /// <summary>Reads the manifest again and stores its icon when it changed; the caller saves the project.</summary>
-    public async Task Refresh(Project project, CancellationToken cancellationToken)
+    public async Task Refresh(ProjectMonitoring project, CancellationToken cancellationToken)
     {
         project.IconReadAt = timeProvider.GetUtcNow();
 
@@ -62,7 +62,7 @@ public partial class ProjectIcons(AppDbContext dbContext,
 
         if (imageProcessor.Identify(source) is not { } info || formats.Contains(info.Format) is false)
         {
-            logger.LogInformation("The icon of project {ProjectId} at {Url} is in a format bit Fabric doesn't take.", project.Id, iconUrl);
+            logger.LogInformation("The icon of project {MonitoringId} at {Url} is in a format bit Fabric doesn't take.", project.Id, iconUrl);
             return;
         }
 
@@ -81,7 +81,7 @@ public partial class ProjectIcons(AppDbContext dbContext,
         }
         catch (BmageImageException exp)
         {
-            logger.LogInformation("The icon of project {ProjectId} at {Url} couldn't be read: {Reason}", project.Id, iconUrl, exp.Message);
+            logger.LogInformation("The icon of project {MonitoringId} at {Url} couldn't be read: {Reason}", project.Id, iconUrl, exp.Message);
             return;
         }
 
@@ -151,7 +151,7 @@ public partial class ProjectIcons(AppDbContext dbContext,
     }
 
     /// <summary>Stores the new icon under a new id and removes the old one; null for none, and the card shows a monogram.</summary>
-    private async Task Replace(Project project, byte[]? webp, string? hash, CancellationToken cancellationToken)
+    private async Task Replace(ProjectMonitoring project, byte[]? webp, string? hash, CancellationToken cancellationToken)
     {
         var old = project.IconId;
 

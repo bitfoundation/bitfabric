@@ -11529,4 +11529,476 @@
     <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
     <value>از {0} تا {1}</value>
   </data>
+  <data name="LicensePageTitle" xml:space="preserve">
+    <value>License پروژه‌ی شما</value>
+  </data>
+  <data name="LicenseCheckingSignIn" xml:space="preserve">
+    <value>در حال بررسی ورود شما</value>
+  </data>
+  <data name="LicenseFreeFor" xml:space="preserve">
+    <value>یک License رایگان برای {0}</value>
+  </data>
+  <data name="LicenseWhatAProjectIs" xml:space="preserve">
+    <value>یک Project یک سامانه با داده‌های خودش است: صندوق فروش و پنل مدیریتش روی یک سرور، یک Project هستند.</value>
+  </data>
+  <data name="LicenseProjectId" xml:space="preserve">
+    <value>شناسه‌ی Project</value>
+  </data>
+  <data name="LicenseFirstCommit" xml:space="preserve">
+    <value>اولین commit</value>
+  </data>
+  <data name="LicenseTeamThatHoldsIt" xml:space="preserve">
+    <value>Team ای که آن را نگه می‌دارد</value>
+  </data>
+  <data name="LicenseTeam" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="LicenseTeamName" xml:space="preserve">
+    <value>نام Team</value>
+  </data>
+  <data name="LicenseNameYourTeam" xml:space="preserve">
+    <value>هر License مال یک Team است. نام Team خود را بنویسید؛ دیگران را بعداً می‌توانید دعوت کنید.</value>
+  </data>
+  <data name="LicenseTeamNameExample" xml:space="preserve">
+    <value>مثلاً Contoso</value>
+  </data>
+  <data name="LicenseTeamShortName" xml:space="preserve">
+    <value>نام کوتاه</value>
+  </data>
+  <data name="LicenseTeamShortNameHelp" xml:space="preserve">
+    <value>حروف کوچک انگلیسی، عدد و خط تیره.</value>
+  </data>
+  <data name="LicenseCreateTeamAndGetLicense" xml:space="preserve">
+    <value>ساخت Team و گرفتن License</value>
+  </data>
+  <data name="LicenseGetTheFreeLicense" xml:space="preserve">
+    <value>گرفتن License رایگان</value>
+  </data>
+  <data name="LicenseHasItsLicense" xml:space="preserve">
+    <value>{0} License خود را دارد</value>
+  </data>
+  <data name="LicenseFreeForUntil" xml:space="preserve">
+    <value>رایگان، برای {0}، تا {1}.</value>
+  </data>
+  <data name="LicenseBitPicksItUp" xml:space="preserve">
+    <value>اگر bit در ترمینال شما منتظر است، License را خودش برمی‌دارد و ادامه می‌دهد.</value>
+  </data>
+  <data name="LicensePasteIntoYourAi" xml:space="preserve">
+    <value>این را در AI خود بچسبانید</value>
+  </data>
+  <data name="LicenseSavedInBitJson" xml:space="preserve">
+    <value>این کار License را در bit.json پروژه ذخیره می‌کند، که bit بدون پرسیدن از کسی آن را بررسی می‌کند.</value>
+  </data>
+  <data name="LicenseOrRunThis" xml:space="preserve">
+    <value>یا این را در پوشه‌ی پروژه اجرا کنید</value>
+  </data>
+  <data name="LicenseSeeYourTeamsLicenses" xml:space="preserve">
+    <value>دیدن License های Team های شما</value>
+  </data>
+  <data name="LicenseOpensFromTheLink" xml:space="preserve">
+    <value>این صفحه از لینکی باز می‌شود که bit در پوشه‌ی یک پروژه نشان می‌دهد. برای گرفتن لینک، هر فرمان bit، مثلاً bit license، را آن‌جا اجرا کنید.</value>
+  </data>
+  <data name="LicenseLinkHasNoFirstCommit" xml:space="preserve">
+    <value>هر License نام اولین commit گیت پروژه را دارد و این لینک آن را ندارد. پروژه را در گیت commit کنید، سپس برای لینک تازه bit license را در پوشه‌اش اجرا کنید.</value>
+  </data>
+  <data name="Licenses" xml:space="preserve">
+    <value>License ها</value>
+  </data>
+  <data name="LicensesYourTeams" xml:space="preserve">
+    <value>License های Team های شما</value>
+  </data>
+  <data name="LicensesEveryLicenseHelp" xml:space="preserve">
+    <value>همه‌ی License هایی که Team های شما دارند، تازه‌ترین اول. bit هر کدام را در bit.json پروژه‌اش نگه می‌دارد.</value>
+  </data>
+  <data name="LicensesLoading" xml:space="preserve">
+    <value>در حال بارگذاری License های شما</value>
+  </data>
+  <data name="LicensesNoneYet" xml:space="preserve">
+    <value>هنوز License ای نیست</value>
+  </data>
+  <data name="LicensesHowToGetOne" xml:space="preserve">
+    <value>برای لینکی که برای یک پروژه License رایگان می‌گیرد، bit license را در پوشه‌ی آن اجرا کنید.</value>
+  </data>
+  <data name="LicensesIssued" xml:space="preserve">
+    <value>صادر شده</value>
+  </data>
+  <data name="LicensesUntil" xml:space="preserve">
+    <value>تا</value>
+  </data>
+  <data name="LicensesGotBy" xml:space="preserve">
+    <value>گرفته‌شده توسط</value>
+  </data>
+  <data name="LicensePrivacyLine" xml:space="preserve">
+    <value>نام پروژه‌ی شما و این‌که License دارد یا نه، تنها چیزی است که از آن می‌دانیم. کد منبع، prompt ها و داده‌های آن هیچ‌گاه در دسترس ما نیست.</value>
+  </data>
+  <data name="LicenseEnds" xml:space="preserve">
+    <value>License در {0} تمام می‌شود</value>
+  </data>
+  <data name="LicenseRenewFromTheLink" xml:space="preserve">
+    <value>آن را رایگان، از لینکی که bit در پوشه‌ی پروژه نشان می‌دهد، تمدید کنید.</value>
+  </data>
+  <data name="LicenseEnded" xml:space="preserve">
+    <value>License در {0} تمام شد</value>
+  </data>
+  <data name="LicenseInGraceHelp" xml:space="preserve">
+    <value>bit تا دو هفته پس از آن کار می‌کند. آن را رایگان، از لینکی که bit نشان می‌دهد، تمدید کنید.</value>
+  </data>
+  <data name="LicensedUntil" xml:space="preserve">
+    <value>دارای License تا {0}</value>
+  </data>
+  <data name="LicenseTrialUntil" xml:space="preserve">
+    <value>Trial تا {0}</value>
+  </data>
+  <data name="LicenseTrialEnded" xml:space="preserve">
+    <value>Trial در {0} تمام شد</value>
+  </data>
+  <data name="LicenseGetFromTheLink" xml:space="preserve">
+    <value>License رایگانش را از لینکی که bit در پوشه‌ی پروژه نشان می‌دهد بگیرید.</value>
+  </data>
+  <data name="LicenseNone" xml:space="preserve">
+    <value>بدون License</value>
+  </data>
+  <data name="LicenseRunBitLicense" xml:space="preserve">
+    <value>برای لینکی که برایش License رایگان می‌گیرد، bit license را در پوشه‌ی پروژه اجرا کنید.</value>
+  </data>
+  <data name="LicenseNotKnownYet" xml:space="preserve">
+    <value>License هنوز معلوم نیست</value>
+  </data>
+  <data name="LicenseNotKnownYetHelp" xml:space="preserve">
+    <value>bit Fabric وقتی آن را می‌فهمد که اپ روی تازه‌ترین bit Boilerplate باشد، یا Team شما License آن را بگیرد.</value>
+  </data>
+  <data name="MonitoringAddAnEnvironmentTo" xml:space="preserve">
+    <value>افزودن یک محیط به {0}</value>
+  </data>
+  <data name="MonitoringEnvironment" xml:space="preserve">
+    <value>محیط</value>
+  </data>
+  <data name="MonitoringEachProjectsLicense" xml:space="preserve">
+    <value>License هر پروژه. bit یک ماه پیش از پایان هر License، لینک تمدید رایگانش را نشان می‌دهد.</value>
+  </data>
+  <data name="MonitoringEveryLicenseOfYourTeams" xml:space="preserve">
+    <value>همه‌ی License های Team های شما</value>
+  </data>
+  <data name="MonitoringNoEnvironmentYet" xml:space="preserve">
+    <value>هنوز محیطی ندارد</value>
+  </data>
+  <data name="MonitoringItsPeople" xml:space="preserve">
+    <value>افراد آن</value>
+  </data>
+  <data name="MonitoringItsPeopleHelp" xml:space="preserve">
+    <value>کسانی که روی این پروژه کار می‌کنند. همه‌ی Team همچنان آن را می‌بینند؛ برداشتن کسی، هشدارهای این‌جا را برای او قطع می‌کند.</value>
+  </data>
+  <data name="MonitoringLoadingItsPeople" xml:space="preserve">
+    <value>در حال بارگذاری افراد آن</value>
+  </data>
+  <data name="MonitoringGetsItsAlerts" xml:space="preserve">
+    <value>هشدارهایش را می‌گیرد</value>
+  </data>
+  <data name="MonitoringWorksOnIt" xml:space="preserve">
+    <value>روی آن کار می‌کند</value>
+  </data>
+  <data name="MonitoringInTheTeam" xml:space="preserve">
+    <value>عضو Team</value>
+  </data>
+  <data name="MonitoringTakeOff" xml:space="preserve">
+    <value>برداشتن</value>
+  </data>
+  <data name="MonitoringEnvironments" xml:space="preserve">
+    <value>محیط‌ها</value>
+  </data>
+  <data name="MonitoringAddAnEnvironment" xml:space="preserve">
+    <value>افزودن یک محیط</value>
+  </data>
+  <data name="MonitoringWatchItsApp" xml:space="preserve">
+    <value>پایش اپ آن</value>
+  </data>
+  <data name="MonitoringWatchItsAppHelp" xml:space="preserve">
+    <value>نشانی استقرار Production یا Test آن را اضافه کنید و bit Fabric را در خود اپ تأیید کنید.</value>
+  </data>
+  <data name="MonitoringThisEnvironment" xml:space="preserve">
+    <value>این محیط</value>
+  </data>
+  <data name="MonitoringEnvironmentExamples" xml:space="preserve">
+    <value>Production، Test یا Staging</value>
+  </data>
+  <data name="MonitoringRemoveThisEnvironment" xml:space="preserve">
+    <value>حذف این محیط</value>
+  </data>
+  <data name="MonitoringRemoveThisEnvironmentHelp" xml:space="preserve">
+    <value>bit Fabric پایش آن را متوقف و تاریخچه‌اش را حذف می‌کند. یک پروژه با آخرین محیطش حذف می‌شود، مگر این‌که License داشته باشد.</value>
+  </data>
+  <data name="MonitoringSwitchProject" xml:space="preserve">
+    <value>رفتن به پروژه‌ی دیگر</value>
+  </data>
+  <data name="MonitoringFindAProject" xml:space="preserve">
+    <value>پیدا کردن پروژه</value>
+  </data>
+  <data name="MonitoringNoProjectMatchesShort" xml:space="preserve">
+    <value>هیچ پروژه‌ای پیدا نشد.</value>
+  </data>
+  <data name="MonitoringAllProjects" xml:space="preserve">
+    <value>همه‌ی پروژه‌ها</value>
+  </data>
+  <data name="MonitoringAppNotWatchedYet" xml:space="preserve">
+    <value>bit Fabric هنوز اپ آن را پایش نمی‌کند.</value>
+  </data>
+  <data name="LicenseProjectAlreadyLicensed" xml:space="preserve">
+    <value>این پروژه License خود را دارد.</value>
+  </data>
+  <data name="LicenseCodeNotFromBit" xml:space="preserve">
+    <value>کد این لینک از نوعی نیست که bit CLI می‌سازد. برای لینک تازه، فرمان bit را دوباره اجرا کنید.</value>
+  </data>
+  <data name="LicensePickATeam" xml:space="preserve">
+    <value>یکی از Team های خود را برای نگه‌داشتن License انتخاب کنید.</value>
+  </data>
+  <data name="LicenseProjectIdMissing" xml:space="preserve">
+    <value>شناسه‌ی پروژه نیست. برای لینک تازه، فرمان bit را دوباره در پوشه‌ی پروژه اجرا کنید.</value>
+  </data>
+  <data name="LicenseFirstCommitMissing" xml:space="preserve">
+    <value>اولین commit پروژه نیست. پروژه را در گیت commit کنید، سپس فرمان bit را دوباره در پوشه‌اش اجرا کنید.</value>
+  </data>
+  <data name="MonitoringEnvironmentTaken" xml:space="preserve">
+    <value>این پروژه از قبل محیطی به نام {0} دارد.</value>
+  </data>
+  <data name="ProjectsOnlyTeamMembers" xml:space="preserve">
+    <value>فقط کسی که به Team پیوسته است می‌تواند روی پروژه‌های آن کار کند.</value>
+  </data>
+  <data name="GrowthTitle" xml:space="preserve">
+    <value>رشد</value>
+  </data>
+  <data name="GrowthPeriodLabel" xml:space="preserve">
+    <value>بازه</value>
+  </data>
+  <data name="GrowthWeek" xml:space="preserve">
+    <value>هفته</value>
+  </data>
+  <data name="GrowthMonth" xml:space="preserve">
+    <value>ماه</value>
+  </data>
+  <data name="GrowthQuarter" xml:space="preserve">
+    <value>سه ماه</value>
+  </data>
+  <data name="GrowthYear" xml:space="preserve">
+    <value>سال</value>
+  </data>
+  <data name="GrowthAll" xml:space="preserve">
+    <value>همه</value>
+  </data>
+  <data name="GrowthWindowWeek" xml:space="preserve">
+    <value>۷ روز گذشته، در برابر ۷ روز پیش از آن</value>
+  </data>
+  <data name="GrowthWindowMonth" xml:space="preserve">
+    <value>۳۰ روز گذشته، در برابر ۳۰ روز پیش از آن</value>
+  </data>
+  <data name="GrowthWindowQuarter" xml:space="preserve">
+    <value>۱۳ هفتهٔ گذشته، در برابر ۱۳ هفتهٔ پیش از آن</value>
+  </data>
+  <data name="GrowthWindowYear" xml:space="preserve">
+    <value>۱۲ ماه گذشته، در برابر ۱۲ ماه پیش از آن</value>
+  </data>
+  <data name="GrowthWindowAll" xml:space="preserve">
+    <value>از نخستین پروژه، {0}</value>
+    <comment>{0} is the day of the first project.</comment>
+  </data>
+  <data name="GrowthProjects" xml:space="preserve">
+    <value>پروژه‌ها</value>
+  </data>
+  <data name="GrowthPerDay" xml:space="preserve">
+    <value>روزی حدود {0}</value>
+    <comment>The projects made a day on average over the period.</comment>
+  </data>
+  <data name="GrowthFlowEnded" xml:space="preserve">
+    <value>Trial پایان‌یافته</value>
+  </data>
+  <data name="GrowthFlowGiven" xml:space="preserve">
+    <value>Trial تا اینجا</value>
+  </data>
+  <data name="GrowthFlowLicensed" xml:space="preserve">
+    <value>License گرفتند</value>
+  </data>
+  <data name="GrowthRealOnly" xml:space="preserve">
+    <value>اجراهای خودکار تست شمرده نمی‌شوند.</value>
+    <comment>Every figure built on projects leaves out those whose Trial bit CLI asked for from CI.</comment>
+  </data>
+  <data name="GrowthNew" xml:space="preserve">
+    <value>تازه</value>
+    <comment>A figure that had nothing in the period before.</comment>
+  </data>
+  <data name="GrowthUp" xml:space="preserve">
+    <value>بیشتر</value>
+    <comment>Read before a change, for screen readers.</comment>
+  </data>
+  <data name="GrowthDown" xml:space="preserve">
+    <value>کمتر</value>
+    <comment>Read before a change, for screen readers.</comment>
+  </data>
+  <data name="GrowthTimes" xml:space="preserve">
+    <value>{0} برابر</value>
+    <comment>A count three times or more what it was in the period before.</comment>
+  </data>
+  <data name="GrowthPoint" xml:space="preserve">
+    <value>۱ واحد</value>
+    <comment>A change of a percentage by one percentage point.</comment>
+  </data>
+  <data name="GrowthPoints" xml:space="preserve">
+    <value>{0} واحد</value>
+    <comment>A change of a percentage, in percentage points.</comment>
+  </data>
+  <data name="GrowthLicensedProjects" xml:space="preserve">
+    <value>پروژه‌های دارای License</value>
+  </data>
+  <data name="GrowthConversion" xml:space="preserve">
+    <value>از Trial به License</value>
+  </data>
+  <data name="GrowthConversionOf" xml:space="preserve">
+    <value>از {0} Trial پایان‌یافته</value>
+  </data>
+  <data name="GrowthConversionSoFar" xml:space="preserve">
+    <value>تا اینجا، از {0} Trial</value>
+  </data>
+  <data name="GrowthOverTime" xml:space="preserve">
+    <value>پروژه‌ها در گذر زمان</value>
+  </data>
+  <data name="GrowthOverTimeDescription" xml:space="preserve">
+    <value>تا اینجا {0} پروژه، که {1} پروژه License دارد.</value>
+  </data>
+  <data name="GrowthSeriesProjects" xml:space="preserve">
+    <value>پروژه‌ها</value>
+  </data>
+  <data name="GrowthSeriesLicensed" xml:space="preserve">
+    <value>دارای License</value>
+  </data>
+  <data name="GrowthEachDay" xml:space="preserve">
+    <value>هر روز</value>
+  </data>
+  <data name="GrowthEachWeek" xml:space="preserve">
+    <value>هر هفته</value>
+  </data>
+  <data name="GrowthEachMonth" xml:space="preserve">
+    <value>هر ماه</value>
+  </data>
+  <data name="GrowthEachDescription" xml:space="preserve">
+    <value>{0} پروژه ساخته شد و {1} پروژه در این بازه License گرفت.</value>
+  </data>
+  <data name="GrowthSeriesMade" xml:space="preserve">
+    <value>پروژه‌های ساخته‌شده</value>
+  </data>
+  <data name="GrowthSeriesNewlyLicensed" xml:space="preserve">
+    <value>پروژه‌هایی که License گرفتند</value>
+  </data>
+  <data name="GrowthSoFar" xml:space="preserve">
+    <value>{0}، تا امروز</value>
+    <comment>A month that isn't over yet.</comment>
+  </data>
+  <data name="GrowthTrialSection" xml:space="preserve">
+    <value>از Trial تا License</value>
+  </data>
+  <data name="GrowthTrialsNow" xml:space="preserve">
+    <value>هر Trial اکنون کجاست</value>
+  </data>
+  <data name="GrowthTrialsGiven" xml:space="preserve">
+    <value>Trial داده‌شده تا امروز</value>
+  </data>
+  <data name="GrowthStateLicensed" xml:space="preserve">
+    <value>License گرفت</value>
+  </data>
+  <data name="GrowthStateRunning" xml:space="preserve">
+    <value>در Trial</value>
+  </data>
+  <data name="GrowthStateEnding" xml:space="preserve">
+    <value>این هفته تمام می‌شود</value>
+  </data>
+  <data name="GrowthStateEnded" xml:space="preserve">
+    <value>تمام شد، بی License</value>
+  </data>
+  <data name="GrowthDaysToLicense" xml:space="preserve">
+    <value>روزها تا License</value>
+  </data>
+  <data name="GrowthDays" xml:space="preserve">
+    <value>{0} روز</value>
+  </data>
+  <data name="GrowthOneDay" xml:space="preserve">
+    <value>۱ روز</value>
+  </data>
+  <data name="GrowthHalfWithin" xml:space="preserve">
+    <value>نیمی در همین مدت License می‌گیرند</value>
+  </data>
+  <data name="GrowthNoLicensesInPeriod" xml:space="preserve">
+    <value>هنوز در این بازه Licenseای نیست</value>
+  </data>
+  <data name="GrowthSameDay" xml:space="preserve">
+    <value>همان روز</value>
+  </data>
+  <data name="GrowthDays1To7" xml:space="preserve">
+    <value>۱–۷</value>
+  </data>
+  <data name="GrowthDays8To14" xml:space="preserve">
+    <value>۸–۱۴</value>
+  </data>
+  <data name="GrowthDays15To30" xml:space="preserve">
+    <value>۱۵–۳۰</value>
+  </data>
+  <data name="GrowthAfterTrial" xml:space="preserve">
+    <value>بعدتر</value>
+    <comment>After the Trial ended.</comment>
+  </data>
+  <data name="GrowthReminders" xml:space="preserve">
+    <value>bit CLI از روز ۱۴ Trial یادآوری می‌کند.</value>
+  </data>
+  <data name="GrowthMoreThanOne" xml:space="preserve">
+    <value>بیش از یک پروژه</value>
+  </data>
+  <data name="GrowthAccountsCreated" xml:space="preserve">
+    <value>حساب‌های ساخته‌شده</value>
+  </data>
+  <data name="GrowthAccountsCreatedNote" xml:space="preserve">
+    <value>همهٔ حساب‌های bitfabric.co</value>
+  </data>
+  <data name="GrowthEmptyTitle" xml:space="preserve">
+    <value>هنوز پروژه‌ای نیست</value>
+  </data>
+  <data name="GrowthEmptyText" xml:space="preserve">
+    <value>هر پروژه‌ای که bit new بسازد اینجا دیده می‌شود.</value>
+  </data>
+  <data name="GrowthError" xml:space="preserve">
+    <value>عددها بارگذاری نشدند.</value>
+  </data>
+  <data name="GrowthRetry" xml:space="preserve">
+    <value>دوباره</value>
+  </data>
+  <data name="GrowthTeamsWithLicense" xml:space="preserve">
+    <value>Team های دارای License</value>
+    <comment>A License is a team's.</comment>
+  </data>
+  <data name="GrowthInProduction" xml:space="preserve">
+    <value>در Production</value>
+    <comment>Licensed projects that monitoring watches in production.</comment>
+  </data>
+  <data name="GrowthInProductionNote" xml:space="preserve">
+    <value>{0} از پروژه‌های دارای License</value>
+  </data>
+  <data name="GrowthTeamsSection" xml:space="preserve">
+    <value>Team ها</value>
+  </data>
+  <data name="GrowthTeamsByProjects" xml:space="preserve">
+    <value>Team ها بر پایهٔ شمار پروژه‌هایشان</value>
+  </data>
+  <data name="GrowthProjectsPerTeam" xml:space="preserve">
+    <value>پروژه برای هر Team</value>
+  </data>
+  <data name="GrowthProjects3To5" xml:space="preserve">
+    <value>۳–۵</value>
+  </data>
+  <data name="GrowthProjects6Plus" xml:space="preserve">
+    <value>۶+</value>
+  </data>
+  <data name="GrowthSeriesTeams" xml:space="preserve">
+    <value>Team ها</value>
+  </data>
+  <data name="GrowthPeopleInTeams" xml:space="preserve">
+    <value>افراد Team های دارای License</value>
+  </data>
+  <data name="GrowthPeopleInTeamsNote" xml:space="preserve">
+    <value>اعضای Team هایی که License دارند</value>
+  </data>
 </root>

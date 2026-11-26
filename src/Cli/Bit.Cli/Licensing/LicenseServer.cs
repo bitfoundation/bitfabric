@@ -12,10 +12,21 @@ public sealed class LicenseServer(LicenseOptions options, CliLog log)
 
     public const string ClaimPath = "api/v1/License/Claim";
 
-    /// <summary>A new project's trial, which <c>bit new</c> asks for right after the project's first commit.</summary>
-    public Task<string?> TrialAsync(Guid project, string name, string commit, CancellationToken cancellationToken)
+    /// <summary>
+    /// A new project's trial, which <c>bit new</c> asks for right after the project's first commit. <paramref name="ci"/>
+    /// names the CI it runs in (See CliEnvironment.CiName), and is left out elsewhere: bit Fabric only keeps the trials made
+    /// in CI out of its figures. The trial, and what it allows, is the same either way.
+    /// </summary>
+    public Task<string?> TrialAsync(Guid project, string name, string commit, string? ci, CancellationToken cancellationToken)
     {
-        var body = new JsonObject { ["project"] = project.ToString("D"), ["name"] = name, ["commit"] = commit }.ToJsonString();
+        var request = new JsonObject { ["project"] = project.ToString("D"), ["name"] = name, ["commit"] = commit };
+
+        if (ci is not null)
+        {
+            request["ci"] = ci;
+        }
+
+        var body = request.ToJsonString();
 
         return SendAsync(new HttpRequestMessage(HttpMethod.Post, TrialPath) { Content = new StringContent(body, Encoding.UTF8, "application/json") }, cancellationToken);
     }

@@ -18,10 +18,10 @@ public partial class ProjectSlaController : AppControllerBase, IProjectSlaContro
 
     [AutoInject] private ProjectSlaReports reports = default!;
 
-    [HttpGet("{projectId}")]
-    public async Task<ProjectSlaSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken)
+    [HttpGet("{monitoringId}")]
+    public async Task<ProjectSlaSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await FindProject(projectId, cancellationToken);
+        var project = await FindProject(monitoringId, cancellationToken);
 
         return await reports.SettingsOf(project.Id, cancellationToken);
     }
@@ -29,7 +29,7 @@ public partial class ProjectSlaController : AppControllerBase, IProjectSlaContro
     [HttpPost]
     public async Task<ProjectSlaSettingsDto> SaveSettings(ProjectSlaSettingsDto settings, CancellationToken cancellationToken)
     {
-        var project = await FindProject(settings.ProjectId, cancellationToken);
+        var project = await FindProject(settings.MonitoringId, cancellationToken);
 
         if (settings.TargetPercent is <= 0 or >= 100 || double.IsNaN(settings.TargetPercent))
             throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringSlaInvalidTarget)]);
@@ -42,11 +42,11 @@ public partial class ProjectSlaController : AppControllerBase, IProjectSlaContro
             || settings.Credits.DistinctBy(credit => credit.BelowPercent).Count() != settings.Credits.Length)
             throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringSlaInvalidCredits), MaxCredits]);
 
-        var saved = await DbContext.ProjectSlaSettings.FirstOrDefaultAsync(row => row.ProjectId == project.Id, cancellationToken);
+        var saved = await DbContext.ProjectSlaSettings.FirstOrDefaultAsync(row => row.MonitoringId == project.Id, cancellationToken);
 
         if (saved is null)
         {
-            saved = new() { ProjectId = project.Id, TenantId = project.TenantId };
+            saved = new() { MonitoringId = project.Id, TenantId = project.TenantId };
             await DbContext.ProjectSlaSettings.AddAsync(saved, cancellationToken);
         }
         else
@@ -67,30 +67,30 @@ public partial class ProjectSlaController : AppControllerBase, IProjectSlaContro
     [HttpPost]
     public async Task<ProjectSlaReportDto> GetReport(ProjectSlaRequestDto request, CancellationToken cancellationToken)
     {
-        var project = await FindProject(request.ProjectId, cancellationToken);
+        var project = await FindProject(request.MonitoringId, cancellationToken);
 
         return await reports.Build(project, request.Year, request.Month, cancellationToken);
     }
 
     /// <inheritdoc cref="IProjectSlaController.ExportCsvUri"/>
-    [HttpGet("{projectId}/{year:int}/{month:int}")]
-    public async Task<IActionResult> ExportCsv(Guid projectId, int year, int month, CancellationToken cancellationToken)
+    [HttpGet("{monitoringId}/{year:int}/{month:int}")]
+    public async Task<IActionResult> ExportCsv(Guid monitoringId, int year, int month, CancellationToken cancellationToken)
     {
-        var report = await reports.Build(await FindProject(projectId, cancellationToken), year, month, cancellationToken);
+        var report = await reports.Build(await FindProject(monitoringId, cancellationToken), year, month, cancellationToken);
 
         return File(ProjectSlaReports.Csv(report), "text/csv; charset=utf-8", ProjectSlaReports.FileNameOf(report, "csv"));
     }
 
     /// <inheritdoc cref="IProjectSlaController.ExportPdfUri"/>
-    [HttpGet("{projectId}/{year:int}/{month:int}")]
-    public async Task<IActionResult> ExportPdf(Guid projectId, int year, int month, CancellationToken cancellationToken)
+    [HttpGet("{monitoringId}/{year:int}/{month:int}")]
+    public async Task<IActionResult> ExportPdf(Guid monitoringId, int year, int month, CancellationToken cancellationToken)
     {
-        var report = await reports.Build(await FindProject(projectId, cancellationToken), year, month, cancellationToken);
+        var report = await reports.Build(await FindProject(monitoringId, cancellationToken), year, month, cancellationToken);
 
         return File(reports.Pdf(report), "application/pdf", ProjectSlaReports.FileNameOf(report, "pdf"));
     }
 
-    private async Task<Project> FindProject(Guid projectId, CancellationToken cancellationToken)
-        => await DbContext.Projects.AsNoTracking().FirstOrDefaultAsync(project => project.Id == projectId, cancellationToken)
+    private async Task<ProjectMonitoring> FindProject(Guid monitoringId, CancellationToken cancellationToken)
+        => await DbContext.Monitorings.AsNoTracking().FirstOrDefaultAsync(project => project.Id == monitoringId, cancellationToken)
            ?? throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 }

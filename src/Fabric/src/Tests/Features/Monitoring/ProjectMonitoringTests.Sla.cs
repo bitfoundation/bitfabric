@@ -16,7 +16,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var sla = client.GetController<IProjectSlaController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var settings = await sla.GetSettings(project.Id, TestContext.CancellationToken);
         Assert.AreEqual(99.9, settings.TargetPercent);
@@ -60,7 +60,7 @@ public partial class ProjectMonitoringTests
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var sla = client.GetController<IProjectSlaController>();
         var incidents = client.GetController<IProjectIncidentsController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var tehran = TimeZoneInfo.FindSystemTimeZoneById("Asia/Tehran");
         var (year, month) = ProjectSlaMonths.MonthOf(DateTimeOffset.UtcNow, tehran);
@@ -77,14 +77,14 @@ public partial class ProjectMonitoringTests
         await using (var scope = server.ApiApp.Services.CreateAsyncScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var tenantId = await dbContext.Projects.IgnoreQueryFilters().Where(p => p.Id == project.Id).Select(p => p.TenantId).SingleAsync(TestContext.CancellationToken);
+            var tenantId = await dbContext.Monitorings.IgnoreQueryFilters().Where(p => p.Id == project.Id).Select(p => p.TenantId).SingleAsync(TestContext.CancellationToken);
 
             // Added two months ago, in Tehran's time zone, and read every quarter of last month.
-            await dbContext.Projects.IgnoreQueryFilters().Where(p => p.Id == project.Id)
+            await dbContext.Monitorings.IgnoreQueryFilters().Where(p => p.Id == project.Id)
                 .ExecuteUpdateAsync(setters => setters.SetProperty(p => p.CreatedOn, from.AddMonths(-1)).SetProperty(p => p.TimeZoneId, "Asia/Tehran"), TestContext.CancellationToken);
 
             await dbContext.Database.ExecuteSqlAsync($"""
-                INSERT INTO "ProjectRollups" ("ProjectId", "BucketStart", "Region", "CheckKey", "TenantId", "Count", "FailedCount", "DegradedCount", "TimedCount", "TotalMs", "MaxMs")
+                INSERT INTO "ProjectRollups" ("MonitoringId", "BucketStart", "Region", "CheckKey", "TenantId", "Count", "FailedCount", "DegradedCount", "TimedCount", "TotalMs", "MaxMs")
                 SELECT {project.Id}, bucket, 'Germany', {ProjectRollupKeys.Report}, {tenantId}, 15, 0, 0, 15, 1500, 100
                 FROM generate_series({from}::timestamptz, {to}::timestamptz - INTERVAL '15 minutes', INTERVAL '15 minutes') AS bucket
                 ON CONFLICT DO NOTHING
@@ -92,24 +92,24 @@ public partial class ProjectMonitoringTests
 
             await dbContext.ProjectIncidents.AddRangeAsync(
             [
-                new() { Id = Guid.NewGuid(), ProjectId = project.Id, TenantId = tenantId, IsAutomatic = true, Impact = ProjectHealth.Down, StartedAt = down, EndedAt = down.AddHours(1), CheckKeys = ["AppDbContext"] },
-                new() { Id = Guid.NewGuid(), ProjectId = project.Id, TenantId = tenantId, IsAutomatic = true, Impact = ProjectHealth.Degraded, StartedAt = degraded, EndedAt = degraded.AddHours(1), CheckKeys = ["smtp"] },
-                new() { Id = Guid.NewGuid(), ProjectId = project.Id, TenantId = tenantId, IsAutomatic = true, Impact = ProjectHealth.Down, StartedAt = maintenance.AddMinutes(20), EndedAt = maintenance.AddMinutes(50), CheckKeys = ["AppDbContext"], DuringMaintenance = true }
+                new() { Id = Guid.NewGuid(), MonitoringId = project.Id, TenantId = tenantId, IsAutomatic = true, Impact = ProjectHealth.Down, StartedAt = down, EndedAt = down.AddHours(1), CheckKeys = ["AppDbContext"] },
+                new() { Id = Guid.NewGuid(), MonitoringId = project.Id, TenantId = tenantId, IsAutomatic = true, Impact = ProjectHealth.Degraded, StartedAt = degraded, EndedAt = degraded.AddHours(1), CheckKeys = ["smtp"] },
+                new() { Id = Guid.NewGuid(), MonitoringId = project.Id, TenantId = tenantId, IsAutomatic = true, Impact = ProjectHealth.Down, StartedAt = maintenance.AddMinutes(20), EndedAt = maintenance.AddMinutes(50), CheckKeys = ["AppDbContext"], DuringMaintenance = true }
             ], TestContext.CancellationToken);
 
             await dbContext.ProjectCheckPeriods.AddRangeAsync(
             [
-                new() { Id = Guid.NewGuid(), ProjectId = project.Id, TenantId = tenantId, CheckKey = "smtp", Title = "Email", Status = HealthCheckStatus.Healthy, StartedAt = from.AddMonths(-1), EndedAt = degraded },
-                new() { Id = Guid.NewGuid(), ProjectId = project.Id, TenantId = tenantId, CheckKey = "smtp", Title = "Email", Status = HealthCheckStatus.Degraded, StartedAt = degraded, EndedAt = degraded.AddHours(1) },
-                new() { Id = Guid.NewGuid(), ProjectId = project.Id, TenantId = tenantId, CheckKey = "smtp", Title = "Email", Status = HealthCheckStatus.Healthy, StartedAt = degraded.AddHours(1), EndedAt = to.AddDays(1) }
+                new() { Id = Guid.NewGuid(), MonitoringId = project.Id, TenantId = tenantId, CheckKey = "smtp", Title = "Email", Status = HealthCheckStatus.Healthy, StartedAt = from.AddMonths(-1), EndedAt = degraded },
+                new() { Id = Guid.NewGuid(), MonitoringId = project.Id, TenantId = tenantId, CheckKey = "smtp", Title = "Email", Status = HealthCheckStatus.Degraded, StartedAt = degraded, EndedAt = degraded.AddHours(1) },
+                new() { Id = Guid.NewGuid(), MonitoringId = project.Id, TenantId = tenantId, CheckKey = "smtp", Title = "Email", Status = HealthCheckStatus.Healthy, StartedAt = degraded.AddHours(1), EndedAt = to.AddDays(1) }
             ], TestContext.CancellationToken);
 
             await dbContext.SaveChangesAsync(TestContext.CancellationToken);
         }
 
-        await incidents.AddMaintenanceWindow(new() { ProjectId = project.Id, Title = "Moving the database", StartsAt = maintenance, EndsAt = maintenance.AddHours(2) }, TestContext.CancellationToken);
+        await incidents.AddMaintenanceWindow(new() { MonitoringId = project.Id, Title = "Moving the database", StartsAt = maintenance, EndsAt = maintenance.AddHours(2) }, TestContext.CancellationToken);
 
-        var report = await sla.GetReport(new() { ProjectId = project.Id, Year = year, Month = month }, TestContext.CancellationToken);
+        var report = await sla.GetReport(new() { MonitoringId = project.Id, Year = year, Month = month }, TestContext.CancellationToken);
 
         Assert.AreEqual("Asia/Tehran", report.TimeZoneId);
         Assert.AreEqual(from, report.From, "A month starts at midnight in the project's time zone.");
@@ -158,7 +158,7 @@ public partial class ProjectMonitoringTests
         }
 
         // Only the last 12 months, the rollups that say when the app was read being kept 13.
-        await Assert.ThrowsExactlyAsync<BadRequestException>(() => sla.GetReport(new() { ProjectId = project.Id, Year = year - 2, Month = month }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<BadRequestException>(() => sla.GetReport(new() { MonitoringId = project.Id, Year = year - 2, Month = month }, TestContext.CancellationToken));
     }
 
     [TestMethod]
@@ -167,16 +167,16 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var owner = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(owner.GetController<IProjectsController>(), customerApp, "customer.example");
-        var report = await owner.GetController<IProjectSlaController>().GetReport(new() { ProjectId = project.Id }, TestContext.CancellationToken);
+        var project = await Connect(owner.GetController<IMonitoringsController>(), customerApp, "customer.example");
+        var report = await owner.GetController<IProjectSlaController>().GetReport(new() { MonitoringId = project.Id }, TestContext.CancellationToken);
         Assert.IsTrue(report.IsCurrent);
 
         await using var stranger = await SignInWithATeamOfTheirOwn(server);
         var strangersSla = stranger.GetController<IProjectSlaController>();
 
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersSla.GetSettings(project.Id, TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersSla.SaveSettings(new() { ProjectId = project.Id }, TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersSla.GetReport(new() { ProjectId = project.Id }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersSla.SaveSettings(new() { MonitoringId = project.Id }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersSla.GetReport(new() { MonitoringId = project.Id }, TestContext.CancellationToken));
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.HttpClient.GetAsync($"{IProjectSlaController.ExportPdfUri}/{project.Id}/{report.Year}/{report.Month}", TestContext.CancellationToken));
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.HttpClient.GetAsync($"{IProjectSlaController.ExportCsvUri}/{project.Id}/{report.Year}/{report.Month}", TestContext.CancellationToken));
     }

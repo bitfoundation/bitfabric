@@ -1,0 +1,111 @@
+@import '../../../Styles/abstracts/_media-queries.scss';
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+// One column of licenses, a team at a time
+.licenses-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+    padding: 16px 16px 48px;
+
+    @include lt-sm {
+        gap: 16px;
+        padding-top: 8px;
+    }
+}
+
+.head,
+.team {
+    display: grid;
+    gap: 8px;
+}
+
+::deep .team-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.list {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.license {
+    display: grid;
+    gap: 12px;
+    padding: 16px;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-card;
+}
+
+.license-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(8rem, 100%), 1fr));
+    gap: 8px 16px;
+    margin: 0;
+
+    div {
+        display: grid;
+        gap: 2px;
+    }
+
+    dt {
+        color: $bit-color-foreground-secondary;
+        font-size: $bit-typography-fs-xs;
+    }
+
+    dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+    }
+}
+
+.mono {
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-family: $bit-typography-font-family-mono;
+    font-size: $bit-typography-fs-xs;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.empty {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding: 32px 16px;
+    text-align: center;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+.empty-mark {
+    width: 3.5rem;
+    height: 3.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1rem;
+    --bit-Icon-color: #{$bit-color-primary};
+    background-color: color-mix(in srgb, #{$bit-color-primary} 12%, transparent);
+}

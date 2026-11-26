@@ -3,6 +3,7 @@ using System.Reflection;
 using Bit.Fabric.Server.Api.Features.Monitoring.Models;
 using Bit.Fabric.Server.Api.Features.Monitoring.Services;
 using Bit.Fabric.Shared.Features.Diagnostic;
+using Bit.Fabric.Shared.Features.Licensing.Dtos;
 using Bit.Fabric.Shared.Features.Monitoring;
 using Bit.Fabric.Shared.Features.Monitoring.Dtos;
 
@@ -17,7 +18,7 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring;
 /// Guarded as the api is: a signed-in user with a team selected (<see cref="AuthPolicies.TENANT_SELECTED"/>), and every
 /// query through the tenant filter of the team the caller's token is for: the app's own token's, or the one an OAuth
 /// approval was given in (See OAuthController.ResolveTenantId). They read and write through the services the pages'
-/// controllers use (<see cref="ProjectsService"/>, <see cref="ProjectIncidentsService"/>, <see cref="ProjectSlaReports"/>,
+/// controllers use (<see cref="MonitoringsService"/>, <see cref="ProjectIncidentsService"/>, <see cref="ProjectSlaReports"/>,
 /// <see cref="StatusPageService"/>), so a tool can do nothing a page can't, and returns compact JSON: times in UTC ISO
 /// 8601, the project's time zone where a page uses it, durations with their unit in the name, and a message for the model
 /// rather than an error when a request can't be answered.
@@ -25,7 +26,8 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring;
 /// </summary>
 [McpServerToolType]
 public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
-    ProjectsService projectsService,
+    MonitoringsService monitoringsService,
+    Projects.ProjectsService projectsService,
     ProjectIncidentsService incidentsService,
     ProjectSlaReports slaReports,
     StatusPageService statusPages,
@@ -34,12 +36,12 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
     IHttpContextAccessor httpContextAccessor,
     TimeProvider timeProvider) : IAsyncDisposable
 {
-    private const string ProjectParameter = "The project: its id, or its name or address as the user says it, such as \"Todo\" or \"todo.bitplatform.dev\". A name or address is matched case-insensitively among the projects of the user's team.";
+    private const string ProjectParameter = "The project's environment: its id, or its name or address as the user says it, such as \"Todo\" for its Production, \"Todo (Test)\" or \"todo.bitplatform.dev\". A name or address is matched case-insensitively among the environments of the user's team's projects (See GetProjects).";
 
     private const string ConfirmFirst = "It changes the project for the whole team, so first tell the user exactly what you are about to do and call it only once they have confirmed in the conversation.";
 
-    [McpServerTool(Name = nameof(GetProjects), Title = "List the monitored projects", ReadOnly = true, OpenWorld = false)]
-    [Description("Lists every project the user's team monitors in bit Fabric (each project is one of their live apps), failing ones first, with its health right now: Operational; Degraded, some parts don't work while the app itself does; Down; NeedsReconnecting, bit Fabric's approval in the app stopped working, so nothing is read until a team member reconnects it on the project's Settings tab; Disconnected, a team member disconnected it on its Settings tab, so nothing is read until someone reconnects it; NotCheckedYet, its first checks are running; or NoData. Each also has its uptime over the last 30 days, the days of those 30 a check found it down or a part failing, as its card's day bars show them, the typical (median) and the slowest 5% response time of its home page over the last 24 hours past any cache (the server's own time), the typical time a visitor waits for it through the cache in front of the app when one answers it, the parts not working right now by the app's own names, its ongoing incident, a cache warning, and when it was last checked. Call it first for any question about the user's projects or apps, such as \"are my projects healthy?\" or \"how did they do this month?\".")]
+    [McpServerTool(Name = nameof(GetProjects), Title = "List the projects and their environments", ReadOnly = true, OpenWorld = false)]
+    [Description("Lists every project of the user's team in bit Fabric, those needing someone first. A project is one of their apps; it has a License (Licensed until a date, LicenseEndingSoon within a month, LicenseInGrace for two weeks after it ended while bit CLI keeps working, LicenseEnded, Trial until a date, TrialEnded, None, or Unknown while bit Fabric doesn't know the project's id yet) and one environment per deployment bit Fabric monitors, such as Production and Test. Each environment has its health right now: Operational; Degraded, some parts don't work while the app itself does; Down; NeedsReconnecting, bit Fabric's approval in the app stopped working, so nothing is read until a team member reconnects it on the environment's Settings tab; Disconnected, a team member disconnected it on its Settings tab, so nothing is read until someone reconnects it; NotCheckedYet, its first checks are running; or NoData. Each environment also has its uptime over the last 30 days, the days of those 30 a check found it down or a part failing, as its card's day bars show them, the typical (median) and the slowest 5% response time of its home page over the last 24 hours past any cache (the server's own time), the typical time a visitor waits for it through the cache in front of the app when one answers it, the parts not working right now by the app's own names, its ongoing incident, a cache warning, and when it was last checked. Call it first for any question about the user's projects or apps, such as \"are my projects healthy?\", \"how did they do this month?\" or \"which licenses end soon?\". The other tools take an environment by its name as listed here, such as \"Orbit\" for Production or \"Orbit (Test)\", or by its address.")]
     public async Task<JsonElement> GetProjects(
         [Description("The IANA time zone the last 30 days are counted in, such as \"Asia/Tehran\": the user's own when they say it. UTC when left out.")] string? timeZone = null,
         CancellationToken cancellationToken = default)
@@ -47,26 +49,73 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
         if (await Refusal() is { } refusal)
             return Result(refusal);
 
-        var zone = ProjectsController.ZoneOf(timeZone);
+        var zone = MonitoringsController.ZoneOf(timeZone);
         var projects = await projectsService.GetProjects(zone, cancellationToken);
 
         return Result(new ProjectList(await TeamName(cancellationToken), zone.Id, [.. projects.Select(project => new ProjectSummary(
             project.Id,
             project.Name,
-            project.Address,
-            HealthOf(project),
-            project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded ? project.ConnectionProblem : null,
-            Round(project.Uptime30Days, 3),
-            project.MedianMs,
-            project.P95Ms,
-            project.MedianVisitorMs,
-            project.FailingChecks,
-            OngoingOf(project),
-            project.HasCacheWarning ? CacheWarning : null,
-            project.LastCheckedAt,
-            [.. project.Last30Days.Where(day => day.Tone is ProjectDayTone.Down or ProjectDayTone.Degraded)
-                                  .Select(day => new DayWithProblems(day.Date, $"{day.Tone}", day.DownMinutes, day.DegradedMinutes))]))]));
+            LicenseOf(project.License),
+            project.License.Until,
+            [.. project.Monitorings.Select(environment => new EnvironmentSummary(
+                environment.Id,
+                environment.Environment,
+                environment.Name,
+                environment.Address,
+                HealthOf(environment),
+                environment.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded ? environment.ConnectionProblem : null,
+                Round(environment.Uptime30Days, 3),
+                environment.MedianMs,
+                environment.P95Ms,
+                environment.MedianVisitorMs,
+                environment.FailingChecks,
+                OngoingOf(environment),
+                environment.HasCacheWarning ? CacheWarning : null,
+                environment.LastCheckedAt,
+                [.. environment.Last30Days.Where(day => day.Tone is ProjectDayTone.Down or ProjectDayTone.Degraded)
+                                          .Select(day => new DayWithProblems(day.Date, $"{day.Tone}", day.DownMinutes, day.DegradedMinutes))]))]))]));
     }
+
+    [McpServerTool(Name = nameof(GetLicenses), Title = "List the team's licenses", ReadOnly = true, OpenWorld = false)]
+    [Description("Lists the licenses the user's team holds for its projects, newest first: the project each is for, the first commit of the project's git history it names, its plan (free), when it was issued and until when it lasts, where it stands (InForce; EndingSoon, within a month, so renew it; InGrace, ended less than two weeks ago while bit CLI keeps working; Ended), and who got it. A license goes into the project's bit.json from bitfabric.co's license page, which bit CLI links to, or with bit license; this tool never gives the license itself.")]
+    public async Task<JsonElement> GetLicenses(CancellationToken cancellationToken = default)
+    {
+        if (await Refusal() is { } refusal)
+            return Result(refusal);
+
+        var now = timeProvider.GetUtcNow();
+
+        var licenses = await dbContext.IssuedLicenses.AsNoTracking()
+            .OrderByDescending(license => license.IssuedOn)
+            .Select(license => new
+            {
+                license.ProjectId,
+                ProjectName = license.Project!.Name,
+                license.FirstCommit,
+                license.Plan,
+                license.IssuedOn,
+                license.ExpiresOn,
+                IssuedBy = license.IssuedBy == null ? null : license.IssuedBy.FullName ?? license.IssuedBy.UserName
+            })
+            .ToListAsync(cancellationToken);
+
+        return Result(new LicenseList(await TeamName(cancellationToken), [.. licenses.Select(license => new LicenseSummary(
+            new(license.ProjectId, license.ProjectName),
+            license.FirstCommit,
+            license.Plan,
+            license.IssuedOn,
+            license.ExpiresOn,
+            $"{Projects.ProjectLicenses.StateOf(license.ExpiresOn, now)}",
+            license.IssuedBy))]));
+    }
+
+    /// <summary>A project's license as GetProjects names it.</summary>
+    private static string LicenseOf(ProjectLicenseDto license) => (license.Kind, license.State) switch
+    {
+        (ProjectLicenseKind.Licensed, LicenseState.EndingSoon) => "LicenseEndingSoon",
+        (ProjectLicenseKind.Licensed, LicenseState.InGrace) => "LicenseInGrace",
+        _ => $"{license.Kind}"
+    };
 
     [McpServerTool(Name = nameof(GetProject), Title = "Show a project in detail", ReadOnly = true, OpenWorld = false)]
     [Description("Shows one project in detail, as its Overview does: its health, every part of the app from its last health report grouped by category, each with its status (Healthy, Degraded, Unhealthy, or NotConfigured: its settings are missing, which is a setup finding rather than an outage), the app's own message about it, what it proves, how long it took against its limit in milliseconds, when a reused result was measured, and since when it has been in that status; the build it runs, its last deployment and restart, a maintenance window it is in right now, and where it is checked from with each location's newest reading.")]
@@ -79,8 +128,8 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
         if (found is null)
             return Result(problem!);
 
-        var details = await projectsService.GetProject(found.Id, cancellationToken);
-        var dto = details.Project!;
+        var details = await monitoringsService.GetMonitoring(found.Id, cancellationToken);
+        var dto = details.Monitoring!;
         var now = timeProvider.GetUtcNow();
 
         var maintenance = (await incidentsService.GetMaintenanceWindows(found.Id, cancellationToken))
@@ -142,7 +191,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
         if (found is null)
             return Result(problem!);
 
-        var map = await projectsService.GetMap(found.Id, cancellationToken);
+        var map = await monitoringsService.GetMap(found.Id, cancellationToken);
 
         // The worst group first, and in each the worst part first, as GetProject ranks them.
         MapGroup[] groups = [.. map.Parts
@@ -182,12 +231,12 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
 
         var since = timeProvider.GetUtcNow().AddDays(-Math.Clamp(days, 1, 90));
 
-        List<Project> projects;
+        List<ProjectMonitoring> projects;
 
         if (string.IsNullOrWhiteSpace(project))
         {
-            projects = await dbContext.Projects.AsNoTracking()
-                .Where(candidate => dbContext.ProjectIncidents.Any(incident => incident.ProjectId == candidate.Id && (incident.EndedAt == null || incident.StartedAt >= since)))
+            projects = await dbContext.Monitorings.AsNoTracking()
+                .Where(candidate => dbContext.ProjectIncidents.Any(incident => incident.MonitoringId == candidate.Id && (incident.EndedAt == null || incident.StartedAt >= since)))
                 .ToListAsync(cancellationToken);
         }
         else
@@ -233,7 +282,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
         var now = timeProvider.GetUtcNow();
         var span = ProjectHistoryDays.Last(Math.Clamp(days, 1, 90), zone, now);
 
-        var history = await incidentsService.GetHistory(new() { ProjectId = found.Id, From = span[0].Start, To = now }, cancellationToken);
+        var history = await incidentsService.GetHistory(new() { MonitoringId = found.Id, From = span[0].Start, To = now }, cancellationToken);
 
         // The rows History draws, as the server lists and names them: a part counts only while the app reports it.
         var partsOfTheApp = history.Parts.OrderBy(part => part.Title, StringComparer.OrdinalIgnoreCase);
@@ -360,7 +409,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
 
         var before = await dbContext.ProjectIncidents.AsNoTracking()
             .Where(incident => incident.Id == incidentId)
-            .Select(incident => new { incident.ProjectId, ProjectName = incident.Project!.Name, incident.EndedAt, incident.AcknowledgedBy, incident.AcknowledgedAt })
+            .Select(incident => new { incident.MonitoringId, ProjectName = incident.Monitoring!.Name, incident.EndedAt, incident.AcknowledgedBy, incident.AcknowledgedAt })
             .FirstOrDefaultAsync(cancellationToken);
 
         if (before is null)
@@ -372,7 +421,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
             : before.AcknowledgedAt is not null ? $"Nothing changed: {before.AcknowledgedBy} acknowledged it already."
             : "Acknowledged: the escalation stopped, and the incident's updates say who is on it.";
 
-        return Result(new Done(message, Incident: IncidentOf(incident, new(before.ProjectId, before.ProjectName))));
+        return Result(new Done(message, Incident: IncidentOf(incident, new(before.MonitoringId, before.ProjectName))));
     }
 
     [McpServerTool(Name = nameof(PostIncidentUpdate), Title = "Post a team update to an incident", ReadOnly = false, Destructive = false, Idempotent = false, OpenWorld = false)]
@@ -391,7 +440,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
 
         var before = await dbContext.ProjectIncidents.AsNoTracking()
             .Where(incident => incident.Id == incidentId)
-            .Select(incident => new { incident.ProjectId, ProjectName = incident.Project!.Name, incident.IsAutomatic, incident.Version })
+            .Select(incident => new { incident.MonitoringId, ProjectName = incident.Monitoring!.Name, incident.IsAutomatic, incident.Version })
             .FirstOrDefaultAsync(cancellationToken);
 
         if (before is null)
@@ -405,7 +454,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
             var incident = await incidentsService.PostUpdate(new() { IncidentId = incidentId, Phase = phase, Text = text.Trim(), Version = before.Version },
                                                              await AuthorName(cancellationToken), cancellationToken);
 
-            return Result(new Done("Posted.", Incident: IncidentOf(incident, new(before.ProjectId, before.ProjectName))));
+            return Result(new Done("Posted.", Incident: IncidentOf(incident, new(before.MonitoringId, before.ProjectName))));
         }
         catch (ConflictException)
         {
@@ -436,7 +485,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
         if (found is null)
             return Result(problem!);
 
-        var window = await incidentsService.AddMaintenanceWindow(new() { ProjectId = found.Id, Title = title.Trim(), StartsAt = startsAt, EndsAt = endsAt, RepeatsWeekly = repeatsWeekly }, cancellationToken);
+        var window = await incidentsService.AddMaintenanceWindow(new() { MonitoringId = found.Id, Title = title.Trim(), StartsAt = startsAt, EndsAt = endsAt, RepeatsWeekly = repeatsWeekly }, cancellationToken);
 
         return Result(new Done("Scheduled: nobody is alerted about an incident that begins in it, and it doesn't count against the SLA.",
             Maintenance: new(window.Id, window.Title, window.StartsAt.ToUniversalTime(), window.EndsAt.ToUniversalTime(), window.RepeatsWeekly)));
@@ -503,9 +552,9 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
     /// The one project of the team <paramref name="wanted"/> names: by id, then by its exact name or host, then by a part of
     /// either; or why there isn't exactly one, with the projects to choose from. A team has 100 projects at most.
     /// </summary>
-    private async Task<(Project? Project, Problem? Problem)> FindProject(string? wanted, CancellationToken cancellationToken)
+    private async Task<(ProjectMonitoring? Project, Problem? Problem)> FindProject(string? wanted, CancellationToken cancellationToken)
     {
-        var projects = await dbContext.Projects.AsNoTracking().OrderBy(project => project.Name).ToListAsync(cancellationToken);
+        var projects = await dbContext.Monitorings.AsNoTracking().OrderBy(project => project.Name).ToListAsync(cancellationToken);
 
         if (string.IsNullOrWhiteSpace(wanted))
             return (null, new("Say which project: its id, name or address.", ChoicesOf(projects)));
@@ -521,7 +570,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
 
         var host = HostOf(text);
 
-        Project[] matches = [.. projects.Where(project => string.Equals(project.Name?.Trim(), text, StringComparison.OrdinalIgnoreCase)
+        ProjectMonitoring[] matches = [.. projects.Where(project => string.Equals(project.Name?.Trim(), text, StringComparison.OrdinalIgnoreCase)
                                                           || (host is not null && (host == HostOf(project.Address) || host == HostOf(project.ServerAddress))))];
 
         if (matches.Length is 0)
@@ -538,7 +587,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
         };
     }
 
-    private static ProjectChoice[] ChoicesOf(IEnumerable<Project> projects)
+    private static ProjectChoice[] ChoicesOf(IEnumerable<ProjectMonitoring> projects)
         => [.. projects.Select(project => new ProjectChoice(project.Id, project.Name, project.Address))];
 
     /// <summary>"Todo.bitplatform.dev", "https://todo.bitplatform.dev/" and "www.todo.bitplatform.dev" alike as "todo.bitplatform.dev"; null for what is no address.</summary>
@@ -574,7 +623,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
     }
 
     /// <summary>As the project's card words it (See ProjectCard.StateText).</summary>
-    private static string HealthOf(ProjectDto project) => (project.ConnectionStatus, project.Health) switch
+    private static string HealthOf(MonitoringDto project) => (project.ConnectionStatus, project.Health) switch
     {
         (ProjectConnectionStatus.ReconnectNeeded, _) => "NeedsReconnecting",
         (ProjectConnectionStatus.Disconnected, _) => "Disconnected",
@@ -585,7 +634,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
         _ => "NoData"
     };
 
-    private static OngoingIncident? OngoingOf(ProjectDto project)
+    private static OngoingIncident? OngoingOf(MonitoringDto project)
         => project.OngoingIncidentId is { } id ? new(id, project.OngoingIncident, project.OngoingIncidentSince!.Value) : null;
 
     /// <summary>A part whose settings are missing: a setup finding, not an outage.</summary>

@@ -5,20 +5,25 @@ using Bit.Cli.Projects;
 namespace Bit.Cli.Licensing;
 
 /// <summary>
-/// What <c>bit new</c> gives a project before its first commit: an id of its own in bit.json, which its license names, and
-/// the same id on the docs MCP server's address in each AI tool's MCP settings, as <c>project=&lt;id&gt;</c>.
+/// What <c>bit new</c> gives a project before its first commit: an id of its own in bit.json, or the one <c>--project-id</c>
+/// gives, which its license names, and the same id on the docs MCP server's address in each AI tool's MCP settings, as
+/// <c>project=&lt;id&gt;</c>.
 /// </summary>
 public static partial class NewProjectIdentity
 {
     private static readonly string[] settingsExtensions = [".json", ".jsonc", ".toml", ".yaml", ".yml"];
 
-    /// <summary>The new project's id, new even when the template's bit.json had one; null when it has no bit.json.</summary>
-    public static Guid? Assign(string projectDirectory)
+    /// <summary>
+    /// The new project's id: <paramref name="given"/> (<c>--project-id</c>), else a new one even when the template's
+    /// bit.json had one; null when it has no bit.json. Only the id changes: its license still has to name it and the
+    /// project's first commit.
+    /// </summary>
+    public static Guid? Assign(string projectDirectory, Guid? given = null)
     {
         if (BitJsonFile.Read(Path.Combine(projectDirectory, ProjectBit.FileName)) is not { } bitJson)
             return null;
 
-        var id = Guid.NewGuid();
+        var id = given ?? Guid.NewGuid();
         bitJson.SetProjectId(id);
 
         NameInDocsMcp(projectDirectory, id);

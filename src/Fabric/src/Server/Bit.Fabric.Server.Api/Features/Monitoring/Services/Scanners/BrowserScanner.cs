@@ -25,28 +25,28 @@ public abstract partial class BrowserScanner(LighthouseClient lighthouse, Sitema
 
     public bool UsesBrowser => true;
 
-    public abstract Task<ProjectScanResult> Scan(Project project, ProjectScan scan, CancellationToken cancellationToken);
+    public abstract Task<ProjectScanResult> Scan(ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken);
 
     /// <summary>The runs of the project's pages; null when the app couldn't be reached or its home page couldn't be loaded.</summary>
-    protected async Task<List<BrowserScanRun>?> Measure(Project project, ProjectScan scan, CancellationToken cancellationToken)
+    protected async Task<List<BrowserScanRun>?> Measure(ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken)
     {
         var startedAt = timeProvider.GetUtcNow();
         var home = new Uri($"{project.Address}/");
 
         if (settings.Monitoring.AllowLocalAddresses is false && await PublicAddressGuard.IsPublicHost(home.Host, cancellationToken) is false)
         {
-            logger.LogInformation("{Kind} scan of project {ProjectId}: {Host} doesn't resolve to a public address.", Kind, project.Id, home.Host);
+            logger.LogInformation("{Kind} scan of project {MonitoringId}: {Host} doesn't resolve to a public address.", Kind, project.Id, home.Host);
             return null;
         }
 
         // The request both kinds were asked for in: the second reads the first one's runs, and a later request never does.
-        var reuseKey = $"{scan.ProjectId:N}:{scan.RequestedAt.UtcTicks}";
+        var reuseKey = $"{scan.MonitoringId:N}:{scan.RequestedAt.UtcTicks}";
 
         var phone = await lighthouse.Audit(home.ToString(), ProjectScanDevice.Phone, reuseKey, cancellationToken);
 
         if (phone is null || phone.RuntimeError is not null)
         {
-            logger.LogInformation("{Kind} scan of project {ProjectId}: Lighthouse couldn't load {Url} ({RuntimeError}).", Kind, project.Id, home, phone?.RuntimeError ?? "not public");
+            logger.LogInformation("{Kind} scan of project {MonitoringId}: Lighthouse couldn't load {Url} ({RuntimeError}).", Kind, project.Id, home, phone?.RuntimeError ?? "not public");
             return null;
         }
 
@@ -71,10 +71,10 @@ public abstract partial class BrowserScanner(LighthouseClient lighthouse, Sitema
 
         if (runs.Sum(run => run.Audit.RefusedRequests) is var refused and > 0)
         {
-            logger.LogWarning("{Kind} scan of project {ProjectId}: the Lighthouse service refused {Count} request(s) its pages made to addresses that aren't public.", Kind, project.Id, refused);
+            logger.LogWarning("{Kind} scan of project {MonitoringId}: the Lighthouse service refused {Count} request(s) its pages made to addresses that aren't public.", Kind, project.Id, refused);
         }
 
-        logger.LogInformation("{Kind} scan of project {ProjectId}: {Runs} run(s) of Lighthouse {Version}, benchmark index {BenchmarkIndex}.",
+        logger.LogInformation("{Kind} scan of project {MonitoringId}: {Runs} run(s) of Lighthouse {Version}, benchmark index {BenchmarkIndex}.",
                               Kind, project.Id, runs.Count, phone.LighthouseVersion, phone.BenchmarkIndex);
 
         return runs;
@@ -130,7 +130,7 @@ public partial class PerformanceScanner(LighthouseClient lighthouse, SitemapRead
 {
     public override ProjectScanKind Kind => ProjectScanKind.Performance;
 
-    public override async Task<ProjectScanResult> Scan(Project project, ProjectScan scan, CancellationToken cancellationToken)
+    public override async Task<ProjectScanResult> Scan(ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken)
     {
         if (await Measure(project, scan, cancellationToken) is not { } runs)
             return ProjectScanResult.Unreachable();
@@ -167,7 +167,7 @@ public partial class AccessibilityScanner(LighthouseClient lighthouse, SitemapRe
 {
     public override ProjectScanKind Kind => ProjectScanKind.Accessibility;
 
-    public override async Task<ProjectScanResult> Scan(Project project, ProjectScan scan, CancellationToken cancellationToken)
+    public override async Task<ProjectScanResult> Scan(ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken)
     {
         if (await Measure(project, scan, cancellationToken) is not { } runs)
             return ProjectScanResult.Unreachable();

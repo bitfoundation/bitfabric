@@ -12,7 +12,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         await Probe(server, project.Id);
@@ -21,7 +21,7 @@ public partial class ProjectMonitoringTests
         await Probe(server, project.Id);
 
         var map = await projects.GetMap(project.Id, TestContext.CancellationToken);
-        var details = await projects.GetProject(project.Id, TestContext.CancellationToken);
+        var details = await projects.GetMonitoring(project.Id, TestContext.CancellationToken);
 
         Assert.AreEqual(details.CheckedAt, map.CheckedAt);
         Assert.AreSequenceEqual(details.Checks.Select(check => check.Key).ToArray(), map.Parts.Select(part => part.Key).ToArray(), "Every part the last report names, nothing guessed.");
@@ -61,7 +61,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         customerApp.Fail("smtp", "The mail server didn't answer within 5 s.");
         await Probe(server, project.Id);

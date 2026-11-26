@@ -68,7 +68,7 @@ public partial class ProjectIncidentDto
 {
     public Guid Id { get; set; }
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     public ProjectIncidentKind Kind { get; set; }
 
@@ -155,7 +155,7 @@ public partial class ProjectIncidentUpdateRequestDto
 /// <summary>A span of a project's history, which the page draws in the viewer's time zone.</summary>
 public partial class ProjectHistoryRequestDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     public DateTimeOffset From { get; set; }
 
@@ -217,7 +217,7 @@ public partial class ProjectMaintenanceWindowDto
 {
     public Guid Id { get; set; }
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]
     [MaxLength(200, ErrorMessage = nameof(AppStrings.MaxLengthAttribute_ValidationError))]
@@ -269,7 +269,7 @@ public partial class ProjectTeamMemberDto
 
 public partial class ProjectAlertSettingsDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     public ProjectAlertRouteDto[] Routes { get; set; } = [];
 
@@ -286,6 +286,15 @@ public partial class ProjectSettingsDto
     [MaxLength(100, ErrorMessage = nameof(AppStrings.MaxLengthAttribute_ValidationError))]
     [Display(Name = "Project name")]
     public string? Name { get; set; }
+
+    /// <summary>The project it is an environment of, whose name <see cref="Name"/> is.</summary>
+    public Guid ProjectId { get; set; }
+
+    /// <summary>This environment's name: Production, Test, Staging or one the team gives.</summary>
+    [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]
+    [MaxLength(50, ErrorMessage = nameof(AppStrings.MaxLengthAttribute_ValidationError))]
+    [Display(Name = "Environment")]
+    public string? Environment { get; set; }
 
     /// <summary>The IANA time zone an SLA month follows.</summary>
     [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]

@@ -1,0 +1,57 @@
+@inherits AppComponentBase
+
+@* Like GitHub's repository switcher: the project's name opens "Switch project", a search box and the team's projects,
+   the current one checked (bitfabric-internal/specs/monitoring.md, A project's page switches to another project directly). *@
+<div class="switcher">
+<BitDropMenu @bind-IsOpen="isOpen" Transparent Responsive LazyRender NoChevron
+             Width="22rem" MaxWidth="calc(100vw - 1rem)"
+             OnOpen="WrapHandled(Load)"
+             Title="@Localizer[nameof(AppStrings.MonitoringSwitchProject)]"
+             Classes="@(new() { Root = "project-switcher", Callout = "project-switcher-callout" })">
+    <Template>
+        <BitText Typography="BitTypography.H5" Element="span" Class="switcher-name">@Current.Name</BitText>
+        <BitIcon IconName="@BitIconName.ChevronDown" Size="BitSize.Small" Color="BitColor.SecondaryForeground" />
+    </Template>
+    <Body>
+        <BitCard FullSize Class="switcher-card">
+            <BitText Typography="BitTypography.Subtitle2" Element="h2" Class="switcher-title">@Localizer[nameof(AppStrings.MonitoringSwitchProject)]</BitText>
+            <BitSearchBox @bind-Value="search" Immediate DebounceTime="100" Placeholder="@Localizer[nameof(AppStrings.MonitoringFindAProject)]"
+                          AriaLabel="@Localizer[nameof(AppStrings.MonitoringFindAProject)]" Class="switcher-search" />
+            @if (projects is null)
+            {
+                <BitShimmer Height="8rem" Radius="0.5rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingYourProjects)]" />
+            }
+            else if (Matches().ToArray() is { Length: > 0 } matches)
+            {
+                <ul class="switcher-list">
+                    @foreach (var project in matches)
+                    {
+                        var isCurrent = project.Id == Current.Id;
+                        <li @key="project.Id">
+                            @* TertiaryBackground: a hovered or focused row takes a quiet tint of the menu, not the primary color, under the row's own text colors. *@
+                            <BitButton Variant="BitVariant.Text" Color="BitColor.TertiaryBackground" FullWidth Href="@HrefOf(project)" OnClick="() => isOpen = false"
+                                       aria-current="@(isCurrent ? "page" : null)" Class="@(isCurrent ? "switcher-item current" : "switcher-item")">
+                                <span class="switcher-check" aria-hidden="true">
+                                    @if (isCurrent)
+                                    {
+                                        <BitIcon IconName="@BitIconName.CheckMark" Size="BitSize.Small" Color="BitColor.Primary" />
+                                    }
+                                </span>
+                                <span class="switcher-text">
+                                    <span class="switcher-project">@project.Name</span>
+                                    <span class="switcher-environments">@EnvironmentsOf(project)</span>
+                                </span>
+                            </BitButton>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Class="switcher-none">@Localizer[nameof(AppStrings.MonitoringNoProjectMatchesShort)]</BitText>
+            }
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.ViewAll" Href="@PageUrls.Projects">@Localizer[nameof(AppStrings.MonitoringAllProjects)]</BitButton>
+        </BitCard>
+    </Body>
+</BitDropMenu>
+</div>

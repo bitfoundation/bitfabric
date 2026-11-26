@@ -23,21 +23,21 @@ public partial class ForceUpdateTests
     }
 
     /// <summary>
-    /// Template 11.0.0-pre-21 renamed the profile image's endpoints and the fields of the user and the tenant that every
-    /// client up to 0.0.12 calls and reads, so those are asked to update instead of finding them broken, as the clients
-    /// before 0.0.10 were when the AI chat's hub lost StartChat.
+    /// 0.0.23 (Teams, Licenses and Projects) reshaped the projects' and monitoring's api that every client up to 0.0.22
+    /// calls, so those are asked to update instead of finding it broken, as the clients up to 0.0.12 were when template
+    /// 11.0.0-pre-21 renamed the profile image's endpoints and the fields of the user and the tenant.
     /// </summary>
     [TestMethod]
     [DataRow("Web")]
     [DataRow("Windows")]
-    public async Task AClientFromBeforeTheProfileImageAndTenantMembershipChange_Should_BeAskedToUpdate(string platform)
+    public async Task AClientFromBeforeTheProjectsAndMonitoringChange_Should_BeAskedToUpdate(string platform)
     {
         await using var server = new AppTestServer();
 
         await server.Build().Start(TestContext.CancellationToken);
 
-        Assert.AreEqual(HttpStatusCode.BadRequest, await CallAs(server, "0.0.12", platform));
-        Assert.AreEqual(HttpStatusCode.OK, await CallAs(server, "0.0.13", platform));
+        Assert.AreEqual(HttpStatusCode.BadRequest, await CallAs(server, "0.0.22", platform));
+        Assert.AreEqual(HttpStatusCode.OK, await CallAs(server, "0.0.23", platform));
     }
 
     [TestMethod]

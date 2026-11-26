@@ -18,14 +18,14 @@ public partial class ProjectConnected
     /// <summary>A location that hasn't answered by then stays "checking" on the project's Locations tab instead.</summary>
     private static readonly TimeSpan pollFor = TimeSpan.FromMinutes(3);
 
-    [Parameter, EditorRequired] public Guid ProjectId { get; set; }
+    [Parameter, EditorRequired] public Guid MonitoringId { get; set; }
 
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
     [AutoInject] private IPushNotificationService pushNotificationService = default!;
     [AutoInject] private NotificationPreferenceService notificationPreferenceService = default!;
     [AutoInject] private IUserController userController = default!;
 
-    private ProjectDetailsDto? details;
+    private MonitoringDetailsDto? details;
     private bool areAlertsOn;
     private bool isPushBlocked;
 
@@ -35,7 +35,7 @@ public partial class ProjectConnected
     {
         await base.OnInitAsync();
 
-        details = await projectsController.GetProject(ProjectId, CurrentCancellationToken);
+        details = await monitoringsController.GetMonitoring(MonitoringId, CurrentCancellationToken);
     }
 
     protected override async Task OnAfterFirstRenderAsync()
@@ -59,7 +59,7 @@ public partial class ProjectConnected
             {
                 await Task.Delay(pollEvery, CurrentCancellationToken);
 
-                details = await projectsController.GetProject(ProjectId, CurrentCancellationToken);
+                details = await monitoringsController.GetMonitoring(MonitoringId, CurrentCancellationToken);
 
                 await InvokeAsync(StateHasChanged);
             }
@@ -82,7 +82,7 @@ public partial class ProjectConnected
     {
         get
         {
-            if (details?.Project is not { } project)
+            if (details?.Monitoring is not { } project)
                 return [];
 
             var checking = Localizer[nameof(AppStrings.MonitoringChecking)].Value;
@@ -113,7 +113,7 @@ public partial class ProjectConnected
         }
     }
 
-    private bool AllAnswered => details?.Project is not null && Locations.All(location => location.Answered is not null);
+    private bool AllAnswered => details?.Monitoring is not null && Locations.All(location => location.Answered is not null);
 
     private static string PartTone(ProjectCheckDto check) => check.IsNotConfigured ? "tone-nodata" : check.Status switch
     {
@@ -122,7 +122,10 @@ public partial class ProjectConnected
         _ => "tone-ok"
     };
 
-    private string TabHref(string tab) => $"{PageUrls.Projects}/{ProjectId}?tab={tab}";
+    private string TabHref(string tab) => $"{ProjectHref}?tab={tab}";
+
+    /// <summary>The environment's page, in the project the first round linked it to (See ProjectLinker).</summary>
+    private string ProjectHref => details?.Monitoring is { } monitoring ? PageUrls.ProjectEnvironment(monitoring.ProjectId, monitoring.Id) : PageUrls.Projects;
 
     /// <summary>
     /// The same steps the app menu's notifications switch takes when turned on (See AppMenu.ToggleNotifications): the

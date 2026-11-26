@@ -16,16 +16,16 @@ public sealed class WorkbenchProjectIncidentsController(WorkbenchScenarioState s
 {
     public Task<ProjectHistoryDto> GetHistory(ProjectHistoryRequestDto request, CancellationToken cancellationToken)
     {
-        return Load("history", () => MonitoringReads.History(World.Get(request.ProjectId), request.From, request.To, World.Now), () =>
+        return Load("history", () => MonitoringReads.History(World.Get(request.MonitoringId), request.From, request.To, World.Now), () =>
         {
             // Nothing happened yet: a project watched for the last hour, with the parts its report has.
-            var history = MonitoringReads.History(World.Get(request.ProjectId), request.From, request.To, World.Now);
+            var history = MonitoringReads.History(World.Get(request.MonitoringId), request.From, request.To, World.Now);
             return new ProjectHistoryDto { WatchedSince = World.Now.AddHours(-1), Parts = history.Parts };
         }, cancellationToken);
     }
 
-    public Task<ProjectIncidentDto[]> GetIncidents(Guid projectId, CancellationToken cancellationToken)
-        => Load<ProjectIncidentDto[]>("incidents", () => MonitoringReads.Incidents(World.Get(projectId), World.Now), () => [], cancellationToken);
+    public Task<ProjectIncidentDto[]> GetIncidents(Guid monitoringId, CancellationToken cancellationToken)
+        => Load<ProjectIncidentDto[]>("incidents", () => MonitoringReads.Incidents(World.Get(monitoringId), World.Now), () => [], cancellationToken);
 
     public async Task<ProjectIncidentDto> Acknowledge(Guid id, CancellationToken cancellationToken)
     {
@@ -56,12 +56,12 @@ public sealed class WorkbenchProjectIncidentsController(WorkbenchScenarioState s
         }, cancellationToken);
     }
 
-    public Task<ProjectMaintenanceWindowDto[]> GetMaintenanceWindows(Guid projectId, CancellationToken cancellationToken)
-        => Load<ProjectMaintenanceWindowDto[]>("maintenance", () => [.. World.Get(projectId).Maintenance.OrderBy(window => window.StartsAt)], () => [], cancellationToken);
+    public Task<ProjectMaintenanceWindowDto[]> GetMaintenanceWindows(Guid monitoringId, CancellationToken cancellationToken)
+        => Load<ProjectMaintenanceWindowDto[]>("maintenance", () => [.. World.Get(monitoringId).Maintenance.OrderBy(window => window.StartsAt)], () => [], cancellationToken);
 
     public Task<ProjectMaintenanceWindowDto> AddMaintenanceWindow(ProjectMaintenanceWindowDto window, CancellationToken cancellationToken) => Save(() =>
     {
-        var project = World.Get(window.ProjectId);
+        var project = World.Get(window.MonitoringId);
 
         if (window.EndsAt <= window.StartsAt || (window.RepeatsWeekly && window.EndsAt - window.StartsAt >= TimeSpan.FromDays(7)))
             throw new BadRequestException();
@@ -69,7 +69,7 @@ public sealed class WorkbenchProjectIncidentsController(WorkbenchScenarioState s
         var added = new ProjectMaintenanceWindowDto
         {
             Id = Guid.NewGuid(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             Title = window.Title,
             StartsAt = window.StartsAt,
             EndsAt = window.EndsAt,
@@ -84,13 +84,13 @@ public sealed class WorkbenchProjectIncidentsController(WorkbenchScenarioState s
     public Task DeleteMaintenanceWindow(Guid id, long version, CancellationToken cancellationToken)
         => Save(() => World.Projects.ForEach(project => project.Maintenance.RemoveAll(window => window.Id == id)), cancellationToken);
 
-    public Task<ProjectAlertSettingsDto> GetAlertSettings(Guid projectId, CancellationToken cancellationToken)
-        => Load("alerts", () => MonitoringReads.AlertSettings(World.Get(projectId)),
-            () => new ProjectAlertSettingsDto { ProjectId = projectId, Members = MonitoringReads.AlertSettings(World.Get(projectId)).Members }, cancellationToken);
+    public Task<ProjectAlertSettingsDto> GetAlertSettings(Guid monitoringId, CancellationToken cancellationToken)
+        => Load("alerts", () => MonitoringReads.AlertSettings(World.Get(monitoringId)),
+            () => new ProjectAlertSettingsDto { MonitoringId = monitoringId, Members = MonitoringReads.AlertSettings(World.Get(monitoringId)).Members }, cancellationToken);
 
     public Task<ProjectAlertSettingsDto> SaveAlertSettings(ProjectAlertSettingsDto settings, CancellationToken cancellationToken) => Save(() =>
     {
-        var project = World.Get(settings.ProjectId);
+        var project = World.Get(settings.MonitoringId);
 
         project.Routes.Clear();
         project.Routes.AddRange(settings.Routes.Select(route =>
@@ -103,16 +103,16 @@ public sealed class WorkbenchProjectIncidentsController(WorkbenchScenarioState s
         return MonitoringReads.AlertSettings(project);
     }, cancellationToken);
 
-    public Task<ProjectAlertDto[]> SendTestAlert(Guid projectId, CancellationToken cancellationToken) => Save<ProjectAlertDto[]>(() =>
+    public Task<ProjectAlertDto[]> SendTestAlert(Guid monitoringId, CancellationToken cancellationToken) => Save<ProjectAlertDto[]>(() =>
     {
-        var project = World.Get(projectId);
+        var project = World.Get(monitoringId);
         var now = World.Now;
 
         return [.. project.Routes.OrderBy(route => route.Step).Select(route => MonitoringSamples.Alert(route, ProjectAlertKind.Test, now))];
     }, cancellationToken);
 
-    public Task<ProjectSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken)
-        => Load("settings", () => MonitoringReads.Settings(World.Get(projectId)), () => MonitoringReads.Settings(World.Get(projectId)), cancellationToken);
+    public Task<ProjectSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken)
+        => Load("settings", () => MonitoringReads.Settings(World.Get(monitoringId)), () => MonitoringReads.Settings(World.Get(monitoringId)), cancellationToken);
 
     public Task<ProjectSettingsDto> SaveSettings(ProjectSettingsDto settings, CancellationToken cancellationToken) => Save(() =>
     {

@@ -52,6 +52,12 @@ public class AppFeatures
 
         [Description("See every health check's status and failure details through /healthz, and let a monitor read it over OAuth.")]
         public const string Operations_View = "2.4";
+
+        /// <summary>
+        /// A System feature, so global admins only: the figures count every team's projects and licenses together.
+        /// </summary>
+        [Description("Open the growth page: projects, Trials and Licenses over time, every team's together, as totals only.")]
+        public const string Growth_View = "2.5";
     }
 
     public class AdminPanel

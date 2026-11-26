@@ -24,7 +24,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
 
         var found = await projects.ProbeAddress(new() { Address = "Customer.example/" }, TestContext.CancellationToken);
 
@@ -43,7 +43,7 @@ public partial class ProjectMonitoringTests
         Assert.AreEqual(ProjectHealth.Operational, project.Health);
         Assert.AreEqual(ProjectConnectionStatus.Connected, project.ConnectionStatus);
 
-        var details = await projects.GetProject(project.Id, TestContext.CancellationToken);
+        var details = await projects.GetMonitoring(project.Id, TestContext.CancellationToken);
 
         Assert.AreSequenceEqual(new[] { "AppDbContext", "googleSignIn", "paymentGateway", "smtp" }, details.Checks.Select(check => check.Key).Order(StringComparer.Ordinal).ToArray());
         Assert.AreEqual(5000, details.Checks.Single(check => check.Key == "smtp").TimeoutMs);
@@ -76,7 +76,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
 
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var before = await RoundsOf(server, project.Id);
 
         // A slow app keeps each round waiting for its answers, so both would read the project before either saved it, as the
@@ -94,18 +94,18 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         customerApp.Fail("smtp", "The mail server didn't answer within 5 s.");
         await Probe(server, project.Id);
 
-        var card = (await projects.GetProjects(null, TestContext.CancellationToken)).Single();
+        var card = (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single();
         Assert.AreEqual(ProjectHealth.Degraded, card.Health);
         // By the name the app gives it; the check that only misses its settings isn't failing.
         Assert.AreSequenceEqual(new[] { "Email" }, card.FailingChecks);
 
-        var smtp = (await projects.GetProject(project.Id, TestContext.CancellationToken)).Checks.Single(check => check.Key == "smtp");
+        var smtp = (await projects.GetMonitoring(project.Id, TestContext.CancellationToken)).Checks.Single(check => check.Key == "smtp");
         Assert.AreEqual(HealthCheckStatus.Degraded, smtp.Status);
         Assert.AreEqual("The mail server didn't answer within 5 s.", smtp.Description);
         Assert.IsNotNull(smtp.Since);
@@ -117,7 +117,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         customerApp.Fail("smtp", "The mail server didn't answer within 5 s.");
@@ -126,7 +126,7 @@ public partial class ProjectMonitoringTests
         var now = DateTimeOffset.UtcNow;
 
         // Zoomed in: a bar a minute, and both rounds may share one, in which case the later one shows.
-        var minutes = await projects.GetPerformance(new() { ProjectId = project.Id, From = now.AddHours(-1), To = now.AddMinutes(1), StepMinutes = 1 }, TestContext.CancellationToken);
+        var minutes = await projects.GetPerformance(new() { MonitoringId = project.Id, From = now.AddHours(-1), To = now.AddMinutes(1), StepMinutes = 1 }, TestContext.CancellationToken);
         Assert.AreEqual(1, minutes.StepMinutes);
         Assert.AreEqual(1, minutes.Series.Single(series => series.Key == "smtp").Points[^1].Degraded);
         Assert.Contains(series => series.Key == ProjectRollupKeys.HomePage && series.Region == "Germany", minutes.Series);
@@ -138,18 +138,18 @@ public partial class ProjectMonitoringTests
         Assert.DoesNotContain(series => series.Key == "googleSignIn", minutes.Series);
 
         // Zoomed out: the 15 minute rollups count both rounds.
-        var quarters = await projects.GetPerformance(new() { ProjectId = project.Id, From = now.AddHours(-1), To = now.AddMinutes(1), StepMinutes = 15 }, TestContext.CancellationToken);
+        var quarters = await projects.GetPerformance(new() { MonitoringId = project.Id, From = now.AddHours(-1), To = now.AddMinutes(1), StepMinutes = 15 }, TestContext.CancellationToken);
         Assert.AreEqual(15, quarters.StepMinutes);
         var smtp = quarters.Series.Single(series => series.Key == "smtp").Points;
         Assert.AreEqual(2, smtp.Sum(point => point.Count));
         Assert.AreEqual(1, smtp.Sum(point => point.Degraded));
 
         // A month can't be drawn a minute a bar; the bars widen rather than send 43,200 a row.
-        var month = await projects.GetPerformance(new() { ProjectId = project.Id, From = now.AddDays(-30), To = now, StepMinutes = 1 }, TestContext.CancellationToken);
+        var month = await projects.GetPerformance(new() { MonitoringId = project.Id, From = now.AddDays(-30), To = now, StepMinutes = 1 }, TestContext.CancellationToken);
         Assert.AreEqual(60, month.StepMinutes);
 
         // The card's uptime comes from the same rollups: two rounds, the app never down.
-        Assert.AreEqual(100, (await projects.GetProjects(null, TestContext.CancellationToken)).Single().Uptime30Days);
+        Assert.AreEqual(100, (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().Uptime30Days);
     }
 
     [TestMethod]
@@ -158,7 +158,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         var deployedAt = DateTimeOffset.UtcNow.AddMinutes(-2);
@@ -167,10 +167,10 @@ public partial class ProjectMonitoringTests
         customerApp.TemplateVersion = "11.0.1";
         await Probe(server, project.Id);
 
-        var details = await projects.GetProject(project.Id, TestContext.CancellationToken);
+        var details = await projects.GetMonitoring(project.Id, TestContext.CancellationToken);
 
         Assert.AreEqual("1.0.1+bbbb222", details.ApplicationVersion);
-        Assert.AreEqual("11.0.1", (await projects.GetProjects(null, TestContext.CancellationToken)).Single().TemplateVersion, "A deployment can be an upgrade of the template, so its version is read again.");
+        Assert.AreEqual("11.0.1", (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().TemplateVersion, "A deployment can be an upgrade of the template, so its version is read again.");
         Assert.IsNotNull(details.LastDeployedAt);
         Assert.IsLessThan(1, Math.Abs((details.LastDeployedAt.Value - deployedAt).TotalSeconds));
     }
@@ -181,13 +181,13 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         customerApp.Revoke();
         await Probe(server, project.Id);
 
-        var card = (await projects.GetProjects(null, TestContext.CancellationToken)).Single();
+        var card = (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single();
         Assert.AreEqual(ProjectConnectionStatus.ReconnectNeeded, card.ConnectionStatus);
         Assert.AreEqual(ProjectHealth.NoData, card.Health);
         // The app's own reason, not a guess.
@@ -200,7 +200,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp { Server = "https://backend.example.net" };
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
 
         var found = await projects.ProbeAddress(new() { Address = "customer.example" }, TestContext.CancellationToken);
 
@@ -221,7 +221,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp { Server = "https://api.customer.example", HasStaticFrontEnd = true };
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
 
         var found = await projects.ProbeAddress(new() { Address = "customer.example" }, TestContext.CancellationToken);
         Assert.IsTrue(found.HasStaticFrontEnd, "The app says its pages are hosted statically.");
@@ -238,7 +238,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp { ServesBitApp = false };
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
 
         // An app answers without saying it's a bit app: "unknown", never "too old".
         Assert.AreEqual(AddressProbeOutcome.NotFound, (await projects.ProbeAddress(new() { Address = "customer.example" }, TestContext.CancellationToken)).Outcome);
@@ -271,7 +271,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
 
         using var browser = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false });
 
@@ -306,7 +306,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         // The server's time is asked for past any cache (?bf=), then the page as a visitor asks for it.
@@ -345,7 +345,7 @@ public partial class ProjectMonitoringTests
 
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
         var rounds = await scope.ServiceProvider.GetRequiredService<AppDbContext>().ProjectProbes.IgnoreQueryFilters()
-            .Where(probe => probe.ProjectId == project.Id).ToListAsync(TestContext.CancellationToken);
+            .Where(probe => probe.MonitoringId == project.Id).ToListAsync(TestContext.CancellationToken);
         Assert.IsTrue(rounds.All(round => round.ResponseMs is not null), "Every round timed the page, the one that was redirected too.");
     }
 
@@ -355,16 +355,16 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp { CachesHomePage = true };
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
         await Probe(server, project.Id);
 
-        var shown = (await projects.GetProjects(null, TestContext.CancellationToken)).Single();
+        var shown = (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single();
         Assert.IsNotNull(shown.MedianMs, "The server's own time, past the cache.");
         Assert.IsNotNull(shown.MedianVisitorMs, "What a visitor waits for, through the cache.");
-        Assert.IsNotNull((await projects.GetProject(project.Id, TestContext.CancellationToken)).HomePageVisitorMs);
+        Assert.IsNotNull((await projects.GetMonitoring(project.Id, TestContext.CancellationToken)).HomePageVisitorMs);
 
-        var performance = await projects.GetPerformance(new() { ProjectId = project.Id, From = DateTimeOffset.UtcNow.AddHours(-1), To = DateTimeOffset.UtcNow.AddMinutes(1), StepMinutes = 1 }, TestContext.CancellationToken);
+        var performance = await projects.GetPerformance(new() { MonitoringId = project.Id, From = DateTimeOffset.UtcNow.AddHours(-1), To = DateTimeOffset.UtcNow.AddMinutes(1), StepMinutes = 1 }, TestContext.CancellationToken);
         Assert.Contains(series => series.Key == ProjectRollupKeys.HomePageForVisitors && series.Points.Length > 0, performance.Series);
 
         var statusPages = client.GetController<IStatusPagesController>();
@@ -380,9 +380,9 @@ public partial class ProjectMonitoringTests
         customerApp.CachesHomePage = false;
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        await dbContext.ProjectProbes.IgnoreQueryFilters().Where(probe => probe.ProjectId == project.Id).ExecuteDeleteAsync(TestContext.CancellationToken);
+        await dbContext.ProjectProbes.IgnoreQueryFilters().Where(probe => probe.MonitoringId == project.Id).ExecuteDeleteAsync(TestContext.CancellationToken);
         await Probe(server, project.Id);
-        shown = (await projects.GetProjects(null, TestContext.CancellationToken)).Single();
+        shown = (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single();
         Assert.IsNotNull(shown.MedianMs);
         Assert.IsNull(shown.MedianVisitorMs);
     }
@@ -391,13 +391,13 @@ public partial class ProjectMonitoringTests
     public void ARoundsMoment_Should_BeTheProjectsOwn_WithinTheSpread()
     {
         var spread = TimeSpan.FromSeconds(30);
-        var projectIds = Enumerable.Range(0, 300).Select(_ => Guid.CreateVersion7()).ToArray();
-        var moments = projectIds.Select(id => ProjectProbeJobRunner.OffsetOf(id, spread)).ToArray();
+        var monitoringIds = Enumerable.Range(0, 300).Select(_ => Guid.CreateVersion7()).ToArray();
+        var moments = monitoringIds.Select(id => ProjectProbeJobRunner.OffsetOf(id, spread)).ToArray();
 
         Assert.IsTrue(moments.All(moment => moment >= TimeSpan.Zero && moment < spread), "Each within the spread.");
-        Assert.AreSequenceEqual(moments, projectIds.Select(id => ProjectProbeJobRunner.OffsetOf(id, spread)).ToArray(), "The same moment every minute.");
+        Assert.AreSequenceEqual(moments, monitoringIds.Select(id => ProjectProbeJobRunner.OffsetOf(id, spread)).ToArray(), "The same moment every minute.");
         Assert.IsGreaterThan(25, moments.Select(moment => (int)moment.TotalSeconds).Distinct().Count(), "Spread over the half minute, ids made in the same millisecond included.");
-        Assert.AreEqual(TimeSpan.Zero, ProjectProbeJobRunner.OffsetOf(projectIds[0], TimeSpan.Zero), "No spread: all at once, as before.");
+        Assert.AreEqual(TimeSpan.Zero, ProjectProbeJobRunner.OffsetOf(monitoringIds[0], TimeSpan.Zero), "No spread: all at once, as before.");
     }
 
     [TestMethod]
@@ -406,10 +406,10 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp { CachesIgnoringQueryString = true };
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         await Connect(projects, customerApp, "customer.example");
 
-        Assert.IsTrue((await projects.GetProjects(null, TestContext.CancellationToken)).Single().HasCacheWarning);
+        Assert.IsTrue((await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().HasCacheWarning);
     }
 
     [TestMethod]
@@ -418,14 +418,14 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var owner = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(owner.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(owner.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         await using var stranger = await SignInWithATeamOfTheirOwn(server);
-        var strangersProjects = stranger.GetController<IProjectsController>();
+        var strangersProjects = stranger.GetController<IMonitoringsController>();
 
-        Assert.IsEmpty(await strangersProjects.GetProjects(null, TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersProjects.GetProject(project.Id, TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersProjects.GetPerformance(new() { ProjectId = project.Id, From = DateTimeOffset.UtcNow.AddHours(-1), To = DateTimeOffset.UtcNow, StepMinutes = 1 }, TestContext.CancellationToken));
+        Assert.IsEmpty(await strangersProjects.GetMonitorings(null, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersProjects.GetMonitoring(project.Id, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersProjects.GetPerformance(new() { MonitoringId = project.Id, From = DateTimeOffset.UtcNow.AddHours(-1), To = DateTimeOffset.UtcNow, StepMinutes = 1 }, TestContext.CancellationToken));
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => strangersProjects.Delete(project.Id, TestContext.CancellationToken));
     }
 
@@ -438,7 +438,7 @@ public partial class ProjectMonitoringTests
         await client.AuthManager.SignIn(new() { Email = email, Password = TestUsers.Password }, TestContext.CancellationToken);
 
         // Without a tenant of their own a project would land in the fallback tenant every tenant-less user shares.
-        await Assert.ThrowsExactlyAsync<ForbiddenException>(() => client.GetController<IProjectsController>().GetProjects(null, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ForbiddenException>(() => client.GetController<IMonitoringsController>().GetMonitorings(null, TestContext.CancellationToken));
     }
 
     /// <param name="customerApp">Answers every request bit Fabric makes to a customer's app.</param>
@@ -542,9 +542,9 @@ public partial class ProjectMonitoringTests
     }
 
     /// <summary>The add flow, the way the browser goes through it: start, the customer app's approval, the callback.</summary>
-    private async Task<ProjectDto> Connect(IProjectsController projects, FakeCustomerApp customerApp, string address)
+    private async Task<MonitoringDto> Connect(IMonitoringsController projects, FakeCustomerApp customerApp, string address, Guid? projectId = null, string? environment = null)
     {
-        var start = await projects.StartConnect(new() { Address = address }, TestContext.CancellationToken);
+        var start = await projects.StartConnect(new() { Address = address, ProjectId = projectId, Environment = environment }, TestContext.CancellationToken);
         var authorize = QueryHelpers.ParseQuery(new Uri(start.AuthorizeUrl!).Query);
 
         Assert.AreEqual("healthz", authorize["scope"].ToString());
@@ -558,16 +558,16 @@ public partial class ProjectMonitoringTests
         return await projects.CompleteConnect(new() { State = authorize["state"], Code = "approved", Iss = customerApp.Server }, TestContext.CancellationToken);
     }
 
-    private async Task Probe(AppTestServer server, Guid projectId)
+    private async Task Probe(AppTestServer server, Guid monitoringId)
     {
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
-        await scope.ServiceProvider.GetRequiredService<ProjectProber>().Probe(projectId, TestContext.CancellationToken);
+        await scope.ServiceProvider.GetRequiredService<ProjectProber>().Probe(monitoringId, TestContext.CancellationToken);
     }
 
-    private async Task<int> RoundsOf(AppTestServer server, Guid projectId)
+    private async Task<int> RoundsOf(AppTestServer server, Guid monitoringId)
     {
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
-        return await scope.ServiceProvider.GetRequiredService<AppDbContext>().ProjectProbes.IgnoreQueryFilters().CountAsync(probe => probe.ProjectId == projectId, TestContext.CancellationToken);
+        return await scope.ServiceProvider.GetRequiredService<AppDbContext>().ProjectProbes.IgnoreQueryFilters().CountAsync(probe => probe.MonitoringId == monitoringId, TestContext.CancellationToken);
     }
 
     public TestContext TestContext { get; set; } = default!;

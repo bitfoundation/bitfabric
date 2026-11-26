@@ -61,7 +61,7 @@ public class ProjectMapBunitTests
         await server.Build(configureTestWebAppServices: services => services.AddScoped(_ => incidents)).Start(TestContext.CancellationToken);
         await using var ctx = server.CreateBunitContext();
 
-        ProjectDto project = new() { Id = Guid.NewGuid(), Name = "Customer app", CreatedOn = DateTimeOffset.UtcNow.AddDays(-10) };
+        MonitoringDto project = new() { Id = Guid.NewGuid(), Name = "Customer app", CreatedOn = DateTimeOffset.UtcNow.AddDays(-10) };
         var everyPartShown = 0;
 
         var cut = ctx.Render<ProjectHistory>(parameters => parameters

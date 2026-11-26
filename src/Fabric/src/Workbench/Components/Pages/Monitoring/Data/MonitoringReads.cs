@@ -30,7 +30,7 @@ public static partial class MonitoringReads
     public static IEnumerable<SampleIncident> OpenIncidents(SampleProject project)
         => project.Incidents.Where(incident => incident.Kind is ProjectIncidentKind.Incident && incident.EndedAt is null).OrderByDescending(incident => incident.StartedAt);
 
-    public static ProjectDto Project(SampleProject project, TimeZoneInfo zone, DateTimeOffset now)
+    public static MonitoringDto Project(SampleProject project, TimeZoneInfo zone, DateTimeOffset now)
     {
         var days = ProjectHistoryDays.Last(30, zone, now);
         var appDays = ProjectHistoryDays.OfApp(History(project, days[0].Start, now, now), days, now);
@@ -42,6 +42,9 @@ public static partial class MonitoringReads
         {
             Id = project.Id,
             Name = project.Name,
+            ProjectId = project.ProjectId ?? project.Id,
+            ProjectName = project.Name,
+            Environment = project.Environment,
             Address = project.Address,
             ServerAddress = project.ServerAddress,
             TemplateVersion = project.TemplateVersion,
@@ -102,13 +105,13 @@ public static partial class MonitoringReads
         return sorted[sorted.Length / 2];
     }
 
-    public static ProjectDetailsDto Details(SampleProject project, TimeZoneInfo zone, DateTimeOffset now)
+    public static MonitoringDetailsDto Details(SampleProject project, TimeZoneInfo zone, DateTimeOffset now)
     {
         var configured = project.Checks.Where(check => check.IsNotConfigured is false).ToArray();
 
         return new()
         {
-            Project = Project(project, zone, now),
+            Monitoring = Project(project, zone, now),
             Checks = [.. project.Checks],
             CheckedAt = project.CheckedAt,
             ReportMs = project.CheckedAt is null || configured.Length is 0 ? null : configured.Max(check => check.DurationMs) + 38,
@@ -149,7 +152,7 @@ public static partial class MonitoringReads
     public static ProjectIncidentDto Incident(SampleProject project, SampleIncident incident) => new()
     {
         Id = incident.Id,
-        ProjectId = project.Id,
+        MonitoringId = project.Id,
         Kind = incident.Kind,
         Impact = incident.Impact,
         Title = MonitoringTexts.InCurrent(incident.Title),
@@ -212,7 +215,7 @@ public static partial class MonitoringReads
 
     public static ProjectAlertSettingsDto AlertSettings(SampleProject project) => new()
     {
-        ProjectId = project.Id,
+        MonitoringId = project.Id,
         Routes = [.. project.Routes],
         Members = [.. MonitoringSamples.Team.Select(member => new ProjectTeamMemberDto { UserId = member.UserId, Name = member.Name, HasEmail = member.Email is not null, HasPhoneNumber = member.PhoneNumber is not null })]
     };

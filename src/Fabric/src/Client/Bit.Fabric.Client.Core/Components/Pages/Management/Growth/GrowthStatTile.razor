@@ -1,0 +1,39 @@
+@* One figure of the growth page: its name, its value, how it changed against the period before, and its line. *@
+@inherits AppComponentBase
+
+<section class="tile">
+    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary" Element="@HeadingElement">@Label</BitText>
+
+    @if (IsLoading)
+    {
+        <BitShimmer Width="5rem" Height="2.25rem" />
+        <BitShimmer Width="7rem" Height="1rem" />
+    }
+    else
+    {
+        <span class="tile-value">@Value</span>
+
+        @if (Added is { Length: > 0 } || Delta is not null)
+        {
+            <span class="tile-change">
+                @if (Added is { Length: > 0 } added)
+                {
+                    <span class="tile-added">@added</span>
+                }
+                <GrowthDeltaChip Delta="Delta" />
+            </span>
+        }
+
+        @if (Note is { Length: > 0 })
+        {
+            <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Note</BitText>
+        }
+
+        @if (Series is { } series && series.Count(value => value is not null) > 1)
+        {
+            <div class="tile-spark" aria-hidden="true">
+                <BitChart Type="BitChartType.Line" Data="sparkData" Options="sparkOptions" Height="2.5rem" GenerateTable="false" NavigationHint="@null" TabIndex="-1" />
+            </div>
+        }
+    }
+</section>

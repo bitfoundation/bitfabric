@@ -23,9 +23,9 @@ public partial class ProjectRollup : ITenantAware
     /// <inheritdoc cref="ProjectRollupKeys.Report"/>
     public const string ReportKey = ProjectRollupKeys.Report;
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
-    public Project? Project { get; set; }
+    public ProjectMonitoring? Monitoring { get; set; }
 
     public Guid TenantId { get; set; }
 

@@ -11,6 +11,11 @@ public static class LicensingServiceCollectionExtensions
 
         services.AddScoped<IProjectLicenseStatus, ProjectLicenseStatus>();
 
+        services.AddScoped<Projects.ProjectLicenses>();
+
+        // The growth page's counts, for its controller.
+        services.AddScoped<Growth.GrowthService>();
+
         return services;
     }
 }

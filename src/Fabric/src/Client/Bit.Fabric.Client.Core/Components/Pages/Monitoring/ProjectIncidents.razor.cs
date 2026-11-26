@@ -13,7 +13,7 @@ public partial class ProjectIncidents
     /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
     private string Dot => MonitoringWords.Dot(Localizer);
 
-    [Parameter, EditorRequired] public Guid ProjectId { get; set; }
+    [Parameter, EditorRequired] public Guid MonitoringId { get; set; }
 
     [AutoInject] private IProjectIncidentsController incidentsController = default!;
     [AutoInject] private Clipboard clipboard = default!;
@@ -28,7 +28,7 @@ public partial class ProjectIncidents
     {
         await base.OnInitAsync();
 
-        incidents = await incidentsController.GetIncidents(ProjectId, CurrentCancellationToken);
+        incidents = await incidentsController.GetIncidents(MonitoringId, CurrentCancellationToken);
 
         // The open one, or the newest, comes open.
         openId = incidents.FirstOrDefault()?.Id;

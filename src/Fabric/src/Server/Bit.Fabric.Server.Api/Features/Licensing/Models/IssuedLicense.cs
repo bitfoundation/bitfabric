@@ -1,17 +1,28 @@
+using Bit.Fabric.Server.Api.Features.Projects.Models;
+using Bit.Fabric.Server.Api.Features.Tenants;
+
 namespace Bit.Fabric.Server.Api.Features.Licensing.Models;
 
-/// <summary>A license the license page issued to a signed-in account, kept as it was signed.</summary>
-public partial class IssuedLicense
+/// <summary>
+/// A license a team holds for one of its projects, as the license page issued and signed it, naming the team as its
+/// holder (bitfabric-internal/specs/product.md, A License belongs to a Team).
+/// </summary>
+public partial class IssuedLicense : ITenantAware
 {
     public Guid Id { get; set; }
 
+    public Guid TenantId { get; set; }
+
+    public Tenant? Tenant { get; set; }
+
     public Guid ProjectId { get; set; }
 
-    public LicensedProject? Project { get; set; }
+    public Project? Project { get; set; }
 
-    public Guid UserId { get; set; }
+    /// <summary>Who got it on the license page; null once their account is deleted, as the license stays the team's.</summary>
+    public Guid? IssuedByUserId { get; set; }
 
-    public User? User { get; set; }
+    public User? IssuedBy { get; set; }
 
     /// <summary><c>free</c>, the only plan today.</summary>
     [Required, MaxLength(20)]

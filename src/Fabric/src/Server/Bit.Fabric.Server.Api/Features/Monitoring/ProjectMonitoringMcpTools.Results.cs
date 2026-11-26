@@ -16,14 +16,22 @@ public partial class ProjectMonitoringMcpTools
     /// <summary>
     /// <c>Team</c>: The team the request is for: a user in several sees which one answered.
     /// </summary>
-    /// <para><c>DaysIn</c>: The time zone each project's days are counted in.</para>
+    /// <para><c>DaysIn</c>: The time zone each environment's days are counted in.</para>
     public sealed record ProjectList(string? Team, string DaysIn, ProjectSummary[] Projects);
 
     /// <summary>
+    /// <c>License</c>: Licensed, LicenseEndingSoon, LicenseInGrace, LicenseEnded, Trial, TrialEnded, None or Unknown.<br/>
+    /// <c>LicenseUntil</c>: When the license or the trial ends or ended.
+    /// </summary>
+    public sealed record ProjectSummary(Guid Id, string? Name, string License, DateTimeOffset? LicenseUntil, EnvironmentSummary[] Environments);
+
+    /// <summary>
+    /// <c>Name</c>: What the other tools take it by: the project's name for Production, "Name (Environment)" for another.<br/>
     /// <c>TypicalResponseMs</c>, <c>Slowest5PercentResponseMs</c>: The home page over the last 24 hours past any cache: the server's own time.<br/>
     /// <c>TypicalVisitorWaitMs</c>: The typical time a visitor waited for it, through the cache in front of the app; null when no cache answered it, so the server's time is what visitors wait for.
     /// </summary>
-    public sealed record ProjectSummary(Guid Id,
+    public sealed record EnvironmentSummary(Guid Id,
+        string? Environment,
         string? Name,
         string? Address,
         string Health,
@@ -45,6 +53,11 @@ public partial class ProjectMonitoringMcpTools
     public sealed record DayWithProblems(DateOnly Date, string State, int DownMinutes, int DegradedMinutes);
 
     public sealed record OngoingIncident(Guid Id, string? Title, DateTimeOffset Since);
+
+    public sealed record LicenseList(string? Team, LicenseSummary[] Licenses);
+
+    /// <summary><c>State</c>: InForce, EndingSoon, InGrace or Ended.</summary>
+    public sealed record LicenseSummary(ProjectRef Project, string? FirstCommit, string? Plan, DateTimeOffset IssuedOn, DateTimeOffset ExpiresOn, string State, string? IssuedBy);
 
     public sealed record ProjectDetail(Guid Id,
         string? Name,

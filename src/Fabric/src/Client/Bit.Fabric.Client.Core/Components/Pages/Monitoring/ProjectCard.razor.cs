@@ -13,14 +13,27 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectCard
 {
-    [Parameter, EditorRequired] public ProjectDto Project { get; set; } = default!;
+    /// <summary>The environment the card draws: its project's Production, or its first.</summary>
+    [Parameter, EditorRequired] public MonitoringDto Project { get; set; } = default!;
+
+    /// <summary>The project it is an environment of, whose name, license and other environments the card shows.</summary>
+    [Parameter] public Bit.Fabric.Shared.Features.Projects.Dtos.ProjectDto? Parent { get; set; }
+
+    private static string EnvironmentTone(MonitoringDto environment) => (environment.ConnectionStatus, environment.Health) switch
+    {
+        (ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected, _) => "tone-nodata",
+        (_, ProjectHealth.Down) => "tone-down",
+        (_, ProjectHealth.Degraded) => "tone-degraded",
+        (_, ProjectHealth.Operational) => "tone-ok",
+        _ => "tone-nodata"
+    };
 
     [AutoInject] private IProjectScansController scansController = default!;
 
     /// <summary>A project connected before the scanners came has none until someone runs them.</summary>
     private async Task RunScans()
     {
-        await scansController.RunNow(new() { ProjectId = Project.Id }, CurrentCancellationToken);
+        await scansController.RunNow(new() { MonitoringId = Project.Id }, CurrentCancellationToken);
 
         foreach (var scan in Project.Scans)
         {
@@ -31,10 +44,10 @@ public partial class ProjectCard
     }
 
     /// <summary>A scan on the card opens the project's Scans tab.</summary>
-    private string ScansHref => $"{PageUrls.Projects}/{Project.Id}?tab=scans";
+    private string ScansHref => $"{PageUrls.ProjectEnvironment(Project.ProjectId, Project.Id)}?tab=scans";
 
     /// <summary>The day bars open the project's History, which draws its 90 days a part at a time.</summary>
-    private string HistoryHref => $"{PageUrls.Projects}/{Project.Id}?tab=history";
+    private string HistoryHref => $"{PageUrls.ProjectEnvironment(Project.ProjectId, Project.Id)}?tab=history";
 
     private static string ScanTone(ProjectScanSummaryDto scan)
         => scan.FinishedAt is null ? (scan.IsRunning ? "tone-maintenance" : "tone-nodata") : ProjectScanWords.Tone(scan.Outcome, scan.Verdict);
@@ -54,7 +67,7 @@ public partial class ProjectCard
     private string? IconUrl => Project.IconId is { } id ? new Uri(AbsoluteServerAddress, $"api/v1/Attachment/GetAttachment/{id}/{AttachmentKind.ProjectIcon}").ToString() : null;
 
     /// <summary>The first letter of the name, the card's mark when the app has no icon, or its icon fails to load.</summary>
-    private string Monogram => string.IsNullOrWhiteSpace(Project.Name) ? "?" : Project.Name.Trim()[..1].ToUpperInvariant();
+    private string Monogram => (Parent?.Name ?? Project.Name) is { Length: > 0 } name && string.IsNullOrWhiteSpace(name) is false ? name.Trim()[..1].ToUpperInvariant() : "?";
 
     private string Tone => (Project.ConnectionStatus, Project.Health) switch
     {

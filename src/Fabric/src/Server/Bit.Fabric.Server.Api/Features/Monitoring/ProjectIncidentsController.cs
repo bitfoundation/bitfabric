@@ -15,15 +15,16 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring;
 public partial class ProjectIncidentsController : AppControllerBase, IProjectIncidentsController
 {
     [AutoInject] private ProjectAlerter alerter = default!;
+    [AutoInject] private Projects.ProjectsService projectsService = default!;
     [AutoInject] private ProjectIncidentsService incidentsService = default!;
 
     [HttpPost]
     public Task<ProjectHistoryDto> GetHistory(ProjectHistoryRequestDto request, CancellationToken cancellationToken)
         => incidentsService.GetHistory(request, cancellationToken);
 
-    [HttpGet("{projectId}")]
-    public Task<ProjectIncidentDto[]> GetIncidents(Guid projectId, CancellationToken cancellationToken)
-        => incidentsService.GetIncidents(projectId, cancellationToken);
+    [HttpGet("{monitoringId}")]
+    public Task<ProjectIncidentDto[]> GetIncidents(Guid monitoringId, CancellationToken cancellationToken)
+        => incidentsService.GetIncidents(monitoringId, cancellationToken);
 
     [HttpPost("{id}")]
     public Task<ProjectIncidentDto> Acknowledge(Guid id, CancellationToken cancellationToken)
@@ -33,9 +34,9 @@ public partial class ProjectIncidentsController : AppControllerBase, IProjectInc
     public Task<ProjectIncidentDto> PostUpdate(ProjectIncidentUpdateRequestDto request, CancellationToken cancellationToken)
         => incidentsService.PostUpdate(request, User.GetDisplayName(), cancellationToken);
 
-    [HttpGet("{projectId}")]
-    public Task<ProjectMaintenanceWindowDto[]> GetMaintenanceWindows(Guid projectId, CancellationToken cancellationToken)
-        => incidentsService.GetMaintenanceWindows(projectId, cancellationToken);
+    [HttpGet("{monitoringId}")]
+    public Task<ProjectMaintenanceWindowDto[]> GetMaintenanceWindows(Guid monitoringId, CancellationToken cancellationToken)
+        => incidentsService.GetMaintenanceWindows(monitoringId, cancellationToken);
 
     [HttpPost]
     public Task<ProjectMaintenanceWindowDto> AddMaintenanceWindow(ProjectMaintenanceWindowDto window, CancellationToken cancellationToken)
@@ -52,20 +53,20 @@ public partial class ProjectIncidentsController : AppControllerBase, IProjectInc
         await DbContext.SaveChangesAsync(cancellationToken);
     }
 
-    [HttpGet("{projectId}")]
-    public async Task<ProjectAlertSettingsDto> GetAlertSettings(Guid projectId, CancellationToken cancellationToken)
+    [HttpGet("{monitoringId}")]
+    public async Task<ProjectAlertSettingsDto> GetAlertSettings(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await FindProject(projectId, cancellationToken);
+        var project = await FindProject(monitoringId, cancellationToken);
 
         var routes = await DbContext.ProjectAlertRoutes.AsNoTracking()
             .Include(route => route.User)
-            .Where(route => route.ProjectId == project.Id)
+            .Where(route => route.MonitoringId == project.Id)
             .OrderBy(route => route.Step).ThenBy(route => route.Channel)
             .ToListAsync(cancellationToken);
 
         return new()
         {
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             Routes = [.. routes.Select(route => new ProjectAlertRouteDto
             {
                 Id = route.Id,
@@ -84,7 +85,7 @@ public partial class ProjectIncidentsController : AppControllerBase, IProjectInc
     [HttpPost]
     public async Task<ProjectAlertSettingsDto> SaveAlertSettings(ProjectAlertSettingsDto alertSettings, CancellationToken cancellationToken)
     {
-        var project = await FindProject(alertSettings.ProjectId, cancellationToken);
+        var project = await FindProject(alertSettings.MonitoringId, cancellationToken);
         var members = (await MembersOf(project.TenantId, cancellationToken)).Select(member => member.UserId).ToHashSet();
 
         foreach (var route in alertSettings.Routes)
@@ -99,14 +100,14 @@ public partial class ProjectIncidentsController : AppControllerBase, IProjectInc
                 throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringEachAlertNeedsATarget)]);
         }
 
-        var existing = await DbContext.ProjectAlertRoutes.Where(route => route.ProjectId == project.Id).ToListAsync(cancellationToken);
+        var existing = await DbContext.ProjectAlertRoutes.Where(route => route.MonitoringId == project.Id).ToListAsync(cancellationToken);
         var culture = CultureInfo.CurrentUICulture.Name;
 
         DbContext.ProjectAlertRoutes.RemoveRange(existing);
         await DbContext.ProjectAlertRoutes.AddRangeAsync(alertSettings.Routes.Select(route => new ProjectAlertRoute
         {
             Id = Guid.CreateSequentialGuid(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = project.TenantId,
             Step = route.Step,
             // Step 0 goes out at once.
@@ -119,40 +120,50 @@ public partial class ProjectIncidentsController : AppControllerBase, IProjectInc
             Culture = existing.FirstOrDefault(old => old.Id == route.Id)?.Culture ?? culture
         }), cancellationToken);
 
+        // Someone an alert reaches works on the project (bitfabric-internal/specs/monitoring.md, Members are who works on it).
+        foreach (var userId in alertSettings.Routes.Where(route => route.Channel is not ProjectAlertChannel.Webhook).Select(route => route.UserId!.Value).Distinct())
+        {
+            await projectsService.EnsureMember(project.ProjectId, project.TenantId, userId, cancellationToken);
+        }
+
         await DbContext.SaveChangesAsync(cancellationToken);
 
         return await GetAlertSettings(project.Id, cancellationToken);
     }
 
-    [HttpPost("{projectId}")]
-    public async Task<ProjectAlertDto[]> SendTestAlert(Guid projectId, CancellationToken cancellationToken)
+    [HttpPost("{monitoringId}")]
+    public async Task<ProjectAlertDto[]> SendTestAlert(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await FindProject(projectId, cancellationToken);
+        var project = await FindProject(monitoringId, cancellationToken);
 
         return [.. (await alerter.SendTest(project, cancellationToken)).Select(ProjectIncidentsService.ToDto)];
     }
 
-    [HttpGet("{projectId}")]
-    public async Task<ProjectSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken)
+    [HttpGet("{monitoringId}")]
+    public async Task<ProjectSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await FindProject(projectId, cancellationToken);
+        var project = await FindProject(monitoringId, cancellationToken);
 
         return await SettingsOf(project, cancellationToken);
     }
 
-    private async Task<ProjectSettingsDto> SettingsOf(Project project, CancellationToken cancellationToken)
+    private async Task<ProjectSettingsDto> SettingsOf(ProjectMonitoring project, CancellationToken cancellationToken)
     {
         var connection = await DbContext.ProjectConnections.AsNoTracking()
-            .Where(connection => connection.ProjectId == project.Id)
+            .Where(connection => connection.MonitoringId == project.Id)
             .Select(connection => new { connection.ConnectedByUserId, connection.ConnectedOn, connection.Resource })
             .FirstOrDefaultAsync(cancellationToken);
 
         var approver = connection is null ? null : await DbContext.Users.AsNoTracking().FirstOrDefaultAsync(user => user.Id == connection.ConnectedByUserId, cancellationToken);
 
+        var projectName = await DbContext.Projects.Where(parent => parent.Id == project.ProjectId).Select(parent => parent.Name).FirstOrDefaultAsync(cancellationToken);
+
         return new()
         {
             Id = project.Id,
-            Name = project.Name,
+            Name = projectName,
+            ProjectId = project.ProjectId,
+            Environment = project.Environment,
             TimeZoneId = project.TimeZoneId,
             ApprovedBy = approver?.DisplayName,
             ApprovedOn = connection?.ConnectedOn,
@@ -167,23 +178,28 @@ public partial class ProjectIncidentsController : AppControllerBase, IProjectInc
         if (TimeZoneInfo.TryFindSystemTimeZoneById(projectSettings.TimeZoneId!, out _) is false)
             throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringUnknownTimeZone)]);
 
-        // Not by the row's Version: every round rewrites the project's state on the same row, so a version read when the tab
-        // opened is stale within a minute. The name and the time zone are two fields a person edits now and then, and the
+        // Not by the row's Version: every round rewrites the environment's state on the same row, so a version read when the
+        // tab opened is stale within a minute. The names and the time zone are fields a person edits now and then, and the
         // last edit stands.
-        var name = projectSettings.Name!.Trim();
-        var updated = await DbContext.Projects
+        var monitoring = await FindProject(projectSettings.Id, cancellationToken);
+        var environment = projectSettings.Environment!.Trim();
+
+        if (await DbContext.Monitorings.AnyAsync(other => other.ProjectId == monitoring.ProjectId && other.Id != monitoring.Id && other.Environment!.ToLower() == environment.ToLower(), cancellationToken))
+            throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringEnvironmentTaken), environment]);
+
+        await DbContext.Monitorings
             .Where(project => project.Id == projectSettings.Id)
-            .ExecuteUpdateAsync(setters => setters.SetProperty(project => project.Name, name)
+            .ExecuteUpdateAsync(setters => setters.SetProperty(project => project.Environment, environment)
                                                   .SetProperty(project => project.TimeZoneId, projectSettings.TimeZoneId), cancellationToken);
 
-        if (updated is 0)
-            throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
+        // The project's name, which every environment of it is called by (See ProjectMonitoring.Name).
+        await projectsService.Rename(monitoring.ProjectId, projectSettings.Name!, cancellationToken);
 
         return await SettingsOf(await FindProject(projectSettings.Id, cancellationToken), cancellationToken);
     }
 
-    private Task<Project> FindProject(Guid projectId, CancellationToken cancellationToken)
-        => incidentsService.FindProject(projectId, cancellationToken);
+    private Task<ProjectMonitoring> FindProject(Guid monitoringId, CancellationToken cancellationToken)
+        => incidentsService.FindProject(monitoringId, cancellationToken);
 
     private async Task<ProjectTeamMemberDto[]> MembersOf(Guid tenantId, CancellationToken cancellationToken)
     {

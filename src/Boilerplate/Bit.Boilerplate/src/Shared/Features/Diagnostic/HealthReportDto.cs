@@ -26,6 +26,13 @@ public class HealthReportDto
     /// <summary>When the answering process started, in UTC.</summary>
     public DateTimeOffset StartedAt { get; set; }
 
+    /// <summary>
+    /// The id <c>bit new</c> wrote into the project's <c>bit.json</c>, which its license names, as the build found it
+    /// (See BitProjectId in Server.Shared's csproj); null when the build found none. Only in this report, which answers
+    /// the app's own admins and the monitor one of them approved, so a monitor knows which project the app is.
+    /// </summary>
+    public Guid? ProjectId { get; set; }
+
     public Dictionary<string, HealthReportEntryDto> Entries { get; set; } = [];
 }
 

@@ -9,14 +9,14 @@ namespace Bit.Fabric.Workbench.Components.Pages.Monitoring.Data;
 /// <summary>
 /// The files the app's monitoring pages download: a project's whole history as CSV or JSON (its Settings tab) and a
 /// month's SLA report as CSV or PDF (its SLA tab), made from the samples as the views first show them. The Workbench serves
-/// them at the addresses the app's components ask for (See IProjectsController.ExportHistoryUri, IProjectSlaController).
+/// them at the addresses the app's components ask for (See IMonitoringsController.ExportHistoryUri, IProjectSlaController).
 /// </summary>
 public static class MonitoringExports
 {
     private static readonly JsonSerializerOptions jsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = true };
 
     /// <summary>The sample project of an id, as a view shows it before anything was changed in it.</summary>
-    public static SampleProject? Find(Guid projectId) => MonitoringSamples.Create(MonitoringSamples.Now()).FirstOrDefault(project => project.Id == projectId);
+    public static SampleProject? Find(Guid monitoringId) => MonitoringSamples.Create(MonitoringSamples.Now()).FirstOrDefault(project => project.Id == monitoringId);
 
     public static string FileNameOf(SampleProject project, string what, string extension) => $"{project.Key}-{what}.{extension}";
 

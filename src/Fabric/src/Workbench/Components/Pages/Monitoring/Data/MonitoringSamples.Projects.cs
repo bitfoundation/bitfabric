@@ -50,7 +50,7 @@ public static partial class MonitoringSamples
             ("Product photos", "عکس‌های محصول", ["userProfileImages"])
         ]);
 
-        project.Sla = new() { ProjectId = project.Id, TargetPercent = 99.95, PartialWeight = 0.3, DegradedWeight = 0.1, Credits = [new() { BelowPercent = 99.95, CreditPercent = 10 }, new() { BelowPercent = 99.5, CreditPercent = 25 }, new() { BelowPercent = 99, CreditPercent = 50 }] };
+        project.Sla = new() { MonitoringId = project.Id, TargetPercent = 99.95, PartialWeight = 0.3, DegradedWeight = 0.1, Credits = [new() { BelowPercent = 99.95, CreditPercent = 10 }, new() { BelowPercent = 99.5, CreditPercent = 25 }, new() { BelowPercent = 99, CreditPercent = 50 }] };
 
         AddScans(project, now, new("A+", 112, 58, 95, 72, 6));
 
@@ -148,7 +148,7 @@ public static partial class MonitoringSamples
             ("Email", "ایمیل", ["smtp", "emailDelivery"])
         ]);
 
-        project.Sla = new() { ProjectId = project.Id, Credits = [new() { BelowPercent = 99.9, CreditPercent = 5 }, new() { BelowPercent = 99, CreditPercent = 15 }] };
+        project.Sla = new() { MonitoringId = project.Id, Credits = [new() { BelowPercent = 99.9, CreditPercent = 5 }, new() { BelowPercent = 99, CreditPercent = 15 }] };
 
         AddScans(project, now, new("A", 96, 94, 91, 98, 120));
 
@@ -301,8 +301,8 @@ public static partial class MonitoringSamples
             ("File uploads", "بارگذاری فایل", ["userProfileImages"])
         ], languages: ["en-US", "fa-IR"]);
 
-        project.Sla = new() { ProjectId = project.Id, Credits = [new() { BelowPercent = 99.9, CreditPercent = 10 }, new() { BelowPercent = 99, CreditPercent = 25 }, new() { BelowPercent = 95, CreditPercent = 50 }] };
-        project.ScanSettings = new() { ProjectId = project.Id, ScanAfterDeployments = true };
+        project.Sla = new() { MonitoringId = project.Id, Credits = [new() { BelowPercent = 99.9, CreditPercent = 10 }, new() { BelowPercent = 99, CreditPercent = 25 }, new() { BelowPercent = 95, CreditPercent = 50 }] };
+        project.ScanSettings = new() { MonitoringId = project.Id, ScanAfterDeployments = true };
 
         AddScans(project, now, new("A", 96, 92, 88, 96, 64), history: true);
 

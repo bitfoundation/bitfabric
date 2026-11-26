@@ -9,6 +9,7 @@ namespace Bit.Fabric.Server.Api.Features.Identity;
 public partial class UserManagementController : AppControllerBase, IUserManagementController
 {
     [AutoInject] private UserManager<User> userManager = default!;
+    [AutoInject] private Projects.TeamDeparture teamDeparture = default!;
     [AutoInject] private IHubContext<AppHub> appHubContext = default!;
     [AutoInject] private ServerApiSettings serverApiSettings = default!;
     [AutoInject] private UserErasureService userErasureService = default!;
@@ -214,6 +215,10 @@ public partial class UserManagementController : AppControllerBase, IUserManageme
         await DbContext.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
         {
             await using var transaction = await DbContext.Database.BeginTransactionAsync(cancellationToken);
+
+            // Their place on the team's projects and every alert route reaching them there go with them (bitfabric-internal/
+            // specs/monitoring.md, Leaving a Team ends its alerts).
+            await teamDeparture.Leave(tenantId!.Value, userId, cancellationToken);
 
             await DbContext.TenantMemberships.Where(tm => tm.UserId == userId && tm.TenantId == tenantId).ExecuteDeleteAsync(cancellationToken);
             await DbContext.UserRoles.Where(ur => ur.UserId == userId && ur.TenantId == tenantId).ExecuteDeleteAsync(cancellationToken);

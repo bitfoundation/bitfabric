@@ -13,9 +13,9 @@ public partial class ProjectAlertRoute : ITenantAware
 {
     public Guid Id { get; set; }
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
-    public Project? Project { get; set; }
+    public ProjectMonitoring? Monitoring { get; set; }
 
     public Guid TenantId { get; set; }
 
@@ -51,9 +51,9 @@ public partial class ProjectAlert : ITenantAware
 {
     public Guid Id { get; set; }
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
-    public Project? Project { get; set; }
+    public ProjectMonitoring? Monitoring { get; set; }
 
     public Guid TenantId { get; set; }
 

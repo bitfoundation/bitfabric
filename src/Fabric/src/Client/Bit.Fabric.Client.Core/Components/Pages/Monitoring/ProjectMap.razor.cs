@@ -18,9 +18,9 @@ public partial class ProjectMap
     private static readonly string[] MapAssemblies = ["Bit.Fabric.Client.Diagrams.wasm", "Bit.Blow.wasm"];
 
     [AutoInject] private LazyAssemblyLoader lazyAssemblyLoader = default!;
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
 
-    [Parameter, EditorRequired] public ProjectDto Project { get; set; } = default!;
+    [Parameter, EditorRequired] public MonitoringDto Project { get; set; } = default!;
 
     /// <summary>Opens another tab of the project, such as its history, on one part when the link names it.</summary>
     [Parameter] public EventCallback<ProjectTabLink> OnOpenTab { get; set; }
@@ -51,7 +51,7 @@ public partial class ProjectMap
     {
         await base.OnInitAsync();
 
-        map = await projectsController.GetMap(Project.Id, CurrentCancellationToken);
+        map = await monitoringsController.GetMap(Project.Id, CurrentCancellationToken);
 
         // What needs attention is picked at once; a map where everything works starts with the summary.
         selectedKey = map.Parts.Where(part => ProjectMapTones.ToneOf(part) is ProjectMapPartTone.Failing or ProjectMapPartTone.Degraded)

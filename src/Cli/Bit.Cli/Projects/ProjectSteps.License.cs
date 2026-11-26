@@ -21,7 +21,7 @@ public sealed partial class ProjectSteps
         if ((roots.Succeeded ? roots.OutputLines.Select(line => line.Trim()).LastOrDefault(ProjectLicense.IsCommit) : null) is not { } commit)
             return StepResult.Skipped(title, "the project has no git commit yet");
 
-        var document = await new LicenseServer(cli.License, cli.Log).TrialAsync(id, bitJson.Name, commit, cancellationToken);
+        var document = await new LicenseServer(cli.License, cli.Log).TrialAsync(id, bitJson.Name, commit, cli.Environment.CiName, cancellationToken);
 
         if (document is null)
             return StepResult.Skipped(title, "bit Fabric didn't answer; run bit license later");

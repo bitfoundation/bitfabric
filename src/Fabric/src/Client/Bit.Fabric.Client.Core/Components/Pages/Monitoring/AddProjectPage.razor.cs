@@ -23,7 +23,7 @@ public partial class AddProjectPage
     private AddressProbeResultDto? probe;
     private Action? unsubscribe;
 
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
     [AutoInject] private Clipboard clipboard = default!;
     [AutoInject] private ILocalHttpServer localHttpServer = default!;
     [AutoInject] private IExternalNavigationService externalNavigationService = default!;
@@ -42,6 +42,19 @@ public partial class AddProjectPage
     /// <summary>The app's address, from Settings' "Reconnect as someone else", looked for at once.</summary>
     [Parameter, SupplyParameterFromQuery(Name = "address")] public string? Address { get; set; }
 
+    /// <summary>The project the environment joins, from its page's "Add an environment"; empty for a new project.</summary>
+    [Parameter, SupplyParameterFromQuery(Name = "project")] public Guid? ProjectId { get; set; }
+
+    [AutoInject] private Bit.Fabric.Shared.Features.Projects.IProjectsController projectsController = default!;
+
+    /// <summary>The project the environment joins, by its name; null for a new project.</summary>
+    private Bit.Fabric.Shared.Features.Projects.Dtos.ProjectDto? joining;
+
+    /// <summary>Production, unless the project has it: then Test, then Staging (bitfabric-internal/specs/monitoring.md).</summary>
+    private string environment = "Production";
+
+    private static readonly string[] environmentChoices = ["Production", "Test", "Staging"];
+
     private bool IsCallback => string.IsNullOrEmpty(State) is false;
 
     private static string BackIcon => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? BitIconName.Forward : BitIconName.Back;
@@ -53,6 +66,12 @@ public partial class AddProjectPage
         await base.OnInitAsync();
 
         address ??= Address;
+
+        if (ProjectId is { } projectId && Connected is null && IsCallback is false)
+        {
+            joining = await projectsController.GetProject(projectId, null, CurrentCancellationToken);
+            environment = environmentChoices.FirstOrDefault(choice => joining.Monitorings.Any(taken => string.Equals(taken.Environment, choice, StringComparison.OrdinalIgnoreCase)) is false) ?? "";
+        }
     }
 
     protected override async Task OnAfterFirstRenderAsync()
@@ -74,7 +93,7 @@ public partial class AddProjectPage
         // Once, in the browser: the code can be exchanged only once, so a prerender must not spend it.
         try
         {
-            var project = await projectsController.CompleteConnect(new() { State = State, Code = Code, Error = Error, Iss = Iss, TimeZoneId = TimeZoneService.CurrentTimeZone.Id }, CurrentCancellationToken);
+            var project = await monitoringsController.CompleteConnect(new() { State = State, Code = Code, Error = Error, Iss = Iss, TimeZoneId = TimeZoneService.CurrentTimeZone.Id }, CurrentCancellationToken);
             ShowConnected(project);
         }
         catch (KnownException exp)
@@ -94,7 +113,7 @@ public partial class AddProjectPage
 
         try
         {
-            probe = await projectsController.ProbeAddress(new() { Address = address }, CurrentCancellationToken);
+            probe = await monitoringsController.ProbeAddress(new() { Address = address }, CurrentCancellationToken);
             name = probe.AppTitle ?? Host(probe.Address);
         }
         finally
@@ -119,10 +138,12 @@ public partial class AddProjectPage
 
             var port = localHttpServer.EnsureStarted();
 
-            var start = await projectsController.StartConnect(new()
+            var start = await monitoringsController.StartConnect(new()
             {
                 Address = probe.Address,
                 Name = name,
+                ProjectId = joining?.Id,
+                Environment = string.IsNullOrWhiteSpace(environment) ? null : environment.Trim(),
                 LocalHttpPort = port is -1 ? null : port,
                 LocalHttpNonce = localHttpServer.CreateExternalSignInNonce()
             }, CurrentCancellationToken);
@@ -156,7 +177,7 @@ public partial class AddProjectPage
 
         try
         {
-            var project = await projectsController.CompleteConnect(new() { State = Value("state"), Code = Value("code"), Error = Value("error"), Iss = Value("iss"), TimeZoneId = TimeZoneService.CurrentTimeZone.Id }, CurrentCancellationToken);
+            var project = await monitoringsController.CompleteConnect(new() { State = Value("state"), Code = Value("code"), Error = Value("error"), Iss = Value("iss"), TimeZoneId = TimeZoneService.CurrentTimeZone.Id }, CurrentCancellationToken);
             isWaitingForApproval = false;
             ShowConnected(project);
         }
@@ -169,7 +190,7 @@ public partial class AddProjectPage
     }
 
     /// <summary>The last step, in place of the approval's answer in the address, which can't be spent twice.</summary>
-    private void ShowConnected(ProjectDto project)
+    private void ShowConnected(MonitoringDto project)
         => NavigationManager.NavigateTo($"{PageUrls.AddProject}?connected={project.Id}", replace: true);
 
     private void CancelApproval()

@@ -11,6 +11,7 @@ namespace Bit.Fabric.Server.Api.Features.Identity;
 public partial class UserController : AppControllerBase, IUserController
 {
     [AutoInject] private UrlEncoder urlEncoder = default!;
+    [AutoInject] private Projects.TeamDeparture teamDeparture = default!;
     [AutoInject] private PhoneService phoneService = default!;
     [AutoInject] private IdentityEmailService emailService = default!;
     [AutoInject] private IUserStore<User> userStore = default!;
@@ -633,6 +634,10 @@ public partial class UserController : AppControllerBase, IUserController
             await using var transaction = await DbContext.Database.BeginTransactionAsync(cancellationToken);
 
             var membershipToLeave = DbContext.TenantMemberships.Where(tm => tm.UserId == userId && tm.TenantId == tenantId);
+
+            // Their place on the team's projects and every alert route reaching them there go with them (bitfabric-internal/
+            // specs/monitoring.md, Leaving a Team ends its alerts).
+            await teamDeparture.Leave(tenantId, userId, cancellationToken);
 
             if (isDecliningAPendingInvitation)
             {

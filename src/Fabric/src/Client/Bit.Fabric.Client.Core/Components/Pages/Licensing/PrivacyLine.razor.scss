@@ -1,0 +1,15 @@
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+.privacy-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding-top: 12px;
+    border-top: $bit-shape-border-width solid $bit-color-border-secondary;
+}
+
+::deep .privacy-icon {
+    flex: none;
+    margin-top: 3px;
+}

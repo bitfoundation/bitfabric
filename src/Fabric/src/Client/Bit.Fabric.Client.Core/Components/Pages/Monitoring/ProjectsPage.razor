@@ -56,48 +56,76 @@
             {
                 var visible = Visible().ToArray();
 
-                <div class="toolbar">
-                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
-                        @(NeedsAttention is 0 ? Localizer[nameof(AppStrings.MonitoringAllProjectsFine), projects.Count] : Localizer[nameof(AppStrings.MonitoringProjectsNeedYou), NeedsAttention, projects.Count])
-                    </BitText>
-                    <BitButton Href="@PageUrls.AddProject" IconName="@BitIconName.Add">@Localizer[nameof(AppStrings.MonitoringAddAProject)]</BitButton>
-                </div>
-                @if (NeedsAttention > 0 || projects.Count > SearchFrom)
+                @* The tabs' headers only; the page draws the open one below, in the address so it can be shared. *@
+                <BitPivot HeaderOnly SelectedKey="@SelectedTab" SelectedKeyChanged="@((string? key) => OpenTab(key))" Class="tabs">
+                    <BitPivotItem Key="@ProjectsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringProjects)]" IconName="@BitIconName.Health" />
+                    <BitPivotItem Key="@LicensesTab" HeaderText="@Localizer[nameof(AppStrings.Licenses)]" IconName="@BitIconName.Certificate" />
+                </BitPivot>
+
+                @if (SelectedTab == LicensesTab)
                 {
-                    @* From the approved design: only what needs you, and a search once there are more cards than a screen holds. *@
-                    <div class="filters-bar">
-                        <div class="filters" role="group" aria-label="@Localizer[nameof(AppStrings.MonitoringShowProjects)]">
-                            <BitTag Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="BitColor.Primary"
-                                    Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), Localizer[nameof(AppStrings.All)], projects.Count]"
-                                    Selected="@(onlyAttention is false)" SelectedChanged="@(_ => onlyAttention = false)" />
-                            <BitTag Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="@(NeedsAttention > 0 ? BitColor.Error : BitColor.Primary)"
-                                    Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), Localizer[nameof(AppStrings.MonitoringNeedsAttention)], NeedsAttention]"
-                                    Disabled="@(NeedsAttention is 0)"
-                                    Selected="onlyAttention" SelectedChanged="@(_ => onlyAttention = true)" />
-                        </div>
-                        @if (projects.Count > SearchFrom)
-                        {
-                            <BitSearchBox @bind-Value="search" Immediate DebounceTime="200" Placeholder="@Localizer[nameof(AppStrings.MonitoringSearchProjects)]"
-                                          AriaLabel="@Localizer[nameof(AppStrings.MonitoringSearchProjects)]" Class="search" />
-                        }
-                    </div>
-                }
-                @if (visible.Length is 0)
-                {
-                    <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.5rem" Padding="3rem 1rem">
-                        <BitIcon IconName="@BitIconName.Search" Size="BitSize.Large" Color="BitColor.SecondaryForeground" />
-                        <BitText Typography="BitTypography.Subtitle1">@Localizer[nameof(AppStrings.MonitoringNoProjectMatches)]</BitText>
-                        <BitButton Variant="BitVariant.Text" OnClick="ShowAll">@Localizer[nameof(AppStrings.MonitoringShowAllProjects)]</BitButton>
-                    </BitStack>
+                    <ProjectLicenses Projects="projects" />
                 }
                 else
                 {
-                    <div class="grid">
-                        @foreach (var project in visible)
-                        {
-                            <ProjectCard @key="project.Id" Project="project" />
-                        }
-                    </div>
+                        <div class="tab">
+                            <div class="toolbar">
+                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                                    @(NeedsAttention is 0 ? Localizer[nameof(AppStrings.MonitoringAllProjectsFine), projects.Count] : Localizer[nameof(AppStrings.MonitoringProjectsNeedYou), NeedsAttention, projects.Count])
+                                </BitText>
+                                <BitButton Href="@PageUrls.AddProject" IconName="@BitIconName.Add">@Localizer[nameof(AppStrings.MonitoringAddAProject)]</BitButton>
+                            </div>
+                            @if (NeedsAttention > 0 || projects.Count > SearchFrom)
+                            {
+                                @* From the approved design: only what needs you, and a search once there are more cards than a screen holds. *@
+                                <div class="filters-bar">
+                                    <div class="filters" role="group" aria-label="@Localizer[nameof(AppStrings.MonitoringShowProjects)]">
+                                        <BitTag Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="BitColor.Primary"
+                                                Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), Localizer[nameof(AppStrings.All)], projects.Count]"
+                                                Selected="@(onlyAttention is false)" SelectedChanged="@(_ => onlyAttention = false)" />
+                                        <BitTag Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="@(NeedsAttention > 0 ? BitColor.Error : BitColor.Primary)"
+                                                Text="@Localizer[nameof(AppStrings.MonitoringLabelWithCount), Localizer[nameof(AppStrings.MonitoringNeedsAttention)], NeedsAttention]"
+                                                Disabled="@(NeedsAttention is 0)"
+                                                Selected="onlyAttention" SelectedChanged="@(_ => onlyAttention = true)" />
+                                    </div>
+                                    @if (projects.Count > SearchFrom)
+                                    {
+                                        <BitSearchBox @bind-Value="search" Immediate DebounceTime="200" Placeholder="@Localizer[nameof(AppStrings.MonitoringSearchProjects)]"
+                                                      AriaLabel="@Localizer[nameof(AppStrings.MonitoringSearchProjects)]" Class="search" />
+                                    }
+                                </div>
+                            }
+                            @if (visible.Length is 0)
+                            {
+                                <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.5rem" Padding="3rem 1rem">
+                                    <BitIcon IconName="@BitIconName.Search" Size="BitSize.Large" Color="BitColor.SecondaryForeground" />
+                                    <BitText Typography="BitTypography.Subtitle1">@Localizer[nameof(AppStrings.MonitoringNoProjectMatches)]</BitText>
+                                    <BitButton Variant="BitVariant.Text" OnClick="ShowAll">@Localizer[nameof(AppStrings.MonitoringShowAllProjects)]</BitButton>
+                                </BitStack>
+                            }
+                            else
+                            {
+                                <div class="grid">
+                                    @foreach (var project in visible)
+                                    {
+                                        if (CardOf(project) is { } card)
+                                        {
+                                            <ProjectCard @key="project.Id" Project="card" Parent="project" />
+                                        }
+                                        else
+                                        {
+                                            @* Licensed on the license page, its app not watched yet. *@
+                                            <article @key="project.Id" class="project-stub" aria-labelledby="@($"stub-{project.Id:N}")">
+                                                <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="@($"stub-{project.Id:N}")">@project.Name</BitText>
+                                                <ProjectLicenseTag License="project.License" />
+                                                <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringAppNotWatchedYet)]</BitText>
+                                                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Add" Href="@($"{PageUrls.AddProject}?project={project.Id}")">@Localizer[nameof(AppStrings.MonitoringAddAnEnvironment)]</BitButton>
+                                            </article>
+                                        }
+                                    }
+                                </div>
+                            }
+                        </div>
                 }
             }
         </Authorized>

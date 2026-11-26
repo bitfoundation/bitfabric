@@ -202,6 +202,9 @@ public sealed class PendingConnection
     public string? Address { get; set; }
     public string? ServerAddress { get; set; }
     public string? Name { get; set; }
+    /// <summary>The project the environment joins; null for a new one named <see cref="Name"/>.</summary>
+    public Guid? ProjectId { get; set; }
+    public string? Environment { get; set; }
     public string? TemplateVersion { get; set; }
     public bool HasStaticFrontEnd { get; set; }
     public string? Issuer { get; set; }

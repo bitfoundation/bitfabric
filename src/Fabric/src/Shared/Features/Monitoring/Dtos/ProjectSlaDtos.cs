@@ -21,7 +21,7 @@ public partial class ProjectSlaSettingsDto
 
     public const double DefaultDegradedWeight = 0;
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     /// <summary>The availability promised a month, such as 99.9.</summary>
     public double TargetPercent { get; set; } = DefaultTargetPercent;
@@ -40,7 +40,7 @@ public partial class ProjectSlaSettingsDto
 
 public partial class ProjectSlaRequestDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     /// <summary>The month's year in the project's time zone; null with <see cref="Month"/> for this month.</summary>
     public int? Year { get; set; }
@@ -104,7 +104,7 @@ public partial class ProjectSlaMaintenanceDto
 /// <summary>A month's SLA report (bitfabric-internal/specs/monitoring.md, SLA reports), on the SLA tab and in its CSV and PDF.</summary>
 public partial class ProjectSlaReportDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     public string? ProjectName { get; set; }
 

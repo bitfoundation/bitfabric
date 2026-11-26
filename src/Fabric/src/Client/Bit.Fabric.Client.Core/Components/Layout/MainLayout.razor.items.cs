@@ -55,7 +55,7 @@ public partial class MainLayout
                 Text = localizer[nameof(AppStrings.MonitoringProjects)],
                 IconName = BitIconName.Health,
                 Url = PageUrls.Projects,
-                AdditionalUrls = [PageUrls.AddProject]
+                AdditionalUrls = [PageUrls.AddProject, PageUrls.Licenses]
             }
         ];
 
@@ -90,6 +90,8 @@ public partial class MainLayout
 
         var manageOAuthClients = await authorizationService.IsAuthorized(authUser!, AppFeatures.System.OAuthClients_Manage);
 
+        var viewGrowth = await authorizationService.IsAuthorized(authUser!, AppFeatures.System.Growth_View);
+
         var manageAiPrompt = await authorizationService.IsAuthorized(authUser!, AppFeatures.Management.SystemPrompts_Write);
 
         if (tenantIsSelected is false)
@@ -101,7 +103,7 @@ public partial class MainLayout
         var manageTenantsGlobally = await authorizationService.IsAuthorized(authUser!, AppFeatures.Management.Tenants_Manage_Global);
 
         // Every flag in this condition has to be able to contribute a child item below, or the group renders empty.
-        if (manageRoles || manageUsers || manageOAuthClients
+        if (manageRoles || manageUsers || manageOAuthClients || viewGrowth
             || manageAiPrompt
             || manageTenantsGlobally
             )
@@ -142,6 +144,16 @@ public partial class MainLayout
                     Text = localizer[nameof(AppStrings.OAuthClients)],
                     IconName = BitIconName.PlugConnected,
                     Url = PageUrls.OAuthClients,
+                });
+            }
+
+            if (viewGrowth)
+            {
+                managementItem.ChildItems.Add(new()
+                {
+                    Text = localizer[nameof(AppStrings.GrowthTitle)],
+                    IconName = BitIconName.AreaChart,
+                    Url = PageUrls.Growth,
                 });
             }
 

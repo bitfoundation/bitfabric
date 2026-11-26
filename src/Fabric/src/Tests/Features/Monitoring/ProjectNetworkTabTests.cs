@@ -21,7 +21,7 @@ public class ProjectNetworkTabTests
         await using var ctx = server.CreateBunitContext();
 
         var cut = ctx.Render<ProjectNetwork>(parameters => parameters
-            .Add(p => p.Project, new ProjectDto { Id = Guid.NewGuid(), Name = "Customer app", Locations = ["enam", "oc"] })
+            .Add(p => p.Project, new MonitoringDto { Id = Guid.NewGuid(), Name = "Customer app", Locations = ["enam", "oc"] })
             .Add(p => p.Readings, [new ProjectNetworkReadingDto { Location = "enam", Colo = "IAD", At = DateTimeOffset.UtcNow.AddSeconds(-20), ResponseMs = 120 }]));
 
         var checkboxes = cut.FindAll("input[type=checkbox]");
