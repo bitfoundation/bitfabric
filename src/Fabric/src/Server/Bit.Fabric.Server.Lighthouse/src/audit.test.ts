@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Result } from 'lighthouse';
-import { reduce, type AuditFinding } from './audit.ts';
+import { configFor, flagsFor, reduce, type AuditFinding } from './audit.ts';
 
 /**
  * The shapes of the audits that failed on a real app made from the template, as Lighthouse 13.6.0 reported them for its
@@ -206,4 +206,18 @@ test('A page Lighthouse couldn\'t load gives its error and no scores, metrics or
     assert.equal(result.performanceScore, null);
     assert.equal(result.metrics.largestContentfulPaintMs, null);
     assert.deepEqual(result.findings, []);
+});
+
+test('A run identifies itself as Lighthouse, as PageSpeed Insights does, on a phone and on a computer', async () => {
+    const { initializeConfig } = await import('lighthouse/core/config/config.js');
+
+    for (const formFactor of ['mobile', 'desktop'] as const) {
+        const { resolvedConfig } = await initializeConfig('navigation', configFor(formFactor), flagsFor(formFactor, 9222));
+        const userAgent = resolvedConfig.settings.emulatedUserAgent;
+
+        assert.equal(typeof userAgent, 'string');
+        assert.ok((userAgent as string).endsWith(' Chrome-Lighthouse'), `${formFactor}: ${userAgent}`);
+        assert.equal(resolvedConfig.settings.formFactor, formFactor, 'Lighthouse still emulates the form factor asked for.');
+        assert.ok((userAgent as string).includes(formFactor === 'mobile' ? 'Mobile Safari' : 'Macintosh'), `${formFactor}: ${userAgent}`);
+    }
 });

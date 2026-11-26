@@ -3,6 +3,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import lighthouse, { desktopConfig, type Flags, type Result } from 'lighthouse';
+import { userAgents } from 'lighthouse/core/config/constants.js';
 
 /** What bit Fabric asks for: one address, as a phone or a computer loads it. */
 export type FormFactor = 'mobile' | 'desktop';
@@ -85,6 +86,34 @@ function chromeFlags(guardPort: number): string[] {
 const skipAudits = ['screenshot-thumbnails', 'final-screenshot', 'full-page-screenshot', 'script-treemap-data'];
 
 /**
+ * Lighthouse's own user agent for the form factor with "Chrome-Lighthouse" at its end, the way PageSpeed Insights sends
+ * it, so a scan sees a site the way PageSpeed Insights does.
+ */
+export function userAgentFor(formFactor: FormFactor): string {
+    return `${userAgents[formFactor]} Chrome-Lighthouse`;
+}
+
+/** How Lighthouse runs for bit Fabric, on the Chrome listening on `port`. */
+export function flagsFor(formFactor: FormFactor, port: number): Flags {
+    return {
+        port,
+        output: 'json',
+        logLevel: 'error',
+        onlyCategories: ['performance', 'accessibility'],
+        skipAudits,
+        disableFullPageScreenshot: true,
+        emulatedUserAgent: userAgentFor(formFactor),
+        maxWaitForFcp: 20_000,
+        maxWaitForLoad: 35_000
+    };
+}
+
+/** Lighthouse's desktop settings for a computer; its defaults, a phone, otherwise. */
+export function configFor(formFactor: FormFactor) {
+    return formFactor === 'desktop' ? desktopConfig : undefined;
+}
+
+/**
  * One Lighthouse run of performance and accessibility on a Chrome of its own, which is killed with its whole process
  * group afterwards, its profile deleted, whatever happens, a timeout included.
  */
@@ -95,18 +124,7 @@ export async function audit(url: string, formFactor: FormFactor, guardPort: numb
     try {
         chrome = await startChrome(chromePath, chromeFlags(guardPort));
 
-        const flags: Flags = {
-            port: chrome.port,
-            output: 'json',
-            logLevel: 'error',
-            onlyCategories: ['performance', 'accessibility'],
-            skipAudits,
-            disableFullPageScreenshot: true,
-            maxWaitForFcp: 20_000,
-            maxWaitForLoad: 35_000
-        };
-
-        const run = lighthouse(url, flags, formFactor === 'desktop' ? desktopConfig : undefined);
+        const run = lighthouse(url, flagsFor(formFactor, chrome.port), configFor(formFactor));
         // Lighthouse rejects once its Chrome is killed; that is the timeout's doing and nobody waits for it any more.
         run.catch(() => undefined);
 
