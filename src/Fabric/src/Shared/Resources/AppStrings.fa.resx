@@ -12046,4 +12046,94 @@
   <data name="GrowthPeopleInTeamsNote" xml:space="preserve">
     <value>اعضای Team هایی که License دارند</value>
   </data>
+    <data name="AppHomeFactCheckTitle" xml:space="preserve">
+        <value>ادعاهای ما را در کمتر از یک دقیقه بسنجید</value>
+    </data>
+    <data name="AppHomeFactCheckLead" xml:space="preserve">
+        <value>حرف ما را باور نکنید. بگذارید AI ای که هر روز از آن استفاده می‌کنید و به آن اعتماد دارید، یک قضاوت اولیه بکند: ادعاهای ما را با مقاله‌هایی که به آن‌ها استناد می‌کنند و سورس کد می‌سنجد و می‌گوید bit Fabric به کار کسب‌وکار شما می‌آید یا نه.</value>
+    </data>
+    <data name="AppHomeFactCheckShowHow" xml:space="preserve">
+        <value>نشانم بده چطور</value>
+    </data>
+    <data name="AppHomeFactCheckHide" xml:space="preserve">
+        <value>بستن</value>
+    </data>
+    <data name="AppHomeFactCheckYourAITitle" xml:space="preserve">
+        <value>Claude Desktop، Codex یا AI دیگری دارید؟</value>
+    </data>
+    <data name="AppHomeFactCheckYourAIText" xml:space="preserve">
+        <value>این سایت را به آن بدهید: هر ادعای اینجا به منبعش، یک مقاله یا سورس کد، لینک دارد. این متن را در AI خودتان کپی کنید و کسب‌وکارتان را در آن بنویسید یا یکی از نمونه‌های بالا را انتخاب کنید؛ bit Fabric را راستی‌آزمایی می‌کند و بر اساس کسب‌وکار و نیازهای خودتان می‌گوید واقعاً به کارتان می‌آید یا نه.</value>
+    </data>
+    <data name="AppHomeFactCheckYourselfTitle" xml:space="preserve">
+        <value>یا خودتان ببینید</value>
+    </data>
+    <data name="AppHomeFactCheckYourselfText" xml:space="preserve">
+        <value>سایت را خودتان بخوانید، یا از دستیار ما بپرسید: با آن چت کنید یا حتی به آن زنگ بزنید. همهٔ صفحه‌ها و سورس کد را می‌خواند، و این گفتگو فقط روی دستگاه خودتان می‌ماند و سرورهای ما نگهش نمی‌دارند.</value>
+    </data>
+    <data name="AppHomeFactCheckAskAssistant" xml:space="preserve">
+        <value>از دستیار ما بپرسید</value>
+    </data>
+    <data name="AppHomeFactCheckChatPrompt" xml:space="preserve">
+        <value>آیا شروع با bit Fabric برای کسب‌وکار من ارزش دارد؟ هر چه لازم است بدانی از من بپرس، بعد برایم راستی‌آزمایی‌اش کن.</value>
+    </data>
+    <data name="AppHomeFactCheckPrompt" xml:space="preserve">
+        <value>bit Fabric ({0}) را برایم راستی‌آزمایی کن، مثل یک بررسی‌کنندهٔ سخت‌گیر، نه یک فروشنده.
+کسب‌وکار من: [چه کار می‌کند و چقدر بزرگ است]
+اپ من باید: [چه کند، روی چه دستگاه‌هایی، و چه چیزی برایم مهم‌تر است]
+
+به MCP server با آدرس {1} وصل شو و ابزار EvaluateBitFabric آن را با این دو صدا بزن. اگر نمی‌توانی وصل شوی، درخواست‌های JSON-RPC آن (tools/list و بعد tools/call) را خودت به همان آدرس بفرست؛ اگر این هم نشد، {0}/llms-full.txt را بخوان.
+بعد ادعاهایی را که برای من مهم است خودت بررسی کن: هر کدام به منبعش، یک مقاله یا کد در https://github.com/bitfoundation/bitfabric، لینک دارد.
+در کمتر از ۲۰۰ کلمه بگو چه چیزی درست است و چه چیزی نه، چقدر وقت، پول و مهارت از من می‌گیرد، و آیا شروع با آن ارزش دارد: بله، نه یا هنوز نه، و چرا.</value>
+    </data>
+    <data name="AppHomeFactCheckExamples" xml:space="preserve">
+        <value>از یک کسب‌وکار رایج شروع کنید، یا کسب‌وکار خودتان را بنویسید:</value>
+    </data>
+    <data name="AppHomeFactCheckExampleChatPrompt" xml:space="preserve">
+        <value>آیا شروع با bit Fabric برای کسب‌وکار من ارزش دارد؟ کسب‌وکار من: {0} اپ من باید: {1} برایم راستی‌آزمایی‌اش کن.</value>
+    </data>
+    <data name="AppHomeFactCheckStore" xml:space="preserve">
+        <value>فروشگاه آنلاین</value>
+    </data>
+    <data name="AppHomeFactCheckStoreBusiness" xml:space="preserve">
+        <value>یک فروشگاه آنلاین که محصولات خودمان را می‌فروشد، حدود ۲٬۰۰۰ سفارش در ماه و رو به رشد.</value>
+    </data>
+    <data name="AppHomeFactCheckStoreNeeds" xml:space="preserve">
+        <value>یک فروشگاه واقعی که سال‌ها سفارشی‌اش می‌کنیم و رویش کار می‌کنیم، نه یک Prototype یا MVP: کاتالوگ، سبد خرید، تسویه و پرداخت، پیگیری سفارش، و پنل مدیریت برای موجودی و سفارش‌ها، روی وب، iPhone و Android.</value>
+    </data>
+    <data name="AppHomeFactCheckCrm" xml:space="preserve">
+        <value>CRM</value>
+    </data>
+    <data name="AppHomeFactCheckCrmBusiness" xml:space="preserve">
+        <value>یک شرکت خدمات B2B با ۲۵ فروشنده و مدیر حساب.</value>
+    </data>
+    <data name="AppHomeFactCheckCrmNeeds" xml:space="preserve">
+        <value>یک CRM متناسب با فرایند فروش خودمان که با ما رشد کند، نه یک MVP: سرنخ‌ها، معامله‌ها و قیف فروش، کارها و یادآوری‌ها، سابقهٔ هر مشتری، گزارش‌ها، و نقش‌ها و دسترسی‌ها، روی وب و موبایل.</value>
+    </data>
+    <data name="AppHomeFactCheckPos" xml:space="preserve">
+        <value>صندوق فروش (POS)</value>
+    </data>
+    <data name="AppHomeFactCheckPosBusiness" xml:space="preserve">
+        <value>زنجیره‌ای از ۸ کافه و شیرینی‌فروشی.</value>
+    </data>
+    <data name="AppHomeFactCheckPosNeeds" xml:space="preserve">
+        <value>صندوق فروش خودمان روی تبلت‌های Android، iPad و Windows، کامل و نگهداری‌شده برای سال‌ها، نه یک Prototype: فروش سریع که بدون اینترنت هم کار می‌کند، پرداخت با کارت و رسید، امتیاز وفاداری، و موجودی و فروش همهٔ شعبه‌ها.</value>
+    </data>
+    <data name="AppHomeFactCheckBookings" xml:space="preserve">
+        <value>نوبت‌دهی و رزرو</value>
+    </data>
+    <data name="AppHomeFactCheckBookingsBusiness" xml:space="preserve">
+        <value>شش باشگاه ورزشی با حدود ۳٬۰۰۰ عضو.</value>
+    </data>
+    <data name="AppHomeFactCheckBookingsNeeds" xml:space="preserve">
+        <value>یک اپ نوبت‌دهی با کیفیت محصول نهایی که مدام سفارشی‌اش می‌کنیم، نه یک Prototype سریع: برنامهٔ کلاس‌ها و رزرو، عضویت و پرداخت، یادآوری‌ها، و یک اپ برای کارکنان، روی iPhone، Android و وب.</value>
+    </data>
+    <data name="AppHomeFactCheckFieldService" xml:space="preserve">
+        <value>خدمات در محل</value>
+    </data>
+    <data name="AppHomeFactCheckFieldServiceBusiness" xml:space="preserve">
+        <value>یک شرکت تعمیر و نگهداری با ۴۰ تکنسین که در محل مشتری کار می‌کنند.</value>
+    </data>
+    <data name="AppHomeFactCheckFieldServiceNeeds" xml:space="preserve">
+        <value>یک اپ برای عملیات خودمان که مدام گسترشش می‌دهیم، درست ساخته‌شده و نه به‌شکل MVP: کارها و زمان‌بندی، اپ تکنسین که بدون اینترنت هم کار می‌کند، عکس و امضا، فاکتور، و داشبورد برای مدیران.</value>
+    </data>
 </root>

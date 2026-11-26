@@ -1,0 +1,108 @@
+@import '../../../../Styles/abstracts/_media-queries.scss';
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+// The fact-check band: a card that stands out a little from the page, a line and a button, opening to two ways to check.
+.afc {
+    gap: 1.25rem;
+    display: flex;
+    padding: 1.5rem;
+    flex-direction: column;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+    box-shadow: $bit-box-shadow-card;
+
+    @include lt-sm {
+        gap: 1rem;
+        padding: 1rem;
+    }
+}
+
+.afc-head {
+    gap: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.afc-icon {
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    flex: 0 0 3rem;
+    place-items: center;
+    border-radius: 50%;
+    color: $bit-color-primary;
+    background-color: color-mix(in srgb, #{$bit-color-primary} 14%, transparent);
+}
+
+.afc-intro {
+    gap: 0.25rem;
+    flex: 1 1 20rem;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
+.afc-how {
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+// The examples span both ways to check, since each fills in both.
+.afc-examples {
+    gap: 0.5rem;
+    display: flex;
+    grid-column: 1 / -1;
+    flex-direction: column;
+}
+
+.afc-example-tags {
+    gap: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.afc-step {
+    gap: 0.75rem;
+    display: flex;
+    padding: 1.25rem;
+    flex-direction: column;
+    border-radius: $bit-shape-radius-surface;
+    background-color: $bit-color-background-secondary;
+
+    @include lt-sm {
+        padding: 1rem;
+    }
+}
+
+.afc-prompt {
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.afc-prompt-text {
+    margin: 0;
+    overflow: auto;
+    max-height: 16rem;
+    padding: 0.875rem;
+    font-size: $bit-typography-fs-sm;
+    line-height: $bit-typography-line-height;
+    font-family: $bit-typography-font-family;
+    white-space: pre-wrap;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-tertiary;
+    background-color: $bit-color-background-primary;
+    color: $bit-color-foreground-primary;
+}
+
+::deep .afc-copy,
+::deep .afc-chat {
+    align-self: flex-start;
+}

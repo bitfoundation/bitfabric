@@ -18,6 +18,8 @@ What it costs: nobody pays bit Fabric during the beta, and no account is needed 
 
 If bit Fabric stops: your app and its database keep running on your server, your code stays in your repository, and the pipeline keeps building and deploying it. Only what runs on bitfabric.co stops: monitoring, alerts and status pages. The app's health report is plain HTTP any other monitor can read, and the health history and SLA reports can be exported.
 
+Every page below, as Markdown in one file: [llms-full.txt]({{Origin}}/llms-full.txt). Each page also has its own copy at its address without the language, ending in .md, like [features.md]({{Origin}}/features.md), and the home page at [index.md]({{Origin}}/index.md).
+
 ## Start
 
 - [Get started]({{Origin}}/en-US/new): a few questions, then the one line that creates your project on your computer. bit Fabric keeps nothing you pick.

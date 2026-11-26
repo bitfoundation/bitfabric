@@ -101,6 +101,9 @@ public static partial class Program
         // The bit platform's documentation tools, for any agent and without sign-in (See DocsMcpServer).
         app.MapDocsMcp();
 
+        // An agent that weighs bit Fabric against a visitor's business, for any AI and without sign-in for now (See EvaluationMcpServer).
+        app.MapMcp(Features.Evaluation.EvaluationMcpServer.Path);
+
         app.MapOpenIdConfiguration();
 
         app.MapOAuthEndpoints();

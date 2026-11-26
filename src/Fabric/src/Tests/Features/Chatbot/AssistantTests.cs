@@ -15,7 +15,7 @@ namespace Bit.Fabric.Tests.Features.Chatbot;
 /// model, through the hub the chat panel uses, so it is judged rather than matched: a second call to the same model reads
 /// the question, what a right answer does, and the answer, and says whether it does that.
 /// <para>
-/// Both need the chat model's key, <c>AI:OpenAI:ChatApiKey</c> (dotnet user-secrets in Server.Api), so without it these are
+/// Both need the chat model's key, <c>AI:Anthropic:ChatApiKey</c> or <c>AI:OpenAI:ChatApiKey</c> (dotnet user-secrets in Server.Api), so without it these are
 /// inconclusive rather than failed, as in CI, which has no key.
 /// </para>
 /// </summary>
@@ -67,7 +67,7 @@ public partial class AssistantTests
         await server.Build(configureTestServices).Start(TestContext.CancellationToken);
 
         var chatClient = server.ApiApp.Services.GetService<IChatClient>()
-            ?? throw new AssertInconclusiveException("The assistant has no chat model here: set AI:OpenAI:ChatApiKey with dotnet user-secrets in Server.Api.");
+            ?? throw new AssertInconclusiveException("The assistant has no chat model here: set AI:Anthropic:ChatApiKey or AI:OpenAI:ChatApiKey with dotnet user-secrets in Server.Api.");
 
         var answer = await Ask(server, question);
 

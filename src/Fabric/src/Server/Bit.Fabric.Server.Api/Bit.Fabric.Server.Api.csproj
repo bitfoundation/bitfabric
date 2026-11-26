@@ -122,6 +122,7 @@
         <PackageReference Include="AdsPush" />
         <PackageReference Include="Microsoft.Extensions.AI" />
         <PackageReference Include="Microsoft.Extensions.AI.OpenAI" />
+        <PackageReference Include="Anthropic" />
         <PackageReference Include="Microsoft.SemanticKernel.Core" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.HuggingFace" />
         <PackageReference Include="Microsoft.Agents.AI" />

@@ -1,0 +1,58 @@
+@inherits AppComponentBase
+@* The home page's fact-check band (bitfabric-internal/specs/home-page.md, "The AI evaluation"): the visitor's own AI, or
+   bit Fabric's assistant, weighs bit Fabric against their business. Folded, it is a line and a button; the rest is in the
+   pre-rendered page, hidden, so crawlers and the page's Markdown copy read it too. *@
+
+<section class="afc" aria-labelledby="afc-title">
+    <div class="afc-head">
+        <span class="afc-icon" aria-hidden="true"><BitIcon IconName="@BitIconName.ReadingMode" Size="BitSize.Large" /></span>
+        <div class="afc-intro">
+            <BitText Typography="BitTypography.H5" Element="h2" Id="afc-title" Class="afc-title">@Localizer[nameof(AppStrings.AppHomeFactCheckTitle)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeFactCheckLead)]
+            </BitText>
+        </div>
+        <BitButton Variant="@(isOpen ? BitVariant.Text : BitVariant.Fill)" IconName="@(isOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
+                   aria-expanded="@(isOpen ? "true" : "false")" aria-controls="afc-how" OnClick="WrapHandled(Toggle)" Class="afc-toggle">
+            @(isOpen ? Localizer[nameof(AppStrings.AppHomeFactCheckHide)] : Localizer[nameof(AppStrings.AppHomeFactCheckShowHow)])
+        </BitButton>
+    </div>
+
+    <div id="afc-how" class="afc-how" hidden="@(isOpen is false)">
+        <div class="afc-examples" role="group" aria-labelledby="afc-examples-label">
+            <BitText Typography="BitTypography.Body2" Element="p" Id="afc-examples-label" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeFactCheckExamples)]
+            </BitText>
+            <div class="afc-example-tags">
+                @foreach (var item in Examples)
+                {
+                    <BitTag Text="@item.Name" IconName="@item.Icon" Variant="BitVariant.Outline" Shape="BitShape.Pill"
+                            Selected="@(example?.Name == item.Name)" SelectedChanged="WrapHandled((bool _) => Pick(item))" />
+                }
+            </div>
+        </div>
+
+        <div class="afc-step">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3">@Localizer[nameof(AppStrings.AppHomeFactCheckYourAITitle)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeFactCheckYourAIText)]
+            </BitText>
+            <div class="afc-prompt">
+                <pre class="afc-prompt-text" dir="auto">@Prompt</pre>
+                <BitButton Size="BitSize.Small" IconName="@(isCopied ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(Copy)" Class="afc-copy">
+                    @(isCopied ? Localizer[nameof(AppStrings.Copied)] : Localizer[nameof(AppStrings.Copy)])
+                </BitButton>
+            </div>
+        </div>
+
+        <div class="afc-step">
+            <BitText Typography="BitTypography.Subtitle1" Element="h3">@Localizer[nameof(AppStrings.AppHomeFactCheckYourselfTitle)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeFactCheckYourselfText)]
+            </BitText>
+            <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.ChatBot" OnClick="WrapHandled(AskTheAssistant)" Class="afc-chat">
+                @Localizer[nameof(AppStrings.AppHomeFactCheckAskAssistant)]
+            </BitButton>
+        </div>
+    </div>
+</section>

@@ -32,6 +32,8 @@ public partial class AppAiChatPanel
     private Task<bool>? loading;
     private IAppAiChat? chat;
     private string? initialPrompt;
+    private bool initialEvaluation;
+    private Action? unsubscribeEvaluate;
     private AppAiChatStatus status = new(IsInVoiceCall: false, NeedsAnswer: false);
 
     /// <summary>
@@ -47,6 +49,15 @@ public partial class AppAiChatPanel
 
         NavigationManager.LocationChanged += NavigationManager_LocationChanged;
 
+        // The home page's fact-check band opens the chat on an evaluation of bit Fabric for the visitor's business.
+        unsubscribeEvaluate = PubSubService.Subscribe(ClientAppMessages.EVALUATE_WITH_AI, async payload =>
+        {
+            if (payload is string prompt)
+            {
+                await OpenAndSend(prompt, evaluation: true);
+            }
+        });
+
         return base.OnInitAsync();
     }
 
@@ -57,8 +68,8 @@ public partial class AppAiChatPanel
         await EnsureLoaded();
     }
 
-    /// <summary>Opens the chat on a prompt of the app's own, as the user's next message.</summary>
-    private async Task OpenAndSend(string prompt)
+    /// <summary>Opens the chat on a prompt of the app's own, as the user's next message, and as an evaluation when <paramref name="evaluation"/> says so.</summary>
+    private async Task OpenAndSend(string prompt, bool evaluation = false)
     {
         var sendNow = false;
 
@@ -67,6 +78,7 @@ public partial class AppAiChatPanel
             // A chat already there sends it now; one about to be created sends it once it has read its conversation back
             sendNow = chat is not null;
             initialPrompt = sendNow ? null : prompt;
+            initialEvaluation = evaluation;
 
             await Open();
 
@@ -75,7 +87,7 @@ public partial class AppAiChatPanel
 
         if (sendNow)
         {
-            await chat!.SendPrompt(prompt);
+            await (evaluation ? chat!.Evaluate(prompt) : chat!.SendPrompt(prompt));
         }
     }
 
@@ -202,6 +214,7 @@ public partial class AppAiChatPanel
 
 
         NavigationManager.LocationChanged -= NavigationManager_LocationChanged;
+        unsubscribeEvaluate?.Invoke();
 
         await base.DisposeAsync(disposing);
     }

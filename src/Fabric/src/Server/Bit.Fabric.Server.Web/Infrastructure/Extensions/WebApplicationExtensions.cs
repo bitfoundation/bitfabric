@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text.RegularExpressions;
 using Bit.Fabric.Client.Core.Components.Pages.Home;
+using Bit.Fabric.Server.Web.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.StaticFiles;
@@ -171,17 +172,7 @@ public static partial class WebApplicationExtensions
 
             app.MapGet("/sitemap.xml", [AppResponseCache(SharedMaxAge = 3600 * 24 * 7)] async (context) =>
             {
-                var urls = AssemblyLoadContext.Default.Assemblies.Where(asm => asm.GetName().Name?.Contains("Bit.Fabric.Client") is true)
-                     .SelectMany(asm => asm.ExportedTypes)
-                     .Where(att => att.GetCustomAttributes<AuthorizeAttribute>(inherit: true).Any() is false)
-                     .SelectMany(t => t.GetCustomAttributes<Microsoft.AspNetCore.Components.RouteAttribute>())
-                     .Where(att => RouteRegex().IsMatch(att.Template) is false)
-                     .Select(att => att.Template)
-                     // A page search engines should not index has no place in the list of pages to index, nor has one that
-                     // only exists to sign in or needs an account to show anything (See NotInSitemapAttribute).
-                     .Where(url => PageUrls.NotInSitemapUrls.Contains(url) is false)
-                     .Distinct()
-                     .ToArray();
+                var urls = SitemapPages.All();
 
                 // Culture-prefixed urls only: the bare url always 302s (See UseCultureUrlRedirection), and a sitemap
                 // entry that always redirects is one crawlers flag rather than index.
@@ -281,6 +272,42 @@ public static partial class WebApplicationExtensions
                 await context.Response.WriteAsync(markdown, context.RequestAborted);
             }).CacheOutput("AppResponseCachePolicy").WithTags("Sitemaps");
 
+            // Every other public page as Markdown, made from what the page pre-renders (See PageMarkdown), and all of them in one
+            // file for an AI that reads the whole site at once (https://llmstxt.org); in English, with this host's own address.
+            // The pages whose copy is written by hand above keep it; llms-full.txt still has every page, each made the same way.
+            string[] handWritten = AppPricing.IsShown ? [AppPricing.MarkdownUrl, AppCostCase.MarkdownUrl, AppCliGuide.MarkdownUrl] : [AppCostCase.MarkdownUrl, AppCliGuide.MarkdownUrl];
+            var markdownPages = SitemapPages.All();
+
+            foreach (var page in markdownPages.Where(page => handWritten.Contains(PageMarkdown.MarkdownUrl(page)) is false))
+            {
+                app.MapGet(PageMarkdown.MarkdownUrl(page), [AppResponseCache(SharedMaxAge = 3600 * 24)] async (HttpContext context, PageMarkdown pageMarkdown) =>
+                {
+                    if (await pageMarkdown.Of(page, context.Request.GetBaseUrl(), context.RequestAborted) is not { } markdown)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                        return;
+                    }
+
+                    context.Response.Headers.ContentType = "text/markdown; charset=utf-8";
+
+                    await context.Response.WriteAsync(markdown, context.RequestAborted);
+                }).CacheOutput("AppResponseCachePolicy").WithTags("Sitemaps");
+            }
+
+            app.MapGet("/llms-full.txt", [AppResponseCache(SharedMaxAge = 3600 * 24)] async (HttpContext context, PageMarkdown pageMarkdown) =>
+            {
+                // A page that can't be read fails the whole file rather than leaving it out: a 503 isn't cached, a partial site would be.
+                if (await pageMarkdown.All(markdownPages, context.Request.GetBaseUrl(), context.RequestAborted) is not { } full)
+                {
+                    context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                    return;
+                }
+
+                context.Response.Headers.ContentType = "text/plain; charset=utf-8";
+
+                await context.Response.WriteAsync(full, context.RequestAborted);
+            }).CacheOutput("AppResponseCachePolicy").WithTags("Sitemaps");
+
             // https://www.rfc-editor.org/rfc/rfc9116 - whom to tell about a vulnerability. Its Expires is a date in the file,
             // renewed by hand before it passes (See HomePageSeoTests).
             var securityTxt = ReadSeoFile("security.txt");
@@ -340,6 +367,4 @@ public static partial class WebApplicationExtensions
     private static string WithOrigin(string text, HttpContext context)
         => text.Replace("{{Origin}}", context.Request.GetBaseUrl().ToString().TrimEnd('/'), StringComparison.Ordinal);
 
-    [GeneratedRegex(@"\{.*?\}")]
-    private static partial Regex RouteRegex();
 }

@@ -40,19 +40,6 @@ public partial class NewProjectPage
     /// <summary>The step shown; the first while the name is invalid, so no line is made from a name that can't name the project.</summary>
     private int CurrentStep => Answers.IsNameValid ? Math.Clamp(Store.Step, 0, StepTitles.Length - 1) : 0;
 
-    /// <summary>The button that folds the super technical options away, with how many of them the visitor changed.</summary>
-    private string SuperTechnicalSummary
-    {
-        get
-        {
-            var changed = Answers.TemplateOptions.Keys.Count(name => NewProjectTemplateOption.Find(name) is { IsTechnical: false });
-
-            return changed is 0
-                ? Localizer[nameof(AppStrings.NewProjectSuperTechnicalDefaults)]
-                : Localizer[nameof(AppStrings.NewProjectSuperTechnicalChanged), changed];
-        }
-    }
-
     protected override async Task OnInitAsync()
     {
         var query = new Uri(NavigationManager.Uri).Query.TrimStart('?')

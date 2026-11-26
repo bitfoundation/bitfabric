@@ -16,7 +16,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261126133037_Initial";
+    public override string LastMigrationId => "20261126194525_AddEvaluationOutcomes";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -90,6 +90,38 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                         TenantId = new Guid("b1f71671-a1d6-4f97-abb9-d87d7b47d6e1"),
                         Version = 1u
                     });
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Evaluation.Models.EvaluationOutcome", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<int>("Convinced")
+                    .HasColumnType("integer");
+
+                b.Property<DateTimeOffset>("CreatedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Culture")
+                    .HasMaxLength(16)
+                    .HasColumnType("character varying(16)");
+
+                b.Property<int>("Source")
+                    .HasColumnType("integer");
+
+                b.Property<string>("Summary")
+                    .IsRequired()
+                    .HasMaxLength(1000)
+                    .HasColumnType("character varying(1000)");
+
+                b.HasKey("Id");
+
+                b.HasIndex("Source", "CreatedOn");
+
+                b.ToTable("EvaluationOutcomes");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Identity.Models.Role", b =>
