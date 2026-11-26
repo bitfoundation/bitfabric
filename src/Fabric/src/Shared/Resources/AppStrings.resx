@@ -11668,7 +11668,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>bit Fabric learns it once the app is on the newest bit Boilerplate, or once your team gets its license.</value>
   </data>
   <data name="MonitoringAddAnEnvironmentTo" xml:space="preserve">
-    <value>Add an environment to {0}</value>
+    <value>Add a server to {0}</value>
   </data>
   <data name="MonitoringEnvironment" xml:space="preserve">
     <value>Environment</value>
@@ -11707,7 +11707,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Environments</value>
   </data>
   <data name="MonitoringAddAnEnvironment" xml:space="preserve">
-    <value>Add an environment</value>
+    <value>Add your server</value>
   </data>
   <data name="MonitoringWatchItsApp" xml:space="preserve">
     <value>Watch its app</value>

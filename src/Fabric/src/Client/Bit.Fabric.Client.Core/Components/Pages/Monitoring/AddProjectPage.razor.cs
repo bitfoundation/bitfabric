@@ -42,7 +42,7 @@ public partial class AddProjectPage
     /// <summary>The app's address, from Settings' "Reconnect as someone else", looked for at once.</summary>
     [Parameter, SupplyParameterFromQuery(Name = "address")] public string? Address { get; set; }
 
-    /// <summary>The project the environment joins, from its page's "Add an environment"; empty for a new project.</summary>
+    /// <summary>The project the environment joins, from its page's "Add your server"; empty for a new project.</summary>
     [Parameter, SupplyParameterFromQuery(Name = "project")] public Guid? ProjectId { get; set; }
 
     [AutoInject] private Bit.Fabric.Shared.Features.Projects.IProjectsController projectsController = default!;

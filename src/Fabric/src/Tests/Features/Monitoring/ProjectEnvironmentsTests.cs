@@ -49,7 +49,7 @@ public class ProjectEnvironmentsTests
         Assert.Contains("Test", environments[1].TextContent);
         Assert.AreEqual("page", environments[1].GetAttribute("aria-current"), "The open one is current.");
         Assert.IsNotNull(environments[1].QuerySelector(".environment-dot.tone-degraded"), "Each with its health.");
-        Assert.Contains(link => link.TextContent.Contains("Add an environment") && link.GetAttribute("href") == $"{PageUrls.AddProject}?project={projectId}",
+        Assert.Contains(link => link.TextContent.Contains("Add your server") && link.GetAttribute("href") == $"{PageUrls.AddProject}?project={projectId}",
                         cut.FindAll("nav.environments a"), "A new environment joins this project.");
         Assert.Contains("Licensed until", cut.Markup, "The project's license beside its name.");
         Assert.Contains("test.orbit.example", cut.Find(".head-meta").TextContent, "The open environment's address.");

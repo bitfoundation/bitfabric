@@ -87,7 +87,7 @@ public partial class StartConnectRequestDto
     public string? Name { get; set; }
 
     /// <summary>
-    /// The project the environment joins, from its page's "Add an environment"; null for a new project named
+    /// The project the environment joins, from its page's "Add your server"; null for a new project named
     /// <see cref="Name"/>. Either way, a project of the team with the id the app reports takes it instead.
     /// </summary>
     public Guid? ProjectId { get; set; }
