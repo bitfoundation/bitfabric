@@ -21,6 +21,26 @@
     gap: .5rem;
 }
 
+// The stage, and the end's buttons over it once the film has played
+.ah-stage-frame {
+    position: relative;
+}
+
+.ah-film-end {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    gap: .75rem;
+    border-radius: $bit-shape-radius-surface;
+    background: color-mix(in srgb, #{$bit-color-background-primary} 55%, transparent);
+    backdrop-filter: blur(1px);
+    animation: ah-in .35s ease-out both;
+}
+
 .ah-stage {
     display: flex;
     flex-direction: column;

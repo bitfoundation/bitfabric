@@ -32,6 +32,7 @@ public partial class AppHomeFilmDialog
         ["Title"] = feature.Title,
         ["Scenes"] = new Bit.Fabric.Client.Films.Components.AppHomeFilms(Localizer).Of(feature.Id),
         ["Logo"] = SignInLogo.Fragment,
+        ["MoreUrl"] = feature.More,
         ["OnClose"] = EventCallback.Factory.Create(this, Close)
     };
 }
