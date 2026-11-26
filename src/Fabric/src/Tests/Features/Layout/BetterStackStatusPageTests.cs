@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using Microsoft.Extensions.Logging.Abstractions;
 using Bit.Fabric.Client.Core;
@@ -108,6 +109,32 @@ public class BetterStackStatusPageTests
         Assert.AreEqual(0, notice.Phase);
     }
 
+    [TestMethod]
+    public async Task TheStatusPage_Should_BeAskedWithoutTheTraceContext_AndEveryOtherRequestKeepIt()
+    {
+        // The propagator Client.Web's Program sets, used the way HttpClient's own tracing uses it: in the browser a
+        // traceparent makes the request a preflighted one, which a Better Stack page doesn't answer.
+        var propagator = new TraceContextPropagator(DistributedContextPropagator.CreateDefaultPropagator());
+        using var activity = new Activity("test").SetIdFormat(ActivityIdFormat.W3C).Start();
+        static void Set(object? carrier, string name, string? value) => ((HttpRequestMessage)carrier!).Headers.TryAddWithoutValidation(name, value);
+
+        bool? traced = null;
+        var service = new TestStatusPageService("https://status.example.com/index.json",
+            () => new(HttpStatusCode.OK) { Content = new StringContent(Index, System.Text.Encoding.UTF8, "text/html") },
+            request =>
+            {
+                propagator.Inject(activity, request, Set);
+                traced = request.Headers.Contains("traceparent");
+            });
+
+        Assert.IsNotNull((await service.Read(TestContext.CancellationToken))!.Summary);
+        Assert.IsFalse(traced);
+
+        using var other = new HttpRequestMessage(HttpMethod.Get, "https://api.example.com/api/v1/projects");
+        propagator.Inject(activity, other, Set);
+        Assert.IsTrue(other.Headers.Contains("traceparent"));
+    }
+
     private static StatusPageSummary Read(string json)
     {
         using var document = JsonDocument.Parse(json);
@@ -117,15 +144,19 @@ public class BetterStackStatusPageTests
 
     public Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext { get; set; } = default!;
 
-    private sealed class TestStatusPageService(string url, Func<HttpResponseMessage> answer)
+    private sealed class TestStatusPageService(string url, Func<HttpResponseMessage> answer, Action<HttpRequestMessage>? sending = null)
         : StatusPageService(new ClientCoreSettings { ServerAddress = "/", StatusPageSummaryUrl = url }, new FixedTimeProvider(Now), NullLogger<StatusPageService>.Instance)
     {
-        protected override HttpClient CreateHttpClient() => new(new AnswerHandler(answer));
+        protected override HttpClient CreateHttpClient() => new(new AnswerHandler(answer, sending));
     }
 
-    private sealed class AnswerHandler(Func<HttpResponseMessage> answer) : HttpMessageHandler
+    private sealed class AnswerHandler(Func<HttpResponseMessage> answer, Action<HttpRequestMessage>? sending) : HttpMessageHandler
     {
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) => Task.FromResult(answer());
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            sending?.Invoke(request);
+            return Task.FromResult(answer());
+        }
     }
 
     private sealed class FixedTimeProvider(DateTimeOffset now) : TimeProvider
