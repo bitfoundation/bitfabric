@@ -267,7 +267,9 @@ The project includes **health check endpoints** to monitor application health.
    and full exception, plus the time of the report. It also says
    which build answered and since when: `applicationVersion` (the informational version, which ends with the commit
    in a Release build), `instanceName` (the machine name) and `startedAt` (when the process started, in UTC), so a
-   monitor that polls it can mark deployments and restarts, instance by instance. It needs the
+   monitor that polls it can mark deployments and restarts, instance by instance. And `projectId`, the id in the
+   project's `bit.json`, which the build reads, so a monitor knows which project the app is: it is served only here,
+   never on an anonymous address, as only the app's own admins and the monitor one of them approved read it. It needs the
    `AppFeatures.System.Operations_View` feature, which only global admins have. Like `/health`, it answers 503 when a
    check reports Unhealthy, so a monitor can go by the status code, and the report is in the body either way.
 
