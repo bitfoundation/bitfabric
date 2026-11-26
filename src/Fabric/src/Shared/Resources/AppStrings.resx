@@ -11860,7 +11860,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Projects over time</value>
   </data>
   <data name="GrowthOverTimeDescription" xml:space="preserve">
-    <value>{0} projects so far, {1} of them licensed.</value>
+    <value>Projects so far: {0}. Licensed: {1}.</value>
   </data>
   <data name="GrowthSeriesProjects" xml:space="preserve">
     <value>Projects</value>
@@ -11878,7 +11878,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Each month</value>
   </data>
   <data name="GrowthEachDescription" xml:space="preserve">
-    <value>{0} projects made and {1} licensed in the period.</value>
+    <value>Projects made in the period: {0}. Licensed: {1}.</value>
   </data>
   <data name="GrowthSeriesMade" xml:space="preserve">
     <value>Projects made</value>
