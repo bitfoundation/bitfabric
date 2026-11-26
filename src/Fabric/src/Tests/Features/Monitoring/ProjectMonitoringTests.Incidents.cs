@@ -16,7 +16,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var incidents = client.GetController<IProjectIncidentsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
@@ -31,7 +31,7 @@ public partial class ProjectMonitoringTests
         Assert.AreEqual(ProjectHealth.Degraded, opened.Impact);
         Assert.AreSequenceEqual(new[] { "smtp" }, opened.CheckKeys, "A part that only misses its settings is no incident.");
         Assert.AreEqual("Email not working properly", opened.Title, "Named the way the app names the part.");
-        Assert.AreEqual(opened.Title, (await projects.GetProjects(null, TestContext.CancellationToken)).Single().OngoingIncident);
+        Assert.AreEqual(opened.Title, (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().OngoingIncident);
 
         // Step 0, at once: a push to whoever connected the project, whose devices don't allow it yet, which the alert says.
         var push = opened.Alerts.Single();
@@ -51,7 +51,7 @@ public partial class ProjectMonitoringTests
         Assert.AreEqual(ProjectIncidentPhase.Resolved, closed.Updates[0].Phase);
         Assert.IsNotNull(closed.AgentPrompt, "Once it's over, a prompt for the team's AI agent.");
         Assert.Contains(alert => alert.Kind is ProjectAlertKind.Resolved, closed.Alerts);
-        Assert.IsNull((await projects.GetProjects(null, TestContext.CancellationToken)).Single().OngoingIncident);
+        Assert.IsNull((await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().OngoingIncident);
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public partial class ProjectMonitoringTests
         customerApp.Report.Entries["smtp"].Title = "";
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var incidents = client.GetController<IProjectIncidentsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
@@ -85,7 +85,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var incidents = client.GetController<IProjectIncidentsController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         customerApp.Fail("AppDbContext", "The database didn't answer.");
         await Probe(server, project.Id);
@@ -122,7 +122,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var incidents = client.GetController<IProjectIncidentsController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var settings = await incidents.GetAlertSettings(project.Id, TestContext.CancellationToken);
         Assert.HasCount(2, settings.Routes, "A new project alerts whoever added it: a push at once, an email later.");
@@ -162,10 +162,10 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var incidents = client.GetController<IProjectIncidentsController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var now = DateTimeOffset.UtcNow;
-        await incidents.AddMaintenanceWindow(new() { ProjectId = project.Id, Title = "Moving the database", StartsAt = now.AddHours(-1), EndsAt = now.AddHours(1) }, TestContext.CancellationToken);
+        await incidents.AddMaintenanceWindow(new() { MonitoringId = project.Id, Title = "Moving the database", StartsAt = now.AddHours(-1), EndsAt = now.AddHours(1) }, TestContext.CancellationToken);
 
         customerApp.Fail("smtp", "The mail server didn't answer within 5 s.");
         await Probe(server, project.Id);
@@ -175,7 +175,7 @@ public partial class ProjectMonitoringTests
         Assert.IsTrue(incident.DuringMaintenance);
         Assert.IsEmpty(incident.Alerts, "During a window nobody is alerted.");
 
-        var history = await incidents.GetHistory(new() { ProjectId = project.Id, From = now.AddDays(-1), To = DateTimeOffset.UtcNow }, TestContext.CancellationToken);
+        var history = await incidents.GetHistory(new() { MonitoringId = project.Id, From = now.AddDays(-1), To = DateTimeOffset.UtcNow }, TestContext.CancellationToken);
         Assert.Contains(period => period.CheckKey == "smtp" && period.Status is HealthCheckStatus.Degraded && period.Title == "Email", history.Periods);
         Assert.HasCount(1, history.Incidents);
         Assert.HasCount(1, history.Maintenance);
@@ -189,7 +189,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var incidents = client.GetController<IProjectIncidentsController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var settings = await incidents.GetSettings(project.Id, TestContext.CancellationToken);
 
@@ -205,13 +205,13 @@ public partial class ProjectMonitoringTests
     }
 
     /// <summary>The escalation job, as if the next step's time had come.</summary>
-    private async Task Escalate(AppTestServer server, Guid projectId)
+    private async Task Escalate(AppTestServer server, Guid monitoringId)
     {
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         await dbContext.ProjectIncidents.IgnoreQueryFilters()
-            .Where(incident => incident.ProjectId == projectId && incident.NextEscalationAt != null)
+            .Where(incident => incident.MonitoringId == monitoringId && incident.NextEscalationAt != null)
             .ExecuteUpdateAsync(setters => setters.SetProperty(incident => incident.NextEscalationAt, DateTimeOffset.UtcNow.AddMinutes(-1)), TestContext.CancellationToken);
 
         await scope.ServiceProvider.GetRequiredService<ProjectEscalationJobRunner>().Escalate(TestContext.CancellationToken);

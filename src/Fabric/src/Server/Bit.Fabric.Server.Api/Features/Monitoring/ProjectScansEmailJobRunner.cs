@@ -48,7 +48,7 @@ public partial class ProjectScansEmailJobRunner
         var forgotten = WeekOf(now).AddDays(-7 * WeeksRemembered);
         await dbContext.ProjectScansEmails.IgnoreQueryFilters().Where(email => email.WeekOf < forgotten).ExecuteDeleteAsync(cancellationToken);
 
-        var tenantIds = await Reported(dbContext.Projects.IgnoreQueryFilters(), since)
+        var tenantIds = await Reported(dbContext.Monitorings.IgnoreQueryFilters(), since)
             .Select(project => project.TenantId)
             .Distinct()
             .ToListAsync(cancellationToken);
@@ -71,18 +71,18 @@ public partial class ProjectScansEmailJobRunner
     {
         var since = now - freshFor;
 
-        var projects = await Reported(dbContext.Projects.IgnoreQueryFilters().AsNoTracking().Where(project => project.TenantId == tenantId), since)
+        var projects = await Reported(dbContext.Monitorings.IgnoreQueryFilters().AsNoTracking().Where(project => project.TenantId == tenantId), since)
             .OrderBy(project => project.Name)
             .ToListAsync(cancellationToken);
 
         if (projects.Count is 0)
             return 0;
 
-        Guid[] projectIds = [.. projects.Select(project => project.Id)];
+        Guid[] monitoringIds = [.. projects.Select(project => project.Id)];
 
         // The cards' own summaries, so the email says what the projects page says.
         ProjectScanKind[] kindsRun = [.. scanners.Where(scanner => scanner.IsAvailable).Select(scanner => scanner.Kind)];
-        var summaries = await ProjectScanReader.SummariesOf(dbContext, projectIds, kindsRun, now, cancellationToken, acrossTenants: true);
+        var summaries = await ProjectScanReader.SummariesOf(dbContext, monitoringIds, kindsRun, now, cancellationToken, acrossTenants: true);
 
         Guid[] scanIds = [.. summaries.Values.SelectMany(scans => scans).Where(scan => scan.ScanId is not null).Select(scan => scan.ScanId!.Value)];
 
@@ -127,7 +127,7 @@ public partial class ProjectScansEmailJobRunner
                     Projects = [.. projects.Select(project => new ProjectScansEmailProject(
                         project.Name ?? "",
                         Uri.TryCreate(project.Address, UriKind.Absolute, out var address) ? address.Host : project.Address ?? "",
-                        ScansLinkOf(project.Id, culture),
+                        ScansLinkOf(project.ProjectId, project.Id, culture),
                         [.. summaries[project.Id].Where(scan => scan.FinishedAt is not null).Select(scan => Scan(scan, now))],
                         [.. summaries[project.Id].Where(scan => scan.ScanId is not null)
                                                  .SelectMany(scan => urgent[scan.ScanId!.Value])
@@ -150,10 +150,10 @@ public partial class ProjectScansEmailJobRunner
     }
 
     /// <summary>The projects the email reports: in it, still watched, and scanned lately.</summary>
-    private IQueryable<Models.Project> Reported(IQueryable<Models.Project> projects, DateTimeOffset since)
+    private IQueryable<Models.ProjectMonitoring> Reported(IQueryable<Models.ProjectMonitoring> projects, DateTimeOffset since)
         => projects.Where(project => project.ConnectionStatus != ProjectConnectionStatus.Disconnected
-                                     && dbContext.ProjectScanSettings.IgnoreQueryFilters().Any(row => row.ProjectId == project.Id && row.WeeklyEmail == false) == false
-                                     && dbContext.ProjectScans.IgnoreQueryFilters().Any(scan => scan.ProjectId == project.Id && scan.FinishedAt >= since));
+                                     && dbContext.ProjectScanSettings.IgnoreQueryFilters().Any(row => row.MonitoringId == project.Id && row.WeeklyEmail == false) == false
+                                     && dbContext.ProjectScans.IgnoreQueryFilters().Any(scan => scan.MonitoringId == project.Id && scan.FinishedAt >= since));
 
     /// <summary>A scan's line: its name, and its grade, score or days left with its verdict, in words.</summary>
     private ProjectScansEmailScan Scan(ProjectScanSummaryDto scan, DateTimeOffset now)
@@ -190,8 +190,8 @@ public partial class ProjectScansEmailJobRunner
     }
 
     /// <summary>The project's Scans tab, under the reader's language, so it opens in the language the email is in.</summary>
-    private Uri ScansLinkOf(Guid projectId, CultureInfo culture)
-        => new($"{(settings.WebAppUrl ?? "https://bitfabric.co/").TrimEnd('/')}/{culture.Name}{PageUrls.Projects}/{projectId}?tab=scans");
+    private Uri ScansLinkOf(Guid projectId, Guid monitoringId, CultureInfo culture)
+        => new($"{(settings.WebAppUrl ?? "https://bitfabric.co/").TrimEnd('/')}/{culture.Name}{PageUrls.ProjectEnvironment(projectId, monitoringId)}?tab=scans");
 
     private async Task<string> Render(ProjectScansEmailModel model)
     {

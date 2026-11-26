@@ -3,6 +3,7 @@ using Bit.Fabric.Shared.Features.Diagnostic;
 using Bit.Fabric.Shared.Features.Identity.OAuth.Dtos;
 using Bit.Fabric.Shared.Features.Licensing.Dtos;
 using Bit.Fabric.Shared.Features.Monitoring.Dtos;
+using Bit.Fabric.Shared.Features.Projects.Dtos;
 using Bit.Fabric.Shared.Features.PushNotification;
 using Bit.Fabric.Shared.Features.Statistics;
 using Bit.Fabric.Shared.Features.Tenants.Dtos;
@@ -43,9 +44,9 @@ namespace Bit.Fabric.Shared.Infrastructure.Dtos;
 [JsonSerializable(typeof(RevokeOAuthClientRequestDto))]
 [JsonSerializable(typeof(PushNotificationSubscriptionDto))]
 
-[JsonSerializable(typeof(ProjectDto))]
-[JsonSerializable(typeof(List<ProjectDto>))]
-[JsonSerializable(typeof(ProjectDetailsDto))]
+[JsonSerializable(typeof(MonitoringDto))]
+[JsonSerializable(typeof(List<MonitoringDto>))]
+[JsonSerializable(typeof(MonitoringDetailsDto))]
 [JsonSerializable(typeof(ProjectMapDto))]
 [JsonSerializable(typeof(ProjectPerformanceRequestDto))]
 [JsonSerializable(typeof(ProjectPerformanceDto))]
@@ -90,6 +91,17 @@ namespace Bit.Fabric.Shared.Infrastructure.Dtos;
 [JsonSerializable(typeof(IssueLicenseRequestDto))]
 [JsonSerializable(typeof(LicenseResponseDto))]
 [JsonSerializable(typeof(IssuedLicenseDto))]
+[JsonSerializable(typeof(LicenseTeamDto))]
+[JsonSerializable(typeof(List<LicenseTeamDto>))]
+[JsonSerializable(typeof(LicenseDto))]
+[JsonSerializable(typeof(List<LicenseDto>))]
+[JsonSerializable(typeof(ProjectLicenseDto))]
+[JsonSerializable(typeof(ProjectDto))]
+[JsonSerializable(typeof(List<ProjectDto>))]
+[JsonSerializable(typeof(RenameProjectRequestDto))]
+[JsonSerializable(typeof(ProjectMemberDto))]
+[JsonSerializable(typeof(List<ProjectMemberDto>))]
+[JsonSerializable(typeof(ProjectMemberRequestDto))]
 
 [JsonSerializable(typeof(TenantDto))]
 [JsonSerializable(typeof(List<TenantDto>))]

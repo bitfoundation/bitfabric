@@ -1,15 +1,23 @@
 namespace Bit.Fabric.Server.Api.Features.Monitoring.Models;
 
-public partial class ProjectConfiguration : IEntityTypeConfiguration<Project>
+public partial class ProjectMonitoringConfiguration : IEntityTypeConfiguration<ProjectMonitoring>
 {
-    public void Configure(EntityTypeBuilder<Project> builder)
+    public void Configure(EntityTypeBuilder<ProjectMonitoring> builder)
     {
-        // One project per address in a team; another team may watch the same app with its own approval.
+        // One monitoring per address in a team; another team may watch the same app with its own approval.
         builder.HasIndex(project => new { project.TenantId, project.Address }).IsUnique();
 
+        // One of each environment in a project.
+        builder.HasIndex(project => new { project.ProjectId, project.Environment }).IsUnique();
+
+        builder.HasOne(monitoring => monitoring.Project)
+               .WithMany(project => project.Monitorings)
+               .HasForeignKey(monitoring => monitoring.ProjectId)
+               .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasOne(project => project.Connection)
-               .WithOne(connection => connection.Project)
-               .HasForeignKey<ProjectConnection>(connection => connection.ProjectId)
+               .WithOne(connection => connection.Monitoring)
+               .HasForeignKey<ProjectConnection>(connection => connection.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -18,7 +26,13 @@ public partial class ProjectConnectionConfiguration : IEntityTypeConfiguration<P
 {
     public void Configure(EntityTypeBuilder<ProjectConnection> builder)
     {
-        builder.HasKey(connection => connection.ProjectId);
+        builder.HasKey(connection => connection.MonitoringId);
+
+        // Who approved it stays as history; their account going leaves it without one.
+        builder.HasOne(connection => connection.ConnectedBy)
+               .WithMany()
+               .HasForeignKey(connection => connection.ConnectedByUserId)
+               .OnDelete(DeleteBehavior.SetNull);
     }
 }
 
@@ -27,14 +41,14 @@ public partial class ProjectProbeConfiguration : IEntityTypeConfiguration<Projec
     public void Configure(EntityTypeBuilder<ProjectProbe> builder)
     {
         // Every page reads a project's rounds newest first, over a span of time.
-        builder.HasIndex(probe => new { probe.ProjectId, probe.At });
+        builder.HasIndex(probe => new { probe.MonitoringId, probe.At });
 
         // The retention job deletes every project's old rounds by time alone.
         builder.HasIndex(probe => probe.At);
 
-        builder.HasOne(probe => probe.Project)
+        builder.HasOne(probe => probe.Monitoring)
                .WithMany()
-               .HasForeignKey(probe => probe.ProjectId)
+               .HasForeignKey(probe => probe.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsMany(probe => probe.Checks, checks => checks.ToJson());
@@ -45,14 +59,14 @@ public partial class ProjectCheckPeriodConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<ProjectCheckPeriod> builder)
     {
-        builder.HasIndex(period => new { period.ProjectId, period.CheckKey, period.StartedAt });
+        builder.HasIndex(period => new { period.MonitoringId, period.CheckKey, period.StartedAt });
 
         // Every round and every card reads the open ones: a handful among months of closed periods.
-        builder.HasIndex(period => period.ProjectId).HasFilter($"\"{nameof(ProjectCheckPeriod.EndedAt)}\" IS NULL");
+        builder.HasIndex(period => period.MonitoringId).HasFilter($"\"{nameof(ProjectCheckPeriod.EndedAt)}\" IS NULL");
 
-        builder.HasOne(period => period.Project)
+        builder.HasOne(period => period.Monitoring)
                .WithMany()
-               .HasForeignKey(period => period.ProjectId)
+               .HasForeignKey(period => period.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -61,11 +75,11 @@ public partial class ProjectStartConfiguration : IEntityTypeConfiguration<Projec
 {
     public void Configure(EntityTypeBuilder<ProjectStart> builder)
     {
-        builder.HasIndex(start => new { start.ProjectId, start.At });
+        builder.HasIndex(start => new { start.MonitoringId, start.At });
 
-        builder.HasOne(start => start.Project)
+        builder.HasOne(start => start.Monitoring)
                .WithMany()
-               .HasForeignKey(start => start.ProjectId)
+               .HasForeignKey(start => start.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -75,17 +89,17 @@ public partial class ProjectRollupConfiguration : IEntityTypeConfiguration<Proje
     public void Configure(EntityTypeBuilder<ProjectRollup> builder)
     {
         // Performance reads every part of a project over a span of time; a round upserts its rows by this key.
-        builder.HasKey(rollup => new { rollup.ProjectId, rollup.BucketStart, rollup.Region, rollup.CheckKey });
+        builder.HasKey(rollup => new { rollup.MonitoringId, rollup.BucketStart, rollup.Region, rollup.CheckKey });
 
         // The cards read one part, the report, of every project over 30 days.
-        builder.HasIndex(rollup => new { rollup.ProjectId, rollup.CheckKey, rollup.BucketStart });
+        builder.HasIndex(rollup => new { rollup.MonitoringId, rollup.CheckKey, rollup.BucketStart });
 
         // The retention job deletes every project's old rows by time alone.
         builder.HasIndex(rollup => rollup.BucketStart);
 
-        builder.HasOne(rollup => rollup.Project)
+        builder.HasOne(rollup => rollup.Monitoring)
                .WithMany()
-               .HasForeignKey(rollup => rollup.ProjectId)
+               .HasForeignKey(rollup => rollup.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -94,14 +108,14 @@ public partial class ProjectIncidentConfiguration : IEntityTypeConfiguration<Pro
 {
     public void Configure(EntityTypeBuilder<ProjectIncident> builder)
     {
-        builder.HasIndex(incident => new { incident.ProjectId, incident.StartedAt });
+        builder.HasIndex(incident => new { incident.MonitoringId, incident.StartedAt });
 
         // Every round looks for its project's open one, and the escalation job for every open one.
-        builder.HasIndex(incident => incident.ProjectId).HasFilter($"\"{nameof(ProjectIncident.EndedAt)}\" IS NULL");
+        builder.HasIndex(incident => incident.MonitoringId).HasFilter($"\"{nameof(ProjectIncident.EndedAt)}\" IS NULL");
 
-        builder.HasOne(incident => incident.Project)
+        builder.HasOne(incident => incident.Monitoring)
                .WithMany()
-               .HasForeignKey(incident => incident.ProjectId)
+               .HasForeignKey(incident => incident.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsMany(incident => incident.Title, title => title.ToJson());
@@ -118,11 +132,11 @@ public partial class ProjectMaintenanceWindowConfiguration : IEntityTypeConfigur
 {
     public void Configure(EntityTypeBuilder<ProjectMaintenanceWindow> builder)
     {
-        builder.HasIndex(window => new { window.ProjectId, window.StartsAt });
+        builder.HasIndex(window => new { window.MonitoringId, window.StartsAt });
 
-        builder.HasOne(window => window.Project)
+        builder.HasOne(window => window.Monitoring)
                .WithMany()
-               .HasForeignKey(window => window.ProjectId)
+               .HasForeignKey(window => window.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -131,11 +145,11 @@ public partial class ProjectSlaSettingsConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<ProjectSlaSettings> builder)
     {
-        builder.HasKey(settings => settings.ProjectId);
+        builder.HasKey(settings => settings.MonitoringId);
 
-        builder.HasOne(settings => settings.Project)
+        builder.HasOne(settings => settings.Monitoring)
                .WithOne()
-               .HasForeignKey<ProjectSlaSettings>(settings => settings.ProjectId)
+               .HasForeignKey<ProjectSlaSettings>(settings => settings.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsMany(settings => settings.Credits, credits => credits.ToJson());
@@ -146,11 +160,11 @@ public partial class ProjectAlertRouteConfiguration : IEntityTypeConfiguration<P
 {
     public void Configure(EntityTypeBuilder<ProjectAlertRoute> builder)
     {
-        builder.HasIndex(route => new { route.ProjectId, route.Step });
+        builder.HasIndex(route => new { route.MonitoringId, route.Step });
 
-        builder.HasOne(route => route.Project)
+        builder.HasOne(route => route.Monitoring)
                .WithMany()
-               .HasForeignKey(route => route.ProjectId)
+               .HasForeignKey(route => route.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
 
         // A member who leaves takes their routes with them.
@@ -165,16 +179,16 @@ public partial class ProjectAlertConfiguration : IEntityTypeConfiguration<Projec
 {
     public void Configure(EntityTypeBuilder<ProjectAlert> builder)
     {
-        builder.HasIndex(alert => new { alert.ProjectId, alert.SentAt });
+        builder.HasIndex(alert => new { alert.MonitoringId, alert.SentAt });
 
         builder.HasIndex(alert => alert.IncidentId);
 
         // By name, so a reason added later never reads as another.
         builder.Property(alert => alert.Problem).HasConversion<string>().HasMaxLength(30);
 
-        builder.HasOne(alert => alert.Project)
+        builder.HasOne(alert => alert.Monitoring)
                .WithMany()
-               .HasForeignKey(alert => alert.ProjectId)
+               .HasForeignKey(alert => alert.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(alert => alert.Incident)
@@ -188,15 +202,15 @@ public partial class StatusPageConfiguration : IEntityTypeConfiguration<StatusPa
 {
     public void Configure(EntityTypeBuilder<StatusPage> builder)
     {
-        builder.HasIndex(page => page.ProjectId).IsUnique();
+        builder.HasIndex(page => page.MonitoringId).IsUnique();
 
         // Across every tenant: a slug and a host name lead to one page.
         builder.HasIndex(page => page.Slug).IsUnique();
         builder.HasIndex(page => page.CustomHostname).IsUnique().HasFilter($"\"{nameof(StatusPage.CustomHostname)}\" IS NOT NULL");
 
-        builder.HasOne(page => page.Project)
+        builder.HasOne(page => page.Monitoring)
                .WithMany()
-               .HasForeignKey(page => page.ProjectId)
+               .HasForeignKey(page => page.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(page => page.Components)
@@ -239,20 +253,20 @@ public partial class ProjectScanConfiguration : IEntityTypeConfiguration<Project
     public void Configure(EntityTypeBuilder<ProjectScan> builder)
     {
         // The tab's latest run of each kind and its history of one kind, newest first.
-        builder.HasIndex(scan => new { scan.ProjectId, scan.Kind, scan.RequestedAt });
+        builder.HasIndex(scan => new { scan.MonitoringId, scan.Kind, scan.RequestedAt });
 
         // Every kind's history, and "Run scans now"'s 10 minutes.
-        builder.HasIndex(scan => new { scan.ProjectId, scan.RequestedAt });
+        builder.HasIndex(scan => new { scan.MonitoringId, scan.RequestedAt });
 
         // The retention job deletes every project's old runs by time alone.
         builder.HasIndex(scan => scan.RequestedAt);
 
         // A request joins the run of its kind still waiting, and the weekly job tidies the ones that never ran: a handful.
-        builder.HasIndex(scan => scan.ProjectId, "IX_ProjectScans_Unfinished").HasFilter($"\"{nameof(ProjectScan.FinishedAt)}\" IS NULL");
+        builder.HasIndex(scan => scan.MonitoringId, "IX_ProjectScans_Unfinished").HasFilter($"\"{nameof(ProjectScan.FinishedAt)}\" IS NULL");
 
-        builder.HasOne(scan => scan.Project)
+        builder.HasOne(scan => scan.Monitoring)
                .WithMany()
-               .HasForeignKey(scan => scan.ProjectId)
+               .HasForeignKey(scan => scan.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(scan => scan.RequestedBy)
@@ -274,11 +288,11 @@ public partial class ProjectScanSettingsConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<ProjectScanSettings> builder)
     {
-        builder.HasKey(settings => settings.ProjectId);
+        builder.HasKey(settings => settings.MonitoringId);
 
-        builder.HasOne(settings => settings.Project)
+        builder.HasOne(settings => settings.Monitoring)
                .WithOne()
-               .HasForeignKey<ProjectScanSettings>(settings => settings.ProjectId)
+               .HasForeignKey<ProjectScanSettings>(settings => settings.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
     }
 }
@@ -293,9 +307,9 @@ public partial class ProjectScanFindingReportConfiguration : IEntityTypeConfigur
         // The guard metric: how often each finding is said to be wrong.
         builder.HasIndex(report => new { report.FindingKey, report.ReportedAt });
 
-        builder.HasOne(report => report.Project)
+        builder.HasOne(report => report.Monitoring)
                .WithMany()
-               .HasForeignKey(report => report.ProjectId)
+               .HasForeignKey(report => report.MonitoringId)
                .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(report => report.User)

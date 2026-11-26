@@ -19,13 +19,13 @@ public partial class ProjectScansController : AppControllerBase, IProjectScansCo
     [AutoInject] private ProjectScanScheduler scheduler = default!;
     [AutoInject] private ILogger<ProjectScansController> logger = default!;
 
-    [HttpGet("{projectId}")]
-    public async Task<ProjectScansDto> GetScans(Guid projectId, CancellationToken cancellationToken)
-        => await reader.Latest(await FindProject(projectId, cancellationToken), cancellationToken);
+    [HttpGet("{monitoringId}")]
+    public async Task<ProjectScansDto> GetScans(Guid monitoringId, CancellationToken cancellationToken)
+        => await reader.Latest(await FindProject(monitoringId, cancellationToken), cancellationToken);
 
     [HttpPost]
     public async Task<ProjectScanDto[]> GetHistory(ProjectScanHistoryRequestDto request, CancellationToken cancellationToken)
-        => await reader.History((await FindProject(request.ProjectId, cancellationToken)).Id, request.Kind, HistoryLength, cancellationToken);
+        => await reader.History((await FindProject(request.MonitoringId, cancellationToken)).Id, request.Kind, HistoryLength, cancellationToken);
 
     [HttpGet("{scanId}")]
     public async Task<ProjectScanDto> GetScan(Guid scanId, CancellationToken cancellationToken)
@@ -34,7 +34,7 @@ public partial class ProjectScansController : AppControllerBase, IProjectScansCo
     [HttpPost]
     public async Task<ProjectScansDto> RunNow(RunProjectScansRequestDto request, CancellationToken cancellationToken)
     {
-        var project = await FindProject(request.ProjectId, cancellationToken);
+        var project = await FindProject(request.MonitoringId, cancellationToken);
 
         if (await scheduler.RunByHand(project, User.GetUserId(), cancellationToken) is { } tryAgainIn)
             throw new TooManyRequestsException(Localizer[nameof(AppStrings.MonitoringScansRunNowLimit), (int)ProjectScanReader.RunNowInterval.TotalMinutes, (int)Math.Ceiling(tryAgainIn.TotalMinutes)])
@@ -43,14 +43,14 @@ public partial class ProjectScansController : AppControllerBase, IProjectScansCo
         return await reader.Latest(project, cancellationToken);
     }
 
-    [HttpGet("{projectId}")]
-    public async Task<ProjectScanSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken)
-        => await reader.Settings((await FindProject(projectId, cancellationToken)).Id, cancellationToken);
+    [HttpGet("{monitoringId}")]
+    public async Task<ProjectScanSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken)
+        => await reader.Settings((await FindProject(monitoringId, cancellationToken)).Id, cancellationToken);
 
     [HttpPost]
     public async Task<ProjectScanSettingsDto> SaveSettings(ProjectScanSettingsDto settings, CancellationToken cancellationToken)
     {
-        var project = await FindProject(settings.ProjectId, cancellationToken);
+        var project = await FindProject(settings.MonitoringId, cancellationToken);
 
         return await reader.SaveSettings(project, settings, cancellationToken);
     }
@@ -60,7 +60,7 @@ public partial class ProjectScansController : AppControllerBase, IProjectScansCo
     {
         var finding = await DbContext.ProjectScanFindings
             .Where(finding => finding.Id == request.FindingId)
-            .Select(finding => new { finding.Id, finding.Key, finding.Where, finding.Scan!.ProjectId, finding.Scan.Kind, finding.TenantId })
+            .Select(finding => new { finding.Id, finding.Key, finding.Where, finding.Scan!.MonitoringId, finding.Scan.Kind, finding.TenantId })
             .FirstOrDefaultAsync(cancellationToken)
             ?? throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
@@ -73,7 +73,7 @@ public partial class ProjectScansController : AppControllerBase, IProjectScansCo
         await DbContext.ProjectScanFindingReports.AddAsync(new()
         {
             Id = Guid.CreateSequentialGuid(),
-            ProjectId = finding.ProjectId,
+            MonitoringId = finding.MonitoringId,
             TenantId = finding.TenantId,
             FindingId = finding.Id,
             Kind = finding.Kind,
@@ -86,10 +86,10 @@ public partial class ProjectScansController : AppControllerBase, IProjectScansCo
 
         await DbContext.SaveChangesAsync(cancellationToken);
 
-        logger.LogWarning("A finding was reported as wrong: {FindingKey} of a {Kind} scan of project {ProjectId}.", finding.Key, finding.Kind, finding.ProjectId);
+        logger.LogWarning("A finding was reported as wrong: {FindingKey} of a {Kind} scan of project {MonitoringId}.", finding.Key, finding.Kind, finding.MonitoringId);
     }
 
-    private async Task<Project> FindProject(Guid projectId, CancellationToken cancellationToken)
-        => await DbContext.Projects.AsNoTracking().FirstOrDefaultAsync(project => project.Id == projectId, cancellationToken)
+    private async Task<ProjectMonitoring> FindProject(Guid monitoringId, CancellationToken cancellationToken)
+        => await DbContext.Monitorings.AsNoTracking().FirstOrDefaultAsync(project => project.Id == monitoringId, cancellationToken)
            ?? throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 }

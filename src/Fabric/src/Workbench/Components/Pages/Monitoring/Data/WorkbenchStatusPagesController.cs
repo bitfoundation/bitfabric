@@ -14,19 +14,19 @@ namespace Bit.Fabric.Workbench.Components.Pages.Monitoring.Data;
 public sealed partial class WorkbenchStatusPagesController(WorkbenchScenarioState scenarioState, MonitoringSampleWorld world, AuthenticationStateProvider authenticationStateProvider)
     : MonitoringStandIn(scenarioState, world, authenticationStateProvider), IStatusPagesController
 {
-    public Task<StatusPageSettingsDto> GetStatusPage(Guid projectId, CancellationToken cancellationToken)
-        => Load("status-page", () => MonitoringReads.StatusPage(World.Get(projectId)), () =>
+    public Task<StatusPageSettingsDto> GetStatusPage(Guid monitoringId, CancellationToken cancellationToken)
+        => Load("status-page", () => MonitoringReads.StatusPage(World.Get(monitoringId)), () =>
         {
             // A project that has none gets its first, unpublished, with a component per kind of part.
-            var page = MonitoringReads.StatusPage(World.Get(projectId));
+            var page = MonitoringReads.StatusPage(World.Get(monitoringId));
             return new StatusPageSettingsDto
             {
-                ProjectId = projectId,
+                MonitoringId = monitoringId,
                 Slug = page.Slug,
                 Languages = [MonitoringTexts.MainCulture],
                 Components = [.. page.Checks.GroupBy(check => check.Category).Select(group => new StatusComponentDto
                 {
-                    Id = MonitoringNoise.IdOf($"{projectId}:first:{group.Key}"),
+                    Id = MonitoringNoise.IdOf($"{monitoringId}:first:{group.Key}"),
                     Name = new() { [MonitoringTexts.MainCulture] = group.Key ?? "" },
                     CheckKeys = [.. group.Select(check => check.Key!)]
                 })],
@@ -41,7 +41,7 @@ public sealed partial class WorkbenchStatusPagesController(WorkbenchScenarioStat
         if (settings.Slug is null || SlugRegex().IsMatch(settings.Slug) is false)
             throw new BadRequestException();
 
-        var project = World.Get(settings.ProjectId);
+        var project = World.Get(settings.MonitoringId);
         var page = project.StatusPage;
 
         page.Slug = settings.Slug;
@@ -57,7 +57,7 @@ public sealed partial class WorkbenchStatusPagesController(WorkbenchScenarioStat
 
     public Task<StatusPageSettingsDto> ConnectCustomHostname(ConnectCustomHostnameRequestDto request, CancellationToken cancellationToken) => Save(() =>
     {
-        var project = World.Get(request.ProjectId);
+        var project = World.Get(request.MonitoringId);
 
         if (project.StatusPage.CnameTarget is null)
             throw new BadRequestException();
@@ -69,9 +69,9 @@ public sealed partial class WorkbenchStatusPagesController(WorkbenchScenarioStat
     }, cancellationToken);
 
     /// <summary>Cloudflare found the CNAME record: a pending host name becomes active.</summary>
-    public Task<StatusPageSettingsDto> RefreshCustomHostname(Guid projectId, CancellationToken cancellationToken) => Save(() =>
+    public Task<StatusPageSettingsDto> RefreshCustomHostname(Guid monitoringId, CancellationToken cancellationToken) => Save(() =>
     {
-        var project = World.Get(projectId);
+        var project = World.Get(monitoringId);
 
         if (project.StatusPage.CustomHostnameState is "pending")
         {
@@ -81,9 +81,9 @@ public sealed partial class WorkbenchStatusPagesController(WorkbenchScenarioStat
         return MonitoringReads.StatusPage(project);
     }, cancellationToken);
 
-    public Task<StatusPageSettingsDto> DisconnectCustomHostname(Guid projectId, CancellationToken cancellationToken) => Save(() =>
+    public Task<StatusPageSettingsDto> DisconnectCustomHostname(Guid monitoringId, CancellationToken cancellationToken) => Save(() =>
     {
-        var project = World.Get(projectId);
+        var project = World.Get(monitoringId);
         project.StatusPage.CustomHostname = null;
         project.StatusPage.CustomHostnameState = null;
 
@@ -96,7 +96,7 @@ public sealed partial class WorkbenchStatusPagesController(WorkbenchScenarioStat
 
         return await Save(() =>
         {
-            var project = World.Get(request.ProjectId);
+            var project = World.Get(request.MonitoringId);
             var now = World.Now;
 
             if (request.IncidentId is { } incidentId)

@@ -15,7 +15,7 @@
     @if (Connected is { } connectedId)
     {
         @* The approval came back: the first checks as they arrive, and what to do next. *@
-        <ProjectConnected @key="connectedId" ProjectId="connectedId" />
+        <ProjectConnected @key="connectedId" MonitoringId="connectedId" />
     }
     else if (IsCallback)
     {

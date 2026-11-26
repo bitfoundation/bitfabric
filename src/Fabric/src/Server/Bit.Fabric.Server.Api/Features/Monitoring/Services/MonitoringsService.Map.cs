@@ -3,7 +3,7 @@ using Bit.Fabric.Shared.Features.Monitoring.Dtos;
 
 namespace Bit.Fabric.Server.Api.Features.Monitoring.Services;
 
-public partial class ProjectsService
+public partial class MonitoringsService
 {
     /// <summary>
     /// The project's application map (bitfabric-internal/specs/monitoring.md, Application map), for its tab and the AI tools
@@ -12,13 +12,13 @@ public partial class ProjectsService
     /// </summary>
     public async Task<ProjectMapDto> GetMap(Guid id, CancellationToken cancellationToken)
     {
-        var details = await GetProject(id, cancellationToken);
+        var details = await GetMonitoring(id, cancellationToken);
 
         var since24Hours = timeProvider.GetUtcNow().AddHours(-24);
         string[] keys = [.. details.Checks.Select(check => check.Key!).Where(key => key is not null)];
 
         var day = (await dbContext.ProjectRollups.AsNoTracking()
-            .Where(rollup => rollup.ProjectId == id && rollup.BucketStart >= since24Hours && keys.Contains(rollup.CheckKey!))
+            .Where(rollup => rollup.MonitoringId == id && rollup.BucketStart >= since24Hours && keys.Contains(rollup.CheckKey!))
             .GroupBy(rollup => rollup.CheckKey!)
             .Select(group => new
             {
@@ -34,7 +34,7 @@ public partial class ProjectsService
 
         // An incident names the parts it is about; a part in two at once points to the older, as the page header does.
         var ongoing = await dbContext.ProjectIncidents.AsNoTracking()
-            .Where(incident => incident.ProjectId == id && incident.EndedAt == null)
+            .Where(incident => incident.MonitoringId == id && incident.EndedAt == null)
             .OrderBy(incident => incident.StartedAt)
             .Select(incident => new { incident.Id, incident.CheckKeys })
             .ToListAsync(cancellationToken);

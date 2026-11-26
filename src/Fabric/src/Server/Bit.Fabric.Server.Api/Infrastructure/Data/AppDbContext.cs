@@ -3,6 +3,7 @@ using Bit.Fabric.Server.Api.Features.Attachments;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth.Models;
 using Bit.Fabric.Server.Api.Features.Licensing.Models;
 using Bit.Fabric.Server.Api.Features.Monitoring.Models;
+using Bit.Fabric.Server.Api.Features.Projects.Models;
 using Bit.Fabric.Server.Api.Features.PushNotification;
 using Bit.Fabric.Server.Api.Features.Tenants;
 using Bit.Fabric.Server.Api.Infrastructure.Data.Configurations;
@@ -46,8 +47,12 @@ public partial class AppDbContext
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = default!;
 
-    /// <summary>The customers' apps bit Fabric watches, and what each round of checking them saw.</summary>
+    /// <summary>The teams' projects, and who works on each (See Project).</summary>
     public DbSet<Project> Projects { get; set; } = default!;
+    public DbSet<ProjectMember> ProjectMembers { get; set; } = default!;
+
+    /// <summary>The environments of projects bit Fabric watches, and what each round of checking them saw.</summary>
+    public DbSet<ProjectMonitoring> Monitorings { get; set; } = default!;
     public DbSet<ProjectConnection> ProjectConnections { get; set; } = default!;
     public DbSet<ProjectProbe> ProjectProbes { get; set; } = default!;
     public DbSet<ProjectCheckPeriod> ProjectCheckPeriods { get; set; } = default!;
@@ -67,8 +72,8 @@ public partial class AppDbContext
     public DbSet<ProjectScanFindingReport> ProjectScanFindingReports { get; set; } = default!;
     public DbSet<ProjectScansEmail> ProjectScansEmails { get; set; } = default!;
 
-    /// <summary>The projects bit CLI made or licensed, and the free licenses issued for them (See LicenseController).</summary>
-    public DbSet<LicensedProject> LicensedProjects { get; set; } = default!;
+    /// <summary>The trials bit CLI asked for, and the licenses teams hold for their projects (See LicenseController).</summary>
+    public DbSet<ProjectTrial> ProjectTrials { get; set; } = default!;
     public DbSet<IssuedLicense> IssuedLicenses { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

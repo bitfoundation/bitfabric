@@ -133,7 +133,7 @@ public partial class ProjectScanDto
 {
     public Guid Id { get; set; }
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     public ProjectScanKind Kind { get; set; }
 
@@ -182,7 +182,7 @@ public partial class ProjectScanDto
 /// <summary>When bit Fabric scans a project (bitfabric-internal/specs/scanners.md, Decisions, 2026-11-13).</summary>
 public partial class ProjectScanSettingsDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     /// <summary>Off until the owner allows it: bit Fabric sees each deployment in the health check.</summary>
     public bool ScanAfterDeployments { get; set; }
@@ -201,7 +201,7 @@ public partial class ProjectScanSettingsDto
 /// <summary>A project's Scans tab: the latest run of each kind with what it found, and when bit Fabric scans.</summary>
 public partial class ProjectScansDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     /// <summary>The project's address, which the prompts for the customer's AI agent name.</summary>
     public string? Address { get; set; }
@@ -250,7 +250,7 @@ public partial class ProjectScanSummaryDto
 
 public partial class ProjectScanHistoryRequestDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     /// <summary>One kind's runs, or every kind's when null.</summary>
     public ProjectScanKind? Kind { get; set; }
@@ -258,7 +258,7 @@ public partial class ProjectScanHistoryRequestDto
 
 public partial class RunProjectScansRequestDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 }
 
 /// <summary>A team member says a finding is wrong (bitfabric-internal/specs/scanners.md, A wrong finding can be reported).</summary>

@@ -187,17 +187,17 @@ public partial class ProjectScansMcpTools : IAsyncDisposable
     /// The current team's project the user named: by id, by its name, or by its address or host. Like the controllers'
     /// TENANT_SELECTED policy, nothing is read without a team, which would be the fallback tenant every team-less user shares.
     /// </summary>
-    private async Task<(Project? Project, string? Problem)> Find(string named, CancellationToken cancellationToken)
+    private async Task<(ProjectMonitoring? Project, string? Problem)> Find(string named, CancellationToken cancellationToken)
     {
         if (httpContextAccessor.HttpContext?.User.GetTenantId() is null)
             return (null, "The user has no team selected in bit Fabric. Ask them to open bit Fabric's projects page, which makes or picks their team, then try again.");
 
-        var projects = await dbContext.Projects.AsNoTracking().ToListAsync(cancellationToken);
+        var projects = await dbContext.Monitorings.AsNoTracking().ToListAsync(cancellationToken);
         var wanted = named.Trim();
 
         var host = Uri.TryCreate(wanted.Contains("://", StringComparison.Ordinal) ? wanted : $"https://{wanted}", UriKind.Absolute, out var uri) ? uri.Host : wanted;
 
-        Project[] matches = Guid.TryParse(wanted, out var id)
+        ProjectMonitoring[] matches = Guid.TryParse(wanted, out var id)
             ? [.. projects.Where(project => project.Id == id)]
             : [.. projects.Where(project => string.Equals(project.Name, wanted, StringComparison.OrdinalIgnoreCase))];
 
@@ -223,7 +223,7 @@ public partial class ProjectScansMcpTools : IAsyncDisposable
 
     private static string? HostOf(string? address) => Uri.TryCreate(address, UriKind.Absolute, out var uri) ? uri.Host : null;
 
-    private static string Listing(IEnumerable<Project> projects)
+    private static string Listing(IEnumerable<ProjectMonitoring> projects)
         => projects.Any() ? string.Join("; ", projects.Select(project => $"{project.Name} ({project.Address}, id {project.Id})")) : "none yet.";
 
     /// <summary>

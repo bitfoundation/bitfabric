@@ -10,7 +10,7 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectAlerts
 {
-    [Parameter, EditorRequired] public Guid ProjectId { get; set; }
+    [Parameter, EditorRequired] public Guid MonitoringId { get; set; }
 
     [AutoInject] private IProjectIncidentsController incidentsController = default!;
 
@@ -33,7 +33,7 @@ public partial class ProjectAlerts
     {
         await base.OnInitAsync();
 
-        Show(await incidentsController.GetAlertSettings(ProjectId, CurrentCancellationToken));
+        Show(await incidentsController.GetAlertSettings(MonitoringId, CurrentCancellationToken));
     }
 
     private void Show(ProjectAlertSettingsDto loaded)
@@ -106,7 +106,7 @@ public partial class ProjectAlerts
 
         try
         {
-            Show(await incidentsController.SaveAlertSettings(new() { ProjectId = ProjectId, Routes = [.. routes] }, CurrentCancellationToken));
+            Show(await incidentsController.SaveAlertSettings(new() { MonitoringId = MonitoringId, Routes = [.. routes] }, CurrentCancellationToken));
         }
         finally
         {
@@ -121,7 +121,7 @@ public partial class ProjectAlerts
 
         try
         {
-            testResults = await incidentsController.SendTestAlert(ProjectId, CurrentCancellationToken);
+            testResults = await incidentsController.SendTestAlert(MonitoringId, CurrentCancellationToken);
         }
         finally
         {

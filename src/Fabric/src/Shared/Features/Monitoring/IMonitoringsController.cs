@@ -8,26 +8,26 @@ namespace Bit.Fabric.Shared.Features.Monitoring;
 /// to the fallback tenant.
 /// </summary>
 [Route("api/v1/[controller]/[action]/"), AuthorizedApi]
-public interface IProjectsController : IAppController
+public interface IMonitoringsController : IAppController
 {
     /// <summary>
-    /// A project's whole history as a file, at <c>{ExportHistoryUri}/{projectId}/csv</c> or <c>.../json</c>
+    /// A project's whole history as a file, at <c>{ExportHistoryUri}/{monitoringId}/csv</c> or <c>.../json</c>
     /// (bitfabric-internal/specs/monitoring.md, Health history is the customer's): every period of each part, incident with
     /// its updates, deployment and restart, and maintenance window, in the project's time zone with UTC alongside. It
     /// downloads a file, so it is called with the HttpClient directly rather than through the generated proxy, which speaks
     /// json only.
     /// </summary>
-    public const string ExportHistoryUri = "api/v1/Projects/ExportHistory";
+    public const string ExportHistoryUri = "api/v1/Monitorings/ExportHistory";
 
     /// <summary>
     /// Every project of the tenant, failing ones first, with its last 30 days drawn in <paramref name="timeZone"/>: the
     /// viewer's IANA or Windows zone id, UTC when it is missing or unknown.
     /// </summary>
     [HttpGet("{?timeZone}")]
-    Task<List<ProjectDto>> GetProjects(string? timeZone, CancellationToken cancellationToken);
+    Task<List<MonitoringDto>> GetMonitorings(string? timeZone, CancellationToken cancellationToken);
 
     [HttpGet("{id}")]
-    Task<ProjectDetailsDto> GetProject(Guid id, CancellationToken cancellationToken);
+    Task<MonitoringDetailsDto> GetMonitoring(Guid id, CancellationToken cancellationToken);
 
     /// <summary>The project's application map: every part its last report names, with how it's doing now and over 24 hours.</summary>
     [HttpGet("{id}")]
@@ -51,7 +51,7 @@ public interface IProjectsController : IAppController
 
     /// <summary>Takes the customer app's answer, and on approval adds the project (or reconnects it) and reads it once.</summary>
     [HttpPost]
-    Task<ProjectDto> CompleteConnect(CompleteConnectRequestDto request, CancellationToken cancellationToken);
+    Task<MonitoringDto> CompleteConnect(CompleteConnectRequestDto request, CancellationToken cancellationToken);
 
     /// <summary>
     /// Picks the bitplatform Network's locations that time the project's home page every minute, besides bit Fabric's own
@@ -59,7 +59,7 @@ public interface IProjectsController : IAppController
     /// locations the customer picks).
     /// </summary>
     [HttpPost]
-    Task<ProjectDto> SetLocations(SetProjectLocationsRequestDto request, CancellationToken cancellationToken);
+    Task<MonitoringDto> SetLocations(SetProjectLocationsRequestDto request, CancellationToken cancellationToken);
 
     /// <summary>
     /// Forgets bit Fabric's approval in the app and stops reading it, keeping its history, until someone of the team
@@ -67,7 +67,7 @@ public interface IProjectsController : IAppController
     /// expires, or at once from the app's own Settings, Sessions.
     /// </summary>
     [HttpPost("{id}")]
-    Task<ProjectDto> Disconnect(Guid id, CancellationToken cancellationToken);
+    Task<MonitoringDto> Disconnect(Guid id, CancellationToken cancellationToken);
 
     /// <summary>Stops watching the project and deletes its history.</summary>
     [HttpDelete("{id}")]

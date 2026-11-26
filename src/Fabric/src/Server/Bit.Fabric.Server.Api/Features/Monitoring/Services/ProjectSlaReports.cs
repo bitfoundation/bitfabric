@@ -20,15 +20,15 @@ public partial class ProjectSlaReports
     [AutoInject] private IStringLocalizer<AppStrings> localizer = default!;
     [AutoInject] private IWebHostEnvironment environment = default!;
 
-    public async Task<ProjectSlaSettingsDto> SettingsOf(Guid projectId, CancellationToken cancellationToken)
+    public async Task<ProjectSlaSettingsDto> SettingsOf(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var settings = await dbContext.ProjectSlaSettings.AsNoTracking().FirstOrDefaultAsync(settings => settings.ProjectId == projectId, cancellationToken);
+        var settings = await dbContext.ProjectSlaSettings.AsNoTracking().FirstOrDefaultAsync(settings => settings.MonitoringId == monitoringId, cancellationToken);
 
         return settings is null
-            ? new() { ProjectId = projectId }
+            ? new() { MonitoringId = monitoringId }
             : new()
             {
-                ProjectId = settings.ProjectId,
+                MonitoringId = settings.MonitoringId,
                 TargetPercent = settings.TargetPercent,
                 PartialWeight = settings.PartialWeight,
                 DegradedWeight = settings.DegradedWeight,
@@ -37,7 +37,7 @@ public partial class ProjectSlaReports
             };
     }
 
-    public async Task<ProjectSlaReportDto> Build(Project project, int? year, int? month, CancellationToken cancellationToken)
+    public async Task<ProjectSlaReportDto> Build(ProjectMonitoring project, int? year, int? month, CancellationToken cancellationToken)
     {
         var zone = ZoneOf(project);
         var now = timeProvider.GetUtcNow();
@@ -59,16 +59,16 @@ public partial class ProjectSlaReports
         var readings = await ReadingsOf(project.Id, spanFrom, spanTo, cancellationToken);
 
         var incidents = await dbContext.ProjectIncidents.AsNoTracking()
-            .Where(incident => incident.ProjectId == project.Id && incident.StartedAt < spanTo && (incident.EndedAt == null || incident.EndedAt > spanFrom))
+            .Where(incident => incident.MonitoringId == project.Id && incident.StartedAt < spanTo && (incident.EndedAt == null || incident.EndedAt > spanFrom))
             .Select(incident => new ProjectIncident { Id = incident.Id, Impact = incident.Impact, StartedAt = incident.StartedAt, EndedAt = incident.EndedAt, DuringMaintenance = incident.DuringMaintenance })
             .ToListAsync(cancellationToken);
 
         var windows = await dbContext.ProjectMaintenanceWindows.AsNoTracking()
-            .Where(window => window.ProjectId == project.Id && window.StartsAt < spanTo)
+            .Where(window => window.MonitoringId == project.Id && window.StartsAt < spanTo)
             .ToListAsync(cancellationToken);
 
         var periods = await dbContext.ProjectCheckPeriods.AsNoTracking()
-            .Where(period => period.ProjectId == project.Id && period.StartedAt < monthTo && (period.EndedAt == null || period.EndedAt > monthFrom))
+            .Where(period => period.MonitoringId == project.Id && period.StartedAt < monthTo && (period.EndedAt == null || period.EndedAt > monthFrom))
             .Select(period => new ProjectCheckPeriod { CheckKey = period.CheckKey, Title = period.Title, Status = period.Status, StartedAt = period.StartedAt, EndedAt = period.EndedAt })
             .ToListAsync(cancellationToken);
 
@@ -101,7 +101,7 @@ public partial class ProjectSlaReports
 
         return new()
         {
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             ProjectName = project.Name,
             Address = project.Address,
             TimeZoneId = zone.Id,
@@ -199,7 +199,7 @@ public partial class ProjectSlaReports
     public static string FileNameOf(ProjectSlaReportDto report, string extension)
         => $"{MonitoringFiles.NameOf(report.ProjectName)}-sla-{report.Year:D4}-{report.Month:D2}.{extension}";
 
-    public static TimeZoneInfo ZoneOf(Project project)
+    public static TimeZoneInfo ZoneOf(ProjectMonitoring project)
         => TimeZoneInfo.TryFindSystemTimeZoneById(project.TimeZoneId ?? "UTC", out var zone) ? zone : TimeZoneInfo.Utc;
 
     private static ProjectSlaRowDto RowOf(string? key, string? title, Figure figure, double partialWeight, double degradedWeight) => new()
@@ -220,7 +220,7 @@ public partial class ProjectSlaReports
     /// When bit Fabric had a reading of the app, from the 15 minute rollups of its report, which a round writes even when
     /// the app doesn't answer but not when its token is refused (See ProjectProber.RollUp): consecutive quarters as one span.
     /// </summary>
-    private async Task<List<Span>> ReadingsOf(Guid projectId, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
+    private async Task<List<Span>> ReadingsOf(Guid monitoringId, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
     {
         var islands = await dbContext.Database.SqlQuery<ReadingIsland>($"""
             SELECT MIN(reading."BucketStart") AS "From", MAX(reading."BucketStart") AS "Last"
@@ -228,7 +228,7 @@ public partial class ProjectSlaReports
                 SELECT DISTINCT "BucketStart",
                        "BucketStart" - DENSE_RANK() OVER (ORDER BY "BucketStart") * make_interval(mins => {ProjectRollup.BucketMinutes}) AS "Island"
                 FROM "ProjectRollups"
-                WHERE "ProjectId" = {projectId} AND "CheckKey" = {ProjectRollup.ReportKey} AND "BucketStart" >= {from} AND "BucketStart" < {to}
+                WHERE "MonitoringId" = {monitoringId} AND "CheckKey" = {ProjectRollup.ReportKey} AND "BucketStart" >= {from} AND "BucketStart" < {to}
             ) AS reading
             GROUP BY reading."Island"
             """).ToListAsync(cancellationToken);

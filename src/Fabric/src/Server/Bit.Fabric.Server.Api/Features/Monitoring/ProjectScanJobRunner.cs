@@ -49,7 +49,7 @@ public partial class ProjectScanJobRunner
         var wait = usesBrowser ? waitForBrowserTurn : waitForTurn;
 
         await using var slot = await slots.AcquireAsync(wait, cancellationToken);
-        await using var turn = await distributedLockFactory($"bit-fabric:monitoring-scan:{scan.ProjectId}:{scan.Kind}").AcquireAsync(wait, cancellationToken);
+        await using var turn = await distributedLockFactory($"bit-fabric:monitoring-scan:{scan.MonitoringId}:{scan.Kind}").AcquireAsync(wait, cancellationToken);
 
         var startedAt = timeProvider.GetUtcNow();
 
@@ -63,7 +63,7 @@ public partial class ProjectScanJobRunner
 
         scan.StartedAt = startedAt;
 
-        var project = await dbContext.Projects.IgnoreQueryFilters().AsNoTracking().FirstOrDefaultAsync(project => project.Id == scan.ProjectId, cancellationToken);
+        var project = await dbContext.Monitorings.IgnoreQueryFilters().AsNoTracking().FirstOrDefaultAsync(project => project.Id == scan.MonitoringId, cancellationToken);
 
         if (project is null)
             return;
@@ -91,11 +91,11 @@ public partial class ProjectScanJobRunner
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Scan {ScanId} ({Kind}) of project {ProjectId} ended {Outcome} with {Findings} finding(s), {Score} {Grade}.",
-                              scan.Id, scan.Kind, scan.ProjectId, scan.Outcome, result.Findings.Count, scan.Score, scan.Grade);
+        logger.LogInformation("Scan {ScanId} ({Kind}) of project {MonitoringId} ended {Outcome} with {Findings} finding(s), {Score} {Grade}.",
+                              scan.Id, scan.Kind, scan.MonitoringId, scan.Outcome, result.Findings.Count, scan.Score, scan.Grade);
     }
 
-    private async Task<ProjectScanResult> Scan(IProjectScanner? scanner, Project project, ProjectScan scan, CancellationToken cancellationToken)
+    private async Task<ProjectScanResult> Scan(IProjectScanner? scanner, ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken)
     {
         if (scanner is null || scanner.IsAvailable is false)
         {
@@ -112,7 +112,7 @@ public partial class ProjectScanJobRunner
         }
         catch (Exception exp) when (cancellationToken.IsCancellationRequested is false)
         {
-            logger.LogError(exp, "The {Kind} scan of project {ProjectId} failed.", scan.Kind, project.Id);
+            logger.LogError(exp, "The {Kind} scan of project {MonitoringId} failed.", scan.Kind, project.Id);
             return new() { Outcome = ProjectScanOutcome.Failed };
         }
     }
@@ -135,7 +135,7 @@ public partial class ProjectScanWeeklyJobRunner
     [AutoInject] private ILogger<ProjectScanWeeklyJobRunner> logger = default!;
 
     /// <summary>The hour of the week, from Sunday 00:00 UTC, a project's weekly scans fall in: the same every week.</summary>
-    public static int SlotOf(Guid projectId) => (int)((uint)projectId.GetHashCode() % HoursAWeek);
+    public static int SlotOf(Guid monitoringId) => (int)((uint)monitoringId.GetHashCode() % HoursAWeek);
 
     [DisableConcurrentExecution(timeoutInSeconds: 600), AutomaticRetry(Attempts = 0)]
     public async Task ScheduleDue(CancellationToken cancellationToken)
@@ -153,18 +153,18 @@ public partial class ProjectScanWeeklyJobRunner
         }
 
         // A project without settings scans weekly: that's the default.
-        var projects = await dbContext.Projects.IgnoreQueryFilters()
+        var projects = await dbContext.Monitorings.IgnoreQueryFilters()
             .Where(project => project.ConnectionStatus != ProjectConnectionStatus.ReconnectNeeded && project.ConnectionStatus != ProjectConnectionStatus.Disconnected
-                              && dbContext.ProjectScanSettings.IgnoreQueryFilters().Any(row => row.ProjectId == project.Id && row.WeeklyScans == false) == false)
+                              && dbContext.ProjectScanSettings.IgnoreQueryFilters().Any(row => row.MonitoringId == project.Id && row.WeeklyScans == false) == false)
             .ToListAsync(cancellationToken);
 
-        Guid[] projectIds = [.. projects.Select(project => project.Id)];
+        Guid[] monitoringIds = [.. projects.Select(project => project.Id)];
 
         var lastScans = await dbContext.ProjectScans.IgnoreQueryFilters()
-            .Where(scan => projectIds.Contains(scan.ProjectId))
-            .GroupBy(scan => scan.ProjectId)
-            .Select(group => new { ProjectId = group.Key, Last = group.Max(scan => scan.RequestedAt) })
-            .ToDictionaryAsync(row => row.ProjectId, row => row.Last, cancellationToken);
+            .Where(scan => monitoringIds.Contains(scan.MonitoringId))
+            .GroupBy(scan => scan.MonitoringId)
+            .Select(group => new { MonitoringId = group.Key, Last = group.Max(scan => scan.RequestedAt) })
+            .ToDictionaryAsync(row => row.MonitoringId, row => row.Last, cancellationToken);
 
         foreach (var project in projects)
         {
@@ -184,7 +184,7 @@ public partial class ProjectScanWeeklyJobRunner
             }
             catch (Exception exp) when (exp is not OperationCanceledException)
             {
-                logger.LogError(exp, "Asking for the weekly scans of project {ProjectId} failed.", project.Id);
+                logger.LogError(exp, "Asking for the weekly scans of project {MonitoringId} failed.", project.Id);
             }
         }
     }

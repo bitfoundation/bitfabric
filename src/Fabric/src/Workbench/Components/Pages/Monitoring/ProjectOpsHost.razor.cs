@@ -35,7 +35,7 @@ public partial class ProjectOpsHost
     public static readonly string[] Tabs = ["overview", "map", "history", "incidents", "performance", "scans", "sla", "locations", "status", "alerts", "settings"];
 
     /// <summary>The picked project, or Your app; a project the view added on the add page counts too, while the view lasts.</summary>
-    private Guid ProjectId => (World.Find(Scenario.GetSwitch(ProjectSwitch) ?? DefaultProject) ?? World.Find(DefaultProject))?.Id ?? Guid.Empty;
+    private Guid MonitoringId => (World.Find(Scenario.GetSwitch(ProjectSwitch) ?? DefaultProject) ?? World.Find(DefaultProject))?.Id ?? Guid.Empty;
 
     private (string Tab, string Selector)? PressedButton => Scenario.GetSwitch(PressSwitch) is { } press && Presses.TryGetValue(press, out var pressed) ? pressed : null;
 

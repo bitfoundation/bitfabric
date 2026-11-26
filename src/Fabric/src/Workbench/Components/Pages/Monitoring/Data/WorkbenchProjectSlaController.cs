@@ -12,8 +12,8 @@ namespace Bit.Fabric.Workbench.Components.Pages.Monitoring.Data;
 public sealed class WorkbenchProjectSlaController(WorkbenchScenarioState scenarioState, MonitoringSampleWorld world, AuthenticationStateProvider authenticationStateProvider)
     : MonitoringStandIn(scenarioState, world, authenticationStateProvider), IProjectSlaController
 {
-    public Task<ProjectSlaSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken)
-        => Load("sla-settings", () => World.Get(projectId).Sla, () => new ProjectSlaSettingsDto { ProjectId = projectId }, cancellationToken);
+    public Task<ProjectSlaSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken)
+        => Load("sla-settings", () => World.Get(monitoringId).Sla, () => new ProjectSlaSettingsDto { MonitoringId = monitoringId }, cancellationToken);
 
     public Task<ProjectSlaSettingsDto> SaveSettings(ProjectSlaSettingsDto settings, CancellationToken cancellationToken) => Save(() =>
     {
@@ -21,7 +21,7 @@ public sealed class WorkbenchProjectSlaController(WorkbenchScenarioState scenari
             || settings.Credits.Any(credit => credit.BelowPercent is <= 0 or > 100 || credit.CreditPercent is <= 0 or > 100))
             throw new BadRequestException();
 
-        var project = World.Get(settings.ProjectId);
+        var project = World.Get(settings.MonitoringId);
         project.Sla = Copy(settings);
         project.Sla.Credits = [.. project.Sla.Credits.OrderByDescending(credit => credit.BelowPercent)];
         project.Sla.Version++;
@@ -31,10 +31,10 @@ public sealed class WorkbenchProjectSlaController(WorkbenchScenarioState scenari
 
     public Task<ProjectSlaReportDto> GetReport(ProjectSlaRequestDto request, CancellationToken cancellationToken)
     {
-        return Load("sla-report", () => MonitoringReads.SlaReport(World.Get(request.ProjectId), request.Year, request.Month, World.Now), () =>
+        return Load("sla-report", () => MonitoringReads.SlaReport(World.Get(request.MonitoringId), request.Year, request.Month, World.Now), () =>
         {
             // A month nothing was counted in: the project was only just connected.
-            var report = MonitoringReads.SlaReport(World.Get(request.ProjectId), request.Year, request.Month, World.Now);
+            var report = MonitoringReads.SlaReport(World.Get(request.MonitoringId), request.Year, request.Month, World.Now);
             report.App = new() { Title = report.ProjectName };
             report.Parts = [];
             report.Months = [.. report.Months.Select(month => new ProjectSlaMonthDto { Year = month.Year, Month = month.Month, IsCurrent = month.IsCurrent })];

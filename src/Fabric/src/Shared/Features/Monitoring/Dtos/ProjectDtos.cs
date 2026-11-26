@@ -86,6 +86,17 @@ public partial class StartConnectRequestDto
     [Display(Name = "Project name")]
     public string? Name { get; set; }
 
+    /// <summary>
+    /// The project the environment joins, from its page's "Add an environment"; null for a new project named
+    /// <see cref="Name"/>. Either way, a project of the team with the id the app reports takes it instead.
+    /// </summary>
+    public Guid? ProjectId { get; set; }
+
+    /// <summary>Production, Test, Staging or a name the team gives; Production when empty.</summary>
+    [MaxLength(50, ErrorMessage = nameof(AppStrings.MaxLengthAttribute_ValidationError))]
+    [Display(Name = "Environment")]
+    public string? Environment { get; set; }
+
     /// <summary>The native app's local server, which the approval's answer goes back to (See ILocalHttpServer); null on the web.</summary>
     public int? LocalHttpPort { get; set; }
 
@@ -117,12 +128,21 @@ public partial class CompleteConnectRequestDto
     public string? TimeZoneId { get; set; }
 }
 
-/// <summary>A project as its card shows it, and as the top of its page does.</summary>
-public partial class ProjectDto
+/// <summary>One environment of a project as its card shows it, and as the top of its page does.</summary>
+public partial class MonitoringDto
 {
     public Guid Id { get; set; }
 
+    /// <summary>What alerts and status pages call it: the project's name, with the environment after it unless that is Production.</summary>
     public string? Name { get; set; }
+
+    /// <summary>The project it is an environment of.</summary>
+    public Guid ProjectId { get; set; }
+
+    public string? ProjectName { get; set; }
+
+    /// <summary>Production, Test, Staging or a name the team gave.</summary>
+    public string? Environment { get; set; }
 
     /// <summary><c>https://host</c>.</summary>
     public string? Address { get; set; }
@@ -274,9 +294,9 @@ public partial class ProjectCheckRoundDto
 }
 
 /// <summary>A project's page: the project and its last report, entry by entry.</summary>
-public partial class ProjectDetailsDto
+public partial class MonitoringDetailsDto
 {
-    public ProjectDto? Project { get; set; }
+    public MonitoringDto? Monitoring { get; set; }
 
     public ProjectCheckDto[] Checks { get; set; } = [];
 
@@ -326,7 +346,7 @@ public partial class ProjectNetworkReadingDto
 [DtoResourceType(typeof(AppStrings))]
 public partial class SetProjectLocationsRequestDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     /// <summary>Codes of NetworkLocations; none leaves only bit Fabric's own server in Germany.</summary>
     [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]
@@ -339,7 +359,7 @@ public partial class SetProjectLocationsRequestDto
 /// </summary>
 public partial class ProjectPerformanceRequestDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     public DateTimeOffset From { get; set; }
 

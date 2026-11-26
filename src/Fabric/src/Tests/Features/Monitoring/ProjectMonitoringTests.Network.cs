@@ -28,7 +28,7 @@ public partial class ProjectMonitoringTests
             Assert.AreEqual(HttpStatusCode.Unauthorized, targets.StatusCode, $"Targets with the secret '{secret}'");
 
             using var results = await SendAsTheNetwork(http, HttpMethod.Post, "api/v1/MonitoringNetwork/Results", secret,
-                                                       new NetworkResultsDto { Location = "enam", Colo = "IAD", Results = [new() { ProjectId = Guid.NewGuid(), At = DateTimeOffset.UtcNow, ResponseMs = 10 }] });
+                                                       new NetworkResultsDto { Location = "enam", Colo = "IAD", Results = [new() { MonitoringId = Guid.NewGuid(), At = DateTimeOffset.UtcNow, ResponseMs = 10 }] });
             Assert.AreEqual(HttpStatusCode.Unauthorized, results.StatusCode, $"Results with the secret '{secret}'");
         }
 
@@ -51,43 +51,43 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp, NetworkSecret);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         // A new project is checked from Eastern North America and Oceania besides Germany.
         Assert.AreSequenceEqual(new[] { "enam", "oc" }, project.Locations);
 
-        var target = (await Targets(server, "enam")).Single(target => target.ProjectId == project.Id);
+        var target = (await Targets(server, "enam")).Single(target => target.MonitoringId == project.Id);
         Assert.AreEqual("https://customer.example/en-US/", target.Url, "The page the home page lands on, as the first round found it, which the Network asks for with a query string of its own.");
         Assert.IsFalse(target.IsServerHealth);
-        Assert.Contains(target => target.ProjectId == project.Id, await Targets(server, "oc"));
-        Assert.DoesNotContain(target => target.ProjectId == project.Id, await Targets(server, "weur"));
+        Assert.Contains(target => target.MonitoringId == project.Id, await Targets(server, "oc"));
+        Assert.DoesNotContain(target => target.MonitoringId == project.Id, await Targets(server, "weur"));
 
-        var changed = await projects.SetLocations(new() { ProjectId = project.Id, Locations = ["weur", "apac-ne", "weur"] }, TestContext.CancellationToken);
+        var changed = await projects.SetLocations(new() { MonitoringId = project.Id, Locations = ["weur", "apac-ne", "weur"] }, TestContext.CancellationToken);
 
         // Each once, in the order the page lists them.
         Assert.AreSequenceEqual(new[] { "weur", "apac-ne" }, changed.Locations);
-        Assert.Contains(target => target.ProjectId == project.Id, await Targets(server, "weur"));
-        Assert.Contains(target => target.ProjectId == project.Id, await Targets(server, "apac-ne"));
-        Assert.DoesNotContain(target => target.ProjectId == project.Id, await Targets(server, "enam"));
-        Assert.DoesNotContain(target => target.ProjectId == project.Id, await Targets(server, "oc"));
+        Assert.Contains(target => target.MonitoringId == project.Id, await Targets(server, "weur"));
+        Assert.Contains(target => target.MonitoringId == project.Id, await Targets(server, "apac-ne"));
+        Assert.DoesNotContain(target => target.MonitoringId == project.Id, await Targets(server, "enam"));
+        Assert.DoesNotContain(target => target.MonitoringId == project.Id, await Targets(server, "oc"));
 
-        await Assert.ThrowsExactlyAsync<BadRequestException>(() => projects.SetLocations(new() { ProjectId = project.Id, Locations = ["sam"] }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<BadRequestException>(() => projects.SetLocations(new() { MonitoringId = project.Id, Locations = ["sam"] }, TestContext.CancellationToken));
 
         // None at all leaves Germany alone.
-        Assert.IsEmpty((await projects.SetLocations(new() { ProjectId = project.Id, Locations = [] }, TestContext.CancellationToken)).Locations);
-        Assert.DoesNotContain(target => target.ProjectId == project.Id, await Targets(server, "weur"));
+        Assert.IsEmpty((await projects.SetLocations(new() { MonitoringId = project.Id, Locations = [] }, TestContext.CancellationToken)).Locations);
+        Assert.DoesNotContain(target => target.MonitoringId == project.Id, await Targets(server, "weur"));
 
         // Another team can't move a project it can't see.
         await using var stranger = await SignInWithATeamOfTheirOwn(server);
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.GetController<IProjectsController>()
-            .SetLocations(new() { ProjectId = project.Id, Locations = ["enam"] }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.GetController<IMonitoringsController>()
+            .SetLocations(new() { MonitoringId = project.Id, Locations = ["enam"] }, TestContext.CancellationToken));
 
         // A project waiting to be reconnected is watched from nowhere, as from Germany.
-        await projects.SetLocations(new() { ProjectId = project.Id, Locations = ["enam"] }, TestContext.CancellationToken);
+        await projects.SetLocations(new() { MonitoringId = project.Id, Locations = ["enam"] }, TestContext.CancellationToken);
         customerApp.Revoke();
         await Probe(server, project.Id);
-        Assert.DoesNotContain(target => target.ProjectId == project.Id, await Targets(server, "enam"));
+        Assert.DoesNotContain(target => target.MonitoringId == project.Id, await Targets(server, "enam"));
     }
 
     [TestMethod]
@@ -96,18 +96,18 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp { Server = "https://api.customer.example", HasStaticFrontEnd = true };
         await using var server = await StartServer(customerApp, NetworkSecret);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
-        var target = (await Targets(server, "enam")).Single(target => target.ProjectId == project.Id);
+        var target = (await Targets(server, "enam")).Single(target => target.MonitoringId == project.Id);
         Assert.AreEqual("https://api.customer.example/health", target.Url);
         Assert.IsTrue(target.IsServerHealth);
 
-        await PostResults(server, new() { Location = "enam", Colo = "IAD", Results = [new() { ProjectId = project.Id, At = DateTimeOffset.UtcNow, ResponseMs = 40, CacheHit = true }] });
+        await PostResults(server, new() { Location = "enam", Colo = "IAD", Results = [new() { MonitoringId = project.Id, At = DateTimeOffset.UtcNow, ResponseMs = 40, CacheHit = true }] });
 
         // A server's /health says nothing of a cache in front of the pages (bitfabric-internal/specs/monitoring.md, Response
         // time).
-        Assert.IsFalse((await projects.GetProjects(null, TestContext.CancellationToken)).Single().HasCacheWarning);
+        Assert.IsFalse((await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().HasCacheWarning);
     }
 
     [TestMethod]
@@ -116,7 +116,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp, NetworkSecret);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         var now = DateTimeOffset.UtcNow;
@@ -127,14 +127,14 @@ public partial class ProjectMonitoringTests
             Colo = "iad",
             Results =
             [
-                new() { ProjectId = project.Id, At = now.AddMinutes(-2), ResponseMs = null, Error = "timeout" },
+                new() { MonitoringId = project.Id, At = now.AddMinutes(-2), ResponseMs = null, Error = "timeout" },
                 // The same app's cache ignores the query string when asked from there.
-                new() { ProjectId = project.Id, At = now, ResponseMs = 123, CacheHit = true }
+                new() { MonitoringId = project.Id, At = now, ResponseMs = 123, CacheHit = true }
             ]
         });
         Assert.AreEqual(2, answer.Accepted);
 
-        var details = await projects.GetProject(project.Id, TestContext.CancellationToken);
+        var details = await projects.GetMonitoring(project.Id, TestContext.CancellationToken);
 
         // Germany first, then the Network's locations; every page lists the regions that reported in the last 10 minutes.
         Assert.AreSequenceEqual(new[] { "Germany", "Eastern North America" }, details.Regions);
@@ -144,19 +144,19 @@ public partial class ProjectMonitoringTests
         Assert.AreEqual(123, reading.ResponseMs);
         // The report and its parts are still Germany's alone.
         Assert.AreEqual("1.0.0+aaaa111", details.ApplicationVersion);
-        Assert.AreEqual(ProjectHealth.Operational, details.Project!.Health);
+        Assert.AreEqual(ProjectHealth.Operational, details.Monitoring!.Health);
 
-        Assert.IsTrue((await projects.GetProjects(null, TestContext.CancellationToken)).Single().HasCacheWarning);
+        Assert.IsTrue((await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().HasCacheWarning);
 
         // A bar a minute: the home page from Eastern North America, with no report row, since the Network reads none.
-        var minutes = await projects.GetPerformance(new() { ProjectId = project.Id, From = now.AddHours(-1), To = now.AddMinutes(1), StepMinutes = 1 }, TestContext.CancellationToken);
+        var minutes = await projects.GetPerformance(new() { MonitoringId = project.Id, From = now.AddHours(-1), To = now.AddMinutes(1), StepMinutes = 1 }, TestContext.CancellationToken);
         var home = minutes.Series.Single(series => series.Key == ProjectRollupKeys.HomePage && series.Region == "Eastern North America").Points;
         Assert.AreEqual(123, home[^1].AverageMs);
         Assert.AreEqual(1, home[0].Failed, "No answer is a failed bar.");
         Assert.DoesNotContain(series => series.Key == ProjectRollupKeys.Report && series.Region == "Eastern North America", minutes.Series);
 
         // The 15 minute rollups count both, as they count Germany's home page.
-        var quarters = await projects.GetPerformance(new() { ProjectId = project.Id, From = now.AddHours(-1), To = now.AddMinutes(1), StepMinutes = 15 }, TestContext.CancellationToken);
+        var quarters = await projects.GetPerformance(new() { MonitoringId = project.Id, From = now.AddHours(-1), To = now.AddMinutes(1), StepMinutes = 15 }, TestContext.CancellationToken);
         var homeQuarters = quarters.Series.Single(series => series.Key == ProjectRollupKeys.HomePage && series.Region == "Eastern North America").Points;
         Assert.AreEqual(2, homeQuarters.Sum(point => point.Count));
         Assert.AreEqual(1, homeQuarters.Sum(point => point.Failed));
@@ -166,7 +166,7 @@ public partial class ProjectMonitoringTests
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var rounds = await dbContext.ProjectProbes.IgnoreQueryFilters()
-                                                  .Where(probe => probe.ProjectId == project.Id && probe.Colo != null)
+                                                  .Where(probe => probe.MonitoringId == project.Id && probe.Colo != null)
                                                   .OrderBy(probe => probe.At)
                                                   .ToListAsync(TestContext.CancellationToken);
 
@@ -184,9 +184,9 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp, NetworkSecret);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
-        await projects.SetLocations(new() { ProjectId = project.Id, Locations = ["weur"] }, TestContext.CancellationToken);
+        await projects.SetLocations(new() { MonitoringId = project.Id, Locations = ["weur"] }, TestContext.CancellationToken);
 
         var now = DateTimeOffset.UtcNow;
 
@@ -197,24 +197,24 @@ public partial class ProjectMonitoringTests
             Results =
             [
                 // No such project.
-                new() { ProjectId = Guid.NewGuid(), At = now, ResponseMs = 10 },
+                new() { MonitoringId = Guid.NewGuid(), At = now, ResponseMs = 10 },
                 // A project that didn't pick Eastern North America.
-                new() { ProjectId = project.Id, At = now, ResponseMs = 10 }
+                new() { MonitoringId = project.Id, At = now, ResponseMs = 10 }
             ]
         });
         Assert.AreEqual(0, answer.Accepted);
 
         // From the location it picked, but too long ago to add to its history.
-        Assert.AreEqual(0, (await PostResults(server, new() { Location = "weur", Colo = "AMS", Results = [new() { ProjectId = project.Id, At = now.AddHours(-1), ResponseMs = 10 }] })).Accepted);
+        Assert.AreEqual(0, (await PostResults(server, new() { Location = "weur", Colo = "AMS", Results = [new() { MonitoringId = project.Id, At = now.AddHours(-1), ResponseMs = 10 }] })).Accepted);
 
-        var details = await projects.GetProject(project.Id, TestContext.CancellationToken);
+        var details = await projects.GetMonitoring(project.Id, TestContext.CancellationToken);
         Assert.IsEmpty(details.NetworkReadings);
         Assert.AreSequenceEqual(new[] { "Germany" }, details.Regions);
 
         // A reading that doesn't say where it ran is refused whole.
         using var http = server.CreateRawHttpClient();
         using var noColo = await SendAsTheNetwork(http, HttpMethod.Post, "api/v1/MonitoringNetwork/Results", NetworkSecret,
-                                                  new NetworkResultsDto { Location = "weur", Colo = "", Results = [new() { ProjectId = project.Id, At = now, ResponseMs = 10 }] });
+                                                  new NetworkResultsDto { Location = "weur", Colo = "", Results = [new() { MonitoringId = project.Id, At = now, ResponseMs = 10 }] });
         Assert.AreEqual(HttpStatusCode.BadRequest, noColo.StatusCode);
     }
 

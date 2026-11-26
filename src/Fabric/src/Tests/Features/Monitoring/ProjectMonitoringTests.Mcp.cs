@@ -61,7 +61,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         customerApp.Fail("smtp", "The mail server didn't answer within 5 s.");
         await Probe(server, project.Id);
@@ -106,7 +106,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         await using var mcp = await ConnectToMcp(server, await AccessTokenOf(client));
 
@@ -148,7 +148,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var incidents = client.GetController<IProjectIncidentsController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         customerApp.Fail("AppDbContext", "The database didn't answer.");
         await Probe(server, project.Id);
@@ -207,7 +207,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var owner = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(owner.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(owner.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         customerApp.Fail("smtp", "The mail server didn't answer within 5 s.");
         await Probe(server, project.Id);
@@ -273,7 +273,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var teams = client.GetController<ITenantController>();
         var firstTeam = (await teams.GetCurrentTenant(TestContext.CancellationToken))!;
 
@@ -324,7 +324,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         customerApp.Fail("smtp", "The mail server didn't answer within 5 s.");
         await Probe(server, project.Id);

@@ -29,20 +29,20 @@ public partial class ProjectScanScheduler
     public ProjectScanKind[] Kinds => [.. ScanFindings.AvailableKinds.Where(kind => scanners.Any(scanner => scanner.Kind == kind && scanner.IsAvailable))];
 
     /// <summary>Every kind bit Fabric runs, after <paramref name="delay"/>; returns the scans written, not the ones joined.</summary>
-    public async Task<List<ProjectScan>> Request(Project project, ProjectScanTrigger trigger, TimeSpan delay, Guid? userId, string? applicationVersion, CancellationToken cancellationToken)
+    public async Task<List<ProjectScan>> Request(ProjectMonitoring project, ProjectScanTrigger trigger, TimeSpan delay, Guid? userId, string? applicationVersion, CancellationToken cancellationToken)
     {
         var now = timeProvider.GetUtcNow();
         var staleBefore = now - StaleAfter;
 
         var waiting = await dbContext.ProjectScans.IgnoreQueryFilters()
-            .Where(scan => scan.ProjectId == project.Id && scan.FinishedAt == null && scan.StartedAt == null && scan.RequestedAt >= staleBefore)
+            .Where(scan => scan.MonitoringId == project.Id && scan.FinishedAt == null && scan.StartedAt == null && scan.RequestedAt >= staleBefore)
             .Select(scan => scan.Kind)
             .ToListAsync(cancellationToken);
 
         List<ProjectScan> scans = [.. Kinds.Where(kind => waiting.Contains(kind) is false).Select(kind => new ProjectScan
         {
             Id = Guid.CreateSequentialGuid(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = project.TenantId,
             Kind = kind,
             Trigger = trigger,
@@ -72,7 +72,7 @@ public partial class ProjectScanScheduler
             }
         }
 
-        logger.LogInformation("Asked for {Count} scan(s) of project {ProjectId} ({Trigger}), starting in {Delay}.", scans.Count, project.Id, trigger, delay);
+        logger.LogInformation("Asked for {Count} scan(s) of project {MonitoringId} ({Trigger}), starting in {Delay}.", scans.Count, project.Id, trigger, delay);
 
         return scans;
     }
@@ -81,10 +81,10 @@ public partial class ProjectScanScheduler
     /// A deployment the health check showed (See ProjectProber.RecordStart): its scans a couple of minutes later, so the new
     /// build is up everywhere, when the owner allows scans after deployments. Off until they do.
     /// </summary>
-    public async Task AfterDeployment(Project project, string? applicationVersion, CancellationToken cancellationToken)
+    public async Task AfterDeployment(ProjectMonitoring project, string? applicationVersion, CancellationToken cancellationToken)
     {
         var allowed = await dbContext.ProjectScanSettings.IgnoreQueryFilters()
-            .Where(row => row.ProjectId == project.Id)
+            .Where(row => row.MonitoringId == project.Id)
             .Select(row => (bool?)row.ScanAfterDeployments)
             .FirstOrDefaultAsync(cancellationToken) ?? false;
 
@@ -98,7 +98,7 @@ public partial class ProjectScanScheduler
     /// "Run scans now", from the Scans tab or an AI agent on /mcp: every kind at once, at most once every 10 minutes a
     /// project. Returns how long until it may be asked for again when it's too soon, null when the scans were asked for.
     /// </summary>
-    public async Task<TimeSpan?> RunByHand(Project project, Guid userId, CancellationToken cancellationToken)
+    public async Task<TimeSpan?> RunByHand(ProjectMonitoring project, Guid userId, CancellationToken cancellationToken)
     {
         // Two presses at once must not both pass the check.
         await using (await distributedLockFactory($"bit-fabric:monitoring-scan-run-now:{project.Id}").AcquireAsync(TimeSpan.FromSeconds(10), cancellationToken))
@@ -106,7 +106,7 @@ public partial class ProjectScanScheduler
             var now = timeProvider.GetUtcNow();
 
             var lastByHand = await dbContext.ProjectScans.IgnoreQueryFilters()
-                .Where(scan => scan.ProjectId == project.Id && scan.Trigger == ProjectScanTrigger.Manual)
+                .Where(scan => scan.MonitoringId == project.Id && scan.Trigger == ProjectScanTrigger.Manual)
                 .MaxAsync(scan => (DateTimeOffset?)scan.RequestedAt, cancellationToken);
 
             if (lastByHand is { } last && last + ProjectScanReader.RunNowInterval > now)
@@ -119,9 +119,9 @@ public partial class ProjectScanScheduler
     }
 
     /// <summary>The first scans of a project just connected; a project reconnected keeps the history it has.</summary>
-    public async Task AfterConnecting(Project project, Guid userId, CancellationToken cancellationToken)
+    public async Task AfterConnecting(ProjectMonitoring project, Guid userId, CancellationToken cancellationToken)
     {
-        if (await dbContext.ProjectScans.IgnoreQueryFilters().AnyAsync(scan => scan.ProjectId == project.Id, cancellationToken))
+        if (await dbContext.ProjectScans.IgnoreQueryFilters().AnyAsync(scan => scan.MonitoringId == project.Id, cancellationToken))
             return;
 
         await Request(project, ProjectScanTrigger.Connected, TimeSpan.Zero, userId, applicationVersion: null, cancellationToken);

@@ -25,18 +25,18 @@ public static class IWorkbenchEndpointRouteBuilderExtensions
             endpoints.MapGet($"api/v1/Attachment/GetAttachment/{{id:guid}}/{Bit.Fabric.Shared.Features.Attachments.AttachmentKind.ProjectIcon}", (Guid id) =>
                 MonitoringIcons.Find(id) is { } png ? Results.File(png, "image/png") : Results.NotFound());
 
-            endpoints.MapGet($"{Bit.Fabric.Shared.Features.Monitoring.IProjectsController.ExportHistoryUri}/{{projectId:guid}}/{{format}}", (Guid projectId, string format) =>
-                MonitoringExports.Find(projectId) is not { } project ? Results.NotFound()
+            endpoints.MapGet($"{Bit.Fabric.Shared.Features.Monitoring.IMonitoringsController.ExportHistoryUri}/{{monitoringId:guid}}/{{format}}", (Guid monitoringId, string format) =>
+                MonitoringExports.Find(monitoringId) is not { } project ? Results.NotFound()
                 : format is "json" ? Results.File(MonitoringExports.HistoryJson(project), "application/json", MonitoringExports.FileNameOf(project, "history", "json"))
                 : Results.File(MonitoringExports.HistoryCsv(project), "text/csv", MonitoringExports.FileNameOf(project, "history", "csv")));
 
-            endpoints.MapGet($"{Bit.Fabric.Shared.Features.Monitoring.IProjectSlaController.ExportCsvUri}/{{projectId:guid}}/{{year:int}}/{{month:int}}", (Guid projectId, int year, int month) =>
-                MonitoringExports.Find(projectId) is { } project && month is >= 1 and <= 12
+            endpoints.MapGet($"{Bit.Fabric.Shared.Features.Monitoring.IProjectSlaController.ExportCsvUri}/{{monitoringId:guid}}/{{year:int}}/{{month:int}}", (Guid monitoringId, int year, int month) =>
+                MonitoringExports.Find(monitoringId) is { } project && month is >= 1 and <= 12
                     ? Results.File(MonitoringExports.SlaCsv(project, year, month), "text/csv", MonitoringExports.FileNameOf(project, $"sla-{year:D4}-{month:D2}", "csv"))
                     : Results.NotFound());
 
-            endpoints.MapGet($"{Bit.Fabric.Shared.Features.Monitoring.IProjectSlaController.ExportPdfUri}/{{projectId:guid}}/{{year:int}}/{{month:int}}", (Guid projectId, int year, int month) =>
-                MonitoringExports.Find(projectId) is { } project && month is >= 1 and <= 12
+            endpoints.MapGet($"{Bit.Fabric.Shared.Features.Monitoring.IProjectSlaController.ExportPdfUri}/{{monitoringId:guid}}/{{year:int}}/{{month:int}}", (Guid monitoringId, int year, int month) =>
+                MonitoringExports.Find(monitoringId) is { } project && month is >= 1 and <= 12
                     ? Results.File(MonitoringExports.SlaPdf(project, year, month), "application/pdf", MonitoringExports.FileNameOf(project, $"sla-{year:D4}-{month:D2}", "pdf"))
                     : Results.NotFound());
         }

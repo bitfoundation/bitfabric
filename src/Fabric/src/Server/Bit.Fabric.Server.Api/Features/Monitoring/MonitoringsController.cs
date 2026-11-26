@@ -14,7 +14,7 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring;
 /// </summary>
 [ApiVersion(1)]
 [ApiController, Route("api/v{v:apiVersion}/[controller]/[action]"), Authorize(Policy = AuthPolicies.TENANT_SELECTED)]
-public partial class ProjectsController : AppControllerBase, IProjectsController
+public partial class MonitoringsController : AppControllerBase, IMonitoringsController
 {
     /// <summary>Far more than a team watches; it stops a script from making this server check thousands of addresses.</summary>
     private const int MaxProjectsPerTenant = 100;
@@ -26,26 +26,27 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
     [AutoInject] private ProjectProber prober = default!;
     [AutoInject] private ProjectScanScheduler scanScheduler = default!;
     [AutoInject] private IFusionCache cache = default!;
-    [AutoInject] private ProjectsService projectsService = default!;
+    [AutoInject] private MonitoringsService monitoringsService = default!;
     [AutoInject] private ProjectHistoryExport historyExport = default!;
+    [AutoInject] private Projects.ProjectsService projectsService = default!;
 
-    /// <summary>Read the same way by the AI tools (See ProjectsService).</summary>
+    /// <summary>Read the same way by the AI tools (See MonitoringsService).</summary>
     [HttpGet]
-    public Task<List<ProjectDto>> GetProjects(string? timeZone, CancellationToken cancellationToken)
-        => projectsService.GetProjects(ZoneOf(timeZone), cancellationToken);
+    public Task<List<MonitoringDto>> GetMonitorings(string? timeZone, CancellationToken cancellationToken)
+        => monitoringsService.GetMonitorings(ZoneOf(timeZone), cancellationToken);
 
     /// <summary>The viewer's zone, by an IANA or a Windows id; UTC for one this server doesn't know.</summary>
     internal static TimeZoneInfo ZoneOf(string? timeZone)
         => string.IsNullOrWhiteSpace(timeZone) is false && TimeZoneInfo.TryFindSystemTimeZoneById(timeZone, out var zone) ? zone : TimeZoneInfo.Utc;
 
     [HttpGet("{id}")]
-    public Task<ProjectDetailsDto> GetProject(Guid id, CancellationToken cancellationToken)
-        => projectsService.GetProject(id, cancellationToken);
+    public Task<MonitoringDetailsDto> GetMonitoring(Guid id, CancellationToken cancellationToken)
+        => monitoringsService.GetMonitoring(id, cancellationToken);
 
-    /// <summary>Read the same way by the AI tools (See ProjectsService.GetMap).</summary>
+    /// <summary>Read the same way by the AI tools (See MonitoringsService.GetMap).</summary>
     [HttpGet("{id}")]
     public Task<ProjectMapDto> GetMap(Guid id, CancellationToken cancellationToken)
-        => projectsService.GetMap(id, cancellationToken);
+        => monitoringsService.GetMap(id, cancellationToken);
 
     /// <summary>The widths a bar may have, in minutes: a round, then the rollup and its multiples.</summary>
     private static readonly int[] performanceSteps = [1, ProjectRollup.BucketMinutes, 60, 360, 1440];
@@ -56,9 +57,9 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
     [HttpPost]
     public async Task<ProjectPerformanceDto> GetPerformance(ProjectPerformanceRequestDto request, CancellationToken cancellationToken)
     {
-        var id = request.ProjectId;
+        var id = request.MonitoringId;
 
-        if (await DbContext.Projects.AnyAsync(project => project.Id == id, cancellationToken) is false)
+        if (await DbContext.Monitorings.AnyAsync(project => project.Id == id, cancellationToken) is false)
             throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
         var from = request.From.ToUniversalTime();
@@ -75,7 +76,7 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
         {
             // Every round, a bar a minute; a reconnect's round and the job's in the same minute show as the later one.
             var rounds = await DbContext.ProjectProbes.AsNoTracking()
-                .Where(probe => probe.ProjectId == id && probe.At >= from && probe.At < to)
+                .Where(probe => probe.MonitoringId == id && probe.At >= from && probe.At < to)
                 .OrderBy(probe => probe.At)
                 .ToListAsync(cancellationToken);
 
@@ -106,7 +107,7 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
         {
             var fromBucket = ProjectRollup.BucketOf(from);
             var rollups = await DbContext.ProjectRollups.AsNoTracking()
-                .Where(rollup => rollup.ProjectId == id && rollup.BucketStart >= fromBucket && rollup.BucketStart < to)
+                .Where(rollup => rollup.MonitoringId == id && rollup.BucketStart >= fromBucket && rollup.BucketStart < to)
                 .ToListAsync(cancellationToken);
 
             points.AddRange(rollups.GroupBy(rollup => (Key: rollup.CheckKey!, Region: rollup.Region!, Start: Floor(rollup.BucketStart, step)))
@@ -115,7 +116,7 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
         }
 
         var starts = await DbContext.ProjectStarts
-            .Where(start => start.ProjectId == id && start.At >= from && start.At < to)
+            .Where(start => start.MonitoringId == id && start.At >= from && start.At < to)
             .OrderBy(start => start.At)
             .Select(start => new ProjectStartDto { At = start.At, IsDeploy = start.IsDeploy, ApplicationVersion = start.ApplicationVersion })
             .ToArrayAsync(cancellationToken);
@@ -158,7 +159,7 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
 
         if (result.Address is not null)
         {
-            result.IsAlreadyAdded = await DbContext.Projects.AnyAsync(project => project.Address == result.Address, cancellationToken);
+            result.IsAlreadyAdded = await DbContext.Monitorings.AnyAsync(project => project.Address == result.Address, cancellationToken);
         }
 
         return result;
@@ -172,9 +173,19 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
         if (found.Outcome is not AddressProbeOutcome.Found)
             throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringHealthReportNotFoundAtAddress)]);
 
-        var existing = await DbContext.Projects.AsNoTracking().FirstOrDefaultAsync(project => project.Address == found.Address, cancellationToken);
+        var existing = await DbContext.Monitorings.AsNoTracking().FirstOrDefaultAsync(project => project.Address == found.Address, cancellationToken);
 
-        if (existing is null && await DbContext.Projects.CountAsync(cancellationToken) >= MaxProjectsPerTenant)
+        // A new environment of a project of the team's own, by its page's "Add an environment".
+        if (request.ProjectId is { } projectId && await DbContext.Projects.AnyAsync(project => project.Id == projectId, cancellationToken) is false)
+            throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
+
+        var environment = string.IsNullOrWhiteSpace(request.Environment) ? ProjectMonitoring.Production : request.Environment.Trim();
+
+        if (existing is null && request.ProjectId is { } joining
+            && await DbContext.Monitorings.AnyAsync(monitoring => monitoring.ProjectId == joining && monitoring.Environment!.ToLower() == environment.ToLower(), cancellationToken))
+            throw new BadRequestException(Localizer["This project already has an environment named {0}.", environment]);
+
+        if (existing is null && await DbContext.Monitorings.CountAsync(cancellationToken) >= MaxProjectsPerTenant)
             throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringProjectsLimit), MaxProjectsPerTenant]);
 
         var resource = await addressProbe.ReadResourceMetadata(found.ServerAddress!, cancellationToken)
@@ -200,6 +211,8 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
             Address = found.Address,
             ServerAddress = found.ServerAddress,
             Name = string.IsNullOrWhiteSpace(request.Name) ? found.AppTitle ?? new Uri(found.Address!).Host : request.Name.Trim(),
+            ProjectId = request.ProjectId,
+            Environment = environment,
             TemplateVersion = found.TemplateVersion,
             HasStaticFrontEnd = found.HasStaticFrontEnd,
             Issuer = issuer,
@@ -233,7 +246,7 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
     }
 
     [HttpPost]
-    public async Task<ProjectDto> CompleteConnect(CompleteConnectRequestDto request, CancellationToken cancellationToken)
+    public async Task<MonitoringDto> CompleteConnect(CompleteConnectRequestDto request, CancellationToken cancellationToken)
     {
         var key = PendingKey(request.State!);
         var json = await cache.GetOrDefaultAsync<string>(key, token: cancellationToken);
@@ -273,16 +286,31 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
 
         var now = TimeProvider.GetUtcNow();
 
-        var project = await DbContext.Projects.Include(p => p.Connection).FirstOrDefaultAsync(p => p.Address == pending.Address, cancellationToken);
+        var project = await DbContext.Monitorings.Include(p => p.Connection).FirstOrDefaultAsync(p => p.Address == pending.Address, cancellationToken);
 
         if (project is null)
         {
+            // The project it joins: the one its page added it to, or a new one; the first round moves it to the team's
+            // project of the id its app reports, when there is one (See ProjectLinker).
+            var parent = pending.ProjectId is { } parentId
+                ? await DbContext.Projects.FirstOrDefaultAsync(p => p.Id == parentId, cancellationToken)
+                  ?? throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)])
+                : null;
+
+            if (parent is null)
+            {
+                parent = new() { Id = Guid.CreateSequentialGuid(), TenantId = pending.TenantId, Name = pending.Name, CreatedOn = now };
+                await DbContext.Projects.AddAsync(parent, cancellationToken);
+            }
+
             project = new()
             {
                 Id = Guid.CreateSequentialGuid(),
                 TenantId = pending.TenantId,
+                ProjectId = parent.Id,
+                Environment = pending.Environment ?? ProjectMonitoring.Production,
                 Address = pending.Address,
-                Name = pending.Name,
+                Name = ProjectMonitoring.NameOf(parent.Name, pending.Environment),
                 CreatedOn = now,
                 Health = ProjectHealth.NoData,
                 // An SLA month follows the zone of whoever added the project until someone changes it in Settings.
@@ -290,15 +318,18 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
                 // Besides Germany, which reads the report; a reconnect keeps the locations the customer picked.
                 Locations = [.. NetworkLocations.Defaults]
             };
-            await DbContext.Projects.AddAsync(project, cancellationToken);
+            await DbContext.Monitorings.AddAsync(project, cancellationToken);
+
+            // Whoever adds it works on the project.
+            await projectsService.EnsureMember(parent.Id, pending.TenantId, pending.UserId, cancellationToken);
 
             // Whoever adds it hears about it first: a push at once, an email 10 minutes later if nobody is on it yet.
             // The Alerts tab changes them.
             var culture = CultureInfo.CurrentUICulture.Name;
             await DbContext.ProjectAlertRoutes.AddRangeAsync(
             [
-                new() { Id = Guid.CreateSequentialGuid(), ProjectId = project.Id, TenantId = project.TenantId, Step = 0, Channel = ProjectAlertChannel.Push, UserId = pending.UserId, Culture = culture },
-                new() { Id = Guid.CreateSequentialGuid(), ProjectId = project.Id, TenantId = project.TenantId, Step = 1, DelayMinutes = 10, Channel = ProjectAlertChannel.Email, UserId = pending.UserId, Culture = culture }
+                new() { Id = Guid.CreateSequentialGuid(), MonitoringId = project.Id, TenantId = project.TenantId, Step = 0, Channel = ProjectAlertChannel.Push, UserId = pending.UserId, Culture = culture },
+                new() { Id = Guid.CreateSequentialGuid(), MonitoringId = project.Id, TenantId = project.TenantId, Step = 1, DelayMinutes = 10, Channel = ProjectAlertChannel.Email, UserId = pending.UserId, Culture = culture }
             ], cancellationToken);
         }
 
@@ -313,7 +344,7 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
         {
             // A new project's, or a disconnected one's, which kept none (See Disconnect): added as new, since its key, the
             // project's id, is already set and would otherwise read as a row to update.
-            connection = project.Connection = new() { ProjectId = project.Id, TenantId = project.TenantId };
+            connection = project.Connection = new() { MonitoringId = project.Id, TenantId = project.TenantId };
             await DbContext.ProjectConnections.AddAsync(connection, cancellationToken);
         }
         connection.Issuer = pending.Issuer;
@@ -333,11 +364,11 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
         // And its first scans, once.
         await scanScheduler.AfterConnecting(project, pending.UserId, cancellationToken);
 
-        return (await DbContext.Projects.AsNoTracking().FirstAsync(p => p.Id == project.Id, cancellationToken)).Map();
+        return (await DbContext.Monitorings.AsNoTracking().Include(p => p.Project).FirstAsync(p => p.Id == project.Id, cancellationToken)).Map();
     }
 
     [HttpPost]
-    public async Task<ProjectDto> SetLocations(SetProjectLocationsRequestDto request, CancellationToken cancellationToken)
+    public async Task<MonitoringDto> SetLocations(SetProjectLocationsRequestDto request, CancellationToken cancellationToken)
     {
         if (request.Locations.Any(code => NetworkLocations.Find(code) is null))
             throw new BadRequestException(Localizer[nameof(AppStrings.MonitoringNoSuchNetworkLocation)]);
@@ -347,21 +378,21 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
 
         // Without the Version check the other updates make: the probe job writes the row every minute, so the Version the
         // page read would be stale within a minute, and the locations are a whole set the request replaces.
-        var updated = await DbContext.Projects.Where(project => project.Id == request.ProjectId)
+        var updated = await DbContext.Monitorings.Where(project => project.Id == request.MonitoringId)
                                               .ExecuteUpdateAsync(setters => setters.SetProperty(project => project.Locations, locations), cancellationToken);
 
         if (updated is 0)
             throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
-        return (await DbContext.Projects.AsNoTracking().FirstAsync(project => project.Id == request.ProjectId, cancellationToken)).Map();
+        return (await DbContext.Monitorings.AsNoTracking().FirstAsync(project => project.Id == request.MonitoringId, cancellationToken)).Map();
     }
 
     [HttpPost("{id}")]
-    public async Task<ProjectDto> Disconnect(Guid id, CancellationToken cancellationToken)
+    public async Task<MonitoringDto> Disconnect(Guid id, CancellationToken cancellationToken)
     {
         // Without the Version check the other updates make, as SetLocations: the probe job writes the row every minute.
         // Nothing reads the app from here on, so whatever it was is no data now.
-        var updated = await DbContext.Projects.Where(project => project.Id == id)
+        var updated = await DbContext.Monitorings.Where(project => project.Id == id)
                                               .ExecuteUpdateAsync(setters => setters.SetProperty(project => project.ConnectionStatus, ProjectConnectionStatus.Disconnected)
                                                                                     .SetProperty(project => project.ConnectionProblem, (string?)null)
                                                                                     .SetProperty(project => project.Health, ProjectHealth.NoData), cancellationToken);
@@ -372,21 +403,21 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
         // The approval's tokens go: bit Fabric keeps no key to an app it no longer watches. The app has no way to be told
         // (the template has no RFC 7009 revocation endpoint), so its session of bit Fabric ends when it expires, or at once
         // from the app's own Settings, Sessions.
-        await DbContext.ProjectConnections.Where(connection => connection.ProjectId == id).ExecuteDeleteAsync(cancellationToken);
+        await DbContext.ProjectConnections.Where(connection => connection.MonitoringId == id).ExecuteDeleteAsync(cancellationToken);
 
         // An incident still open stays open, since no round will tell when it ended, but stops escalating: nobody is to be
         // woken for an app nobody watches.
-        await DbContext.ProjectIncidents.Where(incident => incident.ProjectId == id && incident.EndedAt == null)
+        await DbContext.ProjectIncidents.Where(incident => incident.MonitoringId == id && incident.EndedAt == null)
                                         .ExecuteUpdateAsync(setters => setters.SetProperty(incident => incident.NextEscalationAt, (DateTimeOffset?)null), cancellationToken);
 
-        return (await DbContext.Projects.AsNoTracking().FirstAsync(project => project.Id == id, cancellationToken)).Map();
+        return (await DbContext.Monitorings.AsNoTracking().FirstAsync(project => project.Id == id, cancellationToken)).Map();
     }
 
-    /// <inheritdoc cref="IProjectsController.ExportHistoryUri"/>
-    [HttpGet("{projectId}/{format}")]
-    public async Task ExportHistory(Guid projectId, string format, CancellationToken cancellationToken)
+    /// <inheritdoc cref="IMonitoringsController.ExportHistoryUri"/>
+    [HttpGet("{monitoringId}/{format}")]
+    public async Task ExportHistory(Guid monitoringId, string format, CancellationToken cancellationToken)
     {
-        var project = await projectsService.FindProject(projectId, cancellationToken);
+        var project = await monitoringsService.FindProject(monitoringId, cancellationToken);
 
         var kind = format.ToLowerInvariant() switch
         {
@@ -408,12 +439,18 @@ public partial class ProjectsController : AppControllerBase, IProjectsController
     [HttpDelete("{id}")]
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var project = await DbContext.Projects.FirstOrDefaultAsync(project => project.Id == id, cancellationToken)
+        var project = await DbContext.Monitorings.FirstOrDefaultAsync(project => project.Id == id, cancellationToken)
             ?? throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
         // Its connection, rounds, periods and starts go with it (cascade).
-        DbContext.Projects.Remove(project);
+        DbContext.Monitorings.Remove(project);
         await DbContext.SaveChangesAsync(cancellationToken);
+
+        // A project goes with its last environment, unless it holds a license, which names it.
+        await DbContext.Projects.Where(parent => parent.Id == project.ProjectId
+                                                 && parent.Monitorings.Any() == false
+                                                 && parent.Licenses.Any() == false)
+                                .ExecuteDeleteAsync(cancellationToken);
     }
 
     internal static string PendingKey(string state) => $"monitoring-connect:{state}";

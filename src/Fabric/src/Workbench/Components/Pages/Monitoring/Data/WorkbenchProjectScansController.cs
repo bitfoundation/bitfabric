@@ -13,17 +13,17 @@ namespace Bit.Fabric.Workbench.Components.Pages.Monitoring.Data;
 public sealed class WorkbenchProjectScansController(WorkbenchScenarioState scenarioState, MonitoringSampleWorld world, AuthenticationStateProvider authenticationStateProvider)
     : MonitoringStandIn(scenarioState, world, authenticationStateProvider), IProjectScansController
 {
-    public Task<ProjectScansDto> GetScans(Guid projectId, CancellationToken cancellationToken)
+    public Task<ProjectScansDto> GetScans(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = World.Get(projectId);
+        var project = World.Get(monitoringId);
         World.MoveScansOn(project);
 
         return Load("scans", () => MonitoringSampleWorld.ScansOf(project),
-            () => new ProjectScansDto { ProjectId = projectId, Address = project.Address, Settings = project.ScanSettings }, cancellationToken);
+            () => new ProjectScansDto { MonitoringId = monitoringId, Address = project.Address, Settings = project.ScanSettings }, cancellationToken);
     }
 
     public Task<ProjectScanDto[]> GetHistory(ProjectScanHistoryRequestDto request, CancellationToken cancellationToken)
-        => Load<ProjectScanDto[]>("scan-history", () => [.. World.Get(request.ProjectId).ScanRuns
+        => Load<ProjectScanDto[]>("scan-history", () => [.. World.Get(request.MonitoringId).ScanRuns
                                                                  .Where(run => request.Kind is null || run.Kind == request.Kind)
                                                                  .Select(run => Copy(run))
                                                                  .Select(run => { run.Findings = []; return run; })], () => [], cancellationToken);
@@ -34,7 +34,7 @@ public sealed class WorkbenchProjectScansController(WorkbenchScenarioState scena
 
     public Task<ProjectScansDto> RunNow(RunProjectScansRequestDto request, CancellationToken cancellationToken) => Save(() =>
     {
-        var project = World.Get(request.ProjectId);
+        var project = World.Get(request.MonitoringId);
         var now = World.Now;
 
         if (project.CanRunScansAgainAt > now)
@@ -47,12 +47,12 @@ public sealed class WorkbenchProjectScansController(WorkbenchScenarioState scena
         return MonitoringSampleWorld.ScansOf(project);
     }, cancellationToken);
 
-    public Task<ProjectScanSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken)
-        => Load("scan-settings", () => World.Get(projectId).ScanSettings, () => new ProjectScanSettingsDto { ProjectId = projectId }, cancellationToken);
+    public Task<ProjectScanSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken)
+        => Load("scan-settings", () => World.Get(monitoringId).ScanSettings, () => new ProjectScanSettingsDto { MonitoringId = monitoringId }, cancellationToken);
 
     public Task<ProjectScanSettingsDto> SaveSettings(ProjectScanSettingsDto settings, CancellationToken cancellationToken) => Save(() =>
     {
-        var project = World.Get(settings.ProjectId);
+        var project = World.Get(settings.MonitoringId);
         project.ScanSettings = Copy(settings);
         project.ScanSettings.Version++;
 

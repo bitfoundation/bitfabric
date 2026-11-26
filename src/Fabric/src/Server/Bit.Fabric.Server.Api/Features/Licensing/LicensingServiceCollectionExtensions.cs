@@ -11,6 +11,8 @@ public static class LicensingServiceCollectionExtensions
 
         services.AddScoped<IProjectLicenseStatus, ProjectLicenseStatus>();
 
+        services.AddScoped<Projects.ProjectLicenses>();
+
         return services;
     }
 }

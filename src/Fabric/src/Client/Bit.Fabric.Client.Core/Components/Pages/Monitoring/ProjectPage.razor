@@ -3,7 +3,7 @@
 @attribute [Authorize(Policy = AuthPolicies.TENANT_SELECTED)]
 @inherits AppPageBase
 
-<AppPageData Title="@(details?.Project?.Name ?? Localizer[nameof(AppStrings.MonitoringProject)])" PageTitle="@(details?.Project?.Name ?? Localizer[nameof(AppStrings.MonitoringProject)])" />
+<AppPageData Title="@(details?.Monitoring?.Name ?? Localizer[nameof(AppStrings.MonitoringProject)])" PageTitle="@(details?.Monitoring?.Name ?? Localizer[nameof(AppStrings.MonitoringProject)])" />
 
 <div class="project-page">
     <div class="back">
@@ -17,7 +17,7 @@
             <BitShimmer Height="14rem" Radius="0.75rem" />
         </div>
     }
-    else if (details?.Project is null && isLoadFailed)
+    else if (details?.Monitoring is null && isLoadFailed)
     {
         @* It didn't load, which says nothing of whether it's still there: only the server saying so does (See Load). *@
         <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.75rem" Padding="3rem 1rem" role="alert">
@@ -27,7 +27,7 @@
             <BitButton IconName="@BitIconName.Refresh" OnClick="WrapHandled(Load)">@Localizer[nameof(AppStrings.TryAgain)]</BitButton>
         </BitStack>
     }
-    else if (details?.Project is not { } project)
+    else if (details?.Monitoring is not { } project)
     {
         <BitStack HorizontalAlign="BitAlignment.Center" Gap="0.75rem" Padding="3rem 1rem">
             <BitIcon IconName="@BitIconName.Unknown" Size="BitSize.Large" Color="BitColor.SecondaryForeground" />
@@ -123,7 +123,7 @@
             <BitPivotItem Key="@IncidentsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringIncidents)]" IconName="@BitIconName.WarningSolid">
                 @if (SelectedTab == IncidentsTab)
                 {
-                    <ProjectIncidents ProjectId="project.Id" />
+                    <ProjectIncidents MonitoringId="project.Id" />
                 }
             </BitPivotItem>
             <BitPivotItem Key="@PerformanceTab" HeaderText="@Localizer[nameof(AppStrings.AppHomePerformance)]" IconName="@BitIconName.SpeedHigh">
@@ -135,34 +135,34 @@
             <BitPivotItem Key="@ScansTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringScans)]" IconName="@BitIconName.SiteScan">
                 @if (SelectedTab == ScansTab)
                 {
-                    <ProjectScans ProjectId="project.Id" />
+                    <ProjectScans MonitoringId="project.Id" />
                 }
             </BitPivotItem>
             <BitPivotItem Key="@SlaTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringSla)]" IconName="@BitIconName.ReportDocument">
                 @if (SelectedTab == SlaTab)
                 {
-                    <ProjectSla ProjectId="project.Id" />
+                    <ProjectSla MonitoringId="project.Id" />
                 }
             </BitPivotItem>
             <BitPivotItem Key="@LocationsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringLocations)]" IconName="@BitIconName.Globe">
-                <ProjectNetwork Project="project" Readings="details.NetworkReadings" OnSaved="WrapHandled<ProjectDto>(saved => details.Project = saved)" />
+                <ProjectNetwork Project="project" Readings="details.NetworkReadings" OnSaved="WrapHandled<MonitoringDto>(saved => details.Monitoring = saved)" />
             </BitPivotItem>
             <BitPivotItem Key="@StatusTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringStatusPage)]" IconName="@BitIconName.Megaphone">
                 @if (SelectedTab == StatusTab)
                 {
-                    <ProjectStatusPage ProjectId="project.Id" />
+                    <ProjectStatusPage MonitoringId="project.Id" />
                 }
             </BitPivotItem>
             <BitPivotItem Key="@AlertsTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringAlerts)]" IconName="@BitIconName.Ringer">
                 @if (SelectedTab == AlertsTab)
                 {
-                    <ProjectAlerts ProjectId="project.Id" />
+                    <ProjectAlerts MonitoringId="project.Id" />
                 }
             </BitPivotItem>
             <BitPivotItem Key="@SettingsTab" HeaderText="@Localizer[nameof(AppStrings.Settings)]" IconName="@BitIconName.Settings">
                 @if (SelectedTab == SettingsTab)
                 {
-                    <ProjectSettings Details="details" OnRenamed="WrapHandled<string>(Renamed)" OnDisconnected="WrapHandled<ProjectDto>(saved => details.Project = saved)" OnOpenTab="WrapHandled<string>(OpenTab)" />
+                    <ProjectSettings Details="details" OnRenamed="WrapHandled<string>(Renamed)" OnDisconnected="WrapHandled<MonitoringDto>(saved => details.Monitoring = saved)" OnOpenTab="WrapHandled<string>(OpenTab)" />
                 }
             </BitPivotItem>
         </BitPivot>

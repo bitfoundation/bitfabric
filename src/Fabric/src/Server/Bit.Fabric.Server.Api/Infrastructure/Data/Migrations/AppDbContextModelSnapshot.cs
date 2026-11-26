@@ -16,7 +16,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261125234833_ProbeCheckDependency";
+    public override string LastMigrationId => "20261126124500_Initial";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -776,6 +776,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasMaxLength(64)
                     .HasColumnType("character varying(64)");
 
+                b.Property<Guid?>("IssuedByUserId")
+                    .HasColumnType("uuid");
+
                 b.Property<DateTimeOffset>("IssuedOn")
                     .HasColumnType("timestamp with time zone");
 
@@ -787,7 +790,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<Guid>("ProjectId")
                     .HasColumnType("uuid");
 
-                b.Property<Guid>("UserId")
+                b.Property<Guid>("TenantId")
                     .HasColumnType("uuid");
 
                 b.Property<uint>("Version")
@@ -801,20 +804,31 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.HasIndex("ClaimCodeHash")
                     .HasFilter("\"ClaimedOn\" IS NULL");
 
-                b.HasIndex("UserId");
+                b.HasIndex("IssuedByUserId");
 
                 b.HasIndex("ProjectId", "ExpiresOn");
+
+                b.HasIndex("TenantId", "ProjectId");
 
                 b.ToTable("IssuedLicenses");
             });
 
-        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.ProjectTrial", b =>
             {
                 b.Property<Guid>("Id")
                     .HasColumnType("uuid")
                     .HasDefaultValueSql("uuidv7()");
 
-                b.Property<DateTimeOffset>("CreatedOn")
+                b.Property<string>("Ci")
+                    .HasMaxLength(40)
+                    .HasColumnType("character varying(40)");
+
+                b.Property<string>("Document")
+                    .IsRequired()
+                    .HasMaxLength(2000)
+                    .HasColumnType("character varying(2000)");
+
+                b.Property<DateTimeOffset>("ExpiresOn")
                     .HasColumnType("timestamp with time zone");
 
                 b.Property<string>("FirstCommit")
@@ -822,23 +836,13 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasMaxLength(64)
                     .HasColumnType("character varying(64)");
 
+                b.Property<DateTimeOffset>("IssuedOn")
+                    .HasColumnType("timestamp with time zone");
+
                 b.Property<string>("Name")
                     .IsRequired()
                     .HasMaxLength(100)
                     .HasColumnType("character varying(100)");
-
-                b.Property<DateTimeOffset?>("TrialExpiresOn")
-                    .HasColumnType("timestamp with time zone");
-
-                b.Property<DateTimeOffset?>("TrialIssuedOn")
-                    .HasColumnType("timestamp with time zone");
-
-                b.Property<string>("TrialLicense")
-                    .HasMaxLength(2000)
-                    .HasColumnType("character varying(2000)");
-
-                b.Property<Guid?>("UserId")
-                    .HasColumnType("uuid");
 
                 b.Property<uint>("Version")
                     .IsConcurrencyToken()
@@ -848,92 +852,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasKey("Id");
 
-                b.HasIndex("UserId");
-
-                b.ToTable("LicensedProjects");
-            });
-
-        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("uuid")
-                    .HasDefaultValueSql("uuidv7()");
-
-                b.Property<string>("Address")
-                    .IsRequired()
-                    .HasMaxLength(300)
-                    .HasColumnType("character varying(300)");
-
-                b.Property<string>("ConnectionProblem")
-                    .HasMaxLength(500)
-                    .HasColumnType("character varying(500)");
-
-                b.Property<int>("ConnectionStatus")
-                    .HasColumnType("integer");
-
-                b.Property<DateTimeOffset>("CreatedOn")
-                    .HasColumnType("timestamp with time zone");
-
-                b.Property<bool>("HasStaticFrontEnd")
-                    .HasColumnType("boolean");
-
-                b.Property<int>("Health")
-                    .HasColumnType("integer");
-
-                b.Property<Guid?>("IconId")
-                    .HasColumnType("uuid");
-
-                b.Property<DateTimeOffset?>("IconReadAt")
-                    .HasColumnType("timestamp with time zone");
-
-                b.Property<string>("IconSourceHash")
-                    .HasMaxLength(64)
-                    .HasColumnType("character varying(64)");
-
-                b.Property<DateTimeOffset?>("LastCheckedAt")
-                    .HasColumnType("timestamp with time zone");
-
-                b.PrimitiveCollection<string[]>("Locations")
-                    .IsRequired()
-                    .HasColumnType("text[]");
-
-                b.Property<string>("Name")
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasColumnType("character varying(100)");
-
-                b.Property<string>("ServerAddress")
-                    .IsRequired()
-                    .HasMaxLength(300)
-                    .HasColumnType("character varying(300)");
-
-                b.Property<string>("TemplateVersion")
-                    .HasMaxLength(32)
-                    .HasColumnType("character varying(32)");
-
-                b.Property<Guid>("TenantId")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("uuid")
-                    .HasDefaultValueSql("uuidv7()");
-
-                b.Property<string>("TimeZoneId")
-                    .IsRequired()
-                    .HasMaxLength(64)
-                    .HasColumnType("character varying(64)");
-
-                b.Property<uint>("Version")
-                    .IsConcurrencyToken()
-                    .ValueGeneratedOnAddOrUpdate()
-                    .HasColumnType("xid")
-                    .HasColumnName("xmin");
-
-                b.HasKey("Id");
-
-                b.HasIndex("TenantId", "Address")
-                    .IsUnique();
-
-                b.ToTable("Projects");
+                b.ToTable("ProjectTrials");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectAlert", b =>
@@ -952,15 +871,15 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<int>("Kind")
                     .HasColumnType("integer");
 
+                b.Property<Guid>("MonitoringId")
+                    .HasColumnType("uuid");
+
                 b.Property<string>("Problem")
                     .HasMaxLength(30)
                     .HasColumnType("character varying(30)");
 
                 b.Property<int?>("ProblemStatusCode")
                     .HasColumnType("integer");
-
-                b.Property<Guid>("ProjectId")
-                    .HasColumnType("uuid");
 
                 b.Property<DateTimeOffset>("SentAt")
                     .HasColumnType("timestamp with time zone");
@@ -979,11 +898,11 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasIndex("IncidentId");
 
-                b.HasIndex("ProjectId", "SentAt");
+                b.HasIndex("MonitoringId", "SentAt");
 
                 b.HasIndex("TenantId", "IncidentId");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
                 b.ToTable("ProjectAlerts");
             });
@@ -1010,7 +929,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<int>("DelayMinutes")
                     .HasColumnType("integer");
 
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .HasColumnType("uuid");
 
                 b.Property<int>("Step")
@@ -1035,9 +954,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasIndex("UserId");
 
-                b.HasIndex("ProjectId", "Step");
+                b.HasIndex("MonitoringId", "Step");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
                 b.ToTable("ProjectAlertRoutes");
             });
@@ -1061,7 +980,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<DateTimeOffset?>("EndedAt")
                     .HasColumnType("timestamp with time zone");
 
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .HasColumnType("uuid");
 
                 b.Property<DateTimeOffset>("StartedAt")
@@ -1079,19 +998,19 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasKey("Id");
 
-                b.HasIndex("ProjectId")
+                b.HasIndex("MonitoringId")
                     .HasFilter("\"EndedAt\" IS NULL");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
-                b.HasIndex("ProjectId", "CheckKey", "StartedAt");
+                b.HasIndex("MonitoringId", "CheckKey", "StartedAt");
 
                 b.ToTable("ProjectCheckPeriods");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectConnection", b =>
             {
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("uuid")
                     .HasDefaultValueSql("uuidv7()");
@@ -1104,7 +1023,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasMaxLength(500)
                     .HasColumnType("character varying(500)");
 
-                b.Property<Guid>("ConnectedByUserId")
+                b.Property<Guid?>("ConnectedByUserId")
                     .HasColumnType("uuid");
 
                 b.Property<DateTimeOffset>("ConnectedOn")
@@ -1146,9 +1065,11 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("xid")
                     .HasColumnName("xmin");
 
-                b.HasKey("ProjectId");
+                b.HasKey("MonitoringId");
 
-                b.HasIndex("TenantId", "ProjectId")
+                b.HasIndex("ConnectedByUserId");
+
+                b.HasIndex("TenantId", "MonitoringId")
                     .IsUnique();
 
                 b.ToTable("ProjectConnections");
@@ -1200,11 +1121,11 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<int>("Kind")
                     .HasColumnType("integer");
 
+                b.Property<Guid>("MonitoringId")
+                    .HasColumnType("uuid");
+
                 b.Property<DateTimeOffset?>("NextEscalationAt")
                     .HasColumnType("timestamp with time zone");
-
-                b.Property<Guid>("ProjectId")
-                    .HasColumnType("uuid");
 
                 b.Property<DateTimeOffset>("StartedAt")
                     .HasColumnType("timestamp with time zone");
@@ -1222,12 +1143,12 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasKey("Id");
 
-                b.HasIndex("ProjectId")
+                b.HasIndex("MonitoringId")
                     .HasFilter("\"EndedAt\" IS NULL");
 
-                b.HasIndex("ProjectId", "StartedAt");
+                b.HasIndex("MonitoringId", "StartedAt");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
                 b.ToTable("ProjectIncidents");
             });
@@ -1242,7 +1163,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<DateTimeOffset>("EndsAt")
                     .HasColumnType("timestamp with time zone");
 
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .HasColumnType("uuid");
 
                 b.Property<bool>("RepeatsWeekly")
@@ -1267,11 +1188,110 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasKey("Id");
 
-                b.HasIndex("ProjectId", "StartsAt");
+                b.HasIndex("MonitoringId", "StartsAt");
+
+                b.HasIndex("TenantId", "MonitoringId");
+
+                b.ToTable("ProjectMaintenanceWindows");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<string>("Address")
+                    .IsRequired()
+                    .HasMaxLength(300)
+                    .HasColumnType("character varying(300)");
+
+                b.Property<string>("ConnectionProblem")
+                    .HasMaxLength(500)
+                    .HasColumnType("character varying(500)");
+
+                b.Property<int>("ConnectionStatus")
+                    .HasColumnType("integer");
+
+                b.Property<DateTimeOffset>("CreatedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("Environment")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("character varying(50)");
+
+                b.Property<bool>("HasStaticFrontEnd")
+                    .HasColumnType("boolean");
+
+                b.Property<int>("Health")
+                    .HasColumnType("integer");
+
+                b.Property<Guid?>("IconId")
+                    .HasColumnType("uuid");
+
+                b.Property<DateTimeOffset?>("IconReadAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("IconSourceHash")
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<DateTimeOffset?>("LastCheckedAt")
+                    .HasColumnType("timestamp with time zone");
+
+                b.PrimitiveCollection<string[]>("Locations")
+                    .IsRequired()
+                    .HasColumnType("text[]");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(160)
+                    .HasColumnType("character varying(160)");
+
+                b.Property<Guid>("ProjectId")
+                    .HasColumnType("uuid");
+
+                b.Property<Guid?>("ReportedProjectId")
+                    .HasColumnType("uuid");
+
+                b.Property<string>("ServerAddress")
+                    .IsRequired()
+                    .HasMaxLength(300)
+                    .HasColumnType("character varying(300)");
+
+                b.Property<string>("TemplateVersion")
+                    .HasMaxLength(32)
+                    .HasColumnType("character varying(32)");
+
+                b.Property<Guid>("TenantId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<string>("TimeZoneId")
+                    .IsRequired()
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<uint>("Version")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
+
+                b.HasKey("Id");
+
+                b.HasIndex("ProjectId", "Environment")
+                    .IsUnique();
+
+                b.HasIndex("TenantId", "Address")
+                    .IsUnique();
 
                 b.HasIndex("TenantId", "ProjectId");
 
-                b.ToTable("ProjectMaintenanceWindows");
+                b.ToTable("Monitorings");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectProbe", b =>
@@ -1299,15 +1319,15 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasMaxLength(200)
                     .HasColumnType("character varying(200)");
 
+                b.Property<Guid>("MonitoringId")
+                    .HasColumnType("uuid");
+
                 b.Property<int>("Outcome")
                     .HasColumnType("integer");
 
                 b.Property<string>("Problem")
                     .HasMaxLength(500)
                     .HasColumnType("character varying(500)");
-
-                b.Property<Guid>("ProjectId")
-                    .HasColumnType("uuid");
 
                 b.Property<string>("Region")
                     .IsRequired()
@@ -1336,16 +1356,16 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasIndex("At");
 
-                b.HasIndex("ProjectId", "At");
+                b.HasIndex("MonitoringId", "At");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
                 b.ToTable("ProjectProbes");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectRollup", b =>
             {
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("uuid")
                     .HasDefaultValueSql("uuidv7()");
@@ -1382,13 +1402,13 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<long>("TotalMs")
                     .HasColumnType("bigint");
 
-                b.HasKey("ProjectId", "BucketStart", "Region", "CheckKey");
+                b.HasKey("MonitoringId", "BucketStart", "Region", "CheckKey");
 
                 b.HasIndex("BucketStart");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
-                b.HasIndex("ProjectId", "CheckKey", "BucketStart");
+                b.HasIndex("MonitoringId", "CheckKey", "BucketStart");
 
                 b.ToTable("ProjectRollups");
             });
@@ -1417,11 +1437,11 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<int>("Kind")
                     .HasColumnType("integer");
 
+                b.Property<Guid>("MonitoringId")
+                    .HasColumnType("uuid");
+
                 b.Property<int?>("Outcome")
                     .HasColumnType("integer");
-
-                b.Property<Guid>("ProjectId")
-                    .HasColumnType("uuid");
 
                 b.Property<DateTimeOffset>("RequestedAt")
                     .HasColumnType("timestamp with time zone");
@@ -1452,13 +1472,13 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasIndex("RequestedByUserId");
 
-                b.HasIndex("ProjectId", "RequestedAt");
+                b.HasIndex("MonitoringId", "RequestedAt");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
-                b.HasIndex("ProjectId", "Kind", "RequestedAt");
+                b.HasIndex("MonitoringId", "Kind", "RequestedAt");
 
-                b.HasIndex(new[] { "ProjectId" }, "IX_ProjectScans_Unfinished")
+                b.HasIndex(new[] { "MonitoringId" }, "IX_ProjectScans_Unfinished")
                     .HasFilter("\"FinishedAt\" IS NULL");
 
                 b.ToTable("ProjectScans");
@@ -1518,12 +1538,12 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<int>("Kind")
                     .HasColumnType("integer");
 
+                b.Property<Guid>("MonitoringId")
+                    .HasColumnType("uuid");
+
                 b.Property<string>("Note")
                     .HasMaxLength(1000)
                     .HasColumnType("character varying(1000)");
-
-                b.Property<Guid>("ProjectId")
-                    .HasColumnType("uuid");
 
                 b.Property<DateTimeOffset>("ReportedAt")
                     .HasColumnType("timestamp with time zone");
@@ -1547,14 +1567,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasIndex("FindingKey", "ReportedAt");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
                 b.ToTable("ProjectScanFindingReports");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectScanSettings", b =>
             {
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("uuid")
                     .HasDefaultValueSql("uuidv7()");
@@ -1577,9 +1597,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<bool>("WeeklyScans")
                     .HasColumnType("boolean");
 
-                b.HasKey("ProjectId");
+                b.HasKey("MonitoringId");
 
-                b.HasIndex("TenantId", "ProjectId")
+                b.HasIndex("TenantId", "MonitoringId")
                     .IsUnique();
 
                 b.ToTable("ProjectScanSettings");
@@ -1614,7 +1634,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectSlaSettings", b =>
             {
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("uuid")
                     .HasDefaultValueSql("uuidv7()");
@@ -1637,9 +1657,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("xid")
                     .HasColumnName("xmin");
 
-                b.HasKey("ProjectId");
+                b.HasKey("MonitoringId");
 
-                b.HasIndex("TenantId", "ProjectId")
+                b.HasIndex("TenantId", "MonitoringId")
                     .IsUnique();
 
                 b.ToTable("ProjectSlaSettings");
@@ -1667,7 +1687,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Property<bool>("IsDeploy")
                     .HasColumnType("boolean");
 
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .HasColumnType("uuid");
 
                 b.Property<Guid>("TenantId")
@@ -1675,9 +1695,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.HasKey("Id");
 
-                b.HasIndex("ProjectId", "At");
+                b.HasIndex("MonitoringId", "At");
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
                 b.ToTable("ProjectStarts");
             });
@@ -1744,7 +1764,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .IsRequired()
                     .HasColumnType("text[]");
 
-                b.Property<Guid>("ProjectId")
+                b.Property<Guid>("MonitoringId")
                     .HasColumnType("uuid");
 
                 b.Property<bool>("ShowsResponseTime")
@@ -1776,13 +1796,13 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .IsUnique()
                     .HasFilter("\"CustomHostname\" IS NOT NULL");
 
-                b.HasIndex("ProjectId")
+                b.HasIndex("MonitoringId")
                     .IsUnique();
 
                 b.HasIndex("Slug")
                     .IsUnique();
 
-                b.HasIndex("TenantId", "ProjectId");
+                b.HasIndex("TenantId", "MonitoringId");
 
                 b.ToTable("StatusPages");
             });
@@ -1820,6 +1840,79 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .IsUnique();
 
                 b.ToTable("StatusPageFollowers");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Projects.Models.Project", b =>
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<Guid?>("BitProjectId")
+                    .HasColumnType("uuid");
+
+                b.Property<DateTimeOffset>("CreatedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<string>("FirstCommit")
+                    .HasMaxLength(64)
+                    .HasColumnType("character varying(64)");
+
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("character varying(100)");
+
+                b.Property<Guid>("TenantId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<uint>("Version")
+                    .IsConcurrencyToken()
+                    .ValueGeneratedOnAddOrUpdate()
+                    .HasColumnType("xid")
+                    .HasColumnName("xmin");
+
+                b.HasKey("Id");
+
+                b.HasIndex("BitProjectId");
+
+                b.HasIndex("TenantId", "BitProjectId")
+                    .IsUnique()
+                    .HasFilter("\"BitProjectId\" IS NOT NULL");
+
+                b.ToTable("Projects");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Projects.Models.ProjectMember", b =>
+            {
+                b.Property<Guid>("ProjectId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<Guid>("UserId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
+
+                b.Property<DateTimeOffset>("AddedOn")
+                    .HasColumnType("timestamp with time zone");
+
+                b.Property<Guid>("TenantId")
+                    .HasColumnType("uuid");
+
+                b.HasKey("ProjectId", "UserId");
+
+                b.HasIndex("UserId");
+
+                b.HasIndex("TenantId", "ProjectId");
+
+                b.HasIndex("TenantId", "UserId");
+
+                b.ToTable("ProjectMembers");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.PushNotification.PushNotificationSubscription", b =>
@@ -1953,10 +2046,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("timestamp with time zone");
 
                 b.Property<Guid>("TenantId")
-                    .HasColumnType("uuid");
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
 
                 b.Property<Guid>("UserId")
-                    .HasColumnType("uuid");
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid")
+                    .HasDefaultValueSql("uuidv7()");
 
                 b.HasKey("Id");
 
@@ -2420,40 +2517,27 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.IssuedLicense", b =>
             {
-                b.HasOne("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", "Project")
-                    .WithMany("Licenses")
-                    .HasForeignKey("ProjectId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-
-                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "User")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "IssuedBy")
                     .WithMany()
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-
-                b.Navigation("Project");
-
-                b.Navigation("User");
-            });
-
-        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
-            {
-                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "User")
-                    .WithMany()
-                    .HasForeignKey("UserId")
+                    .HasForeignKey("IssuedByUserId")
                     .OnDelete(DeleteBehavior.SetNull);
 
-                b.Navigation("User");
-            });
-
-        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>
-            {
                 b.HasOne("Bit.Fabric.Server.Api.Features.Tenants.Tenant", "Tenant")
                     .WithMany()
                     .HasForeignKey("TenantId")
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
+
+                b.HasOne("Bit.Fabric.Server.Api.Features.Projects.Models.Project", "Project")
+                    .WithMany("Licenses")
+                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasPrincipalKey("TenantId", "Id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("IssuedBy");
+
+                b.Navigation("Project");
 
                 b.Navigation("Tenant");
             });
@@ -2472,16 +2556,16 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade);
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
                 b.Navigation("Incident");
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
@@ -2499,14 +2583,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade);
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
 
@@ -2521,34 +2605,41 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectConnection", b =>
             {
+                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "ConnectedBy")
+                    .WithMany()
+                    .HasForeignKey("ConnectedByUserId")
+                    .OnDelete(DeleteBehavior.SetNull);
+
                 b.HasOne("Bit.Fabric.Server.Api.Features.Tenants.Tenant", "Tenant")
                     .WithMany()
                     .HasForeignKey("TenantId")
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithOne("Connection")
-                    .HasForeignKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectConnection", "TenantId", "ProjectId")
-                    .HasPrincipalKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "TenantId", "Id")
+                    .HasForeignKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectConnection", "TenantId", "MonitoringId")
+                    .HasPrincipalKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Project");
+                b.Navigation("ConnectedBy");
+
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
@@ -2561,9 +2652,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
@@ -2647,7 +2738,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                         b1.Navigation("Text");
                     });
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
 
@@ -2664,8 +2755,28 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
+                    .HasForeignKey("TenantId", "MonitoringId")
+                    .HasPrincipalKey("TenantId", "Id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Monitoring");
+
+                b.Navigation("Tenant");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", b =>
+            {
+                b.HasOne("Bit.Fabric.Server.Api.Features.Tenants.Tenant", "Tenant")
+                    .WithMany()
+                    .HasForeignKey("TenantId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.HasOne("Bit.Fabric.Server.Api.Features.Projects.Models.Project", "Project")
+                    .WithMany("Monitorings")
                     .HasForeignKey("TenantId", "ProjectId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
@@ -2684,9 +2795,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
@@ -2755,7 +2866,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                 b.Navigation("Checks");
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
@@ -2768,14 +2879,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
@@ -2793,9 +2904,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
@@ -2839,9 +2950,9 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                             .HasForeignKey("ProjectScanId");
                     });
 
-                b.Navigation("Pages");
+                b.Navigation("Monitoring");
 
-                b.Navigation("Project");
+                b.Navigation("Pages");
 
                 b.Navigation("RequestedBy");
 
@@ -2881,14 +2992,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.SetNull);
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
 
@@ -2903,14 +3014,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithOne()
-                    .HasForeignKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectScanSettings", "TenantId", "ProjectId")
-                    .HasPrincipalKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "TenantId", "Id")
+                    .HasForeignKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectScanSettings", "TenantId", "MonitoringId")
+                    .HasPrincipalKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
@@ -2942,16 +3053,16 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithOne()
-                    .HasForeignKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectSlaSettings", "TenantId", "ProjectId")
-                    .HasPrincipalKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "TenantId", "Id")
+                    .HasForeignKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectSlaSettings", "TenantId", "MonitoringId")
+                    .HasPrincipalKey("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
                 b.OwnsMany("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectSlaCredit", "Credits", b1 =>
                     {
-                        b1.Property<Guid>("ProjectSlaSettingsProjectId")
+                        b1.Property<Guid>("ProjectSlaSettingsMonitoringId")
                             .HasDefaultValueSql("uuidv7()");
 
                         b1.Property<int>("__synthesizedOrdinal")
@@ -2961,7 +3072,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
 
                         b1.Property<double>("CreditPercent");
 
-                        b1.HasKey("ProjectSlaSettingsProjectId", "__synthesizedOrdinal");
+                        b1.HasKey("ProjectSlaSettingsMonitoringId", "__synthesizedOrdinal");
 
                         b1.ToTable("ProjectSlaSettings");
 
@@ -2970,12 +3081,12 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                             .HasColumnType("jsonb");
 
                         b1.WithOwner()
-                            .HasForeignKey("ProjectSlaSettingsProjectId");
+                            .HasForeignKey("ProjectSlaSettingsMonitoringId");
                     });
 
                 b.Navigation("Credits");
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
@@ -2988,14 +3099,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
@@ -3084,14 +3195,14 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                     .OnDelete(DeleteBehavior.NoAction)
                     .IsRequired();
 
-                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", "Project")
+                b.HasOne("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", "Monitoring")
                     .WithMany()
-                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasForeignKey("TenantId", "MonitoringId")
                     .HasPrincipalKey("TenantId", "Id")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.Navigation("Project");
+                b.Navigation("Monitoring");
 
                 b.Navigation("Tenant");
             });
@@ -3113,6 +3224,54 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("PushNotificationSubscription");
 
                 b.Navigation("StatusPage");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Projects.Models.Project", b =>
+            {
+                b.HasOne("Bit.Fabric.Server.Api.Features.Tenants.Tenant", "Tenant")
+                    .WithMany()
+                    .HasForeignKey("TenantId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.Navigation("Tenant");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Projects.Models.ProjectMember", b =>
+            {
+                b.HasOne("Bit.Fabric.Server.Api.Features.Tenants.Tenant", "Tenant")
+                    .WithMany()
+                    .HasForeignKey("TenantId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
+
+                b.HasOne("Bit.Fabric.Server.Api.Features.Identity.Models.User", "User")
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("Bit.Fabric.Server.Api.Features.Projects.Models.Project", "Project")
+                    .WithMany("Members")
+                    .HasForeignKey("TenantId", "ProjectId")
+                    .HasPrincipalKey("TenantId", "Id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("Bit.Fabric.Server.Api.Features.Tenants.TenantMembership", "Membership")
+                    .WithMany()
+                    .HasForeignKey("TenantId", "UserId")
+                    .HasPrincipalKey("TenantId", "UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Membership");
+
+                b.Navigation("Project");
+
+                b.Navigation("Tenant");
+
+                b.Navigation("User");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.PushNotification.PushNotificationSubscription", b =>
@@ -3225,12 +3384,7 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
                 b.Navigation("PushNotificationSubscription");
             });
 
-        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Licensing.Models.LicensedProject", b =>
-            {
-                b.Navigation("Licenses");
-            });
-
-        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.Project", b =>
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.ProjectMonitoring", b =>
             {
                 b.Navigation("Connection");
             });
@@ -3243,6 +3397,15 @@ partial class AppDbContextModelSnapshot : ModelSnapshot
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Monitoring.Models.StatusPage", b =>
             {
                 b.Navigation("Components");
+            });
+
+        modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Projects.Models.Project", b =>
+            {
+                b.Navigation("Licenses");
+
+                b.Navigation("Members");
+
+                b.Navigation("Monitorings");
             });
 
         modelBuilder.Entity("Bit.Fabric.Server.Api.Features.Tenants.Tenant", b =>

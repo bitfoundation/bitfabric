@@ -145,7 +145,7 @@ public sealed class MonitoringSampleWorld
     /// <summary>The scans of a project, as its Scans tab shows them.</summary>
     public static ProjectScansDto ScansOf(SampleProject project) => new()
     {
-        ProjectId = project.Id,
+        MonitoringId = project.Id,
         Address = project.Address,
         Latest = [.. ScanFindings.AvailableKinds.Select(kind => project.ScanRuns.FirstOrDefault(run => run.Kind == kind)).OfType<ProjectScanDto>()],
         Pending = [.. project.PendingScans],

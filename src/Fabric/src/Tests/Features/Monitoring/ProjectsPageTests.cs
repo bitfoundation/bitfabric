@@ -18,10 +18,10 @@ public class ProjectsPageTests
     [TestMethod]
     public async Task AnAgency_Should_SeeWhatNeedsIt_FindAProjectByNameOrAddress_AndReconnectFromTheCard()
     {
-        static ProjectDto Project(string name, string address, ProjectHealth health = ProjectHealth.Operational, ProjectConnectionStatus connection = ProjectConnectionStatus.Connected)
+        static MonitoringDto Project(string name, string address, ProjectHealth health = ProjectHealth.Operational, ProjectConnectionStatus connection = ProjectConnectionStatus.Connected)
             => new() { Id = Guid.NewGuid(), Name = name, Address = address, Health = health, ConnectionStatus = connection, ConnectionProblem = connection is ProjectConnectionStatus.ReconnectNeeded ? "The approval was withdrawn." : null };
 
-        List<ProjectDto> projects =
+        List<MonitoringDto> projects =
         [
             Project("Corner shop", "https://shop.example", ProjectHealth.Down),
             Project("Team tasks", "https://tasks.example", connection: ProjectConnectionStatus.ReconnectNeeded),
@@ -32,8 +32,8 @@ public class ProjectsPageTests
             Project("Old landing", "https://landing.example", connection: ProjectConnectionStatus.Disconnected)
         ];
 
-        var controller = A.Fake<IProjectsController>();
-        A.CallTo(() => controller.GetProjects(A<string?>._, A<CancellationToken>._)).ReturnsLazily(() => projects);
+        var controller = A.Fake<IMonitoringsController>();
+        A.CallTo(() => controller.GetMonitorings(A<string?>._, A<CancellationToken>._)).ReturnsLazily(() => projects);
 
         await using var server = new AppTestServer();
         await server.Build(configureTestWebAppServices: services => services.Replace(ServiceDescriptor.Singleton(controller))).Start(TestContext.CancellationToken);

@@ -11,9 +11,9 @@ public partial class ProjectsPage
     private bool hasTeam;
     private bool isCreatingTeam;
     private string? teamName;
-    private List<ProjectDto> projects = [];
+    private List<MonitoringDto> projects = [];
 
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
     [AutoInject] private ITenantController tenantController = default!;
 
     private string SignInUrl => $"{CultureInfoManager.GetCurrentCultureUrl(PageUrls.SignIn)}?return-url={Uri.EscapeDataString(PageUrls.Projects)}";
@@ -26,11 +26,11 @@ public partial class ProjectsPage
     private bool onlyAttention;
     private string? search;
 
-    private static bool NeedsYou(ProjectDto project) => project.Health is ProjectHealth.Down or ProjectHealth.Degraded
+    private static bool NeedsYou(MonitoringDto project) => project.Health is ProjectHealth.Down or ProjectHealth.Degraded
                                                         || project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded;
 
     /// <summary>The cards the filter and the search leave, by the name or the address the card shows.</summary>
-    private IEnumerable<ProjectDto> Visible() => projects.Where(project =>
+    private IEnumerable<MonitoringDto> Visible() => projects.Where(project =>
         (onlyAttention is false || NeedsYou(project))
         && (string.IsNullOrWhiteSpace(search)
             || project.Name?.Contains(search.Trim(), StringComparison.CurrentCultureIgnoreCase) is true
@@ -67,7 +67,7 @@ public partial class ProjectsPage
         {
             // The cards' days run from the viewer's midnights (bitfabric-internal/specs/monitoring.md, Times follow the
             // viewer's time zone).
-            projects = await projectsController.GetProjects(TimeZoneService.CurrentTimeZone.Id, CurrentCancellationToken);
+            projects = await monitoringsController.GetMonitorings(TimeZoneService.CurrentTimeZone.Id, CurrentCancellationToken);
         }
         finally
         {

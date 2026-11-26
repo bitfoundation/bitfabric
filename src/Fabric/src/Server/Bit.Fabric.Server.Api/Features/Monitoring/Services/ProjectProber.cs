@@ -34,6 +34,7 @@ public partial class ProjectProber
     [AutoInject] private ProjectScanScheduler scanScheduler = default!;
     [AutoInject] private ProjectIcons icons = default!;
     [AutoInject] private ProjectLandings landings = default!;
+    [AutoInject] private Projects.ProjectLinker linker = default!;
     [AutoInject] private ServerApiSettings settings = default!;
     [AutoInject] private TimeProvider timeProvider = default!;
     [AutoInject] private DistributedLockFactory distributedLockFactory = default!;
@@ -44,34 +45,34 @@ public partial class ProjectProber
     /// answers and then saves it, so two at once, as the first round CompleteConnect runs and the job's, would fail the later
     /// save on the project's Version. This one reads the project once the other is saved.
     /// </summary>
-    public async Task<ProjectProbe> Probe(Guid projectId, CancellationToken cancellationToken)
+    public async Task<ProjectProbe> Probe(Guid monitoringId, CancellationToken cancellationToken)
     {
-        await using (await RoundLock(projectId).AcquireAsync(roundWait, cancellationToken))
+        await using (await RoundLock(monitoringId).AcquireAsync(roundWait, cancellationToken))
         {
-            return await Round(projectId, cancellationToken);
+            return await Round(monitoringId, cancellationToken);
         }
     }
 
     /// <summary>The job's round of the project every minute, unless one is on its way, which is this minute's.</summary>
-    public async Task<ProjectProbe?> ProbeUnlessUnderway(Guid projectId, CancellationToken cancellationToken)
+    public async Task<ProjectProbe?> ProbeUnlessUnderway(Guid monitoringId, CancellationToken cancellationToken)
     {
-        await using var round = await RoundLock(projectId).TryAcquireAsync(TimeSpan.Zero, cancellationToken);
+        await using var round = await RoundLock(monitoringId).TryAcquireAsync(TimeSpan.Zero, cancellationToken);
 
-        return round is null ? null : await Round(projectId, cancellationToken);
+        return round is null ? null : await Round(monitoringId, cancellationToken);
     }
 
-    private IDistributedLock RoundLock(Guid projectId) => distributedLockFactory($"bit-fabric:monitoring-probe:{projectId}");
+    private IDistributedLock RoundLock(Guid monitoringId) => distributedLockFactory($"bit-fabric:monitoring-probe:{monitoringId}");
 
-    private async Task<ProjectProbe> Round(Guid projectId, CancellationToken cancellationToken)
+    private async Task<ProjectProbe> Round(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await dbContext.Projects.IgnoreQueryFilters()
+        var project = await dbContext.Monitorings.IgnoreQueryFilters()
                                               .Include(p => p.Connection)
-                                              .FirstAsync(p => p.Id == projectId, cancellationToken);
+                                              .FirstAsync(p => p.Id == monitoringId, cancellationToken);
 
         var probe = new ProjectProbe
         {
             Id = Guid.CreateSequentialGuid(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = project.TenantId,
             At = timeProvider.GetUtcNow(),
             Region = settings.Monitoring.Region
@@ -118,6 +119,13 @@ public partial class ProjectProber
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
+        // The project the app says it is, once its report names one (bitfabric-internal/specs/monitoring.md, The approval
+        // links an app to a project).
+        if (probe.Outcome is ProjectProbeOutcome.Read && project.ReportedProjectId is { } reportedProjectId)
+        {
+            await linker.Link(project, reportedProjectId, cancellationToken);
+        }
+
         await RollUp(probe, cancellationToken);
 
         // After the round is saved, so an alert never names an incident that isn't.
@@ -151,7 +159,7 @@ public partial class ProjectProber
     /// The app's own icon, on the first round, after each deployment and once a day (See ProjectIcons). A round that
     /// can't read it is still a round, so a failure here is only logged.
     /// </summary>
-    private async Task RefreshIcon(Project project, CancellationToken cancellationToken)
+    private async Task RefreshIcon(ProjectMonitoring project, CancellationToken cancellationToken)
     {
         try
         {
@@ -160,7 +168,7 @@ public partial class ProjectProber
         }
         catch (Exception exp) when (exp is not OperationCanceledException)
         {
-            logger.LogWarning(exp, "Reading the icon of project {ProjectId} failed.", project.Id);
+            logger.LogWarning(exp, "Reading the icon of project {MonitoringId} failed.", project.Id);
         }
     }
 
@@ -168,7 +176,7 @@ public partial class ProjectProber
     /// A new build seen in the health check gets its scans when the owner allows it. A round that can't ask for them is
     /// still a round, so a failure here is only logged.
     /// </summary>
-    private async Task ScanTheDeployment(Project project, ProjectProbe probe, CancellationToken cancellationToken)
+    private async Task ScanTheDeployment(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
     {
         try
         {
@@ -176,7 +184,7 @@ public partial class ProjectProber
         }
         catch (Exception exp) when (exp is not OperationCanceledException)
         {
-            logger.LogError(exp, "Asking for the scans of project {ProjectId}'s deployment of {ApplicationVersion} failed.", project.Id, probe.ApplicationVersion);
+            logger.LogError(exp, "Asking for the scans of project {MonitoringId}'s deployment of {ApplicationVersion} failed.", project.Id, probe.ApplicationVersion);
         }
     }
 
@@ -215,7 +223,7 @@ public partial class ProjectProber
     public static ProjectRollupPart HomePagePart(ProjectProbe probe) => Part(probe, ProjectRollup.HomePageKey, probe.ResponseMs is null, false, probe.ResponseMs);
 
     private static ProjectRollupPart Part(ProjectProbe probe, string key, bool failed, bool degraded, int? ms)
-        => new(probe.ProjectId, probe.TenantId, probe.Region!, probe.At, key, failed, degraded, ms);
+        => new(probe.MonitoringId, probe.TenantId, probe.Region!, probe.At, key, failed, degraded, ms);
 
     /// <summary>
     /// How long a visitor waits for the home page, asked for with a query string no one else uses, so any cache has to
@@ -224,7 +232,7 @@ public partial class ProjectProber
     /// door lands on (See ProjectLandings). A round that is redirected within the app, as the template sends <c>/</c> to
     /// <c>/en-US/</c>, follows it and times only the last request, and later rounds ask for that page straight away.
     /// </summary>
-    private async Task TimeFrontDoor(Project project, ProjectProbe probe, CancellationToken cancellationToken)
+    private async Task TimeFrontDoor(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
     {
         var uri = new Uri(landings.AddressOf(project));
 
@@ -268,7 +276,7 @@ public partial class ProjectProber
     /// since otherwise it is the server's time again, so the pages show one number (bitfabric-internal/specs/monitoring.md,
     /// Response time). A static front end's server's <c>/health</c> has no cache to look at.
     /// </summary>
-    private async Task TimeForVisitors(Project project, ProjectProbe probe, CancellationToken cancellationToken)
+    private async Task TimeForVisitors(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
     {
         if (project.HasStaticFrontEnd || probe.ResponseMs is null)
             return;
@@ -307,12 +315,12 @@ public partial class ProjectProber
     /// What a visitor's wait is timed on, from here and from the bitplatform Network alike: the home page, which each asks
     /// for with a query string of its own, or a static front end's server's <c>/health</c>, as is.
     /// </summary>
-    public static string FrontDoorOf(Project project) => project.HasStaticFrontEnd ? $"{project.ServerAddress}/health" : $"{project.Address}/";
+    public static string FrontDoorOf(ProjectMonitoring project) => project.HasStaticFrontEnd ? $"{project.ServerAddress}/health" : $"{project.Address}/";
 
     private static bool IsHit(HttpResponseMessage response, string header)
         => response.Headers.TryGetValues(header, out var values) && values.Any(value => value.Contains("HIT", StringComparison.OrdinalIgnoreCase));
 
-    private async Task ReadReport(Project project, ProjectProbe probe, CancellationToken cancellationToken)
+    private async Task ReadReport(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
     {
         var connection = project.Connection;
         if (connection is null)
@@ -382,6 +390,7 @@ public partial class ProjectProber
                 }
 
                 Fill(probe, report);
+                project.ReportedProjectId = report.ProjectId is { } reported && reported != Guid.Empty ? reported : null;
                 return;
             }
             catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested is false)
@@ -457,10 +466,10 @@ public partial class ProjectProber
     private static string? NullIfBlank(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 
     /// <summary>Closes the period of each check whose status changed and opens the next; a check gone from the report closes too.</summary>
-    private async Task MovePeriods(Project project, ProjectProbe probe, CancellationToken cancellationToken)
+    private async Task MovePeriods(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
     {
         var open = await dbContext.ProjectCheckPeriods.IgnoreQueryFilters()
-                                                      .Where(period => period.ProjectId == project.Id && period.EndedAt == null)
+                                                      .Where(period => period.MonitoringId == project.Id && period.EndedAt == null)
                                                       .ToListAsync(cancellationToken);
 
         // A check that only misses its settings is no outage: it has no period, and its open one closes as if it were gone.
@@ -481,7 +490,7 @@ public partial class ProjectProber
             await dbContext.ProjectCheckPeriods.AddAsync(new()
             {
                 Id = Guid.CreateSequentialGuid(),
-                ProjectId = project.Id,
+                MonitoringId = project.Id,
                 TenantId = project.TenantId,
                 CheckKey = check.Key,
                 Title = check.Title,
@@ -503,13 +512,13 @@ public partial class ProjectProber
     /// the app scaling out.
     /// </summary>
     /// <returns>Whether it was a deployment, recorded for the first time.</returns>
-    private async Task<bool> RecordStart(Project project, ProjectProbe probe, CancellationToken cancellationToken)
+    private async Task<bool> RecordStart(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
     {
         if (probe.StartedAt is not { } startedAt || probe.ApplicationVersion is null)
             return false; // A round that read no report.
 
         var previous = await dbContext.ProjectProbes.IgnoreQueryFilters()
-            .Where(p => p.ProjectId == project.Id && p.StartedAt != null && p.ApplicationVersion != null)
+            .Where(p => p.MonitoringId == project.Id && p.StartedAt != null && p.ApplicationVersion != null)
             .OrderByDescending(p => p.At)
             .Select(p => new { p.InstanceName, p.StartedAt, p.ApplicationVersion })
             .Take(20)
@@ -536,7 +545,7 @@ public partial class ProjectProber
             isDeploy = sameInstance.ApplicationVersion != probe.ApplicationVersion;
         }
 
-        if (isDeploy && await dbContext.ProjectStarts.IgnoreQueryFilters().AnyAsync(start => start.ProjectId == project.Id
+        if (isDeploy && await dbContext.ProjectStarts.IgnoreQueryFilters().AnyAsync(start => start.MonitoringId == project.Id
                 && start.IsDeploy && start.ApplicationVersion == probe.ApplicationVersion
                 && start.At >= startedAt - sameDeploymentWindow, cancellationToken))
             return false;
@@ -544,7 +553,7 @@ public partial class ProjectProber
         await dbContext.ProjectStarts.AddAsync(new()
         {
             Id = Guid.CreateSequentialGuid(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = project.TenantId,
             At = startedAt,
             ApplicationVersion = probe.ApplicationVersion,

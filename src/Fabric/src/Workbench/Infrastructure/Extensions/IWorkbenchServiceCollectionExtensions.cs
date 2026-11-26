@@ -30,7 +30,8 @@ public static class IWorkbenchServiceCollectionExtensions
             // Client.Core's HTTP clients, and of what those pages ask the app's client for: this device's notifications, a team
             // to create, the approval page in the customer's own app.
             services.AddScoped<MonitoringSampleWorld>();
-            services.AddScoped<IProjectsController, WorkbenchProjectsController>();
+            services.AddScoped<IMonitoringsController, WorkbenchMonitoringsController>();
+            services.AddScoped<Bit.Fabric.Shared.Features.Projects.IProjectsController, WorkbenchProjectsController>();
             services.AddScoped<IProjectIncidentsController, WorkbenchProjectIncidentsController>();
             services.AddScoped<IProjectScansController, WorkbenchProjectScansController>();
             services.AddScoped<IProjectSlaController, WorkbenchProjectSlaController>();

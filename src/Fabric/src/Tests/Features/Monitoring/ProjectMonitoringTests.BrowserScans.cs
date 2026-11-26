@@ -26,7 +26,7 @@ public partial class ProjectMonitoringTests
 
         await using var server = await StartServer(customerApp, lighthouse: lighthouse);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         await RunQueuedScans(server, project.Id);
 
         var scans = await client.GetController<IProjectScansController>().GetScans(project.Id, TestContext.CancellationToken);
@@ -100,7 +100,7 @@ public partial class ProjectMonitoringTests
         Assert.DoesNotContain(asked => asked.Url.Contains("/fa-IR/", StringComparison.Ordinal), lighthouse.Asked, "The home page's culture first.");
 
         // The card shows them the way it shows the others.
-        var card = (await client.GetController<IProjectsController>().GetProjects(null, TestContext.CancellationToken)).Single();
+        var card = (await client.GetController<IMonitoringsController>().GetMonitorings(null, TestContext.CancellationToken)).Single();
         Assert.AreEqual(54, card.Scans.Single(scan => scan.Kind is ProjectScanKind.Performance).Score);
         Assert.AreEqual(ScanFindingSeverity.Important, card.Scans.Single(scan => scan.Kind is ProjectScanKind.Accessibility).TopFinding!.Severity);
     }
@@ -113,7 +113,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp, lighthouse: lighthouse);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var scansController = client.GetController<IProjectScansController>();
         await RunQueuedScans(server, project.Id);
 
@@ -125,7 +125,7 @@ public partial class ProjectMonitoringTests
 
         lighthouse.Unloadable.Clear();
         lighthouse.IsDown = true;
-        await scansController.RunNow(new() { ProjectId = project.Id }, TestContext.CancellationToken);
+        await scansController.RunNow(new() { MonitoringId = project.Id }, TestContext.CancellationToken);
         await RunQueuedScans(server, project.Id);
 
         latest = (await scansController.GetScans(project.Id, TestContext.CancellationToken)).Latest;
@@ -142,7 +142,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp, lighthouse: lighthouse);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         await RunQueuedScans(server, project.Id);
 
         await using var mcp = await McpClientOf(server, client);

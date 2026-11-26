@@ -10,17 +10,17 @@ namespace Bit.Fabric.Shared.Features.Monitoring;
 public interface IProjectSlaController : IAppController
 {
     /// <summary>
-    /// A month as CSV, at <c>{ExportCsvUri}/{projectId}/{year}/{month}</c>. It downloads a file, so it is called with the
+    /// A month as CSV, at <c>{ExportCsvUri}/{monitoringId}/{year}/{month}</c>. It downloads a file, so it is called with the
     /// HttpClient directly rather than through the generated proxy, which speaks json only.
     /// </summary>
     public const string ExportCsvUri = "api/v1/ProjectSla/ExportCsv";
 
-    /// <summary>A month as a PDF in the viewer's language, at <c>{ExportPdfUri}/{projectId}/{year}/{month}</c>; See <see cref="ExportCsvUri"/>.</summary>
+    /// <summary>A month as a PDF in the viewer's language, at <c>{ExportPdfUri}/{monitoringId}/{year}/{month}</c>; See <see cref="ExportCsvUri"/>.</summary>
     public const string ExportPdfUri = "api/v1/ProjectSla/ExportPdf";
 
     /// <summary>The project's target, weights and credits; the defaults until the owner saves theirs.</summary>
-    [HttpGet("{projectId}")]
-    Task<ProjectSlaSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken);
+    [HttpGet("{monitoringId}")]
+    Task<ProjectSlaSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken);
 
     [HttpPost]
     Task<ProjectSlaSettingsDto> SaveSettings(ProjectSlaSettingsDto settings, CancellationToken cancellationToken);

@@ -22,7 +22,7 @@ public partial class ProjectSla
     /// <summary>The tiers a contract commonly has, offered when the owner adds theirs for the first time.</summary>
     private static readonly (double Below, double Credit)[] commonCredits = [(99.9, 10), (99, 25), (95, 50)];
 
-    [Parameter, EditorRequired] public Guid ProjectId { get; set; }
+    [Parameter, EditorRequired] public Guid MonitoringId { get; set; }
 
     [AutoInject] private IProjectSlaController slaController = default!;
     [AutoInject] private HttpClient httpClient = default!;
@@ -38,14 +38,14 @@ public partial class ProjectSla
     {
         await base.OnInitAsync();
 
-        settings = await slaController.GetSettings(ProjectId, CurrentCancellationToken);
-        report = await slaController.GetReport(new() { ProjectId = ProjectId }, CurrentCancellationToken);
+        settings = await slaController.GetSettings(MonitoringId, CurrentCancellationToken);
+        report = await slaController.GetReport(new() { MonitoringId = MonitoringId }, CurrentCancellationToken);
     }
 
     /// <summary>Shows another month: one of the last 12, picked on the chart.</summary>
     private async Task Open(int year, int month)
     {
-        report = await slaController.GetReport(new() { ProjectId = ProjectId, Year = year, Month = month }, CurrentCancellationToken);
+        report = await slaController.GetReport(new() { MonitoringId = MonitoringId, Year = year, Month = month }, CurrentCancellationToken);
     }
 
     /// <summary>Saves a change of the target or a weight, then counts the month again with it.</summary>
@@ -66,11 +66,11 @@ public partial class ProjectSla
         catch
         {
             // Refused, the tab goes back to what the server holds.
-            settings = await slaController.GetSettings(ProjectId, CurrentCancellationToken);
+            settings = await slaController.GetSettings(MonitoringId, CurrentCancellationToken);
             throw;
         }
 
-        report = await slaController.GetReport(new() { ProjectId = ProjectId, Year = report!.Year, Month = report.Month }, CurrentCancellationToken);
+        report = await slaController.GetReport(new() { MonitoringId = MonitoringId, Year = report!.Year, Month = report.Month }, CurrentCancellationToken);
     }
 
     private void EditCredits()
@@ -106,7 +106,7 @@ public partial class ProjectSla
     /// </summary>
     private async Task Export(string uri, string contentType, string extension)
     {
-        using var response = await httpClient.GetAsync($"{uri}/{ProjectId}/{report!.Year}/{report.Month}", CurrentCancellationToken);
+        using var response = await httpClient.GetAsync($"{uri}/{MonitoringId}/{report!.Year}/{report.Month}", CurrentCancellationToken);
 
         var fileName = response.Content.Headers.ContentDisposition?.FileNameStar
                        ?? response.Content.Headers.ContentDisposition?.FileName?.Trim('"')

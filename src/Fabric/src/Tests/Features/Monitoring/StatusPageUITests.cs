@@ -43,7 +43,7 @@ public partial class StatusPageUITests : AppPageTest
         var slug = $"ui-{Guid.NewGuid():N}"[..20];
 
         Tenant tenant = new() { Id = Guid.CreateVersion7(), Name = slug, Title = "Test team" };
-        Project project = new()
+        ProjectMonitoring project = new()
         {
             Id = Guid.CreateVersion7(),
             TenantId = tenant.Id,
@@ -58,7 +58,7 @@ public partial class StatusPageUITests : AppPageTest
         StatusPage page = new()
         {
             Id = Guid.CreateVersion7(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = tenant.Id,
             Slug = slug,
             IsPublished = true,

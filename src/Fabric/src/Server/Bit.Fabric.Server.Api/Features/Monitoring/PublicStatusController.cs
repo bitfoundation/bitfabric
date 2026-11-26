@@ -301,14 +301,14 @@ public partial class PublicStatusController : AppControllerBase, IPublicStatusCo
             """, "text/javascript", Encoding.UTF8);
     }
 
-    private async Task<(StatusPage Page, Project Project)> Find(string slug, CancellationToken cancellationToken)
+    private async Task<(StatusPage Page, ProjectMonitoring Project)> Find(string slug, CancellationToken cancellationToken)
     {
         var page = await DbContext.StatusPages.IgnoreQueryFilters().AsNoTracking()
             .Include(page => page.Components)
             .FirstOrDefaultAsync(page => page.Slug == slug && page.IsPublished, cancellationToken)
             ?? throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
-        var project = await DbContext.Projects.IgnoreQueryFilters().AsNoTracking().FirstAsync(project => project.Id == page.ProjectId, cancellationToken);
+        var project = await DbContext.Monitorings.IgnoreQueryFilters().AsNoTracking().FirstAsync(project => project.Id == page.MonitoringId, cancellationToken);
 
         return (page, project);
     }

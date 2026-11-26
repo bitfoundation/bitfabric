@@ -10,7 +10,7 @@ namespace Bit.Fabric.Workbench.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectsHost
 {
-    public const string AmountSwitch = Data.WorkbenchProjectsController.AmountSwitch;
+    public const string AmountSwitch = Data.WorkbenchMonitoringsController.AmountSwitch;
 
     public const string TeamSwitch = "team";
 

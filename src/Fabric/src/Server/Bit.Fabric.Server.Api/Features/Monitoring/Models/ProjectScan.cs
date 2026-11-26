@@ -13,9 +13,9 @@ public partial class ProjectScan : ITenantAware
 {
     public Guid Id { get; set; }
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
-    public Project? Project { get; set; }
+    public ProjectMonitoring? Monitoring { get; set; }
 
     public Guid TenantId { get; set; }
 
@@ -124,14 +124,14 @@ public partial class ProjectScanFinding : ITenantAware
 }
 
 /// <summary>
-/// When bit Fabric scans a project: a row of its own rather than columns of <see cref="Project"/>, whose version every round
+/// When bit Fabric scans a project: a row of its own rather than columns of <see cref="ProjectMonitoring"/>, whose version every round
 /// moves on. A project without one scans with the defaults: weekly, and not after deployments until the owner allows it.
 /// </summary>
 public partial class ProjectScanSettings : ITenantAware
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
-    public Project? Project { get; set; }
+    public ProjectMonitoring? Monitoring { get; set; }
 
     public Guid TenantId { get; set; }
 
@@ -156,9 +156,9 @@ public partial class ProjectScanFindingReport : ITenantAware
 {
     public Guid Id { get; set; }
 
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
-    public Project? Project { get; set; }
+    public ProjectMonitoring? Monitoring { get; set; }
 
     public Guid TenantId { get; set; }
 

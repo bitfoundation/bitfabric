@@ -6,7 +6,9 @@ namespace Bit.Fabric.Shared.Features.Monitoring.Dtos;
 /// <summary>A project one location of the bitplatform Network times every minute.</summary>
 public partial class NetworkTargetDto
 {
-    public Guid ProjectId { get; set; }
+    /// <summary>The environment's id, under the name the Network's code reads (src/Network), which deploys on its own.</summary>
+    [JsonPropertyName("projectId")]
+    public Guid MonitoringId { get; set; }
 
     /// <summary>
     /// The https address to time: the home page, which the Network asks for with a query string of its own (a new GUID each
@@ -32,7 +34,9 @@ public partial class NetworkResultsDto
 
 public partial class NetworkResultDto
 {
-    public Guid ProjectId { get; set; }
+    /// <summary>The environment's id, under the name the Network's code writes (src/Network).</summary>
+    [JsonPropertyName("projectId")]
+    public Guid MonitoringId { get; set; }
 
     /// <summary>When the reading started.</summary>
     public DateTimeOffset At { get; set; }

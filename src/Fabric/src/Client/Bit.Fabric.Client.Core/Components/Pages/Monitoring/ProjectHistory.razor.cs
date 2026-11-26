@@ -21,7 +21,7 @@ public partial class ProjectHistory
     /// <summary>The row of the app as a whole, drawn from its incidents.</summary>
     private const string AppRow = "$app";
 
-    [Parameter, EditorRequired] public ProjectDto Project { get; set; } = default!;
+    [Parameter, EditorRequired] public MonitoringDto Project { get; set; } = default!;
 
     /// <summary>The one part to show, by its report key, as the map opens the tab on it (See ProjectTabLink); every part when null.</summary>
     [Parameter] public string? Check { get; set; }
@@ -45,7 +45,7 @@ public partial class ProjectHistory
 
         days = ProjectHistoryDays.Last(DayCount, TimeZoneService.CurrentTimeZone, DateTimeOffset.UtcNow);
 
-        history = await incidentsController.GetHistory(new() { ProjectId = Project.Id, From = days[0].Start, To = DateTimeOffset.UtcNow }, CurrentCancellationToken);
+        history = await incidentsController.GetHistory(new() { MonitoringId = Project.Id, From = days[0].Start, To = DateTimeOffset.UtcNow }, CurrentCancellationToken);
 
         var now = DateTimeOffset.UtcNow;
         var appDays = ProjectHistoryDays.OfApp(history, days, now);

@@ -23,7 +23,7 @@ public partial class ProjectEscalationJobRunner
         var now = timeProvider.GetUtcNow();
 
         var due = await dbContext.ProjectIncidents.IgnoreQueryFilters()
-            .Include(incident => incident.Project)
+            .Include(incident => incident.Monitoring)
             .Where(incident => incident.EndedAt == null && incident.AcknowledgedAt == null && incident.DuringMaintenance == false
                                && incident.NextEscalationAt != null && incident.NextEscalationAt <= now)
             .ToListAsync(cancellationToken);
@@ -33,7 +33,7 @@ public partial class ProjectEscalationJobRunner
             try
             {
                 var routes = await dbContext.ProjectAlertRoutes.IgnoreQueryFilters()
-                    .Where(route => route.ProjectId == incident.ProjectId)
+                    .Where(route => route.MonitoringId == incident.MonitoringId)
                     .ToListAsync(cancellationToken);
 
                 if (ProjectAlerter.NextStep(routes, incident.EscalationStep) is not { } next)
@@ -44,7 +44,7 @@ public partial class ProjectEscalationJobRunner
                 }
 
                 incident.EscalationStep = next.Step;
-                await alerter.Notify(incident.Project!, incident, ProjectAlertKind.Escalated, cancellationToken);
+                await alerter.Notify(incident.Monitoring!, incident, ProjectAlertKind.Escalated, cancellationToken);
             }
             catch (Exception exp) when (exp is not OperationCanceledException)
             {

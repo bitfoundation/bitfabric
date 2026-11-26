@@ -13,14 +13,14 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectCard
 {
-    [Parameter, EditorRequired] public ProjectDto Project { get; set; } = default!;
+    [Parameter, EditorRequired] public MonitoringDto Project { get; set; } = default!;
 
     [AutoInject] private IProjectScansController scansController = default!;
 
     /// <summary>A project connected before the scanners came has none until someone runs them.</summary>
     private async Task RunScans()
     {
-        await scansController.RunNow(new() { ProjectId = Project.Id }, CurrentCancellationToken);
+        await scansController.RunNow(new() { MonitoringId = Project.Id }, CurrentCancellationToken);
 
         foreach (var scan in Project.Scans)
         {

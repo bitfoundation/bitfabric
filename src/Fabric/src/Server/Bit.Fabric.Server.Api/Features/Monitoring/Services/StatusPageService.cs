@@ -30,25 +30,25 @@ public partial class StatusPageService
     ];
 
     /// <summary>The project's page as it is, untracked, or null when its team never opened the Status page tab, which makes it.</summary>
-    public async Task<StatusPage?> Find(Guid projectId, CancellationToken cancellationToken)
+    public async Task<StatusPage?> Find(Guid monitoringId, CancellationToken cancellationToken)
         => await dbContext.StatusPages.AsNoTracking().Include(page => page.Components)
-                                      .FirstOrDefaultAsync(page => page.ProjectId == projectId, cancellationToken);
+                                      .FirstOrDefaultAsync(page => page.MonitoringId == monitoringId, cancellationToken);
 
     /// <summary>How many browsers follow the page by push.</summary>
     public Task<int> FollowerCountOf(Guid pageId, CancellationToken cancellationToken)
         => dbContext.StatusPageFollowers.CountAsync(follower => follower.StatusPageId == pageId, cancellationToken);
 
     /// <summary>The project's page, made unpublished with a component per kind of part when it has none yet.</summary>
-    public async Task<StatusPage> Ensure(Project project, CancellationToken cancellationToken)
+    public async Task<StatusPage> Ensure(ProjectMonitoring project, CancellationToken cancellationToken)
     {
         var page = await dbContext.StatusPages.Include(page => page.Components)
-                                              .FirstOrDefaultAsync(page => page.ProjectId == project.Id, cancellationToken);
+                                              .FirstOrDefaultAsync(page => page.MonitoringId == project.Id, cancellationToken);
 
         if (page is not null)
             return page;
 
         var lastReport = await dbContext.ProjectProbes.AsNoTracking()
-            .Where(probe => probe.ProjectId == project.Id && probe.Outcome == ProjectProbeOutcome.Read)
+            .Where(probe => probe.MonitoringId == project.Id && probe.Outcome == ProjectProbeOutcome.Read)
             .OrderByDescending(probe => probe.At)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -57,7 +57,7 @@ public partial class StatusPageService
         page = new()
         {
             Id = Guid.CreateSequentialGuid(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = project.TenantId,
             Slug = await UniqueSlug(project.Name!, cancellationToken),
             Languages = [CultureInfo.CurrentUICulture.Name],
@@ -161,19 +161,19 @@ public partial class StatusPageService
     }
 
     /// <summary>The page as a visitor sees it, in <paramref name="culture"/> when the page has it.</summary>
-    public async Task<PublicStatusDto> BuildPublic(StatusPage page, Project project, string? culture, CancellationToken cancellationToken)
+    public async Task<PublicStatusDto> BuildPublic(StatusPage page, ProjectMonitoring project, string? culture, CancellationToken cancellationToken)
     {
         var now = timeProvider.GetUtcNow();
         var since = now.AddDays(-90);
         culture = CultureInfoManager.SupportedCultures.Any(supported => supported.Culture.Name == culture) ? culture : page.Languages.FirstOrDefault();
 
         var incidents = await dbContext.ProjectIncidents.IgnoreQueryFilters().AsNoTracking()
-            .Where(incident => incident.ProjectId == project.Id && (incident.EndedAt == null || incident.EndedAt >= since))
+            .Where(incident => incident.MonitoringId == project.Id && (incident.EndedAt == null || incident.EndedAt >= since))
             .OrderByDescending(incident => incident.StartedAt)
             .ToListAsync(cancellationToken);
 
         var windows = await dbContext.ProjectMaintenanceWindows.IgnoreQueryFilters().AsNoTracking()
-            .Where(window => window.ProjectId == project.Id)
+            .Where(window => window.MonitoringId == project.Id)
             .ToListAsync(cancellationToken);
 
         var components = page.Components.Where(component => component.IsShown).OrderBy(component => component.Order).ToArray();
@@ -198,7 +198,7 @@ public partial class StatusPageService
 
         var times = page.ShowsResponseTime
             ? await dbContext.ProjectProbes.IgnoreQueryFilters().AsNoTracking()
-                .Where(probe => probe.ProjectId == project.Id && probe.At >= now.AddHours(-24) && probe.ResponseMs != null)
+                .Where(probe => probe.MonitoringId == project.Id && probe.At >= now.AddHours(-24) && probe.ResponseMs != null)
                 .Select(probe => new { Ms = probe.ResponseMs!.Value, probe.VisitorMs })
                 .ToListAsync(cancellationToken)
             : [];
@@ -252,11 +252,11 @@ public partial class StatusPageService
     /// Pushes an incident's news to the page's followers, each in their language, and only to those who follow one of its
     /// components (or all of them).
     /// </summary>
-    public async Task NotifyFollowers(Project project, ProjectIncident incident, string headline, CancellationToken cancellationToken)
+    public async Task NotifyFollowers(ProjectMonitoring project, ProjectIncident incident, string headline, CancellationToken cancellationToken)
     {
         var page = await dbContext.StatusPages.IgnoreQueryFilters().AsNoTracking()
             .Include(page => page.Components)
-            .FirstOrDefaultAsync(page => page.ProjectId == project.Id && page.IsPublished, cancellationToken);
+            .FirstOrDefaultAsync(page => page.MonitoringId == project.Id && page.IsPublished, cancellationToken);
 
         if (page is null)
             return;

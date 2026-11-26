@@ -16,7 +16,7 @@ public partial class ProjectOverview
     /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
     private string Dot => MonitoringWords.Dot(Localizer);
 
-    [Parameter, EditorRequired] public ProjectDetailsDto Details { get; set; } = default!;
+    [Parameter, EditorRequired] public MonitoringDetailsDto Details { get; set; } = default!;
 
     private string? searchText;
     private Filter statusFilter = Filter.All;
@@ -136,11 +136,11 @@ public partial class ProjectOverview
     /// bit Fabric can't read the app right now, as the page's banner says: the hero says so too, and that the parts below
     /// are its last report's, rather than a state the app may no longer be in.
     /// </summary>
-    private bool IsStale => Details.Project?.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected;
+    private bool IsStale => Details.Monitoring?.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected;
 
     private Tone HeroTone => IsStale ? Tone.Neutral : OverallTone;
 
-    private string OverallHeadline => (IsStale, Details.Project?.ConnectionStatus, OverallTone) switch
+    private string OverallHeadline => (IsStale, Details.Monitoring?.ConnectionStatus, OverallTone) switch
     {
         (true, ProjectConnectionStatus.Disconnected, _) => Localizer[nameof(AppStrings.MonitoringDisconnected)],
         (true, _, _) => Localizer[nameof(AppStrings.MonitoringCannotReadHealth)],

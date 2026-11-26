@@ -11,7 +11,7 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectStatusPage
 {
-    [Parameter, EditorRequired] public Guid ProjectId { get; set; }
+    [Parameter, EditorRequired] public Guid MonitoringId { get; set; }
 
     [AutoInject] private IStatusPagesController statusPagesController = default!;
     [AutoInject] private IProjectIncidentsController incidentsController = default!;
@@ -43,14 +43,14 @@ public partial class ProjectStatusPage
     {
         await base.OnInitAsync();
 
-        statusPage = await statusPagesController.GetStatusPage(ProjectId, CurrentCancellationToken);
+        statusPage = await statusPagesController.GetStatusPage(MonitoringId, CurrentCancellationToken);
         hostname = statusPage.CustomHostname;
         editingLanguage = statusPage.Languages.FirstOrDefault();
         await LoadOpenIncidents();
     }
 
     private async Task LoadOpenIncidents()
-        => openIncidents = [.. (await incidentsController.GetIncidents(ProjectId, CurrentCancellationToken)).Where(incident => incident.EndedAt is null)];
+        => openIncidents = [.. (await incidentsController.GetIncidents(MonitoringId, CurrentCancellationToken)).Where(incident => incident.EndedAt is null)];
 
     private string MainLanguage => statusPage?.Languages.FirstOrDefault() ?? CultureInfo.CurrentUICulture.Name;
 
@@ -105,7 +105,7 @@ public partial class ProjectStatusPage
 
         try
         {
-            statusPage = await statusPagesController.ConnectCustomHostname(new() { ProjectId = ProjectId, Hostname = hostname }, CurrentCancellationToken);
+            statusPage = await statusPagesController.ConnectCustomHostname(new() { MonitoringId = MonitoringId, Hostname = hostname }, CurrentCancellationToken);
         }
         finally
         {
@@ -113,11 +113,11 @@ public partial class ProjectStatusPage
         }
     }
 
-    private async Task Refresh() => statusPage = await statusPagesController.RefreshCustomHostname(ProjectId, CurrentCancellationToken);
+    private async Task Refresh() => statusPage = await statusPagesController.RefreshCustomHostname(MonitoringId, CurrentCancellationToken);
 
     private async Task Disconnect()
     {
-        statusPage = await statusPagesController.DisconnectCustomHostname(ProjectId, CurrentCancellationToken);
+        statusPage = await statusPagesController.DisconnectCustomHostname(MonitoringId, CurrentCancellationToken);
         hostname = null;
     }
 
@@ -180,7 +180,7 @@ public partial class ProjectStatusPage
 
             await statusPagesController.Post(new()
             {
-                ProjectId = ProjectId,
+                MonitoringId = MonitoringId,
                 IncidentId = updatingIncidentId,
                 Kind = postKind,
                 Impact = postImpact,

@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bit.Fabric.Server.Api.Infrastructure.Data.Migrations;
 
 /// <inheritdoc />
-public partial class _20261125094809_Initial : Migration
+public partial class _20261126124500_Initial : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
@@ -140,6 +140,24 @@ public partial class _20261125094809_Initial : Migration
             });
 
         migrationBuilder.CreateTable(
+            name: "ProjectTrials",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                FirstCommit = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                IssuedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                ExpiresOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                Document = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                Ci = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectTrials", x => x.Id);
+            });
+
+        migrationBuilder.CreateTable(
             name: "Tenants",
             columns: table => new
             {
@@ -197,21 +215,10 @@ public partial class _20261125094809_Initial : Migration
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
                 TenantId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                Address = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
-                ServerAddress = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                TemplateVersion = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
-                IconId = table.Column<Guid>(type: "uuid", nullable: true),
-                IconSourceHash = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
-                IconReadAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                HasStaticFrontEnd = table.Column<bool>(type: "boolean", nullable: false),
-                Locations = table.Column<string[]>(type: "text[]", nullable: false),
-                Health = table.Column<int>(type: "integer", nullable: false),
-                ConnectionStatus = table.Column<int>(type: "integer", nullable: false),
-                ConnectionProblem = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                BitProjectId = table.Column<Guid>(type: "uuid", nullable: true),
+                FirstCommit = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
                 CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                TimeZoneId = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                LastCheckedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                 xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
             },
             constraints: table =>
@@ -263,31 +270,6 @@ public partial class _20261125094809_Initial : Migration
                     column: x => x.TenantId,
                     principalTable: "Tenants",
                     principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "LicensedProjects",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                FirstCommit = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                TrialIssuedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                TrialExpiresOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                TrialLicense = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
-                UserId = table.Column<Guid>(type: "uuid", nullable: true),
-                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_LicensedProjects", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_LicensedProjects_Users_UserId",
-                    column: x => x.UserId,
-                    principalTable: "Users",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.SetNull);
             });
 
         migrationBuilder.CreateTable(
@@ -356,13 +338,14 @@ public partial class _20261125094809_Initial : Migration
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                UserId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
                 AcceptedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
             },
             constraints: table =>
             {
                 table.PrimaryKey("PK_TenantMemberships", x => x.Id);
+                table.UniqueConstraint("AK_TenantMemberships_TenantId_UserId", x => new { x.TenantId, x.UserId });
                 table.ForeignKey(
                     name: "FK_TenantMemberships_Tenants_TenantId",
                     column: x => x.TenantId,
@@ -512,440 +495,83 @@ public partial class _20261125094809_Initial : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "ProjectAlertRoutes",
+            name: "IssuedLicenses",
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                 TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                Step = table.Column<int>(type: "integer", nullable: false),
-                DelayMinutes = table.Column<int>(type: "integer", nullable: false),
-                Channel = table.Column<int>(type: "integer", nullable: false),
-                UserId = table.Column<Guid>(type: "uuid", nullable: true),
-                Address = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                WebhookFormat = table.Column<int>(type: "integer", nullable: true),
-                Culture = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                IssuedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                Plan = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                FirstCommit = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                IssuedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                ExpiresOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                Document = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                ClaimCodeHash = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
+                ClaimExpiresOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                ClaimedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                 xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_ProjectAlertRoutes", x => x.Id);
+                table.PrimaryKey("PK_IssuedLicenses", x => x.Id);
                 table.ForeignKey(
-                    name: "FK_ProjectAlertRoutes_Projects_TenantId_ProjectId",
+                    name: "FK_IssuedLicenses_Projects_TenantId_ProjectId",
                     columns: x => new { x.TenantId, x.ProjectId },
                     principalTable: "Projects",
                     principalColumns: new[] { "TenantId", "Id" },
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
-                    name: "FK_ProjectAlertRoutes_Tenants_TenantId",
+                    name: "FK_IssuedLicenses_Tenants_TenantId",
                     column: x => x.TenantId,
                     principalTable: "Tenants",
                     principalColumn: "Id");
                 table.ForeignKey(
-                    name: "FK_ProjectAlertRoutes_Users_UserId",
-                    column: x => x.UserId,
-                    principalTable: "Users",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.Cascade);
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectCheckPeriods",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                CheckKey = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                Status = table.Column<int>(type: "integer", nullable: false),
-                StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                EndedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectCheckPeriods", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_ProjectCheckPeriods_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectCheckPeriods_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectConnections",
-            columns: table => new
-            {
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                Issuer = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
-                TokenEndpoint = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                Resource = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                Scopes = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                ClientId = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                ProtectedAccessToken = table.Column<string>(type: "text", nullable: false),
-                ProtectedRefreshToken = table.Column<string>(type: "text", nullable: true),
-                AccessTokenExpiresAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                ConnectedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                ConnectedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectConnections", x => x.ProjectId);
-                table.ForeignKey(
-                    name: "FK_ProjectConnections_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectConnections_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectIncidents",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                Kind = table.Column<int>(type: "integer", nullable: false),
-                Impact = table.Column<int>(type: "integer", nullable: false),
-                StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                EndedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                CheckKeys = table.Column<string[]>(type: "text[]", nullable: false),
-                ComponentIds = table.Column<Guid[]>(type: "uuid[]", nullable: false),
-                IsAutomatic = table.Column<bool>(type: "boolean", nullable: false),
-                AfterDeployAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                DuringMaintenance = table.Column<bool>(type: "boolean", nullable: false),
-                AcknowledgedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                AcknowledgedBy = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                AcknowledgedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                EscalationStep = table.Column<int>(type: "integer", nullable: false),
-                NextEscalationAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false),
-                Title = table.Column<string>(type: "jsonb", nullable: true),
-                Updates = table.Column<string>(type: "jsonb", nullable: true)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectIncidents", x => x.Id);
-                table.UniqueConstraint("AK_ProjectIncidents_TenantId_Id", x => new { x.TenantId, x.Id });
-                table.ForeignKey(
-                    name: "FK_ProjectIncidents_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectIncidents_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectMaintenanceWindows",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                StartsAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                EndsAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                RepeatsWeekly = table.Column<bool>(type: "boolean", nullable: false),
-                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectMaintenanceWindows", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_ProjectMaintenanceWindows_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectMaintenanceWindows_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectProbes",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                At = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                Region = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                Colo = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
-                Outcome = table.Column<int>(type: "integer", nullable: false),
-                Status = table.Column<int>(type: "integer", nullable: true),
-                ResponseMs = table.Column<int>(type: "integer", nullable: true),
-                ReportMs = table.Column<int>(type: "integer", nullable: true),
-                HasCacheWarning = table.Column<bool>(type: "boolean", nullable: false),
-                ApplicationVersion = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                InstanceName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                Problem = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                Checks = table.Column<string>(type: "jsonb", nullable: true)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectProbes", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_ProjectProbes_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectProbes_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectRollups",
-            columns: table => new
-            {
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                BucketStart = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                Region = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                CheckKey = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                Count = table.Column<int>(type: "integer", nullable: false),
-                FailedCount = table.Column<int>(type: "integer", nullable: false),
-                DegradedCount = table.Column<int>(type: "integer", nullable: false),
-                TimedCount = table.Column<int>(type: "integer", nullable: false),
-                TotalMs = table.Column<long>(type: "bigint", nullable: false),
-                MaxMs = table.Column<int>(type: "integer", nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectRollups", x => new { x.ProjectId, x.BucketStart, x.Region, x.CheckKey });
-                table.ForeignKey(
-                    name: "FK_ProjectRollups_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectRollups_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectScanFindingReports",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                FindingId = table.Column<Guid>(type: "uuid", nullable: false),
-                Kind = table.Column<int>(type: "integer", nullable: false),
-                FindingKey = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                Where = table.Column<string[]>(type: "text[]", nullable: false),
-                UserId = table.Column<Guid>(type: "uuid", nullable: true),
-                ReportedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                Note = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectScanFindingReports", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_ProjectScanFindingReports_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectScanFindingReports_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-                table.ForeignKey(
-                    name: "FK_ProjectScanFindingReports_Users_UserId",
-                    column: x => x.UserId,
+                    name: "FK_IssuedLicenses_Users_IssuedByUserId",
+                    column: x => x.IssuedByUserId,
                     principalTable: "Users",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.SetNull);
             });
 
         migrationBuilder.CreateTable(
-            name: "ProjectScans",
+            name: "Monitorings",
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                 TenantId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                Kind = table.Column<int>(type: "integer", nullable: false),
-                Trigger = table.Column<int>(type: "integer", nullable: false),
-                RequestedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
-                ApplicationVersion = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                RequestedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                FinishedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                Outcome = table.Column<int>(type: "integer", nullable: true),
-                Verdict = table.Column<int>(type: "integer", nullable: true),
-                Score = table.Column<int>(type: "integer", nullable: true),
-                Grade = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
-                ExpiresAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                Pages = table.Column<string>(type: "jsonb", nullable: true)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectScans", x => x.Id);
-                table.UniqueConstraint("AK_ProjectScans_TenantId_Id", x => new { x.TenantId, x.Id });
-                table.ForeignKey(
-                    name: "FK_ProjectScans_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectScans_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-                table.ForeignKey(
-                    name: "FK_ProjectScans_Users_RequestedByUserId",
-                    column: x => x.RequestedByUserId,
-                    principalTable: "Users",
-                    principalColumn: "Id",
-                    onDelete: ReferentialAction.SetNull);
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectScanSettings",
-            columns: table => new
-            {
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                ScanAfterDeployments = table.Column<bool>(type: "boolean", nullable: false),
-                WeeklyScans = table.Column<bool>(type: "boolean", nullable: false),
-                WeeklyEmail = table.Column<bool>(type: "boolean", nullable: false),
+                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                Environment = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                ReportedProjectId = table.Column<Guid>(type: "uuid", nullable: true),
+                Address = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                ServerAddress = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                Name = table.Column<string>(type: "character varying(160)", maxLength: 160, nullable: false),
+                TemplateVersion = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                IconId = table.Column<Guid>(type: "uuid", nullable: true),
+                IconSourceHash = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
+                IconReadAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                HasStaticFrontEnd = table.Column<bool>(type: "boolean", nullable: false),
+                Locations = table.Column<string[]>(type: "text[]", nullable: false),
+                Health = table.Column<int>(type: "integer", nullable: false),
+                ConnectionStatus = table.Column<int>(type: "integer", nullable: false),
+                ConnectionProblem = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                CreatedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                TimeZoneId = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                LastCheckedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                 xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_ProjectScanSettings", x => x.ProjectId);
+                table.PrimaryKey("PK_Monitorings", x => x.Id);
+                table.UniqueConstraint("AK_Monitorings_TenantId_Id", x => new { x.TenantId, x.Id });
                 table.ForeignKey(
-                    name: "FK_ProjectScanSettings_Projects_TenantId_ProjectId",
+                    name: "FK_Monitorings_Projects_TenantId_ProjectId",
                     columns: x => new { x.TenantId, x.ProjectId },
                     principalTable: "Projects",
                     principalColumns: new[] { "TenantId", "Id" },
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
-                    name: "FK_ProjectScanSettings_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectSlaSettings",
-            columns: table => new
-            {
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                TargetPercent = table.Column<double>(type: "double precision", nullable: false),
-                PartialWeight = table.Column<double>(type: "double precision", nullable: false),
-                DegradedWeight = table.Column<double>(type: "double precision", nullable: false),
-                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false),
-                Credits = table.Column<string>(type: "jsonb", nullable: true)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectSlaSettings", x => x.ProjectId);
-                table.ForeignKey(
-                    name: "FK_ProjectSlaSettings_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectSlaSettings_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "ProjectStarts",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                At = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                ApplicationVersion = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                InstanceName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                IsDeploy = table.Column<bool>(type: "boolean", nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_ProjectStarts", x => x.Id);
-                table.ForeignKey(
-                    name: "FK_ProjectStarts_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_ProjectStarts_Tenants_TenantId",
-                    column: x => x.TenantId,
-                    principalTable: "Tenants",
-                    principalColumn: "Id");
-            });
-
-        migrationBuilder.CreateTable(
-            name: "StatusPages",
-            columns: table => new
-            {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                TenantId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                Slug = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
-                IsPublished = table.Column<bool>(type: "boolean", nullable: false),
-                ShowsResponseTime = table.Column<bool>(type: "boolean", nullable: false),
-                Languages = table.Column<string[]>(type: "text[]", nullable: false),
-                SupportAddress = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                CustomHostname = table.Column<string>(type: "character varying(253)", maxLength: 253, nullable: true),
-                CustomHostnameId = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
-                CustomHostnameState = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
-                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_StatusPages", x => x.Id);
-                table.UniqueConstraint("AK_StatusPages_TenantId_Id", x => new { x.TenantId, x.Id });
-                table.ForeignKey(
-                    name: "FK_StatusPages_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
-                    principalColumns: new[] { "TenantId", "Id" },
-                    onDelete: ReferentialAction.Cascade);
-                table.ForeignKey(
-                    name: "FK_StatusPages_Tenants_TenantId",
+                    name: "FK_Monitorings_Tenants_TenantId",
                     column: x => x.TenantId,
                     principalTable: "Tenants",
                     principalColumn: "Id");
@@ -1003,33 +629,36 @@ public partial class _20261125094809_Initial : Migration
             });
 
         migrationBuilder.CreateTable(
-            name: "IssuedLicenses",
+            name: "ProjectMembers",
             columns: table => new
             {
-                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
-                UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                Plan = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                FirstCommit = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                IssuedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                ExpiresOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                Document = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                ClaimCodeHash = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
-                ClaimExpiresOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                ClaimedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
+                ProjectId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                UserId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                AddedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_IssuedLicenses", x => x.Id);
+                table.PrimaryKey("PK_ProjectMembers", x => new { x.ProjectId, x.UserId });
                 table.ForeignKey(
-                    name: "FK_IssuedLicenses_LicensedProjects_ProjectId",
-                    column: x => x.ProjectId,
-                    principalTable: "LicensedProjects",
-                    principalColumn: "Id",
+                    name: "FK_ProjectMembers_Projects_TenantId_ProjectId",
+                    columns: x => new { x.TenantId, x.ProjectId },
+                    principalTable: "Projects",
+                    principalColumns: new[] { "TenantId", "Id" },
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
-                    name: "FK_IssuedLicenses_Users_UserId",
+                    name: "FK_ProjectMembers_TenantMemberships_TenantId_UserId",
+                    columns: x => new { x.TenantId, x.UserId },
+                    principalTable: "TenantMemberships",
+                    principalColumns: new[] { "TenantId", "UserId" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectMembers_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+                table.ForeignKey(
+                    name: "FK_ProjectMembers_Users_UserId",
                     column: x => x.UserId,
                     principalTable: "Users",
                     principalColumn: "Id",
@@ -1097,11 +726,458 @@ public partial class _20261125094809_Initial : Migration
             });
 
         migrationBuilder.CreateTable(
+            name: "ProjectAlertRoutes",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                Step = table.Column<int>(type: "integer", nullable: false),
+                DelayMinutes = table.Column<int>(type: "integer", nullable: false),
+                Channel = table.Column<int>(type: "integer", nullable: false),
+                UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                Address = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                WebhookFormat = table.Column<int>(type: "integer", nullable: true),
+                Culture = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectAlertRoutes", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_ProjectAlertRoutes_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectAlertRoutes_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+                table.ForeignKey(
+                    name: "FK_ProjectAlertRoutes_Users_UserId",
+                    column: x => x.UserId,
+                    principalTable: "Users",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectCheckPeriods",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                CheckKey = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                Status = table.Column<int>(type: "integer", nullable: false),
+                StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                EndedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectCheckPeriods", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_ProjectCheckPeriods_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectCheckPeriods_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectConnections",
+            columns: table => new
+            {
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                Issuer = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                TokenEndpoint = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                Resource = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                Scopes = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                ClientId = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                ProtectedAccessToken = table.Column<string>(type: "text", nullable: false),
+                ProtectedRefreshToken = table.Column<string>(type: "text", nullable: true),
+                AccessTokenExpiresAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                ConnectedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                ConnectedOn = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectConnections", x => x.MonitoringId);
+                table.ForeignKey(
+                    name: "FK_ProjectConnections_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectConnections_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+                table.ForeignKey(
+                    name: "FK_ProjectConnections_Users_ConnectedByUserId",
+                    column: x => x.ConnectedByUserId,
+                    principalTable: "Users",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.SetNull);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectIncidents",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                Kind = table.Column<int>(type: "integer", nullable: false),
+                Impact = table.Column<int>(type: "integer", nullable: false),
+                StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                EndedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                CheckKeys = table.Column<string[]>(type: "text[]", nullable: false),
+                ComponentIds = table.Column<Guid[]>(type: "uuid[]", nullable: false),
+                IsAutomatic = table.Column<bool>(type: "boolean", nullable: false),
+                AfterDeployAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                DuringMaintenance = table.Column<bool>(type: "boolean", nullable: false),
+                AcknowledgedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                AcknowledgedBy = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                AcknowledgedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                EscalationStep = table.Column<int>(type: "integer", nullable: false),
+                NextEscalationAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false),
+                Title = table.Column<string>(type: "jsonb", nullable: true),
+                Updates = table.Column<string>(type: "jsonb", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectIncidents", x => x.Id);
+                table.UniqueConstraint("AK_ProjectIncidents_TenantId_Id", x => new { x.TenantId, x.Id });
+                table.ForeignKey(
+                    name: "FK_ProjectIncidents_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectIncidents_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectMaintenanceWindows",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                StartsAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                EndsAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                RepeatsWeekly = table.Column<bool>(type: "boolean", nullable: false),
+                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectMaintenanceWindows", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_ProjectMaintenanceWindows_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectMaintenanceWindows_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectProbes",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                At = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                Region = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                Colo = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
+                Outcome = table.Column<int>(type: "integer", nullable: false),
+                Status = table.Column<int>(type: "integer", nullable: true),
+                ResponseMs = table.Column<int>(type: "integer", nullable: true),
+                VisitorMs = table.Column<int>(type: "integer", nullable: true),
+                ReportMs = table.Column<int>(type: "integer", nullable: true),
+                HasCacheWarning = table.Column<bool>(type: "boolean", nullable: false),
+                ApplicationVersion = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                InstanceName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                Problem = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                Checks = table.Column<string>(type: "jsonb", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectProbes", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_ProjectProbes_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectProbes_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectRollups",
+            columns: table => new
+            {
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                BucketStart = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                Region = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                CheckKey = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                Count = table.Column<int>(type: "integer", nullable: false),
+                FailedCount = table.Column<int>(type: "integer", nullable: false),
+                DegradedCount = table.Column<int>(type: "integer", nullable: false),
+                TimedCount = table.Column<int>(type: "integer", nullable: false),
+                TotalMs = table.Column<long>(type: "bigint", nullable: false),
+                MaxMs = table.Column<int>(type: "integer", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectRollups", x => new { x.MonitoringId, x.BucketStart, x.Region, x.CheckKey });
+                table.ForeignKey(
+                    name: "FK_ProjectRollups_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectRollups_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectScanFindingReports",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                FindingId = table.Column<Guid>(type: "uuid", nullable: false),
+                Kind = table.Column<int>(type: "integer", nullable: false),
+                FindingKey = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                Where = table.Column<string[]>(type: "text[]", nullable: false),
+                UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                ReportedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                Note = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectScanFindingReports", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_ProjectScanFindingReports_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectScanFindingReports_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+                table.ForeignKey(
+                    name: "FK_ProjectScanFindingReports_Users_UserId",
+                    column: x => x.UserId,
+                    principalTable: "Users",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.SetNull);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectScans",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                Kind = table.Column<int>(type: "integer", nullable: false),
+                Trigger = table.Column<int>(type: "integer", nullable: false),
+                RequestedByUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                ApplicationVersion = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                RequestedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                FinishedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                Outcome = table.Column<int>(type: "integer", nullable: true),
+                Verdict = table.Column<int>(type: "integer", nullable: true),
+                Score = table.Column<int>(type: "integer", nullable: true),
+                Grade = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                ExpiresAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                Pages = table.Column<string>(type: "jsonb", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectScans", x => x.Id);
+                table.UniqueConstraint("AK_ProjectScans_TenantId_Id", x => new { x.TenantId, x.Id });
+                table.ForeignKey(
+                    name: "FK_ProjectScans_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectScans_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+                table.ForeignKey(
+                    name: "FK_ProjectScans_Users_RequestedByUserId",
+                    column: x => x.RequestedByUserId,
+                    principalTable: "Users",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.SetNull);
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectScanSettings",
+            columns: table => new
+            {
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                ScanAfterDeployments = table.Column<bool>(type: "boolean", nullable: false),
+                WeeklyScans = table.Column<bool>(type: "boolean", nullable: false),
+                WeeklyEmail = table.Column<bool>(type: "boolean", nullable: false),
+                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectScanSettings", x => x.MonitoringId);
+                table.ForeignKey(
+                    name: "FK_ProjectScanSettings_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectScanSettings_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectSlaSettings",
+            columns: table => new
+            {
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                TargetPercent = table.Column<double>(type: "double precision", nullable: false),
+                PartialWeight = table.Column<double>(type: "double precision", nullable: false),
+                DegradedWeight = table.Column<double>(type: "double precision", nullable: false),
+                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false),
+                Credits = table.Column<string>(type: "jsonb", nullable: true)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectSlaSettings", x => x.MonitoringId);
+                table.ForeignKey(
+                    name: "FK_ProjectSlaSettings_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectSlaSettings_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "ProjectStarts",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                At = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                ApplicationVersion = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                InstanceName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                IsDeploy = table.Column<bool>(type: "boolean", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_ProjectStarts", x => x.Id);
+                table.ForeignKey(
+                    name: "FK_ProjectStarts_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_ProjectStarts_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
+            name: "StatusPages",
+            columns: table => new
+            {
+                Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
+                TenantId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
+                Slug = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
+                IsPublished = table.Column<bool>(type: "boolean", nullable: false),
+                ShowsResponseTime = table.Column<bool>(type: "boolean", nullable: false),
+                Languages = table.Column<string[]>(type: "text[]", nullable: false),
+                SupportAddress = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                CustomHostname = table.Column<string>(type: "character varying(253)", maxLength: 253, nullable: true),
+                CustomHostnameId = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
+                CustomHostnameState = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
+                xmin = table.Column<uint>(type: "xid", rowVersion: true, nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_StatusPages", x => x.Id);
+                table.UniqueConstraint("AK_StatusPages_TenantId_Id", x => new { x.TenantId, x.Id });
+                table.ForeignKey(
+                    name: "FK_StatusPages_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
+                    principalColumns: new[] { "TenantId", "Id" },
+                    onDelete: ReferentialAction.Cascade);
+                table.ForeignKey(
+                    name: "FK_StatusPages_Tenants_TenantId",
+                    column: x => x.TenantId,
+                    principalTable: "Tenants",
+                    principalColumn: "Id");
+            });
+
+        migrationBuilder.CreateTable(
             name: "ProjectAlerts",
             columns: table => new
             {
                 Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "uuidv7()"),
-                ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                MonitoringId = table.Column<Guid>(type: "uuid", nullable: false),
                 TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                 IncidentId = table.Column<Guid>(type: "uuid", nullable: true),
                 Kind = table.Column<int>(type: "integer", nullable: false),
@@ -1116,15 +1192,15 @@ public partial class _20261125094809_Initial : Migration
             {
                 table.PrimaryKey("PK_ProjectAlerts", x => x.Id);
                 table.ForeignKey(
-                    name: "FK_ProjectAlerts_ProjectIncidents_TenantId_IncidentId",
-                    columns: x => new { x.TenantId, x.IncidentId },
-                    principalTable: "ProjectIncidents",
+                    name: "FK_ProjectAlerts_Monitorings_TenantId_MonitoringId",
+                    columns: x => new { x.TenantId, x.MonitoringId },
+                    principalTable: "Monitorings",
                     principalColumns: new[] { "TenantId", "Id" },
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
-                    name: "FK_ProjectAlerts_Projects_TenantId_ProjectId",
-                    columns: x => new { x.TenantId, x.ProjectId },
-                    principalTable: "Projects",
+                    name: "FK_ProjectAlerts_ProjectIncidents_TenantId_IncidentId",
+                    columns: x => new { x.TenantId, x.IncidentId },
+                    principalTable: "ProjectIncidents",
                     principalColumns: new[] { "TenantId", "Id" },
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
@@ -1466,19 +1542,36 @@ public partial class _20261125094809_Initial : Migration
             filter: "\"ClaimedOn\" IS NULL");
 
         migrationBuilder.CreateIndex(
+            name: "IX_IssuedLicenses_IssuedByUserId",
+            table: "IssuedLicenses",
+            column: "IssuedByUserId");
+
+        migrationBuilder.CreateIndex(
             name: "IX_IssuedLicenses_ProjectId_ExpiresOn",
             table: "IssuedLicenses",
             columns: new[] { "ProjectId", "ExpiresOn" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_IssuedLicenses_UserId",
+            name: "IX_IssuedLicenses_TenantId_ProjectId",
             table: "IssuedLicenses",
-            column: "UserId");
+            columns: new[] { "TenantId", "ProjectId" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_LicensedProjects_UserId",
-            table: "LicensedProjects",
-            column: "UserId");
+            name: "IX_Monitorings_ProjectId_Environment",
+            table: "Monitorings",
+            columns: new[] { "ProjectId", "Environment" },
+            unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Monitorings_TenantId_Address",
+            table: "Monitorings",
+            columns: new[] { "TenantId", "Address" },
+            unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Monitorings_TenantId_ProjectId",
+            table: "Monitorings",
+            columns: new[] { "TenantId", "ProjectId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_OAuthAuthorizationCodes_CodeHash",
@@ -1507,14 +1600,14 @@ public partial class _20261125094809_Initial : Migration
             column: "ClientId");
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectAlertRoutes_ProjectId_Step",
+            name: "IX_ProjectAlertRoutes_MonitoringId_Step",
             table: "ProjectAlertRoutes",
-            columns: new[] { "ProjectId", "Step" });
+            columns: new[] { "MonitoringId", "Step" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectAlertRoutes_TenantId_ProjectId",
+            name: "IX_ProjectAlertRoutes_TenantId_MonitoringId",
             table: "ProjectAlertRoutes",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_ProjectAlertRoutes_UserId",
@@ -1527,9 +1620,9 @@ public partial class _20261125094809_Initial : Migration
             column: "IncidentId");
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectAlerts_ProjectId_SentAt",
+            name: "IX_ProjectAlerts_MonitoringId_SentAt",
             table: "ProjectAlerts",
-            columns: new[] { "ProjectId", "SentAt" });
+            columns: new[] { "MonitoringId", "SentAt" });
 
         migrationBuilder.CreateIndex(
             name: "IX_ProjectAlerts_TenantId_IncidentId",
@@ -1537,57 +1630,77 @@ public partial class _20261125094809_Initial : Migration
             columns: new[] { "TenantId", "IncidentId" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectAlerts_TenantId_ProjectId",
+            name: "IX_ProjectAlerts_TenantId_MonitoringId",
             table: "ProjectAlerts",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectCheckPeriods_ProjectId",
+            name: "IX_ProjectCheckPeriods_MonitoringId",
             table: "ProjectCheckPeriods",
-            column: "ProjectId",
+            column: "MonitoringId",
             filter: "\"EndedAt\" IS NULL");
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectCheckPeriods_ProjectId_CheckKey_StartedAt",
+            name: "IX_ProjectCheckPeriods_MonitoringId_CheckKey_StartedAt",
             table: "ProjectCheckPeriods",
-            columns: new[] { "ProjectId", "CheckKey", "StartedAt" });
+            columns: new[] { "MonitoringId", "CheckKey", "StartedAt" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectCheckPeriods_TenantId_ProjectId",
+            name: "IX_ProjectCheckPeriods_TenantId_MonitoringId",
             table: "ProjectCheckPeriods",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectConnections_TenantId_ProjectId",
+            name: "IX_ProjectConnections_ConnectedByUserId",
             table: "ProjectConnections",
-            columns: new[] { "TenantId", "ProjectId" },
+            column: "ConnectedByUserId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_ProjectConnections_TenantId_MonitoringId",
+            table: "ProjectConnections",
+            columns: new[] { "TenantId", "MonitoringId" },
             unique: true);
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectIncidents_ProjectId",
+            name: "IX_ProjectIncidents_MonitoringId",
             table: "ProjectIncidents",
-            column: "ProjectId",
+            column: "MonitoringId",
             filter: "\"EndedAt\" IS NULL");
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectIncidents_ProjectId_StartedAt",
+            name: "IX_ProjectIncidents_MonitoringId_StartedAt",
             table: "ProjectIncidents",
-            columns: new[] { "ProjectId", "StartedAt" });
+            columns: new[] { "MonitoringId", "StartedAt" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectIncidents_TenantId_ProjectId",
+            name: "IX_ProjectIncidents_TenantId_MonitoringId",
             table: "ProjectIncidents",
+            columns: new[] { "TenantId", "MonitoringId" });
+
+        migrationBuilder.CreateIndex(
+            name: "IX_ProjectMaintenanceWindows_MonitoringId_StartsAt",
+            table: "ProjectMaintenanceWindows",
+            columns: new[] { "MonitoringId", "StartsAt" });
+
+        migrationBuilder.CreateIndex(
+            name: "IX_ProjectMaintenanceWindows_TenantId_MonitoringId",
+            table: "ProjectMaintenanceWindows",
+            columns: new[] { "TenantId", "MonitoringId" });
+
+        migrationBuilder.CreateIndex(
+            name: "IX_ProjectMembers_TenantId_ProjectId",
+            table: "ProjectMembers",
             columns: new[] { "TenantId", "ProjectId" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectMaintenanceWindows_ProjectId_StartsAt",
-            table: "ProjectMaintenanceWindows",
-            columns: new[] { "ProjectId", "StartsAt" });
+            name: "IX_ProjectMembers_TenantId_UserId",
+            table: "ProjectMembers",
+            columns: new[] { "TenantId", "UserId" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectMaintenanceWindows_TenantId_ProjectId",
-            table: "ProjectMaintenanceWindows",
-            columns: new[] { "TenantId", "ProjectId" });
+            name: "IX_ProjectMembers_UserId",
+            table: "ProjectMembers",
+            column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_ProjectProbes_At",
@@ -1595,14 +1708,14 @@ public partial class _20261125094809_Initial : Migration
             column: "At");
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectProbes_ProjectId_At",
+            name: "IX_ProjectProbes_MonitoringId_At",
             table: "ProjectProbes",
-            columns: new[] { "ProjectId", "At" });
+            columns: new[] { "MonitoringId", "At" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectProbes_TenantId_ProjectId",
+            name: "IX_ProjectProbes_TenantId_MonitoringId",
             table: "ProjectProbes",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_ProjectRollups_BucketStart",
@@ -1610,20 +1723,26 @@ public partial class _20261125094809_Initial : Migration
             column: "BucketStart");
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectRollups_ProjectId_CheckKey_BucketStart",
+            name: "IX_ProjectRollups_MonitoringId_CheckKey_BucketStart",
             table: "ProjectRollups",
-            columns: new[] { "ProjectId", "CheckKey", "BucketStart" });
+            columns: new[] { "MonitoringId", "CheckKey", "BucketStart" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectRollups_TenantId_ProjectId",
+            name: "IX_ProjectRollups_TenantId_MonitoringId",
             table: "ProjectRollups",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_Projects_TenantId_Address",
+            name: "IX_Projects_BitProjectId",
             table: "Projects",
-            columns: new[] { "TenantId", "Address" },
-            unique: true);
+            column: "BitProjectId");
+
+        migrationBuilder.CreateIndex(
+            name: "IX_Projects_TenantId_BitProjectId",
+            table: "Projects",
+            columns: new[] { "TenantId", "BitProjectId" },
+            unique: true,
+            filter: "\"BitProjectId\" IS NOT NULL");
 
         migrationBuilder.CreateIndex(
             name: "IX_ProjectScanFindingReports_FindingId_UserId",
@@ -1637,9 +1756,9 @@ public partial class _20261125094809_Initial : Migration
             columns: new[] { "FindingKey", "ReportedAt" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectScanFindingReports_TenantId_ProjectId",
+            name: "IX_ProjectScanFindingReports_TenantId_MonitoringId",
             table: "ProjectScanFindingReports",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_ProjectScanFindingReports_UserId",
@@ -1652,14 +1771,14 @@ public partial class _20261125094809_Initial : Migration
             columns: new[] { "TenantId", "ScanId" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectScans_ProjectId_Kind_RequestedAt",
+            name: "IX_ProjectScans_MonitoringId_Kind_RequestedAt",
             table: "ProjectScans",
-            columns: new[] { "ProjectId", "Kind", "RequestedAt" });
+            columns: new[] { "MonitoringId", "Kind", "RequestedAt" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectScans_ProjectId_RequestedAt",
+            name: "IX_ProjectScans_MonitoringId_RequestedAt",
             table: "ProjectScans",
-            columns: new[] { "ProjectId", "RequestedAt" });
+            columns: new[] { "MonitoringId", "RequestedAt" });
 
         migrationBuilder.CreateIndex(
             name: "IX_ProjectScans_RequestedAt",
@@ -1672,14 +1791,14 @@ public partial class _20261125094809_Initial : Migration
             column: "RequestedByUserId");
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectScans_TenantId_ProjectId",
+            name: "IX_ProjectScans_TenantId_MonitoringId",
             table: "ProjectScans",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_ProjectScans_Unfinished",
             table: "ProjectScans",
-            column: "ProjectId",
+            column: "MonitoringId",
             filter: "\"FinishedAt\" IS NULL");
 
         migrationBuilder.CreateIndex(
@@ -1693,26 +1812,26 @@ public partial class _20261125094809_Initial : Migration
             column: "WeekOf");
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectScanSettings_TenantId_ProjectId",
+            name: "IX_ProjectScanSettings_TenantId_MonitoringId",
             table: "ProjectScanSettings",
-            columns: new[] { "TenantId", "ProjectId" },
+            columns: new[] { "TenantId", "MonitoringId" },
             unique: true);
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectSlaSettings_TenantId_ProjectId",
+            name: "IX_ProjectSlaSettings_TenantId_MonitoringId",
             table: "ProjectSlaSettings",
-            columns: new[] { "TenantId", "ProjectId" },
+            columns: new[] { "TenantId", "MonitoringId" },
             unique: true);
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectStarts_ProjectId_At",
+            name: "IX_ProjectStarts_MonitoringId_At",
             table: "ProjectStarts",
-            columns: new[] { "ProjectId", "At" });
+            columns: new[] { "MonitoringId", "At" });
 
         migrationBuilder.CreateIndex(
-            name: "IX_ProjectStarts_TenantId_ProjectId",
+            name: "IX_ProjectStarts_TenantId_MonitoringId",
             table: "ProjectStarts",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_PushNotificationSubscriptions_DeviceId",
@@ -1790,9 +1909,9 @@ public partial class _20261125094809_Initial : Migration
             filter: "\"CustomHostname\" IS NOT NULL");
 
         migrationBuilder.CreateIndex(
-            name: "IX_StatusPages_ProjectId",
+            name: "IX_StatusPages_MonitoringId",
             table: "StatusPages",
-            column: "ProjectId",
+            column: "MonitoringId",
             unique: true);
 
         migrationBuilder.CreateIndex(
@@ -1802,9 +1921,9 @@ public partial class _20261125094809_Initial : Migration
             unique: true);
 
         migrationBuilder.CreateIndex(
-            name: "IX_StatusPages_TenantId_ProjectId",
+            name: "IX_StatusPages_TenantId_MonitoringId",
             table: "StatusPages",
-            columns: new[] { "TenantId", "ProjectId" });
+            columns: new[] { "TenantId", "MonitoringId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_SystemPrompts_TenantId_PromptKind",
@@ -2010,6 +2129,9 @@ public partial class _20261125094809_Initial : Migration
             name: "ProjectMaintenanceWindows");
 
         migrationBuilder.DropTable(
+            name: "ProjectMembers");
+
+        migrationBuilder.DropTable(
             name: "ProjectProbes");
 
         migrationBuilder.DropTable(
@@ -2034,6 +2156,9 @@ public partial class _20261125094809_Initial : Migration
             name: "ProjectStarts");
 
         migrationBuilder.DropTable(
+            name: "ProjectTrials");
+
+        migrationBuilder.DropTable(
             name: "RoleClaims");
 
         migrationBuilder.DropTable(
@@ -2044,9 +2169,6 @@ public partial class _20261125094809_Initial : Migration
 
         migrationBuilder.DropTable(
             name: "SystemPrompts");
-
-        migrationBuilder.DropTable(
-            name: "TenantMemberships");
 
         migrationBuilder.DropTable(
             name: "UserClaims");
@@ -2064,10 +2186,10 @@ public partial class _20261125094809_Initial : Migration
             name: "WebAuthnCredential");
 
         migrationBuilder.DropTable(
-            name: "LicensedProjects");
+            name: "ProjectIncidents");
 
         migrationBuilder.DropTable(
-            name: "ProjectIncidents");
+            name: "TenantMemberships");
 
         migrationBuilder.DropTable(
             name: "ProjectScans");
@@ -2085,10 +2207,13 @@ public partial class _20261125094809_Initial : Migration
             name: "UserSessions");
 
         migrationBuilder.DropTable(
-            name: "Projects");
+            name: "Monitorings");
 
         migrationBuilder.DropTable(
             name: "Users");
+
+        migrationBuilder.DropTable(
+            name: "Projects");
 
         migrationBuilder.DropTable(
             name: "Tenants");

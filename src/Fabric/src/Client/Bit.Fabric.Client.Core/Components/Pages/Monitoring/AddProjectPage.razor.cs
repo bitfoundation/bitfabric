@@ -23,7 +23,7 @@ public partial class AddProjectPage
     private AddressProbeResultDto? probe;
     private Action? unsubscribe;
 
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
     [AutoInject] private Clipboard clipboard = default!;
     [AutoInject] private ILocalHttpServer localHttpServer = default!;
     [AutoInject] private IExternalNavigationService externalNavigationService = default!;
@@ -74,7 +74,7 @@ public partial class AddProjectPage
         // Once, in the browser: the code can be exchanged only once, so a prerender must not spend it.
         try
         {
-            var project = await projectsController.CompleteConnect(new() { State = State, Code = Code, Error = Error, Iss = Iss, TimeZoneId = TimeZoneService.CurrentTimeZone.Id }, CurrentCancellationToken);
+            var project = await monitoringsController.CompleteConnect(new() { State = State, Code = Code, Error = Error, Iss = Iss, TimeZoneId = TimeZoneService.CurrentTimeZone.Id }, CurrentCancellationToken);
             ShowConnected(project);
         }
         catch (KnownException exp)
@@ -94,7 +94,7 @@ public partial class AddProjectPage
 
         try
         {
-            probe = await projectsController.ProbeAddress(new() { Address = address }, CurrentCancellationToken);
+            probe = await monitoringsController.ProbeAddress(new() { Address = address }, CurrentCancellationToken);
             name = probe.AppTitle ?? Host(probe.Address);
         }
         finally
@@ -119,7 +119,7 @@ public partial class AddProjectPage
 
             var port = localHttpServer.EnsureStarted();
 
-            var start = await projectsController.StartConnect(new()
+            var start = await monitoringsController.StartConnect(new()
             {
                 Address = probe.Address,
                 Name = name,
@@ -156,7 +156,7 @@ public partial class AddProjectPage
 
         try
         {
-            var project = await projectsController.CompleteConnect(new() { State = Value("state"), Code = Value("code"), Error = Value("error"), Iss = Value("iss"), TimeZoneId = TimeZoneService.CurrentTimeZone.Id }, CurrentCancellationToken);
+            var project = await monitoringsController.CompleteConnect(new() { State = Value("state"), Code = Value("code"), Error = Value("error"), Iss = Value("iss"), TimeZoneId = TimeZoneService.CurrentTimeZone.Id }, CurrentCancellationToken);
             isWaitingForApproval = false;
             ShowConnected(project);
         }
@@ -169,7 +169,7 @@ public partial class AddProjectPage
     }
 
     /// <summary>The last step, in place of the approval's answer in the address, which can't be spent twice.</summary>
-    private void ShowConnected(ProjectDto project)
+    private void ShowConnected(MonitoringDto project)
         => NavigationManager.NavigateTo($"{PageUrls.AddProject}?connected={project.Id}", replace: true);
 
     private void CancelApproval()

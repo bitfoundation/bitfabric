@@ -13,7 +13,7 @@ public partial class ProjectPage
 {
     private bool isLoading = true;
     private bool isLoadFailed;
-    private ProjectDetailsDto? details;
+    private MonitoringDetailsDto? details;
 
     [Parameter] public Guid Id { get; set; }
 
@@ -54,13 +54,13 @@ public partial class ProjectPage
 
     private void Renamed(string? name)
     {
-        if (details?.Project is { } project)
+        if (details?.Monitoring is { } project)
         {
             project.Name = name;
         }
     }
 
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
 
     private static string BackIcon => CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? BitIconName.Forward : BitIconName.Back;
 
@@ -76,7 +76,7 @@ public partial class ProjectPage
 
         try
         {
-            details = await projectsController.GetProject(Id, CurrentCancellationToken);
+            details = await monitoringsController.GetMonitoring(Id, CurrentCancellationToken);
             isLoadFailed = false;
         }
         catch (ResourceNotFoundException)

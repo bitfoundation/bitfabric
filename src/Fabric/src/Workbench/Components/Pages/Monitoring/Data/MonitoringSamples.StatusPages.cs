@@ -24,7 +24,7 @@ public static partial class MonitoringSamples
 
         project.StatusPage = new()
         {
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             Slug = project.Key,
             IsPublished = published,
             ShowsResponseTime = published,

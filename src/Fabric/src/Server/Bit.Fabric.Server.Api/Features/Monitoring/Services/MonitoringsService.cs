@@ -8,10 +8,10 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring.Services;
 
 /// <summary>
 /// What the projects page and a project's Overview read (bitfabric-internal/specs/monitoring.md), for
-/// <see cref="ProjectsController"/> and the AI tools (<see cref="ProjectMonitoringMcpTools"/>) alike, so a card says the
+/// <see cref="MonitoringsController"/> and the AI tools (<see cref="ProjectMonitoringMcpTools"/>) alike, so a card says the
 /// same in the app as to an AI. Every query goes through the tenant filter: another team's project is simply not found.
 /// </summary>
-public partial class ProjectsService(AppDbContext dbContext,
+public partial class MonitoringsService(AppDbContext dbContext,
     TimeProvider timeProvider,
     ServerApiSettings settings,
     IEnumerable<IProjectScanner> scanners,
@@ -27,14 +27,14 @@ public partial class ProjectsService(AppDbContext dbContext,
     /// Every project of the tenant as its card shows it, failing ones first, its last 30 days drawn in
     /// <paramref name="zone"/>, the viewer's.
     /// </summary>
-    public async Task<List<ProjectDto>> GetProjects(TimeZoneInfo zone, CancellationToken cancellationToken)
+    public async Task<List<MonitoringDto>> GetMonitorings(TimeZoneInfo zone, CancellationToken cancellationToken)
     {
         var now = timeProvider.GetUtcNow();
         var since24Hours = now.AddHours(-24);
         var recently = now.AddMinutes(-10);
 
-        var projects = await dbContext.Projects.AsNoTracking().ToListAsync(cancellationToken);
-        Guid[] projectIds = [.. projects.Select(project => project.Id)];
+        var projects = await dbContext.Monitorings.AsNoTracking().Include(project => project.Project).ToListAsync(cancellationToken);
+        Guid[] monitoringIds = [.. projects.Select(project => project.Id)];
 
         // The 30 days from the report's rollups, summed up a day at a time by the database: the same few thousand rows a
         // project the card's uptime always read rather than 43,200 rounds, and 30 rows a project back. The days' midnights
@@ -45,40 +45,40 @@ public partial class ProjectsService(AppDbContext dbContext,
         var since = days[0].Start;
 
         var rounds = (await dbContext.Database.SqlQuery<CardDayRow>($"""
-            SELECT "ProjectId", width_bucket("BucketStart", {midnights}) AS "Day",
+            SELECT "MonitoringId", width_bucket("BucketStart", {midnights}) AS "Day",
                    SUM("Count") AS "Count", SUM("FailedCount") AS "Failed", SUM("DegradedCount") AS "Degraded"
             FROM "ProjectRollups"
-            WHERE "ProjectId" = ANY({projectIds}) AND "CheckKey" = {ProjectRollup.ReportKey} AND "BucketStart" >= {since}
+            WHERE "MonitoringId" = ANY({monitoringIds}) AND "CheckKey" = {ProjectRollup.ReportKey} AND "BucketStart" >= {since}
             GROUP BY 1, 2
             """).ToListAsync(cancellationToken))
-            .ToLookup(row => row.ProjectId);
+            .ToLookup(row => row.MonitoringId);
 
         var cacheWarnings = await dbContext.ProjectProbes
-            .Where(probe => projectIds.Contains(probe.ProjectId) && probe.At >= recently && probe.HasCacheWarning)
-            .Select(probe => probe.ProjectId)
+            .Where(probe => monitoringIds.Contains(probe.MonitoringId) && probe.At >= recently && probe.HasCacheWarning)
+            .Select(probe => probe.MonitoringId)
             .Distinct()
             .ToListAsync(cancellationToken);
 
-        // The percentiles need every round of the day; the project ids keep it on the (ProjectId, At) index.
+        // The percentiles need every round of the day; the project ids keep it on the (MonitoringId, At) index.
         var responseTimes = (await dbContext.ProjectProbes
-            .Where(probe => projectIds.Contains(probe.ProjectId) && probe.At >= since24Hours && probe.ResponseMs != null)
-            .Select(probe => new { probe.ProjectId, probe.At, Ms = probe.ResponseMs!.Value, probe.VisitorMs })
+            .Where(probe => monitoringIds.Contains(probe.MonitoringId) && probe.At >= since24Hours && probe.ResponseMs != null)
+            .Select(probe => new { probe.MonitoringId, probe.At, Ms = probe.ResponseMs!.Value, probe.VisitorMs })
             .ToListAsync(cancellationToken))
-            .ToLookup(row => row.ProjectId);
+            .ToLookup(row => row.MonitoringId);
 
         var failing = (await dbContext.ProjectCheckPeriods
-            .Where(period => projectIds.Contains(period.ProjectId) && period.EndedAt == null && period.Status != HealthCheckStatus.Healthy)
-            .Select(period => new { period.ProjectId, Title = period.Title ?? period.CheckKey })
+            .Where(period => monitoringIds.Contains(period.MonitoringId) && period.EndedAt == null && period.Status != HealthCheckStatus.Healthy)
+            .Select(period => new { period.MonitoringId, Title = period.Title ?? period.CheckKey })
             .ToListAsync(cancellationToken))
-            .ToLookup(row => row.ProjectId, row => row.Title!);
+            .ToLookup(row => row.MonitoringId, row => row.Title!);
 
         var ongoing = (await dbContext.ProjectIncidents
-            .Where(incident => projectIds.Contains(incident.ProjectId) && incident.EndedAt == null)
+            .Where(incident => monitoringIds.Contains(incident.MonitoringId) && incident.EndedAt == null)
             .ToListAsync(cancellationToken))
-            .ToLookup(incident => incident.ProjectId);
+            .ToLookup(incident => incident.MonitoringId);
 
         ProjectScanKind[] kindsRun = [.. scanners.Where(scanner => scanner.IsAvailable).Select(scanner => scanner.Kind)];
-        var scans = await ProjectScanReader.SummariesOf(dbContext, projectIds, kindsRun, now, cancellationToken);
+        var scans = await ProjectScanReader.SummariesOf(dbContext, monitoringIds, kindsRun, now, cancellationToken);
 
         return [.. projects.Select(project =>
         {
@@ -146,7 +146,7 @@ public partial class ProjectsService(AppDbContext dbContext,
     /// <summary>A project's day of report rollups, the <c>Day</c>th of the card's 30 (See GetProjects).</summary>
     internal sealed class CardDayRow
     {
-        public Guid ProjectId { get; set; }
+        public Guid MonitoringId { get; set; }
 
         public int Day { get; set; }
 
@@ -158,7 +158,7 @@ public partial class ProjectsService(AppDbContext dbContext,
     }
 
     /// <summary>Failing first, the way the projects page orders its cards.</summary>
-    private static int AttentionRank(ProjectDto project) => (project.Health, project.ConnectionStatus) switch
+    internal static int AttentionRank(MonitoringDto project) => (project.Health, project.ConnectionStatus) switch
     {
         (ProjectHealth.Down, _) => 0,
         (_, ProjectConnectionStatus.ReconnectNeeded) => 1,
@@ -168,13 +168,13 @@ public partial class ProjectsService(AppDbContext dbContext,
     };
 
     /// <summary>A project's Overview: the project and its last report, entry by entry, its builds and where it's checked from.</summary>
-    public async Task<ProjectDetailsDto> GetProject(Guid id, CancellationToken cancellationToken)
+    public async Task<MonitoringDetailsDto> GetMonitoring(Guid id, CancellationToken cancellationToken)
     {
         var project = await FindProject(id, cancellationToken);
 
         // The last rounds that read a report: the newest is what the page shows, all of them each part's strip of recent results.
         var recentRounds = await dbContext.ProjectProbes.AsNoTracking()
-            .Where(probe => probe.ProjectId == id && probe.Outcome == ProjectProbeOutcome.Read)
+            .Where(probe => probe.MonitoringId == id && probe.Outcome == ProjectProbeOutcome.Read)
             .OrderByDescending(probe => probe.At)
             .Take(RecentRounds)
             .ToListAsync(cancellationToken);
@@ -182,12 +182,12 @@ public partial class ProjectsService(AppDbContext dbContext,
         var lastReport = recentRounds.FirstOrDefault();
 
         var since = await dbContext.ProjectCheckPeriods
-            .Where(period => period.ProjectId == id && period.EndedAt == null)
+            .Where(period => period.MonitoringId == id && period.EndedAt == null)
             .ToDictionaryAsync(period => period.CheckKey!, period => period.StartedAt, cancellationToken);
 
         // The newest deployment and the newest restart (See ProjectStart.IsDeploy).
         var lastStarts = await dbContext.ProjectStarts
-            .Where(start => start.ProjectId == id)
+            .Where(start => start.MonitoringId == id)
             .GroupBy(start => start.IsDeploy)
             .Select(group => new { IsDeploy = group.Key, At = group.Max(start => start.At) })
             .ToListAsync(cancellationToken);
@@ -195,7 +195,7 @@ public partial class ProjectsService(AppDbContext dbContext,
         var now = timeProvider.GetUtcNow();
 
         var regions = (await dbContext.ProjectProbes
-            .Where(probe => probe.ProjectId == id && probe.At >= now.AddMinutes(-10))
+            .Where(probe => probe.MonitoringId == id && probe.At >= now.AddMinutes(-10))
             .Select(probe => probe.Region!)
             .Distinct()
             .ToArrayAsync(cancellationToken))
@@ -209,7 +209,7 @@ public partial class ProjectsService(AppDbContext dbContext,
 
         var dto = project.Map();
 
-        if (await dbContext.ProjectIncidents.AsNoTracking().Where(incident => incident.ProjectId == id && incident.EndedAt == null)
+        if (await dbContext.ProjectIncidents.AsNoTracking().Where(incident => incident.MonitoringId == id && incident.EndedAt == null)
                                            .OrderBy(incident => incident.StartedAt).FirstOrDefaultAsync(cancellationToken) is { } ongoing)
         {
             dto.OngoingIncidentId = ongoing.Id;
@@ -219,7 +219,7 @@ public partial class ProjectsService(AppDbContext dbContext,
 
         // Each location's newest reading of the last hour, with the data center it really ran in.
         var networkReadings = (await dbContext.ProjectProbes
-            .Where(probe => probe.ProjectId == id && probe.Colo != null && probe.At >= now.AddHours(-1))
+            .Where(probe => probe.MonitoringId == id && probe.Colo != null && probe.At >= now.AddHours(-1))
             .Select(probe => new { probe.Region, probe.Colo, probe.At, probe.ResponseMs })
             .ToListAsync(cancellationToken))
             .GroupBy(reading => reading.Region)
@@ -237,7 +237,7 @@ public partial class ProjectsService(AppDbContext dbContext,
 
         return new()
         {
-            Project = dto,
+            Monitoring = dto,
             Checks = [.. (lastReport?.Checks ?? []).Select(check =>
             {
                 var checkDto = check.Map();
@@ -261,8 +261,8 @@ public partial class ProjectsService(AppDbContext dbContext,
     }
 
     /// <summary>A project of the tenant, untracked; another team's is not found.</summary>
-    public async Task<Project> FindProject(Guid id, CancellationToken cancellationToken)
-        => await dbContext.Projects.AsNoTracking().FirstOrDefaultAsync(project => project.Id == id, cancellationToken)
+    public async Task<ProjectMonitoring> FindProject(Guid id, CancellationToken cancellationToken)
+        => await dbContext.Monitorings.AsNoTracking().Include(project => project.Project).FirstOrDefaultAsync(project => project.Id == id, cancellationToken)
            ?? throw new ResourceNotFoundException(localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
     /// <summary>bit Fabric's own server first, then the bitplatform Network's locations in the order NetworkLocations lists them.</summary>

@@ -22,13 +22,13 @@ public partial class ProjectIncidentTracker
     /// <summary>What a round changed, for <see cref="ProjectAlerter"/> to tell once the round is saved.</summary>
     public sealed record Change(ProjectIncident Incident, ProjectAlertKind Kind);
 
-    public async Task<Change?> Track(Project project, ProjectProbe probe, CancellationToken cancellationToken)
+    public async Task<Change?> Track(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
     {
         if (probe.Outcome is ProjectProbeOutcome.Unauthorized)
             return null;
 
         var previous = await dbContext.ProjectProbes.IgnoreQueryFilters()
-            .Where(p => p.ProjectId == project.Id && p.Region == probe.Region && p.At < probe.At && p.Outcome != ProjectProbeOutcome.Unauthorized)
+            .Where(p => p.MonitoringId == project.Id && p.Region == probe.Region && p.At < probe.At && p.Outcome != ProjectProbeOutcome.Unauthorized)
             .OrderByDescending(p => p.At)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -39,7 +39,7 @@ public partial class ProjectIncidentTracker
         var confirmed = failingNow.Keys.Intersect(failingBefore.Keys).ToArray();
 
         var open = await dbContext.ProjectIncidents.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(incident => incident.ProjectId == project.Id && incident.EndedAt == null && incident.IsAutomatic, cancellationToken);
+            .FirstOrDefaultAsync(incident => incident.MonitoringId == project.Id && incident.EndedAt == null && incident.IsAutomatic, cancellationToken);
 
         if (open is null)
         {
@@ -95,26 +95,26 @@ public partial class ProjectIncidentTracker
         return open.DuringMaintenance ? null : new(open, ProjectAlertKind.Resolved);
     }
 
-    private async Task<ProjectIncident> Open(Project project, ProjectProbe previous, ProjectProbe probe, string[] confirmed, Dictionary<string, HealthCheckStatus> failing, CancellationToken cancellationToken)
+    private async Task<ProjectIncident> Open(ProjectMonitoring project, ProjectProbe previous, ProjectProbe probe, string[] confirmed, Dictionary<string, HealthCheckStatus> failing, CancellationToken cancellationToken)
     {
         var startedAt = previous.At;
         var impact = ImpactOf(failing.Where(part => confirmed.Contains(part.Key)).Select(part => part.Value));
         var titles = TitlesOf(probe, previous, confirmed);
 
         var deployedAt = await dbContext.ProjectStarts.IgnoreQueryFilters()
-            .Where(start => start.ProjectId == project.Id && start.IsDeploy && start.At <= startedAt && start.At >= startedAt - DeployWindow)
+            .Where(start => start.MonitoringId == project.Id && start.IsDeploy && start.At <= startedAt && start.At >= startedAt - DeployWindow)
             .OrderByDescending(start => start.At)
             .Select(start => (DateTimeOffset?)start.At)
             .FirstOrDefaultAsync(cancellationToken);
 
         var windows = await dbContext.ProjectMaintenanceWindows.IgnoreQueryFilters()
-            .Where(window => window.ProjectId == project.Id && window.StartsAt <= startedAt)
+            .Where(window => window.MonitoringId == project.Id && window.StartsAt <= startedAt)
             .ToListAsync(cancellationToken);
 
         ProjectIncident incident = new()
         {
             Id = Guid.CreateSequentialGuid(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = project.TenantId,
             IsAutomatic = true,
             Impact = impact,
@@ -160,7 +160,7 @@ public partial class ProjectIncidentTracker
                                   ?? previous?.Checks.FirstOrDefault(check => check.Key == key)?.Title
                                   ?? key)];
 
-    private List<ProjectText> TitleOf(Project project, ProjectHealth impact, string[] titles)
+    private List<ProjectText> TitleOf(ProjectMonitoring project, ProjectHealth impact, string[] titles)
         => texts.InEveryLanguage(localizer => titles.Length is 0
             ? localizer[nameof(AppStrings.MonitoringIncidentTitleNotAnswering), project.Name!]
             : impact is ProjectHealth.Down

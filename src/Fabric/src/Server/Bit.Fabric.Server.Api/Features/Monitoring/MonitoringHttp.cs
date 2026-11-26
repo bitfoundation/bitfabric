@@ -24,7 +24,10 @@ public static class MonitoringHttp
         services.AddScoped<ProjectProbesRetentionJobRunner>();
         services.AddScoped<ProjectEscalationJobRunner>();
         services.AddScoped<ProjectSlaReports>();
-        services.AddScoped<ProjectsService>();
+        services.AddScoped<MonitoringsService>();
+        services.AddScoped<Projects.ProjectsService>();
+        services.AddScoped<Projects.ProjectLinker>();
+        services.AddScoped<Projects.TeamDeparture>();
         services.AddScoped<ProjectIncidentsService>();
         services.AddScoped<ProjectHistoryExport>();
 

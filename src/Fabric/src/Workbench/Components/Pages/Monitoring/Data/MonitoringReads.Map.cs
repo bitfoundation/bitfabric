@@ -5,7 +5,7 @@ namespace Bit.Fabric.Workbench.Components.Pages.Monitoring.Data;
 public static partial class MonitoringReads
 {
     /// <summary>
-    /// A sample project's application map, as the server builds it (ProjectsService.GetMap): its report's parts, each with
+    /// A sample project's application map, as the server builds it (MonitoringsService.GetMap): its report's parts, each with
     /// its last 24 hours from the sample's recent rounds, which stand in for the rollups, and the ongoing incident about it.
     /// </summary>
     public static ProjectMapDto Map(SampleProject project, DateTimeOffset now)

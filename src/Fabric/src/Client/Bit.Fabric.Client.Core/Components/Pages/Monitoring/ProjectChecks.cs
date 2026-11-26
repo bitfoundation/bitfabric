@@ -48,7 +48,7 @@ public static class ProjectChecks
         => Array.FindIndex(Groups, known => known.Name == group) is var index and >= 0 ? index * 2 : (Groups.Length - 1) * 2 - 1;
 
     /// <summary>Approving bit Fabric in the app again, with whoever signs in there: the add page, the app's address looked for at once.</summary>
-    public static string ReconnectHref(ProjectDto project)
+    public static string ReconnectHref(MonitoringDto project)
         => $"{PageUrls.AddProject}?address={Uri.EscapeDataString(Uri.TryCreate(project.Address, UriKind.Absolute, out var address) ? address.Authority : project.Address ?? "")}";
 
     /// <summary>What the app calls a part; its report key when the app says nothing.</summary>

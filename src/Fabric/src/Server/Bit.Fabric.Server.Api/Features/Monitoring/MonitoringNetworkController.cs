@@ -40,7 +40,7 @@ public partial class MonitoringNetworkController : AppControllerBase
 
         return [.. (await TargetsOf(networkLocation, cancellationToken)).Select(project => new NetworkTargetDto
         {
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             // The page the front door lands on, once a round from here found it, so a location times one request too.
             Url = landings.AddressOf(project),
             IsServerHealth = project.HasStaticFrontEnd
@@ -72,7 +72,7 @@ public partial class MonitoringNetworkController : AppControllerBase
 
         foreach (var result in request.Results)
         {
-            if (targets.TryGetValue(result.ProjectId, out var project) is false)
+            if (targets.TryGetValue(result.MonitoringId, out var project) is false)
                 continue;
 
             var at = result.At.ToUniversalTime();
@@ -84,7 +84,7 @@ public partial class MonitoringNetworkController : AppControllerBase
             probes.Add(new()
             {
                 Id = Guid.CreateSequentialGuid(),
-                ProjectId = project.Id,
+                MonitoringId = project.Id,
                 TenantId = project.TenantId,
                 At = at,
                 Region = location.Name,
@@ -119,9 +119,9 @@ public partial class MonitoringNetworkController : AppControllerBase
     /// Only https addresses: the Network opens what any visitor can, and never a local one bit Fabric allows itself in
     /// Development. A project waiting to be reconnected isn't watched from anywhere, as from Germany (See ProjectProbeJobRunner).
     /// </summary>
-    private async Task<List<Project>> TargetsOf(NetworkLocation location, CancellationToken cancellationToken)
+    private async Task<List<ProjectMonitoring>> TargetsOf(NetworkLocation location, CancellationToken cancellationToken)
     {
-        var projects = (await DbContext.Projects.IgnoreQueryFilters().AsNoTracking()
+        var projects = (await DbContext.Monitorings.IgnoreQueryFilters().AsNoTracking()
             .Where(project => project.Locations.Contains(location.Code) && project.ConnectionStatus != ProjectConnectionStatus.ReconnectNeeded && project.ConnectionStatus != ProjectConnectionStatus.Disconnected)
             .OrderBy(project => project.CreatedOn).ThenBy(project => project.Id)
             .ToListAsync(cancellationToken))
