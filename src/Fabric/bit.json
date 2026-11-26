@@ -2,6 +2,8 @@
     "template": "bit-bp",
     "version": "11.0.0-pre-22",
     "name": "Bit.Fabric",
+    "projectId": "72c37aa7-dd46-4f30-b74c-0120fa37df64",
+    "license": "bfl1.eyJ2IjoxLCJwcm9qZWN0IjoiNzJjMzdhYTctZGQ0Ni00ZjMwLWI3NGMtMDEyMGZhMzdkZjY0IiwibmFtZSI6IkJpdC5GYWJyaWMiLCJjb21taXQiOiI4MTUyMTZlZmI0MjhhNTk3YTc5MGNkMjNmNmEzOGJlMTRmMGRiM2EyIiwicGxhbiI6ImZyZWUiLCJob2xkZXIiOiJCaXQuRmFicmljIHRlc3QgYWNjb3VudCIsImlzc3VlZCI6IjIwMjYtMTEtMjVUMjE6MTU6NTJaIiwiZXhwaXJlcyI6IjIwMjctMTEtMjVUMjE6MTU6NTJaIn0.2YHnHtWSbqe28BbSW8GLI37fA1GgKvKiAaR9CCXOKyomhvGPbpRY_n90K288II55TGNIrcTtoKueeaGuaEzrUw",
     "options": {
         "framework": "net11.0",
         "database": "PostgreSQL",

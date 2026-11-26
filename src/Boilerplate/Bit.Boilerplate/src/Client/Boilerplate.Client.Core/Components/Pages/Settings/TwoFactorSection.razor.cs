@@ -18,12 +18,42 @@ public partial class TwoFactorSection
     [AutoInject] private Clipboard clipboard = default!;
     [AutoInject] private IUserController userController = default!;
 
+    /// <summary>
+    /// Where the user came from to turn two-factor authentication on, such as an OAuth consent that needs it
+    /// (See ConsentPage). Honoured only when it is a url of this app.
+    /// </summary>
+    [Parameter, SupplyParameterFromQuery(Name = "return-url")]
+    public string? ReturnUrl { get; set; }
+
+    /// <summary>
+    /// Whether this session signed in with two-factor authentication (<see cref="AuthPolicies.TFA_ENABLED"/>): turning it
+    /// on does not add that to the session, which only a new sign-in with the second factor does.
+    /// </summary>
+    private bool isTwoFactorSession;
+
 
     protected override async Task OnInitAsync()
     {
         await base.OnInitAsync();
 
+        isTwoFactorSession = await AuthorizationService.IsAuthorized((await AuthenticationStateTask).User, AuthPolicies.TFA_ENABLED);
+
         await SendTwoFactorAuthRequest(new());
+    }
+
+    private bool HasReturnUrl => Uri.IsAppRelativeUrl(ReturnUrl, requireLeadingSlash: false);
+
+    private void GoBack() => NavigationManager.NavigateTo(ReturnUrl!);
+
+    /// <summary>
+    /// Signs out and back in, so the new session carries the second factor, landing where <see cref="ReturnUrl"/> says. The
+    /// session would be signed out anyway on its next refresh: turning two-factor on signs out every session.
+    /// </summary>
+    private async Task SignInAgain()
+    {
+        await AuthManager.SignOut(CurrentCancellationToken);
+
+        NavigationManager.NavigateTo($"{PageUrls.SignIn}?return-url={Uri.EscapeDataString(ReturnUrl!)}");
     }
 
     private async Task EnableTwoFactorAuth()

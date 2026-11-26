@@ -425,7 +425,7 @@ dnx Bit.Cli --version 11.0.0-pre-22 -- translate
 
 #### 6.3.1 `.vscode/mcp.json`
 
-**Location**: [`/.vscode/mcp.json`](/.vscode/mcp.json)
+**Location**: `/.vscode/mcp.json` of bitfabric-internal, which holds bit Fabric's AI tool settings; `project` is the `projectId` in `src/Fabric/bit.json`
 
 **Purpose**: Configuration for **Model Context Protocol (MCP) servers** that extend GitHub Copilot's capabilities with specialized knowledge and tools.
 
@@ -436,7 +436,7 @@ dnx Bit.Cli --version 11.0.0-pre-22 -- translate
     "servers": {
         "bitplatform": {
             "type": "http",
-            "url": "https://bitplatform.dev/mcp?v=11.0.0"
+            "url": "https://api.bitfabric.co/docs-mcp?project=72c37aa7-dd46-4f30-b74c-0120fa37df64"
         }
     }
 }

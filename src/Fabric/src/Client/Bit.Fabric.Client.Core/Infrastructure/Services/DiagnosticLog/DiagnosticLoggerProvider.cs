@@ -1,13 +1,12 @@
 
-using Bit.Fabric.Client.Core.Components.Layout.Diagnostic;
-
 namespace Bit.Fabric.Client.Core.Infrastructure.Services.DiagnosticLog;
 
 // https://learn.microsoft.com/en-us/aspnet/core/blazor/hybrid/developer-tools
 
 /// <summary>
-/// Provides a custom logger that outputs log messages to the in memory store and allows for selective display of logs
-/// within the application UI for enhanced diagnostic using <see cref="AppDiagnosticModal"/>
+/// Provides a custom logger that keeps the recent log messages in an in memory store, from which the chatbot's
+/// CheckLastError tool reads this device's last error (See <see cref="SharedAppMessages.UPLOAD_LAST_ERROR"/>).
+/// To read the logs in the app, open BevTools' Logs panel (See AppDevTools).
 /// </summary>
 [ProviderAlias("DiagnosticLogger")]
 public partial class DiagnosticLoggerProvider(TimeProvider timeProvider) : ILoggerProvider

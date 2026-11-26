@@ -18,6 +18,11 @@ public static class WindowsWindow
     private const uint WM_SYSCOMMAND = 0x0112;
     private const nint SC_CLOSE = 0xF060;
     private const uint MONITOR_DEFAULTTONEAREST = 2;
+    private const uint GA_ROOTOWNER = 3;
+    private const uint INPUT_KEYBOARD = 1;
+    private const uint KEYEVENTF_KEYUP = 0x0002;
+    private const ushort VK_TAB = 0x09;
+    private const ushort VK_MENU = 0x12;
 
     /// <summary>
     /// The running process of <paramref name="windowsAppId"/>, once it has a window.
@@ -93,7 +98,70 @@ public static class WindowsWindow
             throw new InvalidOperationException($"Windows did not deliver the close request to '{app.ProcessName}' ({Marshal.GetLastWin32Error()}).");
     }
 
+    /// <summary>
+    /// Whether the window in front, the one that gets the keyboard, is the app's or one it owns - what
+    /// <c>WindowsKioskGuard</c> itself asks before it swallows a key.
+    /// </summary>
+    public static bool IsInFront(Process app)
+    {
+        GetWindowThreadProcessId(GetAncestor(GetForegroundWindow(), GA_ROOTOWNER), out var processId);
+
+        return processId == app.Id;
+    }
+
+    /// <summary>Whether any window is in front - none is while the desktop is locked.</summary>
+    public static bool IsDesktopInteractive() => GetForegroundWindow() is not 0;
+
+    /// <summary>
+    /// Alt+Tab as a person presses it: into the input Windows reads from the keyboard, where a keyboard hook sees it,
+    /// in one call so nothing else typed lands in between. False when Windows refused it - a locked or otherwise
+    /// non-interactive desktop.
+    /// </summary>
+    public static bool PressAltTab()
+    {
+        INPUT[] inputs = [Key(VK_MENU, up: false), Key(VK_TAB, up: false), Key(VK_TAB, up: true), Key(VK_MENU, up: true)];
+
+        return SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>()) == inputs.Length;
+
+        static INPUT Key(ushort virtualKey, bool up) => new()
+        {
+            type = INPUT_KEYBOARD,
+            union = new() { ki = new() { wVk = virtualKey, dwFlags = up ? KEYEVENTF_KEYUP : 0 } }
+        };
+    }
+
     private static Rectangle ToRectangle(RECT rect) => Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct INPUT
+    {
+        public uint type;
+        public INPUTUNION union;
+    }
+
+    // MOUSEINPUT is the largest member, so it is here for the size SendInput checks, not to be sent.
+    [StructLayout(LayoutKind.Explicit)]
+    private struct INPUTUNION
+    {
+        [FieldOffset(0)] public MOUSEINPUT mi;
+        [FieldOffset(0)] public KEYBDINPUT ki;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MOUSEINPUT
+    {
+        public int dx, dy;
+        public uint mouseData, dwFlags, time;
+        public nint dwExtraInfo;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct KEYBDINPUT
+    {
+        public ushort wVk, wScan;
+        public uint dwFlags, time;
+        public nint dwExtraInfo;
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     private struct RECT
@@ -138,4 +206,16 @@ public static class WindowsWindow
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool PostMessageW(nint hWnd, uint msg, nint wParam, nint lParam);
+
+    [DllImport("user32.dll")]
+    private static extern nint GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    private static extern nint GetAncestor(nint hwnd, uint gaFlags);
+
+    [DllImport("user32.dll")]
+    private static extern uint GetWindowThreadProcessId(nint hWnd, out uint lpdwProcessId);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 }
