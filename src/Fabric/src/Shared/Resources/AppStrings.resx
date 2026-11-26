@@ -2336,7 +2336,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Is the code mine to change?</value>
   </data>
     <data name="NewProjectFaqCodeMineAnswer" xml:space="preserve">
-    <value>All of it. Whatever you start with is your own code, in your own repository.</value>
+    <value>All of it. Whatever you start with is your own code, in your free GitHub account.</value>
   </data>
     <data name="NewProjectHelpCustomersLead" xml:space="preserve">
     <value>With multi-tenancy, one app serves many companies. Each company has its own users and sees only its own data, and one person can belong to several companies. Most software sold to businesses (SaaS) works this way.</value>
@@ -2624,7 +2624,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>What if bit Fabric disappears?</value>
   </data>
     <data name="NewProjectFaqDisappearsAnswer" xml:space="preserve">
-    <value>Your app keeps working. Its code is in your repository and its data on your server; nothing of it runs on ours.</value>
+    <value>Your app keeps working. Its code is in your free GitHub account and its data on your server; nothing of it runs on ours.</value>
   </data>
     <data name="NewProjectFaqComputer" xml:space="preserve">
     <value>Which computer do I need?</value>
@@ -5620,6 +5620,18 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <data name="AppHomeFlowsBetweenYourPagesText" xml:space="preserve">
     <value>How one page leads to the next, drawn from the real pages, to understand the app or to show it in a meeting.</value>
   </data>
+    <data name="AppHomeBoards" xml:space="preserve">
+    <value>Boards</value>
+    </data>
+    <data name="AppHomeBoardsText" xml:space="preserve">
+    <value>What your AI shows you as a page instead of a long answer: a flow drawn, options side by side, numbers to try.</value>
+    </data>
+    <data name="AppHomeAProgressPage" xml:space="preserve">
+    <value>A Progress page</value>
+    </data>
+    <data name="AppHomeAProgressPageText" xml:space="preserve">
+    <value>A long task's steps as your AI works through them, and the questions only you can answer, with a click or a few words.</value>
+    </data>
     <data name="AppHomeTheWorkbenchDrawsHowYourPagesLeadTo" xml:space="preserve">
     <value>The Workbench draws how your pages lead to one another, from the real pages...</value>
   </data>
@@ -5720,7 +5732,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>On your computer</value>
   </data>
   <data name="AppHomeCompareFabricCode" xml:space="preserve">
-    <value>On your computer and your own server, never with us</value>
+    <value>In your free GitHub account and on your own server, never with us</value>
   </data>
   <data name="AppHomeCompareYourPrompts" xml:space="preserve">
     <value>Your prompts</value>
@@ -8872,7 +8884,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Your app and its database, on your server</value>
   </data>
     <data name="AppHomeKeepsRunningCode" xml:space="preserve">
-    <value>Your code, in your repository</value>
+    <value>Your code, in your free GitHub account</value>
   </data>
     <data name="AppHomeKeepsRunningPipeline" xml:space="preserve">
     <value>The pipeline that builds and deploys it</value>
@@ -10864,7 +10876,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Every bill comes from whoever does the work, so you see what each part costs.</value>
   </data>
   <data name="PricingSavingWhyContext" xml:space="preserve">
-    <value>Your specs, docs and decisions are files in your own GitHub repository, at no cost, so you can move to whichever AI deal is best, Claude, Codex or another, without losing any context.</value>
+    <value>Your specs, docs and decisions are files in your free GitHub account, so you can move to whichever AI deal is best, Claude, Codex or another, without losing any context.</value>
   </data>
   <data name="PricingSavingHonest" xml:space="preserve">
     <value>Making a landing page or a small, simple app? A hosted builder costs less for that, and it's the better pick.</value>
@@ -11053,7 +11065,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Tokens per task count more than a token's price</value>
   </data>
   <data name="CostModelsIntro" xml:space="preserve">
-    <value>A price per token says little on its own: what you pay is the tokens a task takes. Anthropic, which makes Claude, shows it with its own models, and advises comparing them by what a finished task costs.</value>
+    <value>At first glance, a token's price looks like what decides the cost. What you really pay is the tokens a task takes. Anthropic, which makes Claude, shows it with its own models, and advises comparing them by what a finished task costs.</value>
   </data>
   <data name="CostModelsTokenTitle" xml:space="preserve">
     <value>Price per million tokens, input / output</value>
@@ -11116,10 +11128,22 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>So your project costs less</value>
   </data>
   <data name="CostLessText" xml:space="preserve">
-    <value>Fewer tokens for each task, none for what's already built, and fewer rounds of rework. Together, a lower bill for the whole project.</value>
+    <value>Fewer tokens for each task, none for what's already built, fewer rounds of rework, and the best AI deal whenever one comes. Together, a lower bill for the whole project.</value>
   </data>
   <data name="CostLessLink" xml:space="preserve">
     <value>See the bill, line by line</value>
+  </data>
+  <data name="CostSwitchTitle" xml:space="preserve">
+    <value>And you move to the best AI deal, losing nothing</value>
+  </data>
+  <data name="CostSwitchIntro" xml:space="preserve">
+    <value>bit Fabric keeps your specs, docs and decisions as files in your free GitHub account, not in one AI's chat. So when Claude, Codex or another runs a better offer, you move to it and carry on where you left off, with the same Workbench, its Progress page and its boards.</value>
+  </data>
+  <data name="CostSwitchLine" xml:space="preserve">
+    <value>A lower bill, with no drop in your project's quality.</value>
+  </data>
+  <data name="CostSwitchLink" xml:space="preserve">
+    <value>See them in the Workbench</value>
   </data>
   <data name="CliPageTitle" xml:space="preserve">
     <value>bit CLI, the command line of every bit Fabric project</value>

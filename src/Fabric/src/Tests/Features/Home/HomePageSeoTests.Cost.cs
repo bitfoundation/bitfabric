@@ -40,7 +40,7 @@ public partial class HomePageSeoTests
         Assert.AreEqual(AppStrings.CostPageDescription, Meta(head, "name", "description"));
         Assert.Contains($"<link rel=\"alternate\" type=\"text/markdown\" href=\"{origin}{AppCostCase.MarkdownUrl}\"", head, "The page leads agents to its Markdown copy.");
         AssertOneH1(html, AppStrings.CostTitle);
-        // One argument in three steps: tokens per task, tokens per project, so the project costs less; then the questions
+        // One argument in four steps: tokens per task, tokens per project, the best AI deal without losing context, so the project costs less; then the questions
         // and the sources
         AssertBandsInOrder(html, "per-task", "per-project", "costs-less", "questions", "sources");
 
@@ -57,7 +57,7 @@ public partial class HomePageSeoTests
         [
             AppStrings.CostLead, AppStrings.CostModelsIntro, AppStrings.CostModelsWhy, AppStrings.CostProjectIntro,
             AppStrings.CostBuiltTitle, AppStrings.AppHomeDayOneIdentity, AppStrings.CostRoundsTitle, AppStrings.CostRoundsLine,
-            AppStrings.CostLessText, AppStrings.CompareAnswerTokens, AppStrings.CompareAnswerCheaper,
+            AppStrings.CostSwitchIntro, AppStrings.CostLessText, AppStrings.CompareAnswerTokens, AppStrings.CompareAnswerCheaper,
             AppCostCase.TaskLine(localizer), AppCostCase.Earlier(localizer)
         ]))
         {
@@ -155,10 +155,11 @@ public partial class HomePageSeoTests
         var localizer = server.WebApp.Services.GetRequiredService<IStringLocalizer<AppStrings>>();
 
         Assert.StartsWith($"# {AppStrings.CostTitle}\n", markdown, "It opens with the page's h1.");
-        // The three steps, in the page's order
+        // The four steps, in the page's order
         Assert.Contains($"## 1. {AppStrings.CostModelsTitle}\n", markdown, "Step 1 is a section of its own.");
         Assert.IsLessThan(markdown.IndexOf($"## 2. {AppStrings.CostProjectTitle}", StringComparison.Ordinal), markdown.IndexOf($"## 1. {AppStrings.CostModelsTitle}", StringComparison.Ordinal), "Tokens per task come first.");
-        Assert.IsLessThan(markdown.IndexOf($"## 3. {AppStrings.CostLessTitle}", StringComparison.Ordinal), markdown.IndexOf($"## 2. {AppStrings.CostProjectTitle}", StringComparison.Ordinal), "Then tokens per project, then the conclusion.");
+        Assert.IsLessThan(markdown.IndexOf($"## 3. {AppStrings.CostSwitchTitle}", StringComparison.Ordinal), markdown.IndexOf($"## 2. {AppStrings.CostProjectTitle}", StringComparison.Ordinal), "Then tokens per project, then the best AI deal without losing context.");
+        Assert.IsLessThan(markdown.IndexOf($"## 4. {AppStrings.CostLessTitle}", StringComparison.Ordinal), markdown.IndexOf($"## 3. {AppStrings.CostSwitchTitle}", StringComparison.Ordinal), "Then the conclusion.");
         Assert.Contains($"[{AppStrings.CostLessLink}]({origin}/en-US{PageUrls.Pricing})", markdown, "The conclusion leads to the bill.");
 
         foreach (var text in CostFigures.Concat([AppStrings.CostLead, AppStrings.CostRoundsLine, AppStrings.CostModelsWhy, AppStrings.CostProjectIntro, AppStrings.CostLessText, AppCostCase.TaskLine(localizer), AppCostCase.Earlier(localizer), AppStrings.CompareAnswerTokens]))

@@ -190,7 +190,12 @@ public static class AppCostCase
         md.AppendLine().AppendLine(l[nameof(AppStrings.CostRoundsLine)]).AppendLine();
 
         // 3. So the project costs less, and the bill is on the pricing page
-        md.Append("## 3. ").AppendLine(l[nameof(AppStrings.CostLessTitle)]).AppendLine();
+        md.Append("## 3. ").AppendLine(l[nameof(AppStrings.CostSwitchTitle)]).AppendLine();
+        md.AppendLine(l[nameof(AppStrings.CostSwitchIntro)]).AppendLine();
+        md.AppendLine(l[nameof(AppStrings.CostSwitchLine)]).AppendLine();
+        md.Append('[').Append(l[nameof(AppStrings.CostSwitchLink)]).Append("](").Append(AppHomeNumbers.WorkbenchDemoUrl).AppendLine("/progress)").AppendLine();
+
+        md.Append("## 4. ").AppendLine(l[nameof(AppStrings.CostLessTitle)]).AppendLine();
         md.AppendLine(l[nameof(AppStrings.CostLessText)]).AppendLine();
         md.Append('[').Append(l[nameof(AppStrings.CostLessLink)]).Append("](").Append(pricingUrl).AppendLine(")").AppendLine();
 

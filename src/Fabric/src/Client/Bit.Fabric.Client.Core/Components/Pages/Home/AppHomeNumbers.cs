@@ -8,6 +8,9 @@ public static class AppHomeNumbers
     /// <summary>The bit platform team's admin panel demo on the web, built on the same template.</summary>
     public const string AdminPanelDemoUrl = "https://adminpanel.bitplatform.dev/";
 
+    /// <summary>The template's Workbench on sample data, with its pages, flows, boards and a Progress task, open to anyone.</summary>
+    public const string WorkbenchDemoUrl = "https://workbench.bitfabric.co";
+
     // Written in the page and updated by hand, here only: the texts that name them take them as arguments: 1,382 stars and
     // 127 contributors on 2026-11-07, and the team's 500+ improvements a month on average, the team's own figure of the same
     // day. The downloads are of bit platform's packages on nuget.org, named "downloads" alone, as the persona has never heard
