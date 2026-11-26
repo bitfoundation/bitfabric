@@ -13,6 +13,9 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectHistory
 {
+    /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
+    private string Dot => MonitoringWords.Dot(Localizer);
+
     private const int DayCount = 90;
 
     /// <summary>The row of the app as a whole, drawn from its incidents.</summary>

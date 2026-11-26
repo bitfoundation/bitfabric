@@ -11,6 +11,9 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectSettings
 {
+    /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
+    private string Dot => MonitoringWords.Dot(Localizer);
+
     [Parameter, EditorRequired] public ProjectDetailsDto Details { get; set; } = default!;
 
     [Parameter] public EventCallback<string> OnRenamed { get; set; }

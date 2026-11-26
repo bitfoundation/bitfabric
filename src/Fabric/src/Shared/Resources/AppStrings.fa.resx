@@ -6014,7 +6014,7 @@
     <value>بررسی‌شده در {0}</value>
   </data>
   <data name="MonitoringDeployedAt" xml:space="preserve">
-    <value>Deploy شده در {0}</value>
+    <value>در {0} Deploy شد</value>
   </data>
   <data name="MonitoringOpenTheApp" xml:space="preserve">
     <value>باز کردن اپ</value>
@@ -6086,7 +6086,7 @@
     <value>Health report</value>
   </data>
   <data name="MonitoringDeploysAndRestarts" xml:space="preserve">
-    <value>Deployها و راه‌اندازی‌های مجدد</value>
+    <value>راه‌اندازی‌های مجدد و Deployها</value>
   </data>
   <data name="MonitoringFailingOrNotAnsweringLower" xml:space="preserve">
     <value>از کار افتاده یا بی‌پاسخ</value>
@@ -6660,6 +6660,10 @@
   </data>
   <data name="MonitoringDurationOneDayHours" xml:space="preserve">
     <value>۱ روز و {0} ساعت</value>
+  </data>
+  <data name="MonitoringDot" xml:space="preserve">
+    <value>، </value>
+    <comment>Separates the parts of a line, such as a time and a duration. Persian takes its comma: a middle dot beside Persian digits reads as a zero.</comment>
   </data>
   <data name="MonitoringPartsSeparator" xml:space="preserve">
     <value>، </value>

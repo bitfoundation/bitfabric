@@ -6661,6 +6661,10 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="MonitoringDurationOneDayHours" xml:space="preserve">
     <value>1 day {0} h</value>
   </data>
+  <data name="MonitoringDot" xml:space="preserve">
+    <value> · </value>
+    <comment>Separates the parts of a line, such as a time and a duration. Persian takes its comma: a middle dot beside Persian digits reads as a zero.</comment>
+  </data>
   <data name="MonitoringPartsSeparator" xml:space="preserve">
     <value>, </value>
   </data>

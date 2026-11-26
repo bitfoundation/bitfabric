@@ -165,10 +165,10 @@
                                                             Presence="@session.GetPresence(TimeProvider.GetUtcNow())"
                                                             CoinVariant="@(session.Privileged ? BitVariant.Fill : BitVariant.Outline)">
                                                     <PrimaryTextTemplate>
-                                                        <div class="session-address">@session.DisplayAddress</div>
+                                                        <div class="session-address app-latin-digits">@session.DisplayAddress</div>
                                                         @if (session.DisplayIP is not null)
                                                         {
-                                                            <div class="session-ip" title="@session.DisplayIP">@session.DisplayIP</div>
+                                                            <div class="session-ip app-latin-digits" title="@session.DisplayIP">@session.DisplayIP</div>
                                                         }
                                                     </PrimaryTextTemplate>
                                                 </BitPersona>
@@ -235,6 +235,7 @@
                                                     <BitPersona PrimaryText="@session.ApplicationName"
                                                                 SecondaryText="@session.GetLastSeenOn(TimeProvider.GetUtcNow(), Localizer, TimeZoneService)"
                                                                 TertiaryText="@session.DisplayAddress"
+                                                                Classes="@(new() { TertiaryTextContainer = "app-latin-digits" })"
                                                                 Size="BitPersonaSize.Size72"
                                                                 ImageUrl="@session.ImageUrl"
                                                                 Class="session-persona"
