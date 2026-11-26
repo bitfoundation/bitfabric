@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>آنچه عاملتان به‌جای یک جواب طولانی، به شکل یک صفحه نشانتان می‌دهد: یک جریان کشیده‌شده، گزینه‌ها کنار هم، و عددهایی برای امتحان کردن.</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>یک تابلو بساز که نشان دهد اپ ما چطور منتشر می‌شود.</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>نشانم بده وقتی کاربری رمز عبورش را فراموش می‌کند، قدم‌به‌قدم چه اتفاقی می‌افتد.</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>سه سرویس ارسال ایمیل را با قیمتشان کنار هم مقایسه کن.</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>یک تابلو بساز که در آن قیمت پلن‌هایمان را امتحان کنم و درآمد ماهانه را ببینم.</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>هنوز تابلویی نیست. از عاملتان یکی بخواهید تا اینجا ظاهر شود.</value>

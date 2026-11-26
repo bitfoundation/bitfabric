@@ -43,6 +43,13 @@ public static class WorkbenchBoardCatalog
     /// <summary>The name of a kind's group.</summary>
     public static string TitleKeyOf(WorkbenchBoardKind kind) => $"BoardKind{kind}";
 
+    /// <summary>
+    /// What the Boards page and the home page suggest asking for under "Try asking": one prompt for each kind of board the
+    /// page's lead names (a flow drawn, options side by side, numbers to try), none of them for a board <see cref="Build"/>
+    /// already has.
+    /// </summary>
+    public static readonly string[] PromptKeys = [nameof(WorkbenchStrings.BoardsPromptFlow), nameof(WorkbenchStrings.BoardsPromptCompare), nameof(WorkbenchStrings.BoardsPromptNumbers)];
+
     public static WorkbenchBoard? Find(string? id) => Boards.FirstOrDefault(board => string.Equals(board.Id, id, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>Called by hot reload after it applies an edit (<see cref="System.Reflection.Metadata.MetadataUpdateHandlerAttribute"/>).</summary>

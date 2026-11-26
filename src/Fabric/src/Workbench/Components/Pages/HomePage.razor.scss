@@ -426,9 +426,17 @@
 }
 
 .boards-prompt {
+    gap: 0.625rem;
     padding: 1.25rem;
     box-shadow: none;
     margin-bottom: 1.25rem;
+
+    // Three prompts read as three: a line at the start of each.
+    .prompt-text {
+        font-size: 1rem;
+        padding-inline-start: 0.75rem;
+        border-inline-start: 3px solid $bit-color-primary;
+    }
 }
 
 ::deep .boards-open {

@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>आपका एजेंट लंबे जवाब के बजाय पेज के रूप में जो दिखाता है: खींचा हुआ फ़्लो, आमने-सामने विकल्प, आज़माने के लिए आँकड़े।</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>एक बोर्ड बनाओ जो दिखाए कि हमारा ऐप कैसे डिप्लॉय होता है।</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>बनाकर दिखाओ कि जब कोई यूज़र अपना पासवर्ड भूल जाता है तो क्या होता है।</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>तीन ईमेल प्रोवाइडर की उनकी कीमतों के साथ आमने-सामने तुलना करो।</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>एक बोर्ड बनाओ जिसमें मैं अपने प्लान की कीमतें आज़माऊँ और महीने की कमाई देखूँ।</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>अभी कोई बोर्ड नहीं है। अपने एजेंट से एक माँगें, और वह यहाँ दिखेगा।</value>

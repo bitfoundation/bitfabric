@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>Det din agent visar dig som en sida i stället för ett långt svar: ett ritat flöde, alternativ sida vid sida, siffror att pröva.</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>Gör en tavla över hur vår app driftsätts.</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>Rita vad som händer när en användare glömmer sitt lösenord.</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>Jämför tre e-postleverantörer sida vid sida, med deras priser.</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>Gör en tavla där jag kan prova priser för våra planer och se den månatliga intäkten.</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>Inga tavlor än. Be din agent om en, så dyker den upp här.</value>

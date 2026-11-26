@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>Det, din agent viser dig som en side i stedet for et langt svar: et tegnet flow, muligheder side om side, tal at prøve.</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>Lav en tavle over, hvordan vores app bliver udrullet.</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>Tegn, hvad der sker, når en bruger glemmer sin adgangskode.</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>Sammenlign tre e-mailudbydere side om side med deres priser.</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>Lav en tavle, hvor jeg kan prøve priser på vores planer og se den månedlige indtægt.</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>Ingen tavler endnu. Bed din agent om en, så dukker den op her.</value>

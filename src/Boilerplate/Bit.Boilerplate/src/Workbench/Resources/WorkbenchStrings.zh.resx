@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>您的智能体不再给出长篇回答，而是用页面展示给您：画出来的流程、并排的选项、可以试算的数字。</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>做一个展板，展示我们的应用是如何部署的。</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>画出用户忘记密码时会发生什么。</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>把三家邮件服务商连同价格并排比较。</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>做一个展板，让我试试我们套餐的价格，看看每月收入。</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>还没有展板。请您的智能体做一个，它就会出现在这里。</value>

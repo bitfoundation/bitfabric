@@ -172,7 +172,7 @@ public class BoardsUITests : WorkbenchPageTest
         var section = Page.Locator("#boards");
 
         await Expect(section.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeBoardsTitle, Level = 2 })).ToBeVisibleAsync();
-        await Expect(section.GetByText(WorkbenchStrings.BoardsPrompt)).ToBeVisibleAsync();
+        await Expect(section.Locator(".boards-prompt blockquote")).ToHaveTextAsync([WorkbenchStrings.BoardsPromptFlow, WorkbenchStrings.BoardsPromptCompare, WorkbenchStrings.BoardsPromptNumbers]);
         await Expect(section.Locator("a.board-card").Nth(0)).ToHaveAttributeAsync("href", "/boards/payments");
         await Expect(section.Locator("a.board-card").Nth(1)).ToHaveAttributeAsync("href", "/boards/deploy");
         await Expect(section.Locator("a[href='/boards']")).ToBeVisibleAsync();

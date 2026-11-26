@@ -5462,8 +5462,14 @@
     <data name="BoardsLead" xml:space="preserve">
         <value>Was Ihr Agent Ihnen als Seite zeigt statt als lange Antwort: ein gezeichneter Ablauf, Optionen nebeneinander, Zahlen zum Ausprobieren.</value>
     </data>
-    <data name="BoardsPrompt" xml:space="preserve">
-        <value>Mach ein Board, das zeigt, wie unsere App bereitgestellt wird.</value>
+    <data name="BoardsPromptFlow" xml:space="preserve">
+        <value>Zeichne, was passiert, wenn ein Nutzer sein Passwort vergisst.</value>
+    </data>
+    <data name="BoardsPromptCompare" xml:space="preserve">
+        <value>Vergleiche drei E-Mail-Anbieter nebeneinander, mit ihren Preisen.</value>
+    </data>
+    <data name="BoardsPromptNumbers" xml:space="preserve">
+        <value>Mach ein Board, auf dem ich Preise für unsere Tarife ausprobieren und die monatlichen Einnahmen sehen kann.</value>
     </data>
     <data name="BoardsEmpty" xml:space="preserve">
         <value>Noch keine Boards. Fragen Sie Ihren Agenten nach einem, und es erscheint hier.</value>
