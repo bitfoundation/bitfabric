@@ -333,6 +333,8 @@ public partial class FeaturesPage
             new("seo-scan", BitIconName.Search, Localizer[nameof(AppStrings.AppHomeSEOScanner)], Localizer[nameof(AppStrings.AppHomeWhatKeepsYourPagesOutOfGoogleAndBing)]),
             new("accessibility-scan", BitIconName.AccessibilityChecker, Localizer[nameof(AppStrings.AppHomeAccessibilityScanner)], Localizer[nameof(AppStrings.AppHomeWhetherEveryoneCanUseYourAppScreen)]),
             new("status-page", BitIconName.SyncStatus, Localizer[nameof(AppStrings.AppHomeAStatusPage)], Localizer[nameof(AppStrings.AppHomeOnYourOwnDomainSoYourCustomersSee)]),
+            // The app's own notice reads the status page from bit Fabric, not from the app's server, so it speaks while that server is down
+            new("status-notice", BitIconName.Megaphone, Localizer[nameof(AppStrings.AppHomeYourAppTellsItsUsersWhenItSDown)], Localizer[nameof(AppStrings.AppHomeEvenWithYourServerCompletelyDown)]),
             // No "New" tag, as everything here is
             new("alerts", BitIconName.Ringer, Localizer[nameof(AppStrings.AppHomeAlertsInSlackTeamsAndDiscord)], Localizer[nameof(AppStrings.AppHomeYourTeamHearsItWhereItAlreadyTalks)])
         ],

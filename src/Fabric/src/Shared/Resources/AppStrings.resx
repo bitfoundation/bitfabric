@@ -4732,6 +4732,24 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <data name="AppHomeOnYourOwnDomainSoYourCustomersSee" xml:space="preserve">
     <value>On your own domain, so your customers see what works right now, and how reliable you are.</value>
   </data>
+    <data name="AppHomeYourAppTellsItsUsersWhenItSDown" xml:space="preserve">
+    <value>Your app tells its users when it's down</value>
+    </data>
+    <data name="AppHomeEvenWithYourServerCompletelyDown" xml:space="preserve">
+    <value>Even with your server completely down, the app your users already have shows them what's wrong, and each update you post.</value>
+    </data>
+    <data name="AppHomeYourServerIsCompletelyDownYetYourApp" xml:space="preserve">
+    <value>Your server is completely down, yet your app still tells its users what's wrong...</value>
+    </data>
+    <data name="AppHomePlacingOrdersIsnTWorkingRightNow" xml:space="preserve">
+    <value>Placing orders isn't working right now. We're on it.</value>
+    </data>
+    <data name="AppHomeAndEachUpdateYouPostOnYourStatusPage" xml:space="preserve">
+    <value>...and each update you post on your status page, on the web, Android, iOS and Windows alike.</value>
+    </data>
+    <data name="AppHomeUpdateOrdersShouldGoThroughAgain" xml:space="preserve">
+    <value>Update: orders should go through again within 30 minutes.</value>
+    </data>
     <data name="AppHomeOneCodebaseBecomesYourAppsYour" xml:space="preserve">
     <value>One codebase becomes your apps, your website and your admin panel.</value>
   </data>
@@ -10844,6 +10862,9 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   </data>
   <data name="PricingSavingWhyBills" xml:space="preserve">
     <value>Every bill comes from whoever does the work, so you see what each part costs.</value>
+  </data>
+  <data name="PricingSavingWhyContext" xml:space="preserve">
+    <value>Your specs, docs and decisions are files in your own GitHub repository, at no cost, so you can move to whichever AI deal is best, Claude, Codex or another, without losing any context.</value>
   </data>
   <data name="PricingSavingHonest" xml:space="preserve">
     <value>Making a landing page or a small, simple app? A hosted builder costs less for that, and it's the better pick.</value>

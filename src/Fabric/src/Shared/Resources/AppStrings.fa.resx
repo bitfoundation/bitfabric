@@ -4732,6 +4732,24 @@
     <data name="AppHomeOnYourOwnDomainSoYourCustomersSee" xml:space="preserve">
     <value>روی دامنهٔ خودتان، تا مشتری‌هایتان ببینند همین حالا چه چیزی کار می‌کند و چقدر قابل‌اعتمادید.</value>
   </data>
+    <data name="AppHomeYourAppTellsItsUsersWhenItSDown" xml:space="preserve">
+    <value>اپ‌تان خودش از کار افتادنش را به کاربرها می‌گوید</value>
+    </data>
+    <data name="AppHomeEvenWithYourServerCompletelyDown" xml:space="preserve">
+    <value>حتی وقتی سرورتان کاملاً از کار افتاده، اپی که کاربرها دارند نشانشان می‌دهد چه مشکلی پیش آمده و هر خبر تازه‌ای که می‌گذارید.</value>
+    </data>
+    <data name="AppHomeYourServerIsCompletelyDownYetYourApp" xml:space="preserve">
+    <value>سرورتان کاملاً از کار افتاده، ولی اپ‌تان باز هم به کاربرها می‌گوید چه مشکلی پیش آمده...</value>
+    </data>
+    <data name="AppHomePlacingOrdersIsnTWorkingRightNow" xml:space="preserve">
+    <value>ثبت سفارش همین حالا کار نمی‌کند. داریم رسیدگی می‌کنیم.</value>
+    </data>
+    <data name="AppHomeAndEachUpdateYouPostOnYourStatusPage" xml:space="preserve">
+    <value>...و هر خبر تازه‌ای که در صفحهٔ وضعیت می‌گذارید، در وب، Android، iOS و Windows یکسان.</value>
+    </data>
+    <data name="AppHomeUpdateOrdersShouldGoThroughAgain" xml:space="preserve">
+    <value>خبر تازه: تا ۳۰ دقیقهٔ دیگر ثبت سفارش دوباره کار می‌کند.</value>
+    </data>
     <data name="AppHomeOneCodebaseBecomesYourAppsYour" xml:space="preserve">
     <value>یک codebase می‌شود اپ‌ها، وب‌سایت و پنل مدیریت شما.</value>
   </data>
@@ -10844,6 +10862,9 @@
   </data>
   <data name="PricingSavingWhyBills" xml:space="preserve">
     <value>هر صورت‌حساب از همان کسی است که کار را انجام می‌دهد، پس می‌بینید هر بخش چقدر هزینه دارد.</value>
+  </data>
+  <data name="PricingSavingWhyContext" xml:space="preserve">
+    <value>Spec‌ها، مستندات و تصمیم‌هایتان فایل‌هایی در مخزن GitHub خودتان‌اند، بدون هزینه، پس می‌توانید سراغ هر پیشنهاد بهتری از AI بروید، Claude، Codex یا هر کدام دیگر، بی آن‌که چیزی از context را از دست بدهید.</value>
   </data>
   <data name="PricingSavingHonest" xml:space="preserve">
     <value>یک landing page یا یک اپ کوچک و ساده می‌سازید؟ برای آن یک AI builder میزبانی‌شده ارزان‌تر است و انتخاب بهتری است.</value>
