@@ -286,12 +286,12 @@ public partial class ProjectMonitoringTests
         Assert.Contains("Customer app", owners.Body);
         Assert.Contains("customer.example", owners.Body);
         Assert.Contains("The background jobs dashboard (/hangfire) is open to everyone", owners.Body, "The urgent findings, in plain words from their keys.");
-        Assert.Contains($"/en-US/projects/{project.Id}?tab=scans", owners.Body, "Each project with a link to its Scans tab.");
+        Assert.Contains($"/en-US/projects/{project.ProjectId}/{project.Id}?tab=scans", owners.Body, "Each project with a link to its Scans tab.");
 
         var colleagues = ScansEmails().Single(email => email.To == colleague);
         Assert.AreEqual("Test team: اسکن‌های این هفته", colleagues.Subject, "In the recipient's language.");
         Assert.Contains("dir=\"rtl\"", colleagues.Body);
-        Assert.Contains($"/fa-IR/projects/{project.Id}?tab=scans", colleagues.Body);
+        Assert.Contains($"/fa-IR/projects/{project.ProjectId}/{project.Id}?tab=scans", colleagues.Body);
 
         // However often the job runs in a week, nobody gets a second one: sign-in codes go out through the same email
         // service, which must never look like a flood to the mail provider.
@@ -336,7 +336,7 @@ public partial class ProjectMonitoringTests
 
         var list = await Call(mcp, "GetProjects", new() { ["timeZone"] = "Asia/Tehran" });
         Assert.AreEqual("Asia/Tehran", list.GetProperty("daysIn").GetString());
-        Assert.AreEqual(0, list.GetProperty("projects").EnumerateArray().Single().GetProperty("last30DaysWithProblems").GetArrayLength(), "Nothing went wrong yet.");
+        Assert.AreEqual(0, list.GetProperty("projects").EnumerateArray().Single().GetProperty("environments").EnumerateArray().Single().GetProperty("last30DaysWithProblems").GetArrayLength(), "Nothing went wrong yet.");
 
         var saved = await Call(mcp, "SetProjectScanSettings", new() { ["project"] = "customer.example", ["weeklyEmail"] = false });
         Assert.IsFalse(saved.GetProperty("weeklyEmail").GetBoolean());
