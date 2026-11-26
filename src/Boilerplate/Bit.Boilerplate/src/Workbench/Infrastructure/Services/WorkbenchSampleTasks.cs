@@ -143,24 +143,34 @@ public static class WorkbenchSampleTasks
     /// the page, not a real one.
     /// </summary>
     private const string SamplePlan = """
-        # Loyalty points
+        # Loyalty points :sparkles:
 
         > [!NOTE]
-        > A sample plan, light on details: it shows how an agent's plan reads here.
+        > A **sample** plan, light on details: it shows how an agent's plan reads here.
 
-        Customers earn points on every order and spend them at checkout.
+        Customers earn points on every order and spend them at checkout, ==without a coupon code==.
+
+        ## Rules
+
+        Earning
+        : 1 point per whole unit of a paid order's total.
+
+        Spending
+        : 100 points take 1 unit off at checkout, up to half the total.
+
+        Expiry
+        : 12 months after a point was earned.[^expiry]
 
         ## Design
 
-        - **Earning:** 1 point per whole unit of an order's total, once it is paid.
-        - **Spending:** at checkout, 100 points take 1 unit off, up to half the total.
-        - **Expiry:** points expire 12 months after they were earned.
+        | Part | Where | Size |
+        | --- | --- | :---: |
+        | The ledger | A `LoyaltyEntry` table, one row per points earned or spent | S |
+        | Checkout | A *Use my points* switch on the payment step | M |
+        | The account | The balance and its history on the profile page | S |
 
-        | Part | Where |
-        | --- | --- |
-        | The ledger | A `LoyaltyEntry` table: one row per points earned or spent |
-        | Checkout | A "Use my points" switch on the payment step |
-        | The account | The balance and its history on the profile page |
+        > [!TIP]
+        > Points are a ledger, not a balance column: ~~one number per customer~~ every change is a row, so the history and expiry come for free.
 
         ## Tasks
 
@@ -170,5 +180,7 @@ public static class WorkbenchSampleTasks
         - [ ] Points at checkout
         - [ ] The tests: earning, spending, expiry
         - [ ] Try it on Test
+
+        [^expiry]: Agreed with you on the plan; the reason is on the task's notes.
         """;
 }

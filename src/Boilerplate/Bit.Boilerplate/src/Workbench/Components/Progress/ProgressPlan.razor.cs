@@ -50,17 +50,18 @@ public partial class ProgressPlan
         var tasks = TaskItem().Matches(Markdown);
         taskCount = tasks.Count;
         doneCount = tasks.Count(task => task.Groups[1].Value is not " ");
-        title = Title().Match(Markdown) is { Success: true } heading ? heading.Groups[1].Value.Trim() : null;
     }
 
     private void Open() => isOpen = true;
 
     private void ReadOutline(BitMarkdownDocumentNode document)
     {
-        outline = [.. BitMarkdownAstHelper.Descendants(document)
-                                          .OfType<BitMarkdownHeadingNode>()
-                                          .Where(heading => heading.Level is 2 or 3 && string.IsNullOrEmpty(heading.Id) is false)
-                                          .Select(heading => new OutlineEntry(heading.Level, heading.Id!, BitMarkdownInlineHelpers.PlainText(heading.Inlines)))];
+        var headings = BitMarkdownAstHelper.Descendants(document).OfType<BitMarkdownHeadingNode>().ToArray();
+
+        // The plan's own title is its first level-one heading, as it renders: an emoji's shortcode as the emoji.
+        title = headings.FirstOrDefault(heading => heading.Level is 1) is { } first ? BitMarkdownInlineHelpers.PlainText(first.Inlines) : null;
+        outline = [.. headings.Where(heading => heading.Level is 2 or 3 && string.IsNullOrEmpty(heading.Id) is false)
+                              .Select(heading => new OutlineEntry(heading.Level, heading.Id!, BitMarkdownInlineHelpers.PlainText(heading.Inlines)))];
     }
 
     private sealed record OutlineEntry(int Level, string Id, string Text);
@@ -68,8 +69,4 @@ public partial class ProgressPlan
     // A task list's item: "- [ ]" or "- [x]", as GitHub ticks them.
     [GeneratedRegex(@"^\s*[-*+]\s+\[([ xX])\]\s", RegexOptions.Multiline)]
     private static partial Regex TaskItem();
-
-    // The plan's own title, its first level-one heading.
-    [GeneratedRegex(@"^#\s+(.+)$", RegexOptions.Multiline)]
-    private static partial Regex Title();
 }
