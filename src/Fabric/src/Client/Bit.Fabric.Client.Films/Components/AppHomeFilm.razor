@@ -13,6 +13,7 @@
                    Title="@Localizer[nameof(AppStrings.Close)]" AriaLabel="@Localizer[nameof(AppStrings.Close)]" OnClick="OnClose" />
     </div>
 
+    <div class="ah-stage-frame">
     @* A drawing: the caption says what it shows. @key restarts each scene's animations, and the face's when the person changes *@
     <div class="ah-stage @(IsTall ? "is-tall" : null) @(HasTablet ? "has-tablet" : null)" aria-hidden="true">
         @if (scene.Person is { } person)
@@ -101,6 +102,19 @@
         {
             <span class="ah-device-label">@scene.Label</span>
         }
+    </div>
+
+    @* The end: the film stops on its last scene, with Replay, and the page that shows the feature live when it has one *@
+    @if (isEnded)
+    {
+        <div class="ah-film-end">
+            <BitButton IconName="@BitIconName.Refresh" OnClick="Replay">@Localizer[nameof(AppStrings.AppHomeReplay)]</BitButton>
+            @if (MoreUrl is not null)
+            {
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.OpenInNewWindow" Href="@MoreUrl" Target="_blank">@Localizer[nameof(AppStrings.LearnMore)]</BitButton>
+            }
+        </div>
+    }
     </div>
 
     <figcaption class="ah-film-caption" aria-live="polite">@scene.Caption</figcaption>

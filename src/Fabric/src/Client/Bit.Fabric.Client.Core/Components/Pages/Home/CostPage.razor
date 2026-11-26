@@ -65,7 +65,7 @@
         </div>
     </section>
 
-    @* The argument, one story in three steps: a token's price means little on its own, and what counts
+    @* The argument, one story in four steps: a token's price means little on its own, and what counts
        is the tokens a task takes, which Anthropic's own Opus and Sonnet illustrate; the tokens a whole project takes count more
        still, where bit Fabric has built much of it already and cuts the rounds of rework; so the project costs less. Opus and
        Sonnet are the example, never the subject. Each step's number is drawn beside its title, which a screen reader reads in order. *@
@@ -152,10 +152,21 @@
         <BitText Typography="BitTypography.H5" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.CostRoundsLine)]</BitText>
     </section>
 
-    @* 3. The conclusion, and the bill on /pricing, which this page doesn't restate *@
-    <section class="ah-band cs-conclusion" id="ah-costs-less" aria-labelledby="ah-costs-less-title">
+    @* 3. The best AI deal without losing context: the project's specs, docs and decisions are files in the visitor's GitHub account *@
+    <section class="ah-band" id="ah-switch" aria-labelledby="ah-switch-title">
         <header class="ah-band-head">
             <span class="cs-band-step" aria-hidden="true">3</span>
+            <AppHomeBandTitle Anchor="switch" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CostSwitchTitle)]" />
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostSwitchIntro)]</BitText>
+        </header>
+        <BitText Typography="BitTypography.H5" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.CostSwitchLine)]</BitText>
+        <BitButton Variant="BitVariant.Outline" Href="@($"{AppHomeNumbers.WorkbenchDemoUrl}/progress")" Target="_blank" IconName="@BitIconName.OpenInNewWindow" Class="ah-band-link">@Localizer[nameof(AppStrings.CostSwitchLink)]</BitButton>
+    </section>
+
+    @* 4. The conclusion, and the bill on /pricing, which this page doesn't restate *@
+    <section class="ah-band cs-conclusion" id="ah-costs-less" aria-labelledby="ah-costs-less-title">
+        <header class="ah-band-head">
+            <span class="cs-band-step" aria-hidden="true">4</span>
             <AppHomeBandTitle Anchor="costs-less" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.CostLessTitle)]" />
         </header>
         <BitText Typography="BitTypography.H4" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.CostLessText)]</BitText>

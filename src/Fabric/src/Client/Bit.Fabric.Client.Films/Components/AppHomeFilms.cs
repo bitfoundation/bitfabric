@@ -727,6 +727,16 @@ public sealed class AppHomeFilms(IStringLocalizer<AppStrings> localizer)
             localizer[nameof(AppStrings.AppHomeBitFabricChecksThatEveryoneCanUse)],
             [(BitIconName.Contrast, localizer[nameof(AppStrings.AppHomeGreyPricesAreHardToRead)]), (BitIconName.ButtonControl, localizer[nameof(AppStrings.AppHomeAButtonHasNoNameForScreenReaders)]), (BitIconName.Photo2, localizer[nameof(AppStrings.AppHomeTwoImagesHaveNoDescription)])],
             localizer[nameof(AppStrings.AppHomeFixTheAccessibilityFindings)]),
+        // The status notice: the app tells its users about an incident even while its own server is down
+        "status-notice" =>
+        [
+            new(localizer[nameof(AppStrings.AppHomeYourServerIsCompletelyDownYetYourApp)],
+                [new FilmTitle(localizer[nameof(AppStrings.NewProjectSampleOrders)]), .. Orders,
+                 new FilmNote(localizer[nameof(AppStrings.AppHomePlacingOrdersIsnTWorkingRightNow)], Bad) { At = .6 }]) { Person = Sara },
+            new(localizer[nameof(AppStrings.AppHomeAndEachUpdateYouPostOnYourStatusPage)],
+                [new FilmTitle(localizer[nameof(AppStrings.NewProjectSampleOrders)]), .. Orders,
+                 new FilmNote(localizer[nameof(AppStrings.AppHomeUpdateOrdersShouldGoThroughAgain)], Neutral) { At = .6 }], Laptop) { Url = "yourapp.com", Person = Sara }
+        ],
         "status-page" =>
         [
             new(localizer[nameof(AppStrings.AppHomeYourCustomersGetAStatusPageOnYourOwn)],

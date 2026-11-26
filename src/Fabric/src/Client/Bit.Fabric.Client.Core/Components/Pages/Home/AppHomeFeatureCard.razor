@@ -26,5 +26,10 @@
         <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Feature.Text</BitText>
     </div>
 
+    @if (Feature.More is not null)
+    {
+        <BitLink Href="@Feature.More" Target="_blank" Class="ah-card-more">@Localizer[nameof(AppStrings.LearnMore)] <BitIcon IconName="@BitIconName.OpenInNewWindow" Size="BitSize.Small" /></BitLink>
+    }
+
     @ChildContent
 </article>

@@ -37,3 +37,13 @@
     flex-direction: column;
     gap: .25rem;
 }
+
+// Where the feature can be seen live, under its text
+::deep .ah-card-more {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    margin-top: auto;
+    font-size: $bit-typography-fs-sm;
+    font-weight: $bit-typography-fw-semibold;
+}

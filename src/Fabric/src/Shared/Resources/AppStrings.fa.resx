@@ -2336,7 +2336,7 @@
     <value>کدش مال خودم است و می‌توانم تغییرش بدهم؟</value>
   </data>
     <data name="NewProjectFaqCodeMineAnswer" xml:space="preserve">
-    <value>همه‌اش. با هر چه شروع کنید، کد خود شماست، در مخزن خود شما.</value>
+    <value>همه‌اش. با هر چه شروع کنید، کد خود شماست، در حساب رایگان GitHub خودتان.</value>
   </data>
     <data name="NewProjectHelpCustomersLead" xml:space="preserve">
     <value>با Multi-tenancy یک اپ به چند شرکت خدمت می‌دهد. هر شرکت کاربران خودش را دارد و فقط داده‌های خودش را می‌بیند، و یک نفر می‌تواند عضو چند شرکت باشد. بیشتر نرم‌افزارهایی که به کسب‌وکارها فروخته می‌شوند (SaaS) همین‌طور کار می‌کنند.</value>
@@ -2624,7 +2624,7 @@
     <value>اگر bit Fabric تعطیل شود چه؟</value>
   </data>
     <data name="NewProjectFaqDisappearsAnswer" xml:space="preserve">
-    <value>اپ‌تان به کارش ادامه می‌دهد. کدش در مخزن شماست و داده‌اش روی سرور شما؛ هیچ بخشی از آن روی سرورهای ما اجرا نمی‌شود.</value>
+    <value>اپ‌تان به کارش ادامه می‌دهد. کدش در حساب رایگان GitHub شماست و داده‌اش روی سرور شما؛ هیچ بخشی از آن روی سرورهای ما اجرا نمی‌شود.</value>
   </data>
     <data name="NewProjectFaqComputer" xml:space="preserve">
     <value>چه کامپیوتری لازم دارم؟</value>
@@ -4732,6 +4732,24 @@
     <data name="AppHomeOnYourOwnDomainSoYourCustomersSee" xml:space="preserve">
     <value>روی دامنهٔ خودتان، تا مشتری‌هایتان ببینند همین حالا چه چیزی کار می‌کند و چقدر قابل‌اعتمادید.</value>
   </data>
+    <data name="AppHomeYourAppTellsItsUsersWhenItSDown" xml:space="preserve">
+    <value>اپ‌تان خودش از کار افتادنش را به کاربرها می‌گوید</value>
+    </data>
+    <data name="AppHomeEvenWithYourServerCompletelyDown" xml:space="preserve">
+    <value>حتی وقتی سرورتان کاملاً از کار افتاده، اپی که کاربرها دارند نشانشان می‌دهد چه مشکلی پیش آمده و هر خبر تازه‌ای که می‌گذارید.</value>
+    </data>
+    <data name="AppHomeYourServerIsCompletelyDownYetYourApp" xml:space="preserve">
+    <value>سرورتان کاملاً از کار افتاده، ولی اپ‌تان باز هم به کاربرها می‌گوید چه مشکلی پیش آمده، از bit Fabric و نه از سرور شما...</value>
+    </data>
+    <data name="AppHomePlacingOrdersIsnTWorkingRightNow" xml:space="preserve">
+    <value>ثبت سفارش همین حالا کار نمی‌کند. داریم رسیدگی می‌کنیم.</value>
+    </data>
+    <data name="AppHomeAndEachUpdateYouPostOnYourStatusPage" xml:space="preserve">
+    <value>...و هر خبر تازه‌ای که در صفحهٔ وضعیت می‌گذارید، در وب، Android، iOS و Windows یکسان.</value>
+    </data>
+    <data name="AppHomeUpdateOrdersShouldGoThroughAgain" xml:space="preserve">
+    <value>خبر تازه: تا ۳۰ دقیقهٔ دیگر ثبت سفارش دوباره کار می‌کند.</value>
+    </data>
     <data name="AppHomeOneCodebaseBecomesYourAppsYour" xml:space="preserve">
     <value>یک codebase می‌شود اپ‌ها، وب‌سایت و پنل مدیریت شما.</value>
   </data>
@@ -5602,6 +5620,18 @@
     <data name="AppHomeFlowsBetweenYourPagesText" xml:space="preserve">
     <value>اینکه هر صفحه چطور به صفحه‌ی بعد می‌رسد، کشیده‌شده از روی صفحه‌های واقعی، برای فهمیدن اپ یا نشان دادنش در یک جلسه.</value>
   </data>
+    <data name="AppHomeBoards" xml:space="preserve">
+    <value>تابلوها</value>
+    </data>
+    <data name="AppHomeBoardsText" xml:space="preserve">
+    <value>آنچه AI‌تان به‌جای یک جواب طولانی، به شکل یک صفحه نشانتان می‌دهد: یک جریان کشیده‌شده، گزینه‌ها کنار هم، و عددهایی برای امتحان کردن.</value>
+    </data>
+    <data name="AppHomeAProgressPage" xml:space="preserve">
+    <value>صفحهٔ Progress</value>
+    </data>
+    <data name="AppHomeAProgressPageText" xml:space="preserve">
+    <value>قدم‌های یک کار طولانی همان‌طور که AI‌تان جلو می‌برد، و سؤال‌هایی که فقط شما می‌توانید جواب بدهید، با یک کلیک یا چند کلمه.</value>
+    </data>
     <data name="AppHomeTheWorkbenchDrawsHowYourPagesLeadTo" xml:space="preserve">
     <value>Workbench از روی صفحه‌های واقعی می‌کشد که صفحه‌هایتان چطور به هم می‌رسند...</value>
   </data>
@@ -5702,7 +5732,7 @@
     <value>روی کامپیوتر شما</value>
   </data>
   <data name="AppHomeCompareFabricCode" xml:space="preserve">
-    <value>روی کامپیوتر و سرور خودتان، هرگز پیش ما</value>
+    <value>در حساب رایگان GitHub شما و روی سرور خودتان، هرگز پیش ما</value>
   </data>
   <data name="AppHomeCompareYourPrompts" xml:space="preserve">
     <value>promptهای شما</value>
@@ -8854,7 +8884,7 @@
     <value>اپ و پایگاه دادهٔ آن، روی سرور شما</value>
   </data>
     <data name="AppHomeKeepsRunningCode" xml:space="preserve">
-    <value>کد شما، در repository خودتان</value>
+    <value>کد شما، در حساب رایگان GitHub خودتان</value>
   </data>
     <data name="AppHomeKeepsRunningPipeline" xml:space="preserve">
     <value>pipelineای که آن را build و deploy می‌کند</value>
@@ -10845,6 +10875,9 @@
   <data name="PricingSavingWhyBills" xml:space="preserve">
     <value>هر صورت‌حساب از همان کسی است که کار را انجام می‌دهد، پس می‌بینید هر بخش چقدر هزینه دارد.</value>
   </data>
+  <data name="PricingSavingWhyContext" xml:space="preserve">
+    <value>Spec‌ها، مستندات و تصمیم‌هایتان فایل‌هایی در حساب رایگان GitHub شما هستند، پس می‌توانید سراغ بهترین پیشنهاد AI بروید، Claude، Codex یا هر کدام دیگر، بی آن‌که چیزی از context را از دست بدهید.</value>
+  </data>
   <data name="PricingSavingHonest" xml:space="preserve">
     <value>یک landing page یا یک اپ کوچک و ساده می‌سازید؟ برای آن یک AI builder میزبانی‌شده ارزان‌تر است و انتخاب بهتری است.</value>
   </data>
@@ -11032,7 +11065,7 @@
     <value>token به ازای هر task، مهم‌تر از قیمت یک token</value>
   </data>
   <data name="CostModelsIntro" xml:space="preserve">
-    <value>قیمت هر token به‌تنهایی چیز زیادی نمی‌گوید: آنچه می‌پردازید tokenهایی است که یک task می‌برد. Anthropic، سازندهٔ Claude، این را با مدل‌های خودش نشان می‌دهد و توصیه می‌کند مدل‌ها را با هزینهٔ یک کارِ تمام‌شده مقایسه کنید.</value>
+    <value>در نگاه اول، قیمت هر token به نظر می‌رسد چیزی است که هزینه را تعیین می‌کند. آنچه واقعاً می‌پردازید tokenهایی است که یک task می‌برد. Anthropic، سازندهٔ Claude، این را با مدل‌های خودش نشان می‌دهد و توصیه می‌کند مدل‌ها را با هزینهٔ یک کارِ تمام‌شده مقایسه کنید.</value>
   </data>
   <data name="CostModelsTokenTitle" xml:space="preserve">
     <value>قیمت هر یک میلیون token، ورودی / خروجی</value>
@@ -11095,10 +11128,22 @@
     <value>پس پروژهٔ شما کمتر خرج دارد</value>
   </data>
   <data name="CostLessText" xml:space="preserve">
-    <value>token کمتر برای هر task، هیچ tokenی برای آنچه از قبل ساخته شده، و دورهای دوباره‌کاری کمتر. روی هم، صورت‌حساب کمتری برای کل پروژه.</value>
+    <value>token کمتر برای هر task، هیچ tokenی برای آنچه از قبل ساخته شده، دورهای دوباره‌کاری کمتر، و بهترین پیشنهاد AI هر وقت که بیاید. روی هم، صورت‌حساب کمتری برای کل پروژه.</value>
   </data>
   <data name="CostLessLink" xml:space="preserve">
     <value>صورت‌حساب را ردیف به ردیف ببینید</value>
+  </data>
+  <data name="CostSwitchTitle" xml:space="preserve">
+    <value>و سراغ بهترین پیشنهاد AI می‌روید، بی آن‌که چیزی از دست بدهید</value>
+  </data>
+  <data name="CostSwitchIntro" xml:space="preserve">
+    <value>bit Fabric، Spec‌ها، مستندات و تصمیم‌هایتان را به شکل فایل در حساب رایگان GitHub شما نگه می‌دارد، نه در chat یک AI. پس وقتی Claude، Codex یا هر کدام دیگر پیشنهاد بهتری دارد، سراغش می‌روید و از همان جا که بودید ادامه می‌دهید، با همان Workbench، صفحهٔ Progress و تابلوهایش.</value>
+  </data>
+  <data name="CostSwitchLine" xml:space="preserve">
+    <value>صورت‌حساب کمتر، بی آن‌که کیفیت پروژه‌تان پایین بیاید.</value>
+  </data>
+  <data name="CostSwitchLink" xml:space="preserve">
+    <value>در Workbench ببینیدشان</value>
   </data>
   <data name="CliPageTitle" xml:space="preserve">
     <value>bit CLI، خط فرمان هر پروژهٔ bit Fabric</value>
