@@ -11261,6 +11261,9 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="CliRefRun" xml:space="preserve">
     <value>Builds and starts the project: the website and its server, or the Android, iOS, macOS or Windows app.</value>
   </data>
+  <data name="CliRefCodespace" xml:space="preserve">
+    <value>Runs the project on GitHub Codespaces, in its branch's codespace, which it reuses and creates only when there's none, with the app's addresses working on this computer.</value>
+  </data>
   <data name="CliRefDiff" xml:space="preserve">
     <value>Shows what changed in the project's starting point between two versions, as one commit your AI brings into your project.</value>
   </data>
@@ -11277,7 +11280,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Renames the project everywhere its name appears: files, folders, code, the database and the app's id.</value>
   </data>
   <data name="CliRefRemove" xml:space="preserve">
-    <value>Deletes a folder for good, after stopping the apps that keep its files in use.</value>
+    <value>Deletes a folder for good in 10 seconds at most, stopping the apps that keep its files in use.</value>
   </data>
   <data name="CliRefMigration" xml:space="preserve">
     <value>Adds and removes the database's migrations, and bundles them for the database on your server.</value>
@@ -11392,5 +11395,23 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   </data>
   <data name="AppHomeSeeCli" xml:space="preserve">
     <value>What bit CLI does</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Two-factor authentication is needed</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Only an account that signs in with two-factor authentication can authorize this application. Turn it on and sign in again with it, and you'll come back here to finish.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Turn on two-factor authentication</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>Two-factor authentication is on. Keep your recovery codes, then sign in again with it to go back to where you were.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Sign in again</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>Two-factor authentication is on, and you signed in with it. You can go back to where you were.</value>
   </data>
 </root>

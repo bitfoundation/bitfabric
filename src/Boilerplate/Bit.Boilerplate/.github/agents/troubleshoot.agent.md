@@ -61,9 +61,10 @@ Before you look for the cause, check each of these, and walk the user through ge
   the key in the deploy folder's `.env`.
 - **The containers' own logs**: `docker compose logs` of the environment's Compose project on the VM, which you
   reach the way the deploy skill set up. They hold what no error tracker received, startup failures included.
-- **What the user's device saw**: the app's diagnostic modal (`.docs/23- Diagnostic Modal.md`) shows the client's side
-  of a session. Ask the person who saw the problem to open it and send what it shows, before they reload or close the
-  app: its logs live only in memory.
+- **What the user's device saw**: the app's in-app dev tools, bit BevTools (`.docs/23- In-App Dev Tools.md`), show the
+  client's side of a session: its Logs, Errors and Network panels, and the App tab's report with Copy. Ask the person
+  who saw the problem to open it (7 taps on the header's empty space) and send what it shows, before they reload or
+  close the app: what it holds lives only in memory.
 
 Start once you can read the source, the data, the background jobs and the errors, or once the user has decided to go on
 without one of them, knowing what it hides.
@@ -73,7 +74,7 @@ without one of them, knowing what it hides.
 - Ask the environment's dev-mcp for its health first (`GetHealth`): it runs every health check the server has, from
   the database and the background jobs to email, the AI models and the project's websites, and returns each one that
   isn't Healthy with its reason.
-- Start from the evidence: the exception and its stack trace, the trace id an error or the diagnostic modal shows, the
+- Start from the evidence: the exception and its stack trace, the trace id an error or BevTools' Logs panel shows, the
   request that failed, the job that failed with its arguments, the row that looks wrong. Follow one trace from end to
   end rather than reading the logs at random: dev-mcp's `GetTrace` gives a trace's spans and the logs written inside it.
   Outside Development the server keeps only about 5% of its ordinary logs and fast successful spans, so a missing line

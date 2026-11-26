@@ -10,7 +10,7 @@ namespace Bit.Fabric.Client.Core.Components.Layout.AiChat;
 // To store it on the server instead, only RestoreHistory, SaveHistory and ForgetHistory need a new body.
 public partial class AppAiChat
 {
-    /// <summary>The database the conversation lives in. AppDiagnosticModal deletes it by this name.</summary>
+    /// <summary>The database the conversation lives in. ClearAppFilesService deletes it by this name.</summary>
     internal const string HistoryDatabase = "ai-chat-conversation";
 
     private const string ConversationStore = "conversation";
@@ -170,7 +170,7 @@ public partial class AppAiChat
     });
 
     /// <summary>
-    /// Lets the database go when something else needs it to itself - another tab, or the diagnostic modal deleting it,
+    /// Lets the database go when something else needs it to itself - another tab, or Clear app files deleting it,
     /// which stays blocked while this connection is open. The conversation carries on unstored.
     /// </summary>
     private void CloseHistory()
@@ -208,7 +208,7 @@ public partial class AppAiChat
         catch (Exception exp)
         {
             // Closed rather than just dropped: an operation can fail with the database open, and a connection left open
-            // blocks deleteDatabase - which is how AppDiagnosticModal deletes this one.
+            // blocks deleteDatabase - which is how ClearAppFilesService deletes this one.
             CloseHistory();
 
             logger.LogWarning(exp, "Failed to {Operation} the conversation stored on this device.", what);

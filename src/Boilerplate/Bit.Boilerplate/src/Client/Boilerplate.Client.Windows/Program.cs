@@ -95,6 +95,7 @@ public partial class Program
         //#if (framework == 'net11.0')
         var kioskOptions = Services.GetRequiredService<ClientWindowsSettings>().Kiosk;
         var isKiosk = kioskOptions?.Enabled is true;
+        // A kiosk is full screen and topmost from here on, before its window exists.
         kioskModeManagerReferenceToKeepAlive = new KioskModeManager
         {
             ContainerControl = form,
@@ -104,6 +105,13 @@ public partial class Program
             EscapeExitsFullScreen = isKiosk is false,
             FullScreen = isKiosk
         };
+
+        if (isKiosk)
+        {
+            // Before the window is shown, and before the WebView and the app load: a key pressed while they do is as
+            // much a way out as one pressed later.
+            WindowsKioskGuard.Apply(form, kioskModeManagerReferenceToKeepAlive);
+        }
         //#endif
         var pubSubService = Services.GetRequiredService<PubSubService>();
         pubSubHandlerReferenceToKeepAlive = pubSubService.Subscribe(ClientAppMessages.PAGE_DATA_CHANGED, async args =>
@@ -114,6 +122,22 @@ public partial class Program
                 form.Text = title ?? "Boilerplate";
             });
         });
+        //#if (framework == 'net11.0')
+
+        if (isKiosk)
+        {
+            // The first page the app renders is the moment it is up: whatever of the lockdown slipped while it started
+            // is put back now.
+            kioskAppUpHandlerReferenceToKeepAlive = pubSubService.Subscribe(ClientAppMessages.ROUTE_DATA_UPDATED, async _ =>
+            {
+                if (Interlocked.Exchange(ref kioskAppUpHandlerReferenceToKeepAlive, null) is not { } unsubscribe)
+                    return;
+
+                unsubscribe();
+                await form.InvokeAsync(WindowsKioskGuard.Reassert);
+            });
+        }
+        //#endif
 
         _ = Task.Run(async () =>
         {
@@ -173,13 +197,6 @@ public partial class Program
         };
 
         form.Controls.Add(blazorWebView);
-        //#if (framework == 'net11.0')
-
-        if (isKiosk)
-        {
-            WindowsKioskGuard.Apply(form);
-        }
-        //#endif
 
         Application.Run(form);
     }
@@ -241,5 +258,10 @@ public partial class Program
     /// Strong root for the kiosk manager, which only the form it hooks would otherwise keep alive.
     /// </summary>
     private static KioskModeManager? kioskModeManagerReferenceToKeepAlive;
+
+    /// <summary>
+    /// Strong root for the subscription that checks kiosk mode once the app is up, until it has run.
+    /// </summary>
+    private static Action? kioskAppUpHandlerReferenceToKeepAlive;
     //#endif
 }

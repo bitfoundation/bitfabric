@@ -14,7 +14,7 @@ public static class CliApp
     public const int ExitUsage = 2;
     public const int ExitCheckFailed = 3;
 
-    private static readonly string[] longRunningCommands = ["new", "setup", "run", "diff", "translate", "doctor", "clean", "aot-profile", "migration", "pipeline", "api"];
+    private static readonly string[] longRunningCommands = ["new", "setup", "run", "diff", "translate", "doctor", "clean", "aot-profile", "migration", "pipeline", "api", "codespace"];
 
     private static readonly Dictionary<string, string> projectFolders = new() { ["setup"] = "folder-or-repository", ["clean"] = "path", ["rename"] = "path" };
 
@@ -25,6 +25,7 @@ public static class CliApp
             NewCommand.Create(services),
             SetupCommand.Create(services),
             RunCommand.Create(services),
+            CodespaceCommand.Create(services),
             DiffCommand.Create(services),
             DoctorCommand.Create(services),
             TrustCommand.Create(services),
