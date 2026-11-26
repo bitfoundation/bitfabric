@@ -42,7 +42,8 @@ age -d -i "$work/identity" -o "$work/db.dump" "$work/db.dump.age"
 rm -f "$work/identity"
 
 password=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
-$engine run -d --name "$name" -e POSTGRES_PASSWORD="$password" -v "$work:/backup:ro" pgvector/pgvector:pg18 >/dev/null
+# The server's own major (AddPostgreSQL), whose pg_restore also reads the dumps of the majors before it.
+$engine run -d --name "$name" -e POSTGRES_PASSWORD="$password" -v "$work:/backup:ro" pgvector/pgvector:pg19 >/dev/null
 
 for _ in $(seq 1 60); do
     if $engine exec "$name" pg_isready -q -U postgres -h 127.0.0.1; then

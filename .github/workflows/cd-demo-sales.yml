@@ -92,7 +92,7 @@ jobs:
       run: bit new SalesModule --framework net10.0 --database PostgreSQL --module Sales --appInsights --apiServerUrl ${{ env.SERVER_ADDRESS }} --webAppUrl ${{ env.SERVER_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --no-build --no-format --no-migration --no-trust
 
     - name: Update core appsettings.json
-      uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+      uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
       with:
         files: 'SalesModule/**/appsettings*json'
       env:
@@ -183,7 +183,7 @@ jobs:
       run: bit new SalesModule --framework net10.0 --database PostgreSQL --module Sales --sentry --apiServerUrl ${{ env.SERVER_ADDRESS }} --webAppUrl ${{ env.SERVER_ADDRESS }} --filesStorage S3 --captcha reCaptcha --signalR --ads --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --platforms windows --no-build --no-format --no-migration --no-trust
   
     - name: Update core appsettings.json
-      uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+      uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
       with:
         files: 'SalesModule\**\appsettings*json'
       env:

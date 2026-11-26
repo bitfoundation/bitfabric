@@ -121,7 +121,7 @@ jobs:
             bit translate
 
     - name: Update core appsettings.json
-      uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+      uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
       with:
         files: 'AdminPanel/**/appsettings*json'
       env:
@@ -221,7 +221,7 @@ jobs:
       run: bit new AdminPanel --framework net11.0 --database PostgreSQL --module Admin --sentry --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --theme Material --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --no-build --no-format --no-migration --no-trust
 
     - name: Update core appsettings.json
-      uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+      uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
       with:
         files: 'AdminPanel/**/appsettings*json'
       env:
@@ -291,7 +291,7 @@ jobs:
             bit translate
 
     - name: Update core appsettings.json
-      uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+      uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
       with:
         files: 'AdminPanel\**\appsettings*json'
       env:
@@ -406,7 +406,7 @@ jobs:
             bit translate
 
     - name: Update core appsettings.json
-      uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+      uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
       with:
         files: 'AdminPanel/**/appsettings*json'
       env:
@@ -491,7 +491,7 @@ jobs:
             bit translate
 
     - name: Update core appsettings.json
-      uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+      uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
       with:
         files: 'AdminPanel/**/appsettings*json'
       env:
