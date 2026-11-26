@@ -82,10 +82,35 @@ public static class IResourceBuilderExtensions
         /// <summary>
         /// https://github.com/dotnet/aspire/issues/11710
         /// </summary>
-        public IResourceBuilder<PostgresServerResource> WithV18DataVolume(string? name = null, bool isReadOnly = false)
+        public IResourceBuilder<PostgresServerResource> WithV18PlusDataVolume(string? name = null, bool isReadOnly = false)
         {
-            return builder.WithVolume(name ?? VolumeNameGenerator.Generate(builder, "data"),
-                "/var/lib/postgresql/18/docker", isReadOnly);
+            return builder.WithVolume(name ?? VolumeNameGenerator.Generate(builder, PostgresMajor.DataVolumeSuffix),
+                "/var/lib/postgresql", isReadOnly);
         }
     }
+}
+
+/// <summary>
+/// A new major of PostgreSQL can't open an older major's data folder, so each major keeps its data in a volume of its own:
+/// <c>&lt;app host&gt;-postgresserver-data-pg&lt;major&gt;</c>. The older one is left as it was, for a rollback. Deployed,
+/// the Compose project's <c>postgresserver-export</c> and <c>postgresserver-upgrade</c> services copy the database into the
+/// new volume first (<c>deploy/database</c>). In development and in the tests the new volume starts empty and the app seeds
+/// it. The next major moves all four values together, and <c>deploy/backup/restore-test.sh</c>'s image with them.
+/// </summary>
+public static class PostgresMajor
+{
+    /// <summary>The <c>pgvector/pgvector</c> tag <c>AddPostgreSQL</c> runs.</summary>
+    public const string Tag = "pg19";
+
+    /// <summary>Its volume, mounted at <c>/var/lib/postgresql</c>.</summary>
+    public const string DataVolumeSuffix = "data-pg19";
+
+    /// <summary>The tag of the major before it, whose image reads that major's data to export it.</summary>
+    public const string PreviousTag = "pg18";
+
+    /// <summary>
+    /// The volume of the major before it. PostgreSQL 18's was plain <c>data</c>, mounted at <c>/var/lib/postgresql/18/docker</c>,
+    /// so the volume itself is its data folder.
+    /// </summary>
+    public const string PreviousDataVolumeSuffix = "data";
 }
