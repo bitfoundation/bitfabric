@@ -80,8 +80,9 @@
     </section>
 
     @* 4. What a user of the installed app needs from this page, as the app tells it: its version above all, and the licenses of
-       the open-source software in it, on a page of their own *@
-    <section class="ah-band ab-this-app" id="ah-this-app" aria-labelledby="ah-this-app-title">
+       the open-source software in it, on a page of their own. Not in the page's Markdown copy, which an AI reads about bit
+       Fabric, not about this running app (See PageMarkdown) *@
+    <section class="ah-band ab-this-app" id="ah-this-app" aria-labelledby="ah-this-app-title" data-md="skip">
         <header class="ah-band-head">
             <AppHomeBandTitle Anchor="this-app" Element="@sectionHeading" Text="@Localizer[nameof(AppStrings.AboutThisAppTitle)]" />
             <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.AboutThisAppIntro)]</BitText>

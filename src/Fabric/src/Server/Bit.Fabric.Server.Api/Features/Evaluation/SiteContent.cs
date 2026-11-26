@@ -6,7 +6,7 @@ namespace Bit.Fabric.Server.Api.Features.Evaluation;
 /// LICENSE.md. Each is kept an hour; one that can't be read is asked for again a minute later, and the assistant answers
 /// without it meanwhile.
 /// </summary>
-public partial class SiteContent(IHttpClientFactory httpClientFactory, IFusionCache cache, ILogger<SiteContent> logger)
+public partial class SiteContent(IHttpClientFactory httpClientFactory, IFusionCache cache, ServerApiSettings settings, ILogger<SiteContent> logger)
 {
     public const string HttpClientName = nameof(SiteContent);
 
@@ -14,7 +14,7 @@ public partial class SiteContent(IHttpClientFactory httpClientFactory, IFusionCa
 
     /// <summary>Every page of the site the web app at <paramref name="webAppUrl"/> serves, one after another; null when it can't be read.</summary>
     public Task<string?> All(Uri webAppUrl, CancellationToken cancellationToken)
-        => Read(new Uri(webAppUrl, "/llms-full.txt"), cancellationToken);
+        => Read(new Uri(Site(webAppUrl), "/llms-full.txt"), cancellationToken);
 
     /// <summary>One page, by its address without a culture, such as <c>/features</c>; null when there is none.</summary>
     public Task<string?> Page(Uri webAppUrl, string page, CancellationToken cancellationToken)
@@ -25,8 +25,14 @@ public partial class SiteContent(IHttpClientFactory httpClientFactory, IFusionCa
         if (PagePath().IsMatch(page) is false)
             return Task.FromResult<string?>(null);
 
-        return Read(new Uri(webAppUrl, page is "/" ? "/index.md" : $"{page}.md"), cancellationToken);
+        return Read(new Uri(Site(webAppUrl), page is "/" ? "/index.md" : $"{page}.md"), cancellationToken);
     }
+
+    /// <summary>
+    /// The configured web app when there is one, whatever address the caller came from, so the caches hold one copy of the
+    /// site rather than one per origin a caller can name; the caller's own trusted web app otherwise.
+    /// </summary>
+    private Uri Site(Uri webAppUrl) => Uri.TryCreate(settings.WebAppUrl, UriKind.Absolute, out var configured) ? configured : webAppUrl;
 
     /// <summary>The license every project made with bit Fabric is under, as the public repository has it.</summary>
     public Task<string?> License(CancellationToken cancellationToken) => Read(new Uri(LicenseUrl), cancellationToken);

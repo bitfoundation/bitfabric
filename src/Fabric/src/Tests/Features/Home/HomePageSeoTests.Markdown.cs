@@ -73,6 +73,12 @@ public partial class HomePageSeoTests
         var company = await client.GetStringAsync(PageMarkdown.MarkdownUrl(PageUrls.Trust), TestContext.CancellationToken);
         Assert.Contains("- **Name**: BitPlatform", company, "A list of facts reads as term and value.");
 
+        // What describes this running app rather than bit Fabric stays out, and a switch says whether it is on.
+        var about = await client.GetStringAsync(PageMarkdown.MarkdownUrl(PageUrls.About), TestContext.CancellationToken);
+        Assert.DoesNotContain(AppStrings.AboutThisAppTitle, about, "The installed app's version is no part of what bit Fabric is.");
+        var home = await client.GetStringAsync(PageMarkdown.MarkdownUrl(PageUrls.Home), TestContext.CancellationToken);
+        Assert.Contains("(off)", home, "The cost calculator's optional items say they are off, so a reader doesn't add them to the bill.");
+
         var full = await client.GetStringAsync("/llms-full.txt", TestContext.CancellationToken);
 
         foreach (var page in pages.Where(page => page != PageUrls.Contents))

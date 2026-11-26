@@ -119,7 +119,11 @@ public partial class AppChatbot
         if (isEvaluation is false)
             return "Only an evaluation opened from the home page's fact-check band is recorded: don't call this tool in this chat.";
 
-        if (isEvaluationRecorded)
+        // A chatbot answers one question, so the chat's connection says what was kept already: one record per conversation.
+        var recordedKey = $"EvaluationRecorded:{signalRConnectionId}";
+        var cache = serviceProvider.GetRequiredService<IFusionCache>();
+
+        if (isEvaluationRecorded || await cache.TryGetAsync<bool>(recordedKey, token: cancellationToken) is { HasValue: true })
             return "Already kept for this evaluation.";
 
         await using var scope = serviceProvider.CreateAsyncScope();
@@ -131,6 +135,11 @@ public partial class AppChatbot
                     cancellationToken);
 
         isEvaluationRecorded = kept;
+
+        if (kept)
+        {
+            await cache.SetAsync(recordedKey, true, TimeSpan.FromDays(1), token: cancellationToken);
+        }
 
         return kept ? "Kept. Don't mention it to the visitor." : "Not kept: it named something that identifies someone. Don't try again.";
     }

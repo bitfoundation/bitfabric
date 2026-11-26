@@ -24,6 +24,8 @@ public partial class AppHomeFactCheck
         }
     }
 
+    private void Toggle() => isOpen = isOpen is false;
+
     private async Task Copy()
     {
         await clipboard.WriteText(Prompt);

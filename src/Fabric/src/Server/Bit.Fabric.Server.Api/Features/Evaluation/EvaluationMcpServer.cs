@@ -24,12 +24,22 @@ public class EvaluationMcpServer
     /// <summary>How many evaluations one caller gets an hour: each runs a model, which this server pays for.</summary>
     public const int EvaluationsPerHour = 10;
 
-    /// <summary>The longest answer, so one evaluation can't run away.</summary>
+    /// <summary>How many evaluations every caller gets together a day: the ceiling of what this server pays for them.</summary>
+    public const int EvaluationsPerDay = 300;
+
+    /// <summary>The longest each argument may be: a business and its needs take a few lines.</summary>
+    public const int MaxArgumentLength = 1000;
+
+    /// <summary>The longest answer of each round, and how many tool calls the agent may make, so one evaluation can't run away.</summary>
     private const int MaxOutputTokens = 3000;
+    private const int MaxToolCalls = 6;
+
+    private readonly PartitionedRateLimiter<HttpContext> everyone = PartitionedRateLimiter.Create<HttpContext, string>(_ =>
+        RateLimitPartition.GetFixedWindowLimiter("everyone", _ => new FixedWindowRateLimiterOptions { PermitLimit = EvaluationsPerDay, Window = TimeSpan.FromDays(1) }));
 
     private readonly PartitionedRateLimiter<HttpContext> limiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
         RateLimitPartition.GetFixedWindowLimiter(
-            partitionKey: RateLimitOptionsExtensions.GetPartitionKey(context),
+            partitionKey: Caller(context),
             factory: _ => new FixedWindowRateLimiterOptions { PermitLimit = EvaluationsPerHour, Window = TimeSpan.FromHours(1) }));
 
     public static readonly Tool Definition = new()
@@ -83,6 +93,11 @@ public class EvaluationMcpServer
         if (business is null || needs is null)
             return DocsMcpToolResults.Failed("Say what the business does in `business` and what its app must do in `needs`.");
 
+        var question = DocsMcpToolResults.Argument(request, "question");
+
+        if (new[] { business, needs, question }.Any(argument => argument?.Length > MaxArgumentLength))
+            return DocsMcpToolResults.Failed($"Keep each of `business`, `needs` and `question` under {MaxArgumentLength} characters.");
+
         var httpContext = requestServices.GetRequiredService<IHttpContextAccessor>().HttpContext!;
 
         using (var lease = limiter.AttemptAcquire(httpContext))
@@ -91,7 +106,11 @@ public class EvaluationMcpServer
                 return DocsMcpToolResults.Failed($"This caller has had its {EvaluationsPerHour} evaluations this hour; try again later.");
         }
 
-        var question = DocsMcpToolResults.Argument(request, "question");
+        using (var lease = everyone.AttemptAcquire(httpContext))
+        {
+            if (lease.IsAcquired is false)
+                return DocsMcpToolResults.Failed("Today's evaluations are used up; try again tomorrow, or read https://bitfabric.co/llms-full.txt instead.");
+        }
 
         try
         {
@@ -115,22 +134,27 @@ public class EvaluationMcpServer
         var site = await siteContent.All(webAppUrl, cancellationToken);
         var license = await siteContent.License(cancellationToken);
 
+        var isRecorded = false;
+
         var record = AIFunctionFactory.Create(async (
             [Description("The anonymous summary, two or three lines.")] string summary,
             [Description("yes, no or unknown")] string convinced,
             CancellationToken ct) =>
         {
+            if (isRecorded)
+                return "Already kept for this evaluation.";
+
             _ = Enum.TryParse<EvaluationConvinced>(convinced, ignoreCase: true, out var parsed);
-            return await recorder.Record(source, summary, source is EvaluationSource.Mcp ? EvaluationConvinced.Unknown : parsed, ct)
-                ? "Kept."
-                : "Not kept: it named something that identifies someone. Don't try again.";
+            isRecorded = await recorder.Record(source, summary, source is EvaluationSource.Mcp ? EvaluationConvinced.Unknown : parsed, ct);
+
+            return isRecorded ? "Kept." : "Not kept: it named something that identifies someone. Don't try again.";
         }, new AIFunctionFactoryOptions { Name = EvaluationPrompt.RecordToolName, Description = EvaluationPrompt.RecordToolDescription });
 
         var agent = services.GetRequiredService<IChatClient>().AsAIAgent(
             instructions: $"{EvaluationPrompt.Instructions}\n{EvaluationPrompt.McpRecording}\n\n{EvaluationPrompt.Sources(site, license)}",
             name: "EvaluationAgent",
             description: "Weighs bit Fabric against a visitor's business and needs",
-            tools: [.. DocsMcpChatbotTools.AIFunctions(services), record]);
+            tools: [.. Limited([.. DocsMcpChatbotTools.AIFunctions(services), record], MaxToolCalls)]);
 
         var message = $"""
             The business: {business}
@@ -141,5 +165,31 @@ public class EvaluationMcpServer
         var response = await agent.RunAsync(message, options: new ChatClientAgentRunOptions(new ChatOptions { MaxOutputTokens = MaxOutputTokens }), cancellationToken: cancellationToken);
 
         return response.Text;
+    }
+
+    /// <summary>
+    /// One caller for a rate limit: an IPv4 address, or an IPv6 address's /64, which one home or server holds whole and could
+    /// otherwise spread its calls across.
+    /// </summary>
+    private static string Caller(HttpContext context)
+    {
+        if (context.Connection.RemoteIpAddress is { AddressFamily: System.Net.Sockets.AddressFamily.InterNetworkV6 } ip && ip.IsIPv4MappedToIPv6 is false)
+            return $"ip6:{Convert.ToHexString(ip.GetAddressBytes(), 0, 8)}";
+
+        return RateLimitOptionsExtensions.GetPartitionKey(context);
+    }
+
+    /// <summary>The tools, sharing <paramref name="calls"/> calls between them; past that, each says to answer with what it has.</summary>
+    private static IEnumerable<AIFunction> Limited(AIFunction[] tools, int calls)
+    {
+        var left = calls;
+
+        return tools.Select(tool => (AIFunction)new LimitedFunction(tool, () => Interlocked.Decrement(ref left) >= 0));
+    }
+
+    private sealed class LimitedFunction(AIFunction inner, Func<bool> mayCall) : DelegatingAIFunction(inner)
+    {
+        protected override ValueTask<object?> InvokeCoreAsync(AIFunctionArguments arguments, CancellationToken cancellationToken)
+            => mayCall() ? base.InvokeCoreAsync(arguments, cancellationToken) : ValueTask.FromResult<object?>("No more tool calls for this evaluation: answer now with what you have.");
     }
 }

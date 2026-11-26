@@ -48,7 +48,8 @@
                     if (i == CurrentStep)
                         continue;
 
-                    <section class="np-step" hidden aria-label="@StepTitles[i]">
+                    @* No class of the visible step's: its display would override hidden. *@
+                    <section hidden aria-label="@StepTitles[i]">
                         <NewProjectStep Step="i" />
                     </section>
                 }

@@ -51,6 +51,11 @@ public partial class EvaluationTests
             Assert.AreEqual((EvaluationSource.Mcp, EvaluationConvinced.Unknown), (outcomes[0].Source, outcomes[0].Convinced), "Nobody answers the verdict over MCP.");
         }
 
+        var tooLong = await mcp.CallToolAsync(EvaluationMcpServer.ToolName, new Dictionary<string, object?> { ["business"] = new string('a', EvaluationMcpServer.MaxArgumentLength + 1), ["needs"] = "An app" }, cancellationToken: TestContext.CancellationToken);
+        var isTooLong = tooLong.IsError ?? false;
+        Assert.IsTrue(isTooLong, "An argument is a few lines, never a page: nothing reaches the model.");
+        Assert.AreEqual(1, model.Evaluations);
+
         for (var i = 1; i < EvaluationMcpServer.EvaluationsPerHour; i++)
         {
             await Evaluate(mcp);

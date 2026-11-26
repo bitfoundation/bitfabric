@@ -82,6 +82,9 @@ public partial class AppAiChat
             {
                 conversation = BitAiConversationSerializer.FromJson(json);
             }
+
+            // An evaluation goes on being one after a reload, so the visitor's answer to the verdict still says so.
+            isEvaluation = await historyDb.Get<string>(ConversationStore, EvaluationKey(historyOwner)) is "true";
         });
 
         conversationOwner = historyOwner ?? await CurrentHistoryOwner();
@@ -135,6 +138,16 @@ public partial class AppAiChat
     });
 
     /// <summary>Keeps the conversation as it is now, its newest <see cref="AiChatProtocol.MaxHistory"/> messages: anything older would only be read off the disk to be dropped.</summary>
+    /// <summary>Marks the conversation kept on this device as an evaluation (See AppAiChat.Evaluate); forgetting it forgets this too.</summary>
+    private Task SaveEvaluation() => TryHistory("save the evaluation", async () =>
+    {
+        if (historyDb is null || historyOwner is null) return;
+
+        await historyDb.Put(ConversationStore, "true", EvaluationKey(historyOwner));
+    });
+
+    private static string EvaluationKey(string owner) => $"{owner}:evaluation";
+
     private Task SaveHistory() => TryHistory("save", async () =>
     {
         if (historyDb is null || session is null || historyOwner is null) return;

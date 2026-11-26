@@ -296,9 +296,16 @@ public static partial class WebApplicationExtensions
 
             app.MapGet("/llms-full.txt", [AppResponseCache(SharedMaxAge = 3600 * 24)] async (HttpContext context, PageMarkdown pageMarkdown) =>
             {
+                // A page that can't be read fails the whole file rather than leaving it out: a 503 isn't cached, a partial site would be.
+                if (await pageMarkdown.All(markdownPages, context.Request.GetBaseUrl(), context.RequestAborted) is not { } full)
+                {
+                    context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                    return;
+                }
+
                 context.Response.Headers.ContentType = "text/plain; charset=utf-8";
 
-                await context.Response.WriteAsync(await pageMarkdown.All(markdownPages, context.Request.GetBaseUrl(), context.RequestAborted), context.RequestAborted);
+                await context.Response.WriteAsync(full, context.RequestAborted);
             }).CacheOutput("AppResponseCachePolicy").WithTags("Sitemaps");
 
             // https://www.rfc-editor.org/rfc/rfc9116 - whom to tell about a vulnerability. Its Expires is a date in the file,

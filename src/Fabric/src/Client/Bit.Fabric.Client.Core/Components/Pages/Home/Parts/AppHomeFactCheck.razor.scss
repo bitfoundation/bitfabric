@@ -76,10 +76,11 @@
 .afc-prompt-text {
     margin: 0;
     overflow: auto;
-    font-size: 13px;
     max-height: 16rem;
     padding: 0.875rem;
-    line-height: 1.5;
+    font-size: $bit-typography-fs-sm;
+    line-height: $bit-typography-line-height;
+    font-family: $bit-typography-font-family;
     white-space: pre-wrap;
     border-radius: $bit-shape-radius-surface;
     border: 1px solid $bit-color-border-tertiary;

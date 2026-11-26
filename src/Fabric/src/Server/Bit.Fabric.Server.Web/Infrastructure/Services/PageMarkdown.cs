@@ -31,6 +31,8 @@ public partial class PageMarkdown(IServer server, IHttpClientFactory httpClientF
 
     private static readonly HtmlParser parser = new();
 
+    private readonly SemaphoreSlim allPages = new(1, 1);
+
     private static readonly ReverseMarkdown.Converter converter = new(new ReverseMarkdown.Config
     {
         GithubFlavored = true,
@@ -40,10 +42,17 @@ public partial class PageMarkdown(IServer server, IHttpClientFactory httpClientF
         ListBulletChar = '-'
     });
 
-    /// <summary>The page's copy, with its links on <paramref name="origin"/>; null when the page can't be read.</summary>
+    /// <summary>
+    /// The page's copy, with its links on <paramref name="origin"/>; null when the page can't be read. It is made and kept
+    /// once per page on this host's own address, whatever address it is asked for on, and that address is replaced with
+    /// <paramref name="origin"/> as it is served: the page itself may write its own address in its text, as the home page's
+    /// prompt does.
+    /// </summary>
     public async Task<string?> Of(string page, Uri origin, CancellationToken cancellationToken)
     {
-        return await cache.GetOrCreateAsync($"PageMarkdown:{origin}:{page}", async entry =>
+        var own = OwnAddress();
+
+        var markdown = await cache.GetOrCreateAsync($"PageMarkdown:{page}", async entry =>
         {
             entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
 
@@ -52,7 +61,7 @@ public partial class PageMarkdown(IServer server, IHttpClientFactory httpClientF
             try
             {
                 using var client = httpClientFactory.CreateClient(HttpClientName);
-                client.BaseAddress = OwnAddress();
+                client.BaseAddress = own;
 
                 using var response = await client.GetAsync(path, cancellationToken);
 
@@ -65,7 +74,7 @@ public partial class PageMarkdown(IServer server, IHttpClientFactory httpClientF
 
                 var html = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                return ToMarkdown(html, new Uri(origin, path));
+                return ToMarkdown(html, new Uri(own, path));
             }
             catch (Exception exp) when (exp is HttpRequestException or TaskCanceledException && cancellationToken.IsCancellationRequested is false)
             {
@@ -74,29 +83,41 @@ public partial class PageMarkdown(IServer server, IHttpClientFactory httpClientF
                 return null;
             }
         });
+
+        return markdown?.Replace(own.GetLeftPart(UriPartial.Authority), origin.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
     /// Every public page's copy, one after another, for <c>/llms-full.txt</c> and the assistant: the home page first, then the
-    /// sitemap's order, each under its address.
+    /// sitemap's order, each under its address. Null when a page can't be read, so an incomplete site is never served or cached.
+    /// One request makes them at a time; the others wait and find them in the cache.
     /// </summary>
-    public async Task<string> All(IEnumerable<string> pages, Uri origin, CancellationToken cancellationToken)
+    public async Task<string?> All(IEnumerable<string> pages, Uri origin, CancellationToken cancellationToken)
     {
-        var text = new StringBuilder();
-        text.Append("# bit Fabric: every page of bitfabric.co\n\n");
-        text.Append("> Each public page of the site as Markdown, in English, one after another under its address. The site's index is llms.txt.\n");
+        await allPages.WaitAsync(cancellationToken);
 
-        // /contents is the home page as it was, every band of it again: its own copy has it, the whole site leaves it out.
-        foreach (var page in pages.Where(page => page != PageUrls.Contents).OrderBy(page => page is "/" ? 0 : 1))
+        try
         {
-            if (await Of(page, origin, cancellationToken) is not { Length: > 0 } markdown)
-                continue;
+            var text = new StringBuilder();
+            text.Append("# bit Fabric: every page of bitfabric.co\n\n");
+            text.Append("> Each public page of the site as Markdown, in English, one after another under its address. The site's index is llms.txt.\n");
 
-            text.Append("\n\n---\n\n");
-            text.Append(markdown);
+            // /contents is the home page as it was, every band of it again: its own copy has it, the whole site leaves it out.
+            foreach (var page in pages.Where(page => page != PageUrls.Contents).OrderBy(page => page is "/" ? 0 : 1))
+            {
+                if (await Of(page, origin, cancellationToken) is not { Length: > 0 } markdown)
+                    return null;
+
+                text.Append("\n\n---\n\n");
+                text.Append(markdown);
+            }
+
+            return text.ToString();
         }
-
-        return text.ToString();
+        finally
+        {
+            allPages.Release();
+        }
     }
 
     /// <summary>A pre-rendered page's own content as Markdown, under a front matter with its title, description and address.</summary>
@@ -118,6 +139,13 @@ public partial class PageMarkdown(IServer server, IHttpClientFactory httpClientF
         var descriptions = content.QuerySelectorAll("[aria-describedby]")
                                   .SelectMany(described => described.GetAttribute("aria-describedby")!.Split(' ', StringSplitOptions.RemoveEmptyEntries))
                                   .ToHashSet();
+
+        // A switch says whether it is on, as a reader of the page sees it, like the cost calculator's optional items.
+        foreach (var toggle in content.QuerySelectorAll("input[type='checkbox'], [role='switch'], [role='checkbox']").ToArray())
+        {
+            var on = toggle.HasAttribute("checked") || toggle.GetAttribute("aria-checked") is "true";
+            toggle.Replace(document.CreateTextNode(on ? " (on) " : " (off) "));
+        }
 
         foreach (var skipped in content.QuerySelectorAll(Skipped).Concat(content.QuerySelectorAll("[id]").Where(element => descriptions.Contains(element.Id!))).ToArray())
         {

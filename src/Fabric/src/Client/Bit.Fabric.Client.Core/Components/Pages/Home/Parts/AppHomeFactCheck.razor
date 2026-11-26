@@ -13,7 +13,7 @@
             </BitText>
         </div>
         <BitButton Variant="@(isOpen ? BitVariant.Text : BitVariant.Fill)" IconName="@(isOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
-                   aria-expanded="@(isOpen ? "true" : "false")" aria-controls="afc-how" OnClick="() => isOpen = isOpen is false" Class="afc-toggle">
+                   aria-expanded="@(isOpen ? "true" : "false")" aria-controls="afc-how" OnClick="WrapHandled(Toggle)" Class="afc-toggle">
             @(isOpen ? Localizer[nameof(AppStrings.AppHomeFactCheckHide)] : Localizer[nameof(AppStrings.AppHomeFactCheckShowHow)])
         </BitButton>
     </div>
@@ -25,7 +25,7 @@
                 @Localizer[nameof(AppStrings.AppHomeFactCheckYourAIText)]
             </BitText>
             <div class="afc-prompt">
-                <pre class="afc-prompt-text" dir="ltr">@Prompt</pre>
+                <pre class="afc-prompt-text" dir="auto">@Prompt</pre>
                 <BitButton Size="BitSize.Small" IconName="@(isCopied ? BitIconName.CheckMark : BitIconName.Copy)" OnClick="WrapHandled(Copy)" Class="afc-copy">
                     @(isCopied ? Localizer[nameof(AppStrings.Copied)] : Localizer[nameof(AppStrings.Copy)])
                 </BitButton>

@@ -155,7 +155,11 @@ public partial class AppAiChat : IAppAiChat
 
         if (string.IsNullOrWhiteSpace(InitialPrompt) is false)
         {
-            isEvaluation = InitialEvaluation;
+            if (InitialEvaluation)
+            {
+                isEvaluation = true;
+                await SaveEvaluation();
+            }
 
             // Not awaited, so the chat renders while the answer streams; what goes wrong is still handled, as an awaited one's would be
             _ = WrapHandled<string>(SendPrompt)(InitialPrompt);
@@ -215,6 +219,7 @@ public partial class AppAiChat : IAppAiChat
     public async Task Evaluate(string prompt)
     {
         isEvaluation = true;
+        await SaveEvaluation();
 
         await SendPrompt(prompt);
     }
