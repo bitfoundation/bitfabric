@@ -410,6 +410,20 @@ public class PosDashboardUITests : ShowcaseUITest
         }
     }
 
+    [TestMethod, OnDesktops]
+    public async Task TheStore_Should_BePickedFromAListThatStartsSlidingInLate(WorkbenchSurface surface)
+    {
+        // A phone's view on the canvas, where the list is a panel that slides in from the side.
+        await OpenWorkbench(PageKey, "?device=iphone-se");
+
+        // The slide starts late, as it can on a busy machine, so the list waits where it starts, outside the view, before it moves in.
+        await View().Locator("head").EvaluateAsync("head => head.insertAdjacentHTML('beforeend', '<style>[data-bit-callout-holder] > * { transition-delay: 400ms !important; }</style>')");
+
+        await Pick(StorePicker, WorkbenchStrings.PosStoreAmsterdam);
+
+        await Expect(StorePicker).ToContainTextAsync(WorkbenchStrings.PosStoreAmsterdam);
+    }
+
     [TestMethod, EverySurface]
     public async Task TheFilter_Should_StayAfterAReload(WorkbenchSurface surface)
     {
