@@ -185,7 +185,7 @@ jobs:
       #     bit translate
 
       - name: Update core appsettings.json
-        uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+        uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
         with:
           files: 'src/Fabric/src/**/appsettings*json'
         env:
@@ -289,7 +289,7 @@ jobs:
       #     bit translate
 
       - name: Update core appsettings.json
-        uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+        uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
         with:
           files: 'src\Fabric\src\**\appsettings*json'
         env:
@@ -404,7 +404,7 @@ jobs:
       #     bit translate
 
       - name: Update core appsettings.json
-        uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+        uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
         with:
           files: 'src/Fabric/src/**/appsettings*json'
         env:
@@ -486,7 +486,7 @@ jobs:
       #     bit translate
 
       - name: Update core appsettings.json
-        uses: devops-actions/variable-substitution@ae7b1f3676ae374dc70282e6b9650bc50b611222 # v1.2
+        uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
         with:
           files: 'src/Fabric/src/**/appsettings*json'
         env:
