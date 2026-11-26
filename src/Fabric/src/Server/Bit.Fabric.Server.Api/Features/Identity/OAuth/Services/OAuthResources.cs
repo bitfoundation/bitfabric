@@ -36,8 +36,8 @@ public static class OAuthResources
         // The chatbot asks nothing of the caller but a signed-in user, which every policy set implies.
         new(McpPath, [OAuthScopes.Chat], [], []),
         new(DevMcpPath, [OAuthScopes.DevMcp], [AppFeatures.System.DevMcp, AuthPolicies.TFA_ENABLED], []),
-        // The feature alone at the endpoint, which the Operations page reads with the session it already has; minting
-        // a token that reads it unattended takes two factor. A token never gets the failures' error texts (See WriteHealthReport).
+        // The feature alone at the endpoint, where a signed-in user's own session reads it; minting a token that reads
+        // it unattended takes two factor. A token never gets the failures' error texts (See WriteHealthReport).
         new(HealthzPath, [OAuthScopes.Healthz], [AppFeatures.System.Operations_View], [AuthPolicies.TFA_ENABLED])
     ];
 

@@ -550,20 +550,8 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>usando lo que ya conoces y amas</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>Ver video</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Saber más</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>Una app con todo incluido en cada plataforma, desde el primer día</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>Un conjunto de componentes Blazor de alto rendimiento, fáciles de personalizar y hermosos</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>El punto de partida de esta app: todo ya conectado, y el código fuente es enteramente tuyo.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Construye tu aplicación con tu propia IA, empezando con todas las funciones en web, Android, iOS, Windows y macOS. El código, los datos y el servidor siguen siendo tuyos.</value>
@@ -1476,6 +1464,9 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
   </data>
     <data name="PendingInvitation" xml:space="preserve">
     <value>Invitación pendiente</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
+    <value>Invitaciones pendientes</value>
   </data>
     <data name="CurrentTenant" xml:space="preserve">
     <value>Equipo actual</value>
@@ -7698,5 +7689,68 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
   </data>
     <data name="FeaturesLead" xml:space="preserve">
     <value>Todo está construido y probado antes de tu primera indicación, en tu propio repositorio, donde tu IA puede leer y cambiar cada línea. Pulsa ⓘ en una tarjeta para verla en un vídeo corto.</value>
+  </data>
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Algo no funciona en este momento</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Mantenimiento programado</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>El equipo ya lo sabe. No hace falta que lo informe.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Página de estado</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Investigando</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Causa encontrada</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Corrección aplicada</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Resuelto</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Empezó {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Empezó {0}, actualizado {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>ahora mismo</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>hace {0} min</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>hace {0} h</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>En curso hasta {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>De {0} a {1}</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Se necesita la autenticación en dos pasos</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Solo una cuenta que inicia sesión con autenticación en dos pasos puede autorizar esta aplicación. Actívela e inicie sesión de nuevo con ella, y volverá aquí para terminar.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Activar la autenticación en dos pasos</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>La autenticación en dos pasos está activada. Guarde sus códigos de recuperación y luego inicie sesión de nuevo con ella para volver a donde estaba.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Iniciar sesión de nuevo</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>La autenticación en dos pasos está activada e inició sesión con ella. Puede volver a donde estaba.</value>
   </data>
 </root>

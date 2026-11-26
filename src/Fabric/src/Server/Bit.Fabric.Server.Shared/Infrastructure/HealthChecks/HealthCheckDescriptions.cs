@@ -6,7 +6,7 @@ public record HealthCheckDescription(string Title, string? IconName = null, stri
 
 /// <summary>
 /// What /healthz reports as each check's title, icon and about (See HealthReportEntryDto.Title), by registration name,
-/// so the Operations page and a monitor show a check the way the app names it. The template's own checks are described
+/// so a monitor shows a check the way the app names it. The template's own checks are described
 /// here; describe one of your own next to its registration, e.g.
 /// <c>.AddCheck&lt;PaymentGatewayHealthCheck&gt;("paymentGateway", tags: [HealthCheckCategories.Integrations]).Describe("paymentGateway", "Payment gateway", "Money", "Authorizes and voids a one cent payment.")</c>.
 /// A check described nowhere is reported under its registration name, with its category's icon.
@@ -33,7 +33,7 @@ public class HealthCheckDescriptions : Dictionary<string, HealthCheckDescription
         this["sms"] = new("SMS", "CellPhone", "The Twilio account is active.");
         this["webPush"] = new("Web push", "Ringer", "FCM, the push service Chrome uses, accepts the VAPID signature.");
         this["firebase"] = new("Android push", "Ringer", "Firebase Cloud Messaging accepts the credentials.");
-        this["apns"] = new("Apple push", "Ringer", "APNs accepts the credentials.");
+        this["apns"] = new("Apple push", "Ringer", "APNs accepts the credentials, on its production environment outside Development.");
         this["azureSignalR"] = new("Azure SignalR", "Streaming", "The service is healthy and accepts the access key.");
 
         this["entraId"] = new("Microsoft Entra ID", "AuthenticatorApp", "The tenant answers and accepts the app's credentials.");

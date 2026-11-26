@@ -76,6 +76,7 @@ public static partial class IClientCoreServiceCollectionExtensions
             // AddSessioned applies AddSingleton in BlazorHybrid and AddScoped in Blazor WebAssembly and Blazor Server, ensuring correct service lifetimes for each environment.
             services.AddSessioned<PubSubService>();
             services.AddSessioned<SnackBarService>();
+            services.AddSessioned<StatusPageService>();
             services.AddSessioned<ElevatedAccessService>();
             services.AddSessioned<AccountPinCipher>();
             services.AddSessioned<NotificationPreferenceService>();

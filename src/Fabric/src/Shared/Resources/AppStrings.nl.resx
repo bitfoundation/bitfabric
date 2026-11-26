@@ -550,20 +550,8 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>met wat u al kent en leuk vindt</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>Bekijk video</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Meer informatie</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>Een volledig uitgeruste app op elk platform, vanaf dag één</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>Een set prestatieve, eenvoudig aan te passen en mooie Blazor-componenten</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>Het startpunt achter deze app: alles is al aangesloten en de broncode is volledig van u.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Bouw je app met je eigen AI, vanaf dag één compleet op web, Android, iOS, Windows en macOS. De code, de gegevens en de server blijven van jou.</value>
@@ -1476,6 +1464,9 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
   </data>
     <data name="PendingInvitation" xml:space="preserve">
     <value>Openstaande uitnodiging</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
+    <value>Openstaande uitnodigingen</value>
   </data>
     <data name="CurrentTenant" xml:space="preserve">
     <value>Huidig team</value>
@@ -7698,5 +7689,68 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
   </data>
     <data name="FeaturesLead" xml:space="preserve">
     <value>Alles is gebouwd en getest vóór je eerste prompt, in je eigen repository, waar je AI elke regel kan lezen en aanpassen. Druk op ⓘ op een kaart om het in een korte film te zien.</value>
+  </data>
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Er werkt nu iets niet</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Gepland onderhoud</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>Het team weet ervan. Je hoeft het niet te melden.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Statuspagina</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Wordt onderzocht</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Oorzaak gevonden</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Oplossing toegepast</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Opgelost</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Begonnen {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Begonnen {0}, bijgewerkt {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>zojuist</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} min geleden</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} uur geleden</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>Bezig tot {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} tot {1}</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>Tweefactorauthenticatie is nodig</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Alleen een account dat zich aanmeldt met tweefactorauthenticatie kan deze applicatie autoriseren. Zet die aan en meld u er opnieuw mee aan, dan komt u hier terug om af te ronden.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Tweefactorauthenticatie aanzetten</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>Tweefactorauthenticatie staat aan. Bewaar uw herstelcodes en meld u er daarna opnieuw mee aan om terug te gaan naar waar u was.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Opnieuw aanmelden</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>Tweefactorauthenticatie staat aan en u bent ermee aangemeld. U kunt teruggaan naar waar u was.</value>
   </data>
 </root>

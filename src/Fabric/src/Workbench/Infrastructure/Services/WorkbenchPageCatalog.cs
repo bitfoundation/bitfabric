@@ -122,6 +122,28 @@ public static class WorkbenchPageCatalog
                 ])
             ]
         },
+        new(NotAuthorizedHost.PageKey,
+            nameof(WorkbenchStrings.NotAuthorizedTitle),
+            nameof(WorkbenchStrings.NotAuthorizedDescription),
+            BitIconName.Lock,
+            typeof(NotAuthorizedHost),
+            nameof(WorkbenchStrings.CategoryAppPages),
+            ["BitImage", "BitStack", "BitButton"],
+            nameof(WorkbenchStrings.NotAuthorizedCaption))
+        {
+            Switches =
+            [
+                // One per branch of the app's page; its loading one is the Loading data state.
+                new(NotAuthorizedHost.CaseSwitch, nameof(WorkbenchStrings.NotAuthorizedSwitchCase),
+                [
+                    new(NotAuthorizedPage.NoTenantCase, nameof(WorkbenchStrings.NotAuthorizedCaseNoTenant)),
+                    new(NotAuthorizedPage.NoTenantsCase, nameof(WorkbenchStrings.NotAuthorizedCaseNoTenants)),
+                    new(NotAuthorizedPage.PrivilegeCase, nameof(WorkbenchStrings.NotAuthorizedCasePrivilege)),
+                    new(NotAuthorizedPage.ForbiddenCase, nameof(WorkbenchStrings.NotAuthorizedCaseForbidden)),
+                    new(NotAuthorizedPage.SignedOutCase, nameof(WorkbenchStrings.SignedOut))
+                ])
+            ]
+        },
         // bitfabric.co's own pages: the app's home page, then the wizard it leads to, rendered from Client.Core (See SitePageHost).
         new(SitePageHost.HomeKey,
             "Home page",

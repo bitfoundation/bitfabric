@@ -550,20 +550,8 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>en utilisant ce que vous connaissez et aimez déjà</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>Regarder la vidéo</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>En savoir plus</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>Une application complète sur chaque plateforme, dès le premier jour</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>Un ensemble de composants Blazor performants, faciles à personnaliser et élégants</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>Le point de départ de cette application : tout est déjà en place, et le code source est entièrement à vous.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Créez votre application avec votre propre IA, complète dès le départ sur le web, Android, iOS, Windows et macOS. Le code, les données et le serveur restent à vous.</value>
@@ -1476,6 +1464,9 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
   </data>
     <data name="PendingInvitation" xml:space="preserve">
     <value>Invitation en attente</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
+    <value>Invitations en attente</value>
   </data>
     <data name="CurrentTenant" xml:space="preserve">
     <value>Équipe actuelle</value>
@@ -7698,5 +7689,68 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
   </data>
     <data name="FeaturesLead" xml:space="preserve">
     <value>Tout est construit et testé avant votre premier prompt, dans votre propre dépôt, où votre IA peut lire et modifier chaque ligne. Appuyez sur ⓘ d&apos;une carte pour la voir dans un court film.</value>
+  </data>
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Quelque chose ne fonctionne pas en ce moment</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Maintenance planifiée</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>L'équipe est au courant. Inutile de le signaler.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Page d'état</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Analyse en cours</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Cause trouvée</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Correctif appliqué</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Résolu</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Commencé {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Commencé {0}, mis à jour {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>à l'instant</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>il y a {0} min</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>il y a {0} h</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>En cours jusqu'à {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>De {0} à {1}</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>L'authentification à deux facteurs est requise</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>Seul un compte qui se connecte avec l'authentification à deux facteurs peut autoriser cette application. Activez-la, reconnectez-vous avec elle, et vous reviendrez ici pour terminer.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>Activer l'authentification à deux facteurs</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>L'authentification à deux facteurs est activée. Conservez vos codes de récupération, puis reconnectez-vous avec elle pour revenir là où vous étiez.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>Se reconnecter</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>L'authentification à deux facteurs est activée et vous vous êtes connecté avec elle. Vous pouvez revenir là où vous étiez.</value>
   </data>
 </root>

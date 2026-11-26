@@ -48,8 +48,7 @@ public static class WebApplicationExtensions
                 Predicate = static res => res.Tags.Contains("live")
             });
 
-            // The detailed report of the health checks page: behind its feature and never cached, as it carries each
-            // failure's exception.
+            // The detailed report: behind its feature and never cached, as it carries each failure's exception.
             HealthCheckOptions healthzOptions = new()
             {
                 Predicate = _ => true,
@@ -67,8 +66,8 @@ public static class WebApplicationExtensions
         }
 
         /// <summary>
-        /// Server.Web's own settings, for the operations page of a deployment whose api is standalone: the two are
-        /// separate processes. The api serves the same shape through <c>IDiagnosticController.GetDeploymentConfiguration</c>.
+        /// Server.Web's own settings, for a deployment whose api is standalone: the two are separate processes. The api
+        /// serves the same shape through <c>IDiagnosticController.GetDeploymentConfiguration</c>.
         /// </summary>
         public WebApplication MapDeploymentConfiguration()
         {
@@ -275,9 +274,10 @@ public static class WebApplicationExtensions
     {
         var registrations = context.RequestServices.GetRequiredService<IOptions<HealthCheckServiceOptions>>().Value.Registrations.ToDictionary(r => r.Name);
         var descriptions = context.RequestServices.GetRequiredService<IOptions<HealthCheckDescriptions>>().Value;
+        var dependencies = context.RequestServices.GetRequiredService<IOptions<HealthCheckDependencies>>().Value;
 
-        // An exception can carry a server name or a connection string. The app's own session (the Operations page) gets
-        // it; an OAuth token, which some other app holds, never does.
+        // An exception can carry a server name or a connection string. A signed-in user's own session gets it; an OAuth
+        // token, which some other app holds, never does.
         var includeExceptions = context.User.HasClaim(claim => claim.Type is AppClaimTypes.OAUTH_CLIENT_ID) is false;
 
         HealthReportDto body = new()
@@ -296,6 +296,9 @@ public static class WebApplicationExtensions
                     ? tagged
                     : null;
                 var description = descriptions.GetValueOrDefault(entry.Key);
+                var isNotConfigured = entry.Value.Tags.Contains(HealthCheckTags.NotConfigured);
+                // The stand-in of a check whose settings are missing talks to nothing yet.
+                var dependency = isNotConfigured ? null : dependencies.GetValueOrDefault(entry.Key);
 
                 return new HealthReportEntryDto
                 {
@@ -317,7 +320,10 @@ public static class WebApplicationExtensions
                     Title = description?.Title ?? entry.Key,
                     IconName = description?.IconName ?? HealthCheckCategories.IconOf(category),
                     About = description?.About,
-                    IsNotConfigured = entry.Value.Tags.Contains(HealthCheckTags.NotConfigured),
+                    Provider = dependency?.Provider,
+                    Host = dependency?.Host,
+                    Model = dependency?.Model,
+                    IsNotConfigured = isNotConfigured,
                     // Stringified, as a check may put anything in here.
                     Data = data.Where(item => HealthCheckResultData.Keys.Contains(item.Key) is false).ToDictionary(item => item.Key, item => item.Value switch
                     {

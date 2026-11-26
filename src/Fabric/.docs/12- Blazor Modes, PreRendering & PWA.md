@@ -207,7 +207,7 @@ The service worker has **four different modes** to match your app's PreRendering
 - Field service apps, medical apps
 - Apps where guaranteed offline navigation is critical
 
-**Demo:** https://todo-offline.bitplatform.cc/offline-todo
+**Demo:** https://todo-offline.bitfabric.co/offline-todo
 
 **Pros:**
 - ✅ Guaranteed offline functionality
@@ -239,7 +239,7 @@ self.mode = 'NoPrerender';
 - Admin panels and internal tools
 - Apps where instant startup is priority
 
-**Demo:** https://adminpanel.bitplatform.dev/
+**Demo:** https://adminpanel.bitfabric.co/
 
 **Pros:**
 - ✅ Instant app startup
@@ -274,7 +274,7 @@ self.mode = 'NoPrerender';
 - Public-facing apps where first impression matters
 - Apps balancing SEO benefits and server resources
 
-**Demo:** https://todo.bitplatform.dev/
+**Demo:** https://todo.bitfabric.co/
 
 **Pros:**
 - ✅ Fast perceived load on first visit
@@ -299,7 +299,7 @@ self.mode = 'NoPrerender';
 - Every page load fetches pre-rendered HTML from server
 - Content shows immediately on every visit
 
-**Demo:** https://sales.bitplatform.dev/
+**Demo:** https://sales.bitfabric.co/
 
 **Initial Prerender** vs **Always Prerender**:
 If pre-rendering is enabled, `Always Prerender` fetches the site's document on every load of the app. The reason behind fetching the document on every app load is that Blazor WebAssembly's runtime might take some time to kick in on low-end Android devices, so if the user refreshes the page or visits a new page, it shows the pre-rendered document while the Blazor WebAssembly runtime is loading. Downside? It increases server load due to frequent pre-rendering which can be reduced by response caching which will be covered in upcoming stages.

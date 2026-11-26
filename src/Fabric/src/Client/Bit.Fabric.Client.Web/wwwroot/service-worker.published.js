@@ -1,7 +1,7 @@
 // [mirror] push notification and notificationclick handlers - keep in sync with:
 // - src/Client/Bit.Fabric.Client.Web/wwwroot/service-worker.js
 
-// bit version: 11.0.0-pre-22
+// bit version: 11.0.0-pre-25
 // https://github.com/bitfoundation/bitplatform/tree/develop/src/Bswup
 
 
@@ -109,24 +109,24 @@ self.serverHandledUrls = [
 // self.mode = 'FullOffline'; // Traditional PWA app that **first** downloads all assets and **then** runs the app.
 // This ensures the app won't break if network connectivity is lost and the user navigates to a new page requiring lazy-loaded JS/WASM/image files.
 // Recommended if the app primarily uses PWA for offline support and has local/offline database such as IndexedeDB or SQLite (Checkout Bit.Bsqlite)
-// Demo: https://todo-offline.bitplatform.cc/offline-todo
+// Demo: https://todo-offline.bitfabric.co/offline-todo
 
 // self.mode = 'NoPrerender'; // Modern PWA app that **starts immediately** and lazy-loads assets as needed.
 // If network connectivity is lost and the user navigates to a new page requiring lazy-loaded JS/WASM/image files, the app might break.
 // Recommended if the app uses PWA for benefits other than offline support, such as installability, push notifications, etc.
-// Demo: https://adminpanel.bitplatform.dev/
+// Demo: https://adminpanel.bitfabric.co/
 
 // Production and Test prerender (Server.Web's appsettings.Production.json and appsettings.Test.json), and Bswup gives this mode the
 // same settings as NoPrerender, so a host that doesn't runs as it did: the first visit gets the server's page, later ones the cached app.
 self.mode = 'InitialPrerender'; // If pre-rendering is enabled in the `Server.Web` configuration, this mode fetches the site's document only on the first load of the app.
 // Useful for SEO-friendly apps, and to display content on the initial visit while files download. Subsequent visits avoid server pressure from pre-rendering.
-// Demo: https://todo.bitplatform.dev/
+// Demo: https://todo.bitfabric.co/
 
 // self.mode = 'AlwaysPrerender'; // If pre-rendering is enabled in the Server.Web configuration, this mode fetches the site's document on every load of the app.
 // The reason behind fetching the document on every app load is that Blazor WebAssembly's runtime might takes some time to kick in on low-end mobile devices,
 // so if the user refreshes the page or visits a new page, it shows the pre-rendered document while the Blazor WebAssembly runtime is loading.
 // Downside: Increases server load due to frequent pre-rendering.
-// Demo: https://sales.bitplatform.dev/
+// Demo: https://sales.bitfabric.co/
 
 self.enableCacheControl = false; // false means origin's cache headers are respected, true means service worker would manage the cache headers.
 

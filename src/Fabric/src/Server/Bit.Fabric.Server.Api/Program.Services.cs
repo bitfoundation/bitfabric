@@ -3,10 +3,12 @@ using System.Net;
 using System.Net.Mail;
 using AdsPush;
 using AdsPush.Abstraction;
+using AdsPush.Abstraction.APNS;
 using Bit.Belemetry;
 using Bit.Bmage;
 using Bit.Fabric.Server.Api.Features.Attachments;
 using Bit.Fabric.Server.Api.Features.Diagnostic;
+using Bit.Fabric.Server.Shared.Infrastructure.HealthChecks;
 using Bit.Fabric.Server.Api.Features.DocsMcp;
 using Bit.Fabric.Server.Api.Features.Identity;
 using Bit.Fabric.Server.Api.Features.Identity.OAuth;
@@ -139,6 +141,8 @@ public static partial class Program
 
             if (string.IsNullOrWhiteSpace(appSettings.AdsPushAPNS?.P8PrivateKey) is false)
             {
+                appSettings.AdsPushAPNS.P8PrivateKey = AppleP8Key.Body(appSettings.AdsPushAPNS.P8PrivateKey);
+
                 adsPushSenderBuilder = adsPushSenderBuilder.ConfigureApns(appSettings.AdsPushAPNS, sp.GetRequiredService<IHttpClientFactory>().CreateClient("APNS"));
             }
 
@@ -708,11 +712,8 @@ public static partial class Program
         {
             authenticationBuilder.AddApple(options =>
             {
-                options.UsePrivateKey(keyId =>
-                {
-                    return env.ContentRootFileProvider.GetFileInfo("AppleAuthKey.p8");
-                });
                 configuration.GetRequiredSection("Authentication:Apple").Bind(options);
+                options.UsePrivateKey(configuration["Authentication:Apple:PrivateKey"], env.ContentRootFileProvider);
             });
         }
 
@@ -834,8 +835,8 @@ public static partial class Program
         ServerApiSettings appSettings = new();
         configuration.Bind(appSettings);
 
-        // Every check carries one of HealthCheckCategories as a tag, which /healthz reports as the entry's category: the
-        // Operations page and a monitor group a check they don't know by it. Give a check of your own one too.
+        // Every check carries one of HealthCheckCategories as a tag, which /healthz reports as the entry's category: a
+        // monitor groups a check it doesn't know by it. Give a check of your own one too.
         var healthChecksBuilder = builder.AddDefaultHealthChecks()
             .AddDbContextCheck<AppDbContext>(tags: [HealthCheckCategories.Platform])
             .AddHangfire(setup => setup.MinimumAvailableServers = 1, tags: [HealthCheckCategories.Platform])
@@ -848,13 +849,26 @@ public static partial class Program
             // Cached, as signing in on every probe can trip the mail provider's brute force protection.
             .AddCachedCheck("smtp", HealthCheckCategories.Messaging, _ => new SmtpHealthCheck(GetSmtpSettings(configuration)), cacheDuration: TimeSpan.FromMinutes(5), timeout: TimeSpan.FromSeconds(10));
 
-        // Whether the mail reaches inboxes: SPF and DMARC of the sender's domain, read from DNS with no setting of its own.
-        // Left out where mail is caught rather than delivered (See EmailDeliverySettings.For).
         var smtpConnectionString = configuration.GetConnectionString("smtp");
         var smtpHost = string.IsNullOrWhiteSpace(smtpConnectionString)
                        || Uri.TryCreate(GetConnectionStringValue(smtpConnectionString, "Endpoint", "smtp://localhost:25"), UriKind.Absolute, out var smtpEndpoint) is false
             ? null
             : smtpEndpoint.Host;
+
+        // What each check talks to, so a monitor shows what lies behind a part (See HealthCheckDependencies): names and
+        // host names only, never a key, a connection string or a user name. The stand-in of a check whose settings are
+        // missing reports none.
+        healthChecksBuilder.TalksTo("smtp", "SMTP", smtpHost);
+        var s3Host = configuration.GetConnectionString("s3") is { Length: > 0 } s3 ? HealthCheckDependency.HostOf(GetConnectionStringValue(s3, "Endpoint", "")) : null;
+        healthChecksBuilder.TalksTo("fileStorage", s3Host switch
+        {
+            not null when s3Host.EndsWith(".r2.cloudflarestorage.com", StringComparison.OrdinalIgnoreCase) => "Cloudflare R2",
+            not null when s3Host.EndsWith(".amazonaws.com", StringComparison.OrdinalIgnoreCase) => "Amazon S3",
+            _ => "S3"
+        }, s3Host);
+
+        // Whether the mail reaches inboxes: SPF and DMARC of the sender's domain, read from DNS with no setting of its own.
+        // Left out where mail is caught rather than delivered (See EmailDeliverySettings.For).
         var appleSignIn = string.IsNullOrWhiteSpace(configuration["Authentication:Apple:ClientId"]) is false;
 
         if (EmailDeliverySettings.For(appSettings.Email?.DefaultFromEmail, smtpHost, appleSignIn, builder.Environment.IsDevelopment()) is { } emailDelivery)
@@ -914,6 +928,7 @@ public static partial class Program
         // Half a minute, as file storage above: one call to the SMS provider for every monitor reading in it.
         AddCachedCheckIfConfigured("sms", HealthCheckCategories.Messaging, appSettings.Sms?.Configured is true, "Sms",
             sp => ActivatorUtilities.CreateInstance<TwilioHealthCheck>(sp), cacheDuration: TimeSpan.FromSeconds(30), timeout: TimeSpan.FromSeconds(5));
+        healthChecksBuilder.TalksTo("sms", "Twilio", "api.twilio.com");
 
         var backupsConnectionString = configuration.GetConnectionString("backups");
 
@@ -930,6 +945,7 @@ public static partial class Program
 
         AddCachedCheckIfConfigured("cloudflare", HealthCheckCategories.Platform, appSettings.Cloudflare?.Configured is true, "Cloudflare",
             sp => ActivatorUtilities.CreateInstance<CloudflareHealthCheck>(sp), cacheDuration: TimeSpan.FromMinutes(5), timeout: TimeSpan.FromSeconds(10));
+        healthChecksBuilder.TalksTo("cloudflare", "Cloudflare", "api.cloudflare.com");
 
 
 
@@ -937,13 +953,17 @@ public static partial class Program
             || configuration.GetBelemetryOtlpEndpoint() is not null)
         {
             healthChecksBuilder.AddCachedCheck("otlp", HealthCheckCategories.Integrations, sp => ActivatorUtilities.CreateInstance<OtlpHealthCheck>(sp),
-                cacheDuration: TimeSpan.FromMinutes(1), timeout: TimeSpan.FromSeconds(10));
+                cacheDuration: TimeSpan.FromMinutes(1), timeout: TimeSpan.FromSeconds(10))
+                .TalksTo("otlp", "OpenTelemetry", HealthCheckDependency.HostOf(configuration["OTEL_EXPORTER_OTLP_LOGS_ENDPOINT"])
+                                                  ?? HealthCheckDependency.HostOf(configuration["OTEL_EXPORTER_OTLP_ENDPOINT"])
+                                                  ?? HealthCheckDependency.HostOf(configuration.GetBelemetryOtlpEndpoint()));
         }
 
         if (string.IsNullOrWhiteSpace(configuration["AspireDashboard:Url"]) is false)
         {
             healthChecksBuilder.AddCachedCheck("aspireDashboard", HealthCheckCategories.Integrations, sp => ActivatorUtilities.CreateInstance<AspireDashboardHealthCheck>(sp),
-                cacheDuration: TimeSpan.FromMinutes(1), timeout: TimeSpan.FromSeconds(10));
+                cacheDuration: TimeSpan.FromMinutes(1), timeout: TimeSpan.FromSeconds(10))
+                .TalksTo("aspireDashboard", "Aspire dashboard", HealthCheckDependency.HostOf(configuration["AspireDashboard:Url"]));
         }
 
         // Each asks the provider's token endpoint with the app's own credentials, and a code that doesn't exist where one is needed.
@@ -962,12 +982,23 @@ public static partial class Program
         AddCachedCheckIfConfigured("appleSignIn", HealthCheckCategories.Identity, string.IsNullOrWhiteSpace(configuration["Authentication:Apple:ClientId"]) is false, "Authentication:Apple",
             sp => ActivatorUtilities.CreateInstance<AppleSignInHealthCheck>(sp), cacheDuration: TimeSpan.FromMinutes(5), timeout: TimeSpan.FromSeconds(10));
 
+        // The token endpoints the sign-in checks ask.
+        var gitHubDomain = configuration["Authentication:GitHub:EnterpriseDomain"]?.Trim().TrimEnd('/');
+        healthChecksBuilder.TalksTo("googleSignIn", "Google", HealthCheckDependency.HostOf(Microsoft.AspNetCore.Authentication.Google.GoogleDefaults.TokenEndpoint))
+            .TalksTo("gitHubSignIn", "GitHub", string.IsNullOrWhiteSpace(gitHubDomain) ? "github.com" : HealthCheckDependency.HostOf(gitHubDomain))
+            .TalksTo("twitterSignIn", "X", "api.x.com")
+            .TalksTo("facebookSignIn", "Facebook", HealthCheckDependency.HostOf(Microsoft.AspNetCore.Authentication.Facebook.FacebookDefaults.TokenEndpoint))
+            .TalksTo("entraId", "Microsoft Entra ID", HealthCheckDependency.HostOf(configuration["Authentication:AzureAD:Instance"] ?? "https://login.microsoftonline.com/"))
+            .TalksTo("appleSignIn", "Apple", "appleid.apple.com");
+
 
         // Azure SignalR is optional in every environment: without it the app serves SignalR itself, so it has no stand-in.
         if (string.IsNullOrWhiteSpace(configuration["Azure:SignalR:ConnectionString"]) is false)
         {
             healthChecksBuilder.AddCachedCheck("azureSignalR", HealthCheckCategories.Messaging, sp => ActivatorUtilities.CreateInstance<Infrastructure.SignalR.AzureSignalRHealthCheck>(sp),
-                cacheDuration: TimeSpan.FromMinutes(1), timeout: TimeSpan.FromSeconds(10));
+                cacheDuration: TimeSpan.FromMinutes(1), timeout: TimeSpan.FromSeconds(10))
+                // The connection string's endpoint only: its access key stays out.
+                .TalksTo("azureSignalR", "Azure SignalR Service", HealthCheckDependency.HostOf(GetConnectionStringValue(configuration["Azure:SignalR:ConnectionString"]!, "Endpoint", "")));
         }
 
         // Of the web push services, only FCM, which Chrome uses, checks the VAPID signature for a subscription it never issued.
@@ -977,8 +1008,14 @@ public static partial class Program
         AddCachedCheckIfConfigured("firebase", HealthCheckCategories.Messaging, string.IsNullOrWhiteSpace(appSettings.AdsPushFirebase?.PrivateKey) is false, "AdsPushFirebase",
             sp => ActivatorUtilities.CreateInstance<PushNotificationHealthCheck>(sp, AdsPushTarget.Android), cacheDuration: TimeSpan.FromMinutes(5), timeout: TimeSpan.FromSeconds(10));
 
+        // TestFlight and App Store installs get no push from APNs' sandbox (See PushNotificationHealthCheck).
+        var apnsSandbox = builder.Environment.IsDevelopment() is false && appSettings.AdsPushAPNS?.EnvironmentType is APNSEnvironmentType.Development;
         AddCachedCheckIfConfigured("apns", HealthCheckCategories.Messaging, string.IsNullOrWhiteSpace(appSettings.AdsPushAPNS?.P8PrivateKey) is false, "AdsPushAPNS",
-            sp => ActivatorUtilities.CreateInstance<PushNotificationHealthCheck>(sp, AdsPushTarget.Ios), cacheDuration: TimeSpan.FromMinutes(5), timeout: TimeSpan.FromSeconds(10));
+            sp => ActivatorUtilities.CreateInstance<PushNotificationHealthCheck>(sp, AdsPushTarget.Ios, apnsSandbox), cacheDuration: TimeSpan.FromMinutes(5), timeout: TimeSpan.FromSeconds(10));
+
+        healthChecksBuilder.TalksTo("webPush", "Firebase Cloud Messaging", "fcm.googleapis.com")
+            .TalksTo("firebase", "Firebase Cloud Messaging", "fcm.googleapis.com")
+            .TalksTo("apns", "Apple Push Notification service", builder.Environment.IsDevelopment() ? "api.sandbox.push.apple.com" : "api.push.apple.com");
 
         // Each sends a real, minimal request through the client its feature uses.
         var ai = appSettings.AI;
@@ -990,6 +1027,26 @@ public static partial class Program
         AddAICheck<SpeechToTextHealthCheck>("aiSpeechToText", string.IsNullOrWhiteSpace(ai?.OpenAI?.SpeechToTextApiKey) is false, "AI:OpenAI:SpeechToTextApiKey");
         AddAICheck<TextToSpeechHealthCheck>("aiTextToSpeech", string.IsNullOrWhiteSpace(ai?.OpenAI?.TextToSpeechApiKey) is false, "AI:OpenAI:TextToSpeechApiKey");
         AddAICheck<Features.Chatbot.VoiceCall.RealtimeHealthCheck>("aiRealtime", string.IsNullOrWhiteSpace(ai?.OpenAI?.RealtimeApiKey) is false, "AI:OpenAI:RealtimeApiKey");
+
+        // Each speaks the OpenAI API: to OpenAI itself, unless its endpoint is set to another service that speaks it.
+        void TalksToOpenAI(string name, Uri? endpoint, string? model)
+        {
+            var host = HealthCheckDependency.HostOf(endpoint) ?? "api.openai.com";
+            healthChecksBuilder.TalksTo(name, host.Equals("api.openai.com", StringComparison.OrdinalIgnoreCase) ? "OpenAI" : "OpenAI-compatible API", host, model);
+        }
+
+        TalksToOpenAI("aiChat", ai?.OpenAI?.ChatEndpoint, ai?.OpenAI?.ChatModel);
+        if (string.IsNullOrWhiteSpace(ai?.OpenAI?.EmbeddingApiKey) is false)
+        {
+            TalksToOpenAI("aiEmbedding", ai?.OpenAI?.EmbeddingEndpoint, ai?.OpenAI?.EmbeddingModel);
+        }
+        else
+        {
+            healthChecksBuilder.TalksTo("aiEmbedding", "Hugging Face", HealthCheckDependency.HostOf(ai?.HuggingFace?.EmbeddingEndpoint));
+        }
+        TalksToOpenAI("aiSpeechToText", ai?.OpenAI?.SpeechToTextEndpoint, ai?.OpenAI?.SpeechToTextModel);
+        TalksToOpenAI("aiTextToSpeech", ai?.OpenAI?.TextToSpeechEndpoint, ai?.OpenAI?.TextToSpeechModel);
+        TalksToOpenAI("aiRealtime", ai?.OpenAI?.RealtimeEndpoint, ai?.OpenAI?.RealtimeModel);
 
         return builder;
     }

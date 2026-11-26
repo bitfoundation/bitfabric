@@ -553,20 +553,8 @@
     <data name="HomePanelSubtitle" xml:space="preserve">
     <value>با استفاده چیزی که میدانید و دوستش دارید</value>
   </data>
-    <data name="WatchVideo" xml:space="preserve">
-    <value>مشاهده ویدئو</value>
-  </data>
     <data name="LearnMore" xml:space="preserve">
     <value>بیشتر بدانید</value>
-  </data>
-    <data name="BitPlatformMessage" xml:space="preserve">
-    <value>یک اپ کامل روی هر پلتفرمی، از همان روز اول</value>
-  </data>
-    <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>مجموعه ای از کمپوننتهای کارا، ساده و زیبای بلیزری</value>
-  </data>
-    <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>نقطه‌ی شروع همین اپ: همه‌چیز از قبل به هم وصل شده و سورس‌کد کاملاً مال خودتان است.</value>
   </data>
     <data name="NewPassword" xml:space="preserve">
     <value>رمز عبور جدید</value>
@@ -1476,6 +1464,9 @@
   </data>
     <data name="PendingInvitation" xml:space="preserve">
     <value>دعوت‌نامه در انتظار</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
+    <value>دعوت‌نامه‌های در انتظار</value>
   </data>
     <data name="CurrentTenant" xml:space="preserve">
     <value>تیم فعلی</value>
@@ -11495,5 +11486,50 @@
   </data>
   <data name="TfaReturnContinueMessage" xml:space="preserve">
     <value>ورود دو مرحله‌ای روشن است و با آن وارد شده‌اید. می‌توانید به جایی که بودید برگردید.</value>
+  </data>
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>بخشی از برنامه الان درست کار نمی‌کند</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>نگهداری برنامه‌ریزی‌شده</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>تیم از این موضوع باخبر است؛ لازم نیست گزارش دهید.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>صفحه‌ی وضعیت</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>در حال بررسی</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>علت پیدا شد</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>رفع اعمال شد</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>حل شد</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>شروع {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>شروع {0}، آخرین خبر {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>همین حالا</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} دقیقه پیش</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} ساعت پیش</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>در جریان است تا {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>از {0} تا {1}</value>
   </data>
 </root>

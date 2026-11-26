@@ -7,7 +7,7 @@ namespace Bit.Fabric.Server.Api.Infrastructure.HealthChecks;
 /// <summary>
 /// One of the project's other sites, such as its landing page, a blog or the docs, which /health requests too, so a monitor that
 /// reads it watches them along with the app (See <c>HealthChecks:Websites</c> in appsettings.json). Each site is a check of its own,
-/// so the Operations page shows a card for each. It gets a GET that has to end, after its redirects, in a success status: behind a
+/// so /healthz reports an entry for each. It gets a GET that has to end, after its redirects, in a success status: behind a
 /// CDN such as Cloudflare, a TCP connection succeeds whatever state the site is in. A failed check's description says what went wrong.
 /// </summary>
 public class WebsiteHealthCheck(IHttpClientFactory httpClientFactory, string site, bool bypassCache) : IHealthCheck

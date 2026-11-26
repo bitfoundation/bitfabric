@@ -550,20 +550,8 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <data name="HomePanelSubtitle" xml:space="preserve">
     <value>using what you already know and love</value>
   </data>
-    <data name="WatchVideo" xml:space="preserve">
-    <value>Watch video</value>
-  </data>
     <data name="LearnMore" xml:space="preserve">
     <value>Learn more</value>
-  </data>
-    <data name="BitPlatformMessage" xml:space="preserve">
-    <value>A full-featured app on every platform, from day one</value>
-  </data>
-    <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>A set of performant, easy-to-customize and beautiful Blazor components</value>
-  </data>
-    <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>The starting point behind this app: everything wired up, and the source code entirely yours.</value>
   </data>
     <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>Build your app with your own AI, starting full featured on web, Android, iOS, Windows and macOS. The code, the data and the server stay yours.</value>
@@ -1476,6 +1464,9 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   </data>
     <data name="PendingInvitation" xml:space="preserve">
     <value>Pending invitation</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
+    <value>Pending invitations</value>
   </data>
     <data name="CurrentTenant" xml:space="preserve">
     <value>Current team</value>
@@ -11495,5 +11486,50 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   </data>
   <data name="TfaReturnContinueMessage" xml:space="preserve">
     <value>Two-factor authentication is on, and you signed in with it. You can go back to where you were.</value>
+  </data>
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>Something isn't working right now</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>Planned maintenance</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>The team knows about it. No need to report it.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>Status page</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>Investigating</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>Cause found</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>Fix applied</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>Resolved</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>Started {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>Started {0}, updated {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>just now</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>{0} min ago</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>{0} h ago</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>Under way until {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>{0} to {1}</value>
   </data>
 </root>

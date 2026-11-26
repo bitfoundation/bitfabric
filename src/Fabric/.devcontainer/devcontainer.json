@@ -5,7 +5,7 @@
         "cpus": 4
     },
     "waitFor": "onCreateCommand",
-    "onCreateCommand": "dotnet tool install --global Bit.Cli --version 11.0.0-pre-22 && /root/.dotnet/tools/bit setup --yes",
+    "onCreateCommand": "dotnet tool install --global Bit.Cli --version 11.0.0-pre-25 && /root/.dotnet/tools/bit setup --yes",
     "customizations": {
         "codespaces": {
             "openFiles": [
@@ -33,7 +33,8 @@
         5023
     ],
     "features": {
-        "ghcr.io/devcontainers/features/docker-in-docker:4": {}
+        "ghcr.io/devcontainers/features/docker-in-docker:4": {},
+        "ghcr.io/devcontainers/features/sshd:1": {}
     },
     "containerEnv": {
         "DEVCONTAINER": "true",
