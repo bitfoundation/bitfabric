@@ -78,7 +78,6 @@ Before implementing any changes, you **MUST** complete the following:
 <!--#if (brouter != true)-->
     *   `bit Brouter` (`https://brouter.bitplatform.dev/mcp`): a drop-in replacement for Blazor's router that adds nested routes, guards, data loaders, keep-alive components and view transitions.
 <!--#endif-->
-    *   `bit Balette` (`https://balette.bitplatform.dev/mcp`): a keyboard-first Ctrl+K / Cmd+K command palette with fuzzy search.
     *   `bit BbScanner` (`https://bbscanner.bitplatform.dev/mcp`): QR code and barcode scanning from the camera or from images.
     *   `bit Bcrdt` (`https://bcrdt.bitplatform.dev/mcp`): real-time collaborative editing on a CRDT engine, with presence and offline sync.
     *   `bit Bdnd` (`https://bdnd.bitplatform.dev/mcp`): declarative drag and drop between any sources and drop targets.

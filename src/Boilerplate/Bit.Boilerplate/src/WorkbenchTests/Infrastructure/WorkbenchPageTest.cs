@@ -105,8 +105,35 @@ public class WorkbenchPageTest : PageTest
     /// <summary>A button of the shell by its exact name.</summary>
     protected ILocator Button(string name) => Page.GetByRole(AriaRole.Button, new() { Name = name, Exact = true });
 
-    /// <summary>Uses a control the way this surface does: a finger on a phone, the mouse on a desktop.</summary>
-    protected Task Press(ILocator target) => IsPhone ? target.TapAsync() : target.ClickAsync();
+    /// <summary>Uses a control the way this surface does: a finger on a phone, the mouse on a desktop, once it has come to rest.</summary>
+    protected async Task Press(ILocator target)
+    {
+        await WaitUntilAtRest(target);
+        await (IsPhone ? target.TapAsync() : target.ClickAsync());
+    }
+
+    /// <summary>
+    /// Waits until the element shows and no animation or transition moves it or what it sits in, like a list or a panel that slides
+    /// in. Playwright presses an element once its box has stayed put for two frames, which a slide that has yet to start passes on a
+    /// busy machine, and it doesn't check where a press lands in a transformed iframe, which a view on a desktop's canvas is. Pressed
+    /// where its slide starts, outside the view, the press reaches the shell and nothing in the view happens.
+    /// </summary>
+    protected static async Task WaitUntilAtRest(ILocator element)
+    {
+        // A panel's slide starts as it shows, so one that hasn't opened yet has no slide to wait for.
+        await element.WaitForAsync(new() { State = WaitForSelectorState.Visible });
+
+        await element.EvaluateAsync("""
+            async element => {
+                const moving = [];
+                for (let current = element; current; current = current.parentElement) {
+                    moving.push(...current.getAnimations().filter(animation => animation.playState === 'running' && animation.effect?.getComputedTiming().endTime !== Infinity));
+                }
+                // A slide takes a fraction of a second, so an animation that runs on doesn't hold the press for ever.
+                await Promise.race([Promise.all(moving.map(animation => animation.finished.catch(() => { }))), new Promise(resolve => setTimeout(resolve, 5000))]);
+            }
+            """);
+    }
 
     /// <summary>
     /// Where the shell keeps the selected view's settings, its comments and its flows: a desktop's side column, or a phone's Tools

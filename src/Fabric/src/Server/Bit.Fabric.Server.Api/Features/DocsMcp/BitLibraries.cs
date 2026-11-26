@@ -23,7 +23,6 @@ public static class BitLibraries
         new("Brouter", "routing"),
         new("Bmage", "an image editor or image processing"),
         new("Bink", "a drawing canvas"),
-        new("Balette", "a command palette"),
         new("BbScanner", "a barcode scanner"),
         new("Bdnd", "drag and drop"),
         new("BlazeDb", "a browser database"),

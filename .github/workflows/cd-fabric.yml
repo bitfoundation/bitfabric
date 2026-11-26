@@ -318,7 +318,7 @@ jobs:
       - name: Sign the app with Artifact Signing
         if: vars.CODE_SIGNING_ACCOUNT != ''
         timeout-minutes: 10
-        uses: bitfoundation/bitfabric/.github/actions/bit-bp/artifact-signing@v-11.0.0-pre-24
+        uses: bitfoundation/bitfabric/.github/actions/bit-bp/artifact-signing@v-11.0.0-pre-25
         with:
           endpoint: ${{ vars.CODE_SIGNING_ENDPOINT }}
           account: ${{ vars.CODE_SIGNING_ACCOUNT }}
