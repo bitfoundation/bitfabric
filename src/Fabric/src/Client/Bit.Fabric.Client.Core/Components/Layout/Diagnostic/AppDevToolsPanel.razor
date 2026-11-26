@@ -28,6 +28,20 @@
                    IconName="@BitIconName.UpdateRestore"
                    OnClick="WrapHandled(UpdateApp)"
                    Color="BitColor.SecondaryBackground" />
+
+        @* The browser itself has to call UpdateSession, so the dashboard's cookie lands there (See OpenHangfireDashboard). *@
+        @if (AppPlatform.IsBrowser && AppPlatform.IsWasmStandalone is false)
+        {
+            <AuthorizeView Policy="@AppFeatures.System.Jobs_Manage">
+                <BitButton IconOnly
+                           AutoLoading
+                           Title="Hangfire dashboard"
+                           AriaLabel="Hangfire dashboard"
+                           IconName="@BitIconName.RecurringTask"
+                           OnClick="WrapHandled(OpenHangfireDashboard)"
+                           Color="BitColor.SecondaryBackground" />
+            </AuthorizeView>
+        }
     </BitStack>
 
     <DiagnosticReport AutoRun="false" Embedded />
