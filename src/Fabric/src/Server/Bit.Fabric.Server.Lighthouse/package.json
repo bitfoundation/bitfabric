@@ -15,7 +15,7 @@
         "lighthouse": "13.6.0"
     },
     "devDependencies": {
-        "@types/node": "26.6.6",
+        "@types/node": "26.6.11",
         "typescript": "7.0.2"
     }
 }

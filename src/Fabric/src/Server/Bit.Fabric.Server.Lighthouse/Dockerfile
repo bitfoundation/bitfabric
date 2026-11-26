@@ -2,7 +2,7 @@
 # Chromium, behind a guard that keeps Chrome on the public internet (src/guard.ts). The Node image is pinned by version
 # and digest and Lighthouse by package-lock.json; Chromium is Debian's current build when the image is built, so each
 # deployment gets its security fixes, and the service reports its version on /health.
-FROM node:26.12.1-trixie-slim@sha256:94816674c62774da0d099a947bf4613b9e1972a2733abd0d0cd80e795f8411d0
+FROM node:26.13.1-trixie-slim@sha256:abe7e5a82b61a8ef67b315b85497c9e65173387ccf2f4a029248184b8e020be5
 
 # tini as PID 1 reaps what a killed Chrome leaves behind; the fonts draw the scripts customers' pages use, Persian and
 # Arabic among them, so the contrast and layout checks measure real text.

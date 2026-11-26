@@ -130,7 +130,7 @@ public static class IDistributedApplicationBuilderExtensions
 
         public IResourceBuilder<ContainerResource> AddTextEmbeddingsInference()
         {
-            return builder.AddContainer("embedding", "ghcr.io/huggingface/text-embeddings-inference", "cpu-1.9")
+            return builder.AddContainer("embedding", "ghcr.io/huggingface/text-embeddings-inference", "cpu-1.10")
                 .WithArgs("--model-id", "BAAI/bge-small-en-v1.5")
                 .WithVolume("tei-data", "/data")
                 .WithHttpEndpoint(targetPort: 80)
