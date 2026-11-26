@@ -1,9 +1,13 @@
+using Bit.Fabric.Shared.Features.Tenants.Dtos;
+
 namespace Bit.Fabric.Client.Core.Components.Pages;
 
 public partial class NotAuthorizedPage
 {
     private bool lacksValidPrivilege;
+    private bool isGlobalAdmin;
     private bool lacksSelectedTenant;
+    private List<TenantDto> tenants = [];
     private bool isUpdatingAuthState = true;
 
 
@@ -18,6 +22,7 @@ public partial class NotAuthorizedPage
     private string GetSafeReturnUrl() => Uri.IsAppRelativeUrl(ReturnUrl, requireLeadingSlash: false) ? ReturnUrl : PageUrls.Home;
 
     [AutoInject] private SignInModalService signInModalService = default!;
+    [AutoInject] private IUserController userController = default!;
 
 
     protected override async Task OnAfterFirstRenderAsync()
@@ -49,11 +54,31 @@ public partial class NotAuthorizedPage
 
             lacksValidPrivilege = failedPolicies.Contains(AuthPolicies.PRIVILEGED_ACCESS);
             lacksSelectedTenant = failedPolicies.Contains(AuthPolicies.TENANT_SELECTED);
+
+            if (lacksSelectedTenant)
+            {
+                await LoadTenants(user);
+            }
         }
         finally
         {
             isUpdatingAuthState = false;
             StateHasChanged();
+        }
+    }
+
+    private async Task LoadTenants(ClaimsPrincipal user)
+    {
+        isGlobalAdmin = await AuthorizationService.IsAuthorized(user, AppFeatures.Management.Tenants_Manage_Global);
+        tenants = await userController.GetTenants(CurrentCancellationToken);
+    }
+
+    private async Task SwitchTenant(TenantDto tenant)
+    {
+        if (await AuthManager.SwitchTenant(tenant.Id, CurrentCancellationToken))
+        {
+            // As in AppMenu: the refused page renders again, now with a tenant.
+            PubSubService.Publish(ClientAppMessages.SOFT_RESTART);
         }
     }
 

@@ -1,0 +1,73 @@
+@inherits AppComponentBase
+
+@if (notice is not null)
+{
+    <section class="status-notice @KindClass" role="status" aria-live="polite" aria-labelledby="status-notice-title">
+        <div class="body">
+            <div class="icon">
+                <BitIcon IconName="@IconName" Color="@IconColor" />
+            </div>
+
+            <BitText Id="status-notice-title" Typography="BitTypography.Subtitle1" Class="title" Dir="BitDir.Auto">@Title</BitText>
+
+            <BitButton Variant="BitVariant.Text"
+                       Color="BitColor.SecondaryForeground"
+                       Size="BitSize.Small"
+                       IconOnly
+                       IconName="@BitIconName.Cancel"
+                       Title="@Localizer[nameof(AppStrings.Close)]"
+                       OnClick="WrapHandled(Close)"
+                       Class="close" />
+
+            <BitStack Gap="0.5rem" Class="content">
+                @if (notice.Text is not null)
+                {
+                    <BitText Typography="BitTypography.Body2" Class="text" Dir="BitDir.Auto">@notice.Text</BitText>
+                }
+
+                @if (When is { } whenText)
+                {
+                    <BitStack Horizontal Gap="0.375rem" VerticalAlign="BitAlignment.Center">
+                        <BitIcon IconName="@BitIconName.Clock" Size="BitSize.Small" Color="BitColor.SecondaryForeground" />
+                        <BitText Typography="BitTypography.Caption1" Color="BitColor.SecondaryForeground">@whenText</BitText>
+                    </BitStack>
+                }
+
+                @if (notice.Phase is int phase)
+                {
+                    <ol class="phases">
+                        @foreach (var (label, step) in Phases.Select((label, step) => (label, step)))
+                        {
+                            <li class="@(step < phase || phase is 3 ? "done" : step == phase ? "now" : null)" aria-current="@(step == phase ? "step" : null)">
+                                <span class="track"></span>
+                                <BitText Typography="BitTypography.Caption1" Class="label">@label</BitText>
+                            </li>
+                        }
+                    </ol>
+                }
+
+                @if (notice.Kind is not StatusNoticeKind.Maintenance)
+                {
+                    <BitStack Horizontal Gap="0.5rem" VerticalAlign="BitAlignment.Center" Class="known">
+                        <BitIcon IconName="@BitIconName.CompletedSolid" Color="BitColor.Success" />
+                        <BitText Typography="BitTypography.Caption1">@Localizer[nameof(AppStrings.StatusNoticeTeamKnows)]</BitText>
+                    </BitStack>
+                }
+
+                @if (notice.Link is not null)
+                {
+                    <BitStack Horizontal Gap="0.5rem" Class="actions">
+                        <BitButton Href="@notice.Link"
+                                   Target="_blank"
+                                   Rel="BitLinkRels.NoOpener"
+                                   Size="BitSize.Small"
+                                   IconName="@BitIconName.OpenInNewWindow"
+                                   IconPlacement="BitPlacement.End">
+                            @Localizer[nameof(AppStrings.StatusNoticeStatusPage)]
+                        </BitButton>
+                    </BitStack>
+                }
+            </BitStack>
+        </div>
+    </section>
+}

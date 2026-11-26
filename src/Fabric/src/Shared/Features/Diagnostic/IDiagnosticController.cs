@@ -10,7 +10,7 @@ public interface IDiagnosticController : IAppController
     [HttpPost("{deviceId}"), NoRetryPolicy]
     Task<bool> SendTestPushNotification(string deviceId, CancellationToken cancellationToken);
 
-    /// <summary>What this deployment is configured to do, for the operations page.</summary>
+    /// <summary>What this deployment is configured to do, which no health check reports.</summary>
     [HttpGet, AuthorizedApi]
     Task<DeploymentConfigurationDto> GetDeploymentConfiguration(CancellationToken cancellationToken);
 

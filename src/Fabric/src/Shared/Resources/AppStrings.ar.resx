@@ -550,20 +550,8 @@
   <data name="HomePanelSubtitle" xml:space="preserve">
     <value>باستخدام ما تعرفه وتحبه بالفعل</value>
   </data>
-  <data name="WatchVideo" xml:space="preserve">
-    <value>شاهد الفيديو</value>
-  </data>
   <data name="LearnMore" xml:space="preserve">
     <value>تعرف على المزيد</value>
-  </data>
-  <data name="BitPlatformMessage" xml:space="preserve">
-    <value>تطبيق كامل المزايا على كل المنصات، منذ اليوم الأول</value>
-  </data>
-  <data name="BitBlazorUIMessage" xml:space="preserve">
-    <value>مجموعة مكونات Blazor عالية الأداء، سهلة التخصيص وجميلة</value>
-  </data>
-  <data name="BitProjectTemplateMessage" xml:space="preserve">
-    <value>نقطة الانطلاق وراء هذا التطبيق: كل شيء جاهز ومتصل، والكود المصدري ملك لك بالكامل.</value>
   </data>
   <data name="DescriptionMetaTagValue" xml:space="preserve">
     <value>ابنِ تطبيقك بالذكاء الاصطناعي الخاص بك، وابدأ بكامل الميزات على الويب وAndroid وiOS وWindows وmacOS. تبقى الشفرة والبيانات والخادم ملكك.</value>
@@ -1476,6 +1464,9 @@
   </data>
     <data name="PendingInvitation" xml:space="preserve">
     <value>دعوة معلقة</value>
+  </data>
+    <data name="PendingInvitations" xml:space="preserve">
+    <value>دعوات معلقة</value>
   </data>
     <data name="CurrentTenant" xml:space="preserve">
     <value>الفريق الحالي</value>
@@ -7698,5 +7689,68 @@
   </data>
     <data name="FeaturesLead" xml:space="preserve">
     <value>كل ذلك مبنيّ ومُختبَر قبل أول طلب منك، في مستودعك، حيث يستطيع ذكاؤك الاصطناعي قراءة كل سطر وتغييره. اضغط ⓘ على أي بطاقة لتراها في فيلم قصير.</value>
+  </data>
+    <data name="StatusNoticeIncidentTitle" xml:space="preserve">
+    <value>هناك شيء لا يعمل الآن</value>
+  </data>
+    <data name="StatusNoticeMaintenanceTitle" xml:space="preserve">
+    <value>صيانة مجدولة</value>
+  </data>
+    <data name="StatusNoticeTeamKnows" xml:space="preserve">
+    <value>الفريق على علم بذلك. لا حاجة للإبلاغ عنه.</value>
+  </data>
+    <data name="StatusNoticeStatusPage" xml:space="preserve">
+    <value>صفحة الحالة</value>
+  </data>
+    <data name="StatusNoticeInvestigating" xml:space="preserve">
+    <value>قيد التحقيق</value>
+  </data>
+    <data name="StatusNoticeIdentified" xml:space="preserve">
+    <value>تم تحديد السبب</value>
+  </data>
+    <data name="StatusNoticeMonitoring" xml:space="preserve">
+    <value>تم تطبيق الإصلاح</value>
+  </data>
+    <data name="StatusNoticeResolved" xml:space="preserve">
+    <value>تم الحل</value>
+  </data>
+    <data name="StatusNoticeStarted" xml:space="preserve">
+    <value>بدأ {0}</value>
+  </data>
+    <data name="StatusNoticeStartedAndUpdated" xml:space="preserve">
+    <value>بدأ {0}، آخر تحديث {1}</value>
+  </data>
+    <data name="StatusNoticeJustNow" xml:space="preserve">
+    <value>الآن</value>
+  </data>
+    <data name="StatusNoticeMinutesAgo" xml:space="preserve">
+    <value>منذ {0} دقيقة</value>
+  </data>
+    <data name="StatusNoticeHoursAgo" xml:space="preserve">
+    <value>منذ {0} ساعة</value>
+  </data>
+    <data name="StatusNoticeMaintenanceUntil" xml:space="preserve">
+    <value>جارية حتى {0}</value>
+  </data>
+    <data name="StatusNoticeMaintenanceFromTo" xml:space="preserve">
+    <value>من {0} إلى {1}</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredTitle" xml:space="preserve">
+    <value>المصادقة الثنائية مطلوبة</value>
+  </data>
+  <data name="OAuthConsentTwoFactorRequiredMessage" xml:space="preserve">
+    <value>لا يمكن تفويض هذا التطبيق إلا من حساب يسجّل الدخول باستخدام المصادقة الثنائية. فعّلها ثم سجّل الدخول مرة أخرى باستخدامها، وستعود إلى هنا لإكمال العملية.</value>
+  </data>
+  <data name="OAuthConsentTurnOnTwoFactor" xml:space="preserve">
+    <value>تفعيل المصادقة الثنائية</value>
+  </data>
+  <data name="TfaReturnSignInAgainMessage" xml:space="preserve">
+    <value>المصادقة الثنائية مفعّلة. احتفظ برموز الاسترداد، ثم سجّل الدخول مرة أخرى باستخدامها للعودة إلى حيث كنت.</value>
+  </data>
+  <data name="TfaReturnSignInAgain" xml:space="preserve">
+    <value>تسجيل الدخول مرة أخرى</value>
+  </data>
+  <data name="TfaReturnContinueMessage" xml:space="preserve">
+    <value>المصادقة الثنائية مفعّلة وقد سجّلت الدخول باستخدامها. يمكنك العودة إلى حيث كنت.</value>
   </data>
 </root>

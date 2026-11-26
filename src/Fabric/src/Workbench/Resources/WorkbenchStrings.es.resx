@@ -171,6 +171,9 @@
     <data name="DataSlow" xml:space="preserve">
         <value>Lento</value>
     </data>
+    <data name="SignedOut" xml:space="preserve">
+        <value>Sesión cerrada</value>
+    </data>
     <data name="SignedIn" xml:space="preserve">
         <value>Sesión iniciada</value>
     </data>
@@ -4056,6 +4059,30 @@
     <data name="SettingsConfirmAsk" xml:space="preserve">
         <value>Pide primero un código</value>
     </data>
+    <data name="NotAuthorizedTitle" xml:space="preserve">
+        <value>No autorizado</value>
+    </data>
+    <data name="NotAuthorizedDescription" xml:space="preserve">
+        <value>La página de la app para quien no está autorizado, en cada uno de sus casos, para verlos todos sin ser rechazado.</value>
+    </data>
+    <data name="NotAuthorizedCaption" xml:space="preserve">
+        <value>Siempre hay un camino</value>
+    </data>
+    <data name="NotAuthorizedSwitchCase" xml:space="preserve">
+        <value>Caso</value>
+    </data>
+    <data name="NotAuthorizedCaseNoTenant" xml:space="preserve">
+        <value>Sin inquilino seleccionado</value>
+    </data>
+    <data name="NotAuthorizedCaseNoTenants" xml:space="preserve">
+        <value>Ningún inquilino al que cambiar</value>
+    </data>
+    <data name="NotAuthorizedCasePrivilege" xml:space="preserve">
+        <value>Sin sesión privilegiada</value>
+    </data>
+    <data name="NotAuthorizedCaseForbidden" xml:space="preserve">
+        <value>Sin permiso</value>
+    </data>
     <data name="ChecksExportAll" xml:space="preserve">
         <value>Exportar todo</value>
     </data>
@@ -4307,6 +4334,9 @@
     </data>
     <data name="ProgressSendAnswer" xml:space="preserve">
         <value>Enviar respuesta</value>
+    </data>
+    <data name="ProgressUseSuggestion" xml:space="preserve">
+        <value>Usar la sugerencia</value>
     </data>
     <data name="ProgressAnswerFailed" xml:space="preserve">
         <value>Esa pregunta ya se respondió o se retiró mientras tanto.</value>

@@ -1,0 +1,112 @@
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+// BevTools paints its panels in a theme of its own; this one shows the app's components, so it takes the app's.
+.panel {
+    min-height: 100%;
+    color: $bit-color-foreground-primary;
+    background-color: $bit-color-background-primary;
+}
+
+::deep .headline {
+    min-width: 0;
+}
+
+::deep .check-again {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+::deep .indicator.reading {
+    animation: status-reading 1.2s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}
+
+@keyframes status-reading {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.pairs,
+.error,
+section {
+    align-self: stretch;
+    max-width: 48rem;
+}
+
+.pairs {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 0.25rem 1rem;
+    font-size: 0.875rem;
+}
+
+.key {
+    color: $bit-color-foreground-secondary;
+}
+
+.value {
+    overflow-wrap: anywhere;
+}
+
+.address {
+    font-family: monospace;
+    font-size: 0.8125rem;
+    user-select: all;
+}
+
+.error {
+    padding: 0.5rem 0.75rem;
+    font-family: monospace;
+    font-size: 0.8125rem;
+    overflow-wrap: anywhere;
+    color: $bit-color-error-text;
+    background-color: $bit-color-error-tint;
+    border-radius: $bit-shape-radius-surface;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+::deep .section-title {
+    color: $bit-color-foreground-secondary;
+}
+
+.rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+
+    & + & {
+        border-top: 1px solid $bit-color-border-secondary;
+    }
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+}
+
+::deep .update {
+    white-space: pre-line;
+}

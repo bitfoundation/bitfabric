@@ -320,6 +320,20 @@ With a standalone API, the page also reads `Server.Web`'s own `/healthz`, behind
 under **Web server** with a `web:` prefix (`web:binStorage`, `web:serverApi`). If that report can't be read, a
 `web:healthz` check says so. A standalone WASM app, and a hybrid app without `WebAppUrl`, have no `Server.Web` to ask.
 
+The app tells its own users when its status page reports a problem, on the web and in the Android, iOS and Windows apps
+alike. Put the address of the page's `summary.json` in `StatusPageSummaryUrl`, in Client.Core's `appsettings.json` or,
+for a deployment, in the environment's `STATUS_PAGE_SUMMARY_URL` variable, which the CD writes into every app it builds:
+bit Fabric's status page serves one at `https://api.bitfabric.co/api/v1/PublicStatus/Summary/<page>`, and other status
+page services in the same Atlassian Statuspage shape. [`StatusPageNotice`](/src/Client/Bit.Fabric.Client.Core/Components/Layout/StatusPageNotice.razor.cs)
+asks it five seconds after the app opens, off the startup path; again when the app comes back after five minutes or more
+in the background, and when a request to the app's own server fails; it doesn't poll. It shows an unresolved incident
+with its latest update and step, or a planned maintenance under way or starting within a day, with a link to the page,
+until the user closes it; a closed notice comes back only for a new incident or update. A summary that doesn't come back
+is logged as an error and shows nothing. The Content-Security-Policy allows its origin. Empty, as it ships, asks nothing.
+BevTools' Status tab ([`AppStatusPagePanel`](/src/Client/Bit.Fabric.Client.Core/Components/Layout/Diagnostic/AppStatusPagePanel.razor.cs))
+reads the same summary the moment it opens and shows the page's overall status, its components, open incidents and
+planned maintenance, what the notice shows the user for them, or why the read failed, with Check again to read it once more.
+
 ### Registered Checks
 
 `AddDefaultHealthChecks` contributes the disk-space check (at least **2 GB** free), which is the only one tagged
@@ -370,7 +384,8 @@ provider outage does not take an otherwise healthy instance out of the load bala
 - **`entraId`**: reads the tenant's discovery document, then asks for an app-only token, sending the secret only to an
   https token endpoint on the authority's own origin. Only a token, `invalid_scope` or `invalid_resource` passes, so
   `unauthorized_client` (unknown client id), `invalid_client` (wrong secret) and throttling all fail the check.
-- **`appleSignIn`**: signs the client secret with `AppleAuthKey.p8` (so a missing or broken key fails the check) and
+- **`appleSignIn`**: signs the client secret with `Authentication:Apple:PrivateKey`, or else `AppleAuthKey.p8` (so a
+  missing or broken key fails the check), and
   makes sure Apple is reachable. Apple checks the authorization code before the client, so the secret itself can't be
   verified.
 - **`googleSignIn`** and **`gitHubSignIn`**: redeem an authorization code that doesn't exist with the app's client id and
@@ -388,7 +403,9 @@ provider outage does not take an otherwise healthy instance out of the load bala
   made-up subscription before it looks at the signature, and Apple's leaves some bad signatures unanswered, so neither is
   asked.
 - **`firebase`** and **`apns`**: send to a device token that does not exist. Firebase and APNs reject the token only
-  after they accept the credentials, so a token error means the check passed.
+  after they accept the credentials, so a token error means the check passed. APNs gives the same answer for a token of
+  its other environment, so outside Development `apns` reports Degraded while `AdsPushAPNS:EnvironmentType` is
+  `Development`, the sandbox, from which TestFlight and App Store installs get no push.
 - **`aiChat`**: gets a real answer (at most 16 output tokens) from an Agent Framework agent
   built on the app's `IChatClient`, so it also catches exhausted quota or billing.
 - **`aiEmbedding`**: embeds one word with the app's embedding generator, whichever provider is configured (OpenAI
@@ -444,6 +461,15 @@ category of your own, `category:<Name>`, works as well. Each entry also carries 
 show it the way the app names it. Describe yours next to its registration, e.g.
 `.Describe("paymentGateway", "Payment gateway", "Money", "Authorizes and voids a one cent payment.")`; one described
 nowhere is reported under its registration name, with its category's icon.
+
+An entry also says what the check talks to, so a monitor can show what lies behind a part, such as the mail server
+behind "Email": `provider` (a short name, such as `Twilio` or `OpenAI`), `host` (the host name alone) and, for an AI
+check, `model`. The template's checks name theirs where they are registered, from the app's settings; name yours with
+`.TalksTo("paymentGateway", "Stripe", "api.stripe.com")`. These are names only: never put a key, a connection string, a
+user name or a query string in them, and pass a host read from a setting through `HealthCheckDependency.HostOf`, which
+keeps only the host name. The stand-in of a check whose settings are missing names nothing. Like the rest of `/healthz`,
+they are read only by a signed-in user with the Operations feature, or by an app that user approved with the `healthz`
+scope.
 
 ---
 

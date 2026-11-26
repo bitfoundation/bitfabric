@@ -1,8 +1,8 @@
 namespace Bit.Fabric.Shared.Features.Diagnostic;
 
 /// <summary>
-/// What kind of dependency a health check watches, so the Operations page and a monitor reading /healthz can group a
-/// check whose name they don't know and draw a fitting icon for it (See <see cref="HealthReportEntryDto.Category"/>).
+/// What kind of dependency a health check watches, so a monitor reading /healthz can group a check whose name it
+/// doesn't know and draw a fitting icon for it (See <see cref="HealthReportEntryDto.Category"/>).
 /// The category travels as one of the registration's tags, as ASP.NET Core's HealthCheckRegistration has no other
 /// metadata: every check the template registers carries exactly one, and a check of your own takes one the same way,
 /// e.g. <c>AddCheck&lt;PaymentGatewayHealthCheck&gt;("paymentGateway", tags: [HealthCheckCategories.Integrations])</c>.
@@ -32,7 +32,7 @@ public static class HealthCheckCategories
 
     /// <summary>
     /// The icon (a <c>BitIconName</c>) of a check in <paramref name="category"/>, a name without <see cref="TagPrefix"/>,
-    /// that has none of its own, and of that category's group on the Operations page.
+    /// that has none of its own.
     /// </summary>
     public static string IconOf(string? category) => category switch
     {

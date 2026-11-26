@@ -5,7 +5,7 @@ namespace Boilerplate.Server.Shared.Infrastructure.HealthChecks;
 /// check, and the host it reaches. Names only: never a credential, key, connection string, user name, path or query.
 /// </summary>
 /// <param name="Provider">A short name of the service, such as "Twilio", "OpenAI" or "Amazon S3".</param>
-/// <param name="Host">The host name alone, such as "smtp.example.com" (See <see cref="HostOf"/>); null when it says nothing more than <paramref name="Provider"/>.</param>
+/// <param name="Host">The host name alone, such as "smtp.example.com" (See <see cref="HostOf(string?)"/>); null when it says nothing more than <paramref name="Provider"/>.</param>
 /// <param name="Model">The model an AI check uses, such as "gpt-4.1-mini".</param>
 public record HealthCheckDependency(string Provider, string? Host = null, string? Model = null)
 {

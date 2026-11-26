@@ -179,8 +179,7 @@ public partial class DiagnosticController : AppControllerBase, IDiagnosticContro
     Task<DeploymentConfigurationDto> IDiagnosticController.GetDeploymentConfiguration(CancellationToken cancellationToken)
         => Task.FromResult(GetDeploymentConfiguration());
 
-    // The two below are for the operations page, and send right away rather than through a background job, so a
-    // failure reaches the caller.
+    // The two below send right away rather than through a background job, so a failure reaches the caller.
 
     [HttpPost, Authorize(Policy = AppFeatures.System.Operations_View)]
     public async Task<bool> SendTestEmail(CancellationToken cancellationToken)

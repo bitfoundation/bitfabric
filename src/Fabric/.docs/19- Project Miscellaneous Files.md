@@ -223,7 +223,7 @@ These namespaces are **automatically imported** in every C# file, eliminating th
 
 Instead of this in each `.csproj`:
 ```xml
-<PackageReference Include="Bit.BlazorUI" Version="11.0.0-pre-22" />
+<PackageReference Include="Bit.BlazorUI" Version="11.0.0-pre-25" />
 ```
 
 You write this in `.csproj`:
@@ -233,7 +233,7 @@ You write this in `.csproj`:
 
 And the version is defined centrally in `Directory.Packages.props`:
 ```xml
-<PackageVersion Include="Bit.BlazorUI" Version="11.0.0-pre-22" />
+<PackageVersion Include="Bit.BlazorUI" Version="11.0.0-pre-25" />
 ```
 
 **Benefits**:
@@ -244,8 +244,8 @@ And the version is defined centrally in `Directory.Packages.props`:
 **Example packages included**:
 
 ```xml
-<PackageVersion Include="Bit.BlazorUI" Version="11.0.0-pre-22" />
-<PackageVersion Include="Bit.Butil" Version="11.0.0-pre-22" />
+<PackageVersion Include="Bit.BlazorUI" Version="11.0.0-pre-25" />
+<PackageVersion Include="Bit.Butil" Version="11.0.0-pre-25" />
 <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0" />
 <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />
 <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.21" />
@@ -333,13 +333,13 @@ chmod +x Clean.sh  # Make it executable (first time only)
 
 **AI Provider**: Uses OpenAI's GPT-4.1-mini model (or Azure OpenAI)
 
-**Learn more**: See [bit translate documentation](https://github.com/bitfoundation/bitplatform/tree/develop/src/Toolings/Cli#bit-translate)
+**Learn more**: See [bit translate documentation](https://github.com/bitfoundation/bitfabric/tree/main/src/Cli#bit-translate)
 
 **Installation and Usage**:
 
 ```bash
 # Run the translator anywhere in the project; dnx fetches the bit CLI, nothing is installed
-dnx Bit.Cli --version 11.0.0-pre-22 -- translate
+dnx Bit.Cli --version 11.0.0-pre-25 -- translate
 ```
 
 **To add a new language**:
@@ -580,7 +580,7 @@ When you open the project in VS Code, you'll be prompted to install these extens
 **Contains**:
 - Welcome message
 - The seeded accounts and their password, which is random for every project
-- Link to comprehensive documentation at [bitplatform.dev/templates](https://bitplatform.dev/templates/overview)
+- Link to [bitfabric.co](https://bitfabric.co)
 
 ### 8.2 `bit.json`
 
@@ -589,6 +589,8 @@ When you open the project in VS Code, you'll be prompted to install these extens
 **Purpose**: Records how the project was created, for the [bit CLI](https://www.nuget.org/packages/Bit.Cli) and for you: the template (`bit-bp`), its version, the project's name, and the value of every template option.
 
 **Who uses it**: `bit diff` and the `template-diff` skill read the version and the options to create the project again on either side of a change: the old and the new template version, the old and the new .NET version, or one feature switched off and on. The skill updates what changed in it - the version, the framework or the feature's option - and new options arrive through the diff like any other change. `Bit.Fabric.Server.Api`'s build reads the version too, and the app serves it as `bit_template_version` in its OAuth protected resource metadata, so a monitor can tell which template version an app is on.
+
+**The bit CLI it works with**: in the project's folder, bit runs the project's commands with the newest bit CLI that works with the version recorded here, so everyone on the team runs them with the same one. A bit CLI older than that version updates itself, and one that has become too new for it runs them with an older one until the project is upgraded. When a bit CLI turns out not to work with the project, add `"cli": { "maxVersion": "..." }` with the newest one that does.
 
 **Keep it**: the bit CLI may keep more of what it needs to know about the project here. Edit an option's value when you change the project in a way that matches another option, such as removing Aspire, so the next upgrade compares the right templates.
 
@@ -709,6 +711,8 @@ The `bit` command stays available in its terminal, for `bit doctor` and `bit tra
 3. Click "Reopen in Container" when prompted
 4. Wait for the container to build and for `bit setup` to finish; GitHub Codespaces prebuilds do both ahead of time
 5. Start developing!
+
+**On GitHub Codespaces from your terminal**: `bit codespace` runs the project in your branch's codespace, which it reuses, starts when it's stopped and creates only when there's none, and forwards the app's ports to your machine, so the app opens at the same `localhost` address as when it runs locally. `bit codespace code` opens the codespace in VS Code, and `bit codespace stop` and `bit codespace delete` stop or delete it. The dev container's SSH server (the `sshd` feature) is what lets bit run the project in it.
 
 ---
 

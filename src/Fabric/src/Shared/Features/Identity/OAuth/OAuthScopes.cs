@@ -14,7 +14,7 @@ public static class OAuthScopes
 
     /// <summary>
     /// The detailed health report at <c>/healthz</c>: every check's status, but never the failures' exceptions, which
-    /// can carry a server name or a connection string and stay with the app's own Operations page.
+    /// can carry a server name or a connection string and stay with a signed-in user's own session.
     /// </summary>
     public const string Healthz = "healthz";
 

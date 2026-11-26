@@ -26,6 +26,14 @@ public partial class ClientCoreSettings : SharedSettings
     /// </summary>
     public string? WindowsDownloadUrl { get; set; }
 
+    /// <summary>
+    /// The <c>summary.json</c> of the app's status page, such as bit Fabric's
+    /// https://api.bitfabric.co/api/v1/PublicStatus/Summary/{page} or any Statuspage-compatible one. A few seconds after
+    /// the app opens, it asks once and tells its users about an incident or a planned maintenance (See StatusPageNotice).
+    /// Empty, as it ships, asks nothing.
+    /// </summary>
+    public string? StatusPageSummaryUrl { get; set; }
+
     public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         var validationResults = base.Validate(validationContext).ToList();
