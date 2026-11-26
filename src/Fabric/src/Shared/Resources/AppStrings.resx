@@ -11240,6 +11240,9 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="CliRefRun" xml:space="preserve">
     <value>Builds and starts the project: the website and its server, or the Android, iOS, macOS or Windows app.</value>
   </data>
+  <data name="CliRefCodespace" xml:space="preserve">
+    <value>Runs the project on GitHub Codespaces, in its branch's codespace, which it reuses and creates only when there's none, with the app's addresses working on this computer.</value>
+  </data>
   <data name="CliRefDiff" xml:space="preserve">
     <value>Shows what changed in the project's starting point between two versions, as one commit your AI brings into your project.</value>
   </data>
@@ -11256,7 +11259,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Renames the project everywhere its name appears: files, folders, code, the database and the app's id.</value>
   </data>
   <data name="CliRefRemove" xml:space="preserve">
-    <value>Deletes a folder for good, after stopping the apps that keep its files in use.</value>
+    <value>Deletes a folder for good in 10 seconds at most, stopping the apps that keep its files in use.</value>
   </data>
   <data name="CliRefMigration" xml:space="preserve">
     <value>Adds and removes the database's migrations, and bundles them for the database on your server.</value>
