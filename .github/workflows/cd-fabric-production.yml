@@ -45,7 +45,9 @@ jobs:
           fetch-depth: 2
           persist-credentials: false
 
-      # Pull requests are squash-merged, so the push is one commit. A run by hand always deploys.
+      # Pull requests are squash-merged, so the push is one commit. A run by hand always deploys. The commit is the one
+      # ci-fabric ran on: this run's own head_sha is main's tip when the run started, a later commit when another merge
+      # came in meanwhile, so the deployment takes the commit the build records with its Compose project (cd-fabric.yml).
       - name: Find whether the server or the apps changed
         id: changes
         env:
