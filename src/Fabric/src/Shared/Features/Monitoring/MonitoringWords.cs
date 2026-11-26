@@ -18,6 +18,12 @@ public static class MonitoringWords
         _ => localizer[nameof(AppStrings.MonitoringDurationDaysHours), (int)duration.TotalDays, duration.Hours]
     };
 
+    /// <summary>
+    /// What separates the parts of a line, such as a time, a duration and a name: a middle dot, except in Persian, where a
+    /// middle dot beside Persian digits reads as a zero, so its own comma separates them instead.
+    /// </summary>
+    public static string Dot(IStringLocalizer localizer) => localizer[nameof(AppStrings.MonitoringDot)];
+
     /// <summary>Names in a sentence with the language's own comma and "and": "Email", "Email and SMS", "Email, SMS and Push".</summary>
     public static string Parts(IStringLocalizer localizer, IReadOnlyList<string> names) => names.Count switch
     {

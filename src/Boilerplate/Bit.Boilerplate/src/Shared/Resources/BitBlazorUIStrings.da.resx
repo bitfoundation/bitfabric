@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- +:cnd:noEmit -->
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DialogOkText" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="DialogCancelText" xml:space="preserve">
+    <value>Nej</value>
+  </data>
+  <data name="DataGridEmptyText" xml:space="preserve">
+    <value>Ingen poster at vise.</value>
+  </data>
+  <data name="DataGridLoadingText" xml:space="preserve">
+    <value>Indlæser…</value>
+  </data>
+  <data name="DataGridActionsText" xml:space="preserve">
+    <value>Handlinger</value>
+  </data>
+  <data name="DataGridAddRowText" xml:space="preserve">
+    <value>+ Tilføj</value>
+  </data>
+  <data name="DataGridClearFiltersText" xml:space="preserve">
+    <value>Ryd filtre</value>
+  </data>
+  <data name="DataGridExportCsvText" xml:space="preserve">
+    <value>Eksportér CSV</value>
+  </data>
+  <data name="DataGridExportExcelText" xml:space="preserve">
+    <value>Eksportér Excel</value>
+  </data>
+  <data name="DataGridColumnsText" xml:space="preserve">
+    <value>Kolonner</value>
+  </data>
+  <data name="DataGridEditText" xml:space="preserve">
+    <value>Rediger</value>
+  </data>
+  <data name="DataGridDeleteText" xml:space="preserve">
+    <value>Slet</value>
+  </data>
+  <data name="DataGridSaveText" xml:space="preserve">
+    <value>Gem</value>
+  </data>
+  <data name="DataGridCancelText" xml:space="preserve">
+    <value>Annuller</value>
+  </data>
+  <data name="DataGridSelectAllLabel" xml:space="preserve">
+    <value>Vælg alle</value>
+  </data>
+  <data name="DataGridSelectRowLabel" xml:space="preserve">
+    <value>Vælg række</value>
+  </data>
+  <data name="DataGridSelectRowFormat" xml:space="preserve">
+    <value>Vælg række: {0}</value>
+  </data>
+  <data name="DataGridFilterPlaceholder" xml:space="preserve">
+    <value>Filtrer…</value>
+  </data>
+  <data name="DataGridFilterByFormat" xml:space="preserve">
+    <value>Filtrer efter {0}</value>
+  </data>
+  <data name="DataGridFilterAllText" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="DataGridFilterOperatorLabel" xml:space="preserve">
+    <value>Filteroperator for {0}</value>
+  </data>
+  <data name="DataGridFilterOpContains" xml:space="preserve">
+    <value>Indeholder</value>
+  </data>
+  <data name="DataGridFilterOpDoesNotContain" xml:space="preserve">
+    <value>Indeholder ikke</value>
+  </data>
+  <data name="DataGridFilterOpStartsWith" xml:space="preserve">
+    <value>Starter med</value>
+  </data>
+  <data name="DataGridFilterOpEndsWith" xml:space="preserve">
+    <value>Slutter med</value>
+  </data>
+  <data name="DataGridBooleanTrueText" xml:space="preserve">
+    <value>Sand</value>
+  </data>
+  <data name="DataGridBooleanFalseText" xml:space="preserve">
+    <value>Falsk</value>
+  </data>
+  <data name="DataGridGroupByFormat" xml:space="preserve">
+    <value>Gruppér efter {0}</value>
+  </data>
+  <data name="DataGridUngroupByFormat" xml:space="preserve">
+    <value>Fjern gruppering efter {0}</value>
+  </data>
+  <data name="DataGridExpandGroupFormat" xml:space="preserve">
+    <value>Fold gruppe ud {0}: {1}</value>
+  </data>
+  <data name="DataGridCollapseGroupFormat" xml:space="preserve">
+    <value>Fold gruppe sammen {0}: {1}</value>
+  </data>
+  <data name="DataGridPagerRangeFormat" xml:space="preserve">
+    <value>{0}–{1} af {2}</value>
+  </data>
+  <data name="DataGridPagerPageFormat" xml:space="preserve">
+    <value>Side {0} af {1}</value>
+  </data>
+  <data name="DataGridPerPageFormat" xml:space="preserve">
+    <value>{0} / side</value>
+  </data>
+  <data name="DataGridRowsPerPageLabel" xml:space="preserve">
+    <value>Rækker pr. side</value>
+  </data>
+  <data name="DataGridFirstPageLabel" xml:space="preserve">
+    <value>Første side</value>
+  </data>
+  <data name="DataGridPreviousPageLabel" xml:space="preserve">
+    <value>Forrige side</value>
+  </data>
+  <data name="DataGridNextPageLabel" xml:space="preserve">
+    <value>Næste side</value>
+  </data>
+  <data name="DataGridLastPageLabel" xml:space="preserve">
+    <value>Sidste side</value>
+  </data>
+  <data name="DataGridEndOfResultsText" xml:space="preserve">
+    <value>- Ikke flere resultater -</value>
+  </data>
+  <data name="DataGridToggleDetailsLabel" xml:space="preserve">
+    <value>Vis/skjul detaljer</value>
+  </data>
+  <data name="DataGridToggleChildrenLabel" xml:space="preserve">
+    <value>Vis/skjul underordnede</value>
+  </data>
+  <data name="DataGridReorderRowTitle" xml:space="preserve">
+    <value>Træk for at ændre rækkefølgen, eller sæt fokus og brug piletasterne til at flytte denne række</value>
+  </data>
+  <data name="DataGridReorderRowLabel" xml:space="preserve">
+    <value>Flyt række. Tryk på pil op eller pil ned for at flytte denne række.</value>
+  </data>
+  <data name="DataGridInvalidValueError" xml:space="preserve">
+    <value>Ugyldig værdi for {0}.</value>
+  </data>
+  <data name="DataGridAnnouncementSortedAscending" xml:space="preserve">
+    <value>Sorteret efter {0}, stigende</value>
+  </data>
+  <data name="DataGridAnnouncementSortedDescending" xml:space="preserve">
+    <value>Sorteret efter {0}, faldende</value>
+  </data>
+  <data name="DataGridAnnouncementSortCleared" xml:space="preserve">
+    <value>Sortering efter {0} fjernet</value>
+  </data>
+  <data name="DataGridAnnouncementFiltered" xml:space="preserve">
+    <value>Filter anvendt på {0}</value>
+  </data>
+  <data name="DataGridAnnouncementFilterCleared" xml:space="preserve">
+    <value>Filter på {0} ryddet</value>
+  </data>
+  <data name="DataGridAnnouncementPage" xml:space="preserve">
+    <value>Side {0} af {1}</value>
+  </data>
+  <data name="DataGridAnnouncementRowDeleted" xml:space="preserve">
+    <value>Række slettet</value>
+  </data>
+  <data name="DataGridAnnouncementSearched" xml:space="preserve">
+    <value>Søger efter {0}</value>
+  </data>
+  <data name="DataGridAnnouncementSearchCleared" xml:space="preserve">
+    <value>Søgning ryddet</value>
+  </data>
+  <data name="CalendarAriaLabel" xml:space="preserve">
+    <value>Kalender</value>
+  </data>
+  <data name="CalendarGoToNextMonthTitle" xml:space="preserve">
+    <value>Gå til næste måned</value>
+  </data>
+  <data name="CalendarGoToPrevMonthTitle" xml:space="preserve">
+    <value>Gå til forrige måned</value>
+  </data>
+  <data name="CalendarGoToNextYearTitle" xml:space="preserve">
+    <value>Gå til næste år {0}</value>
+  </data>
+  <data name="CalendarGoToPrevYearTitle" xml:space="preserve">
+    <value>Gå til forrige år {0}</value>
+  </data>
+  <data name="CalendarGoToNextYearRangeTitle" xml:space="preserve">
+    <value>Næste årsinterval {0} - {1}</value>
+  </data>
+  <data name="CalendarGoToPrevYearRangeTitle" xml:space="preserve">
+    <value>Forrige årsinterval {0} - {1}</value>
+  </data>
+  <data name="CalendarGoToTodayTitle" xml:space="preserve">
+    <value>Gå til i dag</value>
+  </data>
+  <data name="CalendarMonthPickerToggleTitle" xml:space="preserve">
+    <value>{0}, skift måned</value>
+  </data>
+  <data name="CalendarYearPickerToggleTitle" xml:space="preserve">
+    <value>{0}, skift år</value>
+  </data>
+  <data name="CalendarYearRangePickerToggleTitle" xml:space="preserve">
+    <value>{0} - {1}, skift måned</value>
+  </data>
+  <data name="CalendarWeekNumbersHeaderTitle" xml:space="preserve">
+    <value>Uge</value>
+  </data>
+  <data name="CalendarWeekNumberTitle" xml:space="preserve">
+    <value>Uge {0}</value>
+  </data>
+  <data name="CalendarShowTimePickerTitle" xml:space="preserve">
+    <value>Vis tidsvælger</value>
+  </data>
+  <data name="CalendarHideTimePickerTitle" xml:space="preserve">
+    <value>Skjul tidsvælger</value>
+  </data>
+  <data name="DatePickerClearButtonTitle" xml:space="preserve">
+    <value>Ryd dato</value>
+  </data>
+  <data name="DatePickerCloseButtonTitle" xml:space="preserve">
+    <value>Luk datovælger</value>
+  </data>
+  <data name="DatePickerDateFormatAriaDescription" xml:space="preserve">
+    <value>Forventet format: {0}</value>
+  </data>
+  <data name="DatePickerHighlightedDateAriaLabel" xml:space="preserve">
+    <value>{0}, fremhævet</value>
+  </data>
+  <data name="DatePickerNowButtonTitle" xml:space="preserve">
+    <value>Gå til nu</value>
+  </data>
+  <data name="DatePickerSelectedDateAriaAtomic" xml:space="preserve">
+    <value>Valgt dato {0}</value>
+  </data>
+  <data name="TimeIncreaseHourTitle" xml:space="preserve">
+    <value>Øg time</value>
+  </data>
+  <data name="TimeDecreaseHourTitle" xml:space="preserve">
+    <value>Sænk time</value>
+  </data>
+  <data name="TimeIncreaseMinuteTitle" xml:space="preserve">
+    <value>Øg minut</value>
+  </data>
+  <data name="TimeDecreaseMinuteTitle" xml:space="preserve">
+    <value>Sænk minut</value>
+  </data>
+  <data name="TimeIncreaseSecondTitle" xml:space="preserve">
+    <value>Øg sekund</value>
+  </data>
+  <data name="TimeDecreaseSecondTitle" xml:space="preserve">
+    <value>Sænk sekund</value>
+  </data>
+  <data name="TimeHourLabel" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="TimeMinuteLabel" xml:space="preserve">
+    <value>Minut</value>
+  </data>
+  <data name="TimeSecondLabel" xml:space="preserve">
+    <value>Sekund</value>
+  </data>
+  <data name="DateRangePickerApplyButtonText" xml:space="preserve">
+    <value>Anvend</value>
+  </data>
+  <data name="DateRangePickerCancelButtonText" xml:space="preserve">
+    <value>Annuller</value>
+  </data>
+  <data name="DateRangePickerClearButtonTitle" xml:space="preserve">
+    <value>Ryd det valgte datointerval</value>
+  </data>
+  <data name="DateRangePickerCloseButtonTitle" xml:space="preserve">
+    <value>Luk vælgeren til datointerval</value>
+  </data>
+  <data name="DateRangePickerPresetsAriaLabel" xml:space="preserve">
+    <value>Foruddefinerede datointervaller</value>
+  </data>
+  <data name="DateRangePickerSelectedDateAriaAtomic" xml:space="preserve">
+    <value>Valgt datointerval {0}</value>
+  </data>
+  <data name="DateRangePickerStartTimeIncreaseHourTitle" xml:space="preserve">
+    <value>Øg starttime</value>
+  </data>
+  <data name="DateRangePickerStartTimeDecreaseHourTitle" xml:space="preserve">
+    <value>Sænk starttime</value>
+  </data>
+  <data name="DateRangePickerStartTimeIncreaseMinuteTitle" xml:space="preserve">
+    <value>Øg startminut</value>
+  </data>
+  <data name="DateRangePickerStartTimeDecreaseMinuteTitle" xml:space="preserve">
+    <value>Sænk startminut</value>
+  </data>
+  <data name="DateRangePickerEndTimeIncreaseHourTitle" xml:space="preserve">
+    <value>Øg sluttime</value>
+  </data>
+  <data name="DateRangePickerEndTimeDecreaseHourTitle" xml:space="preserve">
+    <value>Sænk sluttime</value>
+  </data>
+  <data name="DateRangePickerEndTimeIncreaseMinuteTitle" xml:space="preserve">
+    <value>Øg slutminut</value>
+  </data>
+  <data name="DateRangePickerEndTimeDecreaseMinuteTitle" xml:space="preserve">
+    <value>Sænk slutminut</value>
+  </data>
+  <data name="DateRangePickerStartHourLabel" xml:space="preserve">
+    <value>Starttime</value>
+  </data>
+  <data name="DateRangePickerStartMinuteLabel" xml:space="preserve">
+    <value>Startminut</value>
+  </data>
+  <data name="DateRangePickerEndHourLabel" xml:space="preserve">
+    <value>Sluttime</value>
+  </data>
+  <data name="DateRangePickerEndMinuteLabel" xml:space="preserve">
+    <value>Slutminut</value>
+  </data>
+  <data name="DateRangePickerValueFormat" xml:space="preserve">
+    <value>Start: {0} - Slut: {1}</value>
+  </data>
+  <data name="TimePickerCalloutAriaLabel" xml:space="preserve">
+    <value>Ur</value>
+  </data>
+  <data name="TimePickerClearButtonText" xml:space="preserve">
+    <value>Ryd</value>
+  </data>
+  <data name="TimePickerClearButtonTitle" xml:space="preserve">
+    <value>Ryd det valgte tidspunkt</value>
+  </data>
+  <data name="TimePickerCloseButtonTitle" xml:space="preserve">
+    <value>Luk tidsvælger</value>
+  </data>
+  <data name="TimePickerNowButtonText" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+</root>

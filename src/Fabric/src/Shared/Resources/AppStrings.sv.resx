@@ -2312,7 +2312,7 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <value>Det som ingår från början</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>Varje projekt har redan registrering och inloggning med passkeys och tvåstegsverifiering, profiler, roller och behörigheter, inställningar, 11 språk samt ljust och mörkt tema. Dessutom kan det börja med en adminpanel eller en webbutik.</value>
+    <value>Varje projekt har redan registrering och inloggning med passkeys och tvåstegsverifiering, profiler, roller och behörigheter, inställningar, 12 språk samt ljust och mörkt tema. Dessutom kan det börja med en adminpanel eller en webbutik.</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>Bygger du ett verktyg som företag ska använda? Börja med adminpanelen och gör dess produkter till dina egna saker. Säljer du produkter? Börja med butiken.</value>
@@ -2693,7 +2693,7 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <value>Passnycklar och tvåstegs-inloggning</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>11 språk, ljust och mörkt</value>
+    <value>12 språk, ljust och mörkt</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>Exempelsidor: en att-göra-lista</value>
@@ -2720,7 +2720,7 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <value>Vad ska den börja med?</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>Varje projekt har redan en komplett identitetslösning, roller och behörigheter, inställningar, 11 språk och ljust och mörkt tema.</value>
+    <value>Varje projekt har redan en komplett identitetslösning, roller och behörigheter, inställningar, 12 språk och ljust och mörkt tema.</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>Bara det viktigaste</value>

@@ -32,7 +32,7 @@
                         </a>
                         <BitCard FullWidth>
                             <BitStack Horizontal VerticalAlign="BitAlignment.Center">
-                                <BitText Typography="BitTypography.Button">@sharedKey</BitText>
+                                <BitText Typography="BitTypography.Button" Class="app-latin-digits">@sharedKey</BitText>
                                 <BitSpacer />
                                 <BitButton IconOnly
                                            Variant="BitVariant.Text"
@@ -135,7 +135,7 @@
                                         </BitStack>
                                         @foreach (var recoveryCode in recoveryCodes)
                                         {
-                                            <BitText Typography="BitTypography.Button">@recoveryCode</BitText>
+                                            <BitText Typography="BitTypography.Button" Class="app-latin-digits">@recoveryCode</BitText>
                                         }
                                     </BitStack>
                                 </BitCard>

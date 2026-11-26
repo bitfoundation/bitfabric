@@ -64,6 +64,7 @@ The culture code follows the ISO 639-1 standard:
 - `fr` for French
 - `es` for Spanish
 - `de` for German
+- `da` for Danish
 - `ar` for Arabic
 - `zh` for Chinese
 - etc.
@@ -546,6 +547,7 @@ Nothing to install: `dnx Bit.Cli --version 11.0.0-pre-22 -- translate` runs it s
 - `"sv"` - Swedish
 - `"fr"` - French
 - `"de"` - German
+- `"da"` - Danish
 - `"es"` - Spanish
 - `"ar"` - Arabic
 - `"zh"` - Chinese

@@ -49,6 +49,7 @@
                                             Size="BitPersonaSize.Size48"
                                             PrimaryText="@CurrentUser?.DisplayName"
                                             SecondaryText="@(CurrentUser?.Email ?? CurrentUser?.PhoneNumber)"
+                                            Classes="@(new() { SecondaryTextContainer = "app-latin-digits" })"
                                             ImageOverlayText="@Localizer[nameof(AppStrings.Edit)]"
                                             Presence="@(IsOnline is null ? BitPersonaPresence.None : IsOnline is true ? BitPersonaPresence.Online : BitPersonaPresence.Offline)" />
                             </Authorized>
@@ -77,7 +78,8 @@
                                 <BitPersona Size="BitPersonaSize.Size32"
                                             ImageUrl="@userSession.GetProfileImageUrl(AbsoluteServerAddress)"
                                             PrimaryText="@userSession.DisplayName"
-                                            SecondaryText="@(userSession.Email ?? userSession.PhoneNumber)" />
+                                            SecondaryText="@(userSession.Email ?? userSession.PhoneNumber)"
+                                            Classes="@(new() { SecondaryTextContainer = "app-latin-digits" })" />
                                 @if (userSession.HasPin)
                                 {
                                     <BitIcon IconName="@BitIconName.Lock" Size="BitSize.Small" Color="BitColor.SecondaryForeground" />

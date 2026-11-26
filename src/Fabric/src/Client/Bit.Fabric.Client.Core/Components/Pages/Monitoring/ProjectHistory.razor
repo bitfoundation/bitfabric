@@ -75,7 +75,7 @@
                             <li class="@(incident.Impact is ProjectHealth.Down ? "tone-down" : "tone-degraded")">
                                 <span class="dot" aria-hidden="true"></span>
                                 <BitText Typography="BitTypography.Body2" Element="span">
-                                    <strong>@incident.Title</strong> · @LocalTime(incident.StartedAt, "t")–@(incident.EndedAt is { } ended ? LocalTime(ended, "t") : Localizer[nameof(AppStrings.MonitoringNow)])
+                                    <strong>@incident.Title</strong>@Dot@LocalTime(incident.StartedAt, "t")–@(incident.EndedAt is { } ended ? LocalTime(ended, "t") : Localizer[nameof(AppStrings.MonitoringNow)])
                                 </BitText>
                             </li>
                         }
@@ -91,7 +91,7 @@
                             <li class="tone-maintenance">
                                 <span class="dot" aria-hidden="true"></span>
                                 <BitText Typography="BitTypography.Body2" Element="span">
-                                    @LocalTime(start.At, "t") · @(start.IsDeploy ? Localizer[nameof(AppStrings.MonitoringDeployed)] : Localizer[nameof(AppStrings.MonitoringRestarted)]) <span class="ltr">@start.ApplicationVersion</span>
+                                    @LocalTime(start.At, "t")@Dot@(start.IsDeploy ? Localizer[nameof(AppStrings.MonitoringDeployed)] : Localizer[nameof(AppStrings.MonitoringRestarted)]) <span class="ltr app-latin-digits">@start.ApplicationVersion</span>
                                 </BitText>
                             </li>
                         }
@@ -107,10 +107,10 @@
                             <li class="@(period.Status is HealthCheckStatus.Unhealthy ? "tone-down" : "tone-degraded")">
                                 <span class="dot" aria-hidden="true"></span>
                                 <BitText Typography="BitTypography.Body2" Element="span">
-                                    <strong>@(period.Title ?? period.CheckKey)</strong> · @LocalTime(period.StartedAt, "t")–@(period.EndedAt is { } ended ? LocalTime(ended, "t") : Localizer[nameof(AppStrings.MonitoringNow)])
+                                    <strong>@(period.Title ?? period.CheckKey)</strong>@Dot@LocalTime(period.StartedAt, "t")–@(period.EndedAt is { } ended ? LocalTime(ended, "t") : Localizer[nameof(AppStrings.MonitoringNow)])
                                     @if (string.IsNullOrWhiteSpace(period.Description) is false)
                                     {
-                                        <text> · @period.Description</text>
+                                        <text>@Dot@period.Description</text>
                                     }
                                 </BitText>
                             </li>

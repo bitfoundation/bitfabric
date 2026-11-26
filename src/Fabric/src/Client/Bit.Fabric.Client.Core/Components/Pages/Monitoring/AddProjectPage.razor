@@ -61,11 +61,12 @@
                             <span class="mark" aria-hidden="true"><BitIcon IconName="@BitIconName.CompletedSolid" /></span>
                             <div class="result-text">
                                 <BitText Typography="BitTypography.Subtitle1">@Localizer[nameof(AppStrings.MonitoringFoundApp), probe.AppTitle ?? Host(probe.Address)]</BitText>
-                                <BitText Typography="BitTypography.Body2">
+                                @* The sentence's only number is the version, so all of it keeps Latin digits *@
+                                <BitText Typography="BitTypography.Body2" Class="app-latin-digits">
                                     @(probe.TemplateVersion is { } version ? Localizer[nameof(AppStrings.MonitoringMadeWithBitFabricVersion), version] : Localizer[nameof(AppStrings.MonitoringMadeWithBitFabricUnknownVersion)])
                                     @if (probe.ServerAddress != probe.Address)
                                     {
-                                        <span>@(" " + Localizer[nameof(AppStrings.MonitoringHealthReportIsOnItsServer)]) <span class="ltr">@Host(probe.ServerAddress)</span>.</span>
+                                        <span>@(" " + Localizer[nameof(AppStrings.MonitoringHealthReportIsOnItsServer)]) <span class="ltr app-latin-digits">@Host(probe.ServerAddress)</span>.</span>
                                     }
                                 </BitText>
                                 @if (probe.IsAlreadyAdded)

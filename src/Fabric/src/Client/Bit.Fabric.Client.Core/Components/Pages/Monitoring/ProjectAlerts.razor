@@ -44,7 +44,7 @@
                                             @ChannelText(route.Channel)
                                             @if (route.Channel is ProjectAlertChannel.Webhook)
                                             {
-                                                <text> · @FormatText(route.WebhookFormat) · </text><span class="ltr">@Host(route.Address)</span>
+                                                <text> · @FormatText(route.WebhookFormat) · </text><span class="ltr app-latin-digits">@Host(route.Address)</span>
                                             }
                                             else
                                             {
@@ -116,7 +116,7 @@
                     <li>
                         <BitIcon IconName="@(result.Succeeded ? BitIconName.CompletedSolid : BitIconName.StatusErrorFull)" Color="@(result.Succeeded ? BitColor.Success : BitColor.Error)" Size="BitSize.Small" />
                         <BitText Typography="BitTypography.Body2" Element="span">
-                            @ChannelText(result.Channel) · <span class="ltr">@result.Target</span> · @(result.Succeeded ? Localizer[nameof(AppStrings.MonitoringSent)] : ProblemText(Localizer, result))
+                            @ChannelText(result.Channel) · <span class="ltr app-latin-digits">@result.Target</span> · @(result.Succeeded ? Localizer[nameof(AppStrings.MonitoringSent)] : ProblemText(Localizer, result))
                         </BitText>
                     </li>
                 }

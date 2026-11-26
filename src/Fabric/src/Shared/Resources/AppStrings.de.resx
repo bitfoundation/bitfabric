@@ -2312,7 +2312,7 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <value>Was bereits enthalten ist</value>
   </data>
     <data name="NewProjectHelpStartLead" xml:space="preserve">
-    <value>Jedes Projekt verfügt bereits über Registrierung und Anmeldung mit Passkeys und Zwei-Faktor-Authentifizierung, Profile, Rollen und Berechtigungen, Einstellungen, 11 Sprachen sowie helle und dunkle Designs. Zusätzlich kann es mit einem Adminbereich oder einem Onlineshop starten.</value>
+    <value>Jedes Projekt verfügt bereits über Registrierung und Anmeldung mit Passkeys und Zwei-Faktor-Authentifizierung, Profile, Rollen und Berechtigungen, Einstellungen, 12 Sprachen sowie helle und dunkle Designs. Zusätzlich kann es mit einem Adminbereich oder einem Onlineshop starten.</value>
   </data>
     <data name="NewProjectHelpStartAdvice" xml:space="preserve">
     <value>Entwickelst du ein Tool für Unternehmen? Starte mit dem Adminbereich und mache seine Produkte zu deinen eigenen Dingen. Verkaufst du Produkte? Starte mit dem Shop.</value>
@@ -2693,7 +2693,7 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <value>Passkeys und Anmeldung in zwei Schritten</value>
   </data>
     <data name="NewProjectSampleLanguages" xml:space="preserve">
-    <value>11 Sprachen, hell und dunkel</value>
+    <value>12 Sprachen, hell und dunkel</value>
   </data>
     <data name="NewProjectSampleTodo" xml:space="preserve">
     <value>Beispielseiten: eine To-do-Liste</value>
@@ -2720,7 +2720,7 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <value>Womit soll es beginnen?</value>
   </data>
     <data name="NewProjectStartLead" xml:space="preserve">
-    <value>Jedes Projekt verfügt bereits über eine vollständige Identity-Lösung, Rollen und Berechtigungen, Einstellungen, 11 Sprachen sowie helle und dunkle Designs.</value>
+    <value>Jedes Projekt verfügt bereits über eine vollständige Identity-Lösung, Rollen und Berechtigungen, Einstellungen, 12 Sprachen sowie helle und dunkle Designs.</value>
   </data>
     <data name="NewProjectStartBlank" xml:space="preserve">
     <value>Nur das Wesentliche</value>
