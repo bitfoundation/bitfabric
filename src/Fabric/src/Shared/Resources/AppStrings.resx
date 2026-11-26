@@ -4739,7 +4739,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Even with your server completely down, the app your users already have shows them what's wrong, and each update you post.</value>
     </data>
     <data name="AppHomeYourServerIsCompletelyDownYetYourApp" xml:space="preserve">
-    <value>Your server is completely down, yet your app still tells its users what's wrong...</value>
+    <value>Your server is completely down, yet your app still tells its users what's wrong, read from bit Fabric rather than your server...</value>
     </data>
     <data name="AppHomePlacingOrdersIsnTWorkingRightNow" xml:space="preserve">
     <value>Placing orders isn't working right now. We're on it.</value>

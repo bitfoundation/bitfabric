@@ -4739,7 +4739,7 @@
     <value>حتی وقتی سرورتان کاملاً از کار افتاده، اپی که کاربرها دارند نشانشان می‌دهد چه مشکلی پیش آمده و هر خبر تازه‌ای که می‌گذارید.</value>
     </data>
     <data name="AppHomeYourServerIsCompletelyDownYetYourApp" xml:space="preserve">
-    <value>سرورتان کاملاً از کار افتاده، ولی اپ‌تان باز هم به کاربرها می‌گوید چه مشکلی پیش آمده...</value>
+    <value>سرورتان کاملاً از کار افتاده، ولی اپ‌تان باز هم به کاربرها می‌گوید چه مشکلی پیش آمده، از bit Fabric و نه از سرور شما...</value>
     </data>
     <data name="AppHomePlacingOrdersIsnTWorkingRightNow" xml:space="preserve">
     <value>ثبت سفارش همین حالا کار نمی‌کند. داریم رسیدگی می‌کنیم.</value>
