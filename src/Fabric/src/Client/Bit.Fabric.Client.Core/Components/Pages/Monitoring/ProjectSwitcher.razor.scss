@@ -1,0 +1,81 @@
+@import '_monitoring.scss';
+
+// The project's name as the page's title, with its chevron: it opens the switcher
+.switcher {
+    min-width: 0;
+    max-width: 100%;
+}
+
+::deep .project-switcher {
+    max-width: 100%;
+}
+
+::deep .switcher-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+::deep .switcher-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+}
+
+::deep .switcher-title {
+    margin: 0;
+}
+
+.switcher-list {
+    display: grid;
+    gap: 2px;
+    max-height: min(50vh, 22rem);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+::deep .switcher-item {
+    justify-content: flex-start;
+    text-align: start;
+    min-height: 2.75rem;
+}
+
+::deep .switcher-item.current {
+    background-color: color-mix(in srgb, #{$bit-color-primary} 8%, transparent);
+}
+
+.switcher-check {
+    width: 1.25rem;
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+}
+
+.switcher-text {
+    display: grid;
+    min-width: 0;
+}
+
+.switcher-project {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: $bit-color-foreground-primary;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+.switcher-environments {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: $bit-color-foreground-secondary;
+    font-size: $bit-typography-fs-xs;
+}
+
+::deep .switcher-none {
+    padding: 8px 4px;
+}

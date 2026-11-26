@@ -35,7 +35,7 @@ public static partial class MonitoringSamples
 
             if (isRunning)
             {
-                project.PendingScans.Add(new() { Id = MonitoringNoise.IdOf($"{project.Key}:pending:{kind}"), ProjectId = project.Id, Kind = kind, Trigger = ProjectScanTrigger.Manual, RequestedAt = now.AddMinutes(-3), StartedAt = now.AddMinutes(-2) });
+                project.PendingScans.Add(new() { Id = MonitoringNoise.IdOf($"{project.Key}:pending:{kind}"), MonitoringId = project.Id, Kind = kind, Trigger = ProjectScanTrigger.Manual, RequestedAt = now.AddMinutes(-3), StartedAt = now.AddMinutes(-2) });
             }
         }
 
@@ -59,7 +59,7 @@ public static partial class MonitoringSamples
             project.PendingScans.Add(new()
             {
                 Id = MonitoringNoise.IdOf($"{project.Key}:pending:{kind}:{requestedAt.UtcTicks}"),
-                ProjectId = project.Id,
+                MonitoringId = project.Id,
                 Kind = kind,
                 Trigger = trigger,
                 RequestedAt = requestedAt,
@@ -74,7 +74,7 @@ public static partial class MonitoringSamples
         var scan = new ProjectScanDto
         {
             Id = MonitoringNoise.IdOf($"{project.Key}:scan:{kind}:{finishedAt.UtcTicks}"),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             Kind = kind,
             Trigger = trigger,
             ApplicationVersion = applicationVersion,

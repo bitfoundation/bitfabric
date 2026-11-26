@@ -18,7 +18,7 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
     /// <summary>The periods, incidents, deployments and maintenance overlapping a span, for History.</summary>
     public async Task<ProjectHistoryDto> GetHistory(ProjectHistoryRequestDto request, CancellationToken cancellationToken)
     {
-        var project = await FindProject(request.ProjectId, cancellationToken);
+        var project = await FindProject(request.MonitoringId, cancellationToken);
         var from = request.From.ToUniversalTime();
         var to = request.To.ToUniversalTime();
 
@@ -27,7 +27,7 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
 
         // Only the stretches a part wasn't healthy: healthy is what a part is when nothing says otherwise.
         var periods = await dbContext.ProjectCheckPeriods.AsNoTracking()
-            .Where(period => period.ProjectId == project.Id && period.Status != HealthCheckStatus.Healthy
+            .Where(period => period.MonitoringId == project.Id && period.Status != HealthCheckStatus.Healthy
                              && period.StartedAt < to && (period.EndedAt == null || period.EndedAt > from))
             .OrderBy(period => period.StartedAt)
             .Select(period => new ProjectPeriodDto
@@ -42,12 +42,12 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
             .ToArrayAsync(cancellationToken);
 
         var incidents = await dbContext.ProjectIncidents.AsNoTracking()
-            .Where(incident => incident.ProjectId == project.Id && incident.StartedAt < to && (incident.EndedAt == null || incident.EndedAt > from))
+            .Where(incident => incident.MonitoringId == project.Id && incident.StartedAt < to && (incident.EndedAt == null || incident.EndedAt > from))
             .OrderByDescending(incident => incident.StartedAt)
             .ToListAsync(cancellationToken);
 
         var starts = await dbContext.ProjectStarts.AsNoTracking()
-            .Where(start => start.ProjectId == project.Id && start.At >= from && start.At < to)
+            .Where(start => start.MonitoringId == project.Id && start.At >= from && start.At < to)
             .OrderBy(start => start.At)
             .Select(start => new ProjectStartDto { At = start.At, IsDeploy = start.IsDeploy, ApplicationVersion = start.ApplicationVersion })
             .ToArrayAsync(cancellationToken);
@@ -79,7 +79,7 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
     /// time within the span the app reported it, from the 15-minute rollups every round writes for every configured part.
     /// A part the latest report says only misses its settings gets no row, whatever an older template once said of it.
     /// </summary>
-    private async Task<ProjectHistoryPartDto[]> PartsOf(Project project, ProjectProbe? lastReport, ProjectPeriodDto[] periods, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
+    private async Task<ProjectHistoryPartDto[]> PartsOf(ProjectMonitoring project, ProjectProbe? lastReport, ProjectPeriodDto[] periods, DateTimeOffset from, DateTimeOffset to, CancellationToken cancellationToken)
     {
         var reported = lastReport?.Checks.Where(check => check.Key is not null).DistinctBy(check => check.Key).ToDictionary(check => check.Key!) ?? [];
 
@@ -93,7 +93,7 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
         var bucketsFrom = from.AddMinutes(-ProjectRollup.BucketMinutes);
 
         var spans = await dbContext.ProjectRollups.AsNoTracking()
-            .Where(rollup => rollup.ProjectId == project.Id && keys.Contains(rollup.CheckKey!) && rollup.BucketStart > bucketsFrom && rollup.BucketStart < to)
+            .Where(rollup => rollup.MonitoringId == project.Id && keys.Contains(rollup.CheckKey!) && rollup.BucketStart > bucketsFrom && rollup.BucketStart < to)
             .GroupBy(rollup => rollup.CheckKey)
             .Select(group => new { Key = group.Key!, First = group.Min(rollup => rollup.BucketStart), Last = group.Max(rollup => rollup.BucketStart) })
             .ToDictionaryAsync(span => span.Key, StringComparer.Ordinal, cancellationToken);
@@ -117,18 +117,18 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
     private static string? NonBlank(string? text) => string.IsNullOrWhiteSpace(text) ? null : text;
 
     /// <summary>The open incidents and those of the last 90 days, newest first.</summary>
-    public async Task<ProjectIncidentDto[]> GetIncidents(Guid projectId, CancellationToken cancellationToken)
+    public async Task<ProjectIncidentDto[]> GetIncidents(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await FindProject(projectId, cancellationToken);
+        var project = await FindProject(monitoringId, cancellationToken);
 
         return await IncidentsOf(project, timeProvider.GetUtcNow().AddDays(-90), cancellationToken);
     }
 
     /// <summary>The project's open incidents and those that began since <paramref name="since"/>, open ones first, then newest first.</summary>
-    public async Task<ProjectIncidentDto[]> IncidentsOf(Project project, DateTimeOffset since, CancellationToken cancellationToken)
+    public async Task<ProjectIncidentDto[]> IncidentsOf(ProjectMonitoring project, DateTimeOffset since, CancellationToken cancellationToken)
     {
         var incidents = await dbContext.ProjectIncidents.AsNoTracking()
-            .Where(incident => incident.ProjectId == project.Id && (incident.EndedAt == null || incident.StartedAt >= since))
+            .Where(incident => incident.MonitoringId == project.Id && (incident.EndedAt == null || incident.StartedAt >= since))
             .OrderByDescending(incident => incident.EndedAt == null)
             .ThenByDescending(incident => incident.StartedAt)
             .Take(100)
@@ -153,7 +153,7 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
     /// </summary>
     public async Task<ProjectIncidentDto> Acknowledge(Guid id, Guid userId, string name, CancellationToken cancellationToken)
     {
-        var incident = await dbContext.ProjectIncidents.Include(incident => incident.Project).FirstOrDefaultAsync(incident => incident.Id == id, cancellationToken)
+        var incident = await dbContext.ProjectIncidents.Include(incident => incident.Monitoring).FirstOrDefaultAsync(incident => incident.Id == id, cancellationToken)
             ?? throw new ResourceNotFoundException(localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
         if (incident.EndedAt is null && incident.AcknowledgedAt is null)
@@ -178,7 +178,7 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
     /// <summary>An update the team writes, such as what they found, in the language it was written in and by <paramref name="author"/>.</summary>
     public async Task<ProjectIncidentDto> PostUpdate(ProjectIncidentUpdateRequestDto request, string author, CancellationToken cancellationToken)
     {
-        var incident = await dbContext.ProjectIncidents.Include(incident => incident.Project).FirstOrDefaultAsync(incident => incident.Id == request.IncidentId, cancellationToken)
+        var incident = await dbContext.ProjectIncidents.Include(incident => incident.Monitoring).FirstOrDefaultAsync(incident => incident.Id == request.IncidentId, cancellationToken)
             ?? throw new ResourceNotFoundException(localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
         // bit Fabric closes the incidents it opened, once the checks pass.
@@ -200,15 +200,15 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
         return await Reload(incident, cancellationToken);
     }
 
-    public async Task<ProjectMaintenanceWindowDto[]> GetMaintenanceWindows(Guid projectId, CancellationToken cancellationToken)
+    public async Task<ProjectMaintenanceWindowDto[]> GetMaintenanceWindows(Guid monitoringId, CancellationToken cancellationToken)
     {
         return await dbContext.ProjectMaintenanceWindows.AsNoTracking()
-            .Where(window => window.ProjectId == projectId)
+            .Where(window => window.MonitoringId == monitoringId)
             .OrderBy(window => window.StartsAt)
             .Select(window => new ProjectMaintenanceWindowDto
             {
                 Id = window.Id,
-                ProjectId = window.ProjectId,
+                MonitoringId = window.MonitoringId,
                 Title = window.Title,
                 StartsAt = window.StartsAt,
                 EndsAt = window.EndsAt,
@@ -221,7 +221,7 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
     /// <summary>A time the team works on the app: no alert goes out in it, and it doesn't count against the SLA.</summary>
     public async Task<ProjectMaintenanceWindowDto> AddMaintenanceWindow(ProjectMaintenanceWindowDto window, CancellationToken cancellationToken)
     {
-        var project = await FindProject(window.ProjectId, cancellationToken);
+        var project = await FindProject(window.MonitoringId, cancellationToken);
 
         // A weekly window shorter than the week, so it ends before it comes again.
         if (window.EndsAt <= window.StartsAt || (window.RepeatsWeekly && window.EndsAt - window.StartsAt >= TimeSpan.FromDays(7)))
@@ -230,7 +230,7 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
         ProjectMaintenanceWindow added = new()
         {
             Id = Guid.CreateSequentialGuid(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = project.TenantId,
             Title = window.Title!.Trim(),
             StartsAt = window.StartsAt.ToUniversalTime(),
@@ -247,22 +247,22 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
     }
 
     /// <summary>A project of the tenant, untracked; another team's is not found.</summary>
-    public async Task<Project> FindProject(Guid projectId, CancellationToken cancellationToken)
-        => await dbContext.Projects.AsNoTracking().FirstOrDefaultAsync(project => project.Id == projectId, cancellationToken)
+    public async Task<ProjectMonitoring> FindProject(Guid monitoringId, CancellationToken cancellationToken)
+        => await dbContext.Monitorings.AsNoTracking().FirstOrDefaultAsync(project => project.Id == monitoringId, cancellationToken)
            ?? throw new ResourceNotFoundException(localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
     /// <summary>The newest round that read the project's report, which names its parts; null before the first.</summary>
-    public async Task<ProjectProbe?> LastReportOf(Guid projectId, CancellationToken cancellationToken)
+    public async Task<ProjectProbe?> LastReportOf(Guid monitoringId, CancellationToken cancellationToken)
     {
         return await dbContext.ProjectProbes.AsNoTracking()
-            .Where(probe => probe.ProjectId == projectId && probe.Outcome == ProjectProbeOutcome.Read)
+            .Where(probe => probe.MonitoringId == monitoringId && probe.Outcome == ProjectProbeOutcome.Read)
             .OrderByDescending(probe => probe.At)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
     /// <summary>What the app calls each part, from the newest round that read its report.</summary>
-    private async Task<Dictionary<string, string>> TitlesOf(Guid projectId, CancellationToken cancellationToken)
-        => TitlesOf(await LastReportOf(projectId, cancellationToken));
+    private async Task<Dictionary<string, string>> TitlesOf(Guid monitoringId, CancellationToken cancellationToken)
+        => TitlesOf(await LastReportOf(monitoringId, cancellationToken));
 
     private static Dictionary<string, string> TitlesOf(ProjectProbe? lastReport)
     {
@@ -278,17 +278,17 @@ public partial class ProjectIncidentsService(AppDbContext dbContext,
             .OrderByDescending(alert => alert.SentAt)
             .ToListAsync(cancellationToken);
 
-        return ToDto(incident.Project!, incident, await TitlesOf(incident.ProjectId, cancellationToken), alerts);
+        return ToDto(incident.Monitoring!, incident, await TitlesOf(incident.MonitoringId, cancellationToken), alerts);
     }
 
-    public static ProjectIncidentDto ToDto(Project project, ProjectIncident incident, Dictionary<string, string> titles, IEnumerable<ProjectAlert> alerts)
+    public static ProjectIncidentDto ToDto(ProjectMonitoring project, ProjectIncident incident, Dictionary<string, string> titles, IEnumerable<ProjectAlert> alerts)
     {
         var culture = CultureInfo.CurrentUICulture.Name;
 
         return new()
         {
             Id = incident.Id,
-            ProjectId = incident.ProjectId,
+            MonitoringId = incident.MonitoringId,
             Kind = incident.Kind,
             Impact = incident.Impact,
             Title = ProjectTexts.In(incident.Title, culture),

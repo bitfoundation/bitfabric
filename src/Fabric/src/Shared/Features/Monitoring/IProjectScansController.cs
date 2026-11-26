@@ -10,8 +10,8 @@ namespace Bit.Fabric.Shared.Features.Monitoring;
 public interface IProjectScansController : IAppController
 {
     /// <summary>The newest run of each kind, with its findings, and the project's scan settings.</summary>
-    [HttpGet("{projectId}")]
-    Task<ProjectScansDto> GetScans(Guid projectId, CancellationToken cancellationToken);
+    [HttpGet("{monitoringId}")]
+    Task<ProjectScansDto> GetScans(Guid monitoringId, CancellationToken cancellationToken);
 
     /// <summary>Past runs, newest first, without their findings.</summary>
     [HttpPost]
@@ -25,8 +25,8 @@ public interface IProjectScansController : IAppController
     [HttpPost]
     Task<ProjectScansDto> RunNow(RunProjectScansRequestDto request, CancellationToken cancellationToken);
 
-    [HttpGet("{projectId}")]
-    Task<ProjectScanSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken);
+    [HttpGet("{monitoringId}")]
+    Task<ProjectScanSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken);
 
     [HttpPost]
     Task<ProjectScanSettingsDto> SaveSettings(ProjectScanSettingsDto settings, CancellationToken cancellationToken);

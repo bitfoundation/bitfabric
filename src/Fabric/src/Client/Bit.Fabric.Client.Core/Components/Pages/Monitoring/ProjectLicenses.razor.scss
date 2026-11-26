@@ -1,0 +1,62 @@
+@import '_monitoring.scss';
+
+.licenses-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.rows {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.row {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+}
+
+.row-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+::deep .row-name {
+    padding-inline: 0;
+    font-weight: $bit-typography-fw-semibold;
+}
+
+// Text that wraps between words, so a separator stays with the word before it: Persian's comma never starts a line.
+::deep .row-meta {
+    display: block;
+}
+
+// Each part on its own, so a separator between two English words keeps the page's direction.
+.part {
+    unicode-bidi: isolate;
+}
+
+.mono {
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-family: $bit-typography-font-family-mono;
+}

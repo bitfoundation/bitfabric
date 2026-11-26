@@ -14,6 +14,9 @@ env:
   SERVER_API_ADDRESS: 'https://todo-api.bitfabric.co'
   # The summary.json of the demo's status page on bit Fabric, which the apps read to tell their users when something is wrong.
   STATUS_PAGE_SUMMARY_URL: 'https://api.bitfabric.co/api/v1/PublicStatus/Summary/bit-todosample'
+  # The demo's project id, which every job gives its project once the DEMO_TODO_LICENSE secret holds the demo's License,
+  # so that one License fits every run (See .github/actions/new-demo-project). Not a secret: without the License it gives nothing.
+  DEMO_PROJECT_ID: '23b6d67c-2106-4802-aa27-2164341926bc'
   R2_BUCKET: 'todo'
   APP_BUNDLE_ID: 'com.bitplatform.Todo.Template'
   OpenAI__ApiKey: ${{ secrets.OPENAI__APIKEY }}
@@ -111,7 +114,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new TodoSample --framework net11.0 --database PostgreSQL --sample --appInsights --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --offlineDb --signalR --ads --api Standalone --redis --multitenant false --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --no-restore --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_TODO_LICENSE }}
+        arguments: TodoSample --framework net11.0 --database PostgreSQL --sample --appInsights --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --offlineDb --signalR --ads --api Standalone --redis --multitenant false --template-package "$BIT_TEMPLATE_PACKAGE" --yes --no-restore --no-build --no-format --no-migration --no-trust
        
     - name: Translate .resx files
       run: |
@@ -188,7 +195,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new TodoSample --framework net11.0 --database PostgreSQL --sample --appInsights --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --api Standalone --multitenant false --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_TODO_LICENSE }}
+        arguments: TodoSample --framework net11.0 --database PostgreSQL --sample --appInsights --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --api Standalone --multitenant false --template-package "$BIT_TEMPLATE_PACKAGE" --yes --no-build --no-format --no-migration --no-trust
        
     - name: Translate .resx files
       run: |
@@ -276,7 +287,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new TodoSample --framework net10.0 --database PostgreSQL --sample --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR false --ads --multitenant false --theme Cupertino --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_TODO_LICENSE }}
+        arguments: TodoSample --framework net10.0 --database PostgreSQL --sample --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR false --ads --multitenant false --theme Cupertino --template-package "$BIT_TEMPLATE_PACKAGE" --yes --no-build --no-format --no-migration --no-trust
 
     - name: Update core appsettings.json
       uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
@@ -338,7 +353,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new TodoSample --framework net10.0 --database PostgreSQL --sample --appInsights --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --offlineDb --signalR --ads --multitenant false --theme Fluent --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --no-restore --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_TODO_LICENSE }}
+        arguments: TodoSample --framework net10.0 --database PostgreSQL --sample --appInsights --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --offlineDb --signalR --ads --multitenant false --theme Fluent --template-package "$BIT_TEMPLATE_PACKAGE" --yes --no-restore --no-build --no-format --no-migration --no-trust
 
     - name: Update core appsettings.json
       uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
@@ -397,7 +416,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new TodoSample --framework net10.0 --database PostgreSQL --sample --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR false --ads --multitenant false --brouter false --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_TODO_LICENSE }}
+        arguments: TodoSample --framework net10.0 --database PostgreSQL --sample --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR false --ads --multitenant false --brouter false --template-package "$BIT_TEMPLATE_PACKAGE" --yes --no-build --no-format --no-migration --no-trust
 
     - name: Update core appsettings.json
       uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
@@ -459,7 +482,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new TodoSample --framework net10.0 --database PostgreSQL --sample --sentry --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --captcha reCaptcha --signalR --ads --multitenant false --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --platforms windows --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_TODO_LICENSE }}
+        arguments: TodoSample --framework net10.0 --database PostgreSQL --sample --sentry --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --captcha reCaptcha --signalR --ads --multitenant false --template-package "$BIT_TEMPLATE_PACKAGE" --yes --platforms windows --no-build --no-format --no-migration --no-trust
   
     - name: Translate .resx files
       run: |
@@ -559,7 +586,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new TodoSample --framework net10.0 --database PostgreSQL --sample --sentry --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --multitenant false --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --platforms android --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_TODO_LICENSE }}
+        arguments: TodoSample --framework net10.0 --database PostgreSQL --sample --sentry --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --multitenant false --template-package "$BIT_TEMPLATE_PACKAGE" --yes --platforms android --no-build --no-format --no-migration --no-trust
   
     - name: Extract Android signing key from env
       uses: timheuer/base64-to-file@dfa5a5dd38803cb4f5c3a081eeb28e8362d43e9c # v2.0.0
@@ -679,7 +710,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new TodoSample --framework net10.0 --database PostgreSQL --sample --sentry --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --multitenant false --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --platforms ios --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_TODO_LICENSE }}
+        arguments: TodoSample --framework net10.0 --database PostgreSQL --sample --sentry --apiServerUrl ${{ env.SERVER_API_ADDRESS }} --webAppUrl ${{ env.SERVER_WEB_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --multitenant false --template-package "$BIT_TEMPLATE_PACKAGE" --yes --platforms ios --no-build --no-format --no-migration --no-trust
       
     - name: Translate .resx files
       run: |

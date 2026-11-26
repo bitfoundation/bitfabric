@@ -18,7 +18,7 @@ public partial class ProjectScans
     private static readonly TimeSpan pollEvery = TimeSpan.FromSeconds(5);
     private static readonly TimeSpan pollFor = TimeSpan.FromMinutes(5);
 
-    [Parameter, EditorRequired] public Guid ProjectId { get; set; }
+    [Parameter, EditorRequired] public Guid MonitoringId { get; set; }
 
     [AutoInject] private IProjectScansController scansController = default!;
     [AutoInject] private Clipboard clipboard = default!;
@@ -43,8 +43,8 @@ public partial class ProjectScans
 
     private async Task Load()
     {
-        scans = await scansController.GetScans(ProjectId, CurrentCancellationToken);
-        history = await scansController.GetHistory(new() { ProjectId = ProjectId }, CurrentCancellationToken);
+        scans = await scansController.GetScans(MonitoringId, CurrentCancellationToken);
+        history = await scansController.GetHistory(new() { MonitoringId = MonitoringId }, CurrentCancellationToken);
 
         if (scans.Pending.Length > 0)
         {
@@ -58,7 +58,7 @@ public partial class ProjectScans
 
         try
         {
-            scans = await scansController.RunNow(new() { ProjectId = ProjectId }, CurrentCancellationToken);
+            scans = await scansController.RunNow(new() { MonitoringId = MonitoringId }, CurrentCancellationToken);
             SnackBarService.Success(Localizer[nameof(AppStrings.MonitoringScansStarted)]);
         }
         finally
@@ -86,11 +86,11 @@ public partial class ProjectScans
                 await Task.Delay(pollEvery, CurrentCancellationToken);
 
                 var pendingBefore = scans.Pending.Length;
-                scans = await scansController.GetScans(ProjectId, CurrentCancellationToken);
+                scans = await scansController.GetScans(MonitoringId, CurrentCancellationToken);
 
                 if (scans.Pending.Length < pendingBefore)
                 {
-                    history = await scansController.GetHistory(new() { ProjectId = ProjectId }, CurrentCancellationToken);
+                    history = await scansController.GetHistory(new() { MonitoringId = MonitoringId }, CurrentCancellationToken);
                 }
 
                 await InvokeAsync(StateHasChanged);
@@ -126,7 +126,7 @@ public partial class ProjectScans
         catch
         {
             // Refused, the tab goes back to what the server holds.
-            scans.Settings = await scansController.GetSettings(ProjectId, CurrentCancellationToken);
+            scans.Settings = await scansController.GetSettings(MonitoringId, CurrentCancellationToken);
             throw;
         }
         finally

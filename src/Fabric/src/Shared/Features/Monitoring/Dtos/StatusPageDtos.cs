@@ -4,7 +4,7 @@ namespace Bit.Fabric.Shared.Features.Monitoring.Dtos;
 [DtoResourceType(typeof(AppStrings))]
 public partial class StatusPageSettingsDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     /// <summary>The page is at <c>/status/{slug}</c>: lowercase letters, digits and hyphens.</summary>
     [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]
@@ -72,7 +72,7 @@ public partial class StatusCheckDto
 [DtoResourceType(typeof(AppStrings))]
 public partial class ConnectCustomHostnameRequestDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]
     [MaxLength(253, ErrorMessage = nameof(AppStrings.MaxLengthAttribute_ValidationError))]
@@ -83,7 +83,7 @@ public partial class ConnectCustomHostnameRequestDto
 /// <summary>An incident, an update to one, or an announcement the team posts (bitfabric-internal/specs/monitoring.md, Posting an update).</summary>
 public partial class StatusPostRequestDto
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
     /// <summary>An update to this incident; null for a new one.</summary>
     public Guid? IncidentId { get; set; }
@@ -129,7 +129,7 @@ public partial class PublicStatusDto
     /// <summary>The app's own address, which the page links back to.</summary>
     public string? AppAddress { get; set; }
 
-    /// <summary>The app's own icon, an attachment of its own (See ProjectDto.IconId); null for none, and the page shows a monogram.</summary>
+    /// <summary>The app's own icon, an attachment of its own (See MonitoringDto.IconId); null for none, and the page shows a monogram.</summary>
     public Guid? IconId { get; set; }
 
     /// <summary>Operational, Degraded, Down, or NoData when bit Fabric can't read the app right now.</summary>

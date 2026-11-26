@@ -35,7 +35,13 @@ public partial class ProjectOpsHost
     public static readonly string[] Tabs = ["overview", "map", "history", "incidents", "performance", "scans", "sla", "locations", "status", "alerts", "settings"];
 
     /// <summary>The picked project, or Your app; a project the view added on the add page counts too, while the view lasts.</summary>
-    private Guid ProjectId => (World.Find(Scenario.GetSwitch(ProjectSwitch) ?? DefaultProject) ?? World.Find(DefaultProject))?.Id ?? Guid.Empty;
+    private SampleProject? Opened => World.Find(Scenario.GetSwitch(ProjectSwitch) ?? DefaultProject) ?? World.Find(DefaultProject);
+
+    /// <summary>The environment the page shows: a sample project is one environment.</summary>
+    private Guid MonitoringId => Opened?.Id ?? Guid.Empty;
+
+    /// <summary>The project that environment belongs to, as the Workbench's projects stand-in groups them.</summary>
+    private Guid ProjectId => Opened is { } opened ? opened.ProjectId ?? opened.Id : Guid.Empty;
 
     private (string Tab, string Selector)? PressedButton => Scenario.GetSwitch(PressSwitch) is { } press && Presses.TryGetValue(press, out var pressed) ? pressed : null;
 

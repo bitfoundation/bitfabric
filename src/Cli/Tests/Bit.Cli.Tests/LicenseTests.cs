@@ -410,28 +410,7 @@ public class LicenseTests
         const string firstCommit = "0123456789abcdef0123456789abcdef01234567";
         string? committedBitJson = null;
 
-        host.Runner.On("dotnet", "new bit-bp", spec =>
-        {
-            var arguments = spec.Arguments.ToList();
-            var directory = Directory.CreateDirectory(arguments[arguments.IndexOf("--output") + 1]).FullName;
-
-            NewWorkflowTests.WriteProject(directory, "Contoso");
-            File.WriteAllText(Path.Combine(directory, "bit.json"), """
-                {
-                    "template": "bit-bp",
-                    "version": "11.0.0",
-                    "name": "Contoso",
-                    "projectId": "11111111-1111-1111-1111-111111111111",
-                    "options": {
-                        "database": "Sqlite"
-                    }
-                }
-                """);
-            File.WriteAllText(Path.Combine(directory, ".mcp.json"), """{ "mcpServers": { "bitplatform": { "type": "http", "url": "https://api.bitfabric.co/docs-mcp" }, "dev-mcp-test": { "type": "http", "url": "https://test.example.com/dev-mcp" } } }""");
-            File.WriteAllText(Path.Combine(Directory.CreateDirectory(Path.Combine(directory, ".codex")).FullName, "config.toml"), "[mcp_servers.bitplatform]\nurl = \"https://api.bitfabric.co/docs-mcp?project=old\"\n");
-
-            return new ProcessResult { ExitCode = 0 };
-        });
+        GeneratesAProject(host);
         host.Runner.Executables["git"] = "git";
         host.Runner.On("git", "rev-parse", 128, "fatal: not a git repository");
         host.Runner.On("git", "rev-list --max-parents=0 HEAD", 0, firstCommit);
@@ -455,6 +434,7 @@ public class LicenseTests
         Assert.AreEqual(id.ToString("D"), trial.RootElement.GetProperty("project").GetString());
         Assert.AreEqual("Contoso", trial.RootElement.GetProperty("name").GetString());
         Assert.AreEqual(firstCommit, trial.RootElement.GetProperty("commit").GetString());
+        Assert.IsFalse(trial.RootElement.TryGetProperty("ci", out _), "Outside CI, the request names no CI.");
 
         var license = ProjectLicense.Verify(bitJson["license"]!.GetValue<string>(), [host.BitFabric.PublicKey]);
         Assert.IsNotNull(license);
@@ -495,6 +475,168 @@ public class LicenseTests
     }
 
     [TestMethod]
+    public async Task BitNewWithAProjectId_Should_GiveTheProjectThatId_InBitJsonAndTheDocsMcpAddress()
+    {
+        using var host = new TestHost(HostOs.Linux);
+        host.BitFabric.Online = true;
+        host.Services.License.PublicKeys = [host.BitFabric.PublicKey];
+        var given = Guid.Parse("5c3e1d0a-8b7f-4e2a-9d61-2f4b8a7c0e13");
+
+        GeneratesAProject(host);
+        host.Runner.Executables["git"] = "git";
+        host.Runner.On("git", "rev-parse", 128, "fatal: not a git repository");
+        host.Runner.On("git", "rev-list --max-parents=0 HEAD", 0, "0123456789abcdef0123456789abcdef01234567");
+
+        Assert.AreEqual(0, await host.RunAsync("new", "Contoso", "--template-package", NewWorkflowTests.FakeTemplatePackage(host), "--project-id", $"{given:D}", "--yes", "--no-setup", "--no-trust"), host.Output);
+
+        var directory = Path.Combine(host.WorkingDirectory, "Contoso");
+        var bitJson = JsonNode.Parse(File.ReadAllText(Path.Combine(directory, "bit.json")))!.AsObject();
+
+        Assert.AreEqual($"{given:D}", bitJson["projectId"]!.GetValue<string>());
+        StringAssert.Contains(File.ReadAllText(Path.Combine(directory, ".mcp.json")), $"https://api.bitfabric.co/docs-mcp?project={given:D}\"");
+        StringAssert.Contains(File.ReadAllText(Path.Combine(directory, ".codex", "config.toml")), $"https://api.bitfabric.co/docs-mcp?project={given:D}\"");
+        StringAssert.Contains(host.FlatOutput, $"Id {given:D}, from --project-id");
+
+        using var trial = JsonDocument.Parse(host.BitFabric.Requests.Single());
+        Assert.AreEqual($"{given:D}", trial.RootElement.GetProperty("project").GetString(), "Its trial is asked for that id, as for any other.");
+    }
+
+    [TestMethod]
+    [DataRow("not-a-guid")]
+    [DataRow("5c3e1d0a-8b7f-4e2a-9d61")]
+    [DataRow("00000000-0000-0000-0000-000000000000")]
+    [DataRow("")]
+    public async Task BitNewWithAMalformedProjectId_Should_Refuse_BeforeCreatingAnything(string given)
+    {
+        using var host = new TestHost(HostOs.Linux);
+
+        Assert.AreEqual(CliApp.ExitUsage, await host.RunAsync("new", "Contoso", "--template-package", NewWorkflowTests.FakeTemplatePackage(host), "--project-id", given, "--yes", "--no-setup", "--no-trust"), host.Output);
+        StringAssert.Contains(host.FlatOutput, "--project-id takes a project's id: a GUID such as 3f2504e0-4f89-41d3-9a0c-0305e82c3301, and not all zeros.");
+        Assert.IsFalse(host.Runner.Calls.Any(call => call.FileName is "dotnet"), "Nothing ran.");
+        Assert.IsFalse(Directory.Exists(Path.Combine(host.WorkingDirectory, "Contoso")));
+    }
+
+    /// <summary>
+    /// The trial request names the CI bit runs in, which bit Fabric only keeps out of its figures: the trial bit gets and
+    /// saves is the same in CI as outside it.
+    /// </summary>
+    [TestMethod]
+    [DataRow(null, null, null)]
+    [DataRow("GITHUB_ACTIONS", "true", "github-actions")]
+    [DataRow("TF_BUILD", "True", "azure-pipelines")]
+    [DataRow("CI", "true", "other")]
+    public async Task BitNewsTrialRequest_Should_NameTheCi_OnlyInCi(string? variable, string? value, string? ci)
+    {
+        using var host = new TestHost(HostOs.Linux, variables: variable is null ? null : new Dictionary<string, string> { [variable] = value! });
+        host.BitFabric.Online = true;
+        host.Services.License.PublicKeys = [host.BitFabric.PublicKey];
+
+        GeneratesAProject(host);
+        host.Runner.Executables["git"] = "git";
+        host.Runner.On("git", "rev-parse", 128, "fatal: not a git repository");
+        host.Runner.On("git", "rev-list --max-parents=0 HEAD", 0, "0123456789abcdef0123456789abcdef01234567");
+
+        Assert.AreEqual(0, await host.RunAsync("new", "Contoso", "--template-package", NewWorkflowTests.FakeTemplatePackage(host), "--yes", "--no-setup", "--no-trust"), host.Output);
+
+        using var trial = JsonDocument.Parse(host.BitFabric.Requests.Single());
+        Assert.AreEqual(ci, trial.RootElement.TryGetProperty("ci", out var named) ? named.GetString() : null);
+
+        var bitJson = JsonNode.Parse(File.ReadAllText(Path.Combine(host.WorkingDirectory, "Contoso", "bit.json")))!.AsObject();
+        var license = ProjectLicense.Verify(bitJson["license"]?.GetValue<string>(), [host.BitFabric.PublicKey]);
+        Assert.IsNotNull(license);
+        Assert.AreEqual("trial", license.Plan);
+        StringAssert.Contains(host.FlatOutput, "Got a trial license");
+    }
+
+    /// <summary>The check doesn't look at whether it runs in CI: a trial that has ended stops a command there too.</summary>
+    [TestMethod]
+    [DataRow(null, null)]
+    [DataRow("GITHUB_ACTIONS", "true")]
+    [DataRow("TF_BUILD", "True")]
+    [DataRow("CI", "true")]
+    public async Task ATrialThatHasEnded_Should_StopTheCommand_InCiAsOutside(string? variable, string? value)
+    {
+        if (await GitIdentity.GitAvailableAsync() is false)
+            return;
+
+        using var project = await LicensedProject.CreateAsync(now: issued.AddDays(30).AddHours(1), variables: variable is null ? null : new() { [variable] = value! });
+        project.SaveLicense(project.Sign("trial", issued, issued.AddDays(30)));
+
+        Assert.AreEqual(variable is not null, project.Host.Environment.IsCI);
+        Assert.AreEqual(CliApp.ExitFailed, await project.Host.RunAsync(aCommand), project.Host.Output);
+        StringAssert.Contains(project.Host.Output, "The project's trial has ended. Get its free license: https://bitfabric.co/license?");
+    }
+
+    /// <summary>
+    /// --project-id with the id of a project someone else made: bit Fabric answers with that project's trial, which names
+    /// that project's first commit, not this repository's, so bit doesn't keep it, and this project has no license. Putting
+    /// that trial in bit.json by hand gives nothing either.
+    /// </summary>
+    [TestMethod]
+    public async Task BitNewWithSomeoneElsesId_Should_GetNoLicense_AndItsCommandsStop()
+    {
+        if (await GitIdentity.GitAvailableAsync() is false)
+            return;
+
+        using var host = new TestHost(variables: GitIdentity.RealPath());
+        using var identity = new GitIdentity(host.Root);
+        var theirs = Guid.NewGuid();
+        var theirTrial = host.BitFabric.Sign(theirs, "0123456789abcdef0123456789abcdef01234567", "trial", DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddDays(29));
+        host.BitFabric.Online = true;
+        host.BitFabric.Trials[theirs] = theirTrial;
+        host.Services.License.PublicKeys = [host.BitFabric.PublicKey];
+
+        GeneratesAProject(host);
+        RunsGitForReal(host);
+
+        Assert.AreEqual(0, await host.RunAsync("new", "Contoso", "--template-package", NewWorkflowTests.FakeTemplatePackage(host), "--project-id", $"{theirs:D}", "--yes", "--no-setup", "--no-trust"), host.Output);
+
+        var directory = Path.Combine(host.WorkingDirectory, "Contoso");
+        var bitJsonPath = Path.Combine(directory, "bit.json");
+        var bitJson = JsonNode.Parse(File.ReadAllText(bitJsonPath))!.AsObject();
+
+        Assert.AreEqual($"{theirs:D}", bitJson["projectId"]!.GetValue<string>());
+        Assert.IsNull(bitJson["license"], "bit doesn't keep a trial that names another first commit.");
+        StringAssert.Contains(host.FlatOutput, "No trial license yet bit Fabric's answer didn't check out");
+
+        host.Services.License.ChecksCommands = true;
+
+        Assert.AreEqual(CliApp.ExitFailed, await host.RunAsync([.. aCommand, "--project", directory]), host.Output);
+        StringAssert.Contains(host.Output, $"This project has no license yet. Get one, free: https://bitfabric.co/license?project=Contoso&id={theirs:D}&commit=");
+
+        bitJson["license"] = theirTrial;
+        File.WriteAllText(bitJsonPath, bitJson.ToJsonString());
+
+        Assert.AreEqual(CliApp.ExitFailed, await host.RunAsync([.. aCommand, "--project", directory]), host.Output);
+        StringAssert.Contains(host.Output, "The license in bit.json belongs to another project. Get this project its own, free: https://bitfabric.co/license?");
+    }
+
+    /// <summary>
+    /// A demo of the template starts its repository with an empty commit that is the same in every run, and its id isn't a
+    /// secret, so anyone can make that first commit and that bit.json. Without the demo's license, that repository is a
+    /// project with no license, whose commands stop.
+    /// </summary>
+    [TestMethod]
+    public async Task AReproducedFirstCommit_WithoutTheLicense_Should_Stop()
+    {
+        if (await GitIdentity.GitAvailableAsync() is false)
+            return;
+
+        var demoId = Guid.NewGuid();
+        using var demo = await LicensedProject.CreateAsync(id: demoId, reproducibleFirstCommit: true);
+        using var reproduced = await LicensedProject.CreateAsync(id: demoId, reproducibleFirstCommit: true);
+        reproduced.Host.Services.License.PublicKeys = [demo.Host.BitFabric.PublicKey];
+
+        Assert.AreEqual(demo.FirstCommit, reproduced.FirstCommit, "Anyone can make the same first commit.");
+
+        demo.SaveLicense(demo.Sign("free", issued, issued.AddDays(365)));
+        Assert.AreEqual(CommandRan, await demo.Host.RunAsync(aCommand), demo.Host.Output);
+
+        Assert.AreEqual(CliApp.ExitFailed, await reproduced.Host.RunAsync(aCommand), reproduced.Host.Output);
+        StringAssert.Contains(reproduced.Host.Output, $"This project has no license yet. Get one, free: https://bitfabric.co/license?project=Contoso&id={demoId:D}&commit={reproduced.FirstCommit}&code=");
+    }
+
+    [TestMethod]
     [DataRow("https://api.bitfabric.co/docs-mcp", "https://api.bitfabric.co/docs-mcp?project={0}")]
     [DataRow("https://api.bitfabric.co/docs-mcp?project=x", "https://api.bitfabric.co/docs-mcp?project={0}")]
     [DataRow("https://api.bitfabric.co/docs-mcp?project=x&libraries=all", "https://api.bitfabric.co/docs-mcp?libraries=all&project={0}")]
@@ -504,6 +646,45 @@ public class LicenseTests
         var id = Guid.NewGuid();
 
         Assert.AreEqual(string.Format(System.Globalization.CultureInfo.InvariantCulture, expected, id.ToString("D")), NewProjectIdentity.WithProject(address, id));
+    }
+
+    /// <summary>
+    /// bit new's <c>dotnet new</c>, as the fake runner answers it: the project, with the template's bit.json and its id, which
+    /// bit new replaces, and the docs MCP server's address in two AI tools' settings.
+    /// </summary>
+    private static void GeneratesAProject(TestHost host)
+    {
+        host.Runner.On("dotnet", "new bit-bp", spec =>
+        {
+            var arguments = spec.Arguments.ToList();
+            var directory = Directory.CreateDirectory(arguments[arguments.IndexOf("--output") + 1]).FullName;
+
+            NewWorkflowTests.WriteProject(directory, "Contoso");
+            File.WriteAllText(Path.Combine(directory, "bit.json"), """
+                {
+                    "template": "bit-bp",
+                    "version": "11.0.0",
+                    "name": "Contoso",
+                    "projectId": "11111111-1111-1111-1111-111111111111",
+                    "options": {
+                        "database": "Sqlite"
+                    }
+                }
+                """);
+            File.WriteAllText(Path.Combine(directory, ".mcp.json"), """{ "mcpServers": { "bitplatform": { "type": "http", "url": "https://api.bitfabric.co/docs-mcp" }, "dev-mcp-test": { "type": "http", "url": "https://test.example.com/dev-mcp" } } }""");
+            File.WriteAllText(Path.Combine(Directory.CreateDirectory(Path.Combine(directory, ".codex")).FullName, "config.toml"), "[mcp_servers.bitplatform]\nurl = \"https://api.bitfabric.co/docs-mcp?project=old\"\n");
+
+            return new ProcessResult { ExitCode = 0 };
+        });
+    }
+
+    /// <summary>The fake runner runs git for real, so bit new makes a real repository, whose first commit the check looks for.</summary>
+    private static void RunsGitForReal(TestHost host)
+    {
+        var git = new ProcessRunner(host.Environment, CliLog.None);
+
+        host.Runner.Executables["git"] = "git";
+        host.Runner.OnAsync("git", "", git.RunAsync);
     }
 
     /// <summary>A git repository with a first commit, a bit.json with the project's id, and bit checking its license.</summary>
@@ -530,11 +711,35 @@ public class LicenseTests
 
         public string FirstCommit { get; private set; } = "";
 
-        public static async Task<LicensedProject> CreateAsync(Guid? id = null, DateTimeOffset? now = null, IPrompter? prompter = null, Dictionary<string, string>? variables = null)
+        /// <param name="reproducibleFirstCommit">
+        /// Starts the history with an empty commit that is the same in every repository it's made in, as the template's demo
+        /// workflows do (See .github/actions/new-demo-project), with the project's files in the second commit.
+        /// </param>
+        public static async Task<LicensedProject> CreateAsync(Guid? id = null, DateTimeOffset? now = null, IPrompter? prompter = null, Dictionary<string, string>? variables = null, bool reproducibleFirstCommit = false)
         {
             var project = Start(now, prompter, variables);
 
             await project.GitAsync("init", "-q", "-b", "main");
+
+            if (reproducibleFirstCommit)
+            {
+                await project.runner.RunAsync(new ProcessSpec
+                {
+                    FileName = "git",
+                    Arguments = ["commit", "-q", "--allow-empty", "-m", "The demo's root"],
+                    WorkingDirectory = project.Directory,
+                    Environment = new Dictionary<string, string?>
+                    {
+                        ["GIT_AUTHOR_NAME"] = "bit Fabric",
+                        ["GIT_AUTHOR_EMAIL"] = "noreply@bitfabric.co",
+                        ["GIT_AUTHOR_DATE"] = "2026-11-26T00:00:00Z",
+                        ["GIT_COMMITTER_NAME"] = "bit Fabric",
+                        ["GIT_COMMITTER_EMAIL"] = "noreply@bitfabric.co",
+                        ["GIT_COMMITTER_DATE"] = "2026-11-26T00:00:00Z"
+                    }
+                });
+            }
+
             File.WriteAllText(project.BitJsonPath, $$"""
                 {
                     "template": "bit-bp",

@@ -17,7 +17,7 @@ public class ProjectScansTabTests
     [TestMethod]
     public async Task TheScansTab_Should_RankWhatToFix_UrgentFirst_AndSendAWrongFindingsReport()
     {
-        var projectId = Guid.NewGuid();
+        var monitoringId = Guid.NewGuid();
         var now = DateTimeOffset.UtcNow;
 
         ProjectScanFindingDto hangfire = new() { Id = Guid.NewGuid(), Key = ScanFindings.HangfireOpen, Severity = ScanFindingSeverity.Urgent, Where = ["https://api.bluebird.app/hangfire"] };
@@ -26,28 +26,28 @@ public class ProjectScansTabTests
 
         ProjectScansDto scans = new()
         {
-            ProjectId = projectId,
+            MonitoringId = monitoringId,
             Address = "https://bluebird.app",
             Latest =
             [
-                Scan(projectId, ProjectScanKind.Security, now, verdict: ProjectScanVerdict.Poor, score: 20, grade: "F", findings: [hangfire, csp], trigger: ProjectScanTrigger.Deployment, version: "1.0.2+cccc333aa"),
-                Scan(projectId, ProjectScanKind.Seo, now, verdict: ProjectScanVerdict.Good, score: 82, findings: [images]),
-                Scan(projectId, ProjectScanKind.DomainAndCertificate, now, verdict: ProjectScanVerdict.Good, expiresAt: now.AddDays(61.5))
+                Scan(monitoringId, ProjectScanKind.Security, now, verdict: ProjectScanVerdict.Poor, score: 20, grade: "F", findings: [hangfire, csp], trigger: ProjectScanTrigger.Deployment, version: "1.0.2+cccc333aa"),
+                Scan(monitoringId, ProjectScanKind.Seo, now, verdict: ProjectScanVerdict.Good, score: 82, findings: [images]),
+                Scan(monitoringId, ProjectScanKind.DomainAndCertificate, now, verdict: ProjectScanVerdict.Good, expiresAt: now.AddDays(61.5))
             ],
-            Settings = new() { ProjectId = projectId, WeeklyScans = true }
+            Settings = new() { MonitoringId = monitoringId, WeeklyScans = true }
         };
 
         var controller = A.Fake<IProjectScansController>();
-        A.CallTo(() => controller.GetScans(projectId, A<CancellationToken>._)).Returns(scans);
+        A.CallTo(() => controller.GetScans(monitoringId, A<CancellationToken>._)).Returns(scans);
         A.CallTo(() => controller.GetHistory(A<ProjectScanHistoryRequestDto>._, A<CancellationToken>._))
-         .Returns([Scan(projectId, ProjectScanKind.Security, now.AddDays(-7), verdict: ProjectScanVerdict.NeedsWork, score: 70, grade: "B", trigger: ProjectScanTrigger.Weekly)]);
+         .Returns([Scan(monitoringId, ProjectScanKind.Security, now.AddDays(-7), verdict: ProjectScanVerdict.NeedsWork, score: 70, grade: "B", trigger: ProjectScanTrigger.Weekly)]);
 
         // In place of the app's client of the api, before the context's services are first read.
         await using var server = new AppTestServer();
         await server.Build(configureTestWebAppServices: services => services.Replace(ServiceDescriptor.Singleton(controller))).Start(TestContext.CancellationToken);
         await using var ctx = server.CreateBunitContext();
 
-        var cut = ctx.Render<ProjectScans>(parameters => parameters.Add(p => p.ProjectId, projectId));
+        var cut = ctx.Render<ProjectScans>(parameters => parameters.Add(p => p.MonitoringId, monitoringId));
 
         cut.WaitForAssertion(() => Assert.Contains("Domain and certificate", cut.Markup));
 
@@ -86,12 +86,12 @@ public class ProjectScansTabTests
     [TestMethod]
     public async Task ThePerformanceCard_Should_ShowTheCoreWebVitals_OfEachPageAndDevice()
     {
-        var projectId = Guid.NewGuid();
+        var monitoringId = Guid.NewGuid();
         var now = DateTimeOffset.UtcNow;
 
         ProjectScanFindingDto lcp = new() { Id = Guid.NewGuid(), Key = ScanFindings.LcpSlow, Severity = ScanFindingSeverity.Important, Parameters = ["4.5"], Where = ["/en-US/"] };
 
-        var performance = Scan(projectId, ProjectScanKind.Performance, now, verdict: ProjectScanVerdict.NeedsWork, score: 54, findings: [lcp]);
+        var performance = Scan(monitoringId, ProjectScanKind.Performance, now, verdict: ProjectScanVerdict.NeedsWork, score: 54, findings: [lcp]);
         performance.Pages =
         [
             new() { Path = "/en-US/", Device = ProjectScanDevice.Phone, Score = 54, LargestContentfulPaintMs = 4475, CumulativeLayoutShift = 0.001, TotalBlockingTimeMs = 450, FirstContentfulPaintMs = 1409, TimeToFirstByteMs = 659 },
@@ -100,12 +100,12 @@ public class ProjectScansTabTests
         ];
 
         var controller = A.Fake<IProjectScansController>();
-        A.CallTo(() => controller.GetScans(projectId, A<CancellationToken>._)).Returns(new ProjectScansDto
+        A.CallTo(() => controller.GetScans(monitoringId, A<CancellationToken>._)).Returns(new ProjectScansDto
         {
-            ProjectId = projectId,
+            MonitoringId = monitoringId,
             Address = "https://bluebird.app",
-            Latest = [performance, Scan(projectId, ProjectScanKind.Accessibility, now, verdict: ProjectScanVerdict.Good, score: 96)],
-            Settings = new() { ProjectId = projectId, WeeklyScans = true }
+            Latest = [performance, Scan(monitoringId, ProjectScanKind.Accessibility, now, verdict: ProjectScanVerdict.Good, score: 96)],
+            Settings = new() { MonitoringId = monitoringId, WeeklyScans = true }
         });
         A.CallTo(() => controller.GetHistory(A<ProjectScanHistoryRequestDto>._, A<CancellationToken>._)).Returns([]);
 
@@ -113,7 +113,7 @@ public class ProjectScansTabTests
         await server.Build(configureTestWebAppServices: services => services.Replace(ServiceDescriptor.Singleton(controller))).Start(TestContext.CancellationToken);
         await using var ctx = server.CreateBunitContext();
 
-        var cut = ctx.Render<ProjectScans>(parameters => parameters.Add(p => p.ProjectId, projectId));
+        var cut = ctx.Render<ProjectScans>(parameters => parameters.Add(p => p.MonitoringId, monitoringId));
 
         cut.WaitForAssertion(() => Assert.Contains("Core Web Vitals", cut.Markup));
 
@@ -135,7 +135,7 @@ public class ProjectScansTabTests
         Assert.Contains("The same pages, checked with axe-core", markup, "Accessibility's card says what it checks.");
     }
 
-    private static ProjectScanDto Scan(Guid projectId, ProjectScanKind kind, DateTimeOffset finishedAt, ProjectScanVerdict verdict, int? score = null, string? grade = null,
+    private static ProjectScanDto Scan(Guid monitoringId, ProjectScanKind kind, DateTimeOffset finishedAt, ProjectScanVerdict verdict, int? score = null, string? grade = null,
                                        DateTimeOffset? expiresAt = null, ProjectScanFindingDto[]? findings = null, ProjectScanTrigger trigger = ProjectScanTrigger.Weekly, string? version = null)
     {
         findings ??= [];
@@ -143,7 +143,7 @@ public class ProjectScansTabTests
         return new()
         {
             Id = Guid.NewGuid(),
-            ProjectId = projectId,
+            MonitoringId = monitoringId,
             Kind = kind,
             Trigger = trigger,
             ApplicationVersion = version,

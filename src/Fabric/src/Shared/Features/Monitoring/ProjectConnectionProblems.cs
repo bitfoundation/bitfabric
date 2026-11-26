@@ -1,7 +1,7 @@
 namespace Bit.Fabric.Shared.Features.Monitoring;
 
 /// <summary>
-/// Why bit Fabric can't read a project anymore (ProjectDto.ConnectionProblem). The probe stores a stable code, with what
+/// Why bit Fabric can't read a project anymore (MonitoringDto.ConnectionProblem). The probe stores a stable code, with what
 /// the app said when it said something, and every reader gets it in their own language at read time: the card, the
 /// project's page, an alert and an AI agent alike. A reason stored before the codes, an English sentence, reads as it was
 /// written until the next round stores its code.

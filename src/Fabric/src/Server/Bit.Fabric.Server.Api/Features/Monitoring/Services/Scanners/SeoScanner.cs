@@ -22,7 +22,7 @@ public partial class SeoScanner(ScanHttp http, SitemapReader sitemapReader, ILog
 
     public ProjectScanKind Kind => ProjectScanKind.Seo;
 
-    public async Task<ProjectScanResult> Scan(Project project, ProjectScan scan, CancellationToken cancellationToken)
+    public async Task<ProjectScanResult> Scan(ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken)
     {
         var home = await http.Get($"{project.Address}/", cancellationToken, followRedirects: true);
 
@@ -50,7 +50,7 @@ public partial class SeoScanner(ScanHttp http, SitemapReader sitemapReader, ILog
             }
             catch (Exception exp) when (exp is not OperationCanceledException)
             {
-                logger.LogWarning(exp, "Reading {Url} of project {ProjectId} failed.", url, project.Id);
+                logger.LogWarning(exp, "Reading {Url} of project {MonitoringId} failed.", url, project.Id);
             }
         }
 

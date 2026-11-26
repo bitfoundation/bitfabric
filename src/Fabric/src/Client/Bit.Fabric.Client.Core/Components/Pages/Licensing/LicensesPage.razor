@@ -1,0 +1,75 @@
+@attribute [Route(PageUrls.Licenses)]
+@attribute [Route("{culture?}" + PageUrls.Licenses)]
+@attribute [Authorize]
+@inherits AppPageBase
+
+<AppPageData Title="@Localizer[nameof(AppStrings.Licenses)]" PageTitle="@Localizer[nameof(AppStrings.LicensesYourTeams)]" />
+
+<section class="licenses-page">
+    <div class="back">
+        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BackIcon" Href="@PageUrls.Projects">@Localizer[nameof(AppStrings.MonitoringProjects)]</BitButton>
+    </div>
+
+    <header class="head">
+        <BitText Typography="BitTypography.H5" Element="h1">@Localizer[nameof(AppStrings.LicensesYourTeams)]</BitText>
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.LicensesEveryLicenseHelp)]</BitText>
+    </header>
+
+    @if (isLoading)
+    {
+        <div class="list" aria-busy="true">
+            @for (var i = 0; i < 3; i++)
+            {
+                <BitShimmer Height="6rem" Radius="0.75rem" Label="@(i is 0 ? Localizer[nameof(AppStrings.LicensesLoading)] : null)" />
+            }
+        </div>
+    }
+    else if (licenses.Count is 0)
+    {
+        <section class="empty" aria-labelledby="empty-title">
+            <span class="empty-mark" aria-hidden="true"><BitIcon IconName="@BitIconName.Certificate" Size="BitSize.Large" /></span>
+            <BitText Typography="BitTypography.H6" Element="h2" Id="empty-title">@Localizer[nameof(AppStrings.LicensesNoneYet)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.LicensesHowToGetOne)]</BitText>
+        </section>
+    }
+    else
+    {
+        @foreach (var team in licenses.GroupBy(license => license.TeamId))
+        {
+            <section class="team" aria-labelledby="@($"team-{team.Key:N}")">
+                <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="@($"team-{team.Key:N}")" Class="team-title">
+                    <BitIcon IconName="@BitIconName.People" Size="BitSize.Small" Color="BitColor.SecondaryForeground" />
+                    @team.First().TeamTitle
+                </BitText>
+                <ul class="list">
+                    @foreach (var license in team)
+                    {
+                        <li @key="license.Id" class="license">
+                            <div class="license-head">
+                                <BitText Typography="BitTypography.Subtitle2" Element="span" Class="license-project">@license.ProjectName</BitText>
+                                <ProjectLicenseTag License="@AsProjectLicense(license)" />
+                            </div>
+                            <dl class="facts">
+                                <div><dt>@Localizer[nameof(AppStrings.LicensesIssued)]</dt><dd>@Day(license.IssuedOn)</dd></div>
+                                <div><dt>@Localizer[nameof(AppStrings.LicensesUntil)]</dt><dd>@Day(license.ExpiresOn)</dd></div>
+                                @if (license.IssuedBy is { } by)
+                                {
+                                    <div><dt>@Localizer[nameof(AppStrings.LicensesGotBy)]</dt><dd>@by</dd></div>
+                                }
+                                <div><dt>@Localizer[nameof(AppStrings.LicenseFirstCommit)]</dt><dd><bdi class="mono">@license.FirstCommit?[..Math.Min(12, license.FirstCommit.Length)]</bdi></dd></div>
+                            </dl>
+                            <div class="actions">
+                                <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@(copied == license.Id ? BitIconName.CheckMark : BitIconName.Copy)"
+                                           OnClick="WrapHandled(() => CopyPrompt(license))">
+                                    @(copied == license.Id ? Localizer[nameof(AppStrings.Copied)] : Localizer[nameof(AppStrings.MonitoringScanCopyPrompt)])
+                                </BitButton>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </section>
+        }
+    }
+
+    <PrivacyLine />
+</section>

@@ -24,6 +24,9 @@ public sealed record NewRequest
 
     public string? TemplatePackage { get; init; }
 
+    /// <summary>The id <c>--project-id</c> gives the project in place of a new one, as typed; NewWorkflow checks it.</summary>
+    public string? ProjectId { get; init; }
+
     public bool Yes { get; init; }
 
     public bool NonInteractive { get; init; }
@@ -84,6 +87,7 @@ public static class NewCommand
         ideOption.AcceptOnlyFromAmong("code", "vs", "rider", "none");
         var templateVersionOption = new Option<string?>("--template-version") { Description = "The bit Boilerplate version to use. Default: the same as this CLI." };
         var templatePackageOption = new Option<string?>("--template-package") { Description = "Create the project from a local Bit.Boilerplate .nupkg, or from the template's folder in a bitfabric checkout, the way its CI does." };
+        var projectIdOption = new Option<string?>("--project-id") { Description = "Give the project this id instead of a new one, for a project made again on every run that keeps one identity, such as a demo deployed from the template. Its license still has to be one issued for this id and the project's first commit.", HelpName = "guid" };
         var dryRunOption = new Option<bool>("--dry-run") { Description = "Show what would happen, and change nothing." };
         var noSetup = new Option<bool>("--no-setup") { Description = "Only create the project: no tools, workloads, restore or build. Run bit setup in its folder later." };
         var noCertificate = new Option<bool>("--no-certificate") { Description = "Keep the template's shared development certificate and web push keys." };
@@ -102,6 +106,7 @@ public static class NewCommand
             ideOption,
             templateVersionOption,
             templatePackageOption,
+            projectIdOption,
             dryRunOption,
             noSetup,
             noCertificate,
@@ -164,6 +169,7 @@ public static class NewCommand
                 Ide = parseResult.GetValue(ideOption),
                 TemplateVersion = parseResult.GetValue(templateVersionOption),
                 TemplatePackage = parseResult.GetValue(templatePackageOption),
+                ProjectId = parseResult.GetValue(projectIdOption),
                 Yes = parseResult.GetValue(shared.Yes),
                 NonInteractive = parseResult.GetValue(shared.NonInteractive),
                 DryRun = parseResult.GetValue(dryRunOption),

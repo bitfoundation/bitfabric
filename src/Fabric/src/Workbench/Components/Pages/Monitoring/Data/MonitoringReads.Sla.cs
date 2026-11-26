@@ -32,7 +32,7 @@ public static partial class MonitoringReads
 
         return new()
         {
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             ProjectName = project.Name,
             Address = project.Address,
             TimeZoneId = project.TimeZoneId,

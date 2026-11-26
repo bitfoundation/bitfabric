@@ -16,10 +16,10 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
     [AutoInject] private CloudflareCustomHostnames customHostnames = default!;
     [AutoInject] private ServerApiSettings settings = default!;
 
-    [HttpGet("{projectId}")]
-    public async Task<StatusPageSettingsDto> GetStatusPage(Guid projectId, CancellationToken cancellationToken)
+    [HttpGet("{monitoringId}")]
+    public async Task<StatusPageSettingsDto> GetStatusPage(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await FindProject(projectId, cancellationToken);
+        var project = await FindProject(monitoringId, cancellationToken);
         var page = await statusPages.Ensure(project, cancellationToken);
 
         return await ToSettings(page, cancellationToken);
@@ -28,7 +28,7 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
     [HttpPost]
     public async Task<StatusPageSettingsDto> SaveStatusPage(StatusPageSettingsDto request, CancellationToken cancellationToken)
     {
-        var project = await FindProject(request.ProjectId, cancellationToken);
+        var project = await FindProject(request.MonitoringId, cancellationToken);
         var page = await statusPages.Ensure(project, cancellationToken);
 
         var slug = request.Slug?.Trim().ToLowerInvariant();
@@ -84,7 +84,7 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
     [HttpPost]
     public async Task<StatusPageSettingsDto> ConnectCustomHostname(ConnectCustomHostnameRequestDto request, CancellationToken cancellationToken)
     {
-        var project = await FindProject(request.ProjectId, cancellationToken);
+        var project = await FindProject(request.MonitoringId, cancellationToken);
         var page = await statusPages.Ensure(project, cancellationToken);
 
         if (customHostnames.IsConfigured is false)
@@ -112,10 +112,10 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
         return await ToSettings(page, cancellationToken);
     }
 
-    [HttpPost("{projectId}")]
-    public async Task<StatusPageSettingsDto> RefreshCustomHostname(Guid projectId, CancellationToken cancellationToken)
+    [HttpPost("{monitoringId}")]
+    public async Task<StatusPageSettingsDto> RefreshCustomHostname(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await FindProject(projectId, cancellationToken);
+        var project = await FindProject(monitoringId, cancellationToken);
         var page = await statusPages.Ensure(project, cancellationToken);
 
         if (page.CustomHostnameId is { } id && customHostnames.IsConfigured)
@@ -127,10 +127,10 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
         return await ToSettings(page, cancellationToken);
     }
 
-    [HttpPost("{projectId}")]
-    public async Task<StatusPageSettingsDto> DisconnectCustomHostname(Guid projectId, CancellationToken cancellationToken)
+    [HttpPost("{monitoringId}")]
+    public async Task<StatusPageSettingsDto> DisconnectCustomHostname(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var project = await FindProject(projectId, cancellationToken);
+        var project = await FindProject(monitoringId, cancellationToken);
         var page = await statusPages.Ensure(project, cancellationToken);
 
         if (page.CustomHostnameId is { } id && customHostnames.IsConfigured)
@@ -147,7 +147,7 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
     [HttpPost]
     public async Task<ProjectIncidentDto> Post(StatusPostRequestDto request, CancellationToken cancellationToken)
     {
-        var project = await FindProject(request.ProjectId, cancellationToken);
+        var project = await FindProject(request.MonitoringId, cancellationToken);
         var page = await statusPages.Ensure(project, cancellationToken);
         var now = TimeProvider.GetUtcNow();
         var author = User.GetDisplayName();
@@ -160,7 +160,7 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
 
         if (request.IncidentId is { } incidentId)
         {
-            incident = await DbContext.ProjectIncidents.FirstOrDefaultAsync(incident => incident.Id == incidentId && incident.ProjectId == project.Id, cancellationToken)
+            incident = await DbContext.ProjectIncidents.FirstOrDefaultAsync(incident => incident.Id == incidentId && incident.MonitoringId == project.Id, cancellationToken)
                 ?? throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
             if (incident.IsAutomatic && request.Phase is ProjectIncidentPhase.Resolved)
@@ -184,7 +184,7 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
             incident = new()
             {
                 Id = Guid.CreateSequentialGuid(),
-                ProjectId = project.Id,
+                MonitoringId = project.Id,
                 TenantId = project.TenantId,
                 Kind = request.Kind,
                 Impact = isAnnouncement ? ProjectHealth.Operational : request.Impact is ProjectHealth.Down ? ProjectHealth.Down : ProjectHealth.Degraded,
@@ -242,20 +242,20 @@ public partial class StatusPagesController : AppControllerBase, IStatusPagesCont
         return drafts;
     }
 
-    private async Task<Project> FindProject(Guid projectId, CancellationToken cancellationToken)
-        => await DbContext.Projects.FirstOrDefaultAsync(project => project.Id == projectId, cancellationToken)
+    private async Task<ProjectMonitoring> FindProject(Guid monitoringId, CancellationToken cancellationToken)
+        => await DbContext.Monitorings.FirstOrDefaultAsync(project => project.Id == monitoringId, cancellationToken)
            ?? throw new ResourceNotFoundException(Localizer[nameof(AppStrings.ResourceNotFoundException)]);
 
     private async Task<StatusPageSettingsDto> ToSettings(StatusPage page, CancellationToken cancellationToken)
     {
         var lastReport = await DbContext.ProjectProbes.AsNoTracking()
-            .Where(probe => probe.ProjectId == page.ProjectId && probe.Outcome == ProjectProbeOutcome.Read)
+            .Where(probe => probe.MonitoringId == page.MonitoringId && probe.Outcome == ProjectProbeOutcome.Read)
             .OrderByDescending(probe => probe.At)
             .FirstOrDefaultAsync(cancellationToken);
 
         return new()
         {
-            ProjectId = page.ProjectId,
+            MonitoringId = page.MonitoringId,
             Slug = page.Slug,
             IsPublished = page.IsPublished,
             ShowsResponseTime = page.ShowsResponseTime,

@@ -1,0 +1,37 @@
+@inherits AppComponentBase
+
+@* Who works on the project (bitfabric-internal/specs/monitoring.md, Members are who works on it): every member of the team
+   still sees it. *@
+<section class="panel" aria-labelledby="members-title">
+    <BitText Typography="BitTypography.Subtitle1" Element="h3" Id="members-title">@Localizer[nameof(AppStrings.MonitoringItsPeople)]</BitText>
+    <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringItsPeopleHelp)]</BitText>
+
+    @if (people is null)
+    {
+        <BitShimmer Height="4rem" Radius="0.5rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingItsPeople)]" />
+    }
+    else
+    {
+        <ul class="people">
+            @foreach (var person in people)
+            {
+                <li @key="person.UserId" class="@(person.IsMember ? "person" : "person not-member")">
+                    <BitPersona PrimaryText="@person.Name" Size="BitPersonaSize.Size32" ShowSecondaryText
+                                SecondaryText="@(person.IsMember ? (person.AlertRouteCount > 0 ? Localizer[nameof(AppStrings.MonitoringGetsItsAlerts)] : Localizer[nameof(AppStrings.MonitoringWorksOnIt)]) : Localizer[nameof(AppStrings.MonitoringInTheTeam)])" />
+                    @if (person.IsMember)
+                    {
+                        <BitButton Variant="BitVariant.Text" Size="BitSize.Small" Color="BitColor.Error" IconName="@BitIconName.PeopleBlock"
+                                   Loading="@(busy == person.UserId)" OnClick="WrapHandled(() => Remove(person))"
+                                   AriaDescription="@person.Name">@Localizer[nameof(AppStrings.MonitoringTakeOff)]</BitButton>
+                    }
+                    else
+                    {
+                        <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.AddFriend"
+                                   Loading="@(busy == person.UserId)" OnClick="WrapHandled(() => Add(person))"
+                                   AriaDescription="@person.Name">@Localizer[nameof(AppStrings.Add)]</BitButton>
+                    }
+                </li>
+            }
+        </ul>
+    }
+</section>

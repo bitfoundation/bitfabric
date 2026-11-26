@@ -4,14 +4,14 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring.Models;
 
 /// <summary>
 /// What a project's owner promises their customers and how bit Fabric counts it (bitfabric-internal/specs/monitoring.md,
-/// SLA reports): a row of its own rather than columns of <see cref="Project"/>, whose version every round moves on. A
+/// SLA reports): a row of its own rather than columns of <see cref="ProjectMonitoring"/>, whose version every round moves on. A
 /// project without one counts with the defaults (See ProjectSlaSettingsDto).
 /// </summary>
 public partial class ProjectSlaSettings : ITenantAware
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
-    public Project? Project { get; set; }
+    public ProjectMonitoring? Monitoring { get; set; }
 
     public Guid TenantId { get; set; }
 

@@ -1,7 +1,7 @@
 @inherits AppComponentBase
 
 <article class="@($"project-card {Tone}")" aria-labelledby="@($"project-{Project.Id:N}")">
-    <a class="card-link" href="@($"{PageUrls.Projects}/{Project.Id}")" aria-labelledby="@($"project-{Project.Id:N}")"></a>
+    <a class="card-link" href="@PageUrls.ProjectEnvironment(Project.ProjectId, Project.Id)" aria-labelledby="@($"project-{Project.Id:N}")"></a>
 
     <header class="card-head">
         @if (IconUrl is { } iconUrl)
@@ -15,11 +15,31 @@
             <span class="monogram" aria-hidden="true">@Monogram</span>
         }
         <span class="card-title">
-            <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="@($"project-{Project.Id:N}")">@Project.Name</BitText>
+            <BitText Typography="BitTypography.Subtitle1" Element="h2" Id="@($"project-{Project.Id:N}")">@(Parent?.Name ?? Project.Name)</BitText>
             <BitText Typography="BitTypography.Caption1" Foreground="BitColorKind.Secondary" Class="ltr app-latin-digits">@Host</BitText>
         </span>
         <BitTag Size="BitSize.Small" Variant="BitVariant.Fill" Color="@StateColor" IconName="@StateIcon" Text="@StateText" />
     </header>
+
+    @if (Parent is { } parent)
+    {
+        @* The project's license, and its other environments, each with its health, above the link that covers the card. *@
+        <div class="project-line">
+            <ProjectLicenseTag License="parent.License" />
+            @if (parent.Monitorings.Count > 1)
+            {
+                <span class="environments">
+                    @foreach (var environment in parent.Monitorings)
+                    {
+                        <BitTag @key="environment.Id" Size="BitSize.Small" Shape="BitShape.Pill" Variant="@(environment.Id == Project.Id ? BitVariant.Outline : BitVariant.Text)"
+                                Href="@PageUrls.ProjectEnvironment(environment.ProjectId, environment.Id)" Text="@environment.Environment" Class="@EnvironmentTone(environment)">
+                            <PrefixTemplate><span class="environment-dot" aria-hidden="true"></span></PrefixTemplate>
+                        </BitTag>
+                    }
+                </span>
+            }
+        </div>
+    }
 
     @if (Project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected)
     {

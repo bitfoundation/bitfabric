@@ -18,29 +18,29 @@ public partial class ProjectProbeJobRunner
     [DisableConcurrentExecution(timeoutInSeconds: 50), AutomaticRetry(Attempts = 0)]
     public async Task ProbeAll(CancellationToken cancellationToken)
     {
-        var projectIds = await dbContext.Projects.IgnoreQueryFilters()
+        var monitoringIds = await dbContext.Monitorings.IgnoreQueryFilters()
                                                  .Where(project => project.ConnectionStatus != ProjectConnectionStatus.ReconnectNeeded && project.ConnectionStatus != ProjectConnectionStatus.Disconnected)
                                                  .Select(project => project.Id)
                                                  .ToListAsync(cancellationToken);
 
         using var slots = new SemaphoreSlim(settings.Monitoring.Parallelism);
 
-        await Task.WhenAll(projectIds.Select(async projectId =>
+        await Task.WhenAll(monitoringIds.Select(async monitoringId =>
         {
             // Each project at its own moment of the minute; the slot is taken only then, so a project waiting for its
             // moment doesn't hold one.
-            await Task.Delay(OffsetOf(projectId, settings.Monitoring.RoundSpread), timeProvider, cancellationToken);
+            await Task.Delay(OffsetOf(monitoringId, settings.Monitoring.RoundSpread), timeProvider, cancellationToken);
             await slots.WaitAsync(cancellationToken);
 
             try
             {
                 // A DbContext per project: they run side by side, and one project's failure stays its own.
                 await using var scope = serviceScopeFactory.CreateAsyncScope();
-                await scope.ServiceProvider.GetRequiredService<ProjectProber>().ProbeUnlessUnderway(projectId, cancellationToken);
+                await scope.ServiceProvider.GetRequiredService<ProjectProber>().ProbeUnlessUnderway(monitoringId, cancellationToken);
             }
             catch (Exception exp) when (exp is not OperationCanceledException)
             {
-                logger.LogError(exp, "Checking project {ProjectId} failed.", projectId);
+                logger.LogError(exp, "Checking project {MonitoringId} failed.", monitoringId);
             }
             finally
             {
@@ -54,8 +54,8 @@ public partial class ProjectProbeJobRunner
     /// every minute and on every instance, and the projects of one host, or of Test and Production, fall apart. A Guid's
     /// hash is made from its bytes, the same in every process.
     /// </summary>
-    public static TimeSpan OffsetOf(Guid projectId, TimeSpan spread)
-        => spread <= TimeSpan.Zero ? TimeSpan.Zero : TimeSpan.FromMilliseconds((uint)projectId.GetHashCode() % (ulong)spread.TotalMilliseconds);
+    public static TimeSpan OffsetOf(Guid monitoringId, TimeSpan spread)
+        => spread <= TimeSpan.Zero ? TimeSpan.Zero : TimeSpan.FromMilliseconds((uint)monitoringId.GetHashCode() % (ulong)spread.TotalMilliseconds);
 }
 
 /// <summary>

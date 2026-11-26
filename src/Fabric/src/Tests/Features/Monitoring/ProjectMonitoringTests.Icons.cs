@@ -33,10 +33,10 @@ public partial class ProjectMonitoringTests
 
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
-        var first = (await projects.GetProjects(null, TestContext.CancellationToken)).Single().IconId;
+        var first = (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().IconId;
         Assert.IsNotNull(first, "Read on the first round.");
 
         // Anonymous, as the public status page and a browser's img ask for it.
@@ -58,7 +58,7 @@ public partial class ProjectMonitoringTests
 
         // A round within the day reads nothing again.
         await ProbeAt(server, project.Id, DateTimeOffset.UtcNow.AddHours(1));
-        Assert.AreEqual(first, (await projects.GetProjects(null, TestContext.CancellationToken)).Single().IconId);
+        Assert.AreEqual(first, (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().IconId);
 
         // A deployment with a new icon.
         customerApp.Files["/images/icons/icon-512.png"] = (Png(512, Navy), "image/png");
@@ -66,7 +66,7 @@ public partial class ProjectMonitoringTests
         customerApp.Report.StartedAt = DateTimeOffset.UtcNow.AddHours(2);
         await ProbeAt(server, project.Id, DateTimeOffset.UtcNow.AddHours(2).AddMinutes(1));
 
-        var second = (await projects.GetProjects(null, TestContext.CancellationToken)).Single().IconId;
+        var second = (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().IconId;
         Assert.IsNotNull(second);
         Assert.AreNotEqual(first, second, "A new icon is a new address, which no cache has seen.");
         using (var gone = await Get(first.Value))
@@ -80,7 +80,7 @@ public partial class ProjectMonitoringTests
         customerApp.Report.StartedAt = DateTimeOffset.UtcNow.AddHours(4);
         await ProbeAt(server, project.Id, DateTimeOffset.UtcNow.AddHours(4).AddMinutes(1));
 
-        Assert.IsNull((await projects.GetProjects(null, TestContext.CancellationToken)).Single().IconId, "The card goes back to the monogram.");
+        Assert.IsNull((await projects.GetMonitorings(null, TestContext.CancellationToken)).Single().IconId, "The card goes back to the monogram.");
     }
 
     /// <summary>Within 5% on each channel, as a lossy WebP keeps a color only about.</summary>

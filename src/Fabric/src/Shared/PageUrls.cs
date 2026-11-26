@@ -169,6 +169,9 @@ public static partial class PageUrls
     [Description("Run this deployment: the status of every dependency it relies on, and its background jobs. Requires sign-in.")]
     public const string Operations = "/operations";
 
+    [Description("Projects, Trials and Licenses over time, every team's together, as totals only. Requires sign-in.")]
+    public const string Growth = "/growth";
+
     /// <summary>
     /// Signed out, it only says what signing in gives (bitfabric-internal/specs/monitoring.md), so it isn't in the sitemap
     /// (bitfabric-internal/specs/home-page.md, 2026-11-19).
@@ -177,8 +180,19 @@ public static partial class PageUrls
     [NotInSitemap]
     public const string Projects = "/projects";
 
+    /// <summary>
+    /// One environment of a project, such as its Test deployment: <c>/projects/{projectId}/{monitoringId}</c>, where alerts,
+    /// emails and the project switcher lead. <c>/projects/{projectId}</c> alone opens its Production environment, or its first.
+    /// </summary>
+    public static string ProjectEnvironment(Guid projectId, Guid monitoringId) => $"{Projects}/{projectId}/{monitoringId}";
+
     [Description("Add an app to watch: its address, then an approval in the app's own sign-in page. Requires sign-in.")]
     public const string AddProject = "/projects/add";
+
+    /// <summary>Every license of each team the signed-in account is in (bitfabric-internal/specs/product.md, Seeing licenses).</summary>
+    [Description("The licenses your teams hold for their projects: until when each lasts, and the prompt that puts one into its project. Requires sign-in.")]
+    [NotInSitemap]
+    public const string Licenses = "/licenses";
 
     /// <summary>
     /// The add page with an approval's answer, which web-interop-app.html opens when no add page waits for it, such as

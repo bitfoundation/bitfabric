@@ -47,6 +47,16 @@ public sealed partial class NewWorkflow(CliServices cli)
         if (ProjectName.Validate(name, typeNames, namespaceNames) is { } nameError)
             return cli.UsageError("name-invalid", $"{nameError} Try: bit new {ProjectName.Suggest(name, typeNames, namespaceNames)}");
 
+        Guid? projectId = null;
+
+        if (request.ProjectId is { } givenId)
+        {
+            if (Guid.TryParse(givenId.Trim(), out var parsedId) is false || parsedId == Guid.Empty)
+                return cli.UsageError("project-id-invalid", "--project-id takes a project's id: a GUID such as 3f2504e0-4f89-41d3-9a0c-0305e82c3301, and not all zeros.");
+
+            projectId = parsedId;
+        }
+
         if (request.GitHubRepo && request.NoGit)
             return cli.UsageError("github-repo-no-git", "--github-repo pushes the project's git repository, so it can't go with --no-git.");
 
@@ -95,7 +105,7 @@ public sealed partial class NewWorkflow(CliServices cli)
         var runMode = ProjectRun.Mode(cli, selection.Aspire, request.NoBuild, request.NoRun);
 
         TagTelemetry(selection, platforms, selectedTools, ide, request);
-        WritePlan(context, selection, selectedTools, ide, request, administrator, runMode);
+        WritePlan(context, selection, selectedTools, ide, request, projectId, administrator, runMode);
 
         if (request.DryRun)
         {
@@ -129,7 +139,7 @@ public sealed partial class NewWorkflow(CliServices cli)
                     await new ToolInstaller(cli, steps).InstallAsync(selectedTools, CreateToolContext(cli, needs), cancellationToken);
                 }
 
-                await CreateAsync(steps, context, selection, request, cancellationToken);
+                await CreateAsync(steps, context, selection, request, projectId, cancellationToken);
 
                 if (request.NoCertificate is false)
                 {
@@ -497,7 +507,7 @@ public sealed partial class NewWorkflow(CliServices cli)
         cli.Settings.Save();
     }
 
-    private async Task CreateAsync(StepRunner steps, ProjectContext context, TemplateSelection selection, NewRequest request, CancellationToken cancellationToken)
+    private async Task CreateAsync(StepRunner steps, ProjectContext context, TemplateSelection selection, NewRequest request, Guid? projectId, CancellationToken cancellationToken)
     {
         var source = new TemplateSource(cli.Environment, cli.Runner);
         TemplatePackage? package = null;
@@ -539,7 +549,7 @@ public sealed partial class NewWorkflow(CliServices cli)
 
             if (result.Succeeded && context.Exists)
             {
-                Licensing.NewProjectIdentity.Assign(context.Directory);
+                Licensing.NewProjectIdentity.Assign(context.Directory, projectId);
             }
 
             var files = context.Exists ? Directory.EnumerateFiles(context.Directory, "*", SearchOption.AllDirectories).Count() : 0;
@@ -560,7 +570,7 @@ public sealed partial class NewWorkflow(CliServices cli)
         cli.Telemetry.SetTag(TelemetryFields.TemplateVersion, request.TemplatePackage is null ? request.TemplateVersion ?? BuildInfo.Version : "local");
     }
 
-    private void WritePlan(ProjectContext context, TemplateSelection selection, IReadOnlyList<ToolCheck> tools, string ide, NewRequest request, IReadOnlyList<string> administrator, ProjectRunMode runMode)
+    private void WritePlan(ProjectContext context, TemplateSelection selection, IReadOnlyList<ToolCheck> tools, string ide, NewRequest request, Guid? projectId, IReadOnlyList<string> administrator, ProjectRunMode runMode)
     {
         var grid = new Grid().AddColumn(new GridColumn().NoWrap().PadRight(2)).AddColumn();
 
@@ -571,6 +581,12 @@ public sealed partial class NewWorkflow(CliServices cli)
             : $"{TemplateLabels.For(v.Parameter)}: {v.Value}").ToList();
 
         Row("Project", $"{context.Name} in {context.Directory}");
+
+        if (projectId is { } id)
+        {
+            Row("Id", $"{id:D}, from --project-id");
+        }
+
         Row("Options", options.Count == 0 ? "the template's defaults" : string.Join(" · ", options));
         Row("Platforms", string.Join(", ", context.Platforms.Order().Select(Platforms.Title)));
 

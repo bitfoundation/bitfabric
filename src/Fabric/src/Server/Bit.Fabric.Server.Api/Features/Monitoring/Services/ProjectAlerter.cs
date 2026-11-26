@@ -36,11 +36,13 @@ public partial class ProjectAlerter
     /// Alerts the routes of the incident's step about an incident that opened or escalated, or, once it's over, every
     /// route up to the step it reached. Then saves, with the next escalation's time.
     /// </summary>
-    public async Task<List<ProjectAlert>> Notify(Project project, ProjectIncident incident, ProjectAlertKind kind, CancellationToken cancellationToken)
+    public async Task<List<ProjectAlert>> Notify(ProjectMonitoring project, ProjectIncident incident, ProjectAlertKind kind, CancellationToken cancellationToken)
     {
         var routes = await dbContext.ProjectAlertRoutes.IgnoreQueryFilters()
             .Include(route => route.User)
-            .Where(route => route.ProjectId == project.Id)
+            .Where(route => route.MonitoringId == project.Id)
+            // Never someone who has left the team since (See TeamDeparture), whatever routes were left behind.
+            .Where(route => route.UserId == null || dbContext.TenantMemberships.Any(membership => membership.TenantId == route.TenantId && membership.UserId == route.UserId && membership.AcceptedOn != null))
             .ToListAsync(cancellationToken);
 
         var reached = kind switch
@@ -69,11 +71,13 @@ public partial class ProjectAlerter
         => routes.Where(route => route.Step > step).OrderBy(route => route.Step).ThenBy(route => route.DelayMinutes).FirstOrDefault();
 
     /// <summary>The app stopped accepting bit Fabric's approval: step 0 hears it, since nothing is read until someone reconnects.</summary>
-    public async Task NotifyConnectionLost(Project project, CancellationToken cancellationToken)
+    public async Task NotifyConnectionLost(ProjectMonitoring project, CancellationToken cancellationToken)
     {
         var routes = await dbContext.ProjectAlertRoutes.IgnoreQueryFilters()
             .Include(route => route.User)
-            .Where(route => route.ProjectId == project.Id && route.Step == 0)
+            .Where(route => route.MonitoringId == project.Id && route.Step == 0)
+            // Never someone who has left the team since (See TeamDeparture), whatever routes were left behind.
+            .Where(route => route.UserId == null || dbContext.TenantMemberships.Any(membership => membership.TenantId == route.TenantId && membership.UserId == route.UserId && membership.AcceptedOn != null))
             .ToListAsync(cancellationToken);
 
         await Send(project, null, ProjectAlertKind.ConnectionLost, routes, cancellationToken);
@@ -81,11 +85,13 @@ public partial class ProjectAlerter
     }
 
     /// <summary>A test alert to every route, so the team sees where alerts land.</summary>
-    public async Task<List<ProjectAlert>> SendTest(Project project, CancellationToken cancellationToken)
+    public async Task<List<ProjectAlert>> SendTest(ProjectMonitoring project, CancellationToken cancellationToken)
     {
         var routes = await dbContext.ProjectAlertRoutes
             .Include(route => route.User)
-            .Where(route => route.ProjectId == project.Id)
+            .Where(route => route.MonitoringId == project.Id)
+            // Never someone who has left the team since (See TeamDeparture), whatever routes were left behind.
+            .Where(route => route.UserId == null || dbContext.TenantMemberships.Any(membership => membership.TenantId == route.TenantId && membership.UserId == route.UserId && membership.AcceptedOn != null))
             .ToListAsync(cancellationToken);
 
         var alerts = await Send(project, null, ProjectAlertKind.Test, routes, cancellationToken);
@@ -94,7 +100,7 @@ public partial class ProjectAlerter
         return alerts;
     }
 
-    private async Task<List<ProjectAlert>> Send(Project project, ProjectIncident? incident, ProjectAlertKind kind, List<ProjectAlertRoute> routes, CancellationToken cancellationToken)
+    private async Task<List<ProjectAlert>> Send(ProjectMonitoring project, ProjectIncident? incident, ProjectAlertKind kind, List<ProjectAlertRoute> routes, CancellationToken cancellationToken)
     {
         List<ProjectAlert> alerts = [];
 
@@ -105,7 +111,7 @@ public partial class ProjectAlerter
             ProjectAlert alert = new()
             {
                 Id = Guid.CreateSequentialGuid(),
-                ProjectId = project.Id,
+                MonitoringId = project.Id,
                 TenantId = project.TenantId,
                 IncidentId = incident?.Id,
                 Kind = kind,
@@ -126,7 +132,7 @@ public partial class ProjectAlerter
             }
             catch (Exception exp) when (exp is not OperationCanceledException)
             {
-                logger.LogWarning(exp, "Alerting route {RouteId} of project {ProjectId} failed.", route.Id, project.Id);
+                logger.LogWarning(exp, "Alerting route {RouteId} of project {MonitoringId} failed.", route.Id, project.Id);
                 (alert.Succeeded, alert.Problem, alert.ProblemStatusCode) = (false, ProjectAlertProblem.Failed, null);
             }
 
@@ -138,9 +144,9 @@ public partial class ProjectAlerter
         return alerts;
     }
 
-    private Message Compose(Project project, ProjectIncident? incident, ProjectAlertKind kind)
+    private Message Compose(ProjectMonitoring project, ProjectIncident? incident, ProjectAlertKind kind)
     {
-        var path = $"{PageUrls.Projects}/{project.Id}";
+        var path = PageUrls.ProjectEnvironment(project.ProjectId, project.Id);
 
         if (incident is null)
         {
@@ -166,7 +172,7 @@ public partial class ProjectAlerter
     }
 
     /// <summary>For the customer's AI agent, which can read the app's own logs: English, as agents read it best.</summary>
-    public static string AgentPromptOf(Project project, ProjectIncident incident)
+    public static string AgentPromptOf(ProjectMonitoring project, ProjectIncident incident)
         => $"bit Fabric saw the app at {project.Address} fail ({string.Join(", ", incident.CheckKeys)}) from {incident.StartedAt:u} to {incident.EndedAt ?? DateTimeOffset.UtcNow:u}. Read the app's logs and traces around that time, find the cause, and propose a fix.";
 
     private async Task<(bool, ProjectAlertProblem?, int?)> Push(ProjectAlertRoute route, Message message, CancellationToken cancellationToken)
@@ -183,7 +189,7 @@ public partial class ProjectAlerter
         return reached > 0 ? (true, null, null) : (false, ProjectAlertProblem.NoDevice, null);
     }
 
-    private async Task<(bool, ProjectAlertProblem?, int?)> Email(Project project, ProjectAlertRoute route, Message message)
+    private async Task<(bool, ProjectAlertProblem?, int?)> Email(ProjectMonitoring project, ProjectAlertRoute route, Message message)
     {
         if (route.User?.Email is not { Length: > 0 } email || route.User.EmailConfirmed is false)
             return (false, ProjectAlertProblem.NoConfirmedEmail, null);
@@ -218,7 +224,7 @@ public partial class ProjectAlerter
         return (true, null, null);
     }
 
-    private async Task<(bool, ProjectAlertProblem?, int?)> Webhook(Project project, ProjectIncident? incident, ProjectAlertKind kind, ProjectAlertRoute route, Message message, CancellationToken cancellationToken)
+    private async Task<(bool, ProjectAlertProblem?, int?)> Webhook(ProjectMonitoring project, ProjectIncident? incident, ProjectAlertKind kind, ProjectAlertRoute route, Message message, CancellationToken cancellationToken)
     {
         if (Uri.TryCreate(route.Address, UriKind.Absolute, out var address) is false)
             return (false, ProjectAlertProblem.InvalidWebhook, null);

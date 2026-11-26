@@ -16,12 +16,12 @@ public partial class ProjectScanReader
     [AutoInject] private AppDbContext dbContext = default!;
     [AutoInject] private TimeProvider timeProvider = default!;
 
-    public async Task<ProjectScansDto> Latest(Project project, CancellationToken cancellationToken)
+    public async Task<ProjectScansDto> Latest(ProjectMonitoring project, CancellationToken cancellationToken)
     {
         var now = timeProvider.GetUtcNow();
 
         var latestIds = await dbContext.ProjectScans
-            .Where(scan => scan.ProjectId == project.Id && scan.FinishedAt != null)
+            .Where(scan => scan.MonitoringId == project.Id && scan.FinishedAt != null)
             .GroupBy(scan => scan.Kind)
             .Select(group => group.OrderByDescending(scan => scan.RequestedAt).Select(scan => scan.Id).First())
             .ToArrayAsync(cancellationToken);
@@ -29,19 +29,19 @@ public partial class ProjectScanReader
         var latest = await WithFindings(await dbContext.ProjectScans.AsNoTracking().Where(scan => latestIds.Contains(scan.Id)).ToListAsync(cancellationToken), cancellationToken);
 
         var pending = (await dbContext.ProjectScans.AsNoTracking()
-            .Where(scan => scan.ProjectId == project.Id && scan.FinishedAt == null && scan.RequestedAt >= now - ProjectScanScheduler.StaleAfter)
+            .Where(scan => scan.MonitoringId == project.Id && scan.FinishedAt == null && scan.RequestedAt >= now - ProjectScanScheduler.StaleAfter)
             .OrderBy(scan => scan.RequestedAt)
             .ToListAsync(cancellationToken))
             .DistinctBy(scan => scan.Kind)
             .Select(scan => scan.Map());
 
         var lastRunNow = await dbContext.ProjectScans
-            .Where(scan => scan.ProjectId == project.Id && scan.Trigger == ProjectScanTrigger.Manual)
+            .Where(scan => scan.MonitoringId == project.Id && scan.Trigger == ProjectScanTrigger.Manual)
             .MaxAsync(scan => (DateTimeOffset?)scan.RequestedAt, cancellationToken);
 
         return new()
         {
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             Address = project.Address,
             Latest = [.. latest.OrderBy(scan => Order(scan.Kind))],
             Pending = [.. pending.OrderBy(scan => Order(scan.Kind))],
@@ -51,10 +51,10 @@ public partial class ProjectScanReader
     }
 
     /// <summary>Past runs, newest first, with how many findings of each severity each had.</summary>
-    public async Task<ProjectScanDto[]> History(Guid projectId, ProjectScanKind? kind, int take, CancellationToken cancellationToken)
+    public async Task<ProjectScanDto[]> History(Guid monitoringId, ProjectScanKind? kind, int take, CancellationToken cancellationToken)
     {
         var rows = await dbContext.ProjectScans.AsNoTracking()
-            .Where(scan => scan.ProjectId == projectId && scan.FinishedAt != null && (kind == null || scan.Kind == kind))
+            .Where(scan => scan.MonitoringId == monitoringId && scan.FinishedAt != null && (kind == null || scan.Kind == kind))
             .OrderByDescending(scan => scan.RequestedAt)
             .Take(take)
             .Select(scan => new
@@ -84,26 +84,26 @@ public partial class ProjectScanReader
         return scan is null ? null : (await WithFindings([scan], cancellationToken))[0];
     }
 
-    public async Task<ProjectScanSettingsDto> Settings(Guid projectId, CancellationToken cancellationToken)
+    public async Task<ProjectScanSettingsDto> Settings(Guid monitoringId, CancellationToken cancellationToken)
     {
-        var settings = await dbContext.ProjectScanSettings.AsNoTracking().FirstOrDefaultAsync(row => row.ProjectId == projectId, cancellationToken);
+        var settings = await dbContext.ProjectScanSettings.AsNoTracking().FirstOrDefaultAsync(row => row.MonitoringId == monitoringId, cancellationToken);
 
         return settings is null
-            ? new() { ProjectId = projectId }
-            : new() { ProjectId = projectId, ScanAfterDeployments = settings.ScanAfterDeployments, WeeklyScans = settings.WeeklyScans, WeeklyEmail = settings.WeeklyEmail, Version = settings.Version };
+            ? new() { MonitoringId = monitoringId }
+            : new() { MonitoringId = monitoringId, ScanAfterDeployments = settings.ScanAfterDeployments, WeeklyScans = settings.WeeklyScans, WeeklyEmail = settings.WeeklyEmail, Version = settings.Version };
     }
 
     /// <summary>
     /// The three settings as the tab or an AI agent sets them, the version they read checked against the row (a project
     /// of the caller's team; See ProjectScansController and ProjectScansMcpTools).
     /// </summary>
-    public async Task<ProjectScanSettingsDto> SaveSettings(Project project, ProjectScanSettingsDto settings, CancellationToken cancellationToken)
+    public async Task<ProjectScanSettingsDto> SaveSettings(ProjectMonitoring project, ProjectScanSettingsDto settings, CancellationToken cancellationToken)
     {
-        var saved = await dbContext.ProjectScanSettings.FirstOrDefaultAsync(row => row.ProjectId == project.Id, cancellationToken);
+        var saved = await dbContext.ProjectScanSettings.FirstOrDefaultAsync(row => row.MonitoringId == project.Id, cancellationToken);
 
         if (saved is null)
         {
-            saved = new() { ProjectId = project.Id, TenantId = project.TenantId };
+            saved = new() { MonitoringId = project.Id, TenantId = project.TenantId };
             await dbContext.ProjectScanSettings.AddAsync(saved, cancellationToken);
         }
         else
@@ -163,20 +163,20 @@ public partial class ProjectScanReader
     /// <paramref name="acrossTenants"/> is for a background job, which has no tenant to filter by and names the projects of
     /// one itself (See ProjectScansEmailJobRunner).
     /// </summary>
-    public static async Task<Dictionary<Guid, ProjectScanSummaryDto[]>> SummariesOf(AppDbContext dbContext, Guid[] projectIds, ProjectScanKind[] kindsRun, DateTimeOffset now, CancellationToken cancellationToken, bool acrossTenants = false)
+    public static async Task<Dictionary<Guid, ProjectScanSummaryDto[]>> SummariesOf(AppDbContext dbContext, Guid[] monitoringIds, ProjectScanKind[] kindsRun, DateTimeOffset now, CancellationToken cancellationToken, bool acrossTenants = false)
     {
         var projectScans = acrossTenants ? dbContext.ProjectScans.IgnoreQueryFilters() : dbContext.ProjectScans;
         var projectScanFindings = acrossTenants ? dbContext.ProjectScanFindings.IgnoreQueryFilters() : dbContext.ProjectScanFindings;
 
         var latestIds = await projectScans
-            .Where(scan => projectIds.Contains(scan.ProjectId) && scan.FinishedAt != null)
-            .GroupBy(scan => new { scan.ProjectId, scan.Kind })
+            .Where(scan => monitoringIds.Contains(scan.MonitoringId) && scan.FinishedAt != null)
+            .GroupBy(scan => new { scan.MonitoringId, scan.Kind })
             .Select(group => group.OrderByDescending(scan => scan.RequestedAt).Select(scan => scan.Id).First())
             .ToArrayAsync(cancellationToken);
 
         var latest = await projectScans
             .Where(scan => latestIds.Contains(scan.Id))
-            .Select(scan => new { scan.Id, scan.ProjectId, scan.Kind, scan.FinishedAt, scan.Outcome, scan.Verdict, scan.Score, scan.Grade, scan.ExpiresAt, Findings = scan.Findings.Count() })
+            .Select(scan => new { scan.Id, scan.MonitoringId, scan.Kind, scan.FinishedAt, scan.Outcome, scan.Verdict, scan.Score, scan.Grade, scan.ExpiresAt, Findings = scan.Findings.Count() })
             .ToListAsync(cancellationToken);
 
         var topFindings = (await projectScanFindings
@@ -187,21 +187,21 @@ public partial class ProjectScanReader
             .ToDictionary(finding => finding.ScanId);
 
         var running = (await projectScans
-            .Where(scan => projectIds.Contains(scan.ProjectId) && scan.FinishedAt == null && scan.RequestedAt >= now - ProjectScanScheduler.StaleAfter)
-            .Select(scan => new { scan.ProjectId, scan.Kind })
+            .Where(scan => monitoringIds.Contains(scan.MonitoringId) && scan.FinishedAt == null && scan.RequestedAt >= now - ProjectScanScheduler.StaleAfter)
+            .Select(scan => new { scan.MonitoringId, scan.Kind })
             .Distinct()
             .ToListAsync(cancellationToken))
             .ToHashSet();
 
-        return projectIds.ToDictionary(projectId => projectId, projectId => ScanFindings.AvailableKinds.Where(kind => kindsRun.Contains(kind) || latest.Any(row => row.ProjectId == projectId && row.Kind == kind)).Select(kind =>
+        return monitoringIds.ToDictionary(monitoringId => monitoringId, monitoringId => ScanFindings.AvailableKinds.Where(kind => kindsRun.Contains(kind) || latest.Any(row => row.MonitoringId == monitoringId && row.Kind == kind)).Select(kind =>
         {
-            var scan = latest.FirstOrDefault(row => row.ProjectId == projectId && row.Kind == kind);
+            var scan = latest.FirstOrDefault(row => row.MonitoringId == monitoringId && row.Kind == kind);
 
             return new ProjectScanSummaryDto
             {
                 ScanId = scan?.Id,
                 Kind = kind,
-                IsRunning = running.Contains(new { ProjectId = projectId, Kind = kind }),
+                IsRunning = running.Contains(new { MonitoringId = monitoringId, Kind = kind }),
                 FinishedAt = scan?.FinishedAt,
                 Outcome = scan?.Outcome,
                 Verdict = scan?.Verdict,

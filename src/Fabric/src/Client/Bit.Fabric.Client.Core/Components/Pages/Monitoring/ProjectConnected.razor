@@ -1,7 +1,7 @@
 @inherits AppComponentBase
 
 <section class="panel connected" aria-labelledby="connected-title">
-    @if (details?.Project is not { } project)
+    @if (details?.Monitoring is not { } project)
     {
         <BitShimmer Height="12rem" Radius="0.75rem" Label="@Localizer[nameof(AppStrings.MonitoringLoadingTheProject)]" />
     }
@@ -104,7 +104,7 @@
         </div>
 
         <div class="actions">
-            <BitButton IconName="@ForwardIcon" IconPlacement="BitPlacement.End" Href="@($"{PageUrls.Projects}/{ProjectId}")">@Localizer[nameof(AppStrings.MonitoringOpenTheProject)]</BitButton>
+            <BitButton IconName="@ForwardIcon" IconPlacement="BitPlacement.End" Href="@ProjectHref">@Localizer[nameof(AppStrings.MonitoringOpenTheProject)]</BitButton>
         </div>
     }
 </section>

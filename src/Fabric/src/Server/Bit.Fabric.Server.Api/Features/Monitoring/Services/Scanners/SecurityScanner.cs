@@ -35,7 +35,7 @@ public partial class SecurityScanner(ScanHttp http, ILogger<SecurityScanner> log
         ("/odata/$metadata", ScanFindings.ODataMetadataOpen, ScanFindingSeverity.Important, -10, response => response.IsOk && (response.MediaType?.Contains("xml", StringComparison.OrdinalIgnoreCase) is true || response.IsJson))
     ];
 
-    public async Task<ProjectScanResult> Scan(Project project, ProjectScan scan, CancellationToken cancellationToken)
+    public async Task<ProjectScanResult> Scan(ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken)
     {
         var home = await http.Get($"{project.Address}/", cancellationToken, followRedirects: true);
 
@@ -92,7 +92,7 @@ public partial class SecurityScanner(ScanHttp http, ILogger<SecurityScanner> log
             catch (Exception exp) when (exp is not OperationCanceledException)
             {
                 // One endpoint that can't be read leaves the others to be.
-                logger.LogWarning(exp, "Reading {Path} of project {ProjectId} failed.", endpoint.Path, project.Id);
+                logger.LogWarning(exp, "Reading {Path} of project {MonitoringId} failed.", endpoint.Path, project.Id);
             }
         }
 
@@ -131,7 +131,7 @@ public partial class SecurityScanner(ScanHttp http, ILogger<SecurityScanner> log
     private delegate void Finding(string key, ScanFindingSeverity severity, int penalty, string[]? parameters = null, string[]? where = null);
 
     /// <summary>The http:// address should answer with a redirect to https://. An http port that doesn't answer at all needs nothing.</summary>
-    private async Task CheckHttpsRedirect(Project project, Finding add, CancellationToken cancellationToken)
+    private async Task CheckHttpsRedirect(ProjectMonitoring project, Finding add, CancellationToken cancellationToken)
     {
         var httpAddress = $"http://{new Uri(project.Address!).Host}/";
         var response = await http.Get(httpAddress, cancellationToken, readBody: false);
@@ -268,7 +268,7 @@ public partial class SecurityScanner(ScanHttp http, ILogger<SecurityScanner> log
     private static readonly string[] disclosingHeaders = ["Server", "X-Powered-By", "X-AspNet-Version", "X-AspNetMvc-Version"];
 
     /// <summary>A header that names the server's software and its version, such as <c>nginx/1.25.3</c>; a bare name says little.</summary>
-    private static void CheckServerDisclosure(ScanResponse home, Project project, Finding add)
+    private static void CheckServerDisclosure(ScanResponse home, ProjectMonitoring project, Finding add)
     {
         var disclosed = disclosingHeaders
             .Select(name => (Name: name, Value: home.Header(name)))

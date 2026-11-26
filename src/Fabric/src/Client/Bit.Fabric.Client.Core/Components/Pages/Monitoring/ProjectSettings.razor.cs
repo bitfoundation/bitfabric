@@ -14,12 +14,15 @@ public partial class ProjectSettings
     /// <summary>The separator between the parts of a line, which in Persian isn't a middle dot (See MonitoringWords.Dot).</summary>
     private string Dot => MonitoringWords.Dot(Localizer);
 
-    [Parameter, EditorRequired] public ProjectDetailsDto Details { get; set; } = default!;
+    [Parameter, EditorRequired] public MonitoringDetailsDto Details { get; set; } = default!;
+
+    /// <summary>The project this environment is of, whose people its Members section lists.</summary>
+    [Parameter, EditorRequired] public Guid ProjectId { get; set; }
 
     [Parameter] public EventCallback<string> OnRenamed { get; set; }
 
     /// <summary>The project as it is once disconnected, for the page's head and banner.</summary>
-    [Parameter] public EventCallback<ProjectDto> OnDisconnected { get; set; }
+    [Parameter] public EventCallback<MonitoringDto> OnDisconnected { get; set; }
 
     /// <summary>Opens another tab of the project's page, such as Locations.</summary>
     [Parameter] public EventCallback<string> OnOpenTab { get; set; }
@@ -31,7 +34,7 @@ public partial class ProjectSettings
     private static readonly (string Path, string ContentType) JsonFormat = ("json", "application/json");
 
     [AutoInject] private IProjectIncidentsController incidentsController = default!;
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
     [AutoInject] private HttpClient httpClient = default!;
     [AutoInject] private FileSaveService fileSaveService = default!;
 
@@ -48,14 +51,14 @@ public partial class ProjectSettings
     private BitDateRangePickerValue? windowRange;
     private bool windowRepeatsWeekly;
 
-    private Guid ProjectId => Details.Project!.Id;
+    private Guid MonitoringId => Details.Monitoring!.Id;
 
     protected override async Task OnInitAsync()
     {
         await base.OnInitAsync();
 
-        settings = await incidentsController.GetSettings(ProjectId, CurrentCancellationToken);
-        windows = await incidentsController.GetMaintenanceWindows(ProjectId, CurrentCancellationToken);
+        settings = await incidentsController.GetSettings(MonitoringId, CurrentCancellationToken);
+        windows = await incidentsController.GetMaintenanceWindows(MonitoringId, CurrentCancellationToken);
     }
 
     private async Task Save()
@@ -88,7 +91,7 @@ public partial class ProjectSettings
         {
             var added = await incidentsController.AddMaintenanceWindow(new()
             {
-                ProjectId = ProjectId,
+                MonitoringId = MonitoringId,
                 Title = windowTitle,
                 StartsAt = windowRange!.StartDate!.Value,
                 EndsAt = windowRange.EndDate!.Value,
@@ -117,9 +120,9 @@ public partial class ProjectSettings
 
         try
         {
-            var project = await projectsController.Disconnect(ProjectId, CurrentCancellationToken);
+            var project = await monitoringsController.Disconnect(MonitoringId, CurrentCancellationToken);
             isConfirmingDisconnect = false;
-            settings = await incidentsController.GetSettings(ProjectId, CurrentCancellationToken);
+            settings = await incidentsController.GetSettings(MonitoringId, CurrentCancellationToken);
             await OnDisconnected.InvokeAsync(project);
         }
         finally
@@ -134,7 +137,7 @@ public partial class ProjectSettings
     /// </summary>
     private async Task Export((string Path, string ContentType) format)
     {
-        using var response = await httpClient.GetAsync($"{IProjectsController.ExportHistoryUri}/{ProjectId}/{format.Path}", CurrentCancellationToken);
+        using var response = await httpClient.GetAsync($"{IMonitoringsController.ExportHistoryUri}/{MonitoringId}/{format.Path}", CurrentCancellationToken);
 
         var fileName = response.Content.Headers.ContentDisposition?.FileNameStar
                        ?? response.Content.Headers.ContentDisposition?.FileName?.Trim('"')
@@ -144,7 +147,7 @@ public partial class ProjectSettings
     }
 
     /// <summary>"Germany, Eastern North America and Oceania", each in the reader's language.</summary>
-    private string CheckedFrom(ProjectDto project)
+    private string CheckedFrom(MonitoringDto project)
         => MonitoringWords.Parts(Localizer, [Localizer[nameof(AppStrings.MonitoringLocationGermany)].Value,
                                              .. NetworkLocations.All.Where(location => project.Locations.Contains(location.Code)).Select(location => Localizer[location.NameKey].Value)]);
 
@@ -155,7 +158,7 @@ public partial class ProjectSettings
 
         try
         {
-            await projectsController.Delete(ProjectId, CurrentCancellationToken);
+            await monitoringsController.Delete(MonitoringId, CurrentCancellationToken);
             NavigationManager.NavigateTo(PageUrls.Projects);
         }
         finally

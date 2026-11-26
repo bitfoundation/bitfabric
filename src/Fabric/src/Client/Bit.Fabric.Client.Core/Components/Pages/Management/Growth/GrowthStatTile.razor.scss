@@ -1,0 +1,38 @@
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
+
+.tile {
+    gap: 0.35rem;
+    height: 100%;
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    padding: 1rem 1.125rem 0.75rem;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-secondary;
+    background-color: $bit-color-background-primary;
+}
+
+.tile-value {
+    line-height: 1.1;
+    font-weight: $bit-typography-h4-font-weight;
+    font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+    color: $bit-color-foreground-primary;
+}
+
+.tile-change {
+    gap: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.tile-added {
+    font-weight: 600;
+    font-size: $bit-typography-body2-font-size;
+    color: $bit-color-foreground-primary;
+}
+
+.tile-spark {
+    margin-top: auto;
+    padding-top: 0.25rem;
+}

@@ -1,0 +1,74 @@
+name: New demo project
+description: Runs bit new for one of the template's demos. Once the demo has its License, the project gets the demo's own id and a first commit that is the same in every run, which that one License names, instead of a new id and a trial.
+
+# Each job of a demo makes the demo's project with bit new on every deploy, with its own arguments. A License names a
+# project's id and the first commit of its git history, so with the License the demo keeps both from run to run: bit new
+# gets the demo's id with --project-id, and the history starts with an empty commit whose author, committer, dates and
+# message never change, so its sha never changes either. Neither the id nor that commit is a secret, and neither gives
+# anything without the License, which bit license checks before it saves it: bit Fabric's signature, the id, and that the
+# commit is in this history.
+
+inputs:
+  arguments:
+    description: bit new's arguments, the project's name first, as bash reads a command line - quotes group words, and $VARIABLES expand.
+    required: true
+  project-id:
+    description: The demo's project id, the same in every job of the demo.
+    required: true
+  license:
+    description: The demo's License, from its secret. Without it, bit new runs as for any project - a new id, and a trial whose request names the CI.
+    default: ''
+
+runs:
+  using: composite
+
+  steps:
+
+    - name: Create the project with bit new
+      shell: bash
+      env:
+        BIT_NEW_ARGUMENTS: ${{ inputs.arguments }}
+        DEMO_PROJECT_ID: ${{ inputs.project-id }}
+        DEMO_LICENSE: ${{ inputs.license }}
+      run: |
+        set -euo pipefail
+        eval "set -- $BIT_NEW_ARGUMENTS"
+
+        if [ -z "$DEMO_LICENSE" ]; then
+          echo "The demo has no License yet, so bit new gives the project a new id and asks for its trial, as for any project."
+          bit new "$@"
+          exit 0
+        fi
+
+        # The folder bit new creates: the project's name, unless -o or --output names another.
+        folder="$1"
+        previous=""
+        for argument in "$@"; do
+          case "$previous" in -o|--output) folder="$argument" ;; esac
+          previous="$argument"
+        done
+
+        # --no-git leaves out bit new's own first commit and its trial: the history starts with the demo's commit below,
+        # and the License takes the trial's place.
+        bit new "$@" --project-id "$DEMO_PROJECT_ID" --no-git
+        cd "$folder"
+
+        git init -q -b main --object-format=sha1
+        # As bit new does on Windows: a project's paths go past Windows' 260 characters.
+        git config core.longpaths true
+        # Keeps git add from warning about line endings once per file on Windows.
+        git config core.safecrlf false
+        git config commit.gpgsign false
+        export GIT_AUTHOR_NAME='bit Fabric' GIT_AUTHOR_EMAIL='noreply@bitfabric.co' GIT_COMMITTER_NAME='bit Fabric' GIT_COMMITTER_EMAIL='noreply@bitfabric.co'
+
+        # The commit the demo's License names: no files, and a fixed author, committer, dates and message.
+        GIT_AUTHOR_DATE='2026-11-26T00:00:00Z' GIT_COMMITTER_DATE='2026-11-26T00:00:00Z' git commit -q --allow-empty -m "The demo's root"
+        root="$(git rev-parse HEAD)"
+        echo "The demo's first commit: $root"
+        echo "Its License page: https://bitfabric.co/license?project=$1&id=$DEMO_PROJECT_ID&commit=$root"
+
+        git add -A
+        git commit -q -m "Create $1 with bit new"
+
+        bit license "$DEMO_LICENSE"
+        git commit -q -m "Add the demo's license" -- bit.json

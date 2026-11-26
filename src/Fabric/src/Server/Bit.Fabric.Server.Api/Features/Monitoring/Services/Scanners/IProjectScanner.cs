@@ -23,7 +23,7 @@ public interface IProjectScanner
     bool UsesBrowser => false;
 
     /// <summary>Scans the project for the scan written down when it was asked for, which says when and why.</summary>
-    Task<ProjectScanResult> Scan(Project project, ProjectScan scan, CancellationToken cancellationToken);
+    Task<ProjectScanResult> Scan(ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken);
 }
 
 /// <summary>What a scanner found and how it judges the app.</summary>

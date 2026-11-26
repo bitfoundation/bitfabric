@@ -263,6 +263,11 @@ public static class WebApplicationExtensions
 
     private static readonly DateTimeOffset ProcessStartedAt = ReadProcessStartedAt();
 
+    /// <summary>The project's id in its <c>bit.json</c>, which the build reads (See BitProjectId in this project's csproj).</summary>
+    private static readonly Guid? BitProjectId = Guid.TryParse(typeof(WebApplicationExtensions).Assembly
+        .GetCustomAttributes<AssemblyMetadataAttribute>()
+        .FirstOrDefault(attribute => attribute.Key is "BitProjectId")?.Value, out var id) && id != Guid.Empty ? id : null;
+
     private static DateTimeOffset ReadProcessStartedAt()
     {
         using var process = Process.GetCurrentProcess();
@@ -288,6 +293,7 @@ public static class WebApplicationExtensions
             ApplicationVersion = ApplicationInformationalVersion,
             InstanceName = System.Environment.MachineName,
             StartedAt = ProcessStartedAt,
+            ProjectId = BitProjectId,
             Entries = report.Entries.ToDictionary(entry => entry.Key, entry =>
             {
                 var registration = registrations.GetValueOrDefault(entry.Key);

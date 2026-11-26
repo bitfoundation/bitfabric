@@ -14,8 +14,8 @@ public interface IProjectIncidentsController : IAppController
     Task<ProjectHistoryDto> GetHistory(ProjectHistoryRequestDto request, CancellationToken cancellationToken);
 
     /// <summary>The open incidents and those of the last 90 days, newest first.</summary>
-    [HttpGet("{projectId}")]
-    Task<ProjectIncidentDto[]> GetIncidents(Guid projectId, CancellationToken cancellationToken);
+    [HttpGet("{monitoringId}")]
+    Task<ProjectIncidentDto[]> GetIncidents(Guid monitoringId, CancellationToken cancellationToken);
 
     /// <summary>"I'm on it": stops the escalation and tells everyone already alerted who has it.</summary>
     [HttpPost("{id}")]
@@ -25,8 +25,8 @@ public interface IProjectIncidentsController : IAppController
     [HttpPost]
     Task<ProjectIncidentDto> PostUpdate(ProjectIncidentUpdateRequestDto request, CancellationToken cancellationToken);
 
-    [HttpGet("{projectId}")]
-    Task<ProjectMaintenanceWindowDto[]> GetMaintenanceWindows(Guid projectId, CancellationToken cancellationToken);
+    [HttpGet("{monitoringId}")]
+    Task<ProjectMaintenanceWindowDto[]> GetMaintenanceWindows(Guid monitoringId, CancellationToken cancellationToken);
 
     [HttpPost]
     Task<ProjectMaintenanceWindowDto> AddMaintenanceWindow(ProjectMaintenanceWindowDto window, CancellationToken cancellationToken);
@@ -34,19 +34,19 @@ public interface IProjectIncidentsController : IAppController
     [HttpDelete("{id}/{version}")]
     Task DeleteMaintenanceWindow(Guid id, long version, CancellationToken cancellationToken);
 
-    [HttpGet("{projectId}")]
-    Task<ProjectAlertSettingsDto> GetAlertSettings(Guid projectId, CancellationToken cancellationToken);
+    [HttpGet("{monitoringId}")]
+    Task<ProjectAlertSettingsDto> GetAlertSettings(Guid monitoringId, CancellationToken cancellationToken);
 
     /// <summary>Replaces the project's routes with these.</summary>
     [HttpPost]
     Task<ProjectAlertSettingsDto> SaveAlertSettings(ProjectAlertSettingsDto settings, CancellationToken cancellationToken);
 
     /// <summary>Sends every route a test alert, so the team sees where alerts land.</summary>
-    [HttpPost("{projectId}")]
-    Task<ProjectAlertDto[]> SendTestAlert(Guid projectId, CancellationToken cancellationToken);
+    [HttpPost("{monitoringId}")]
+    Task<ProjectAlertDto[]> SendTestAlert(Guid monitoringId, CancellationToken cancellationToken);
 
-    [HttpGet("{projectId}")]
-    Task<ProjectSettingsDto> GetSettings(Guid projectId, CancellationToken cancellationToken);
+    [HttpGet("{monitoringId}")]
+    Task<ProjectSettingsDto> GetSettings(Guid monitoringId, CancellationToken cancellationToken);
 
     [HttpPost]
     Task<ProjectSettingsDto> SaveSettings(ProjectSettingsDto settings, CancellationToken cancellationToken);

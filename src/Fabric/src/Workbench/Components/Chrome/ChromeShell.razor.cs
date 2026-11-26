@@ -179,6 +179,7 @@ public partial class ChromeShell
         var manageUsers = await AuthorizationService.IsAuthorized(authUser, AppFeatures.Management.Users_Manage);
         var manageOAuthClients = await AuthorizationService.IsAuthorized(authUser, AppFeatures.System.OAuthClients_Manage);
         var viewOperations = await AuthorizationService.IsAuthorized(authUser, AppFeatures.System.Operations_View);
+        var viewGrowth = await AuthorizationService.IsAuthorized(authUser, AppFeatures.System.Growth_View);
 
         var manageAiPrompt = await AuthorizationService.IsAuthorized(authUser, AppFeatures.Management.SystemPrompts_Write);
 
@@ -190,7 +191,7 @@ public partial class ChromeShell
 
         var manageTenantsGlobally = await AuthorizationService.IsAuthorized(authUser, AppFeatures.Management.Tenants_Manage_Global);
 
-        if (manageRoles || manageUsers || manageOAuthClients || viewOperations
+        if (manageRoles || manageUsers || manageOAuthClients || viewOperations || viewGrowth
             || manageAiPrompt
             || manageTenantsGlobally
             )
@@ -222,6 +223,11 @@ public partial class ChromeShell
             if (viewOperations)
             {
                 managementItem.ChildItems.Add(new() { Text = AppLocalizer[nameof(AppStrings.Operations)], IconName = BitIconName.ServerProcesses, Url = "#operations" });
+            }
+
+            if (viewGrowth)
+            {
+                managementItem.ChildItems.Add(new() { Text = AppLocalizer[nameof(AppStrings.GrowthTitle)], IconName = BitIconName.AreaChart, Url = PageUrl("growth", "#growth") });
             }
 
             if (manageAiPrompt)

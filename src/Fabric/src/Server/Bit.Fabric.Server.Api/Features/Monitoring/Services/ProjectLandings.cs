@@ -15,7 +15,7 @@ public class ProjectLandings
     private readonly ConcurrentDictionary<Guid, (string FrontDoor, string Landing)> landings = new();
 
     /// <summary>What to time for the project: the page its front door lands on once a round found it, the front door until then.</summary>
-    public string AddressOf(Project project)
+    public string AddressOf(ProjectMonitoring project)
     {
         var frontDoor = ProjectProber.FrontDoorOf(project);
 
@@ -23,8 +23,8 @@ public class ProjectLandings
         return landings.TryGetValue(project.Id, out var known) && known.FrontDoor == frontDoor ? known.Landing : frontDoor;
     }
 
-    public void Learn(Project project, Uri landing) => landings[project.Id] = (ProjectProber.FrontDoorOf(project), landing.GetLeftPart(UriPartial.Path));
+    public void Learn(ProjectMonitoring project, Uri landing) => landings[project.Id] = (ProjectProber.FrontDoorOf(project), landing.GetLeftPart(UriPartial.Path));
 
     /// <summary>The next round starts from the front door again.</summary>
-    public void Forget(Project project) => landings.TryRemove(project.Id, out _);
+    public void Forget(ProjectMonitoring project) => landings.TryRemove(project.Id, out _);
 }

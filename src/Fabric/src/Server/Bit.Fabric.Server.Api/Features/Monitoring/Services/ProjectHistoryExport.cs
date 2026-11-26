@@ -11,7 +11,7 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring.Services;
 /// time is written in the project's time zone, with its offset, and in UTC alongside; texts bit Fabric writes in every
 /// language are in the reader's. It is read a page at a time, by time and then id, and written out as it is read, so a
 /// year of history never sits in memory and no query is larger than a page. The project comes through the tenant filter
-/// (See ProjectsService.FindProject), and every row is the project's.
+/// (See MonitoringsService.FindProject), and every row is the project's.
 /// </summary>
 public partial class ProjectHistoryExport(AppDbContext dbContext, TimeProvider timeProvider)
 {
@@ -24,10 +24,10 @@ public partial class ProjectHistoryExport(AppDbContext dbContext, TimeProvider t
     public const string CsvHeader = "record,id,incident_id,time_zone,started_at,started_at_utc,ended_at,ended_at_utc,minutes,part_keys,part,status,title,text,by,acknowledged_at,acknowledged_at_utc,during_maintenance";
 
     /// <summary>"Sales-history-2026-11-13.csv".</summary>
-    public static string FileNameOf(Project project, Format format, DateTimeOffset now)
+    public static string FileNameOf(ProjectMonitoring project, Format format, DateTimeOffset now)
         => $"{MonitoringFiles.NameOf(project.Name)}-history-{now.UtcDateTime:yyyy-MM-dd}.{(format is Format.Csv ? "csv" : "json")}";
 
-    public async Task Write(Project project, Format format, Stream output, CancellationToken cancellationToken)
+    public async Task Write(ProjectMonitoring project, Format format, Stream output, CancellationToken cancellationToken)
     {
         var zone = ProjectSlaReports.ZoneOf(project);
 
@@ -41,7 +41,7 @@ public partial class ProjectHistoryExport(AppDbContext dbContext, TimeProvider t
         }
     }
 
-    private async Task WriteCsv(Project project, TimeZoneInfo zone, Stream output, CancellationToken cancellationToken)
+    private async Task WriteCsv(ProjectMonitoring project, TimeZoneInfo zone, Stream output, CancellationToken cancellationToken)
     {
         // With a byte order mark, so a spreadsheet reads a part's name in any script as UTF-8, as the SLA's CSV does.
         await using var csv = new StreamWriter(output, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true), bufferSize: 16 * 1024, leaveOpen: true);
@@ -96,7 +96,7 @@ public partial class ProjectHistoryExport(AppDbContext dbContext, TimeProvider t
         await csv.FlushAsync(cancellationToken);
     }
 
-    private async Task WriteJson(Project project, TimeZoneInfo zone, Stream output, CancellationToken cancellationToken)
+    private async Task WriteJson(ProjectMonitoring project, TimeZoneInfo zone, Stream output, CancellationToken cancellationToken)
     {
         // Never flushed by itself: every FlushAsync below hands what it holds to the response, a page at a time.
         await using var json = new Utf8JsonWriter(output, new JsonWriterOptions { Indented = true });
@@ -213,27 +213,27 @@ public partial class ProjectHistoryExport(AppDbContext dbContext, TimeProvider t
         await json.FlushAsync(cancellationToken);
     }
 
-    private IAsyncEnumerable<ProjectCheckPeriod> Periods(Guid projectId, CancellationToken cancellationToken)
+    private IAsyncEnumerable<ProjectCheckPeriod> Periods(Guid monitoringId, CancellationToken cancellationToken)
         => Paged((after, seen) => dbContext.ProjectCheckPeriods.AsNoTracking()
-                                           .Where(period => period.ProjectId == projectId && (after == null || period.StartedAt >= after) && seen.Contains(period.Id) == false)
+                                           .Where(period => period.MonitoringId == monitoringId && (after == null || period.StartedAt >= after) && seen.Contains(period.Id) == false)
                                            .OrderBy(period => period.StartedAt).ThenBy(period => period.Id),
                  period => period.StartedAt, period => period.Id, cancellationToken);
 
-    private IAsyncEnumerable<ProjectIncident> Incidents(Guid projectId, CancellationToken cancellationToken)
+    private IAsyncEnumerable<ProjectIncident> Incidents(Guid monitoringId, CancellationToken cancellationToken)
         => Paged((after, seen) => dbContext.ProjectIncidents.AsNoTracking()
-                                           .Where(incident => incident.ProjectId == projectId && (after == null || incident.StartedAt >= after) && seen.Contains(incident.Id) == false)
+                                           .Where(incident => incident.MonitoringId == monitoringId && (after == null || incident.StartedAt >= after) && seen.Contains(incident.Id) == false)
                                            .OrderBy(incident => incident.StartedAt).ThenBy(incident => incident.Id),
                  incident => incident.StartedAt, incident => incident.Id, cancellationToken);
 
-    private IAsyncEnumerable<ProjectStart> Starts(Guid projectId, CancellationToken cancellationToken)
+    private IAsyncEnumerable<ProjectStart> Starts(Guid monitoringId, CancellationToken cancellationToken)
         => Paged((after, seen) => dbContext.ProjectStarts.AsNoTracking()
-                                           .Where(start => start.ProjectId == projectId && (after == null || start.At >= after) && seen.Contains(start.Id) == false)
+                                           .Where(start => start.MonitoringId == monitoringId && (after == null || start.At >= after) && seen.Contains(start.Id) == false)
                                            .OrderBy(start => start.At).ThenBy(start => start.Id),
                  start => start.At, start => start.Id, cancellationToken);
 
-    private IAsyncEnumerable<ProjectMaintenanceWindow> Windows(Guid projectId, CancellationToken cancellationToken)
+    private IAsyncEnumerable<ProjectMaintenanceWindow> Windows(Guid monitoringId, CancellationToken cancellationToken)
         => Paged((after, seen) => dbContext.ProjectMaintenanceWindows.AsNoTracking()
-                                           .Where(window => window.ProjectId == projectId && (after == null || window.StartsAt >= after) && seen.Contains(window.Id) == false)
+                                           .Where(window => window.MonitoringId == monitoringId && (after == null || window.StartsAt >= after) && seen.Contains(window.Id) == false)
                                            .OrderBy(window => window.StartsAt).ThenBy(window => window.Id),
                  window => window.StartsAt, window => window.Id, cancellationToken);
 

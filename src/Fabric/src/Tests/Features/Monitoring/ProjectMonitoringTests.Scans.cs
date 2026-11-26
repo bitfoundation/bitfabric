@@ -39,7 +39,7 @@ public partial class ProjectMonitoringTests
 
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         await RunQueuedScans(server, project.Id);
 
         var scans = await client.GetController<IProjectScansController>().GetScans(project.Id, TestContext.CancellationToken);
@@ -114,7 +114,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp().DoneRight();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         await RunQueuedScans(server, project.Id);
 
         var scans = await client.GetController<IProjectScansController>().GetScans(project.Id, TestContext.CancellationToken);
@@ -137,7 +137,7 @@ public partial class ProjectMonitoringTests
         Assert.Contains("https://customer.example/en-US/about", customerApp.ScanRequested);
 
         // The card on the projects page shows each scan, as the approved design draws it.
-        var card = (await client.GetController<IProjectsController>().GetProjects(null, TestContext.CancellationToken)).Single();
+        var card = (await client.GetController<IMonitoringsController>().GetMonitorings(null, TestContext.CancellationToken)).Single();
         Assert.AreEqual("A+", card.Scans.Single(scan => scan.Kind is ProjectScanKind.Security).Grade);
         Assert.IsTrue(card.Scans.All(scan => scan.FinishedAt is not null && scan.TopFinding is null));
     }
@@ -148,7 +148,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var scansController = client.GetController<IProjectScansController>();
 
         // Asked for the moment it's connected, one of each kind, the browser scans included.
@@ -158,12 +158,12 @@ public partial class ProjectMonitoringTests
 
         await RunQueuedScans(server, project.Id);
 
-        var history = await scansController.GetHistory(new() { ProjectId = project.Id }, TestContext.CancellationToken);
+        var history = await scansController.GetHistory(new() { MonitoringId = project.Id }, TestContext.CancellationToken);
         Assert.HasCount(5, history);
         Assert.IsTrue(history.All(scan => scan.Trigger is ProjectScanTrigger.Connected));
 
         // The fake app sends none of the headers a policy needs: its card's tooltip is the most urgent of them.
-        var card = (await client.GetController<IProjectsController>().GetProjects(null, TestContext.CancellationToken)).Single();
+        var card = (await client.GetController<IMonitoringsController>().GetMonitorings(null, TestContext.CancellationToken)).Single();
         var security = card.Scans.Single(scan => scan.Kind is ProjectScanKind.Security);
         Assert.IsGreaterThan(0, security.FindingCount);
         Assert.AreEqual(ScanFindingSeverity.Important, security.TopFinding!.Severity);
@@ -177,7 +177,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var scansController = client.GetController<IProjectScansController>();
         await RunQueuedScans(server, project.Id);
 
@@ -190,7 +190,7 @@ public partial class ProjectMonitoringTests
         await Probe(server, project.Id);
         await RunQueuedScans(server, project.Id);
 
-        Assert.DoesNotContain(scan => scan.Trigger is ProjectScanTrigger.Deployment, await scansController.GetHistory(new() { ProjectId = project.Id }, TestContext.CancellationToken));
+        Assert.DoesNotContain(scan => scan.Trigger is ProjectScanTrigger.Deployment, await scansController.GetHistory(new() { MonitoringId = project.Id }, TestContext.CancellationToken));
 
         settings.ScanAfterDeployments = true;
         var saved = await scansController.SaveSettings(settings, TestContext.CancellationToken);
@@ -206,7 +206,7 @@ public partial class ProjectMonitoringTests
         await Probe(server, project.Id);
         await RunQueuedScans(server, project.Id);
 
-        var deployment = (await scansController.GetHistory(new() { ProjectId = project.Id }, TestContext.CancellationToken)).Where(scan => scan.Trigger is ProjectScanTrigger.Deployment).ToArray();
+        var deployment = (await scansController.GetHistory(new() { MonitoringId = project.Id }, TestContext.CancellationToken)).Where(scan => scan.Trigger is ProjectScanTrigger.Deployment).ToArray();
         Assert.HasCount(5, deployment);
         Assert.IsTrue(deployment.All(scan => scan.ApplicationVersion == "1.0.2+cccc333" && scan.FinishedAt is not null), "The build the deployment brought.");
 
@@ -221,22 +221,22 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var scansController = client.GetController<IProjectScansController>();
         await RunQueuedScans(server, project.Id);
 
         Assert.IsNull((await scansController.GetScans(project.Id, TestContext.CancellationToken)).CanRunAgainAt);
 
-        var started = await scansController.RunNow(new() { ProjectId = project.Id }, TestContext.CancellationToken);
+        var started = await scansController.RunNow(new() { MonitoringId = project.Id }, TestContext.CancellationToken);
         Assert.HasCount(5, started.Pending);
         Assert.IsTrue(started.Pending.All(scan => scan.Trigger is ProjectScanTrigger.Manual));
         Assert.IsNotNull(started.CanRunAgainAt);
         Assert.IsLessThan(TimeSpan.FromMinutes(10.1), started.CanRunAgainAt.Value - DateTimeOffset.UtcNow);
 
-        await Assert.ThrowsExactlyAsync<TooManyRequestsException>(() => scansController.RunNow(new() { ProjectId = project.Id }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<TooManyRequestsException>(() => scansController.RunNow(new() { MonitoringId = project.Id }, TestContext.CancellationToken));
 
         await RunQueuedScans(server, project.Id);
-        var history = await scansController.GetHistory(new() { ProjectId = project.Id, Kind = ProjectScanKind.Security }, TestContext.CancellationToken);
+        var history = await scansController.GetHistory(new() { MonitoringId = project.Id, Kind = ProjectScanKind.Security }, TestContext.CancellationToken);
         Assert.AreSequenceEqual(new[] { ProjectScanTrigger.Manual, ProjectScanTrigger.Connected }, history.Select(scan => scan.Trigger).ToArray(), "One kind's runs, newest first.");
     }
 
@@ -246,7 +246,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var scansController = client.GetController<IProjectScansController>();
         await RunQueuedScans(server, project.Id);
 
@@ -278,7 +278,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var owner = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(owner.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(owner.GetController<IMonitoringsController>(), customerApp, "customer.example");
         await RunQueuedScans(server, project.Id);
         var latest = (await owner.GetController<IProjectScansController>().GetScans(project.Id, TestContext.CancellationToken)).Latest;
         var findingId = latest.SelectMany(scan => scan.Findings).First().Id;
@@ -287,11 +287,11 @@ public partial class ProjectMonitoringTests
         var scans = stranger.GetController<IProjectScansController>();
 
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.GetScans(project.Id, TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.GetHistory(new() { ProjectId = project.Id }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.GetHistory(new() { MonitoringId = project.Id }, TestContext.CancellationToken));
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.GetScan(latest[0].Id, TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.RunNow(new() { ProjectId = project.Id }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.RunNow(new() { MonitoringId = project.Id }, TestContext.CancellationToken));
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.GetSettings(project.Id, TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.SaveSettings(new() { ProjectId = project.Id, ScanAfterDeployments = true }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.SaveSettings(new() { MonitoringId = project.Id, ScanAfterDeployments = true }, TestContext.CancellationToken));
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => scans.ReportWrong(new() { FindingId = findingId }, TestContext.CancellationToken));
     }
 
@@ -305,7 +305,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         await RunQueuedScans(server, project.Id);
 
         await using var mcp = await McpClientOf(server, client);
@@ -374,14 +374,14 @@ public partial class ProjectMonitoringTests
     }
 
     /// <summary>Runs the project's scans still waiting, here and now, as their Hangfire jobs would (See ScanJobsHeldBack).</summary>
-    private async Task RunQueuedScans(AppTestServer server, Guid projectId)
+    private async Task RunQueuedScans(AppTestServer server, Guid monitoringId)
     {
         Guid[] scanIds;
 
         await using (var scope = server.ApiApp.Services.CreateAsyncScope())
         {
             scanIds = [.. await scope.ServiceProvider.GetRequiredService<AppDbContext>().ProjectScans.IgnoreQueryFilters()
-                                     .Where(scan => scan.ProjectId == projectId && scan.FinishedAt == null)
+                                     .Where(scan => scan.MonitoringId == monitoringId && scan.FinishedAt == null)
                                      .Select(scan => scan.Id)
                                      .ToListAsync(TestContext.CancellationToken)];
         }

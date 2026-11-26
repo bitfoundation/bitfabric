@@ -17,14 +17,14 @@ public class ProjectConnectedTests
     [TestMethod]
     public async Task TheLastStep_Should_ShowEachLocationsFirstCheck_AsItArrives_AndLeadToTheNextSteps()
     {
-        var projectId = Guid.NewGuid();
+        var monitoringId = Guid.NewGuid();
         var now = DateTimeOffset.UtcNow;
         ProjectNetworkReadingDto eastern = new() { Location = "enam", Colo = "IAD", At = now, ResponseMs = 96 };
         ProjectNetworkReadingDto oceania = new() { Location = "oc", Colo = "SYD", At = now, ResponseMs = 131 };
 
-        ProjectDetailsDto Details(params ProjectNetworkReadingDto[] readings) => new()
+        MonitoringDetailsDto Details(params ProjectNetworkReadingDto[] readings) => new()
         {
-            Project = new() { Id = projectId, Name = "Customer app", Address = "https://customer.example", Locations = ["enam", "oc"], ConnectionStatus = ProjectConnectionStatus.Connected, Health = ProjectHealth.Operational },
+            Monitoring = new() { Id = monitoringId, ProjectId = monitoringId, Name = "Customer app", Address = "https://customer.example", Locations = ["enam", "oc"], ConnectionStatus = ProjectConnectionStatus.Connected, Health = ProjectHealth.Operational },
             Checks =
             [
                 new() { Key = "AppDbContext", Title = "Database", Category = "Platform", IconName = "Database", Status = HealthCheckStatus.Healthy },
@@ -37,14 +37,14 @@ public class ProjectConnectedTests
 
         // Germany read the report the moment the approval came back; Eastern North America has answered, Oceania not yet.
         var current = Details(eastern);
-        var controller = A.Fake<IProjectsController>();
-        A.CallTo(() => controller.GetProject(projectId, A<CancellationToken>._)).ReturnsLazily(() => current);
+        var controller = A.Fake<IMonitoringsController>();
+        A.CallTo(() => controller.GetMonitoring(monitoringId, A<CancellationToken>._)).ReturnsLazily(() => current);
 
         await using var server = new AppTestServer();
         await server.Build(configureTestWebAppServices: services => services.Replace(ServiceDescriptor.Singleton(controller))).Start(TestContext.CancellationToken);
         await using var ctx = server.CreateBunitContext();
 
-        var cut = ctx.Render<ProjectConnected>(parameters => parameters.Add(p => p.ProjectId, projectId));
+        var cut = ctx.Render<ProjectConnected>(parameters => parameters.Add(p => p.MonitoringId, monitoringId));
 
         cut.WaitForAssertion(() => Assert.Contains("Customer app is connected", cut.Markup));
 
@@ -62,12 +62,12 @@ public class ProjectConnectedTests
         // The three next steps, each leading to where it is done.
         Assert.Contains("Alerts on this device", markup);
         Assert.Contains("Turn on", markup);
-        Assert.Contains($"href=\"/projects/{projectId}?tab=alerts\"", markup);
+        Assert.Contains($"href=\"/projects/{monitoringId}/{monitoringId}?tab=alerts\"", markup, "The environment's page, in its project (an environment's own project has its id).");
         Assert.Contains("Your status page", markup);
-        Assert.Contains($"href=\"/projects/{projectId}?tab=status\"", markup);
+        Assert.Contains($"href=\"/projects/{monitoringId}/{monitoringId}?tab=status\"", markup);
         Assert.Contains("Your team", markup);
         Assert.Contains($"href=\"{PageUrls.ManageMyTenants}\"", markup);
-        Assert.Contains($"href=\"/projects/{projectId}\"", markup, "Open the project.");
+        Assert.Contains($"href=\"/projects/{monitoringId}/{monitoringId}\"", markup, "Open the project.");
 
         // Oceania's first reading comes in a minute later: the page looks again on its own.
         current = Details(eastern, oceania);
@@ -81,11 +81,11 @@ public class ProjectConnectedTests
     public async Task TheProjectCard_Should_DrawItsLast30Days_ABarADay_ThatOpenTheHistory()
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        var projectId = Guid.NewGuid();
+        var monitoringId = Guid.NewGuid();
 
-        ProjectDto project = new()
+        MonitoringDto project = new()
         {
-            Id = projectId,
+            Id = monitoringId,
             Name = "Customer app",
             Address = "https://customer.example",
             ConnectionStatus = ProjectConnectionStatus.Connected,
@@ -113,7 +113,7 @@ public class ProjectConnectedTests
         Assert.Contains("tone-degraded", bars[25].ClassName!);
         Assert.Contains("12 min down", bars[20].GetAttribute("title")!, "Each bar's tooltip says how its day went.");
 
-        Assert.AreEqual($"/projects/{projectId}?tab=history", cut.Find(".day-bars").GetAttribute("href"));
+        Assert.AreEqual($"/projects/{project.ProjectId}/{monitoringId}?tab=history", cut.Find(".day-bars").GetAttribute("href"));
         Assert.Contains("30 days", cut.Markup);
         Assert.Contains("Uptime 99.50%", cut.Markup);
     }

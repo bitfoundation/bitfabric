@@ -30,7 +30,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var incidents = client.GetController<IProjectIncidentsController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var connectedAt = DateTimeOffset.UtcNow;
 
         // The next day: the app's template now says what only misses its settings, and its payment gateway fails.
@@ -47,7 +47,7 @@ public partial class ProjectMonitoringTests
 
         var now = connectedAt.AddDays(3).AddMinutes(1);
         var days = ProjectHistoryDays.Last(4, TimeZoneInfo.Utc, now);
-        var history = await incidents.GetHistory(new() { ProjectId = project.Id, From = days[0].Start, To = now }, TestContext.CancellationToken);
+        var history = await incidents.GetHistory(new() { MonitoringId = project.Id, From = days[0].Start, To = now }, TestContext.CancellationToken);
 
         Assert.AreSequenceEqual(new[] { "AppDbContext", "paymentGateway", "search", "smtp" }, history.Parts.Select(part => part.Key).Order(StringComparer.Ordinal).ToArray(),
             "The parts of the latest report, and the one taken out after it failed; not the one that only misses its settings.");
@@ -76,10 +76,10 @@ public partial class ProjectMonitoringTests
     }
 
     /// <summary>A round on a day the test chooses: the prober takes its time from the clock it is given, and so do the periods and rollups it writes.</summary>
-    private async Task ProbeAt(AppTestServer server, Guid projectId, DateTimeOffset at)
+    private async Task ProbeAt(AppTestServer server, Guid monitoringId, DateTimeOffset at)
     {
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
-        await ActivatorUtilities.CreateInstance<ProjectProber>(scope.ServiceProvider, new ClockAt(at)).Probe(projectId, TestContext.CancellationToken);
+        await ActivatorUtilities.CreateInstance<ProjectProber>(scope.ServiceProvider, new ClockAt(at)).Probe(monitoringId, TestContext.CancellationToken);
     }
 
     private sealed class ClockAt(DateTimeOffset now) : TimeProvider

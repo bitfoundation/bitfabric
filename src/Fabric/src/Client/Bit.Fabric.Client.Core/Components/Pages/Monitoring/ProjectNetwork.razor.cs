@@ -10,17 +10,17 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Monitoring;
 /// </summary>
 public partial class ProjectNetwork
 {
-    [Parameter, EditorRequired] public ProjectDto Project { get; set; } = default!;
+    [Parameter, EditorRequired] public MonitoringDto Project { get; set; } = default!;
 
-    /// <summary>Each location's newest reading (See ProjectDetailsDto.NetworkReadings).</summary>
+    /// <summary>Each location's newest reading (See MonitoringDetailsDto.NetworkReadings).</summary>
     [Parameter] public ProjectNetworkReadingDto[] Readings { get; set; } = [];
 
     /// <summary>The project as saved, with its new locations.</summary>
-    [Parameter] public EventCallback<ProjectDto> OnSaved { get; set; }
+    [Parameter] public EventCallback<MonitoringDto> OnSaved { get; set; }
 
-    [AutoInject] private IProjectsController projectsController = default!;
+    [AutoInject] private IMonitoringsController monitoringsController = default!;
 
-    private ProjectDto? shownProject;
+    private MonitoringDto? shownProject;
     private HashSet<string> picked = [];
     private bool isSaving;
 
@@ -57,9 +57,9 @@ public partial class ProjectNetwork
 
         try
         {
-            var saved = await projectsController.SetLocations(new()
+            var saved = await monitoringsController.SetLocations(new()
             {
-                ProjectId = Project.Id,
+                MonitoringId = Project.Id,
                 Locations = [.. NetworkLocations.All.Select(location => location.Code).Where(picked.Contains)]
             }, CurrentCancellationToken);
 

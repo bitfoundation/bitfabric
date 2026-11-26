@@ -14,6 +14,12 @@ public sealed class SampleProject
 
     public required string Name { get; set; }
 
+    /// <summary>The project it is an environment of: its own id unless the sample world puts it in another's.</summary>
+    public Guid? ProjectId { get; set; }
+
+    /// <summary>Production, unless the sample world names another environment.</summary>
+    public string Environment { get; set; } = "Production";
+
     /// <summary><c>https://host</c>.</summary>
     public required string Address { get; init; }
 

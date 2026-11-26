@@ -43,7 +43,7 @@ public partial class MonitoringClientController : AppControllerBase
     [HttpGet]
     public async Task<IActionResult> Callback(string? state, string? code, string? error, string? iss, CancellationToken cancellationToken)
     {
-        var pending = string.IsNullOrEmpty(state) ? null : await cache.GetOrDefaultAsync<string>(ProjectsController.PendingKey(state), token: cancellationToken) is { } json
+        var pending = string.IsNullOrEmpty(state) ? null : await cache.GetOrDefaultAsync<string>(MonitoringsController.PendingKey(state), token: cancellationToken) is { } json
             ? JsonSerializer.Deserialize(json, MonitoringJsonContext.Default.PendingConnection)
             : null;
 

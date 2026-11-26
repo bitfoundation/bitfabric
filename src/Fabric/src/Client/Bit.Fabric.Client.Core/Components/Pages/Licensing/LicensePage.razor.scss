@@ -71,9 +71,10 @@
 
 .license-text {
     min-width: 0;
-    max-height: 9rem;
+    // Eight whole lines, so a long license never shows half a line before it scrolls.
+    max-height: calc(1.6em * 8);
     overflow-y: auto;
-    padding-top: 4px;
+    margin-top: 4px;
     color: $bit-color-foreground-primary;
     font-family: $bit-typography-font-family-mono;
     font-size: $bit-typography-fs-xs;
@@ -88,4 +89,28 @@
     @include lt-sm {
         width: 100%;
     }
+}
+
+// The team that holds the license: a name and a short name side by side, one under the other on a phone
+.team-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 16px;
+
+    @include lt-sm {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.team-one {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: $bit-shape-border-width solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-md;
+}
+
+::deep .team-picker {
+    max-width: 24rem;
 }

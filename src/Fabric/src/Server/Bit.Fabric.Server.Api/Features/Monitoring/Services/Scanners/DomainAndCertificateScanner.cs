@@ -21,7 +21,7 @@ public partial class DomainAndCertificateScanner(ICertificateInspector certifica
 
     public ProjectScanKind Kind => ProjectScanKind.DomainAndCertificate;
 
-    public async Task<ProjectScanResult> Scan(Project project, ProjectScan scan, CancellationToken cancellationToken)
+    public async Task<ProjectScanResult> Scan(ProjectMonitoring project, ProjectScan scan, CancellationToken cancellationToken)
     {
         var now = timeProvider.GetUtcNow();
         Uri[] addresses = [.. new[] { project.Address, project.ServerAddress }

@@ -1,25 +1,11 @@
 namespace Bit.Fabric.Server.Api.Features.Licensing.Models;
 
-public partial class LicensedProjectConfiguration : IEntityTypeConfiguration<LicensedProject>
+public partial class ProjectTrialConfiguration : IEntityTypeConfiguration<ProjectTrial>
 {
-    public void Configure(EntityTypeBuilder<LicensedProject> builder)
+    public void Configure(EntityTypeBuilder<ProjectTrial> builder)
     {
         // The id comes from the project's bit.json.
-        builder.Property(project => project.Id).ValueGeneratedNever();
-
-        // An account's projects.
-        builder.HasIndex(project => project.UserId);
-
-        // An account that is deleted leaves its projects without one, so the next sign-in can claim them again.
-        builder.HasOne(project => project.User)
-               .WithMany()
-               .HasForeignKey(project => project.UserId)
-               .OnDelete(DeleteBehavior.SetNull);
-
-        builder.HasMany(project => project.Licenses)
-               .WithOne(license => license.Project)
-               .HasForeignKey(license => license.ProjectId)
-               .OnDelete(DeleteBehavior.Cascade);
+        builder.Property(trial => trial.Id).ValueGeneratedNever();
     }
 }
 
@@ -33,9 +19,15 @@ public partial class IssuedLicenseConfiguration : IEntityTypeConfiguration<Issue
         // bit CLI asks by its code every few seconds while it waits; only codes not yet spent are looked up.
         builder.HasIndex(license => license.ClaimCodeHash).HasFilter($"\"{nameof(IssuedLicense.ClaimedOn)}\" IS NULL");
 
-        builder.HasOne(license => license.User)
-               .WithMany()
-               .HasForeignKey(license => license.UserId)
+        builder.HasOne(license => license.Project)
+               .WithMany(project => project.Licenses)
+               .HasForeignKey(license => license.ProjectId)
                .OnDelete(DeleteBehavior.Cascade);
+
+        // The license stays the team's when the account that got it is deleted.
+        builder.HasOne(license => license.IssuedBy)
+               .WithMany()
+               .HasForeignKey(license => license.IssuedByUserId)
+               .OnDelete(DeleteBehavior.SetNull);
     }
 }

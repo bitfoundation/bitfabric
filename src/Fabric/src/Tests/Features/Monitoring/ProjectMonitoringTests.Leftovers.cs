@@ -21,7 +21,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
         var tehran = TimeZoneInfo.FindSystemTimeZoneById("Asia/Tehran");
@@ -38,12 +38,12 @@ public partial class ProjectMonitoringTests
             var tenantId = await TenantOf(dbContext, project.Id);
 
             await dbContext.ProjectRollups.AddRangeAsync([
-                new ProjectRollup { ProjectId = project.Id, TenantId = tenantId, BucketStart = downAt, Region = "Germany", CheckKey = ProjectRollup.ReportKey, Count = 15, FailedCount = 3, TimedCount = 12, TotalMs = 1200, MaxMs = 150 },
-                new ProjectRollup { ProjectId = project.Id, TenantId = tenantId, BucketStart = degradedAt, Region = "Germany", CheckKey = ProjectRollup.ReportKey, Count = 15, DegradedCount = 4, TimedCount = 15, TotalMs = 1500, MaxMs = 150 }]);
+                new ProjectRollup { MonitoringId = project.Id, TenantId = tenantId, BucketStart = downAt, Region = "Germany", CheckKey = ProjectRollup.ReportKey, Count = 15, FailedCount = 3, TimedCount = 12, TotalMs = 1200, MaxMs = 150 },
+                new ProjectRollup { MonitoringId = project.Id, TenantId = tenantId, BucketStart = degradedAt, Region = "Germany", CheckKey = ProjectRollup.ReportKey, Count = 15, DegradedCount = 4, TimedCount = 15, TotalMs = 1500, MaxMs = 150 }]);
             await dbContext.SaveChangesAsync(TestContext.CancellationToken);
         }
 
-        var inTehran = (await projects.GetProjects("Asia/Tehran", TestContext.CancellationToken)).Single();
+        var inTehran = (await projects.GetMonitorings("Asia/Tehran", TestContext.CancellationToken)).Single();
 
         Assert.HasCount(30, inTehran.Last30Days);
         Assert.AreEqual(today, inTehran.Last30Days[^1].Date, "Today last, in the viewer's zone.");
@@ -69,13 +69,13 @@ public partial class ProjectMonitoringTests
         Assert.AreEqual(100.0 * 28 / 31, inTehran.Uptime30Days!.Value, 0.001);
 
         // The same rounds in UTC: the quarter past Tehran's midnight is the evening before.
-        var inUtc = (await projects.GetProjects("UTC", TestContext.CancellationToken)).Single();
+        var inUtc = (await projects.GetMonitorings("UTC", TestContext.CancellationToken)).Single();
         var downInUtc = inUtc.Last30Days.Single(day => day.Tone is ProjectDayTone.Down);
         Assert.AreEqual(DateOnly.FromDateTime(downAt.UtcDateTime), downInUtc.Date);
         Assert.AreNotEqual(down.Date, downInUtc.Date);
 
         // A zone this server doesn't know, or none, is UTC.
-        var unknown = (await projects.GetProjects("Not/AZone", TestContext.CancellationToken)).Single();
+        var unknown = (await projects.GetMonitorings("Not/AZone", TestContext.CancellationToken)).Single();
         Assert.AreSequenceEqual(inUtc.Last30Days.Select(day => (day.Date, day.Tone)).ToArray(), unknown.Last30Days.Select(day => (day.Date, day.Tone)).ToArray());
     }
 
@@ -85,7 +85,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var incidents = client.GetController<IProjectIncidentsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
@@ -97,7 +97,7 @@ public partial class ProjectMonitoringTests
         // Someone else's team can't.
         await using (var stranger = await SignInWithATeamOfTheirOwn(server))
         {
-            await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.GetController<IProjectsController>().Disconnect(project.Id, TestContext.CancellationToken));
+            await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.GetController<IMonitoringsController>().Disconnect(project.Id, TestContext.CancellationToken));
         }
 
         var disconnected = await projects.Disconnect(project.Id, TestContext.CancellationToken);
@@ -109,7 +109,7 @@ public partial class ProjectMonitoringTests
         await using (var scope = server.ApiApp.Services.CreateAsyncScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            Assert.IsFalse(await dbContext.ProjectConnections.IgnoreQueryFilters().AnyAsync(connection => connection.ProjectId == project.Id, TestContext.CancellationToken), "No token is kept.");
+            Assert.IsFalse(await dbContext.ProjectConnections.IgnoreQueryFilters().AnyAsync(connection => connection.MonitoringId == project.Id, TestContext.CancellationToken), "No token is kept.");
             Assert.IsNull((await dbContext.ProjectIncidents.IgnoreQueryFilters().SingleAsync(row => row.Id == incident.Id, TestContext.CancellationToken)).NextEscalationAt,
                           "Nobody is woken for an app nobody watches.");
         }
@@ -117,16 +117,16 @@ public partial class ProjectMonitoringTests
         // A round already under way reads nothing, and tells nobody an approval was lost: the team let it go.
         await Probe(server, project.Id);
 
-        var card = (await projects.GetProjects(null, TestContext.CancellationToken)).Single();
+        var card = (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single();
         Assert.AreEqual(ProjectConnectionStatus.Disconnected, card.ConnectionStatus);
 
         await using (var scope = server.ApiApp.Services.CreateAsyncScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            Assert.IsFalse(await dbContext.ProjectAlerts.IgnoreQueryFilters().AnyAsync(alert => alert.ProjectId == project.Id && alert.Kind == ProjectAlertKind.ConnectionLost, TestContext.CancellationToken));
+            Assert.IsFalse(await dbContext.ProjectAlerts.IgnoreQueryFilters().AnyAsync(alert => alert.MonitoringId == project.Id && alert.Kind == ProjectAlertKind.ConnectionLost, TestContext.CancellationToken));
         }
 
-        var history = await incidents.GetHistory(new() { ProjectId = project.Id, From = DateTimeOffset.UtcNow.AddDays(-1), To = DateTimeOffset.UtcNow }, TestContext.CancellationToken);
+        var history = await incidents.GetHistory(new() { MonitoringId = project.Id, From = DateTimeOffset.UtcNow.AddDays(-1), To = DateTimeOffset.UtcNow }, TestContext.CancellationToken);
         Assert.Contains(period => period.CheckKey == "smtp", history.Periods, "The history stays.");
         Assert.HasCount(1, history.Incidents);
 
@@ -142,7 +142,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var projects = client.GetController<IProjectsController>();
+        var projects = client.GetController<IMonitoringsController>();
         var incidents = client.GetController<IProjectIncidentsController>();
         var project = await Connect(projects, customerApp, "customer.example");
 
@@ -162,7 +162,7 @@ public partial class ProjectMonitoringTests
         await Probe(server, project.Id);
 
         var now = DateTimeOffset.UtcNow;
-        await incidents.AddMaintenanceWindow(new() { ProjectId = project.Id, Title = "Moving the database", StartsAt = now.AddDays(1), EndsAt = now.AddDays(1).AddHours(1), RepeatsWeekly = true }, TestContext.CancellationToken);
+        await incidents.AddMaintenanceWindow(new() { MonitoringId = project.Id, Title = "Moving the database", StartsAt = now.AddDays(1), EndsAt = now.AddDays(1).AddHours(1), RepeatsWeekly = true }, TestContext.CancellationToken);
 
         // More periods than a page, all from one round, as when every part fails at once: no page may lose or repeat one.
         int periodCount;
@@ -175,7 +175,7 @@ public partial class ProjectMonitoringTests
             await dbContext.ProjectCheckPeriods.AddRangeAsync(Enumerable.Range(0, ProjectHistoryExport.PageSize + 10).Select(index => new ProjectCheckPeriod
             {
                 Id = Guid.CreateVersion7(),
-                ProjectId = project.Id,
+                MonitoringId = project.Id,
                 TenantId = tenantId,
                 CheckKey = $"part{index}",
                 Title = $"Part {index}",
@@ -185,11 +185,11 @@ public partial class ProjectMonitoringTests
             }), TestContext.CancellationToken);
             await dbContext.SaveChangesAsync(TestContext.CancellationToken);
 
-            periodCount = await dbContext.ProjectCheckPeriods.IgnoreQueryFilters().CountAsync(period => period.ProjectId == project.Id, TestContext.CancellationToken);
+            periodCount = await dbContext.ProjectCheckPeriods.IgnoreQueryFilters().CountAsync(period => period.MonitoringId == project.Id, TestContext.CancellationToken);
         }
 
         // CSV: one file, a row a record.
-        using var csvResponse = await client.HttpClient.GetAsync($"{IProjectsController.ExportHistoryUri}/{project.Id}/csv", TestContext.CancellationToken);
+        using var csvResponse = await client.HttpClient.GetAsync($"{IMonitoringsController.ExportHistoryUri}/{project.Id}/csv", TestContext.CancellationToken);
         Assert.IsNotNull(csvResponse.Content.Headers.ContentType);
         Assert.AreEqual("text/csv", csvResponse.Content.Headers.ContentType.MediaType);
         Assert.IsNotNull(csvResponse.Content.Headers.ContentDisposition);
@@ -217,7 +217,7 @@ public partial class ProjectMonitoringTests
         Assert.Contains(line => line.StartsWith("maintenance,", StringComparison.Ordinal) && line.Contains(",weekly,Moving the database,", StringComparison.Ordinal), lines);
 
         // JSON: the same records, grouped.
-        using var jsonResponse = await client.HttpClient.GetAsync($"{IProjectsController.ExportHistoryUri}/{project.Id}/json", TestContext.CancellationToken);
+        using var jsonResponse = await client.HttpClient.GetAsync($"{IMonitoringsController.ExportHistoryUri}/{project.Id}/json", TestContext.CancellationToken);
         Assert.IsNotNull(jsonResponse.Content.Headers.ContentType);
         Assert.AreEqual("application/json", jsonResponse.Content.Headers.ContentType.MediaType);
         using var json = JsonDocument.Parse(await jsonResponse.Content.ReadAsStringAsync(TestContext.CancellationToken));
@@ -239,9 +239,9 @@ public partial class ProjectMonitoringTests
 
         // Scoped to the team like every other endpoint, and only these two formats.
         await using var stranger = await SignInWithATeamOfTheirOwn(server);
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.HttpClient.GetAsync($"{IProjectsController.ExportHistoryUri}/{project.Id}/csv", TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.HttpClient.GetAsync($"{IProjectsController.ExportHistoryUri}/{project.Id}/json", TestContext.CancellationToken));
-        await Assert.ThrowsExactlyAsync<BadRequestException>(() => client.HttpClient.GetAsync($"{IProjectsController.ExportHistoryUri}/{project.Id}/xml", TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.HttpClient.GetAsync($"{IMonitoringsController.ExportHistoryUri}/{project.Id}/csv", TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.HttpClient.GetAsync($"{IMonitoringsController.ExportHistoryUri}/{project.Id}/json", TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<BadRequestException>(() => client.HttpClient.GetAsync($"{IMonitoringsController.ExportHistoryUri}/{project.Id}/xml", TestContext.CancellationToken));
     }
 
     [TestMethod]
@@ -251,7 +251,7 @@ public partial class ProjectMonitoringTests
         customerApp.OpenPaths.Add("/hangfire");
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
         await RunQueuedScans(server, project.Id);
 
         // A second member of the team, who last used bit Fabric in Persian.
@@ -286,12 +286,12 @@ public partial class ProjectMonitoringTests
         Assert.Contains("Customer app", owners.Body);
         Assert.Contains("customer.example", owners.Body);
         Assert.Contains("The background jobs dashboard (/hangfire) is open to everyone", owners.Body, "The urgent findings, in plain words from their keys.");
-        Assert.Contains($"/en-US/projects/{project.Id}?tab=scans", owners.Body, "Each project with a link to its Scans tab.");
+        Assert.Contains($"/en-US/projects/{project.ProjectId}/{project.Id}?tab=scans", owners.Body, "Each project with a link to its Scans tab.");
 
         var colleagues = ScansEmails().Single(email => email.To == colleague);
         Assert.AreEqual("Test team: اسکن‌های این هفته", colleagues.Subject, "In the recipient's language.");
         Assert.Contains("dir=\"rtl\"", colleagues.Body);
-        Assert.Contains($"/fa-IR/projects/{project.Id}?tab=scans", colleagues.Body);
+        Assert.Contains($"/fa-IR/projects/{project.ProjectId}/{project.Id}?tab=scans", colleagues.Body);
 
         // However often the job runs in a week, nobody gets a second one: sign-in codes go out through the same email
         // service, which must never look like a flood to the mail provider.
@@ -323,7 +323,7 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         await using var mcp = await ConnectToMcp(server, await AccessTokenOf(client));
 
@@ -336,7 +336,7 @@ public partial class ProjectMonitoringTests
 
         var list = await Call(mcp, "GetProjects", new() { ["timeZone"] = "Asia/Tehran" });
         Assert.AreEqual("Asia/Tehran", list.GetProperty("daysIn").GetString());
-        Assert.AreEqual(0, list.GetProperty("projects").EnumerateArray().Single().GetProperty("last30DaysWithProblems").GetArrayLength(), "Nothing went wrong yet.");
+        Assert.AreEqual(0, list.GetProperty("projects").EnumerateArray().Single().GetProperty("environments").EnumerateArray().Single().GetProperty("last30DaysWithProblems").GetArrayLength(), "Nothing went wrong yet.");
 
         var saved = await Call(mcp, "SetProjectScanSettings", new() { ["project"] = "customer.example", ["weeklyEmail"] = false });
         Assert.IsFalse(saved.GetProperty("weeklyEmail").GetBoolean());
@@ -351,6 +351,6 @@ public partial class ProjectMonitoringTests
         return await scope.ServiceProvider.GetRequiredService<ProjectScansEmailJobRunner>().SendTo(tenantId, at, TestContext.CancellationToken);
     }
 
-    private async Task<Guid> TenantOf(AppDbContext dbContext, Guid projectId)
-        => await dbContext.Projects.IgnoreQueryFilters().Where(project => project.Id == projectId).Select(project => project.TenantId).SingleAsync(TestContext.CancellationToken);
+    private async Task<Guid> TenantOf(AppDbContext dbContext, Guid monitoringId)
+        => await dbContext.Monitorings.IgnoreQueryFilters().Where(project => project.Id == monitoringId).Select(project => project.TenantId).SingleAsync(TestContext.CancellationToken);
 }

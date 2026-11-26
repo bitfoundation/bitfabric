@@ -18,7 +18,7 @@ public class ProjectHistoryTabTests
     [TestMethod]
     public async Task ThePartsTheServerLists_Should_BeDrawnByTheirNames_WithTheDaysBeforeOneWasAddedAsNotInTheReport()
     {
-        var projectId = Guid.NewGuid();
+        var monitoringId = Guid.NewGuid();
         var now = DateTimeOffset.UtcNow;
 
         var controller = A.Fake<IProjectIncidentsController>();
@@ -37,7 +37,7 @@ public class ProjectHistoryTabTests
         await server.Build(configureTestWebAppServices: services => services.Replace(ServiceDescriptor.Singleton(controller))).Start(TestContext.CancellationToken);
         await using var ctx = server.CreateBunitContext();
 
-        var cut = ctx.Render<ProjectHistory>(parameters => parameters.Add(p => p.Project, new ProjectDto { Id = projectId, Name = "Bluebird" }));
+        var cut = ctx.Render<ProjectHistory>(parameters => parameters.Add(p => p.Project, new MonitoringDto { Id = monitoringId, Name = "Bluebird" }));
 
         cut.WaitForAssertion(() => Assert.Contains("Apple push", cut.Markup));
         Assert.DoesNotContain(">apns<", cut.Markup);

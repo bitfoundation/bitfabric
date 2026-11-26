@@ -43,10 +43,13 @@ public partial class StatusPageUITests : AppPageTest
         var slug = $"ui-{Guid.NewGuid():N}"[..20];
 
         Tenant tenant = new() { Id = Guid.CreateVersion7(), Name = slug, Title = "Test team" };
-        Project project = new()
+        Bit.Fabric.Server.Api.Features.Projects.Models.Project parent = new() { Id = Guid.CreateVersion7(), TenantId = tenant.Id, Name = "Customer app", CreatedOn = now.AddDays(-3) };
+        ProjectMonitoring project = new()
         {
             Id = Guid.CreateVersion7(),
             TenantId = tenant.Id,
+            ProjectId = parent.Id,
+            Environment = ProjectMonitoring.Production,
             Address = "https://customer.example",
             ServerAddress = "https://customer.example",
             Name = "Customer app",
@@ -58,7 +61,7 @@ public partial class StatusPageUITests : AppPageTest
         StatusPage page = new()
         {
             Id = Guid.CreateVersion7(),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             TenantId = tenant.Id,
             Slug = slug,
             IsPublished = true,
@@ -66,7 +69,7 @@ public partial class StatusPageUITests : AppPageTest
             Components = [new() { Id = Guid.CreateVersion7(), TenantId = tenant.Id, Name = [new() { Culture = "en-US", Text = "Website and app" }], CheckKeys = ["AppDbContext"] }]
         };
 
-        await dbContext.AddRangeAsync(tenant, project, page);
+        await dbContext.AddRangeAsync(tenant, parent, project, page);
         await dbContext.SaveChangesAsync(TestContext.CancellationToken);
 
         return slug;

@@ -1,3 +1,4 @@
+using Bit.Fabric.Server.Api.Features.Identity.Models;
 using Bit.Fabric.Server.Api.Features.Tenants;
 
 namespace Bit.Fabric.Server.Api.Features.Monitoring.Models;
@@ -8,9 +9,9 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring.Models;
 /// </summary>
 public partial class ProjectConnection : ITenantAware
 {
-    public Guid ProjectId { get; set; }
+    public Guid MonitoringId { get; set; }
 
-    public Project? Project { get; set; }
+    public ProjectMonitoring? Monitoring { get; set; }
 
     public Guid TenantId { get; set; }
 
@@ -41,8 +42,10 @@ public partial class ProjectConnection : ITenantAware
 
     public DateTimeOffset AccessTokenExpiresAt { get; set; }
 
-    /// <summary>The bit Fabric user who connected it.</summary>
-    public Guid ConnectedByUserId { get; set; }
+    /// <summary>The bit Fabric user who connected it; null once their account is deleted.</summary>
+    public Guid? ConnectedByUserId { get; set; }
+
+    public User? ConnectedBy { get; set; }
 
     public DateTimeOffset ConnectedOn { get; set; }
 

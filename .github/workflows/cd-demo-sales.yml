@@ -13,6 +13,9 @@ env:
   SERVER_ADDRESS: 'https://sales.bitfabric.co'
   # The summary.json of the demo's status page on bit Fabric, which the apps read to tell their users when something is wrong.
   STATUS_PAGE_SUMMARY_URL: 'https://api.bitfabric.co/api/v1/PublicStatus/Summary/bit-salesmodule'
+  # The demo's project id, which every job gives its project once the DEMO_SALES_LICENSE secret holds the demo's License,
+  # so that one License fits every run (See .github/actions/new-demo-project). Not a secret: without the License it gives nothing.
+  DEMO_PROJECT_ID: '469f0afd-5043-484c-be01-877e08e602cd'
   R2_BUCKET: 'sales'
   OpenAI__ApiKey: ${{ secrets.OPENAI__APIKEY }}
   OpenAI__Endpoint: ${{ vars.OPENAI__ENDPOINT }}
@@ -89,7 +92,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new SalesModule --framework net10.0 --database PostgreSQL --module Sales --appInsights --apiServerUrl ${{ env.SERVER_ADDRESS }} --webAppUrl ${{ env.SERVER_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_SALES_LICENSE }}
+        arguments: SalesModule --framework net10.0 --database PostgreSQL --module Sales --appInsights --apiServerUrl ${{ env.SERVER_ADDRESS }} --webAppUrl ${{ env.SERVER_ADDRESS }} --filesStorage S3 --notification --captcha reCaptcha --signalR --ads --template-package "$BIT_TEMPLATE_PACKAGE" --yes --no-build --no-format --no-migration --no-trust
 
     - name: Update core appsettings.json
       uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0
@@ -180,7 +187,11 @@ jobs:
       uses: ./.github/actions/setup-bit-cli
 
     - name: Create project with bit new
-      run: bit new SalesModule --framework net10.0 --database PostgreSQL --module Sales --sentry --apiServerUrl ${{ env.SERVER_ADDRESS }} --webAppUrl ${{ env.SERVER_ADDRESS }} --filesStorage S3 --captcha reCaptcha --signalR --ads --template-package "${{ env.BIT_TEMPLATE_PACKAGE }}" --yes --platforms windows --no-build --no-format --no-migration --no-trust
+      uses: ./.github/actions/new-demo-project
+      with:
+        project-id: ${{ env.DEMO_PROJECT_ID }}
+        license: ${{ secrets.DEMO_SALES_LICENSE }}
+        arguments: SalesModule --framework net10.0 --database PostgreSQL --module Sales --sentry --apiServerUrl ${{ env.SERVER_ADDRESS }} --webAppUrl ${{ env.SERVER_ADDRESS }} --filesStorage S3 --captcha reCaptcha --signalR --ads --template-package "$BIT_TEMPLATE_PACKAGE" --yes --platforms windows --no-build --no-format --no-migration --no-trust
   
     - name: Update core appsettings.json
       uses: devops-actions/variable-substitution@2344e258b5e8b1bd83b53f14271a410f7a4f5a44 # v3.1.0

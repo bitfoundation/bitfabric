@@ -7,8 +7,8 @@ namespace Bit.Fabric.Shared.Features.Monitoring;
 public interface IStatusPagesController : IAppController
 {
     /// <summary>The page's settings; a project that has none gets its first, unpublished, with a component per kind of part.</summary>
-    [HttpGet("{projectId}")]
-    Task<StatusPageSettingsDto> GetStatusPage(Guid projectId, CancellationToken cancellationToken);
+    [HttpGet("{monitoringId}")]
+    Task<StatusPageSettingsDto> GetStatusPage(Guid monitoringId, CancellationToken cancellationToken);
 
     [HttpPost]
     Task<StatusPageSettingsDto> SaveStatusPage(StatusPageSettingsDto settings, CancellationToken cancellationToken);
@@ -18,11 +18,11 @@ public interface IStatusPagesController : IAppController
     Task<StatusPageSettingsDto> ConnectCustomHostname(ConnectCustomHostnameRequestDto request, CancellationToken cancellationToken);
 
     /// <summary>Reads the host name's state again from Cloudflare.</summary>
-    [HttpPost("{projectId}")]
-    Task<StatusPageSettingsDto> RefreshCustomHostname(Guid projectId, CancellationToken cancellationToken);
+    [HttpPost("{monitoringId}")]
+    Task<StatusPageSettingsDto> RefreshCustomHostname(Guid monitoringId, CancellationToken cancellationToken);
 
-    [HttpPost("{projectId}")]
-    Task<StatusPageSettingsDto> DisconnectCustomHostname(Guid projectId, CancellationToken cancellationToken);
+    [HttpPost("{monitoringId}")]
+    Task<StatusPageSettingsDto> DisconnectCustomHostname(Guid monitoringId, CancellationToken cancellationToken);
 
     /// <summary>A new incident or announcement, or an update to one, in the languages the team wrote it in.</summary>
     [HttpPost]

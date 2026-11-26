@@ -86,9 +86,9 @@ public static partial class MonitoringSamples
             StatusPage = new() { Slug = key, Languages = [MonitoringTexts.MainCulture] }
         };
 
-        project.Sla = new() { ProjectId = project.Id };
-        project.ScanSettings = new() { ProjectId = project.Id };
-        project.StatusPage.ProjectId = project.Id;
+        project.Sla = new() { MonitoringId = project.Id };
+        project.ScanSettings = new() { MonitoringId = project.Id };
+        project.StatusPage.MonitoringId = project.Id;
 
         return project;
     }
@@ -178,7 +178,7 @@ public static partial class MonitoringSamples
         var window = new ProjectMaintenanceWindowDto
         {
             Id = MonitoringNoise.IdOf($"{project.Key}:window:{title}"),
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             Title = title,
             StartsAt = startsAt,
             EndsAt = startsAt + length,

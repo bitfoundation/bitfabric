@@ -15,7 +15,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var statusPages = client.GetController<IStatusPagesController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var page = await statusPages.GetStatusPage(project.Id, TestContext.CancellationToken);
 
@@ -45,7 +45,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var statusPages = client.GetController<IStatusPagesController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var page = await statusPages.GetStatusPage(project.Id, TestContext.CancellationToken);
         page.IsPublished = true;
@@ -76,7 +76,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var statusPages = client.GetController<IStatusPagesController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var page = await statusPages.GetStatusPage(project.Id, TestContext.CancellationToken);
         page.IsPublished = true;
@@ -85,7 +85,7 @@ public partial class ProjectMonitoringTests
 
         await statusPages.Post(new()
         {
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             Kind = ProjectIncidentKind.Announcement,
             Title = new() { ["en-US"] = "New sign-in page", ["fa-IR"] = "صفحه‌ی ورود جدید" },
             Text = new() { ["en-US"] = "Signing in got faster.", ["fa-IR"] = "ورود سریع‌تر شد." }
@@ -106,7 +106,7 @@ public partial class ProjectMonitoringTests
         // The main language is the one a post can't be without.
         await Assert.ThrowsExactlyAsync<BadRequestException>(() => statusPages.Post(new()
         {
-            ProjectId = project.Id,
+            MonitoringId = project.Id,
             Kind = ProjectIncidentKind.Incident,
             Title = new() { ["fa-IR"] = "کندی" },
             Text = new() { ["fa-IR"] = "بررسی می‌کنیم." }
@@ -120,7 +120,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var statusPages = client.GetController<IStatusPagesController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var page = await statusPages.GetStatusPage(project.Id, TestContext.CancellationToken);
         page.IsPublished = true;
@@ -153,7 +153,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var statusPages = client.GetController<IStatusPagesController>();
-        var project = await Connect(client.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(client.GetController<IMonitoringsController>(), customerApp, "customer.example");
 
         var page = await statusPages.GetStatusPage(project.Id, TestContext.CancellationToken);
         page.IsPublished = true;
@@ -203,11 +203,11 @@ public partial class ProjectMonitoringTests
         var customerApp = new FakeCustomerApp();
         await using var server = await StartServer(customerApp);
         await using var owner = await SignInWithATeamOfTheirOwn(server);
-        var ownersPage = await owner.GetController<IStatusPagesController>().GetStatusPage((await Connect(owner.GetController<IProjectsController>(), customerApp, "customer.example")).Id, TestContext.CancellationToken);
+        var ownersPage = await owner.GetController<IStatusPagesController>().GetStatusPage((await Connect(owner.GetController<IMonitoringsController>(), customerApp, "customer.example")).Id, TestContext.CancellationToken);
 
         await using var other = await SignInWithATeamOfTheirOwn(server);
         var statusPages = other.GetController<IStatusPagesController>();
-        var project = await Connect(other.GetController<IProjectsController>(), customerApp, "customer.example");
+        var project = await Connect(other.GetController<IMonitoringsController>(), customerApp, "customer.example");
         var page = await statusPages.GetStatusPage(project.Id, TestContext.CancellationToken);
 
         Assert.AreNotEqual(ownersPage.Slug, page.Slug, "Another team's page of the same app gets an address of its own.");
@@ -220,6 +220,6 @@ public partial class ProjectMonitoringTests
 
         // The test server has no Cloudflare for SaaS, so the page stays on bit Fabric's address.
         Assert.IsNull(page.CnameTarget);
-        await Assert.ThrowsExactlyAsync<BadRequestException>(() => statusPages.ConnectCustomHostname(new() { ProjectId = project.Id, Hostname = "status.customer.example" }, TestContext.CancellationToken));
+        await Assert.ThrowsExactlyAsync<BadRequestException>(() => statusPages.ConnectCustomHostname(new() { MonitoringId = project.Id, Hostname = "status.customer.example" }, TestContext.CancellationToken));
     }
 }
