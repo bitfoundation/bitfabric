@@ -12001,4 +12001,43 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="GrowthPeopleInTeamsNote" xml:space="preserve">
     <value>Members of teams that hold a License</value>
   </data>
+    <data name="AppHomeFactCheckTitle" xml:space="preserve">
+        <value>Fact-check us in under a minute</value>
+    </data>
+    <data name="AppHomeFactCheckLead" xml:space="preserve">
+        <value>Let your own AI check every claim on this site against its sources and our code, and tell you whether bit Fabric fits your business.</value>
+    </data>
+    <data name="AppHomeFactCheckShowHow" xml:space="preserve">
+        <value>Show me how</value>
+    </data>
+    <data name="AppHomeFactCheckHide" xml:space="preserve">
+        <value>Hide</value>
+    </data>
+    <data name="AppHomeFactCheckYourAITitle" xml:space="preserve">
+        <value>Have Claude Desktop, Codex or another AI?</value>
+    </data>
+    <data name="AppHomeFactCheckYourAIText" xml:space="preserve">
+        <value>Hand it this site: every claim here links to its source, an article or our code. Copy this into your AI, fill in your business, and it fact-checks bit Fabric and tells you, from your own business and needs, whether it really fits.</value>
+    </data>
+    <data name="AppHomeFactCheckYourselfTitle" xml:space="preserve">
+        <value>Or see for yourself</value>
+    </data>
+    <data name="AppHomeFactCheckYourselfText" xml:space="preserve">
+        <value>Read the site yourself, or ask our assistant: chat with it, or even call it. It reads every page and our code, and this chat isn't saved.</value>
+    </data>
+    <data name="AppHomeFactCheckAskAssistant" xml:space="preserve">
+        <value>Ask our assistant</value>
+    </data>
+    <data name="AppHomeFactCheckChatPrompt" xml:space="preserve">
+        <value>Is bit Fabric worth starting with for my business? Ask me what you need to know, then fact-check it for me.</value>
+    </data>
+    <data name="AppHomeFactCheckPrompt" xml:space="preserve">
+        <value>Fact-check bit Fabric ({0}) for me, as a skeptical reviewer, not a salesperson.
+My business: [what it does and how big it is]
+What my app must do: [what it must do, on which devices, and what matters most]
+
+Connect to the MCP server {1} and call its EvaluateBitFabric tool with the two above. If you can't connect to it, send its JSON-RPC requests (tools/list, then tools/call) to that address yourself; if you can't do that either, read {0}/llms-full.txt.
+Then check the claims that matter to me yourself: each links to its source, an article or the code at https://github.com/bitfoundation/bitfabric.
+Tell me in under 200 words what holds and what doesn't, what it would cost me in time, money and skills, and whether it's worth starting with: yes, no or not yet, and why.</value>
+    </data>
 </root>

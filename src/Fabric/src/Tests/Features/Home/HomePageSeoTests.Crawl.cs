@@ -60,6 +60,14 @@ public partial class HomePageSeoTests
                 continue;
             }
 
+            // Every page in one file, for an AI that reads the whole site at once (See HomePageSeoTests.Markdown)
+            if (path is "/llms-full.txt")
+            {
+                using var full = await client.GetAsync(link, TestContext.CancellationToken);
+                Assert.AreEqual(HttpStatusCode.OK, full.StatusCode, $"{link} answers.");
+                continue;
+            }
+
             Assert.StartsWith("/en-US/", path, $"{link} carries its culture, so an agent meets no redirect.");
             Assert.Contains(BarePath(path), PublicPages, $"{link} is a public page.");
             Assert.DoesNotContain(BarePath(path), AccountPages, $"{link} needs no account.");

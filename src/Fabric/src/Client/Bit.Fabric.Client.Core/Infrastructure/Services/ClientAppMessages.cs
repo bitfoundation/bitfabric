@@ -15,6 +15,12 @@ public partial class ClientAppMessages
     public const string SHOW_SNACK = nameof(SHOW_SNACK);
 
     /// <summary>
+    /// Opens the AI chat panel on an evaluation of bit Fabric for the visitor's business, its payload the first message
+    /// (See AppAiChatPanel and the home page's fact-check band).
+    /// </summary>
+    public const string EVALUATE_WITH_AI = nameof(EVALUATE_WITH_AI);
+
+    /// <summary>
     /// A publisher that sends this message announces that the subscriber should show a modal.
     /// </summary>
     public const string SHOW_MODAL = nameof(SHOW_MODAL);

@@ -63,7 +63,7 @@
                     @* Built on Bit.BlazorUI.AI, so it renders only once EnsureLoaded has loaded that. *@
                     @if (isLoaded)
                     {
-                        <AppAiChat @ref="chat" InitialPrompt="@initialPrompt" OnStatusChanged="HandleOnStatusChanged" EnsureSignedIn="EnsureSignedIn" />
+                        <AppAiChat @ref="chat" InitialPrompt="@initialPrompt" InitialEvaluation="initialEvaluation" OnStatusChanged="HandleOnStatusChanged" EnsureSignedIn="EnsureSignedIn" />
                     }
                     else if (hasFailed)
                     {

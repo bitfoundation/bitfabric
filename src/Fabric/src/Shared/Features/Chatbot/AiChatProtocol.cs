@@ -70,7 +70,7 @@ public static class AiChatProtocol
         public const string RecordEvaluationOutcome = nameof(RecordEvaluationOutcome);
 
         /// <summary>The calls the user doesn't see: the ones that only feed the model, and the suggestions, which show under the answer.</summary>
-        public static readonly IReadOnlySet<string> Hidden = new HashSet<string>([GetCurrentDateTime, GetAppPages, ShowFollowUpSuggestions, GetBitLibraryTools]);
+        public static readonly IReadOnlySet<string> Hidden = new HashSet<string>([GetCurrentDateTime, GetAppPages, ShowFollowUpSuggestions, GetBitLibraryTools, RecordEvaluationOutcome]);
 
         /// <summary>The calls drawn as a card of their own: a form, an approval, products.</summary>
         public static readonly IReadOnlySet<string> Cards = new HashSet<string>([

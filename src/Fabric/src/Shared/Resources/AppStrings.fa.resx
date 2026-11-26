@@ -12001,4 +12001,43 @@
   <data name="GrowthPeopleInTeamsNote" xml:space="preserve">
     <value>اعضای Team هایی که License دارند</value>
   </data>
+    <data name="AppHomeFactCheckTitle" xml:space="preserve">
+        <value>ادعاهای ما را در کمتر از یک دقیقه بسنجید</value>
+    </data>
+    <data name="AppHomeFactCheckLead" xml:space="preserve">
+        <value>بگذارید AI خودتان هر ادعای این سایت را با منابعش و کد ما بسنجد و بگوید bit Fabric به کار کسب‌وکار شما می‌آید یا نه.</value>
+    </data>
+    <data name="AppHomeFactCheckShowHow" xml:space="preserve">
+        <value>نشانم بده چطور</value>
+    </data>
+    <data name="AppHomeFactCheckHide" xml:space="preserve">
+        <value>بستن</value>
+    </data>
+    <data name="AppHomeFactCheckYourAITitle" xml:space="preserve">
+        <value>Claude Desktop، Codex یا AI دیگری دارید؟</value>
+    </data>
+    <data name="AppHomeFactCheckYourAIText" xml:space="preserve">
+        <value>این سایت را به آن بدهید: هر ادعای اینجا به منبعش، یک مقاله یا کد ما، لینک دارد. این متن را در AI خودتان کپی کنید و کسب‌وکارتان را در آن بنویسید؛ bit Fabric را راستی‌آزمایی می‌کند و بر اساس کسب‌وکار و نیازهای خودتان می‌گوید واقعاً به کارتان می‌آید یا نه.</value>
+    </data>
+    <data name="AppHomeFactCheckYourselfTitle" xml:space="preserve">
+        <value>یا خودتان ببینید</value>
+    </data>
+    <data name="AppHomeFactCheckYourselfText" xml:space="preserve">
+        <value>سایت را خودتان بخوانید، یا از دستیار ما بپرسید: با آن چت کنید یا حتی به آن زنگ بزنید. همهٔ صفحه‌ها و کد ما را می‌خواند، و این گفتگو ذخیره نمی‌شود.</value>
+    </data>
+    <data name="AppHomeFactCheckAskAssistant" xml:space="preserve">
+        <value>از دستیار ما بپرسید</value>
+    </data>
+    <data name="AppHomeFactCheckChatPrompt" xml:space="preserve">
+        <value>آیا شروع با bit Fabric برای کسب‌وکار من ارزش دارد؟ هر چه لازم است بدانی از من بپرس، بعد برایم راستی‌آزمایی‌اش کن.</value>
+    </data>
+    <data name="AppHomeFactCheckPrompt" xml:space="preserve">
+        <value>bit Fabric ({0}) را برایم راستی‌آزمایی کن، مثل یک بررسی‌کنندهٔ سخت‌گیر، نه یک فروشنده.
+کسب‌وکار من: [چه کار می‌کند و چقدر بزرگ است]
+اپ من باید: [چه کند، روی چه دستگاه‌هایی، و چه چیزی برایم مهم‌تر است]
+
+به MCP server با آدرس {1} وصل شو و ابزار EvaluateBitFabric آن را با این دو صدا بزن. اگر نمی‌توانی وصل شوی، درخواست‌های JSON-RPC آن (tools/list و بعد tools/call) را خودت به همان آدرس بفرست؛ اگر این هم نشد، {0}/llms-full.txt را بخوان.
+بعد ادعاهایی را که برای من مهم است خودت بررسی کن: هر کدام به منبعش، یک مقاله یا کد در https://github.com/bitfoundation/bitfabric، لینک دارد.
+در کمتر از ۲۰۰ کلمه بگو چه چیزی درست است و چه چیزی نه، چقدر وقت، پول و مهارت از من می‌گیرد، و آیا شروع با آن ارزش دارد: بله، نه یا هنوز نه، و چرا.</value>
+    </data>
 </root>

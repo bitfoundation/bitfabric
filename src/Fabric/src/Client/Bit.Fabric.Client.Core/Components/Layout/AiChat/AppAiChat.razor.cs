@@ -37,6 +37,15 @@ public partial class AppAiChat : IAppAiChat
     /// <summary>A prompt of the app's own the chat sends as it opens, once it has read its conversation back (See AppAiChatPanel.OpenAndSend).</summary>
     [Parameter] public string? InitialPrompt { get; set; }
 
+    /// <summary>Whether <see cref="InitialPrompt"/> starts an evaluation (See <see cref="Evaluate"/>).</summary>
+    [Parameter] public bool InitialEvaluation { get; set; }
+
+    /// <summary>
+    /// Whether this conversation evaluates bit Fabric for the visitor's business, opened from the home page's fact-check band
+    /// (bitfabric-internal/specs/home-page.md, "The AI evaluation"): every question then says so, until the chat starts over.
+    /// </summary>
+    private bool isEvaluation;
+
     /// <summary>What the floating button shows of the chat while the panel is closed: a call going on, a question waiting.</summary>
     [Parameter] public EventCallback<AppAiChatStatus> OnStatusChanged { get; set; }
 
@@ -146,6 +155,8 @@ public partial class AppAiChat : IAppAiChat
 
         if (string.IsNullOrWhiteSpace(InitialPrompt) is false)
         {
+            isEvaluation = InitialEvaluation;
+
             // Not awaited, so the chat renders while the answer streams; what goes wrong is still handled, as an awaited one's would be
             _ = WrapHandled<string>(SendPrompt)(InitialPrompt);
         }
@@ -200,10 +211,20 @@ public partial class AppAiChat : IAppAiChat
         await session.SubmitAsync(prompt);
     }
 
+    /// <inheritdoc cref="IAppAiChat.Evaluate"/>
+    public async Task Evaluate(string prompt)
+    {
+        isEvaluation = true;
+
+        await SendPrompt(prompt);
+    }
+
     /// <summary>Starts over: stops the answer, the reading and the call, and forgets the conversation on this device too.</summary>
     public async Task Clear()
     {
         if (session is null) return;
+
+        isEvaluation = false;
 
         session.Stop();
 
@@ -283,7 +304,8 @@ public partial class AppAiChat : IAppAiChat
     {
         [AiChatProtocol.CultureId] = CultureInfo.CurrentCulture.LCID.ToString(CultureInfo.InvariantCulture),
         [AiChatProtocol.TimeZoneId] = (await TimeZoneService.GetCurrentTimeZone()).Id,
-        [AiChatProtocol.DeviceInfo] = TelemetryContext.Platform
+        [AiChatProtocol.DeviceInfo] = TelemetryContext.Platform,
+        [AiChatProtocol.Evaluation] = isEvaluation ? "true" : null
     };
 
     /// <summary>
