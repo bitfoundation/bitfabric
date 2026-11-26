@@ -12050,7 +12050,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
         <value>Fact-check us in under a minute</value>
     </data>
     <data name="AppHomeFactCheckLead" xml:space="preserve">
-        <value>Let your own AI check every claim on this site against its sources and our code, and tell you whether bit Fabric fits your business.</value>
+        <value>Don't take our word for it. Let the AI you already use and trust every day give you a first verdict: it checks our claims against the articles they cite and the source code, and tells you whether bit Fabric fits your business.</value>
     </data>
     <data name="AppHomeFactCheckShowHow" xml:space="preserve">
         <value>Show me how</value>
@@ -12062,13 +12062,13 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
         <value>Have Claude Desktop, Codex or another AI?</value>
     </data>
     <data name="AppHomeFactCheckYourAIText" xml:space="preserve">
-        <value>Hand it this site: every claim here links to its source, an article or our code. Copy this into your AI, fill in your business, and it fact-checks bit Fabric and tells you, from your own business and needs, whether it really fits.</value>
+        <value>Hand it this site: every claim here links to its source, an article or the source code. Copy this into your AI, fill in your business or pick one above, and it fact-checks bit Fabric and tells you, from your own business and needs, whether it really fits.</value>
     </data>
     <data name="AppHomeFactCheckYourselfTitle" xml:space="preserve">
         <value>Or see for yourself</value>
     </data>
     <data name="AppHomeFactCheckYourselfText" xml:space="preserve">
-        <value>Read the site yourself, or ask our assistant: chat with it, or even call it. It reads every page and our code, and this chat isn't saved.</value>
+        <value>Read the site yourself, or ask our assistant: chat with it, or even call it. It reads every page and the source code, and this chat stays on your device: our servers don't keep it.</value>
     </data>
     <data name="AppHomeFactCheckAskAssistant" xml:space="preserve">
         <value>Ask our assistant</value>
@@ -12084,5 +12084,56 @@ What my app must do: [what it must do, on which devices, and what matters most]
 Connect to the MCP server {1} and call its EvaluateBitFabric tool with the two above. If you can't connect to it, send its JSON-RPC requests (tools/list, then tools/call) to that address yourself; if you can't do that either, read {0}/llms-full.txt.
 Then check the claims that matter to me yourself: each links to its source, an article or the code at https://github.com/bitfoundation/bitfabric.
 Tell me in under 200 words what holds and what doesn't, what it would cost me in time, money and skills, and whether it's worth starting with: yes, no or not yet, and why.</value>
+    </data>
+    <data name="AppHomeFactCheckExamples" xml:space="preserve">
+        <value>Start from a common business, or fill in your own:</value>
+    </data>
+    <data name="AppHomeFactCheckExampleChatPrompt" xml:space="preserve">
+        <value>Is bit Fabric worth starting with for my business? My business: {0} What my app must do: {1} Fact-check it for me.</value>
+    </data>
+    <data name="AppHomeFactCheckStore" xml:space="preserve">
+        <value>Online store</value>
+    </data>
+    <data name="AppHomeFactCheckStoreBusiness" xml:space="preserve">
+        <value>An online store selling our own products, about 2,000 orders a month and growing.</value>
+    </data>
+    <data name="AppHomeFactCheckStoreNeeds" xml:space="preserve">
+        <value>A real store we customize and keep building on for years, not a prototype or an MVP: catalog, cart, checkout and payments, order tracking, and an admin for stock and orders, on the web, iPhone and Android.</value>
+    </data>
+    <data name="AppHomeFactCheckCrm" xml:space="preserve">
+        <value>CRM</value>
+    </data>
+    <data name="AppHomeFactCheckCrmBusiness" xml:space="preserve">
+        <value>A B2B services company with 25 salespeople and account managers.</value>
+    </data>
+    <data name="AppHomeFactCheckCrmNeeds" xml:space="preserve">
+        <value>A CRM shaped around our own sales process and built to grow with us, not an MVP: leads, deals and the pipeline, tasks and reminders, every customer's history, reports, and roles and permissions, on the web and phones.</value>
+    </data>
+    <data name="AppHomeFactCheckPos" xml:space="preserve">
+        <value>Point of sale</value>
+    </data>
+    <data name="AppHomeFactCheckPosBusiness" xml:space="preserve">
+        <value>A chain of 8 cafés and bakeries.</value>
+    </data>
+    <data name="AppHomeFactCheckPosNeeds" xml:space="preserve">
+        <value>Our own point of sale on Android, iPad and Windows tablets, finished and maintained for the long run, not a prototype: fast checkout that keeps selling offline, card payments and receipts, loyalty points, and stock and sales across every shop.</value>
+    </data>
+    <data name="AppHomeFactCheckBookings" xml:space="preserve">
+        <value>Bookings</value>
+    </data>
+    <data name="AppHomeFactCheckBookingsBusiness" xml:space="preserve">
+        <value>Six fitness studios with about 3,000 members.</value>
+    </data>
+    <data name="AppHomeFactCheckBookingsNeeds" xml:space="preserve">
+        <value>A booking app of production quality that we keep customizing, not a quick prototype: class schedules and bookings, memberships and payments, reminders, and an app for the staff, on iPhone, Android and the web.</value>
+    </data>
+    <data name="AppHomeFactCheckFieldService" xml:space="preserve">
+        <value>Field service</value>
+    </data>
+    <data name="AppHomeFactCheckFieldServiceBusiness" xml:space="preserve">
+        <value>A maintenance company with 40 technicians on the road.</value>
+    </data>
+    <data name="AppHomeFactCheckFieldServiceNeeds" xml:space="preserve">
+        <value>An app for our own operations that we'll keep extending, built properly rather than as an MVP: jobs and scheduling, a technician app that works offline, photos and signatures, invoices, and dashboards for the managers.</value>
     </data>
 </root>

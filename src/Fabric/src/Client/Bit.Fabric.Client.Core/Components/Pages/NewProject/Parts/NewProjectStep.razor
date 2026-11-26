@@ -34,6 +34,11 @@
             {
                 <NewProjectTechnicalQuestion HeadingElement="h2" />
             }
+            else if (RendererInfo.IsInteractive is false)
+            {
+                @* Pre-rendered closed too, so crawlers and the page's Markdown copy read every question. *@
+                <div hidden><NewProjectTechnicalQuestion HeadingElement="h2" /></div>
+            }
             <BitButton Variant="BitVariant.Text" Size="BitSize.Small"
                        IconName="@(Store.IsSuperTechnicalOpen ? BitIconName.ChevronUp : BitIconName.ChevronDown)"
                        aria-expanded="@(Store.IsSuperTechnicalOpen ? "true" : "false")"
@@ -42,6 +47,10 @@
             @if (Store.IsSuperTechnicalOpen)
             {
                 <NewProjectSuperTechnicalQuestion HeadingElement="h2" />
+            }
+            else if (RendererInfo.IsInteractive is false)
+            {
+                <div hidden><NewProjectSuperTechnicalQuestion HeadingElement="h2" /></div>
             }
         </div>
         <NewProjectGetIt />

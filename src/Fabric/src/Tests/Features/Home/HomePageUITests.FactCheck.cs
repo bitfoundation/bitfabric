@@ -27,6 +27,17 @@ public partial class HomePageUITests
         await Expect(prompt).ToContainTextAsync($"{server.ApiAppAddress}evaluate-mcp");
         await Expect(prompt).ToContainTextAsync($"{server.WebAppAddress.ToString().TrimEnd('/')}/llms-full.txt");
 
+        // A common business fills in the prompt's blanks, and picking it again gives them back
+        var pos = band.GetByRole(AriaRole.Button, new() { Name = AppStrings.AppHomeFactCheckPos });
+        await pos.ClickAsync();
+        await Expect(pos).ToHaveAttributeAsync("aria-pressed", "true");
+        await Expect(prompt).ToContainTextAsync(AppStrings.AppHomeFactCheckPosBusiness);
+        await Expect(prompt).ToContainTextAsync(AppStrings.AppHomeFactCheckPosNeeds);
+
+        await pos.ClickAsync();
+        await Expect(prompt).Not.ToContainTextAsync(AppStrings.AppHomeFactCheckPosNeeds);
+        await Expect(prompt).ToContainTextAsync("[");
+
         await Context.GrantPermissionsAsync(["clipboard-read", "clipboard-write"]);
         await band.GetByRole(AriaRole.Button, new() { Name = AppStrings.Copy }).ClickAsync();
         await Expect(band.GetByRole(AriaRole.Button, new() { Name = AppStrings.Copied })).ToBeVisibleAsync();

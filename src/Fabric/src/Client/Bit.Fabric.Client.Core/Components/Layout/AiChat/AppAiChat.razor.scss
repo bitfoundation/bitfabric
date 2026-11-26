@@ -7,6 +7,8 @@ $space: calc(#{$bit-spacing-scaling-factor} * #{$bit-layout-density-scale});
     display: flex;
     min-height: 0;
     flex-direction: column;
+    // The greeting is a line of welcome, not a page heading.
+    --bit-AiEmptyState-title-font-size: #{$bit-typography-fs-lg};
 }
 
 ::deep {

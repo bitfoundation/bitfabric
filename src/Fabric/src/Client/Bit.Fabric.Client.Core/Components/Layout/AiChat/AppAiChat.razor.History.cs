@@ -137,7 +137,6 @@ public partial class AppAiChat
         }
     });
 
-    /// <summary>Keeps the conversation as it is now, its newest <see cref="AiChatProtocol.MaxHistory"/> messages: anything older would only be read off the disk to be dropped.</summary>
     /// <summary>Marks the conversation kept on this device as an evaluation (See AppAiChat.Evaluate); forgetting it forgets this too.</summary>
     private Task SaveEvaluation() => TryHistory("save the evaluation", async () =>
     {
@@ -148,6 +147,7 @@ public partial class AppAiChat
 
     private static string EvaluationKey(string owner) => $"{owner}:evaluation";
 
+    /// <summary>Keeps the conversation as it is now, its newest <see cref="AiChatProtocol.MaxHistory"/> messages: anything older would only be read off the disk to be dropped.</summary>
     private Task SaveHistory() => TryHistory("save", async () =>
     {
         if (historyDb is null || session is null || historyOwner is null) return;
@@ -205,7 +205,9 @@ public partial class AppAiChat
 
         await historyDb!.Transact([IndexedDbOperation.Clear(ConversationStore),
                                    IndexedDbOperation.Put(OwnerStore, historyOwner, OwnerKey),
-                                   .. session is null ? [] : new[] { IndexedDbOperation.Put(ConversationStore, ConversationJson(), historyOwner) }]);
+                                   .. session is null ? [] : new[] { IndexedDbOperation.Put(ConversationStore, ConversationJson(), historyOwner) },
+                                   // An evaluation stays one under its new owner, as it does after a reload.
+                                   .. session is null || isEvaluation is false ? [] : new[] { IndexedDbOperation.Put(ConversationStore, "true", EvaluationKey(historyOwner)) }]);
     }
 
     /// <summary>

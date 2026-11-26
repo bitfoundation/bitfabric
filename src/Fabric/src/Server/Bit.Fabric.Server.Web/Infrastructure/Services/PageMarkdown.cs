@@ -134,11 +134,25 @@ public partial class PageMarkdown(IServer server, IHttpClientFactory httpClientF
         if (content is null)
             return string.Empty;
 
-        // What a screen reader hears beside a control, like "Copy the link to this section" or "(opens in a new tab)", says
-        // nothing about the page.
+        // What only a screen reader hears beside a control, like "Copy the link to this section", says nothing about the page:
+        // the library's hidden AriaDescription, whose id ends in -dsc. A description everyone sees, like a switch's line on
+        // what it does, stays.
         var descriptions = content.QuerySelectorAll("[aria-describedby]")
                                   .SelectMany(described => described.GetAttribute("aria-describedby")!.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                                  .Where(id => id.EndsWith("-dsc", StringComparison.Ordinal))
                                   .ToHashSet();
+
+        // A question of an accordion, like the home page's FAQ, is the title inside its header's button, which goes with the
+        // other buttons below: it is kept as a line of its own above its answer.
+        foreach (var header in content.QuerySelectorAll("button.bit-acd-hdr").ToArray())
+        {
+            if (header.QuerySelector(".bit-acd-ttl")?.TextContent.Trim() is not { Length: > 0 } question)
+                continue;
+
+            var line = document.CreateElement("p");
+            line.InnerHtml = $"<strong>{System.Net.WebUtility.HtmlEncode(question)}</strong>";
+            header.Replace(line);
+        }
 
         // A switch says whether it is on, as a reader of the page sees it, like the cost calculator's optional items.
         foreach (var toggle in content.QuerySelectorAll("input[type='checkbox'], [role='switch'], [role='checkbox']").ToArray())

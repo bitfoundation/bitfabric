@@ -68,12 +68,30 @@ public partial class EvaluationTests
         Assert.AreEqual(EvaluationMcpServer.EvaluationsPerHour, model.Evaluations);
     }
 
+    /// <summary>A model that never stops asking for tools still gets only a few rounds past the evaluation's tool calls.</summary>
+    [TestMethod]
+    public async Task AnEvaluation_Should_StopAModelThatKeepsCallingTools()
+    {
+        var model = new GreedyModel();
+        await using var server = await StartServer(model);
+        await using var mcp = await Connect(server);
+
+        var answer = await Evaluate(mcp);
+
+        Assert.IsLessThanOrEqualTo(EvaluationMcpServer.MaxToolCalls + 2, model.Rounds, "Each round past the tool calls is a request the server pays for.");
+        Assert.IsFalse(string.IsNullOrWhiteSpace(answer), "The caller still gets an answer.");
+    }
+
     [TestMethod]
     [DataRow("A two-person bakery chain wants pre-orders and loyalty points; worth starting with.", true)]
     [DataRow("Write to sara@example.com about the bakery.", false)]
     [DataRow("The bakery at +31 6 1234 5678 wants an app.", false)]
     [DataRow("See bloomflowers.nl for what they sell.", false)]
     [DataRow("They read bitfabric.co and were convinced.", true)]
+    [DataRow("Contact sara@bitfabric.co about the bakery.", false)]
+    [DataRow("The business at bloomflowers.biz needs online orders.", false)]
+    [DataRow("Call 5551234 about the bakery.", false)]
+    [DataRow("A shop on ASP.NET and Node.js today, 2,000 orders a month; worth starting with.", true)]
     public async Task ASummary_Should_BeKept_OnlyWhenItNamesNobody(string summary, bool kept)
     {
         await using var server = new AppTestServer();
@@ -100,7 +118,7 @@ public partial class EvaluationTests
         ["needs"] = "Pre-orders and loyalty points on iPhone and Android"
     };
 
-    private async Task<AppTestServer> StartServer(FakeEvaluator model)
+    private async Task<AppTestServer> StartServer(IChatClient model)
     {
         var server = new AppTestServer();
 
@@ -165,6 +183,32 @@ public partial class EvaluationTests
 
             return Task.FromResult(new ChatResponse(new ChatMessage(ChatRole.Assistant,
                 [new FunctionCallContent($"call-{Evaluations}", EvaluationPrompt.RecordToolName, new Dictionary<string, object?> { ["summary"] = Summary, ["convinced"] = "yes" })])));
+        }
+
+        public async IAsyncEnumerable<ChatResponseUpdate> GetStreamingResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            foreach (var update in (await GetResponseAsync(messages, options, cancellationToken)).ToChatResponseUpdates())
+            {
+                yield return update;
+            }
+        }
+
+        public object? GetService(Type serviceType, object? serviceKey = null) => null;
+
+        public void Dispose() { }
+    }
+
+    /// <summary>Asks for the recording tool every round, whatever it is told, with a word of answer each time.</summary>
+    private sealed class GreedyModel : IChatClient
+    {
+        public int Rounds { get; private set; }
+
+        public Task<ChatResponse> GetResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options = null, CancellationToken cancellationToken = default)
+        {
+            Rounds++;
+
+            return Task.FromResult(new ChatResponse(new ChatMessage(ChatRole.Assistant,
+                [new TextContent($"Checking ({Rounds})."), new FunctionCallContent($"call-{Rounds}", EvaluationPrompt.RecordToolName, new Dictionary<string, object?> { ["summary"] = "A bakery chain.", ["convinced"] = "unknown" })])));
         }
 
         public async IAsyncEnumerable<ChatResponseUpdate> GetStreamingResponseAsync(IEnumerable<ChatMessage> messages, ChatOptions? options = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)

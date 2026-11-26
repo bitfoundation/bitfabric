@@ -65,7 +65,8 @@ public partial class HomePageSeoTests
 
         // /new pre-renders every step and every question's help, not only the first step, so its copy has the whole wizard.
         var wizard = await client.GetStringAsync(PageMarkdown.MarkdownUrl(PageUrls.NewProject), TestContext.CancellationToken);
-        foreach (var line in new[] { AppStrings.NewProjectCustomersTitle, AppStrings.NewProjectErrorsTitle, AppStrings.NewProjectDevicesTitle, AppStrings.NewProjectHelpErrorsTitle, AppStrings.NewProjectHelpDevicesAdvice })
+        // A switch's visible line on what it does stays, and the technical choices are there while they are closed.
+        foreach (var line in new[] { AppStrings.NewProjectCustomersTitle, AppStrings.NewProjectErrorsTitle, AppStrings.NewProjectDevicesTitle, AppStrings.NewProjectHelpErrorsTitle, AppStrings.NewProjectHelpDevicesAdvice, AppStrings.NewProjectAssistantText, AppStrings.NewProjectPushText, AppStrings.NewProjectOfflineTitle, AppStrings.NewProjectGitHubTitle })
         {
             Assert.Contains(line, wizard, $"/new.md has \"{line}\".");
         }
@@ -78,6 +79,7 @@ public partial class HomePageSeoTests
         Assert.DoesNotContain(AppStrings.AboutThisAppTitle, about, "The installed app's version is no part of what bit Fabric is.");
         var home = await client.GetStringAsync(PageMarkdown.MarkdownUrl(PageUrls.Home), TestContext.CancellationToken);
         Assert.Contains("(off)", home, "The cost calculator's optional items say they are off, so a reader doesn't add them to the bill.");
+        Assert.Contains($"**{AppStrings.AppHomeQuestionAISeesCode}**", home, "A question of the FAQ is kept above its answer, though it is the title of a button.");
 
         var full = await client.GetStringAsync("/llms-full.txt", TestContext.CancellationToken);
 

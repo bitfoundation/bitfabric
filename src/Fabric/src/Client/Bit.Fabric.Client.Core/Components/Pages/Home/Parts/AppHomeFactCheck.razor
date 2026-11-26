@@ -19,6 +19,19 @@
     </div>
 
     <div id="afc-how" class="afc-how" hidden="@(isOpen is false)">
+        <div class="afc-examples" role="group" aria-labelledby="afc-examples-label">
+            <BitText Typography="BitTypography.Body2" Element="p" Id="afc-examples-label" Foreground="BitColorKind.Secondary">
+                @Localizer[nameof(AppStrings.AppHomeFactCheckExamples)]
+            </BitText>
+            <div class="afc-example-tags">
+                @foreach (var item in Examples)
+                {
+                    <BitTag Text="@item.Name" IconName="@item.Icon" Variant="BitVariant.Outline" Shape="BitShape.Pill"
+                            Selected="@(example?.Name == item.Name)" SelectedChanged="WrapHandled((bool _) => Pick(item))" />
+                }
+            </div>
+        </div>
+
         <div class="afc-step">
             <BitText Typography="BitTypography.Subtitle1" Element="h3">@Localizer[nameof(AppStrings.AppHomeFactCheckYourAITitle)]</BitText>
             <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">

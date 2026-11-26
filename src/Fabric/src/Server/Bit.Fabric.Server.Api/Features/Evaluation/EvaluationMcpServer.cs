@@ -35,7 +35,7 @@ public class EvaluationMcpServer
     /// can't run away.
     /// </summary>
     private const int MaxOutputTokens = 8000;
-    private const int MaxToolCalls = 6;
+    public const int MaxToolCalls = 6;
 
     private readonly PartitionedRateLimiter<HttpContext> everyone = PartitionedRateLimiter.Create<HttpContext, string>(_ =>
         RateLimitPartition.GetFixedWindowLimiter("everyone", _ => new FixedWindowRateLimiterOptions { PermitLimit = EvaluationsPerDay, Window = TimeSpan.FromDays(1) }));
@@ -175,7 +175,10 @@ public class EvaluationMcpServer
 
         var response = await agent.RunAsync(messages, options: new ChatClientAgentRunOptions(options), cancellationToken: cancellationToken);
 
-        return response.Text;
+        // A loop ended for asking past its tool calls may have no answer yet.
+        return string.IsNullOrWhiteSpace(response.Text)
+            ? "The evaluation used up its steps before it could answer. Ask again with one narrower question."
+            : response.Text;
     }
 
     /// <summary>
@@ -195,12 +198,28 @@ public class EvaluationMcpServer
     {
         var left = calls;
 
-        return tools.Select(tool => (AIFunction)new LimitedFunction(tool, () => Interlocked.Decrement(ref left) >= 0));
+        return tools.Select(tool => (AIFunction)new LimitedFunction(tool, () => Interlocked.Decrement(ref left)));
     }
 
-    private sealed class LimitedFunction(AIFunction inner, Func<bool> mayCall) : DelegatingAIFunction(inner)
+    /// <summary>
+    /// Runs while calls are left. The first call past them tells the model to answer; one more ends the agent's loop, so the
+    /// model can't keep asking for rounds the server pays for (the loop's own limit is the shared chat client's, and far higher).
+    /// </summary>
+    private sealed class LimitedFunction(AIFunction inner, Func<int> take) : DelegatingAIFunction(inner)
     {
         protected override ValueTask<object?> InvokeCoreAsync(AIFunctionArguments arguments, CancellationToken cancellationToken)
-            => mayCall() ? base.InvokeCoreAsync(arguments, cancellationToken) : ValueTask.FromResult<object?>("No more tool calls for this evaluation: answer now with what you have.");
+        {
+            var left = take();
+
+            if (left >= 0)
+                return base.InvokeCoreAsync(arguments, cancellationToken);
+
+            if (left < -1 && FunctionInvokingChatClient.CurrentContext is { } context)
+            {
+                context.Terminate = true;
+            }
+
+            return ValueTask.FromResult<object?>("No more tool calls for this evaluation: answer now with what you have.");
+        }
     }
 }

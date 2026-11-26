@@ -16,8 +16,7 @@ public partial class EvaluationRecorder(AppDbContext dbContext, TimeProvider tim
     {
         summary = summary.Trim();
 
-        // bit Fabric's own address names nobody.
-        if (summary.Length is 0 || Identifying().IsMatch(summary.Replace("bitfabric.co", "bit Fabric", StringComparison.OrdinalIgnoreCase)))
+        if (summary.Length is 0 || Identifies(summary))
         {
             logger.LogInformation("An evaluation's summary wasn't kept: it was empty or named an address, a phone number or a site.");
             return false;
@@ -38,7 +37,26 @@ public partial class EvaluationRecorder(AppDbContext dbContext, TimeProvider tim
         return true;
     }
 
-    // An email address, a phone number (seven digits or more, with the usual separators) or a web address.
-    [GeneratedRegex(@"[^\s@]+@[^\s@]+\.[^\s@]+|\+?\d[\d\s().-]{6,}\d|https?://|www\.|\b[\w-]+\.(com|net|org|io|co|nl|ir|de|uk|app|dev|ai)\b", RegexOptions.IgnoreCase)]
-    private static partial Regex Identifying();
+    /// <summary>
+    /// Whether the summary carries an email address, a phone number of seven digits or more, or a web address: any name with a
+    /// dot before two or more lower-case letters, such as bloomflowers.biz. bit Fabric's own bitfabric.co, standing alone, names
+    /// nobody; an email address or a subdomain on it still does. A library such as Node.js isn't a site.
+    /// </summary>
+    public static bool Identifies(string summary)
+        => Email().IsMatch(summary)
+           || Phone().Matches(summary).Any(match => match.Value.Count(char.IsAsciiDigit) >= 7)
+           || Address().IsMatch(OwnSite().Replace(summary, "bit Fabric"));
+
+    [GeneratedRegex(@"[^\s@]+@[^\s@]+\.[^\s@]+")]
+    private static partial Regex Email();
+
+    [GeneratedRegex(@"\+?\d[\d\s().-]{5,}\d")]
+    private static partial Regex Phone();
+
+    // The ending in lower case, as an address is written, so ASP.NET isn't one.
+    [GeneratedRegex(@"(?i:https?://|www\.)|\b[A-Za-z0-9][A-Za-z0-9-]*(\.[A-Za-z0-9-]+)*\.(?!js\b)[a-z]{2,24}\b")]
+    private static partial Regex Address();
+
+    [GeneratedRegex(@"(?<![\w@.-])bitfabric\.co(?![\w.-]*\w)", RegexOptions.IgnoreCase)]
+    private static partial Regex OwnSite();
 }
