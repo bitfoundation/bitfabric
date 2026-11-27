@@ -19,9 +19,10 @@ public partial class ProjectCard
     /// <summary>The project it is an environment of, whose name, license and other environments the card shows.</summary>
     [Parameter] public Bit.Fabric.Shared.Features.Projects.Dtos.ProjectDto? Parent { get; set; }
 
+    /// <summary>One that needs reconnecting is still checked through its public /health, so its health still shows.</summary>
     private static string EnvironmentTone(MonitoringDto environment) => (environment.ConnectionStatus, environment.Health) switch
     {
-        (ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected, _) => "tone-nodata",
+        (ProjectConnectionStatus.Disconnected, _) => "tone-nodata",
         (_, ProjectHealth.Down) => "tone-down",
         (_, ProjectHealth.Degraded) => "tone-degraded",
         (_, ProjectHealth.Operational) => "tone-ok",
@@ -69,8 +70,10 @@ public partial class ProjectCard
     /// <summary>The first letter of the name, the card's mark when the app has no icon, or its icon fails to load.</summary>
     private string Monogram => (Parent?.Name ?? Project.Name) is { Length: > 0 } name && string.IsNullOrWhiteSpace(name) is false ? name.Trim()[..1].ToUpperInvariant() : "?";
 
+    /// <summary>One that needs reconnecting and is down says it is down first: its public /health still tells (See ProjectProber).</summary>
     private string Tone => (Project.ConnectionStatus, Project.Health) switch
     {
+        (ProjectConnectionStatus.ReconnectNeeded, ProjectHealth.Down) => "tone-down",
         (ProjectConnectionStatus.ReconnectNeeded, _) => "tone-partial",
         (ProjectConnectionStatus.Disconnected, _) => "tone-nodata",
         (_, ProjectHealth.Down) => "tone-down",
@@ -81,6 +84,7 @@ public partial class ProjectCard
 
     private BitColor StateColor => (Project.ConnectionStatus, Project.Health) switch
     {
+        (ProjectConnectionStatus.ReconnectNeeded, ProjectHealth.Down) => BitColor.Error,
         (ProjectConnectionStatus.ReconnectNeeded, _) => BitColor.SevereWarning,
         (ProjectConnectionStatus.Disconnected, _) => BitColor.SecondaryBackground,
         (ProjectConnectionStatus.FirstChecks, ProjectHealth.NoData) => BitColor.Info,
@@ -92,6 +96,7 @@ public partial class ProjectCard
 
     private string StateIcon => (Project.ConnectionStatus, Project.Health) switch
     {
+        (ProjectConnectionStatus.ReconnectNeeded, ProjectHealth.Down) => BitIconName.StatusErrorFull,
         (ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected, _) => BitIconName.PlugDisconnected,
         (_, ProjectHealth.Down) => BitIconName.StatusErrorFull,
         (_, ProjectHealth.Degraded) => BitIconName.WarningSolid,
@@ -101,6 +106,7 @@ public partial class ProjectCard
 
     private string StateText => (Project.ConnectionStatus, Project.Health) switch
     {
+        (ProjectConnectionStatus.ReconnectNeeded, ProjectHealth.Down) => Localizer[nameof(AppStrings.MonitoringDown)],
         (ProjectConnectionStatus.ReconnectNeeded, _) => Localizer[nameof(AppStrings.MonitoringNeedsReconnecting)],
         (ProjectConnectionStatus.Disconnected, _) => Localizer[nameof(AppStrings.MonitoringDisconnected)],
         (ProjectConnectionStatus.FirstChecks, ProjectHealth.NoData) => Localizer[nameof(AppStrings.MonitoringFirstChecksRunning)],

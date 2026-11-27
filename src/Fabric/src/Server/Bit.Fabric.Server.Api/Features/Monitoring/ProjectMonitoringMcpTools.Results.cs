@@ -9,6 +9,9 @@ public partial class ProjectMonitoringMcpTools
     /// <summary>Why a request can't be answered as asked, with the projects to pick from when it named none, or several.</summary>
     public sealed record Problem(string Message, ProjectChoice[]? Projects = null);
 
+    /// <param name="Kind">Connection, for an environment that needs reconnecting; App otherwise.</param>
+    public sealed record TroubleshootPrompt(ProjectRef Project, string Kind, string? Prompt);
+
     public sealed record ProjectChoice(Guid Id, string? Name, string? Address);
 
     public sealed record ProjectRef(Guid Id, string? Name);

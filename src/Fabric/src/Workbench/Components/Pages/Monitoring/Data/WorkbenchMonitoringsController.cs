@@ -55,6 +55,18 @@ public sealed class WorkbenchMonitoringsController(WorkbenchScenarioState scenar
         return details;
     }
 
+    /// <summary>The app's own prompt, built from the sample project as the server builds it from a real one.</summary>
+    public Task<TroubleshootPromptDto> GetTroubleshootPrompt(Guid id, CancellationToken cancellationToken)
+    {
+        var project = World.Get(id);
+        var details = MonitoringReads.Details(project, timeZoneService.CurrentTimeZone, World.Now);
+        var server = (project.ServerAddress ?? project.Address).TrimEnd('/');
+
+        return Task.FromResult(ProjectTroubleshootPrompt.For(new(project.Name, project.Environment, project.Address, project.ServerAddress, project.TemplateVersion,
+                                                                 project.ConnectionStatus, project.ConnectionProblem, server, $"{server}/oauth/token", $"{server}/healthz",
+                                                                 project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded ? World.Now.AddMinutes(-75) : null), details));
+    }
+
     public Task<ProjectMapDto> GetMap(Guid id, CancellationToken cancellationToken)
         => Load<ProjectMapDto>("map", () => MonitoringReads.Map(World.Get(id), World.Now),
             () => throw new ResourceNotFoundException(AppStrings.ResourceNotFoundException), cancellationToken);

@@ -6038,7 +6038,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>Open the app</value>
   </data>
   <data name="MonitoringCannotReadHealth" xml:space="preserve">
-    <value>bit Fabric can't read this app's health</value>
+    <value>bit Fabric can't read this app's health report</value>
   </data>
   <data name="MonitoringReconnect" xml:space="preserve">
     <value>Reconnect</value>
@@ -6632,7 +6632,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
     <value>That time zone isn't known.</value>
   </data>
   <data name="MonitoringAlertConnectionLostTitle" xml:space="preserve">
-    <value>bit Fabric can't read {0}'s health anymore</value>
+    <value>bit Fabric can't read {0}'s health report anymore</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
     <value>Someone allowed to see its health report has to reconnect it.</value>
@@ -8533,6 +8533,27 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   </data>
   <data name="MonitoringConnectionNoLongerAccepted" xml:space="preserve">
     <value>Your app no longer accepts bit Fabric's approval: {0}</value>
+  </data>
+  <data name="MonitoringConnectionApprovalWithdrawn" xml:space="preserve">
+    <value>Your app no longer knows bit Fabric's approval: it was withdrawn, or your app's data was reset.</value>
+  </data>
+  <data name="MonitoringConnectionReportGone" xml:space="preserve">
+    <value>Your app no longer serves the health report bit Fabric reads. Its code may have changed.</value>
+  </data>
+  <data name="MonitoringConnectionServerError" xml:space="preserve">
+    <value>For an hour, your app's server has failed when bit Fabric renews its approval ({0}).</value>
+  </data>
+  <data name="MonitoringStillCheckingUp" xml:space="preserve">
+    <value>It still checks every minute that the app is up.</value>
+  </data>
+  <data name="MonitoringTroubleshoot" xml:space="preserve">
+    <value>Troubleshoot</value>
+  </data>
+  <data name="MonitoringTroubleshootTitle" xml:space="preserve">
+    <value>Troubleshoot with your AI</value>
+  </data>
+  <data name="MonitoringTroubleshootHelp" xml:space="preserve">
+    <value>Copy this prompt into the AI that works on your app's code, such as Claude Code, Codex or Copilot. It's in English, which every AI reads.</value>
   </data>
   <data name="MonitoringGroupWebsites" xml:space="preserve">
     <value>Websites</value>

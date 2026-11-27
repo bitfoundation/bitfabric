@@ -331,37 +331,6 @@ public class OAuthAuthorizationServerTests
     }
 
     /// <summary>
-    /// <c>/healthz</c>'s document offers <c>healthz</c> alone, as its 401 does, and, anonymous like the rest of the
-    /// document, names the template version <c>bit.json</c> records, so a monitor can tell an app made from bit-bp
-    /// and its age before it asks anyone for a token.
-    /// </summary>
-    [TestMethod]
-    public async Task TheHealthzProtectedResourceMetadata_Should_NameTheTemplateVersion()
-    {
-        await using var server = new AppTestServer();
-        await server.Build().Start(TestContext.CancellationToken);
-
-        using var httpClient = server.CreateRawHttpClient();
-        using var document = JsonDocument.Parse(
-            await httpClient.GetStringAsync(".well-known/oauth-protected-resource/healthz", TestContext.CancellationToken));
-
-        Assert.AreSequenceEqual([OAuthScopes.Healthz],
-            document.RootElement.GetProperty("scopes_supported").EnumerateArray().Select(item => item.GetString()).ToArray());
-
-        Assert.AreEqual(BitJsonVersion(), document.RootElement.GetProperty("bit_template_version").GetString(),
-            "The version the build read from bit.json, the one bit diff and the template-diff skill go by.");
-
-        using var response = await httpClient.GetAsync(new Uri(server.ApiAppAddress, "healthz"), TestContext.CancellationToken);
-
-        Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
-
-        var challenge = string.Join(' ', response.Headers.WwwAuthenticate.Select(header => $"{header.Scheme} {header.Parameter}"));
-
-        Assert.Contains($"scope=\"{OAuthScopes.Healthz}\"", challenge,
-            "A client following the challenge asks for what the resource is for.");
-    }
-
-    /// <summary>
     /// An exception can carry a server name or a connection string, so a <c>healthz</c> token reads the report without
     /// them, nor the description a check that throws gets from its exception's message. Only the app's own session gets
     /// them (See HealthCheckIntegrationTests.DetailedReport_Should_NeedTheFeature_AndDescribeEveryCheck).
@@ -419,23 +388,6 @@ public class OAuthAuthorizationServerTests
 
         Assert.IsNotNull(report);
         return report;
-    }
-
-    /// <summary>The version in the <c>bit.json</c> above the test binaries: the template's own, or a generated project's.</summary>
-    private static string? BitJsonVersion()
-    {
-        var directory = new DirectoryInfo(AppContext.BaseDirectory);
-
-        while (directory is not null && File.Exists(Path.Combine(directory.FullName, "bit.json")) is false)
-        {
-            directory = directory.Parent;
-        }
-
-        Assert.IsNotNull(directory, "No bit.json above the test binaries.");
-
-        using var bitJson = JsonDocument.Parse(File.ReadAllText(Path.Combine(directory.FullName, "bit.json")));
-
-        return bitJson.RootElement.GetProperty("version").GetString();
     }
 
     /// <summary>

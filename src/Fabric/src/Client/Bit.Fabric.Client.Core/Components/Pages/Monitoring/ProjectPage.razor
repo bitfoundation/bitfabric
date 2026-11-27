@@ -75,6 +75,7 @@
                 <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Refresh" Loading="isLoading" OnClick="WrapHandled(Load)">@Localizer[nameof(AppStrings.Refresh)]</BitButton>
                 @if (project is not null)
                 {
+                    <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.ChatBot" OnClick="WrapHandled(() => isTroubleshootOpen = true)">@Localizer[nameof(AppStrings.MonitoringTroubleshoot)]</BitButton>
                     <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.OpenInNewWindow" Href="@project.Address" Target="_blank">@Localizer[nameof(AppStrings.MonitoringOpenTheApp)]</BitButton>
                 }
             </div>
@@ -129,9 +130,10 @@
         {
             <BitMessage Color="BitColor.SevereWarning" Variant="BitVariant.Outline" AutoMultiline Title="@Localizer[nameof(AppStrings.MonitoringCannotReadHealth)]">
                 @* The app's own reason may come in its own language and direction. *@
-                <ChildContent><span dir="auto">@project.ConnectionProblem</span></ChildContent>
+                <ChildContent><span dir="auto">@project.ConnectionProblem</span> @Localizer[nameof(AppStrings.MonitoringStillCheckingUp)]</ChildContent>
                 <Actions>
                     <BitButton Size="BitSize.Small" IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(project)">@Localizer[nameof(AppStrings.MonitoringReconnect)]</BitButton>
+                    <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.ChatBot" OnClick="WrapHandled(() => isTroubleshootOpen = true)">@Localizer[nameof(AppStrings.MonitoringTroubleshoot)]</BitButton>
                 </Actions>
             </BitMessage>
         }
@@ -150,6 +152,8 @@
                 @Localizer[nameof(AppStrings.MonitoringCacheAnswersForHomePageHelp)]
             </BitMessage>
         }
+
+        <ProjectTroubleshoot MonitoringId="project.Id" @bind-IsOpen="isTroubleshootOpen" />
 
         <BitPivot SelectedKey="@SelectedTab" SelectedKeyChanged="@((string? key) => OpenTab(key))" OverflowBehavior="BitPivotOverflowBehavior.Scroll" Class="tabs">
             <BitPivotItem Key="@OverviewTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringOverview)]" IconName="@BitIconName.Health">

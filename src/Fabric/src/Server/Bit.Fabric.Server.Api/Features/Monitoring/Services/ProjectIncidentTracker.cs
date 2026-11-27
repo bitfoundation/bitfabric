@@ -8,8 +8,9 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring.Services;
 /// Opens, grows and closes a project's incidents from its rounds (bitfabric-internal/specs/monitoring.md, Checks): a part
 /// that fails in two rounds in a row opens one, against a single bad answer, and one closes after every part of it passed
 /// two rounds in a row. A part that only misses its settings is no incident, and an app bit Fabric can't read the report
-/// of is down. A round whose token was refused is no evidence either way. One automatic incident is open at a time; parts
-/// that fail while it lasts join it.
+/// of is down. While the token can't read the report, the public /health stands in: Unhealthy there fails the app itself,
+/// and since it names no part, an incident of parts waits for it to say Healthy before it closes. One automatic incident
+/// is open at a time; parts that fail while it lasts join it.
 /// </summary>
 public partial class ProjectIncidentTracker
 {
@@ -76,8 +77,11 @@ public partial class ProjectIncidentTracker
             open.Title = TitleOf(project, open.Impact, TitlesOf(probe, previous, open.CheckKeys));
         }
 
-        // Over once none of its parts failed in either round.
+        // Over once none of its parts failed in either round; a round that names no part says so only when all is Healthy.
         if (open.CheckKeys.Any(key => failingNow.ContainsKey(key) || failingBefore.ContainsKey(key)))
+            return null;
+
+        if (open.CheckKeys.Any(key => key != ProjectRollup.ReportKey) && (NamesNoPart(probe) || (previous is not null && NamesNoPart(previous))))
             return null;
 
         open.EndedAt = previous!.At;
@@ -139,10 +143,15 @@ public partial class ProjectIncidentTracker
         return incident;
     }
 
-    /// <summary>The app itself counts as a part when its report couldn't be read.</summary>
+    /// <summary>A round of the public /health that wasn't Healthy, or of the front door alone, can't tell whether a part still fails.</summary>
+    private static bool NamesNoPart(ProjectProbe probe)
+        => probe.Outcome is ProjectProbeOutcome.Reached || (probe.Outcome is ProjectProbeOutcome.PublicHealth && probe.Status is not HealthCheckStatus.Healthy);
+
+    /// <summary>The app itself counts as a part when its report couldn't be read, or its public /health says Unhealthy.</summary>
     private static Dictionary<string, HealthCheckStatus> Failing(ProjectProbe probe)
     {
-        if (probe.Outcome is ProjectProbeOutcome.Unreachable or ProjectProbeOutcome.BadResponse)
+        if (probe.Outcome is ProjectProbeOutcome.Unreachable or ProjectProbeOutcome.BadResponse
+            || (probe.Outcome is ProjectProbeOutcome.PublicHealth && probe.Status is HealthCheckStatus.Unhealthy))
             return new() { [ProjectRollup.ReportKey] = HealthCheckStatus.Unhealthy };
 
         return probe.Checks.Where(check => check.IsNotConfigured is false && check.Status is not HealthCheckStatus.Healthy)

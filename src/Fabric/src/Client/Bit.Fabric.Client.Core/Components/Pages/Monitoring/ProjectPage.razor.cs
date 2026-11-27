@@ -15,6 +15,7 @@ public partial class ProjectPage
 {
     private bool isLoading = true;
     private bool isLoadFailed;
+    private bool isTroubleshootOpen;
     private ProjectDto? parent;
     private MonitoringDetailsDto? details;
 
@@ -84,9 +85,10 @@ public partial class ProjectPage
     private string EnvironmentHref(MonitoringDto environment)
         => string.IsNullOrEmpty(Tab) ? PageUrls.ProjectEnvironment(environment.ProjectId, environment.Id) : $"{PageUrls.ProjectEnvironment(environment.ProjectId, environment.Id)}?tab={Uri.EscapeDataString(Tab)}";
 
+    /// <summary>One that needs reconnecting is still checked through its public /health, so its health still shows.</summary>
     private static string ToneOf(MonitoringDto environment) => (environment.ConnectionStatus, environment.Health) switch
     {
-        (ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected, _) => "tone-nodata",
+        (ProjectConnectionStatus.Disconnected, _) => "tone-nodata",
         (_, ProjectHealth.Down) => "tone-down",
         (_, ProjectHealth.Degraded) => "tone-degraded",
         (_, ProjectHealth.Operational) => "tone-ok",

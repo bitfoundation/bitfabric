@@ -26,8 +26,23 @@ public static class ProjectConnectionProblems
     /// <summary>The app no longer accepts the approval; the detail is the reason it gave, in its own words.</summary>
     public const string NoLongerAccepted = nameof(NoLongerAccepted);
 
+    /// <summary>The app answered invalid_grant: it doesn't know the approval anymore, withdrawn or its data reset.</summary>
+    public const string ApprovalWithdrawn = nameof(ApprovalWithdrawn);
+
+    /// <summary>
+    /// For an hour, the app's token endpoint or its <c>/healthz</c> answered 404: it no longer serves bit Fabric's report,
+    /// which a reconnect won't bring back until its code does.
+    /// </summary>
+    public const string ReportGone = nameof(ReportGone);
+
+    /// <summary>For an hour, renewing the approval met a server error or no answer; the detail is the last one seen.</summary>
+    public const string ServerError = nameof(ServerError);
+
     /// <summary>The code to store, with its detail after a colon.</summary>
     public static string Of(string code, string? detail = null) => detail is null ? code : $"{code}:{detail}";
+
+    /// <summary>The code of a stored reason, without its detail.</summary>
+    public static string? CodeOf(string? stored) => stored?.Split(':', 2)[0];
 
     /// <summary>The stored reason in the localizer's language.</summary>
     public static string? Describe(IStringLocalizer localizer, string? stored) => Describe(stored, (key, arguments) => localizer[key, arguments]);
@@ -35,6 +50,10 @@ public static class ProjectConnectionProblems
     /// <summary>The stored reason in the current UI culture, for code that has no localizer, such as a mapper.</summary>
     public static string? Describe(string? stored) => Describe(stored, (key, arguments) =>
         string.Format(CultureInfo.CurrentCulture, AppStrings.ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key, arguments));
+
+    /// <summary>The stored reason in <paramref name="culture"/>, such as English for a prompt an AI reads.</summary>
+    public static string? Describe(string? stored, CultureInfo culture) => Describe(stored, (key, arguments) =>
+        string.Format(culture, AppStrings.ResourceManager.GetString(key, culture) ?? key, arguments));
 
     private static string? Describe(string? stored, Func<string, object[], string> text)
     {
@@ -52,6 +71,9 @@ public static class ProjectConnectionProblems
             ApproverLostAccess => text(nameof(AppStrings.MonitoringConnectionApproverLostAccess), []),
             RenewRefused => text(nameof(AppStrings.MonitoringConnectionRenewRefused), [detail]),
             NoLongerAccepted => text(nameof(AppStrings.MonitoringConnectionNoLongerAccepted), [detail]),
+            ApprovalWithdrawn => text(nameof(AppStrings.MonitoringConnectionApprovalWithdrawn), []),
+            ReportGone => text(nameof(AppStrings.MonitoringConnectionReportGone), []),
+            ServerError => text(nameof(AppStrings.MonitoringConnectionServerError), [detail]),
             _ => stored
         };
     }

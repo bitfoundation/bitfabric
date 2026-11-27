@@ -28,6 +28,7 @@ The test project is located at [`src/Tests/Boilerplate.Tests.csproj`](/src/Tests
 - **[`IntegrationTests.cs`](/src/Tests/Features/Identity/IntegrationTests.cs)**: Example of API/backend testing
 - **[`UITests.cs`](/src/Tests/Features/Identity/UITests.cs)**: Example of UI testing with Playwright
 - **[`BunitUITests.cs`](/src/Tests/Features/Identity/BunitUITests.cs)**: Example of UI testing with bUnit, which renders a page in memory without a browser
+- **[`HealthzOAuthTests.cs`](/src/Tests/Features/Identity/HealthzOAuthTests.cs)**: The way a monitor such as bit Fabric reads `/healthz` - discovery, OAuth with PKCE, the report and the token's renewal - end to end, so a change that breaks it fails `dotnet test`
 - **[`CultureCookieParsingTests.cs`](/src/Tests/Features/Culture/CultureCookieParsingTests.cs)**: Example of a plain unit test, with no server and no database
 - **[`TestData.cs`](/src/Tests/Features/Identity/TestData.cs)**: Shared test data constants
 - **[`.runsettings`](/src/Tests/.runsettings)**: Test configuration (Playwright debug settings, environment variable overrides)

@@ -42,6 +42,16 @@ public partial class ProjectConnection : ITenantAware
 
     public DateTimeOffset AccessTokenExpiresAt { get; set; }
 
+    /// <summary>
+    /// Since when the report couldn't be read for a reason that may pass: a server error, no answer or a 404 from the token
+    /// endpoint or <c>/healthz</c>. After an hour of it the environment needs reconnecting; a report read clears it
+    /// (bitfabric-internal/specs/monitoring.md, Monitoring keeps watching when the approval breaks).
+    /// </summary>
+    public DateTimeOffset? ReportFailingSince { get; set; }
+
+    /// <summary>While the environment needs reconnecting, when its round tries the token again: every 15 minutes.</summary>
+    public DateTimeOffset? NextTokenAttemptAt { get; set; }
+
     /// <summary>The bit Fabric user who connected it; null once their account is deleted.</summary>
     public Guid? ConnectedByUserId { get; set; }
 

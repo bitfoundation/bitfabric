@@ -117,12 +117,13 @@ public partial class MonitoringNetworkController : AppControllerBase
     /// <summary>
     /// The projects that picked the location, first added first, up to <see cref="MonitoringOptions.NetworkTargetsPerLocation"/>.
     /// Only https addresses: the Network opens what any visitor can, and never a local one bit Fabric allows itself in
-    /// Development. A project waiting to be reconnected isn't watched from anywhere, as from Germany (See ProjectProbeJobRunner).
+    /// Development. A project waiting to be reconnected is timed too, as it is from Germany; one the team disconnected isn't
+    /// watched from anywhere (See ProjectProbeJobRunner).
     /// </summary>
     private async Task<List<ProjectMonitoring>> TargetsOf(NetworkLocation location, CancellationToken cancellationToken)
     {
         var projects = (await DbContext.Monitorings.IgnoreQueryFilters().AsNoTracking()
-            .Where(project => project.Locations.Contains(location.Code) && project.ConnectionStatus != ProjectConnectionStatus.ReconnectNeeded && project.ConnectionStatus != ProjectConnectionStatus.Disconnected)
+            .Where(project => project.Locations.Contains(location.Code) && project.ConnectionStatus != ProjectConnectionStatus.Disconnected)
             .OrderBy(project => project.CreatedOn).ThenBy(project => project.Id)
             .ToListAsync(cancellationToken))
             .Where(project => ProjectProber.FrontDoorOf(project).StartsWith("https://", StringComparison.OrdinalIgnoreCase))

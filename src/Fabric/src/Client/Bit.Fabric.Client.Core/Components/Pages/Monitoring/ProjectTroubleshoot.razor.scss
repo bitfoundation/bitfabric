@@ -1,0 +1,54 @@
+@import '../../../Styles/abstracts/_bit-css-variables.scss';
+
+.troubleshoot {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding: 1.25rem;
+    min-width: 0;
+}
+
+.troubleshoot-head {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.troubleshoot-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex: none;
+    border-radius: $bit-shape-radius-surface;
+    color: $bit-color-primary;
+    background: color-mix(in srgb, #{$bit-color-primary} 12%, transparent);
+}
+
+::deep .troubleshoot-close {
+    margin-inline-start: auto;
+}
+
+.troubleshoot-prompt {
+    margin: 0;
+    max-height: 50vh;
+    overflow: auto;
+    padding: .9rem 1rem;
+    border: 1px solid $bit-color-border-secondary;
+    border-radius: $bit-shape-radius-surface;
+    background: $bit-color-background-secondary;
+    color: $bit-color-foreground-primary;
+    font-size: $bit-typography-fs-sm;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    text-align: start;
+}
+
+.troubleshoot-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: flex-end;
+}

@@ -137,7 +137,7 @@ public enum ProjectProbeOutcome
     Read,
     /// <summary>The server didn't answer, or not in time.</summary>
     Unreachable,
-    /// <summary>The token was refused, or couldn't be refreshed.</summary>
+    /// <summary>The token was refused, or couldn't be refreshed: rounds before /health took the report's place.</summary>
     Unauthorized,
     /// <summary>The server answered with something that isn't a health report.</summary>
     BadResponse,
@@ -145,5 +145,11 @@ public enum ProjectProbeOutcome
     /// A reading of the bitplatform Network got an answer from the app's front door. It reads no report, so it is never
     /// <see cref="Read"/>; one that got no answer is <see cref="Unreachable"/> (See ProjectProbe.Colo).
     /// </summary>
-    Reached
+    Reached,
+    /// <summary>
+    /// The token couldn't read the report, and the server's public <c>/health</c> was read in its place: its status alone,
+    /// with no checks and no build (bitfabric-internal/specs/monitoring.md, Monitoring keeps watching when the approval
+    /// breaks). A round of bit Fabric's own server that got neither, but whose front door answered, is <see cref="Reached"/>.
+    /// </summary>
+    PublicHealth
 }

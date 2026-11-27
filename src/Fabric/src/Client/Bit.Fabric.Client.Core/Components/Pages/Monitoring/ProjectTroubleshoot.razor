@@ -1,0 +1,32 @@
+@inherits AppComponentBase
+
+@* The Troubleshoot button's dialog: a prompt for the customer's own AI, in English whatever the page's language (See
+   ProjectTroubleshootPrompts on the server). *@
+<BitModal IsOpen="IsOpen" IsOpenChanged="WrapHandled<bool>(Changed)" MaxWidth="46rem">
+    <section class="troubleshoot" aria-labelledby="troubleshoot-title">
+        <header class="troubleshoot-head">
+            <span class="troubleshoot-mark" aria-hidden="true"><BitIcon IconName="@BitIconName.ChatBot" /></span>
+            <BitText Typography="BitTypography.H6" Element="h2" Id="troubleshoot-title">@Localizer[nameof(AppStrings.MonitoringTroubleshootTitle)]</BitText>
+            <BitButton Variant="BitVariant.Text" IconOnly IconName="@BitIconName.Cancel" OnClick="WrapHandled(Close)" AriaLabel="@Localizer[nameof(AppStrings.Close)]" Class="troubleshoot-close" />
+        </header>
+
+        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringTroubleshootHelp)]</BitText>
+
+        @if (prompt is null)
+        {
+            <BitShimmer Height="16rem" Radius="0.5rem" />
+        }
+        else
+        {
+            @* An AI reads it, so it stays English, left to right and in Latin digits in every language. *@
+            <pre class="troubleshoot-prompt app-latin-digits" dir="ltr" lang="en" tabindex="0">@prompt.Prompt</pre>
+        }
+
+        <div class="troubleshoot-actions">
+            <BitButton IconName="@(isCopied ? BitIconName.CheckMark : BitIconName.Copy)" Disabled="prompt is null" OnClick="WrapHandled(Copy)">
+                @(isCopied ? Localizer[nameof(AppStrings.Copied)] : Localizer[nameof(AppStrings.Copy)])
+            </BitButton>
+            <BitButton Variant="BitVariant.Outline" OnClick="WrapHandled(Close)">@Localizer[nameof(AppStrings.Close)]</BitButton>
+        </div>
+    </section>
+</BitModal>

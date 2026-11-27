@@ -179,8 +179,9 @@ public partial class StatusPageService
         var components = page.Components.Where(component => component.IsShown).OrderBy(component => component.Order).ToArray();
         var active = incidents.Where(incident => incident.EndedAt is null && incident.Kind is ProjectIncidentKind.Incident).ToArray();
 
-        // A page whose app bit Fabric can't read right now says so rather than look operational.
-        var isStale = project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected || project.LastCheckedAt is null || now - project.LastCheckedAt > TimeSpan.FromMinutes(10);
+        // A page whose app bit Fabric doesn't check right now says so rather than look operational. One that needs
+        // reconnecting is still checked, through its public /health (See ProjectProber.ReadPublicHealth).
+        var isStale = project.ConnectionStatus is ProjectConnectionStatus.Disconnected || project.LastCheckedAt is null || now - project.LastCheckedAt > TimeSpan.FromMinutes(10);
 
         PublicComponentDto[] publicComponents = [.. components.Select(component =>
         {

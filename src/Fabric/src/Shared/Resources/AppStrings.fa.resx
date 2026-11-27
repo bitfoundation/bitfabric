@@ -6038,7 +6038,7 @@
     <value>باز کردن اپ</value>
   </data>
   <data name="MonitoringCannotReadHealth" xml:space="preserve">
-    <value>bit Fabric نمی‌تواند سلامت این اپ را بخواند</value>
+    <value>bit Fabric نمی‌تواند health report این اپ را بخواند</value>
   </data>
   <data name="MonitoringReconnect" xml:space="preserve">
     <value>اتصال دوباره</value>
@@ -6632,7 +6632,7 @@
     <value>این منطقهٔ زمانی شناخته‌شده نیست.</value>
   </data>
   <data name="MonitoringAlertConnectionLostTitle" xml:space="preserve">
-    <value>bit Fabric دیگر نمی‌تواند سلامت {0} را بخواند</value>
+    <value>bit Fabric دیگر نمی‌تواند health report {0} را بخواند</value>
   </data>
   <data name="MonitoringAlertConnectionLostBody" xml:space="preserve">
     <value>کسی که اجازهٔ دیدن health report آن را دارد، باید آن را دوباره متصل کند.</value>
@@ -8533,6 +8533,27 @@
   </data>
   <data name="MonitoringConnectionNoLongerAccepted" xml:space="preserve">
     <value>اپ شما دیگر تأیید bit Fabric را نمی‌پذیرد: {0}</value>
+  </data>
+  <data name="MonitoringConnectionApprovalWithdrawn" xml:space="preserve">
+    <value>اپ شما دیگر تأیید bit Fabric را نمی‌شناسد: یا پس گرفته شده، یا داده‌های اپ‌تان از نو ساخته شده است.</value>
+  </data>
+  <data name="MonitoringConnectionReportGone" xml:space="preserve">
+    <value>اپ شما دیگر health reportی را که bit Fabric می‌خواند ارائه نمی‌دهد. شاید کدش تغییر کرده باشد.</value>
+  </data>
+  <data name="MonitoringConnectionServerError" xml:space="preserve">
+    <value>یک ساعت است که سرور اپ شما هنگام تمدید تأیید bit Fabric خطا می‌دهد ({0}).</value>
+  </data>
+  <data name="MonitoringStillCheckingUp" xml:space="preserve">
+    <value>هنوز هر دقیقه بررسی می‌کند که اپ بالا باشد.</value>
+  </data>
+  <data name="MonitoringTroubleshoot" xml:space="preserve">
+    <value>عیب‌یابی</value>
+  </data>
+  <data name="MonitoringTroubleshootTitle" xml:space="preserve">
+    <value>عیب‌یابی با AI خودتان</value>
+  </data>
+  <data name="MonitoringTroubleshootHelp" xml:space="preserve">
+    <value>این prompt را در AIای که روی کد اپ‌تان کار می‌کند، مثل Claude Code، Codex یا Copilot، کپی کنید. به انگلیسی است تا هر AIای آن را بخواند.</value>
   </data>
   <data name="MonitoringGroupWebsites" xml:space="preserve">
     <value>وب‌سایت‌ها</value>
