@@ -190,7 +190,7 @@ public partial class ConsentPage
     private string ScopeDescription(string scope) => scope switch
     {
         OAuthScopes.DevMcp => Localizer[nameof(AppStrings.OAuthScopeDevMcpDescription)],
-        OAuthScopes.Healthz => Localizer[nameof(AppStrings.OAuthScopeHealthzDescription)],
+        OAuthScopes.Monitoring => Localizer[nameof(AppStrings.OAuthScopeMonitoringDescription)],
         //#if (signalR == true)
         OAuthScopes.Chat => Localizer[nameof(AppStrings.OAuthScopeChatDescription)],
         //#endif

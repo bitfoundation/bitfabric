@@ -1627,11 +1627,11 @@ Después de alcanzar {0}, los inicios de sesión adicionales tendrán funciones 
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>Leer información de diagnóstico de este despliegue.</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>Leer el informe detallado de estado de este despliegue, sin los detalles de error de lo que esté fallando.</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>Supervisar este despliegue: leer su informe detallado de estado, sin los detalles de error de lo que esté fallando.</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>Leer el informe de estado.</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>Supervisar esta app.</value>
   </data>
     <data name="OAuthClients" xml:space="preserve">
     <value>Aplicaciones</value>

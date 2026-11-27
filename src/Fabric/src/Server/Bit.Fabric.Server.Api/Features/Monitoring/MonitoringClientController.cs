@@ -30,7 +30,7 @@ public partial class MonitoringClientController : AppControllerBase
             ResponseTypes = ["code"],
             // A public client: PKCE proves it's the same one that asked, and it holds no secret.
             TokenEndpointAuthMethod = "none",
-            Scope = MonitoringOAuthClient.HealthzScope
+            Scope = MonitoringOAuthClient.MonitoringScope
         }, MonitoringJsonContext.Default.Options);
     }
 

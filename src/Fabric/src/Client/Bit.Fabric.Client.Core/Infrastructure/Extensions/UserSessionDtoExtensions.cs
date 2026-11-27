@@ -54,7 +54,7 @@ public static class UserSessionDtoExtensions
             return (session.OAuthScope ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(scope => scope switch
             {
                 OAuthScopes.DevMcp => localizer[nameof(AppStrings.OAuthScopeDevMcpShortDescription)].ToString(),
-                OAuthScopes.Healthz => localizer[nameof(AppStrings.OAuthScopeHealthzShortDescription)].ToString(),
+                OAuthScopes.Monitoring => localizer[nameof(AppStrings.OAuthScopeMonitoringShortDescription)].ToString(),
                 OAuthScopes.Chat => localizer[nameof(AppStrings.OAuthScopeChatShortDescription)].ToString(),
                 _ => scope
             });

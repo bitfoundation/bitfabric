@@ -54,7 +54,7 @@ public class SessionsSectionUITests : SettingsPageTest
 
         await Expect(Applications).ToHaveCountAsync(1);
         await Expect(Applications).ToContainTextAsync(UptimeMonitor);
-        await Expect(Applications).ToContainTextAsync(AppStrings.OAuthScopeHealthzShortDescription);
+        await Expect(Applications).ToContainTextAsync(AppStrings.OAuthScopeMonitoringShortDescription);
         await Expect(Sessions.GetByText(AppStrings.OAuthSessionsHint, new() { Exact = true })).ToBeVisibleAsync();
 
         await Expect(OtherSessions.Filter(new() { HasText = UptimeMonitor })).ToHaveCountAsync(0);

@@ -194,7 +194,7 @@ public sealed class SettingsSampleAccount(WorkbenchScenarioState scenarioState, 
             Session(new(4, 0, 0, new byte[8]), "Berlin, Germany", "198.51.100.82", "Firefox 144 on Linux", now.AddDays(-4), privileged: false, notifications: false),
             // An uptime monitor the user let read the app's health report at /healthz, which signs in as an external application.
             Session(new(5, 0, 0, new byte[8]), "Amsterdam, Netherlands", "203.0.113.91", null, now.AddDays(-2), privileged: false, notifications: false,
-                    oAuthClient: ("status.example.com", "Uptime monitor", OAuthScopes.Healthz))
+                    oAuthClient: ("status.example.com", "Uptime monitor", OAuthScopes.Monitoring))
         ];
 
         return (user, sessions);

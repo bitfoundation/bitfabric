@@ -2014,11 +2014,11 @@
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>قراءة معلومات تشخيصية عن هذا النشر.</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>قراءة تقرير الحالة التفصيلي لهذا النشر، دون تفاصيل أخطاء ما هو معطّل.</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>مراقبة هذا النشر: قراءة تقرير الحالة التفصيلي الخاص به، دون تفاصيل أخطاء ما هو معطّل.</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>قراءة تقرير الحالة.</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>مراقبة هذا التطبيق.</value>
   </data>
     <data name="OAuthSessionsTitle" xml:space="preserve">
     <value>التطبيقات المصرّح لها</value>

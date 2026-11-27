@@ -2014,11 +2014,11 @@ Efter att ha nått {0} kommer extra inloggningar att ha reducerade funktioner.</
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>Läsa diagnostikinformation om den här driftsättningen.</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>Läsa den detaljerade hälsorapporten för den här driftsättningen, utan feldetaljerna för det som inte fungerar.</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>Övervaka den här driftsättningen: läsa dess detaljerade hälsorapport, utan feldetaljerna för det som inte fungerar.</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>Läsa hälsorapporten.</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>Övervaka den här appen.</value>
   </data>
     <data name="OAuthSessionsTitle" xml:space="preserve">
     <value>Auktoriserade applikationer</value>

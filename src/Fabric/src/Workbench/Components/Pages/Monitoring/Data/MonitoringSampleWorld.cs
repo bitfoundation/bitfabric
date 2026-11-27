@@ -61,7 +61,7 @@ public sealed class MonitoringSampleWorld
         var state = Guid.NewGuid().ToString("N");
         approvals[state] = (found, name);
 
-        return $"{found.ServerAddress ?? found.Address}/api/v1/OAuth/Authorize?response_type=code&client_id=bit-fabric&scope=healthz&state={state}";
+        return $"{found.ServerAddress ?? found.Address}/api/v1/OAuth/Authorize?response_type=code&client_id=bit-fabric&scope=monitoring&state={state}";
     }
 
     /// <summary>The state of one of this world's approvals in an approval page's address; null for any other address.</summary>

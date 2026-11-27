@@ -13,10 +13,12 @@ public static class OAuthScopes
     public const string DevMcp = "dev-mcp";
 
     /// <summary>
-    /// The detailed health report at <c>/healthz</c>: every check's status, but never the failures' exceptions, which
-    /// can carry a server name or a connection string and stay with a signed-in user's own session.
+    /// What a monitor reads of a running deployment, named for the job rather than the endpoint so that reading more
+    /// later takes no second approval. Today it is the detailed health report at <c>/healthz</c>: every check's status,
+    /// but never the failures' exceptions, which can carry a server name or a connection string and stay with a
+    /// signed-in user's own session.
     /// </summary>
-    public const string Healthz = "healthz";
+    public const string Monitoring = "monitoring";
 
     /// <summary>
     /// The chatbot's own tools at <c>/mcp</c>. Only the server-side ones are exposed there, so this scope cannot reach
@@ -30,7 +32,7 @@ public static class OAuthScopes
         // all held - which an empty set vacuously is. Consent is then the only thing standing in front of it.
         [Chat] = [],
         [DevMcp] = [AppFeatures.System.DevMcp],
-        [Healthz] = [AppFeatures.System.Operations_View]
+        [Monitoring] = [AppFeatures.System.Operations_View]
     }.ToFrozenDictionary(StringComparer.Ordinal);
 
     /// <summary>Published as <c>scopes_supported</c> in the authorization server metadata.</summary>

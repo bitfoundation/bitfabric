@@ -1627,11 +1627,11 @@ Nach Erreichen von {0} haben zusätzliche Anmeldungen reduzierte Funktionen.</va
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>Diagnoseinformationen dieser Bereitstellung lesen.</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>Den ausführlichen Zustandsbericht dieser Bereitstellung lesen, ohne die Fehlerdetails von allem, was gerade ausfällt.</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>Diese Bereitstellung überwachen: ihren ausführlichen Zustandsbericht lesen, ohne die Fehlerdetails von allem, was gerade ausfällt.</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>Den Zustandsbericht lesen.</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>Diese App überwachen.</value>
   </data>
     <data name="OAuthClients" xml:space="preserve">
     <value>Anwendungen</value>
