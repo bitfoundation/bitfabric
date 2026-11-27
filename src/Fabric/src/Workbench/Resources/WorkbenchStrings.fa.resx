@@ -4563,6 +4563,9 @@
     <data name="BoardPicksSent" xml:space="preserve">
         <value>برای {0} فرستاده شد.</value>
     </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>کسی منتظرشان نبود.</value>
+    </data>
     <data name="BoardSubmitFailed" xml:space="preserve">
         <value>ثبت نشد. دوباره امتحان کنید.</value>
     </data>

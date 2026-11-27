@@ -63,7 +63,7 @@
         <div class="providers">
             @foreach (var provider in PaymentsFacts.Providers)
             {
-                <div class="provider @(provider.IsMerchantOfRecord ? "mor" : null) @(store.Providers.Contains(provider.Name) ? "picked" : null)">
+                <div class="provider @(provider.IsMerchantOfRecord ? "mor" : null) @(picks.Providers.Contains(provider.Name) ? "picked" : null)">
                     <div class="provider-head">
                         <span class="monogram" aria-hidden="true">@provider.Name[0]</span>
                         <div class="provider-title">
@@ -82,8 +82,8 @@
                         }
                     </ul>
                     <span class="good-for">Good for <strong>@provider.GoodFor</strong></span>
-                    <BitCheckbox Label="@($"Set up {provider.Name}")" Value="store.Providers.Contains(provider.Name)"
-                                 ValueChanged="(bool _) => store.ToggleProvider(provider.Name)" Class="provider-pick" />
+                    <BitCheckbox Label="@($"Set up {provider.Name}")" Value="picks.Providers.Contains(provider.Name)"
+                                 ValueChanged="(bool _) => picks.ToggleProvider(provider.Name)" Class="provider-pick" />
                 </div>
             }
         </div>

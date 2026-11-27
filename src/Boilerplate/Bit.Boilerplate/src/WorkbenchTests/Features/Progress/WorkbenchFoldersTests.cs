@@ -92,7 +92,7 @@ public class WorkbenchFoldersTests
     }
 
     [TestMethod]
-    public void AWorkbenchOnAnotherPort_Should_KeepAReviewOfItsOwn()
+    public void AWorkbenchOnAnotherPort_Should_KeepAReviewAndBoardsFilesOfItsOwn()
     {
         Folder("MyApp", ".git");
         File.WriteAllText(Path.Combine(Folder("MyApp", "src", "Workbench", "Properties"), "launchSettings.json"), "{ \"profiles\": { \"MyApp\": { \"applicationUrl\": \"http://localhost:6400\" } } }");
@@ -101,11 +101,14 @@ public class WorkbenchFoldersTests
         WorkbenchFolders.Port = WorkbenchFolders.PortOf("http://localhost:6400");
 
         var shared = WorkbenchFolders.Reviews;
+        var sharedBoards = WorkbenchFolders.Boards;
 
         WorkbenchFolders.Port = WorkbenchFolders.PortOf("https://localhost:6401/;http://localhost:6402");
 
         Assert.AreEqual("Reviews", Path.GetFileName(shared));
+        Assert.AreEqual(Path.Combine(Path.GetDirectoryName(shared)!, "Boards"), sharedBoards, "The boards' picks sit next to the review.");
         Assert.AreEqual(Path.Combine(Path.GetDirectoryName(shared)!, "Reviews-6401"), WorkbenchFolders.Reviews, "Two processes never share a review.");
+        Assert.AreEqual(Path.Combine(Path.GetDirectoryName(shared)!, "Boards-6401"), WorkbenchFolders.Boards, "Nor a board's file.");
     }
 
     [TestMethod]

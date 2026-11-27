@@ -5354,6 +5354,9 @@
     <data name="BoardPicksSent" xml:space="preserve">
         <value>Transmis à {0}.</value>
     </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>Personne ne les attendait.</value>
+    </data>
     <data name="BoardSubmitFailed" xml:space="preserve">
         <value>Échec de l’envoi. Réessayez.</value>
     </data>

@@ -5354,6 +5354,9 @@
     <data name="BoardPicksSent" xml:space="preserve">
         <value>An {0} gesendet.</value>
     </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>Niemand hat darauf gewartet.</value>
+    </data>
     <data name="BoardSubmitFailed" xml:space="preserve">
         <value>Absenden fehlgeschlagen. Versuchen Sie es erneut.</value>
     </data>

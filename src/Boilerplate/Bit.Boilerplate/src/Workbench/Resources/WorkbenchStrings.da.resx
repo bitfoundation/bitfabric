@@ -5354,6 +5354,9 @@
     <data name="BoardPicksSent" xml:space="preserve">
         <value>Sendt til {0}.</value>
     </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>Ingen ventede på dem.</value>
+    </data>
     <data name="BoardSubmitFailed" xml:space="preserve">
         <value>Kunne ikke sende. Prøv igen.</value>
     </data>

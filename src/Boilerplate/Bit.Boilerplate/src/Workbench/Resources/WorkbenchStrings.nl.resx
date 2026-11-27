@@ -5354,6 +5354,9 @@
     <data name="BoardPicksSent" xml:space="preserve">
         <value>Verstuurd naar {0}.</value>
     </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>Niemand wachtte erop.</value>
+    </data>
     <data name="BoardSubmitFailed" xml:space="preserve">
         <value>Versturen is mislukt. Probeer het opnieuw.</value>
     </data>

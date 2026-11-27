@@ -5354,6 +5354,9 @@
     <data name="BoardPicksSent" xml:space="preserve">
         <value>{0} को भेजा गया।</value>
     </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>कोई इनका इंतज़ार नहीं कर रहा था।</value>
+    </data>
     <data name="BoardSubmitFailed" xml:space="preserve">
         <value>भेजा नहीं जा सका। फिर से कोशिश करें।</value>
     </data>

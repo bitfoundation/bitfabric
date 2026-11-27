@@ -92,10 +92,13 @@ public partial class BoardSubmit
 
     private async Task Submit()
     {
-        if (Board is null || isSubmitting)
+        // Checked again on the press, as an invite can be revoked while the board is open.
+        if (Board is null || isSubmitting || reviewSession.SavesComments is false)
             return;
 
         isSubmitting = true;
+
+        var by = WorkbenchStore.ReviewerName ?? Localizer[nameof(WorkbenchStrings.ProgressYou)];
 
         try
         {
@@ -103,48 +106,68 @@ public partial class BoardSubmit
             await Persistor.FlushAsync();
 
             var (state, version) = StoreState(Board.Id);
-            var by = WorkbenchStore.ReviewerName ?? Localizer[nameof(WorkbenchStrings.ProgressYou)];
 
             if ((picks = await boardFiles.Submit(Board.Id, state, version, by, CurrentCancellationToken)) is null)
             {
                 SnackBarService.Error(Text(nameof(WorkbenchStrings.BoardSubmitFailed)));
                 return;
             }
-
-            if (ProgressTask is { } taskId && await Tell(taskId, by) is { } agent)
-            {
-                SnackBarService.Success(Text(nameof(WorkbenchStrings.BoardPicksSent), agent));
-            }
         }
         catch (Exception exception) when (exception is not OperationCanceledException)
         {
             logger.LogError(exception, "The picks of the board {BoardId} could not be submitted.", Board.Id);
             SnackBarService.Error(Text(nameof(WorkbenchStrings.BoardSubmitFailed)));
+            return;
         }
         finally
         {
             isSubmitting = false;
         }
+
+        if (ProgressTask is { } taskId)
+        {
+            // The picks are kept by now; the user learns whether the agent heard of them too.
+            if (await Tell(taskId, by) is { } agent)
+            {
+                SnackBarService.Success(Text(nameof(WorkbenchStrings.BoardPicksSent), agent));
+            }
+            else
+            {
+                SnackBarService.Show(Text(nameof(WorkbenchStrings.BoardSubmitted)), Text(nameof(WorkbenchStrings.BoardPicksNobodyTold)), BitColor.Warning);
+            }
+        }
     }
 
-    /// <summary>Adds the submit to the agent's task, which wakes its wait; returns the agent's name, or null when the task is over or gone.</summary>
+    /// <summary>
+    /// Adds the submit to the agent's task, which wakes its wait; returns the agent's name, or null when the task is over or
+    /// gone, or this circuit may not act on it.
+    /// </summary>
     private async Task<string?> Tell(string taskId, string by)
     {
-        await reviewSession.Open(Localizer[nameof(WorkbenchStrings.Reviewer)]);
-
-        if (reviewSession.Tasks.FirstOrDefault(task => task.Id == taskId) is not { } task)
+        try
         {
-            logger.LogWarning("The board {BoardId} names the Progress task {TaskId}, which isn't there.", Board!.Id, taskId);
+            await reviewSession.Open(Localizer[nameof(WorkbenchStrings.Reviewer)]);
+
+            if (reviewSession.Tasks.FirstOrDefault(task => task.Id == taskId) is not { } task)
+            {
+                logger.LogWarning("The board {BoardId} names the Progress task {TaskId}, which isn't there.", Board!.Id, taskId);
+                return null;
+            }
+
+            return reviewSession.SubmitBoard(task, Board!.Id, Title, by) ? task.Agent : null;
+        }
+        catch (Exception exception) when (exception is not OperationCanceledException)
+        {
+            logger.LogError(exception, "The Progress task {TaskId} could not be told of the picks of the board {BoardId}.", taskId, Board!.Id);
             return null;
         }
-
-        return reviewSession.SubmitBoard(task, Board!.Id, Title, by) ? task.Agent : null;
     }
 
     /// <summary>The board's store as it is on this screen, and its own version.</summary>
     private (JsonObject? State, int Version) StoreState(string boardId)
     {
-        return blexManager.Stores.FirstOrDefault(store => store.Name == WorkbenchBoardFiles.StoreName(boardId)) is { } store
+        // Matched as the catalog matches a board's id, ignoring case, as its saves are.
+        return blexManager.Stores.FirstOrDefault(store => string.Equals(store.Name, WorkbenchBoardFiles.StoreName(boardId), StringComparison.OrdinalIgnoreCase)) is { } store
             ? (store.SerializeState(), store is BlexStoreBase { PersistVersion: var version } ? version : 0)
             : (null, 0);
     }

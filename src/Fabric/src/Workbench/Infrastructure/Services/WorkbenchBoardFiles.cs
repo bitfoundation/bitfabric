@@ -55,21 +55,38 @@ public sealed partial class WorkbenchBoardFiles(ILogger<WorkbenchBoardFiles> log
     /// <summary>The board's file as it is; null when nothing was saved for it yet, or when it can't be read.</summary>
     public async Task<WorkbenchBoardPicks?> Read(string boardId, CancellationToken cancellationToken = default)
     {
+        try
+        {
+            return await ReadFile(boardId, cancellationToken);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+        {
+            logger.LogWarning(exception, "The picks of the board {BoardId} can't be read.", boardId);
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// The board's file; null when there is none or what it holds isn't a board's picks, like a file edited by hand, which the
+    /// next save replaces. A file that can't be opened right now throws, so a save waits rather than writing over it.
+    /// </summary>
+    private async Task<WorkbenchBoardPicks?> ReadFile(string boardId, CancellationToken cancellationToken)
+    {
         var path = FilePath(boardId);
 
         if (File.Exists(path) is false)
             return null;
 
+        // Shared, so an agent reading the file at the same time never stops a save, nor a save the agent.
+        await using var file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+
         try
         {
-            // Shared, so an agent reading the file at the same time never stops a save, nor a save the agent.
-            await using var file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-
             return await JsonSerializer.DeserializeAsync<WorkbenchBoardPicks>(file, jsonOptions, cancellationToken);
         }
-        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or JsonException)
+        catch (JsonException exception)
         {
-            logger.LogWarning(exception, "The picks of the board {BoardId} can't be read.", boardId);
+            logger.LogWarning(exception, "The picks of the board {BoardId} aren't a board's picks, so the next save replaces them.", boardId);
             return null;
         }
     }
@@ -139,7 +156,8 @@ public sealed partial class WorkbenchBoardFiles(ILogger<WorkbenchBoardFiles> log
 
         try
         {
-            if ((picks = edit(await Read(boardId, cancellationToken))) is null)
+            // A file that can't be opened now is left as it is, so what was submitted is never lost to a moment's lock.
+            if ((picks = edit(await ReadFile(boardId, cancellationToken))) is null)
                 return null;
 
             await Write(FilePath(boardId), JsonSerializer.Serialize(picks, jsonOptions), cancellationToken);
@@ -166,10 +184,10 @@ public sealed partial class WorkbenchBoardFiles(ILogger<WorkbenchBoardFiles> log
 
         var temporary = $"{path}.{Guid.NewGuid():N}.tmp";
 
-        await File.WriteAllTextAsync(temporary, json, cancellationToken);
-
         try
         {
+            await File.WriteAllTextAsync(temporary, json, cancellationToken);
+
             // A reader that holds the file without sharing its deletion, like an editor, can keep it for a moment.
             for (var attempt = 1; ; attempt++)
             {

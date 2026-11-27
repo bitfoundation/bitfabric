@@ -83,14 +83,15 @@ building, told on the buildings page itself with a `BoardFlow`.
   A board without controls needs no store.
 - A board that asks the user to pick, like options to tick or one choice among several, hands you the picks without the
   chat. The payments example asks which providers to set up this way.
-  - Keep only the picks in its store, named after the board's catalog id, `[BlexStore(Name = "board-<id>", Persist =
-    true)]`, and call `Subscribe(store)` in the board's `OnInitialized`, so the picks show again after a reload.
+  - Keep the picks alone in a store named after the board's catalog id, `[BlexStore(Name = "board-<id>", Persist =
+    true)]`, as every change to it counts as a change to the picks; anything else the reader moves, like a slider, goes in
+    a store of another name. Call `Subscribe(store)` in the board's `OnInitialized`, so the picks show again after a reload.
   - Give `BoardFrame` `Picks`, and `ProgressTask="<your task's id>"` when you wait on a Progress task (the **workbench**
     skill, section 9), which implies it: a Submit bar stays at the foot of the screen, in the board's language («ثبت» on a
     board in Persian). No Copy button.
   - Each time that store saves in the Workbench's own window, the Workbench writes it to `<id>.json` in its `Boards`
-    folder, outside the repository: `bit-workbench/<project>/Boards` in the local application data, which
-    `GET /api/workbench` names as `boards`. Read it whenever you need the picks. It holds `board`, `isSubmitted`,
+    folder, outside the repository: `bit-workbench/<project>/Boards` in the local application data, `Boards-<port>` for a
+    Workbench on another port, which `GET /api/workbench` names as `boards`. Read it whenever you need the picks. It holds `board`, `isSubmitted`,
     `savedAt`, `state` (the store's fields by name), `submitted` (`at`, `by` and the `state` as sent, null until the first
     submit) and `storeVersion`; `isSubmitted` turns false when the user changes a pick after submitting, and `submitted`
     stays as sent.
