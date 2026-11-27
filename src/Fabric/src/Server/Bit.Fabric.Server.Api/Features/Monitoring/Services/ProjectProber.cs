@@ -88,10 +88,20 @@ public partial class ProjectProber
         await TimeForVisitors(project, probe, cancellationToken);
         var problem = await ReadReport(project, probe, cancellationToken);
 
-        if (problem is not null)
+        if (problem is { AppFailed: true })
+        {
+            // The report failed with the token. The public /health tells a broken report from an app that is down: when it
+            // answers, the round is read from it and the report's failure counts toward its hour; when it doesn't, the
+            // failure stands, as an outage that says nothing of the connection.
+            if (await ReadPublicHealth(project, probe, fallBackOnFrontDoor: false, cancellationToken) is false)
+            {
+                problem = null;
+            }
+        }
+        else if (problem is not null)
         {
             // The token can't read the report, so the round falls back on what needs none.
-            await ReadPublicHealth(project, probe, cancellationToken);
+            await ReadPublicHealth(project, probe, fallBackOnFrontDoor: true, cancellationToken);
         }
 
         await dbContext.ProjectProbes.AddAsync(probe, cancellationToken);
@@ -329,7 +339,8 @@ public partial class ProjectProber
     /// </summary>
     /// <param name="IsTemporary">It may pass, so it is told only once it has lasted <see cref="TemporaryProblemGrace"/>.</param>
     /// <param name="IsWaiting">The environment needs reconnecting and its next try of the token isn't due yet.</param>
-    private sealed record ReportProblem(string? Code, bool IsTemporary, bool IsWaiting = false);
+    /// <param name="AppFailed">The token was fine but the report failed, as the probe already says (See the round).</param>
+    private sealed record ReportProblem(string? Code, bool IsTemporary, bool IsWaiting = false, bool AppFailed = false);
 
     /// <summary>
     /// Moves the environment's connection by the round (bitfabric-internal/specs/monitoring.md, Monitoring keeps watching
@@ -398,10 +409,13 @@ public partial class ProjectProber
     /// The base that needs no token, for a round whose report the token couldn't read: the server's public <c>/health</c>,
     /// which the template answers 200 with Healthy or Degraded and 503 with Unhealthy. An app without one is up as long
     /// as its front door answered (bitfabric-internal/specs/monitoring.md, Monitoring keeps watching when the approval
-    /// breaks).
+    /// breaks). A server error from it is the app failing, not a missing <c>/health</c>. True when it answered a status.
+    /// With <paramref name="fallBackOnFrontDoor"/> false, an answer that isn't one leaves the probe as it is.
     /// </summary>
-    private async Task ReadPublicHealth(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
+    private async Task<bool> ReadPublicHealth(ProjectMonitoring project, ProjectProbe probe, bool fallBackOnFrontDoor, CancellationToken cancellationToken)
     {
+        HttpStatusCode? failedWith = null;
+
         var url = $"{(project.ServerAddress ?? project.Address)!.TrimEnd('/')}/health";
 
         try
@@ -424,7 +438,13 @@ public partial class ProjectProber
                 probe.Outcome = ProjectProbeOutcome.PublicHealth;
                 probe.Status = known;
                 probe.ReportMs = elapsed;
-                return;
+                probe.Problem = null;
+                return true;
+            }
+
+            if ((int)response.StatusCode >= 500)
+            {
+                failedWith = response.StatusCode;
             }
         }
         catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested is false)
@@ -436,13 +456,25 @@ public partial class ProjectProber
             // As above.
         }
 
+        if (fallBackOnFrontDoor is false)
+            return false;
+
+        if (failedWith is { } failed)
+        {
+            probe.Outcome = ProjectProbeOutcome.BadResponse;
+            probe.Problem = $"Your app's server answered HTTP {(int)failed} to its /health.";
+            return false;
+        }
+
         probe.Outcome = probe.ResponseMs is null ? ProjectProbeOutcome.Unreachable : ProjectProbeOutcome.Reached;
         probe.Problem = probe.ResponseMs is null ? "Your app's server didn't answer." : null;
+        return false;
     }
 
     /// <summary>
-    /// Reads the health report with the project's token. Returns why the token couldn't read it, or null when it did, or
-    /// when the app failed to answer at all, which <paramref name="probe"/> then says. While the environment needs
+    /// Reads the health report with the project's token. Returns null when it did, and otherwise why not: the token
+    /// couldn't be used, or the report failed (a server error, no answer, or something that isn't a report), which
+    /// <paramref name="probe"/> then says and the round checks against <c>/health</c>. While the environment needs
     /// reconnecting, the token is tried every <see cref="TokenRetryInterval"/>.
     /// </summary>
     private async Task<ReportProblem?> ReadReport(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
@@ -502,7 +534,7 @@ public partial class ProjectProber
                 {
                     probe.Outcome = ProjectProbeOutcome.BadResponse;
                     probe.Problem = $"Your app's server answered HTTP {(int)response.StatusCode} without a health report.";
-                    return null;
+                    return ReportFailed($"HTTP {(int)response.StatusCode}");
                 }
 
                 Fill(probe, report);
@@ -513,7 +545,7 @@ public partial class ProjectProber
             {
                 probe.Outcome = ProjectProbeOutcome.Unreachable;
                 probe.Problem = $"Your app's server didn't answer within {(int)settings.Monitoring.RequestTimeout.TotalSeconds} seconds.";
-                return null;
+                return ReportFailed($"no answer within {(int)settings.Monitoring.RequestTimeout.TotalSeconds} s");
             }
             catch (HttpRequestException exp)
             {
@@ -524,17 +556,20 @@ public partial class ProjectProber
                     HttpRequestError.SecureConnectionError => "Your app's server has a certificate problem.",
                     _ => "Your app's server didn't answer."
                 };
-                return null;
+                return ReportFailed("no answer");
             }
             catch (JsonException)
             {
                 probe.Outcome = ProjectProbeOutcome.BadResponse;
                 probe.Problem = "Your app's server answered with something that isn't a health report.";
-                return null;
+                return ReportFailed("not a health report");
             }
         }
 
         return null;
+
+        static ReportProblem ReportFailed(string detail)
+            => new(ProjectConnectionProblems.Of(ProjectConnectionProblems.ReportFailing, detail), IsTemporary: true, AppFailed: true);
     }
 
     /// <summary>

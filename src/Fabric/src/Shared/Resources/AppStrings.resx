@@ -8543,6 +8543,9 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="MonitoringConnectionServerError" xml:space="preserve">
     <value>For an hour, your app's server has failed when bit Fabric renews its approval ({0}).</value>
   </data>
+  <data name="MonitoringConnectionReportFailing" xml:space="preserve">
+    <value>For an hour, your app has failed to give bit Fabric its health report ({0}), though it says it is up.</value>
+  </data>
   <data name="MonitoringStillCheckingUp" xml:space="preserve">
     <value>It still checks every minute that the app is up.</value>
   </data>

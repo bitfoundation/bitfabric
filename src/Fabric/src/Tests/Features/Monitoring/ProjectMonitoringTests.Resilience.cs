@@ -115,6 +115,67 @@ public partial class ProjectMonitoringTests
     }
 
     [TestMethod]
+    public async Task AReportThatFailsWhileTheAppIsUp_Should_KeepItOperational_AndSaySoAfterAnHour()
+    {
+        var customerApp = new FakeCustomerApp();
+        await using var server = await StartServer(customerApp);
+        await using var client = await SignInWithATeamOfTheirOwn(server);
+        var projects = client.GetController<IMonitoringsController>();
+        var project = await Connect(projects, customerApp, "customer.example");
+        var start = DateTimeOffset.UtcNow.AddMinutes(1);
+
+        // A developer broke the code behind /healthz: it answers 500, while the app and its /health are fine.
+        customerApp.HealthzFailsWith = HttpStatusCode.InternalServerError;
+
+        await ProbeAt(server, project.Id, start);
+        await ProbeAt(server, project.Id, start.AddMinutes(1));
+        var card = await CardOf(projects);
+        Assert.AreEqual(ProjectHealth.Operational, card.Health, "A broken report is no outage: /health says the app is up.");
+        Assert.IsNull(card.OngoingIncident);
+        Assert.AreEqual(ProjectConnectionStatus.Connected, card.ConnectionStatus, "It may be a deployment on its way.");
+        Assert.AreEqual(ProjectProbeOutcome.PublicHealth, await LastOutcome(server, project.Id));
+
+        await ProbeAt(server, project.Id, start.AddMinutes(61));
+        card = await CardOf(projects);
+        Assert.AreEqual(ProjectConnectionStatus.ReconnectNeeded, card.ConnectionStatus, "An hour of it is worth telling.");
+        Assert.AreEqual(ProjectConnectionProblems.Describe(ProjectConnectionProblems.Of(ProjectConnectionProblems.ReportFailing, "HTTP 500"), CultureInfo.GetCultureInfo("en")), card.ConnectionProblem);
+
+        var prompt = await projects.GetTroubleshootPrompt(project.Id, TestContext.CancellationToken);
+        Assert.Contains("`/healthz/v1` has failed", prompt.Prompt!, "The guidance for a broken report.");
+
+        // Fixed: the next try of the token reads the report and connects it again.
+        customerApp.HealthzFailsWith = null;
+        await ProbeAt(server, project.Id, start.AddMinutes(77));
+        Assert.AreEqual(ProjectConnectionStatus.Connected, (await CardOf(projects)).ConnectionStatus);
+        Assert.AreEqual(ProjectProbeOutcome.Read, await LastOutcome(server, project.Id));
+    }
+
+    [TestMethod]
+    public async Task AServerThatFailsAltogether_Should_BeDown_AndLeaveTheConnectionAlone()
+    {
+        var customerApp = new FakeCustomerApp();
+        await using var server = await StartServer(customerApp);
+        await using var client = await SignInWithATeamOfTheirOwn(server);
+        var projects = client.GetController<IMonitoringsController>();
+        var project = await Connect(projects, customerApp, "customer.example");
+        var start = DateTimeOffset.UtcNow.AddMinutes(1);
+
+        // The proxy in front of a server that is down: 502 for the report and for /health alike.
+        customerApp.HealthzFailsWith = HttpStatusCode.BadGateway;
+        customerApp.HealthFailsWith = HttpStatusCode.BadGateway;
+
+        await ProbeAt(server, project.Id, start);
+        await ProbeAt(server, project.Id, start.AddMinutes(1));
+        var card = await CardOf(projects);
+        Assert.AreEqual(ProjectHealth.Down, card.Health);
+        Assert.IsNotNull(card.OngoingIncident);
+        Assert.AreEqual(ProjectProbeOutcome.BadResponse, await LastOutcome(server, project.Id));
+
+        await ProbeAt(server, project.Id, start.AddMinutes(61));
+        Assert.AreEqual(ProjectConnectionStatus.Connected, (await CardOf(projects)).ConnectionStatus, "An outage says nothing of the approval.");
+    }
+
+    [TestMethod]
     public async Task TheTroubleshootPrompt_Should_FitTheEnvironment_InEnglish()
     {
         var customerApp = new FakeCustomerApp();
@@ -133,6 +194,7 @@ public partial class ProjectMonitoringTests
         Assert.Contains("dev-mcp-production", app.Prompt!, "The environment's own dev MCP.");
         Assert.Contains("troubleshoot", app.Prompt!);
 
+        var issuedToken = customerApp.AccessToken!;
         customerApp.Revoke();
         await Probe(server, project.Id);
 
@@ -142,7 +204,7 @@ public partial class ProjectMonitoringTests
         Assert.Contains("https://customer.example/.well-known/oauth-protected-resource/healthz", connection.Prompt!);
         Assert.Contains("https://customer.example/oauth/token", connection.Prompt!);
         Assert.Contains("Reconnect", connection.Prompt!);
-        Assert.DoesNotContain(customerApp.AccessToken!, connection.Prompt!, "Never a token.");
+        Assert.DoesNotContain(issuedToken, connection.Prompt!, "Never a token.");
     }
 
     private async Task<MonitoringDto> CardOf(IMonitoringsController projects)

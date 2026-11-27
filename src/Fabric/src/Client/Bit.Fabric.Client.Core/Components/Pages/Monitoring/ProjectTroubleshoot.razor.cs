@@ -16,6 +16,9 @@ public partial class ProjectTroubleshoot
     private TroubleshootPromptDto? prompt;
     private Guid? loadedFor;
     private bool isCopied;
+    private bool failed;
+    /// <summary>Counts the loads, so an answer a later load replaced, after a close and reopen, is dropped.</summary>
+    private int loads;
 
     [Parameter, EditorRequired] public Guid MonitoringId { get; set; }
 
@@ -37,9 +40,33 @@ public partial class ProjectTroubleshoot
             return;
 
         loadedFor = MonitoringId;
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        var load = ++loads;
         prompt = null;
+        failed = false;
         isCopied = false;
-        prompt = await monitoringsController.GetTroubleshootPrompt(MonitoringId, CurrentCancellationToken);
+
+        try
+        {
+            var loaded = await monitoringsController.GetTroubleshootPrompt(MonitoringId, CurrentCancellationToken);
+            if (load == loads)
+            {
+                prompt = loaded;
+            }
+        }
+        catch
+        {
+            // The app's error handler says what went wrong; the dialog offers to try again instead of loading forever.
+            if (load == loads)
+            {
+                failed = true;
+            }
+            throw;
+        }
     }
 
     private async Task Copy()

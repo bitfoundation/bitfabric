@@ -236,8 +236,17 @@ public class HealthzOAuthTests
             userId = user.Id;
         }
 
-        var requiresTwoFactor = await client.AuthManager.SignIn(new() { Email = email, Password = password, TwoFactorCode = recoveryCode }, TestContext.CancellationToken);
-        Assert.IsFalse(requiresTwoFactor, "The recovery code should have completed the two factor sign-in.");
+        try
+        {
+            var requiresTwoFactor = await client.AuthManager.SignIn(new() { Email = email, Password = password, TwoFactorCode = recoveryCode }, TestContext.CancellationToken);
+            Assert.IsFalse(requiresTwoFactor, "The recovery code should have completed the two factor sign-in.");
+        }
+        catch
+        {
+            // The caller's finally starts only once this returns, so a failed sign-in takes the role back here.
+            await RevokeGlobalAdmin(server, userId);
+            throw;
+        }
 
         return userId;
     }

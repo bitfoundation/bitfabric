@@ -8543,6 +8543,9 @@
   <data name="MonitoringConnectionServerError" xml:space="preserve">
     <value>یک ساعت است که سرور اپ شما هنگام تمدید تأیید bit Fabric خطا می‌دهد ({0}).</value>
   </data>
+  <data name="MonitoringConnectionReportFailing" xml:space="preserve">
+    <value>یک ساعت است که اپ شما health report خود را به bit Fabric نمی‌دهد ({0})، با اینکه می‌گوید بالا و در دسترس است.</value>
+  </data>
   <data name="MonitoringStillCheckingUp" xml:space="preserve">
     <value>هنوز هر دقیقه بررسی می‌کند که اپ بالا باشد.</value>
   </data>

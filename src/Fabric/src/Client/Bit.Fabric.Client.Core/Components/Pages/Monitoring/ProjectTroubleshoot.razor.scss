@@ -52,3 +52,15 @@
     gap: .5rem;
     justify-content: flex-end;
 }
+
+// What the dialog shows when the prompt couldn't be loaded, in the prompt's place.
+.troubleshoot-failed {
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px dashed $bit-color-border-secondary;
+}

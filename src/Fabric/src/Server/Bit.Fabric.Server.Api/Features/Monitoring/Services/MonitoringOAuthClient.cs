@@ -168,13 +168,14 @@ public partial class MonitoringOAuthClient(IHttpClientFactory httpClientFactory,
                 ? ProjectConnectionProblems.Of(ProjectConnectionProblems.ReportGone)
                 : ProjectConnectionProblems.Of(ProjectConnectionProblems.ServerError, result.Error);
 
-        // The app's own reason as it said it, when it gave one, such as the template's "The approval was revoked.".
-        if (result.ErrorDescription?.Trim() is { Length: > 0 } reason)
-            return ProjectConnectionProblems.Of(ProjectConnectionProblems.NoLongerAccepted, reason.Length > 300 ? reason[..300] : reason);
+        // Any other refusal, such as invalid_client, is about bit Fabric's client rather than the approval: named by its error.
+        if (result.Error is not "invalid_grant")
+            return ProjectConnectionProblems.Of(ProjectConnectionProblems.RenewRefused, result.Error);
 
-        return result.Error is "invalid_grant"
-            ? ProjectConnectionProblems.Of(ProjectConnectionProblems.ApprovalWithdrawn)
-            : ProjectConnectionProblems.Of(ProjectConnectionProblems.RenewRefused, result.Error);
+        // The app's own reason as it said it, when it gave one, such as the template's "The approval was revoked.".
+        return result.ErrorDescription?.Trim() is { Length: > 0 } reason
+            ? ProjectConnectionProblems.Of(ProjectConnectionProblems.NoLongerAccepted, reason.Length > 300 ? reason[..300] : reason)
+            : ProjectConnectionProblems.Of(ProjectConnectionProblems.ApprovalWithdrawn);
     }
 }
 

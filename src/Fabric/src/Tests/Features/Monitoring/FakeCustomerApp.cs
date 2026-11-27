@@ -68,6 +68,12 @@ public sealed class FakeCustomerApp
     /// <summary>Its server serves the detailed report at <c>/healthz/v1</c>; false answers 404, as when its code was removed.</summary>
     public bool ServesHealthz { get; set; } = true;
 
+    /// <summary>What <c>/healthz/v1</c> answers instead of the report, with a page that isn't JSON, as broken code behind it does.</summary>
+    public HttpStatusCode? HealthzFailsWith { get; set; }
+
+    /// <summary>What the public <c>/health</c> answers instead, as a proxy in front of a server that is down does.</summary>
+    public HttpStatusCode? HealthFailsWith { get; set; }
+
     /// <summary>How long it takes to answer anything, as a slow app does.</summary>
     public TimeSpan Delay { get; set; }
 
@@ -307,6 +313,8 @@ public sealed class FakeCustomerApp
             }),
             ("POST", "/oauth/token") when origin == Server => await Token(request, cancellationToken),
             ("GET", "/healthz/v1") when origin == Server && ServesHealthz is false => new HttpResponseMessage(HttpStatusCode.NotFound),
+            ("GET", "/healthz/v1") when origin == Server && HealthzFailsWith is { } healthzStatus => ErrorPage(healthzStatus),
+            ("GET", "/health") when origin == Server && HealthFailsWith is { } healthStatus => ErrorPage(healthStatus),
             ("GET", "/healthz/v1") when origin == Server => request.Headers.Authorization?.Parameter is { } token && token == AccessToken
                 ? HealthReport()
                 : new HttpResponseMessage(HttpStatusCode.Unauthorized),
@@ -341,7 +349,7 @@ public sealed class FakeCustomerApp
         }
         else if (RefreshFailsWith is { } status)
         {
-            return new HttpResponseMessage(status) { Content = new StringContent("<html><body>Something went wrong</body></html>", Encoding.UTF8, "text/html") };
+            return ErrorPage(status);
         }
         else if (RefusesRefresh)
         {
@@ -424,6 +432,10 @@ public sealed class FakeCustomerApp
 
     private static HttpResponseMessage TokenError(string error, string? description = null)
         => Json(new Dictionary<string, object?> { ["error"] = error, ["error_description"] = description }, HttpStatusCode.BadRequest);
+
+    /// <summary>A server error's page, as a server or the proxy in front of it gives: HTML, not JSON.</summary>
+    private static HttpResponseMessage ErrorPage(HttpStatusCode status)
+        => new(status) { Content = new StringContent("<html><body>Something went wrong</body></html>", Encoding.UTF8, "text/html") };
 
     private static HttpResponseMessage Json(Dictionary<string, object?> body, HttpStatusCode status = HttpStatusCode.OK)
         => new(status) { Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json") };

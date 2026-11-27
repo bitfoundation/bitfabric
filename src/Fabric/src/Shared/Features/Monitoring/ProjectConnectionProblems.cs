@@ -38,6 +38,12 @@ public static class ProjectConnectionProblems
     /// <summary>For an hour, renewing the approval met a server error or no answer; the detail is the last one seen.</summary>
     public const string ServerError = nameof(ServerError);
 
+    /// <summary>
+    /// For an hour, <c>/healthz/v1</c> failed (a server error, no answer, or something that isn't a report) while the public
+    /// <c>/health</c> said the app is up: its report is broken, not the app. The detail is the last failure seen.
+    /// </summary>
+    public const string ReportFailing = nameof(ReportFailing);
+
     /// <summary>The code to store, with its detail after a colon.</summary>
     public static string Of(string code, string? detail = null) => detail is null ? code : $"{code}:{detail}";
 
@@ -74,6 +80,7 @@ public static class ProjectConnectionProblems
             ApprovalWithdrawn => text(nameof(AppStrings.MonitoringConnectionApprovalWithdrawn), []),
             ReportGone => text(nameof(AppStrings.MonitoringConnectionReportGone), []),
             ServerError => text(nameof(AppStrings.MonitoringConnectionServerError), [detail]),
+            ReportFailing => text(nameof(AppStrings.MonitoringConnectionReportFailing), [detail]),
             _ => stored
         };
     }

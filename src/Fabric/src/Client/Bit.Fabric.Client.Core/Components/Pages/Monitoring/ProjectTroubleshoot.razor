@@ -12,7 +12,14 @@
 
         <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.MonitoringTroubleshootHelp)]</BitText>
 
-        @if (prompt is null)
+        @if (failed)
+        {
+            <div class="troubleshoot-failed">
+                <BitText Typography="BitTypography.Body2">@Localizer[nameof(AppStrings.SomethingWentWrong)]</BitText>
+                <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.Refresh" OnClick="WrapHandled(Load)">@Localizer[nameof(AppStrings.TryAgain)]</BitButton>
+            </div>
+        }
+        else if (prompt is null)
         {
             <BitShimmer Height="16rem" Radius="0.5rem" />
         }
