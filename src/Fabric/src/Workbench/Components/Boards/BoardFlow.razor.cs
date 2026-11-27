@@ -4,25 +4,33 @@ namespace Bit.Fabric.Workbench.Components.Boards;
 
 /// <summary>
 /// A process told on the app's own pages: its screens, each a page of the catalog live in its device, joined by arrows labeled
-/// with what the user does, laid out from the first screen on (BoardFlowLayout). It pans and zooms, and Present walks through
-/// the screens one at a time, the shown one usable. A block of a board (BoardBlock), as the boards skill describes.
+/// with what the user does, laid out from the first screen on (BoardFlowLayout). It shows one screen at a time, usable, and
+/// steps to the previous or next one, or to the one clicked; it zooms, pans and goes full screen. A block of a board
+/// (BoardBlock), as the boards skill describes.
 /// </summary>
 public partial class BoardFlow
 {
     private const double LabelFontSize = 30;
 
+    [AutoInject] private Bit.Butil.Document document = default!;
+
     private BlowCanvas? canvas;
+    private ElementReference flowElement;
+    private ButilSubscription? fullScreenChange;
     // The screens shown: each id once, the first screen with it kept.
     private BoardFlowScreen[] shown = [];
-    // The screen being presented, or -1.
-    private int presentIndex = -1;
+    private int currentIndex;
+    // Full screen is the browser's, or the window's where the browser refuses it.
+    private bool isFullScreen;
+    private bool isBrowserFullScreen;
+    private bool fillsWindow;
+    private bool isPopoverPending;
     // A finger's drag scrolls the board's page on a phone, rather than panning the canvas under it.
     private bool isNarrow;
     private readonly List<BlowNode> nodes = [];
     private readonly List<BlowEdge> edges = [];
     // Each screen's place in the flow, from 1, shown on its card.
     private readonly Dictionary<string, int> numbers = [];
-    private readonly BlowFitViewOptions fitOptions = new() { Padding = 0.12, MaxZoom = 1 };
 
     [Parameter, EditorRequired] public IReadOnlyList<BoardFlowScreen> Screens { get; set; } = [];
 
@@ -34,25 +42,19 @@ public partial class BoardFlow
     /// <summary>The canvas's height on a wide screen, a CSS length; a phone's is shorter.</summary>
     [Parameter] public string? Height { get; set; }
 
-    private bool IsPresenting => presentIndex >= 0 && presentIndex < shown.Length;
-
-    private string? CurrentScreenId => IsPresenting ? shown[presentIndex].Id : null;
+    private string? CurrentScreenId => shown.Length > 0 ? shown[currentIndex].Id : null;
 
     private bool IsRtl => CurrentDir is BitDir.Rtl;
 
     private string? HeightStyle => Height is null ? null : $"--board-flow-height:{Height}";
 
-    /// <summary>The pages the flow goes through, in order, each once.</summary>
-    private string PathText => string.Join(IsRtl ? " ← " : " → ", shown.Select(TitleOf).Distinct());
+    private string FullScreenLabel => Localizer[isFullScreen ? nameof(WorkbenchStrings.ExitFullScreen) : nameof(WorkbenchStrings.FullScreen)];
 
     protected override void OnParametersSet()
     {
         Build();
 
-        if (presentIndex >= shown.Length)
-        {
-            presentIndex = -1;
-        }
+        currentIndex = Math.Clamp(currentIndex, 0, Math.Max(shown.Length - 1, 0));
 
         base.OnParametersSet();
     }
@@ -133,34 +135,103 @@ public partial class BoardFlow
     /// <summary>The screen's page in the Pages section, in its scenario.</summary>
     private static string OpenUrlOf(BoardFlowScreen screen) => $"{WorkbenchUrls.Page(screen.PageKey)}{ScenarioOf(screen).ToQueryString()}";
 
-    /// <summary>Zooms to one screen and makes its page usable.</summary>
-    private async Task Present(int index)
+    /// <summary>Fits the canvas to the current screen, easing there over the duration in milliseconds.</summary>
+    private BlowFitViewOptions FitCurrent(int duration) => new()
+    {
+        Nodes = [.. nodes.Where(node => node.Id == CurrentScreenId)],
+        Padding = 0.08,
+        MaxZoom = 1,
+        Duration = duration
+    };
+
+    /// <summary>Zooms to a screen and makes its page usable.</summary>
+    private async Task Show(int index)
     {
         if (shown.Length == 0)
             return;
 
-        presentIndex = Math.Clamp(index, 0, shown.Length - 1);
-
-        if (canvas is not null && nodes.FirstOrDefault(node => node.Id == shown[presentIndex].Id) is { } node)
-        {
-            await canvas.FitViewAsync(new BlowFitViewOptions { Nodes = [node], Padding = 0.08, MaxZoom = 1, Duration = 450 });
-        }
-    }
-
-    private Task PresentScreen(BlowNodeMouseEvent args)
-    {
-        var index = Array.FindIndex(shown, screen => screen.Id == args.Node.Id);
-
-        return index < 0 ? Task.CompletedTask : Present(index);
-    }
-
-    private async Task StopPresenting()
-    {
-        presentIndex = -1;
+        currentIndex = Math.Clamp(index, 0, shown.Length - 1);
 
         if (canvas is not null)
         {
-            await canvas.FitViewAsync(new BlowFitViewOptions { Padding = fitOptions.Padding, MaxZoom = 1, Duration = 450 });
+            await canvas.FitViewAsync(FitCurrent(duration: 450));
+        }
+    }
+
+    private Task ShowScreen(BlowNode node)
+    {
+        var index = Array.FindIndex(shown, screen => screen.Id == node.Id);
+
+        return index < 0 ? Task.CompletedTask : Show(index);
+    }
+
+    /// <summary>Fits the current screen again once the canvas changes size, as on going full screen or back.</summary>
+    private async Task KeepCurrentInView(BlowDimensions size)
+    {
+        if (canvas is not null)
+        {
+            await canvas.FitViewAsync(FitCurrent(duration: 0));
+        }
+    }
+
+    /// <summary>
+    /// Takes the flow full screen, or over the whole window where the browser refuses, as a phone's Safari does; Esc, or the
+    /// browser's own control, ends the browser's full screen and the flow's with it.
+    /// </summary>
+    private async Task ToggleFullScreen()
+    {
+        if (isFullScreen)
+        {
+            // Without its popover attribute, the flow leaves the window's top layer.
+            isFullScreen = false;
+            fillsWindow = false;
+
+            if (isBrowserFullScreen)
+            {
+                await document.ExitFullscreen();
+            }
+
+            return;
+        }
+
+        isFullScreen = true;
+
+        try
+        {
+            fullScreenChange ??= await document.SubscribeFullscreenChange(fullScreen =>
+            {
+                if (fullScreen)
+                {
+                    isBrowserFullScreen = isFullScreen;
+                    return;
+                }
+
+                if (isBrowserFullScreen)
+                {
+                    isBrowserFullScreen = false;
+                    isFullScreen = false;
+                    InvokeAsync(StateHasChanged);
+                }
+            });
+
+            await flowElement.RequestFullScreen(new());
+        }
+        catch (JSException)
+        {
+            fillsWindow = true;
+            isPopoverPending = true;
+        }
+    }
+
+    /// <summary>Shows the flow over the page once it has rendered as a popover, in the top layer, which no block around it clips.</summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (isPopoverPending)
+        {
+            isPopoverPending = false;
+            await flowElement.ShowPopover();
         }
     }
 
@@ -168,5 +239,15 @@ public partial class BoardFlow
     {
         isNarrow = narrow;
         StateHasChanged();
+    }
+
+    public override async ValueTask DisposeAsync()
+    {
+        if (fullScreenChange is not null)
+        {
+            await fullScreenChange.DisposeAsync();
+        }
+
+        await base.DisposeAsync();
     }
 }

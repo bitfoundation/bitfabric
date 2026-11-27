@@ -217,7 +217,7 @@ else
                     <ChecksPanel PaneId="@store.SelectedPane.Id"
                                  PageKey="@pageInfo.Key"
                                  PageTitle="@Localizer[pageInfo.TitleKey]"
-                                 Query="@store.SelectedPane.Scenario.ToQueryString()"
+                                 Query="@AsShown(store.SelectedPane.Scenario).ToQueryString()"
                                  InPageSwitches="inPageSwitches"
                                  AskAgent="AskAgentAboutFindingCallback" />
                 }

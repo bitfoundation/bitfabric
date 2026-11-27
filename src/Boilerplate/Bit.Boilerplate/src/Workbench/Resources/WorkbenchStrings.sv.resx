@@ -169,7 +169,7 @@
         <value>Mörk</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>System</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Data</value>
@@ -2514,20 +2514,17 @@
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Öppna i arbetsbänken</value>
     </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Visa alla skärmar</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Presentera</value>
-    </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Föregående skärm</value>
     </data>
     <data name="NextScreen" xml:space="preserve">
         <value>Nästa skärm</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Sluta presentera</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Helskärm</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Avsluta helskärm</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} av {1}</value>

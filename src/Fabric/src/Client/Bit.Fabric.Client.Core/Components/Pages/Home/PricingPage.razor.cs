@@ -3,8 +3,8 @@ namespace Bit.Fabric.Client.Core.Components.Pages.Home;
 /// <summary>
 /// bitfabric.co/pricing: the draft plans, examples of who
 /// pays what, an example month on a hosted builder and with bit Fabric, what a license gives, what stays true whatever the
-/// visitor pays, what they pay others and the questions they ask, then the way to start. Built from the Workbench's pricing
-/// design, option 1 with its "row by row" saving. Its words are <see cref="AppPricing"/>'s, which /pricing.md writes out too.
+/// visitor pays, what they pay others and the questions they ask, then the way to start. Its words are
+/// <see cref="AppPricing"/>'s, which /pricing.md writes out too.
 /// </summary>
 public partial class PricingPage
 {

@@ -238,7 +238,8 @@ ships, and section 8 has nothing to rebuild. What follows is for a page whose da
 - To explain a task that crosses screens, build a board (the **boards** skill) around a `BoardFlow`: each screen a
   page of the catalog in its scenario, with a line on what it shows, and an arrow labeled with what the user does to
   get to the next. A screen that shows the page as a few taps leave it, like the form that "Add building" opens, gets
-  the page's stores as JSON in its `State`. The user pans, zooms and presents it screen by screen.
+  the page's stores as JSON in its `State`. It shows one screen at a time; the user steps through them and can go full
+  screen.
 - The review sheet (Screenshot, then Review sheet) puts every open view, its settings and the comments into one HTML or
   PDF file. Offer it when the user wants something to send around or to attach to the pull request.
 - Write what was decided into the feature's spec, as `AGENTS.md` section 6 asks.

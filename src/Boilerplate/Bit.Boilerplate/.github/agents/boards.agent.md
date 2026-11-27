@@ -58,7 +58,8 @@ building, told on the buildings page itself with a `BoardFlow`.
   `BoardSource` for each page or file a fact came from, which `BoardFrame` folds at the foot.
 - `BoardFlow` tells a process on the app's own pages: its screens (`BoardFlowScreen`: a page's key, a line on what it
   shows, its scenario, and the page's stores as JSON for a state a few taps reach) joined by arrows labeled with what
-  the user does (`BoardFlowLink`). It lays them out itself, and pans, zooms and presents them screen by screen.
+  the user does (`BoardFlowLink`). It lays them out itself and shows one screen at a time, which the reader steps
+  through, zooms and takes full screen.
 - Add it to `WorkbenchBoardCatalog.Build` (`src/Workbench/Infrastructure/Services/WorkbenchBoardCatalog.cs`) with its id,
   title, a one-line summary, an icon, its component, the day it was made, its tone and its kind (`HowItWorks`,
   `Comparison`, `Plan` or `Report`), which the list groups the boards by. Hot reload brings it in. While

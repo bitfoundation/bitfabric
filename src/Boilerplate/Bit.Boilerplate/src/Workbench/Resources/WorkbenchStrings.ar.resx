@@ -169,7 +169,7 @@
         <value>داكن</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>النظام</value>
+        <value>تلقائي</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>بيانات</value>
@@ -2514,20 +2514,17 @@
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>افتح في منضدة العمل</value>
     </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>إظهار كل الشاشات</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>عرض تقديمي</value>
-    </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>الشاشة السابقة</value>
     </data>
     <data name="NextScreen" xml:space="preserve">
         <value>الشاشة التالية</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>إيقاف العرض التقديمي</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>ملء الشاشة</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>الخروج من ملء الشاشة</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} من {1}</value>

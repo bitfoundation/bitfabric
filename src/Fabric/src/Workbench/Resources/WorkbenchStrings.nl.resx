@@ -157,7 +157,7 @@
         <value>Donker</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>Systeem</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Gegevens</value>
@@ -1821,20 +1821,17 @@
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Openen in de werkbank</value>
     </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Alle schermen tonen</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Presenteren</value>
-    </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Vorig scherm</value>
     </data>
     <data name="NextScreen" xml:space="preserve">
         <value>Volgend scherm</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Stoppen met presenteren</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Volledig scherm</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Volledig scherm sluiten</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} van {1}</value>

@@ -6,7 +6,7 @@ namespace Boilerplate.Workbench.Components.Shell;
 /// The shell's own state: the open views (panes) and their scenarios, the selected view, the zoom, the mode, the tab
 /// and the reviewer's settings. Saved in the browser so a reload comes back to the same views; the address mirrors it.
 /// </summary>
-[BlexStore(Name = "workbench", Persist = true)]
+[BlexStore(Name = "workbench", Persist = true, Version = 1)]
 public partial class WorkbenchStore
 {
     // The query keys that carry a scenario; an address without any of them leaves the saved views as they are.

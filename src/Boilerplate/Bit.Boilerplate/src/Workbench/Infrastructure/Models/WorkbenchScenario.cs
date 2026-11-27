@@ -21,7 +21,7 @@ public sealed partial record WorkbenchScenario
 
     public WorkbenchDataState Data { get; init; } = WorkbenchDataState.Live;
 
-    public WorkbenchThemeMode Theme { get; init; } = WorkbenchThemeMode.Light;
+    public WorkbenchThemeMode Theme { get; init; } = WorkbenchThemeMode.System;
 
     public string? Culture { get; init; }
 

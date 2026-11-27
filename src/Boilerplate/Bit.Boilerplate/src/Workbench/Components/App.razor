@@ -5,7 +5,7 @@
 @* - src/Client/Boilerplate.Client.Maui/wwwroot/index.html *@
 @using Microsoft.AspNetCore.Http
 
-@* A /preview page takes its theme, safe-area insets and look from the scenario in its query string and never saves the theme; the shell keeps the theme the user picked. *@
+@* A /preview page takes its theme, safe-area insets and look from the scenario in its query string and never saves the theme; the shell keeps the theme the user picked, which a view set to System shows. *@
 @{
     var isPreview = HttpContext.Request.Path.StartsWithSegments("/preview");
     var scenario = isPreview ? WorkbenchScenario.Parse(HttpContext.Request.QueryString.Value) : null;
@@ -15,7 +15,7 @@
         {
             WorkbenchThemeMode.Light => AppThemePresets.Light,
             WorkbenchThemeMode.Dark => AppThemePresets.Dark,
-            _ => BitThemePresets.System
+            _ => HttpContext.Request.Cookies[BitThemeCookie.PreferenceCookieName] ?? BitThemePresets.System
         }
         : HttpContext.Request.Cookies[BitThemeCookie.PreferenceCookieName];
     var themeOptions = new BitThemeSsrOptions

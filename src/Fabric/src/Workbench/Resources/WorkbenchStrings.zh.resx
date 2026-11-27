@@ -157,7 +157,7 @@
         <value>深色</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>跟随系统</value>
+        <value>自动</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>有数据</value>
@@ -1821,20 +1821,17 @@
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>在工作台中打开</value>
     </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>显示所有屏幕</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>演示</value>
-    </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>上一个屏幕</value>
     </data>
     <data name="NextScreen" xml:space="preserve">
         <value>下一个屏幕</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>停止演示</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>全屏</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>退出全屏</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>第 {0} 个，共 {1} 个</value>

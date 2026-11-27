@@ -507,6 +507,25 @@ if (!isPreview) {
     connectFrames({ invoke: callShell });
 }
 
+// A view whose address sets no theme shows the Workbench's own, so a theme the Workbench, or a view around it, switches to
+// goes into it as it is, without a reload; the shell's page is told too.
+document.addEventListener('bit-theme-change', event => {
+    const theme = (event as CustomEvent).detail?.newTheme as string | undefined;
+    if (!theme) return;
+
+    document.querySelectorAll('iframe').forEach(frame => {
+        const address = addressOf(frame);
+        if (!address) return;
+
+        const url = new URL(address);
+        if (url.origin !== location.origin || !url.pathname.startsWith('/preview') || url.searchParams.has('theme')) return;
+
+        (frame.contentWindow as any)?.BitBlazorUI?.Theme?.set(theme);
+    });
+
+    callShell('ShellThemeChanged', theme.includes('dark'));
+});
+
 // Touch emulation runs in handheld views without a backdrop, whose body the server marks with wb-touch.
 if (isPreview && document.body.classList.contains('wb-touch')) {
     emulateTouch();

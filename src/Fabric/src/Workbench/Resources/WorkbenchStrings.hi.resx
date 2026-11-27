@@ -157,7 +157,7 @@
         <value>डार्क</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>सिस्टम</value>
+        <value>ऑटो</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>डेटा</value>
@@ -1821,20 +1821,17 @@
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>वर्कबेंच में खोलें</value>
     </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>सभी स्क्रीनें दिखाएँ</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>प्रस्तुत करें</value>
-    </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>पिछली स्क्रीन</value>
     </data>
     <data name="NextScreen" xml:space="preserve">
         <value>अगली स्क्रीन</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>प्रस्तुति रोकें</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>पूर्ण स्क्रीन</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>पूर्ण स्क्रीन से बाहर निकलें</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{1} में से {0}</value>

@@ -3,9 +3,9 @@ namespace Boilerplate.WorkbenchTests.Features.Boards;
 /// <summary>
 /// The boards an agent builds instead of a long answer in the chat, through the three that ship as examples: the section's own
 /// board lists them by kind, each opens on its own address with every board in the side panel, whose search reads what they
-/// say, what the reader changes on one works without the page jumping, a flow of live screens joined by labeled arrows walks
-/// through them one at a time, a board reads in its own language whatever the Workbench's, and the home page and the header
-/// lead to them.
+/// say, what the reader changes on one works without the page jumping, a flow of live screens joined by labeled arrows shows
+/// them one at a time and goes full screen, a board reads in its own language whatever the Workbench's, and the home page
+/// and the header lead to them.
 /// </summary>
 [TestClass, TestCategory("UITest")]
 public class BoardsUITests : WorkbenchPageTest
@@ -144,7 +144,7 @@ public class BoardsUITests : WorkbenchPageTest
     }
 
     [TestMethod, EverySurface]
-    public async Task TheAddBuildingBoard_Should_JoinItsScreensWithLabeledArrowsAndPresentThemOneByOne(WorkbenchSurface surface)
+    public async Task TheAddBuildingBoard_Should_JoinItsScreensWithLabeledArrowsAndShowThemOneByOne(WorkbenchSurface surface)
     {
         await OpenBoards("/add-building");
 
@@ -157,10 +157,8 @@ public class BoardsUITests : WorkbenchPageTest
         await Expect(Flow.Locator(".screen-note")).ToHaveTextAsync([WorkbenchStrings.SampleFlowBuildingsList, WorkbenchStrings.SampleFlowBuildingsForm, WorkbenchStrings.SampleFlowBuildingsMap]);
         await Expect(Flow.Locator(".bit-blow-edge")).ToHaveCountAsync(2);
         await Expect(Flow.Locator(".bit-blow-edge-label")).ToContainTextAsync([WorkbenchStrings.BuildingsAdd, WorkbenchStrings.BuildingsMapView]);
-        await Expect(FlowBar.Locator(".flow-path")).ToHaveTextAsync(WorkbenchStrings.BuildingsTitle);
 
-        await Press(FlowButton(WorkbenchStrings.Present));
-
+        // It opens on the first screen, usable, and steps to the next.
         await Expect(FlowBar.GetByRole(AriaRole.Status)).ToContainTextAsync(string.Format(CultureInfo.InvariantCulture, WorkbenchStrings.ScreenOf, 1, 3));
         await Expect(FlowButton(WorkbenchStrings.PreviousScreen)).ToBeDisabledAsync();
         await Expect(Flow.Locator(".screen-card.current iframe")).ToHaveAttributeAsync("data-screen-id", "list");
@@ -171,12 +169,21 @@ public class BoardsUITests : WorkbenchPageTest
         await Expect(FlowBar.GetByRole(AriaRole.Status)).ToContainTextAsync(WorkbenchStrings.SampleFlowBuildingsForm);
         await Expect(Flow.Locator(".screen-card.current iframe")).ToHaveAttributeAsync("data-screen-id", "form");
 
-        // Stopping goes back to the whole flow.
-        await Press(FlowButton(WorkbenchStrings.StopPresenting));
+        await Press(FlowButton(WorkbenchStrings.NextScreen));
 
-        await Expect(Flow.Locator(".screen-card.current")).ToHaveCountAsync(0);
-        await Expect(FlowButton(WorkbenchStrings.Present)).ToBeVisibleAsync();
-        await Expect(FlowBar.Locator(".flow-path")).ToBeVisibleAsync();
+        await Expect(Flow.Locator(".screen-card.current iframe")).ToHaveAttributeAsync("data-screen-id", "map");
+        await Expect(FlowButton(WorkbenchStrings.NextScreen)).ToBeDisabledAsync();
+
+        // Full screen, from the button next to the zoom ones, fills at least the window, and the button brings the flow back.
+        await Press(Flow.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.FullScreen, Exact = true }));
+
+        await Expect(Flow).ToHaveCSSAsync("position", "fixed");
+        Assert.AreEqual(Page.ViewportSize!.Width, (int)Math.Round((await Flow.BoundingBoxAsync())!.Width));
+
+        await Press(Flow.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ExitFullScreen, Exact = true }));
+
+        await Expect(Flow).Not.ToHaveCSSAsync("position", "fixed");
+        await Expect(Flow.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.FullScreen, Exact = true })).ToBeVisibleAsync();
     }
 
     [TestMethod, EverySurface]

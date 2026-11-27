@@ -157,7 +157,7 @@
         <value>Dark</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>System</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Data</value>
@@ -1851,20 +1851,17 @@
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Open in the Workbench</value>
     </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Show all screens</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Present</value>
-    </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Previous screen</value>
     </data>
     <data name="NextScreen" xml:space="preserve">
         <value>Next screen</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Stop presenting</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Full screen</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Exit full screen</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} of {1}</value>

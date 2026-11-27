@@ -63,6 +63,8 @@ public partial class WorkbenchViewPage
 
     private readonly ElementReference[] columnTabs = new ElementReference[columns.Length];
     private DotNetObjectReference<WorkbenchViewPage>? reference;
+    // The theme the Workbench shows, which a view set to System shows too.
+    private WorkbenchThemeMode shellTheme = WorkbenchThemeMode.Light;
 
     [AutoInject] private WorkbenchStore store = default!;
     [AutoInject] private BlexManager blexManager = default!;
@@ -178,6 +180,10 @@ public partial class WorkbenchViewPage
         isRestored = true;
 
         await RunStartStep(() => JSRuntime.InvokeVoidAsync("workbench.setComponentNames", WorkbenchComponentNames.RootClasses, Localizer[nameof(WorkbenchStrings.NotFromTheme)].Value).AsTask());
+        if (IsDisposed)
+            return;
+
+        await RunStartStep(async () => ShellThemeChanged((await bitThemeManager.GetCurrentThemeAsync())?.Contains("dark", StringComparison.OrdinalIgnoreCase) is true));
         if (IsDisposed)
             return;
 
@@ -386,7 +392,7 @@ public partial class WorkbenchViewPage
 
         var state = await JSRuntime.InvokeAsync<string?>("workbench.captureFrame", pane.Id);
 
-        selectedThreadId = await reviewSession.AddThread(pageInfo.Key, pane.Scenario.ToQueryString(), picked.Anchor, ReviewerName, request, state);
+        selectedThreadId = await reviewSession.AddThread(pageInfo.Key, AsShown(pane.Scenario).ToQueryString(), picked.Anchor, ReviewerName, request, state);
         pickedText = null;
 
         store.SetMode(WorkbenchModes.Comment);
@@ -412,7 +418,7 @@ public partial class WorkbenchViewPage
         if (IsDisposed || pageInfo?.Key != pageKey || store.Panes.FirstOrDefault(p => p.Id == paneId) is not { } pane)
             return false;
 
-        var threadId = await reviewSession.AddThread(pageKey, pane.Scenario.ToQueryString(), anchor, ReviewerName, text, state);
+        var threadId = await reviewSession.AddThread(pageKey, AsShown(pane.Scenario).ToQueryString(), anchor, ReviewerName, text, state);
 
         if (threadId is null)
             return false;
@@ -455,7 +461,7 @@ public partial class WorkbenchViewPage
             return;
 
         // Read before anything is awaited, as the comment belongs to the page and the view it was written on.
-        var query = pane.Scenario.ToQueryString();
+        var query = AsShown(pane.Scenario).ToQueryString();
 
         if (pendingComment is null)
         {
@@ -579,6 +585,20 @@ public partial class WorkbenchViewPage
 
         store.ReportScenario(paneId, scenario);
     }
+
+    /// <summary>The Workbench's own theme changed, as by its switch or the device's.</summary>
+    [JSInvokable]
+    public void ShellThemeChanged(bool isDark)
+    {
+        shellTheme = isDark ? WorkbenchThemeMode.Dark : WorkbenchThemeMode.Light;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// The view's scenario with System turned into the theme the view shows, the Workbench's own, for what is made of
+    /// the view outside the Workbench: a comment, a screenshot, a check.
+    /// </summary>
+    private WorkbenchScenario AsShown(WorkbenchScenario scenario) => scenario.Theme is WorkbenchThemeMode.System ? scenario with { Theme = shellTheme } : scenario;
 
     /// <summary>A press or a key went into a view's page.</summary>
     [JSInvokable]
@@ -709,7 +729,7 @@ public partial class WorkbenchViewPage
 
         var snapshotId = await CaptureState(pane);
 
-        await JSRuntime.InvokeVoidAsync("workbench.download", WorkbenchUrls.Screenshot(pageInfo.Key, pane.Scenario, snapshotId));
+        await JSRuntime.InvokeVoidAsync("workbench.download", WorkbenchUrls.Screenshot(pageInfo.Key, AsShown(pane.Scenario), snapshotId));
     }
 
     private async Task DownloadAll()
@@ -738,7 +758,7 @@ public partial class WorkbenchViewPage
 
         foreach (var pane in store.Panes)
         {
-            shots.Add((pageKey, pane.Scenario, await CaptureState(pane)));
+            shots.Add((pageKey, AsShown(pane.Scenario), await CaptureState(pane)));
         }
 
         return shots;

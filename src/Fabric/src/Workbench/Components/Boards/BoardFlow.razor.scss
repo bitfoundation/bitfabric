@@ -20,17 +20,12 @@
     border-bottom: 1px solid $bit-color-border-tertiary;
 }
 
-.flow-path,
 .flow-step-note {
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     color: $bit-color-foreground-secondary;
-}
-
-.flow-path {
-    font-size: 14px;
 }
 
 .flow-step {
@@ -45,10 +40,36 @@
     position: relative;
     height: var(--board-flow-height, 640px);
 
-    // A phone shows the screens side by side and small, until Present brings one up.
     @include lt-md {
         height: min(var(--board-flow-height, 640px), 480px);
     }
+}
+
+// Full screen gives the canvas all of the window, or of the screen, below the bar.
+.board-flow.full-screen {
+    inset: 0;
+    margin: 0;
+    border: none;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    position: fixed;
+    border-radius: 0;
+    padding-inline: 0;
+    padding-top: $bit-env-inset-top;
+    padding-bottom: $bit-env-inset-bottom;
+    color: $bit-color-foreground-primary;
+
+    .flow-canvas {
+        height: auto;
+        flex-grow: 1;
+    }
+}
+
+// The icon of the full screen button, as large as the zoom buttons' own.
+::deep .full-screen-button {
+    font-size: 14px;
 }
 
 // Blow's colors come from the app's theme, so the flow follows light and dark.

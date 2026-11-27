@@ -466,6 +466,32 @@ public class ShellUITests : ShellPageTest
         await Expect(View().Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
     }
 
+    [TestMethod, OnDesktops]
+    public async Task AViewSetToNoTheme_Should_ShowTheWorkbenchsOwn(WorkbenchSurface surface)
+    {
+        await OpenWorkbench("theme");
+
+        await Expect(View().Locator("html")).Not.ToHaveAttributeAsync("bit-theme", new Regex("dark"));
+
+        // The Workbench's switch reaches the view without a reload, and the view keeps showing it after one.
+        await Press(TopBarButton(WorkbenchStrings.ToggleWorkbenchTheme));
+
+        await Expect(View().Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
+        await Expect(Page).Not.ToHaveURLAsync(new Regex("theme="));
+
+        await OpenWorkbench("theme");
+
+        await Expect(View().Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
+
+        // A view set to Light stays light in a dark Workbench.
+        await OpenTools();
+        await Press(ToolsButton(WorkbenchStrings.ThemeLight));
+        await CloseTools();
+
+        await Expect(Page).ToHaveURLAsync(new Regex(@"\?theme=light$"));
+        await Expect(View().Locator("html")).Not.ToHaveAttributeAsync("bit-theme", new Regex("dark"));
+    }
+
     [TestMethod, EverySurface]
     public async Task BrowserBack_Should_ReturnToThePageBefore(WorkbenchSurface surface)
     {

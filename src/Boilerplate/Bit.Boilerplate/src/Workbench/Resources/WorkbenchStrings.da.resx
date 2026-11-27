@@ -169,7 +169,7 @@
         <value>Mørk</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>System</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Data</value>
@@ -2514,20 +2514,17 @@
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Åbn i arbejdsbænken</value>
     </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Vis alle skærme</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Præsenter</value>
-    </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Forrige skærm</value>
     </data>
     <data name="NextScreen" xml:space="preserve">
         <value>Næste skærm</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Stop præsentationen</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Fuld skærm</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Afslut fuld skærm</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} af {1}</value>

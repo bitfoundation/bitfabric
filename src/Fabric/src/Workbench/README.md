@@ -45,8 +45,9 @@ Chromium when it is installed, otherwise Microsoft Edge or Google Chrome. To ins
   browser's own speech recognition, in the language its menu picks.
 - **`/pages/<page>`**: one page with its tools. Pick the device, its orientation and frame, the data state
   (live, loading, empty, error, mixed or slow), the signed-in state, the app's navigation, a colored background with a
-  caption for store screenshots, the theme and the language. Compare devices, themes, languages, data states or accounts
-  side by side, download screenshots, and copy a link that opens the same views.
+  caption for store screenshots, the theme (Auto, the default, shows the Workbench's own) and the language. Compare
+  devices, themes, languages, data states or accounts side by side, download screenshots, and copy a link that opens the
+  same views.
 - **Any size**: drag the edge or corner of a view, or type its size. The bar above each view shows the app's
   breakpoints, the same ones its styles and components switch at, and snaps the view to one of them.
 - **This page**: a page can offer design options to compare (a table or cards, say) and switches for its own cases, like

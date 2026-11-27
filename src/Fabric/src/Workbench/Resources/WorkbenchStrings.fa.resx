@@ -157,7 +157,7 @@
         <value>تیره</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>سیستم</value>
+        <value>خودکار</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>داده</value>
@@ -1851,20 +1851,17 @@
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>باز کردن در میز کار</value>
     </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>نمایش همهٔ صفحه‌ها</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>ارائه</value>
-    </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>صفحهٔ قبلی</value>
     </data>
     <data name="NextScreen" xml:space="preserve">
         <value>صفحهٔ بعدی</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>پایان ارائه</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>تمام‌صفحه</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>خروج از تمام‌صفحه</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} از {1}</value>
