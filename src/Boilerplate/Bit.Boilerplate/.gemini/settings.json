@@ -3,6 +3,9 @@
         "bitplatform": {
             "httpUrl": "https://api.bitfabric.co/docs-mcp"
         },
+        "bit-fabric": {
+            "httpUrl": "https://api.bitfabric.co/mcp"
+        },
         "aspire": {
             "command": "aspire",
             "args": [

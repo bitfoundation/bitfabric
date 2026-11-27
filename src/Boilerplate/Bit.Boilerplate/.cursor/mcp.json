@@ -9,6 +9,9 @@
         "dev-mcp-production": {
             "url": "https://use-your-api-server-url-here.com/dev-mcp"
         },
+        "bit-fabric": {
+            "url": "https://api.bitfabric.co/mcp"
+        },
         "aspire": {
             "command": "aspire",
             "args": [

@@ -56,6 +56,8 @@ Before you look for the cause, check each of these, and walk the user through ge
 - **The traces, logs and metrics**, in Application Insights: help the user add the Azure MCP server and sign in with an
   account that may read the resource.
 <!--#endif-->
+- **What was seen from outside**, when the project is registered at bit Fabric: the `bit-fabric` server in the MCP files
+  tells, from outside the app, since when it fails, which parts, its past incidents and the deployments before them.
 - **When dev-mcp doesn't answer**, because the app itself is down, the dashboard still holds what it sent before:
   over SSH to the VM, the way the deploy skill set up, point `aspire agent mcp` at the dashboard's loopback port with
   the key in the deploy folder's `.env`.

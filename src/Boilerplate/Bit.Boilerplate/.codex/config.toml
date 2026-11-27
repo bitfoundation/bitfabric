@@ -7,6 +7,9 @@ url = "https://use-your-test-api-server-url-here.com/dev-mcp"
 [mcp_servers.dev-mcp-production]
 url = "https://use-your-api-server-url-here.com/dev-mcp"
 
+[mcp_servers.bit-fabric]
+url = "https://api.bitfabric.co/mcp"
+
 [mcp_servers.aspire]
 command = "aspire"
 args = ["agent", "mcp"]
