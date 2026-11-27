@@ -23,7 +23,7 @@ public partial class HomePageSeoTests
 
     /// <summary>Anthropic's figures the page quotes, each as written, from AppCostCase's constants and their sources.</summary>
     private static readonly string[] CostFigures =
-        ["$2 / $10", "$4 / $20", "$0.11", "$0.12", "7%", "87.6%", "87.4%", "76%", "Sonnet 5.5", "Opus 5.5"];
+        ["$2 / $10", "$4 / $20", "$0.11", "$0.12", "7%", "87.6%", "87.4%", "76%", "Sonnet 5.5", "Opus 5.5", "$0.10"];
 
     [TestMethod]
     public async Task TheCostPage_Should_ArgueTheCase_WithEveryFigureLeadingToADatedSource()
@@ -57,6 +57,7 @@ public partial class HomePageSeoTests
         [
             AppStrings.CostLead, AppStrings.CostModelsIntro, AppStrings.CostModelsWhy, AppStrings.CostProjectIntro,
             AppStrings.CostBuiltTitle, AppStrings.AppHomeDayOneIdentity, AppStrings.CostRoundsTitle, AppStrings.CostRoundsLine,
+            AppStrings.CostCachedTitle, AppStrings.CostCachedIntro, AppStrings.CostCachedLine,
             AppStrings.CostSwitchIntro, AppStrings.CostLessText, AppStrings.CompareAnswerTokens, AppStrings.CompareAnswerCheaper,
             AppCostCase.TaskLine(localizer), AppCostCase.Earlier(localizer)
         ]))
@@ -112,7 +113,7 @@ public partial class HomePageSeoTests
         using var document = JsonDocument.Parse(JsonLdOf(html));
         var graph = AssertJsonLdOfAPage(document, origin, PageUrls.Cost, "WebPage", "BreadcrumbList");
         Assert.AreEqual($"{origin}/#software", graph[0].GetProperty("about").GetProperty("@id").GetString(), "The page is about bit Fabric.");
-        Assert.AreEqual("2026-11-21", graph[0].GetProperty("dateModified").GetString(), "The day its sources were read.");
+        Assert.AreEqual("2026-11-27", graph[0].GetProperty("dateModified").GetString(), "The day its sources were read.");
         Assert.AreSequenceEqual(sources.Select(source => source.Url).ToArray(),
             graph[0].GetProperty("citation").EnumerateArray().Select(citation => citation.GetProperty("url").GetString()!).ToArray(), "It cites every source.");
 

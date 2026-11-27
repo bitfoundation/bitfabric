@@ -11106,8 +11106,29 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="CostSourcesIntro" xml:space="preserve">
     <value>Anthropic's own pages, each read on {0}. The numbers on this page lead here.</value>
   </data>
+  <data name="CostCachedTitle" xml:space="preserve">
+    <value>Its instructions cost little, and save a lot</value>
+  </data>
+  <data name="CostCachedIntro" xml:space="preserve">
+    <value>Your bit Fabric project gives your AI many instructions, skills and tools, which it reads with every request. They rarely change, so AI providers keep them in their prompt cache, where reading them again costs a fraction of the usual price.</value>
+  </data>
+  <data name="CostCachedPanelTitle" xml:space="preserve">
+    <value>A million tokens of instructions, on {0}</value>
+  </data>
+  <data name="CostCachedWithout" xml:space="preserve">
+    <value>Without the cache</value>
+  </data>
+  <data name="CostCachedFrom" xml:space="preserve">
+    <value>From the cache</value>
+  </data>
+  <data name="CostCachedPanelLine" xml:space="preserve">
+    <value>A twentieth of the price, on every request after the first.</value>
+  </data>
+  <data name="CostCachedLine" xml:space="preserve">
+    <value>They keep your AI on the plan, your project's conventions and its tests, so each part is built right the first time. That saves far more than they cost.</value>
+  </data>
   <data name="CostReadDate" xml:space="preserve">
-    <value>21 November 2026</value>
+    <value>27 November 2026</value>
   </data>
   <data name="CostPublishedOn" xml:space="preserve">
     <value>Published on {0}.</value>
