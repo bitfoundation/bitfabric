@@ -145,6 +145,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
     gap: 1rem;
+
+    // A panel on its own, as wide as one of a pair
+    &.is-one {
+        max-width: 36rem;
+    }
 }
 
 .cs-panel {

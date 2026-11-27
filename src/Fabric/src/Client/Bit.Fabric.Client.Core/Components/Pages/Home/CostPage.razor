@@ -32,7 +32,7 @@
         {
             <li @key="bar.Model" class="cs-bar-row @(bar.IsStronger ? "is-stronger" : null)">
                 <span class="cs-bar-name">
-                    <bdi dir="ltr" class="cs-bar-model">@bar.Model</bdi>
+                    <bdi dir="auto" class="cs-bar-model">@bar.Model</bdi>
                     @if (bar.Setting is not null)
                     {
                         <span class="cs-bar-setting">@bar.Setting</span>
@@ -100,7 +100,7 @@
     </section>
 
     @* 2. Tokens per project: what every project starts with, so the AI spends nothing on it, then building by trial, its rounds
-       faded and coming back on themselves, against each step done once *@
+       faded and coming back on themselves, against each step done once, then the instructions behind it, read from the cache *@
     <section class="ah-band" id="ah-per-project" aria-labelledby="ah-per-project-title">
         <header class="ah-band-head">
             <span class="cs-band-step" aria-hidden="true">2</span>
@@ -150,6 +150,19 @@
             </div>
         </div>
         <BitText Typography="BitTypography.H5" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.CostRoundsLine)]</BitText>
+        @* What keeps the AI on course is read from the prompt cache, at a twentieth of the price (ANT-3) *@
+        <div class="ah-band-head cs-part">
+            <BitText Typography="BitTypography.H5" Element="@cardHeading">@Localizer[nameof(AppStrings.CostCachedTitle)]</BitText>
+            <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">@Localizer[nameof(AppStrings.CostCachedIntro)]</BitText>
+        </div>
+        <div class="cs-panels is-one app-latin-digits">
+            <figure class="cs-panel">
+                <figcaption class="cs-panel-title">@AppCostCase.CachePanelTitle(Localizer)@refs(["ANT-3"])</figcaption>
+                @bars(AppCostCase.CachePrices(Localizer))
+                <BitText Typography="BitTypography.H6" Element="p" Class="cs-panel-line">@Localizer[nameof(AppStrings.CostCachedPanelLine)]</BitText>
+            </figure>
+        </div>
+        <BitText Typography="BitTypography.H5" Element="p" Class="ah-band-line">@Localizer[nameof(AppStrings.CostCachedLine)]</BitText>
     </section>
 
     @* 3. The best AI deal without losing context: the project's specs, docs and decisions are files in the visitor's GitHub account *@
