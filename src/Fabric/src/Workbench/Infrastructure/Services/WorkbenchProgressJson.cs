@@ -57,7 +57,10 @@ public static class WorkbenchProgressJson
             : null;
     }
 
-    /// <summary>What the user did since the cursor: answers, finished steps, messages and what they removed, oldest first.</summary>
+    /// <summary>
+    /// What the user did since the cursor: answers, finished steps, messages, what they removed and the boards they submitted,
+    /// with each board's file, oldest first.
+    /// </summary>
     public static object DescribeWait(long cursor, WorkbenchProgressTask task, IEnumerable<WorkbenchProgressEntry> events)
     {
         return new
@@ -76,6 +79,7 @@ public static class WorkbenchProgressJson
                         WorkbenchProgressEntryKind.Step => "step",
                         WorkbenchProgressEntryKind.NoteRemoved => "removed-note",
                         WorkbenchProgressEntryKind.EntryRemoved => "removed-line",
+                        WorkbenchProgressEntryKind.Board => "board",
                         _ => "message"
                     },
                     Ask = ask?.Id,
@@ -84,6 +88,8 @@ public static class WorkbenchProgressJson
                     Secret = DescribeSecret(task, ask),
                     Step = entry.Kind is WorkbenchProgressEntryKind.Step ? entry.RefId : null,
                     Note = entry.Kind is WorkbenchProgressEntryKind.NoteRemoved ? entry.RefId : null,
+                    Board = entry.Kind is WorkbenchProgressEntryKind.Board ? entry.RefId : null,
+                    File = entry.Kind is WorkbenchProgressEntryKind.Board && WorkbenchBoardFiles.IsFileName(entry.RefId) ? WorkbenchBoardFiles.FilePath(entry.RefId) : null,
                     Text = string.IsNullOrEmpty(entry.Text) ? null : entry.Text,
                     By = entry.Author,
                     entry.At

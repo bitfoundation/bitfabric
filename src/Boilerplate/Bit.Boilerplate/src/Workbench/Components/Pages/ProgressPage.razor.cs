@@ -362,7 +362,12 @@ public partial class ProgressPage
 
     private string EntryText(WorkbenchProgressEntry entry)
     {
-        return entry.Kind is WorkbenchProgressEntryKind.Step ? Localizer[nameof(WorkbenchStrings.ProgressEntryStepDone), entry.Text] : entry.Text;
+        return entry.Kind switch
+        {
+            WorkbenchProgressEntryKind.Step => Localizer[nameof(WorkbenchStrings.ProgressEntryStepDone), entry.Text],
+            WorkbenchProgressEntryKind.Board => Localizer[nameof(WorkbenchStrings.ProgressEntryBoardSubmitted), entry.Text],
+            _ => entry.Text
+        };
     }
 
     /// <summary>

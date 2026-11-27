@@ -4,7 +4,7 @@ namespace Bit.Fabric.Workbench.Components.Boards;
 
 /// <summary>
 /// The frame of a board (WorkbenchBoardCatalog): its hero, with an icon, a title and one line under it, a date and a note as
-/// small chips, then its blocks (BoardBlock) and its sources, folded away. A board an agent writes is in one language, the one
+/// small chips, then its blocks (BoardBlock), a Submit bar on a board that asks its reader to pick, and its sources, folded away. A board an agent writes is in one language, the one
 /// it was asked in, and reads in it whatever language the Workbench is in; one whose words are in the Workbench's
 /// translations reads in the Workbench's. See the boards skill (.github/agents/boards.agent.md).
 /// </summary>
@@ -40,6 +40,19 @@ public partial class BoardFrame
     [Parameter] public RenderFragment? Aside { get; set; }
 
     [Parameter] public BoardSource[]? Sources { get; set; }
+
+    /// <summary>
+    /// Whether the board asks its reader to pick, like options to tick: a Submit bar stays at the foot of the screen, and what
+    /// they pick, kept in the board's store (named board-{id}), is in the board's file for the agent as they go and is kept
+    /// there as final when they submit (BoardSubmit, WorkbenchBoardFiles).
+    /// </summary>
+    [Parameter] public bool Picks { get; set; }
+
+    /// <summary>
+    /// The id of the Progress task whose agent waits for the picks: Submit tells it at once, which wakes its wait on the task.
+    /// Implies <see cref="Picks"/>.
+    /// </summary>
+    [Parameter] public string? ProgressTask { get; set; }
 
     [Parameter] public string SourcesTitle { get; set; } = "Sources";
 

@@ -5,18 +5,23 @@ namespace Bit.Fabric.Workbench.Infrastructure.Services;
 
 /// <summary>
 /// Where the pages' stores save their state: the browser's IndexedDB, under a key prefix per view, so a view comes back as it
-/// was left. A preview that restores a snapshot for a screenshot reads and writes nothing.
+/// was left. A preview that restores a snapshot for a screenshot reads and writes nothing. A board's store saved in the
+/// Workbench's own window, by the user the agent works for, is also written to the board's file, where the agent reads it
+/// (WorkbenchBoardFiles).
 /// </summary>
 public sealed partial class WorkbenchStateStorage : IBlexStorage, IAsyncDisposable
 {
     private const string DatabaseName = "bit-workbench";
     private const string StoreName = "state";
+    private const string ShellPrefix = "shell/";
     private const int MaxFailures = 3;
 
     [AutoInject] private IJSRuntime jsRuntime = default!;
     [AutoInject] private IndexedDb indexedDb = default!;
     [AutoInject] private NavigationManager navigationManager = default!;
     [AutoInject] private ILogger<WorkbenchStateStorage> logger = default!;
+    [AutoInject] private WorkbenchBoardFiles boardFiles = default!;
+    [AutoInject] private WorkbenchReviewSession reviewSession = default!;
 
     private string? keyPrefix;
     private bool? isCapture;
@@ -62,6 +67,11 @@ public sealed partial class WorkbenchStateStorage : IBlexStorage, IAsyncDisposab
             return;
         }
 
+        if (BoardOf(key) is { } boardId)
+        {
+            await boardFiles.Save(boardId, value, cancellationToken);
+        }
+
         if (await Open(cancellationToken) is not { } database)
             return;
 
@@ -78,6 +88,11 @@ public sealed partial class WorkbenchStateStorage : IBlexStorage, IAsyncDisposab
     /// <summary>Removes a store's saved state; a failure is logged and otherwise ignored.</summary>
     public async ValueTask RemoveAsync(string key, CancellationToken cancellationToken = default)
     {
+        if (BoardOf(key) is { } boardId)
+        {
+            await boardFiles.Remove(boardId, cancellationToken);
+        }
+
         if (await Open(cancellationToken) is not { } database)
             return;
 
@@ -92,7 +107,16 @@ public sealed partial class WorkbenchStateStorage : IBlexStorage, IAsyncDisposab
     }
 
     /// <summary>pane-{id}/ for a view's preview, shell/ for everything else.</summary>
-    private string KeyPrefix => keyPrefix ??= WorkbenchUrls.ReadQuery(navigationManager.Uri, WorkbenchUrls.PaneQueryKey) is { } paneId ? $"pane-{paneId}/" : "shell/";
+    private string KeyPrefix => keyPrefix ??= WorkbenchUrls.ReadQuery(navigationManager.Uri, WorkbenchUrls.PaneQueryKey) is { } paneId ? $"pane-{paneId}/" : ShellPrefix;
+
+    /// <summary>
+    /// The board whose store this is, when its saves go to the board's file too: in the Workbench's own window, not a view's
+    /// preview or a capture, and for the user the agent works for, on this machine or with an invite link, never a visitor.
+    /// </summary>
+    private string? BoardOf(string key)
+    {
+        return KeyPrefix is ShellPrefix && IsCapture is false && WorkbenchBoardFiles.BoardOf(key) is { } boardId && reviewSession.SavesComments ? boardId : null;
+    }
 
     /// <summary>A store's key: per view, and per user of the view for what the Settings page holds, as that belongs to the account.</summary>
     private string KeyOf(string key)

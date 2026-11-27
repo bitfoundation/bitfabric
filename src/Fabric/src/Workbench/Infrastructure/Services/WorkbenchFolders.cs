@@ -42,6 +42,9 @@ public static class WorkbenchFolders
     /// <summary>The secrets the user pasted for an agent's commands to read, next to the reviews, outside the repository.</summary>
     public static string Secrets => Path.Combine(Path.GetDirectoryName(Reviews)!, "Secrets");
 
+    /// <summary>What the reader picked on each board, one file per board (WorkbenchBoardPicks), next to the reviews, outside the repository.</summary>
+    public static string Boards => Path.Combine(Path.GetDirectoryName(Reviews)!, "Boards");
+
     /// <summary>The port of the first address in an ASP.NET Core urls setting, like http://localhost:6031.</summary>
     public static int? PortOf(string? urls)
     {

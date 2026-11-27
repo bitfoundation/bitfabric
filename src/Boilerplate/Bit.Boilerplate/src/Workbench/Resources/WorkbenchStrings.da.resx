@@ -4995,6 +4995,9 @@
     <data name="ProgressEntryStepDone" xml:space="preserve">
         <value>Færdig: {0}</value>
     </data>
+    <data name="ProgressEntryBoardSubmitted" xml:space="preserve">
+        <value>Sendt: {0}</value>
+    </data>
     <data name="ProgressAgentNeedsYou" xml:space="preserve">
         <value>{0} har brug for dig</value>
     </data>
@@ -5326,6 +5329,33 @@
     </data>
     <data name="BoardNotFound" xml:space="preserve">
         <value>Der er ingen tavle på denne adresse.</value>
+    </data>
+    <data name="BoardSubmitRegion" xml:space="preserve">
+        <value>Dine valg</value>
+    </data>
+    <data name="BoardSubmit" xml:space="preserve">
+        <value>Send</value>
+    </data>
+    <data name="BoardSubmitAgain" xml:space="preserve">
+        <value>Send igen</value>
+    </data>
+    <data name="BoardSubmitted" xml:space="preserve">
+        <value>Sendt</value>
+    </data>
+    <data name="BoardPicksSaved" xml:space="preserve">
+        <value>Dine valg gemmes undervejs. Send dem, når du er færdig.</value>
+    </data>
+    <data name="BoardPicksSubmittedAt" xml:space="preserve">
+        <value>Sendt kl. {0}.</value>
+    </data>
+    <data name="BoardPicksChangedSince" xml:space="preserve">
+        <value>Ændret, siden du sendte kl. {0}.</value>
+    </data>
+    <data name="BoardPicksSent" xml:space="preserve">
+        <value>Sendt til {0}.</value>
+    </data>
+    <data name="BoardSubmitFailed" xml:space="preserve">
+        <value>Kunne ikke sende. Prøv igen.</value>
     </data>
     <data name="DeployBoardTitle" xml:space="preserve">
         <value>Sådan bliver dette projekt leveret</value>

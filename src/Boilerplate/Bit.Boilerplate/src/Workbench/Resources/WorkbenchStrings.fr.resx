@@ -4995,6 +4995,9 @@
     <data name="ProgressEntryStepDone" xml:space="preserve">
         <value>Fait : {0}</value>
     </data>
+    <data name="ProgressEntryBoardSubmitted" xml:space="preserve">
+        <value>Envoyé : {0}</value>
+    </data>
     <data name="ProgressAgentNeedsYou" xml:space="preserve">
         <value>{0} a besoin de vous</value>
     </data>
@@ -5326,6 +5329,33 @@
     </data>
     <data name="BoardNotFound" xml:space="preserve">
         <value>Aucun tableau à cette adresse.</value>
+    </data>
+    <data name="BoardSubmitRegion" xml:space="preserve">
+        <value>Vos choix</value>
+    </data>
+    <data name="BoardSubmit" xml:space="preserve">
+        <value>Envoyer</value>
+    </data>
+    <data name="BoardSubmitAgain" xml:space="preserve">
+        <value>Envoyer à nouveau</value>
+    </data>
+    <data name="BoardSubmitted" xml:space="preserve">
+        <value>Envoyé</value>
+    </data>
+    <data name="BoardPicksSaved" xml:space="preserve">
+        <value>Vos choix sont enregistrés au fur et à mesure. Envoyez-les quand vous avez terminé.</value>
+    </data>
+    <data name="BoardPicksSubmittedAt" xml:space="preserve">
+        <value>Envoyé à {0}.</value>
+    </data>
+    <data name="BoardPicksChangedSince" xml:space="preserve">
+        <value>Modifié depuis votre envoi à {0}.</value>
+    </data>
+    <data name="BoardPicksSent" xml:space="preserve">
+        <value>Transmis à {0}.</value>
+    </data>
+    <data name="BoardSubmitFailed" xml:space="preserve">
+        <value>Échec de l’envoi. Réessayez.</value>
     </data>
     <data name="DeployBoardTitle" xml:space="preserve">
         <value>Comment ce projet est livré</value>

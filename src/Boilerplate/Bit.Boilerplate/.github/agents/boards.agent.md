@@ -13,7 +13,7 @@ light and dark, on a phone and right to left.
 
 Three examples ship with the Workbench. Look at them before you build your first:
 `src/Workbench/Components/Pages/Boards/Payments`, a dated comparison of payment providers and of the stores' terms with a
-calculator, and `src/Workbench/Components/Pages/Boards/Deploy`, how this project gets from a change to its users, drawn
+calculator, which asks which providers to set up, and `src/Workbench/Components/Pages/Boards/Deploy`, how this project gets from a change to its users, drawn
 for the options it was created with, and `src/Workbench/Components/Pages/Boards/AddBuilding`, how someone adds a
 building, told on the buildings page itself with a `BoardFlow`.
 
@@ -81,6 +81,25 @@ building, told on the buildings page itself with a `BoardFlow`.
   **workbench** skill, section 2). A new store is registered in
   `src/Workbench/Infrastructure/Extensions/IWorkbenchServiceCollectionExtensions.cs`, startup code that takes one restart.
   A board without controls needs no store.
+- A board that asks the user to pick, like options to tick or one choice among several, hands you the picks without the
+  chat. The payments example asks which providers to set up this way.
+  - Keep only the picks in its store, named after the board's catalog id, `[BlexStore(Name = "board-<id>", Persist =
+    true)]`, and call `Subscribe(store)` in the board's `OnInitialized`, so the picks show again after a reload.
+  - Give `BoardFrame` `Picks`, and `ProgressTask="<your task's id>"` when you wait on a Progress task (the **workbench**
+    skill, section 9), which implies it: a Submit bar stays at the foot of the screen, in the board's language («ثبت» on a
+    board in Persian). No Copy button.
+  - Each time that store saves in the Workbench's own window, the Workbench writes it to `<id>.json` in its `Boards`
+    folder, outside the repository: `bit-workbench/<project>/Boards` in the local application data, which
+    `GET /api/workbench` names as `boards`. Read it whenever you need the picks. It holds `board`, `isSubmitted`,
+    `savedAt`, `state` (the store's fields by name), `submitted` (`at`, `by` and the `state` as sent, null until the first
+    submit) and `storeVersion`; `isSubmitted` turns false when the user changes a pick after submitting, and `submitted`
+    stays as sent.
+  - Submit adds "Submitted: <title>" to that task, and your wait on it returns `{"kind": "board", "board": "<id>",
+    "file": "<path>"}` at once. Read the file then; if `isSubmitted` is false by the time you read it, the user is
+    changing them again, so wait for the next.
+  - The file holds the last save from any browser, and a view's preview, a screenshot or a visitor through
+    a tunnel never writes it. So never pick on a board the user is filling in, in your own browser: try it before you
+    hand it over, then delete its file.
 
 ## 4. Look at it
 
@@ -95,6 +114,8 @@ building, told on the buildings page itself with a `BoardFlow`.
 
 - Give the user its address, `/boards/<id>` on the Workbench's own address, and say in a sentence what it shows. Don't
   repeat the board in the chat.
+- On a board that asks for picks, tell them to submit when they're done, and wait on your task for it rather than asking
+  them to paste the picks into the chat.
 - To show it to someone on another machine, share it the way the **workbench** skill's section 6 says.
 
 ## 6. Keep it or let it go
@@ -102,7 +123,7 @@ building, told on the buildings page itself with a `BoardFlow`.
 - When the user wants to keep it in the repository, move its catalog entry's title and summary into
   `WorkbenchStrings.resx` in every language the Workbench has, which its tests check, and commit it with the work it
   explains.
-- Otherwise delete its folder and its catalog entry once the user is done with it.
+- Otherwise delete its folder and its catalog entry once the user is done with it, and its file in the `Boards` folder.
 - What the user decides from it is a product decision: write it into the feature's spec (`AGENTS.md` section 6).
 
 ## Done when

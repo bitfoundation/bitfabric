@@ -1,0 +1,21 @@
+@inherits WorkbenchComponentBase
+
+@* Stays at the foot of the screen while the reader picks, so Submit is always at hand. *@
+@if (Board is not null && reviewSession.SavesComments)
+{
+    <div class="board-submit @(IsSubmitted ? "submitted" : null)" role="region" aria-label="@Text(nameof(WorkbenchStrings.BoardSubmitRegion))">
+        <span class="submit-icon" aria-hidden="true">
+            <BitIcon IconName="@(IsSubmitted ? BitIconName.CompletedSolid : BitIconName.CheckboxComposite)" />
+        </span>
+        <span class="submit-status" role="status">@Status</span>
+        <BitButton Variant="@(IsSubmitted ? BitVariant.Outline : BitVariant.Fill)"
+                   Color="@(IsSubmitted ? BitColor.Success : BitColor.Primary)"
+                   IconName="@(IsSubmitted ? BitIconName.CheckMark : IsRightToLeft ? BitIconName.SendMirrored : BitIconName.Send)"
+                   Disabled="IsSubmitted"
+                   Loading="isSubmitting"
+                   OnClick="Submit"
+                   Class="submit-button">
+            @ButtonText
+        </BitButton>
+    </div>
+}

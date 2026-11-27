@@ -77,6 +77,8 @@ public static class IWorkbenchServiceCollectionExtensions
             services.AddBitBlexStore<WorkbenchDeviceStore>();
             services.AddScoped<IBlexStorage, WorkbenchStateStorage>();
             services.AddBitBlexPersistence();
+            // What the reader picks on a board goes to a file of the board's too, where the agent that built it reads it.
+            services.AddSingleton<WorkbenchBoardFiles>();
             services.AddScoped<IBitAccentColorStore, ChromeAccentStore>();
             services.AddAuthorizationCore(options => options.AddPolicy(WorkbenchPolicies.ManageBuildings, policy => policy.RequireRole(WorkbenchPolicies.AdminRoles)));
 

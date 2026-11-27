@@ -5,7 +5,7 @@
             IconName="@BitIconName.PaymentCard" Tone="success"
             Meta="@($"Read on {PaymentsFacts.ReadOn}")"
             Note="An example board: not every provider or country"
-            Sources="PaymentsFacts.Sources" SourcesTitle="Each provider's and store's own page">
+            Sources="PaymentsFacts.Sources" SourcesTitle="Each provider's and store's own page" Picks>
     <Aside>
         <BoardNumbers Items="Kept" />
     </Aside>
@@ -59,11 +59,11 @@
         </div>
     </BoardBlock>
 
-    <BoardBlock Id="providers" Title="On the web, any provider">
+    <BoardBlock Id="providers" Title="On the web, any provider" Kicker="Tick the ones to set up, then submit.">
         <div class="providers">
             @foreach (var provider in PaymentsFacts.Providers)
             {
-                <div class="provider @(provider.IsMerchantOfRecord ? "mor" : null)">
+                <div class="provider @(provider.IsMerchantOfRecord ? "mor" : null) @(store.Providers.Contains(provider.Name) ? "picked" : null)">
                     <div class="provider-head">
                         <span class="monogram" aria-hidden="true">@provider.Name[0]</span>
                         <div class="provider-title">
@@ -82,6 +82,8 @@
                         }
                     </ul>
                     <span class="good-for">Good for <strong>@provider.GoodFor</strong></span>
+                    <BitCheckbox Label="@($"Set up {provider.Name}")" Value="store.Providers.Contains(provider.Name)"
+                                 ValueChanged="(bool _) => store.ToggleProvider(provider.Name)" Class="provider-pick" />
                 </div>
             }
         </div>

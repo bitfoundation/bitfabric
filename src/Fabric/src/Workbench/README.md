@@ -41,6 +41,9 @@ Chromium when it is installed, otherwise Microsoft Edge or Google Chrome. To ins
   few words, such as a process told on the app's own pages with arrows between them, with the app's own
   components and theme, in light and dark and on every device. Ask your agent to show you
   something, and its board shows up under Boards, at an address you can come back to. Its `boards` skill builds them.
+  A board that asks you to pick, like options to tick, has a Submit button at its foot, «ثبت» on a board in Persian: what
+  you pick goes into a file of that board's as you go, `Boards/<board>.json` in the Workbench's folder next to the review,
+  where your agent reads it, and Submit tells your agent you're done.
 - **Dictation**: the microphone next to a comment, a reply, an answer or a message turns speech into text, with the
   browser's own speech recognition, in the language its menu picks.
 - **`/pages/<page>`**: one page with its tools. Pick the device, its orientation and frame, the data state

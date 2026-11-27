@@ -35,6 +35,11 @@ public static class WorkbenchTestsInitializer
         {
             Directory.Delete(WorkbenchFolders.Secrets, recursive: true);
         }
+
+        if (WorkbenchFolders.Project is null && Directory.Exists(WorkbenchFolders.Boards))
+        {
+            Directory.Delete(WorkbenchFolders.Boards, recursive: true);
+        }
     }
 
     [AssemblyCleanup]

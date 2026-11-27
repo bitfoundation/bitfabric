@@ -4995,6 +4995,9 @@
     <data name="ProgressEntryStepDone" xml:space="preserve">
         <value>पूरा: {0}</value>
     </data>
+    <data name="ProgressEntryBoardSubmitted" xml:space="preserve">
+        <value>भेजा गया: {0}</value>
+    </data>
     <data name="ProgressAgentNeedsYou" xml:space="preserve">
         <value>{0} को आपकी ज़रूरत है</value>
     </data>
@@ -5326,6 +5329,33 @@
     </data>
     <data name="BoardNotFound" xml:space="preserve">
         <value>इस पते पर कोई बोर्ड नहीं है।</value>
+    </data>
+    <data name="BoardSubmitRegion" xml:space="preserve">
+        <value>आपके चुनाव</value>
+    </data>
+    <data name="BoardSubmit" xml:space="preserve">
+        <value>भेजें</value>
+    </data>
+    <data name="BoardSubmitAgain" xml:space="preserve">
+        <value>फिर से भेजें</value>
+    </data>
+    <data name="BoardSubmitted" xml:space="preserve">
+        <value>भेज दिया</value>
+    </data>
+    <data name="BoardPicksSaved" xml:space="preserve">
+        <value>आपके चुनाव साथ-साथ सहेजे जाते हैं। पूरा होने पर उन्हें भेजें।</value>
+    </data>
+    <data name="BoardPicksSubmittedAt" xml:space="preserve">
+        <value>{0} पर भेजा गया।</value>
+    </data>
+    <data name="BoardPicksChangedSince" xml:space="preserve">
+        <value>{0} पर भेजने के बाद बदला गया।</value>
+    </data>
+    <data name="BoardPicksSent" xml:space="preserve">
+        <value>{0} को भेजा गया।</value>
+    </data>
+    <data name="BoardSubmitFailed" xml:space="preserve">
+        <value>भेजा नहीं जा सका। फिर से कोशिश करें।</value>
     </data>
     <data name="DeployBoardTitle" xml:space="preserve">
         <value>यह प्रोजेक्ट कैसे शिप होता है</value>

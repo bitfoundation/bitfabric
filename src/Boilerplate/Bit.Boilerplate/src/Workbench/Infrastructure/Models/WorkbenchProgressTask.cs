@@ -163,5 +163,7 @@ public enum WorkbenchProgressEntryKind
     Answer,
     Step,
     NoteRemoved,
-    EntryRemoved
+    EntryRemoved,
+    /// <summary>The user submitted their picks on a board (WorkbenchBoardFiles); the line's ref is the board's id.</summary>
+    Board
 }

@@ -80,9 +80,10 @@ ships, and section 8 has nothing to rebuild. What follows is for a page whose da
   Loads start once the page is interactive; while it prerenders, the page shows its loading state.
 - What the user can change on the page lives in a bit Blex store of the page: the search text, the selection, the open
   dialog and its fields, the chosen view, the user's own edits to the sample data. The Workbench saves these stores per
-  view and hands them to every screenshot, so an image shows exactly what was on the screen when it was taken, and a
-  reload or a restart comes back to the same place. A value that only lives in a component's field is lost on reload and
-  missing from the screenshot.
+  view, in the browser, and hands them to every screenshot, so an image shows exactly what was on the screen when it was
+  taken, and a reload or a restart comes back to the same place. A value that only lives in a component's field is lost
+  on reload and missing from the screenshot. A board's store is also written to a file you can read, with the picks its
+  reader submits (the **boards** skill).
 - That saved state outlives your changes. Blex drops what no longer reads, like a value of another type, and a field
   with nothing saved starts from its default. It can't tell when saved state still reads but no longer fits: a field that
   now means something else, a record in the store that gained a field, or sample data the store keeps an edited copy of,
@@ -295,8 +296,9 @@ as its host here. The rest of this section is for a page of the Workbench's own.
 - Then wait for the user with `GET /api/progress/<id>/wait?cursor=<cursor>&agent=<your name>`, in the background where
   your client can, starting from `cursor=0` and passing the one each answer returns, so nothing the user sent before your
   first wait is missed (a chat that finds its task again starts from 0 too and skips what it already handled): it answers as soon as they
-  answer a question, finish a step of theirs, write to you or remove one of the task's notes (`removed-note`, with its
-  id as `note`) or a line of its activity (`removed-line`), and with nothing within a minute. Act on what they sent,
+  answer a question, finish a step of theirs, write to you, remove one of the task's notes (`removed-note`, with its
+  id as `note`) or a line of its activity (`removed-line`), or submit their picks on a board that names the task
+  (`board`, with the board's id as `board` and its `file`, the **boards** skill), and with nothing within a minute. Act on what they sent,
   update the task, and wait again until it is over. What they removed, with its `text`, stays out: a removed note's id
   adds nothing again, and something new to tell them takes a new one. A wait that fails while the Workbench restarts is retried a few
   seconds apart, as in section 1.

@@ -85,9 +85,9 @@ public sealed partial class WorkbenchProgressAgent
     }
 
     /// <summary>
-    /// Returns what the user did on the task after the cursor (answers, finished steps, messages and the notes and lines they
-    /// removed) as soon as there is any, or nothing once the timeout passes; null when the task is gone. Waiting shows the
-    /// agent as there.
+    /// Returns what the user did on the task after the cursor (answers, finished steps, messages, the notes and lines they
+    /// removed and the boards they submitted) as soon as there is any, or nothing once the timeout passes; null when the task
+    /// is gone. Waiting shows the agent as there.
     /// </summary>
     public async Task<(long Cursor, WorkbenchProgressTask Task, List<WorkbenchProgressEntry> Events)?> Wait(string agentName, string id, long since, TimeSpan timeout, CancellationToken cancellationToken)
     {
