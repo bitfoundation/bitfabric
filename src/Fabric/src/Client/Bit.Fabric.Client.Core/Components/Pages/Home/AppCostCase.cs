@@ -21,9 +21,10 @@ public sealed record AppCostQuestion(string Question, string Answer, string[] So
 /// things. The case, as one argument in three steps: a token's price means little
 /// on its own, what counts is the tokens a task takes, which Anthropic's Opus and Sonnet illustrate in its own figures; more
 /// important still are the tokens a whole project takes, where bit Fabric has already built and tested much of it and its
-/// way of working cuts the rounds of rework; so a project costs less with bit Fabric. Opus and Sonnet are an example of the
+/// way of working cuts the rounds of rework, while the instructions and tools that keep it on course are read from the AI
+/// provider's prompt cache; so a project costs less with bit Fabric. Opus and Sonnet are an example of the
 /// principle, never the subject. Every figure about another company's product is a constant below with the source it comes from, read on
-/// 21 November 2026; none is bit Fabric's own measurement.
+/// 27 November 2026; none is bit Fabric's own measurement.
 /// </summary>
 public static class AppCostCase
 {
@@ -31,7 +32,7 @@ public static class AppCostCase
     public const string MarkdownUrl = "/cost.md";
 
     /// <summary>The day every source was read (CostReadDate in each language), and the page's JSON-LD dateModified.</summary>
-    public static readonly DateOnly ReadOn = new(2026, 11, 21);
+    public static readonly DateOnly ReadOn = new(2026, 11, 27);
 
     // The models, as Anthropic names them (ANT-2, ANT-3)
     public const string Sonnet = "Sonnet 5.5";
@@ -42,6 +43,9 @@ public static class AppCostCase
     public const decimal SonnetOutput = 10;
     public const decimal OpusInput = 4;
     public const decimal OpusOutput = 20;
+
+    // A million input tokens read from the prompt cache, a twentieth of the input price (ANT-3)
+    public const decimal SonnetCacheRead = 0.10m;
 
     // Anthropic's own test on a SWE-bench Pro subset: Sonnet 5.5 at its default effort against Opus 5.5 at low effort, the
     // share of tasks each solved and the cost per solved task, priced as a customer is billed; "about 7% more per solved
@@ -120,6 +124,16 @@ public static class AppCostCase
         new(Opus, l[nameof(AppStrings.CostModelsLowEffort)], Dollars(OpusPerTask), 1, IsStronger: true)
     ];
 
+    /// <summary>The project's instructions on <see cref="Sonnet"/>, without the prompt cache and read from it (ANT-3).</summary>
+    public static AppCostBar[] CachePrices(IStringLocalizer<AppStrings> l) =>
+    [
+        new(l[nameof(AppStrings.CostCachedWithout)], null, Dollars(SonnetInput), 1, IsStronger: false),
+        new(l[nameof(AppStrings.CostCachedFrom)], null, Dollars(SonnetCacheRead), (double)(SonnetCacheRead / SonnetInput), IsStronger: true)
+    ];
+
+    /// <summary>The panel's title, the model's name kept on one line.</summary>
+    public static string CachePanelTitle(IStringLocalizer<AppStrings> l) => l[nameof(AppStrings.CostCachedPanelTitle), Sonnet.Replace(' ', ' ')];
+
     public static string TaskLine(IStringLocalizer<AppStrings> l) => l[nameof(AppStrings.CostModelsTaskLine), MorePerTask, SonnetSolved, OpusSolved];
 
     public static string Earlier(IStringLocalizer<AppStrings> l) => l[nameof(AppStrings.CostModelsEarlier), FewerOutputTokens];
@@ -168,7 +182,7 @@ public static class AppCostCase
         md.Append(Earlier(l)).AppendLine(Ref("ANT-1")).AppendLine();
         md.AppendLine(l[nameof(AppStrings.CostModelsWhy)]).AppendLine();
 
-        // 2. Tokens per project: what is already built, and fewer rounds of rework
+        // 2. Tokens per project: what is already built, fewer rounds of rework, and the instructions read from the cache
         md.Append("## 2. ").AppendLine(l[nameof(AppStrings.CostProjectTitle)]).AppendLine();
         md.AppendLine(l[nameof(AppStrings.CostProjectIntro)]).AppendLine();
         md.Append("### ").AppendLine(l[nameof(AppStrings.CostBuiltTitle)]).AppendLine();
@@ -188,6 +202,15 @@ public static class AppCostCase
             md.Append(number++).Append(". **").Append(step.Title).Append("**: ").AppendLine(step.Text);
         }
         md.AppendLine().AppendLine(l[nameof(AppStrings.CostRoundsLine)]).AppendLine();
+        md.Append("### ").AppendLine(l[nameof(AppStrings.CostCachedTitle)]).AppendLine();
+        md.AppendLine(l[nameof(AppStrings.CostCachedIntro)]).AppendLine();
+        md.Append("**").Append(CachePanelTitle(l)).Append("**").AppendLine(Ref("ANT-3")).AppendLine();
+        foreach (var bar in CachePrices(l))
+        {
+            md.Append("- ").Append(bar.Model).Append(": ").AppendLine(bar.Figure);
+        }
+        md.AppendLine().AppendLine(l[nameof(AppStrings.CostCachedPanelLine)]).AppendLine();
+        md.AppendLine(l[nameof(AppStrings.CostCachedLine)]).AppendLine();
 
         // 3. So the project costs less, and the bill is on the pricing page
         md.Append("## 3. ").AppendLine(l[nameof(AppStrings.CostSwitchTitle)]).AppendLine();

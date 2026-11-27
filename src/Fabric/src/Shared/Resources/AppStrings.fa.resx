@@ -11130,8 +11130,29 @@
   <data name="CostSourcesIntro" xml:space="preserve">
     <value>صفحه‌های خودِ Anthropic، هر کدام خوانده‌شده در {0}. شماره‌های این صفحه به این‌جا می‌رسند.</value>
   </data>
+  <data name="CostCachedTitle" xml:space="preserve">
+    <value>دستورالعمل‌هایش هزینهٔ کمی دارند و هزینهٔ زیادی را کم می‌کنند</value>
+  </data>
+  <data name="CostCachedIntro" xml:space="preserve">
+    <value>پروژهٔ bit Fabric شما دستورالعمل‌ها، skillها و ابزارهای زیادی به AI شما می‌دهد که آن‌ها را با هر درخواست می‌خواند. این‌ها به‌ندرت تغییر می‌کنند، پس سرویس‌های AI آن‌ها را در prompt cache نگه می‌دارند و خواندن دوباره‌شان کسری از قیمت معمول خرج دارد.</value>
+  </data>
+  <data name="CostCachedPanelTitle" xml:space="preserve">
+    <value>یک میلیون token دستورالعمل، روی {0}</value>
+  </data>
+  <data name="CostCachedWithout" xml:space="preserve">
+    <value>بدون cache</value>
+  </data>
+  <data name="CostCachedFrom" xml:space="preserve">
+    <value>از cache</value>
+  </data>
+  <data name="CostCachedPanelLine" xml:space="preserve">
+    <value>یک‌بیستم قیمت، در هر درخواست پس از درخواست اول.</value>
+  </data>
+  <data name="CostCachedLine" xml:space="preserve">
+    <value>همین‌ها AI شما را روی plan، قواعد پروژه و تست‌هایش نگه می‌دارند تا هر بخش همان بار اول درست ساخته شود. این خیلی بیشتر از هزینه‌شان صرفه‌جویی می‌کند.</value>
+  </data>
   <data name="CostReadDate" xml:space="preserve">
-    <value>21 نوامبر 2026</value>
+    <value>27 نوامبر 2026</value>
   </data>
   <data name="CostPublishedOn" xml:space="preserve">
     <value>منتشرشده در {0}.</value>
