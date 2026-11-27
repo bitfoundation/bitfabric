@@ -428,18 +428,35 @@ have taken requests, so a failure from then on leaves the database ahead and und
 <!--#endif-->
 
 <!--#if (cloudflare == true || filesStorage == "S3")-->
-- **One setup token, asked for once.** With Cloudflare, have the user create a custom API token, expiring within days,
-  with, on the account, Cloudflare Tunnel, Access: Apps and Policies, Access: Organizations, Identity Providers, and
-  Groups, Workers R2 Storage and Account API Tokens, each with Edit, and on all zones of the account, DNS, Cache
-  Rules and Zone Settings with Edit and Cache Purge with Purge, plus Zone with Edit if the domain isn't on the account yet,
-  and take it with a secret question that puts it in a file (section 2). With it, do
-  everything below yourself through Cloudflare's API, for each environment, and mint every token that runs with it.
-  Tell the user Account API Tokens lets it mint any token on the account, so it is as strong as the account until they
-  delete it. Before anything else, try one read with it for each permission (tunnels, Access applications, R2 buckets,
-  DNS records, zone settings, rulesets and the token list), so a missing one shows now and not halfway through.
+- **One setup token, asked for once.** You do everything on Cloudflare yourself, through its API, for each environment,
+  with one setup token the user creates, and every token that runs is one you mint with it, holding only what it needs.
+<!--#if (cloudflare == true)-->
+  With it you add the domain, create the tunnels with their DNS records and connector tokens, set the zone's settings
+  and cache rules, create the Access applications and mint `CLOUDFLARE_TOKEN`.
+<!--#endif-->
+<!--#if (filesStorage == "S3")-->
+  You create the R2 bucket and mint its keys with it too.
+<!--#endif-->
+  The user creates it from this link, which you put on their step of the Progress task: it opens Cloudflare's form for
+  a custom API token with its name and every permission the setup needs filled in, the `key` and `type` pairs of its
+  `permissionGroupKeys`.
+<!--#if (cloudflare == true && filesStorage == "S3")-->
+  <https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22argotunnel%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22access%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22access_acct%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22workers_r2%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_api_tokens%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22zone%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22dns%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22cache_settings%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22zone_settings%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22cache%22%2C%22type%22%3A%22purge%22%7D%5D&accountId=*&zoneId=all&name=Boilerplate%20setup>
+<!--#elif (cloudflare == true)-->
+  <https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22argotunnel%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22access%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22access_acct%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_api_tokens%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22zone%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22dns%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22cache_settings%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22zone_settings%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22cache%22%2C%22type%22%3A%22purge%22%7D%5D&accountId=*&zoneId=all&name=Boilerplate%20setup>
+<!--#else-->
+  <https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22workers_r2%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_api_tokens%22%2C%22type%22%3A%22edit%22%7D%5D&accountId=*&zoneId=all&name=Boilerplate%20setup>
+<!--#endif-->
+  On the form they only set its TTL to end within a few days and, with more than one account, pick this project's under
+  Account Resources. Tell them its API Tokens permission lets it mint any token on the account, so it is as strong as
+  the account until they delete it. Take it with a secret question that puts it in a file (section 2), and before
+  anything else try one read with it for each permission in the link, so a missing one shows now and not halfway
+  through.
 - The setup token never goes into a GitHub secret, a file the VM reads, a commit or a log, and no token that runs is
-  the setup token. Once the environments are up, or if the setup stops before that, delete its file, and the user
-  deletes the token in the dashboard, since a token can't delete itself. More environments later get a new one.
+  the setup token. Deleting it is the user's last step on the Progress task, there from the start with
+  <https://dash.cloudflare.com/profile/api-tokens> and the token's name, since a token can't delete itself. Once the
+  environments are up, or if the setup stops before that, ask them to delete it there, check that Cloudflare now
+  refuses it (`GET user/tokens/verify`), then delete its file. More environments later get a new one.
 <!--#endif-->
 <!--#if (cloudflare == true)-->
 - Add the domain to the account on the free plan if it isn't there, and give the user the nameservers to set. If the
