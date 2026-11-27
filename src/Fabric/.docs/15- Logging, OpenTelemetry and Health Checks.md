@@ -187,7 +187,7 @@ What the app logs can be read **inside the app**, on any device and in every env
 
 ### 🖥️ Server Applications
 
-Every project sends its telemetry through [bit Belemetry](https://github.com/bitfoundation/bitplatform/tree/develop/src/Utilities/Belemetry): logs, traces and metrics over OTLP (the Aspire dashboard, Grafana, Datadog, New Relic etc.) and to Azure Application Insights, and errors to Sentry as Issues. [`ConfigureAppTelemetry`](../src/Shared/Infrastructure/Extensions/BelemetryOptionsExtensions.cs) adds each exporter whose setting is there: `OTEL_EXPORTER_OTLP_ENDPOINT`, `ApplicationInsights:ConnectionString` or `Sentry:Dsn`.
+Every project sends its telemetry through [bit Belemetry](https://github.com/bitfoundation/bitplatform/tree/develop/src/Utilities/Belemetry): logs, traces and metrics over OTLP (the Aspire dashboard, Datadog, New Relic etc.) and to Azure Application Insights, and errors to Sentry as Issues. [`ConfigureAppTelemetry`](../src/Shared/Infrastructure/Extensions/BelemetryOptionsExtensions.cs) adds each exporter whose setting is there: `OTEL_EXPORTER_OTLP_ENDPOINT`, `ApplicationInsights:ConnectionString` or `Sentry:Dsn`.
 
 * **Server.Api** and **Server.Web**
 

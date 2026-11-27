@@ -80,10 +80,6 @@
     <Project Path="src/Server/Boilerplate.Server.AppHost/Boilerplate.Server.AppHost.csproj" />
 <!--#endif-->
   </Folder>
-  <Folder Name="/.SolutionItems/.grafana/">
-    <File Path=".grafana/dashboard.json" />
-    <File Path=".grafana/README.md" />
-  </Folder>
   <Folder Name="/.SolutionItems/specs/">
     <File Path="specs/README.md" />
     <File Path="specs/workarounds.md" />
