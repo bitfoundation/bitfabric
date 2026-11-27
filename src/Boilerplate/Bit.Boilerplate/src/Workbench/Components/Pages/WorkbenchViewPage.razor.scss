@@ -11,13 +11,13 @@
     grid-template-columns: var(--wb-nav-width) minmax(0, 1fr) var(--wb-inspector-width);
     grid-template-areas: "top top top" "nav canvas inspector";
 
-    // Below lg the page list column folds away to give the views the room.
+    // Below lg the page list opens over the views from the header's toggle, as every section's side panel does.
     @include lt-lg {
         --wb-nav-width: 0px;
         --wb-inspector-width: 300px;
     }
 
-    // The top bar's toggles fold either column away.
+    // The header's toggles fold either column away.
     &.nav-collapsed {
         --wb-nav-width: 0px;
     }
@@ -27,50 +27,15 @@
     }
 }
 
-// Wraps onto a second row on a tablet instead of pushing the last buttons out of reach.
-.topbar {
-    gap: 0.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    grid-area: top;
-    padding: 0.375rem 0.75rem;
-    align-items: center;
-    background-color: $bit-color-background-primary;
-    border-bottom: 1px solid $bit-color-border-tertiary;
-}
-
-.brand {
-    gap: 0.5rem;
-    display: flex;
-    font-size: 15px;
-    font-weight: 700;
-    align-items: center;
-    text-decoration: none;
-    letter-spacing: -0.01em;
-    color: $bit-color-foreground-primary;
-}
-
-.crumb-separator {
-    color: $bit-color-foreground-tertiary;
-}
-
-::deep .crumb-title {
-    min-width: 0;
-    color: $bit-color-foreground-secondary;
-}
-
 .sidebar {
     overflow-y: auto;
     background-color: $bit-color-background-primary;
 }
 
+// The side panel scrolls its own list, under its search.
 .navigator-column {
     grid-area: nav;
-    border-inline-end: 1px solid $bit-color-border-tertiary;
-
-    @include lt-lg {
-        display: none;
-    }
+    overflow: hidden;
 }
 
 .inspector-column {
@@ -78,16 +43,8 @@
     border-inline-start: 1px solid $bit-color-border-tertiary;
 }
 
-.nav-collapsed .navigator-column,
 .inspector-collapsed .inspector-column {
     display: none;
-}
-
-// The page list is always folded away below lg, so its toggle has nothing to do there.
-::deep .navigator-toggle {
-    @include lt-lg {
-        display: none;
-    }
 }
 
 .page-status {
@@ -198,30 +155,15 @@
     }
 }
 
-// Inside the phone's own safe areas, as a page in a frame can't read them.
+// Under the header, inside the phone's own safe areas, as a page in a frame can't read them.
 .phone-view {
-    height: 100dvh;
+    height: calc(100dvh - 52px);
     box-sizing: border-box;
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
 }
 
-// Clear of the app's bottom bar and the home indicator.
-.phone-layout ::deep .tools-button {
-    bottom: calc(#{$bit-env-inset-bottom} + 4.5rem);
-    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.45);
-}
-
 .phone-layout ::deep .tools-header {
     width: 100%;
-}
-
-// The section and the page atop a phone's tools, as a desktop's top bar names them.
-.tools-crumb {
-    gap: 0.25rem;
-    display: flex;
-    min-width: 0;
-    align-items: center;
-    margin-bottom: 0.75rem;
 }
 
 // Under the guide that points at the user picker inside it, whose dropdown still opens over both.

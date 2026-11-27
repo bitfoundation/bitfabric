@@ -1,0 +1,15 @@
+@inherits WorkbenchComponentBase
+
+@* The frame of Pages', Boards' and Progress's lists and items; a page's own view lays out the same header and side panel around its views, and Home has the header over a page that scrolls as a document. *@
+<div class="wb-frame @Class @(WorkbenchStore.IsNavigatorCollapsed ? "wb-side-folded" : null) @(WorkbenchStore.IsSidePanelOpen ? "wb-side-open" : null)">
+    <ShellHeader Section="Section" Title="@Title" TitleExtra="TitleExtra" Actions="Actions" HasSidePanel="SidePanel is not null" />
+
+    @if (SidePanel is not null)
+    {
+        <aside class="wb-side">@SidePanel</aside>
+    }
+
+    <div class="wb-main @MainClass">
+        @ChildContent
+    </div>
+</div>

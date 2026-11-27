@@ -15,6 +15,7 @@ public partial class WorkbenchViewPage
     private const string TourDataStatesAnchor = "data-states";
     private const string TourComponentsPage = "assistant";
     private const string TourLandingPage = "new-project";
+    private const string TourBoard = "get-started";
 
     // A comment about the page as a whole: one written on the tour's live review step without pressing a spot first, or a
     // finding of the Checks tab whose element is gone.
@@ -40,15 +41,12 @@ public partial class WorkbenchViewPage
         WorkbenchScenario[] viewsBefore = [.. store.Panes.Select(pane => pane.Scenario)];
         var modeBefore = store.Mode;
         var phone = new WorkbenchScenario();
-        // The sample from the home page to the wizard shows what a flow is; without its pages, the list of flows does.
-        var hasGetStartedSample = reviewSession.AllFlows.Any(flow => flow.Id == WorkbenchSampleFlows.GetStartedId);
-        var flowsUrl = hasGetStartedSample ? WorkbenchUrls.Flow(WorkbenchSampleFlows.GetStartedId) : WorkbenchUrls.Flows;
-        // The sample's arrow editor, which opens only where arrows can be changed.
-        var showsArrowEditor = hasGetStartedSample && reviewSession.CanWrite;
-        // Set by the step being left when the next one is on the board too, which it then leaves as it is.
-        var staysOnBoard = false;
-        // Set by the Progress step when Next leaves it, as the Flows step goes there from the Progress page by itself.
+        // The example board, whose flow shows what a board can be; without it, the Boards section's own board.
+        var boardsUrl = WorkbenchBoardCatalog.Find(TourBoard) is { } tourBoard ? WorkbenchUrls.Board(tourBoard.Id) : WorkbenchUrls.Boards;
+        // Set by the Progress step when Next leaves it, as the Boards step goes there from the Progress page by itself.
         var leavesProgressForward = false;
+        // Set by the Boards step when Back leaves it, as the Progress step goes back there by itself.
+        var leavesBoardsBack = false;
         var pageBefore = pageInfo!.Key;
         // Another page than the one the tour starts on, for a change; without it, that page.
         var componentsPage = WorkbenchPageCatalog.Find(TourComponentsPage)?.Key ?? pageBefore;
@@ -56,22 +54,7 @@ public partial class WorkbenchViewPage
         var landingPage = WorkbenchPageCatalog.Find(TourLandingPage)?.Key ?? pageBefore;
 
         // Replaces the address, as the phone's Back from a page the tour opened by itself would lead nowhere useful.
-        void ShowPage(string pageKey) => NavigationManager.NavigateTo($"{WorkbenchUrls.Workbench(pageKey)}{store.QueryString}", replace: true);
-
-        // Back to the views, unless the next step is on the board too: then only the arrow's editor closes.
-        void LeaveBoard(string stayingOn)
-        {
-            if (staysOnBoard)
-            {
-                NavigationManager.NavigateTo(stayingOn, replace: true);
-            }
-            else
-            {
-                ShowPage(pageBefore);
-            }
-
-            staysOnBoard = false;
-        }
+        void ShowPage(string pageKey) => NavigationManager.NavigateTo($"{WorkbenchUrls.Page(pageKey)}{store.QueryString}", replace: true);
 
         BonboardingTourDefinition tour = new()
         {
@@ -105,7 +88,7 @@ public partial class WorkbenchViewPage
 
                 var address = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
 
-                if (IsOnFlowsPage || IsOnProgressPage || BonboardingRouteMatcher.Matches(WorkbenchUrls.Workbench(componentsPage), address) || BonboardingRouteMatcher.Matches(WorkbenchUrls.Workbench(landingPage), address))
+                if (IsOnBoardsPage || IsOnProgressPage || BonboardingRouteMatcher.Matches(WorkbenchUrls.Page(componentsPage), address) || BonboardingRouteMatcher.Matches(WorkbenchUrls.Page(landingPage), address))
                 {
                     ShowPage(pageBefore);
                 }
@@ -130,7 +113,7 @@ public partial class WorkbenchViewPage
                 new BonboardingStepDefinition
                 {
                     Id = "head-start",
-                    Target = BonboardingStepTarget.Css("#wb-navigator"),
+                    Target = BonboardingStepTarget.Css(".navigator-column"),
                     Title = nameof(WorkbenchStrings.HomeWhyHeadStartTitle),
                     Description = nameof(WorkbenchStrings.HomeWhyHeadStartText),
                     Placement = BonboardingPlacement.InlineEnd
@@ -232,7 +215,7 @@ public partial class WorkbenchViewPage
                         leavesProgressForward = true;
                         return ValueTask.FromResult<string?>(null);
                     },
-                    // Back goes to the views; Next goes straight on to the Flows page.
+                    // Back goes to the views; Next goes straight on to the Boards page.
                     OnBeforeLeave = _ => ShowInTour(() =>
                     {
                         if (leavesProgressForward is false)
@@ -245,53 +228,30 @@ public partial class WorkbenchViewPage
                 },
                 new BonboardingStepDefinition
                 {
-                    Id = "flows",
-                    Route = flowsUrl,
-                    // The building sample's screens, which leaves room beside them for the card; without the sample, the list of flows.
-                    Target = BonboardingStepTarget.Css(".screen-card:has([data-screen-id='list']), .flow-list"),
-                    AdditionalTargets = [BonboardingStepTarget.Css(".screen-card:has([data-screen-id='form'])"), BonboardingStepTarget.Css(".screen-card:has([data-screen-id='map'])")],
-                    Title = nameof(WorkbenchStrings.Flows),
-                    Description = nameof(WorkbenchStrings.AllFlowsHint),
+                    Id = "boards",
+                    Route = boardsUrl,
+                    // The example board's flow, with the card beside it; without that board, the card alone on the section's own.
+                    Target = BonboardingStepTarget.Css(".board-flow"),
+                    Title = nameof(WorkbenchStrings.HomeBigBoardsTitle),
+                    Description = nameof(WorkbenchStrings.HomeBigBoardsText),
                     Placement = BonboardingPlacement.InlineStart,
-                    // A leave hook that never ran, for the browser's Back, leaves no mark for the next one.
-                    OnBeforeShow = _ => ShowInTour(() => staysOnBoard = false),
-                    // Runs before the leave hook, so the board stays for the arrow's step.
-                    ResolveNext = _ =>
+                    OnBeforeShow = _ => ShowInTour(() => leavesBoardsBack = false),
+                    ResolvePrevious = _ =>
                     {
-                        staysOnBoard = showsArrowEditor;
+                        leavesBoardsBack = true;
                         return ValueTask.FromResult<string?>(null);
                     },
                     // Back goes to the Progress page from here, never through the views, whose first render would take a
                     // tour that waits for a page as the browser's Back and step it back once more.
-                    ResolvePrevious = _ =>
+                    OnBeforeLeave = _ => ShowInTour(() =>
                     {
-                        staysOnBoard = true;
-                        return ValueTask.FromResult<string?>(null);
-                    },
-                    OnBeforeLeave = _ => ShowInTour(() => LeaveBoard(stayingOn: flowsUrl))
-                },
-                new BonboardingStepDefinition
-                {
-                    Id = "flow-arrows",
-                    Route = flowsUrl,
-                    When = _ => ValueTask.FromResult(showsArrowEditor),
-                    // The editor of the sample's Get started arrow, opened the way the board's address opens it.
-                    Target = BonboardingStepTarget.Dynamic(_ =>
-                    {
-                        NavigationManager.NavigateTo(WorkbenchUrls.FlowArrow(WorkbenchSampleFlows.GetStartedId, WorkbenchSampleFlows.GetStartedArrowId), replace: true);
+                        if (leavesBoardsBack is false)
+                        {
+                            ShowPage(pageBefore);
+                        }
 
-                        return BonboardingStepTarget.Css(".label-editor");
-                    }),
-                    Title = nameof(WorkbenchStrings.TourArrowsTitle),
-                    Description = nameof(WorkbenchStrings.TourArrowsText),
-                    Placement = BonboardingPlacement.Bottom,
-                    OnBeforeShow = _ => ShowInTour(() => staysOnBoard = false),
-                    ResolvePrevious = _ =>
-                    {
-                        staysOnBoard = true;
-                        return ValueTask.FromResult<string?>(null);
-                    },
-                    OnBeforeLeave = _ => ShowInTour(() => LeaveBoard(stayingOn: flowsUrl))
+                        leavesBoardsBack = false;
+                    })
                 },
                 new BonboardingStepDefinition
                 {
@@ -337,7 +297,7 @@ public partial class WorkbenchViewPage
         return tour;
     }
 
-    private bool IsOnFlowsPage => BonboardingRouteMatcher.Matches($"{WorkbenchUrls.Flows}*", NavigationManager.ToBaseRelativePath(NavigationManager.Uri));
+    private bool IsOnBoardsPage => BonboardingRouteMatcher.Matches($"{WorkbenchUrls.Boards}*", NavigationManager.ToBaseRelativePath(NavigationManager.Uri));
 
     private bool IsOnProgressPage => BonboardingRouteMatcher.Matches($"{WorkbenchUrls.Progress}*", NavigationManager.ToBaseRelativePath(NavigationManager.Uri));
 

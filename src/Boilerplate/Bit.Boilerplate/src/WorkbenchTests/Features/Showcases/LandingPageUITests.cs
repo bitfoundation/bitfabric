@@ -148,7 +148,7 @@ public class LandingPageUITests : ShowcaseUITest
         await Press(View().Locator(".lp-footer").GetByRole(AriaRole.Link, new() { Name = AppStrings.Terms, Exact = true }));
 
         await Expect(View().GetByText(WorkbenchStrings.LandingMissingPage, new() { Exact = true }).First).ToBeVisibleAsync();
-        await Expect(Page).ToHaveURLAsync(new Regex($"/workbench/{PageKey}"));
+        await Expect(Page).ToHaveURLAsync(new Regex($"/pages/{PageKey}"));
         await Expect(Heading).ToBeAttachedAsync();
     }
 

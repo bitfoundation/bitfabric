@@ -267,6 +267,27 @@
     <data name="SearchPages" xml:space="preserve">
         <value>搜索页面</value>
     </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>Workbench 是什么、能做什么</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>你的应用页面，基于示例数据</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>你的代理展示给你的内容</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>你的代理的长任务和问题</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>搜索展板</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>搜索任务</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>没有与你的搜索匹配的内容。</value>
+    </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>工作台中没有这个页面。</value>
     </data>
@@ -816,17 +837,8 @@
     <data name="ProvinceLimburg" xml:space="preserve">
         <value>林堡省</value>
     </data>
-    <data name="HomePageTitle" xml:space="preserve">
-        <value>工作台 · 您与 AI 智能体一起构建应用的地方</value>
-    </data>
     <data name="HomeEyebrow" xml:space="preserve">
         <value>您项目的一部分</value>
-    </data>
-    <data name="HomeHeadline" xml:space="preserve">
-        <value>您与 AI 智能体一起构建应用的地方。</value>
-    </data>
-    <data name="HomeLead" xml:space="preserve">
-        <value>在示例数据上设计每个页面，覆盖每种状态和每种设备；用评论进行评审，智能体会在您输入时就作出回应；跟进它的长任务，比如部署或新功能，用点击或语音回答它的问题。一切都在您的项目里，使用应用自带的组件和主题。</value>
     </data>
     <data name="HomeStartHere" xml:space="preserve">
         <value>从这里开始</value>
@@ -854,12 +866,6 @@
     </data>
     <data name="HomeChipStore" xml:space="preserve">
         <value>1320 × 2868 PNG</value>
-    </data>
-    <data name="HomeWhyTitle" xml:space="preserve">
-        <value>为什么您的项目里有工作台</value>
-    </data>
-    <data name="HomeWhySubtitle" xml:space="preserve">
-        <value>设计工具、测试台、摄影棚和智能体的控制室，都在项目里。</value>
     </data>
     <data name="HomeWhyAgentsTitle" xml:space="preserve">
         <value>与任意 AI 智能体协作</value>
@@ -2091,18 +2097,6 @@
     <data name="ThemeFindingsHint" xml:space="preserve">
         <value>页面自行设置、既不来自主题、也不是主题颜色与白色、黑色或背景混合而成的颜色。不包括 bit 组件、图表以及通过 --data-color 传入的颜色。</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>流程</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>流程把一项任务的各个屏幕并排展示，每个屏幕都处于关键状态，比如一个列表和它的按钮打开的对话框，并用箭头标出如何从一个屏幕到下一个。打开一个流程，即可理解应用，或在会议上讲解它。</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>新流程的名称</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>删除流程</value>
-    </data>
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} 条待处理评论</value>
     </data>
@@ -2487,9 +2481,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>还没有评论。</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>还没有流程。</value>
-    </data>
     <data name="SampleFlowBuildings" xml:space="preserve">
         <value>添加建筑</value>
     </data>
@@ -2502,38 +2493,8 @@
     <data name="SampleFlowBuildingsMap" xml:space="preserve">
         <value>“地图”在荷兰地图上显示相同的建筑。</value>
     </data>
-    <data name="SampleFlowPos" xml:space="preserve">
-        <value>打开 POS 仪表板</value>
-    </data>
-    <data name="SampleFlowPosLoading" xml:space="preserve">
-        <value>数据加载时，每个小组件都保持原位。</value>
-    </data>
-    <data name="SampleFlowPosReady" xml:space="preserve">
-        <value>然后每个小组件都会显示当天的数字。</value>
-    </data>
-    <data name="SampleFlowPosEmpty" xml:space="preserve">
-        <value>还没有销售时，每个小组件都会说明。</value>
-    </data>
-    <data name="SampleFlowPosMixed" xml:space="preserve">
-        <value>一个小组件出错时，其他小组件继续工作。</value>
-    </data>
-    <data name="SampleFlowPosReadyLink" xml:space="preserve">
-        <value>数据到达</value>
-    </data>
-    <data name="SampleFlowPosEmptyLink" xml:space="preserve">
-        <value>还没有销售</value>
-    </data>
-    <data name="SampleFlowPosMixedLink" xml:space="preserve">
-        <value>一次加载失败</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>示例</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>与您的 AI 智能体实时评审</value>
-    </data>
-    <data name="HomeWhyLiveText" xml:space="preserve">
-        <value>在页面任意位置钉一条评论，可以打字也可以说话。在您自己的电脑上，编程智能体会在您输入时就收到它，修改页面，在评论里回复并勾掉它。支持 Claude Code、Codex、Copilot、Gemini、Junie 和 Cursor。</value>
     </data>
     <data name="TourLiveText" xml:space="preserve">
         <value>在页面任意位置钉一条评论，可以打字也可以说话：“发送”旁的麦克风会把语音转成文字。在您自己的电脑上，编程智能体会在您输入时就收到它，修改页面，在评论里回复并勾掉它。支持 Claude Code、Codex、Copilot、Gemini、Junie 和 Cursor。现在就试试：写下评论并发送。</value>
@@ -2547,71 +2508,8 @@
     <data name="TapToComment" xml:space="preserve">
         <value>点按要评论的位置</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>请让您的智能体画一个，比如“展示如何添加一栋建筑”，或在页面的“流程”选项卡中把视图添加到流程。</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>此链接下没有流程，它可能已被删除。</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>此流程还没有屏幕。请在页面的“流程”选项卡中添加视图，或让您的智能体来做。</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>屏幕：{0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>全部流程</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>一项任务的各个屏幕并排展示，用箭头相连</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>将此视图添加到流程</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>流程会按视图当前的样子保存它：设备、设置以及页面上打开的一切。</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>流程</value>
-    </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>新流程</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>此屏幕展示的内容（可选）</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>如何从上一个屏幕来到这里（可选）</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>用户执行的操作</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>点按“添加建筑”</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>标记第 {0} 个屏幕上通往这里的按钮，箭头就会从它开始。</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>从第 {0} 个屏幕上标记的按钮开始。</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>标记按钮</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>重新标记</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>移除标记</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>点按第 {0} 个屏幕上通往第 {1} 个屏幕的按钮。</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>添加此视图</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>打开流程</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>在工作台中打开</value>
@@ -2633,18 +2531,6 @@
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>第 {0} 个，共 {1} 个</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>拖动屏幕即可移动它，双击屏幕即可试用。从屏幕右边缘的圆点拖到另一个屏幕即可画出箭头，然后为它命名并标记它开始的按钮。双击箭头可修改或删除它。</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>删除此流程？</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>移除此屏幕</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>删除箭头</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>智能体回复时通知我</value>
@@ -2874,9 +2760,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>无法保存翻译。</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>无法将此屏幕添加到流程。</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>笔记本电脑 {0}</value>
     </data>
@@ -2915,9 +2798,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>重置此视图</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>此屏幕尚未加载完成。请稍等片刻，然后重新标记按钮。</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>请保留原文中花括号内的占位符，否则页面无法显示这段文字。</value>
@@ -3269,12 +3149,6 @@
     </data>
     <data name="LandingConsentFirstVisit" xml:space="preserve">
         <value>首次访问</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>这是示例：双击屏幕即可试用，双击箭头即可修改，修改时会生成一份您自己的流程副本。</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>这是示例，会保持原样：在这里修改会生成一份带有此修改的流程副本，归您所有，并将其打开。</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>本周各门店表现如何？</value>
@@ -4860,15 +4734,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>新名称将从明天起显示在收据上。</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0}（副本）</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>修改箭头</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>双击箭头即可重命名、标记它开始的按钮或删除它。示例会保持原样：修改示例中的箭头会生成一份您自己的流程副本。</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>等级</value>
     </data>
@@ -5060,9 +4925,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>从动态中移除</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>选择一个任务查看进展。</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>此任务已不存在。它的智能体可能已完成并将其移除。</value>
@@ -5400,15 +5262,6 @@
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>跟进长任务，一键作答</value>
     </data>
-    <data name="HomeWhyProgressText" xml:space="preserve">
-        <value>一次部署或一个新功能需要很多步骤，其中有些只有您能完成。每个智能体对话都会在这里显示完成了什么、还剩什么以及需要您做什么，长对话里不再遗漏任何事。您在那里粘贴的密钥和密码会直接存到该去的地方，从不经过聊天。</value>
-    </data>
-    <data name="HomeWhyVoiceTitle" xml:space="preserve">
-        <value>用说话代替打字</value>
-    </data>
-    <data name="HomeWhyVoiceText" xml:space="preserve">
-        <value>点击评论、回复或回答旁的麦克风，直接说出来。浏览器会把您的语音转成您所选语言的文字。</value>
-    </data>
     <data name="TourProgressText" xml:space="preserve">
         <value>一次部署或一个新功能需要很多步骤，其中有些只有您能完成。每个智能体对话都会在这里显示完成了什么、还剩什么以及需要您做什么。用一次点击、几句话或语音作答，它会立即继续。在示例上试试吧。</value>
     </data>
@@ -5503,9 +5356,6 @@
     </data>
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>可以试算的数字，就像计算器</value>
-    </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>浅色与深色，任何屏幕</value>
     </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>打开展板</value>
@@ -5720,12 +5570,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>报告</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>本项目的流程</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>示例</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>计划</value>
     </data>
@@ -5746,5 +5590,122 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>目录</value>
+    </data>
+    <data name="HomeAgentPageTitle" xml:space="preserve">
+        <value>工作台 · 您的 AI 智能体在这里开发应用，由您来掌舵</value>
+    </data>
+    <data name="HomeAgentHeadline" xml:space="preserve">
+        <value>您的 AI 智能体在这里开发应用，由您来掌舵。</value>
+    </data>
+    <data name="HomeAgentLead" xml:space="preserve">
+        <value>您的 AI 智能体在这里基于示例数据构建每个页面，覆盖每种场景和状态，并在之后每次修改后重新检查。它用可交互的展板向您讲解，您指出哪里要改，甚至可以用语音，跟进它的长任务，做出决定并回答问题。一切都在您的项目里，使用您应用自己的组件和主题。</value>
+    </data>
+    <data name="HomeForWhoTitle" xml:space="preserve">
+        <value>工作台为谁而设</value>
+    </data>
+    <data name="HomeForWhoSubtitle" xml:space="preserve">
+        <value>主要是您的 AI 智能体。您来这里指出问题、做决定、回答问题，并查看它的讲解。</value>
+    </data>
+    <data name="HomeBigAgentBadge" xml:space="preserve">
+        <value>主要用户</value>
+    </data>
+    <data name="HomeBigAgentTitle" xml:space="preserve">
+        <value>您的 AI 智能体</value>
+    </data>
+    <data name="HomeBigAgentText" xml:space="preserve">
+        <value>它在这里按不同场景和数据状态构建每个页面。之后有改动时，它会回来在真实浏览器中手动试一遍，确认没有东西被改坏。</value>
+    </data>
+    <data name="HomeBigAgentNote" xml:space="preserve">
+        <value>您的项目也有自动化测试。</value>
+    </data>
+    <data name="HomeBigYouBadge" xml:space="preserve">
+        <value>为您</value>
+    </data>
+    <data name="HomeBigFeedbackTitle" xml:space="preserve">
+        <value>指出来，说说要改什么</value>
+    </data>
+    <data name="HomeBigFeedbackText" xml:space="preserve">
+        <value>选中页面的任意部分，留下您的反馈，打字或语音都行。智能体会在您输入时就收到，修改页面，并在原处回复您。</value>
+    </data>
+    <data name="HomeBigProgressTitle" xml:space="preserve">
+        <value>跟进任务，做出决定</value>
+    </data>
+    <data name="HomeBigProgressText" xml:space="preserve">
+        <value>查看一个长任务的进展，比如一次部署或一个新功能，做出它需要的决定，并用一次点击、几句话或语音回答它的问题。</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>可交互的可视化文档</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>问问某件事如何运作，让它权衡几个方案或制定计划，智能体会用展板而不是长篇文字来回答：用箭头连起来的应用页面、图表，以及可以试算的数字。</value>
+    </data>
+    <data name="HomeCardRealTitle" xml:space="preserve">
+        <value>真实组件</value>
+    </data>
+    <data name="HomeCardRealText" xml:space="preserve">
+        <value>与您的应用相同的 bit BlazorUI 组件、主题和样式，因此您确认的设计，构建出来后看起来完全一样。</value>
+    </data>
+    <data name="HomeCardStatesTitle" xml:space="preserve">
+        <value>每种状态</value>
+    </data>
+    <data name="HomeCardStatesText" xml:space="preserve">
+        <value>加载中、无数据、出错、部分数据和慢速数据，一键即达。</value>
+    </data>
+    <data name="HomeCardDevicesTitle" xml:space="preserve">
+        <value>每种设备</value>
+    </data>
+    <data name="HomeCardDevicesText" xml:space="preserve">
+        <value>按真实尺寸呈现手机、平板和台式机，支持浅色、深色和每种语言。</value>
+    </data>
+    <data name="HomeCardStoresTitle" xml:space="preserve">
+        <value>应用商店截图</value>
+    </data>
+    <data name="HomeCardStoresText" xml:space="preserve">
+        <value>为 App Store、Google Play 和 Microsoft Store 生成像素级精确的图片，带背景和说明文字。</value>
+    </data>
+    <data name="HomeCardHeadStartTitle" xml:space="preserve">
+        <value>快人一步</value>
+    </data>
+    <data name="HomeCardHeadStartText" xml:space="preserve">
+        <value>可直接复用或借鉴的现成页面，例如 POS 仪表板和排班表。</value>
+    </data>
+    <data name="HomeCardSafeTitle" xml:space="preserve">
+        <value>放心尝试</value>
+    </data>
+    <data name="HomeCardSafeText" xml:space="preserve">
+        <value>这里的一切都不会连接您的 API 或数据库，因此任何想法都不会破坏您的应用或其数据。</value>
+    </data>
+    <data name="HomeCardManyAppsTitle" xml:space="preserve">
+        <value>多个应用</value>
+    </data>
+    <data name="HomeCardManyAppsText" xml:space="preserve">
+        <value>您的每个应用并排呈现，各有自己的主题。</value>
+    </data>
+    <data name="HomeCardAgentsTitle" xml:space="preserve">
+        <value>任意 AI 智能体</value>
+    </data>
+    <data name="HomeCardAgentsText" xml:space="preserve">
+        <value>Claude Code、Codex、Copilot、Gemini、Junie 或 Cursor。无需 Claude Design 或 Figma。</value>
+    </data>
+    <data name="HomeCardCustomizeTitle" xml:space="preserve">
+        <value>修改工作台本身</value>
+    </data>
+    <data name="HomeCardCustomizeText" xml:space="preserve">
+        <value>让您的智能体添加团队需要的工具、设备和状态。</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>在应用自己的页面上展示流程，用箭头串联</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>放大</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>缩小</value>
+    </data>
+    <data name="AddBuildingBoardSummary" xml:space="preserve">
+        <value>从列表到表单再到地图：一步步看懂建筑页面。</value>
+    </data>
+    <data name="AddBuildingBoardLead" xml:space="preserve">
+        <value>演示如何添加一座地标建筑，直接在页面上讲解。</value>
     </data>
 </root>

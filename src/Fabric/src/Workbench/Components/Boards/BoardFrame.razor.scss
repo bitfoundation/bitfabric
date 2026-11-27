@@ -21,6 +21,12 @@
     }
 }
 
+// A board in Persian reads in Vazirmatn with Persian digits, whatever language the Workbench is in.
+.board:lang(fa) {
+    --bit-tpg-font-family: "Vazirmatn FD Digits", "Vazirmatn", var(--app-preset-font-family);
+    font-family: var(--bit-tpg-font-family);
+}
+
 .tone-secondary {
     --tone: #{$bit-color-secondary};
     --tone-dark: #{$bit-color-secondary-dark};

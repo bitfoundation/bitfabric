@@ -51,6 +51,17 @@ section {
         min-width: 0;
         padding-inline: 0.25rem;
     }
+
+    &.many {
+        display: flex;
+        flex-wrap: wrap;
+
+        ::deep .segment {
+            flex: 1 1 auto;
+            white-space: nowrap;
+            padding-inline: 0.75rem;
+        }
+    }
 }
 
 .size-fields {

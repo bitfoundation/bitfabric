@@ -1,16 +1,23 @@
 namespace Boilerplate.Workbench.Components.Shell;
 
 /// <summary>
-/// The Workbench's sections as one button that names the section the user is in and opens all of them, Home included,
-/// with the count of what the agents' tasks wait for on Progress: the header's on a phone, and the breadcrumb's in a page's
-/// own view, whose toolbar has no room for <see cref="SectionNav"/>. Its name adds that it holds the sections, as a page's
-/// view already has a button named Pages, the one that folds its list of pages.
+/// The Workbench's sections as one button in the header's breadcrumb, in every section: it names the section the user is in
+/// and opens all four, each with a line on what it is for, with what the agents' tasks wait for on Progress counted on the
+/// button and on Progress's item. Its name adds that it holds the sections, as a section's side panel has a toggle named
+/// after the section too. Its look is in workbench.scss, as its menu opens outside the component.
 /// </summary>
 public partial class SectionMenu
 {
     private List<BitMenuButtonItem> items = [];
 
-    private static readonly BitMenuButtonClassStyles styles = new() { Callout = "--bit-MenuButton-callout-min-width: 12rem" };
+    private static readonly BitMenuButtonClassStyles classes = new()
+    {
+        Root = "section-switcher",
+        Callout = "section-switcher-callout",
+        ItemButton = "section-switcher-item",
+        ItemDescription = "section-switcher-hint",
+        ItemSecondaryText = "section-switcher-count"
+    };
 
     /// <summary>The section the user is in, which the button names and the menu checks.</summary>
     [Parameter] public WorkbenchSection Section { get; set; }
@@ -22,12 +29,17 @@ public partial class SectionMenu
 
     [Parameter] public string? Class { get; set; }
 
+    private string AriaLabel => Waiting > 0
+        ? $"{Localizer[WorkbenchSections.TextKeyOf(Section)]} ({Localizer[nameof(WorkbenchStrings.WorkbenchSections)]}, {Localizer[nameof(WorkbenchStrings.ProgressNeedsYouCount), Waiting]})"
+        : $"{Localizer[WorkbenchSections.TextKeyOf(Section)]} ({Localizer[nameof(WorkbenchStrings.WorkbenchSections)]})";
+
     protected override void OnParametersSet()
     {
-        items = [.. new[] { WorkbenchSection.Home }.Concat(WorkbenchSections.Listed).Select(section => new BitMenuButtonItem
+        items = [.. WorkbenchSections.All.Select(section => new BitMenuButtonItem
         {
             Key = section.ToString(),
             Text = Localizer[WorkbenchSections.TextKeyOf(section)],
+            Description = Localizer[WorkbenchSections.HintKeyOf(section)],
             IconName = WorkbenchSections.IconOf(section),
             Href = section is WorkbenchSection.Home ? WorkbenchUrls.HomeTop : WorkbenchSections.UrlOf(section),
             RadioGroup = "section",

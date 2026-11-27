@@ -1,31 +1,40 @@
 @inherits WorkbenchComponentBase
 
-<header class="shell-header">
+<BitMediaQuery ScreenQuery="BitScreenQuery.LtLg" OnChange="OnNarrowChanged" />
+
+@* The one header of every section: the side panel's toggle, the logo, the section switcher and the open item, then the
+   section's own buttons and the Workbench's. *@
+<header class="shell-header @Class">
+    @if (HasSidePanel)
+    {
+        <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" Class="side-toggle"
+                   IconName="@SideToggleIcon"
+                   Title="@Localizer[WorkbenchSections.TextKeyOf(Section)]"
+                   AriaLabel="@Localizer[WorkbenchSections.TextKeyOf(Section)]"
+                   aria-expanded="@(IsSidePanelShown ? "true" : "false")"
+                   aria-controls="wb-side-panel"
+                   OnClick="ToggleSidePanel" />
+    }
+
     <a class="brand" href="@(Section is WorkbenchSection.Home ? WorkbenchUrls.HomeTop : WorkbenchUrls.Home)" aria-label="@Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]">
         <img src="_content/Boilerplate.Client.Core/images/bit-logo.svg" alt="" width="26" height="26" />
         <span>@Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]</span>
     </a>
 
-    @* A bar of the sections on wider screens, and one button that opens them on a phone. *@
-    <SectionNav Section="Section" Waiting="reviewSession.NeedsYouCount" Class="section-nav" />
-    <SectionMenu Section="Section" Waiting="reviewSession.NeedsYouCount" Size="BitSize.Small" Class="section-menu" />
+    <span class="crumb-separator" aria-hidden="true">/</span>
+    <SectionMenu Section="Section" Waiting="reviewSession.NeedsYouCount" Class="section-menu" />
+
+    @if (string.IsNullOrWhiteSpace(Title) is false)
+    {
+        <span class="crumb-separator crumb-item" aria-hidden="true">/</span>
+        <BitText Typography="BitTypography.Body1" Class="crumb-title crumb-item" NoWrap Dir="BitDir.Auto" title="@Title">@Title</BitText>
+    }
+
+    @TitleExtra
 
     <BitSpacer />
 
     @Actions
-
-    @if (Section is not WorkbenchSection.Progress)
-    {
-        <span class="progress-shortcut">
-            <BitBadge Content="@(reviewSession.NeedsYouCount)" Hidden="reviewSession.NeedsYouCount == 0" Color="BitColor.Warning" Overlap Size="BitSize.Small">
-                <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small"
-                           IconName="@BitIconName.TaskList"
-                           Href="@WorkbenchUrls.Progress"
-                           Title="@Localizer[nameof(WorkbenchStrings.Progress)]"
-                           AriaLabel="@Localizer[nameof(WorkbenchStrings.Progress)]" />
-            </BitBadge>
-        </span>
-    }
 
     <LanguageMenu Size="BitSize.Small" />
 
@@ -36,4 +45,6 @@
                Title="@Localizer[nameof(WorkbenchStrings.ToggleWorkbenchTheme)]"
                AriaLabel="@Localizer[nameof(WorkbenchStrings.ToggleWorkbenchTheme)]"
                OnClick="ToggleTheme" />
+
+    @End
 </header>

@@ -602,9 +602,9 @@ public class InspectUITests : WorkbenchCodeCopyPageTest
     {
         await PickTheIconButton();
 
-        await Press(Page.Locator("#wb-navigator").GetByRole(AriaRole.Link).Filter(new() { HasText = WorkbenchStrings.ShiftsTitle }));
+        await Press(Page.Locator(".navigator-column").GetByRole(AriaRole.Link).Filter(new() { HasText = WorkbenchStrings.ShiftsTitle }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/shifts"));
         await WaitForViews();
         await Expect(View().Locator(".shifts")).ToBeVisibleAsync();
         await Expect(Mode(WorkbenchStrings.ModeInspect)).ToHaveAttributeAsync("aria-pressed", "true");

@@ -38,6 +38,107 @@ html:has(> .wb-body),
     overflow: auto;
 }
 
+// Arabic-script text takes Vazirmatn wherever it is, such as a Persian board in an English Workbench; Latin text keeps the
+// theme's font, and the font's file downloads only once such text shows (its unicode-range, in Client.Core's _rtl-fonts.scss).
+// A Persian Workbench takes it, with Persian digits, from that file's own rule for the whole page.
+.wb-body {
+    --bit-tpg-font-family: var(--app-preset-font-family), "Vazirmatn";
+    font-family: var(--bit-tpg-font-family);
+}
+
+// ---- The frame every section shares (WorkbenchFrame): the header, the section's side panel at the start and its content,
+// which scrolls on its own. A page's own view lays out the same header and side panel (.wb-side) around its views.
+.wb-frame {
+    --wb-side-width: 280px;
+    height: 100dvh;
+    display: grid;
+    overflow: hidden;
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-columns: var(--wb-side-width) minmax(0, 1fr);
+    grid-template-areas: "top top" "side main";
+
+    > .shell-header {
+        grid-area: top;
+    }
+
+    &.wb-side-folded {
+        --wb-side-width: 0px;
+    }
+
+    @include lt-lg {
+        --wb-side-width: 0px;
+    }
+}
+
+// A page's own view: the header over its three columns, wrapping onto a second row where its tools don't fit on one.
+.workbench > .shell-header {
+    grid-area: top;
+    flex-wrap: wrap;
+    padding-block: 0.375rem;
+}
+
+.wb-main {
+    min-width: 0;
+    min-height: 0;
+    grid-area: main;
+    overflow: auto;
+}
+
+.wb-side {
+    min-height: 0;
+    grid-area: side;
+    overflow: hidden;
+    background-color: var(--bit-clr-bg-pri);
+    border-inline-end: 1px solid var(--bit-clr-brd-ter);
+}
+
+.wb-side-folded .wb-side {
+    display: none;
+}
+
+// What dims the page beside the side panel while it is open over it.
+.side-scrim {
+    display: none;
+}
+
+// Below a desktop the side panel opens over the content from the header's toggle, and a tap beside it closes it.
+@include lt-lg {
+    .wb-side {
+        bottom: 0;
+        top: 52px;
+        z-index: 30;
+        display: block !important;
+        position: fixed;
+        visibility: hidden;
+        width: min(20rem, 86vw);
+        inset-inline-start: 0;
+        transform: translateX(-100%);
+        transition: transform var(--bit-mot-duration) var(--bit-mot-easing), visibility var(--bit-mot-duration);
+
+        [dir="rtl"] & {
+            transform: translateX(100%);
+        }
+    }
+
+    .wb-side-open .wb-side {
+        transform: none;
+        visibility: visible;
+        box-shadow: var(--bit-shd-sheet);
+    }
+
+    .wb-side-open .side-scrim {
+        inset: 52px 0 0;
+        z-index: -1;
+        display: block;
+        position: fixed;
+        background-color: var(--bit-clr-bg-overlay);
+    }
+
+    .wb-side .section-sidebar {
+        background-color: var(--bit-clr-bg-pri);
+    }
+}
+
 // Handheld views show a finger-sized circle instead of the mouse pointer.
 .wb-touch,
 .wb-touch * {
@@ -167,7 +268,7 @@ body:has(.tour-states) {
         }
 
         .workbench .topbar > :not(.brand, .modes, [data-bonboarding-anchor="screenshot"]),
-        .flows-page .topbar > :not(.brand, .crumb, .crumb-separator, .crumb-title),
+        .boards-page > .shell-header > :not(.brand, .crumb-separator, .section-menu, .crumb-title),
         .workbench .brand span,
         .workbench .navigator-column,
         .workbench .inspector-column,
@@ -231,8 +332,14 @@ body:has(.tour-states) {
     html[data-wb-tour="head-start"] .workbench {
         grid-template-areas: "top" "nav";
 
+        // In the grid rather than over it, as the step shows the list itself.
         .navigator-column {
+            width: auto;
             display: block;
+            position: static;
+            transform: none;
+            box-shadow: none;
+            visibility: visible;
         }
     }
 
@@ -275,7 +382,7 @@ body:has(.tour-states) {
         --wb-tour-card-room: min(18rem, 46dvh);
 
         .workbench,
-        .flows-page {
+        .boards-page {
             height: calc(100dvh - var(--wb-tour-card-room));
         }
 
@@ -293,7 +400,7 @@ body:has(.tour-states) {
         --wb-tour-card-room: 20rem;
 
         .workbench,
-        .flows-page {
+        .boards-page {
             width: calc(100% - var(--wb-tour-card-room));
         }
 
@@ -304,4 +411,41 @@ body:has(.tour-states) {
             max-height: calc(100dvh - 1.5rem);
         }
     }
+}
+
+// ---- The header's section switcher (SectionMenu): a button as solid as the app's controls, and a menu whose sections each
+// say what they are for.
+.section-switcher {
+    --bit-MenuButton-min-height: 2.25rem;
+    font-weight: 600;
+    border-radius: 999px;
+}
+
+.section-switcher-callout {
+    min-width: 17rem;
+    padding: 0.375rem;
+    border-radius: 14px;
+}
+
+.section-switcher-item {
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+}
+
+.section-switcher-hint {
+    font-size: 12px;
+    color: var(--bit-clr-fg-sec);
+}
+
+.section-switcher-count {
+    font-size: 11px;
+    min-width: 1.25rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    text-align: center;
+    border-radius: 999px;
+    color: var(--bit-clr-wrn-text);
+    background-color: var(--bit-clr-wrn);
 }

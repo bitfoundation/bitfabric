@@ -4,15 +4,21 @@
 
 <PageTitle>@(SelectedTask is { } titled && TaskId is not null ? $"{titled.Title} · {Localizer[nameof(WorkbenchStrings.Progress)]}" : $"{Localizer[nameof(WorkbenchStrings.Progress)]} · {Localizer[nameof(WorkbenchStrings.WorkbenchTitle)]}")</PageTitle>
 
-<div class="progress-page @(TaskId is null ? "showing-list" : "showing-task")" data-guide="@guideState">
-    <ShellHeader Section="WorkbenchSection.Progress">
-        <Actions>
-            <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Help"
-                       Title="@Localizer[nameof(WorkbenchStrings.TourStart)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TourStart)]"
-                       OnClick="StartGuide" />
-        </Actions>
-    </ShellHeader>
-
+<WorkbenchFrame Section="WorkbenchSection.Progress" Title="@(TaskId is null ? null : SelectedTask?.Title)" Class="progress-page" MainClass="progress-main">
+    <SidePanel>
+        <SectionSidebar AriaLabel="@Localizer[nameof(WorkbenchStrings.ProgressTasks)]"
+                        SearchPlaceholder="@Localizer[nameof(WorkbenchStrings.SearchTasks)]"
+                        Overview="Overview"
+                        Groups="SideGroups"
+                        CurrentKey="@(TaskId is null ? null : SelectedTask?.Id)" />
+    </SidePanel>
+    <Actions>
+        <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Help"
+                   Title="@Localizer[nameof(WorkbenchStrings.TourStart)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TourStart)]"
+                   OnClick="StartGuide" />
+    </Actions>
+    <ChildContent>
+    <div class="progress-content" data-guide="@guideState">
     @* Who may see the real tasks waits for them, so the samples never flash by first. *@
     @if (reviewSession.CanSeeTasks && reviewSession.IsOpen is false && isOpenFailed is false)
     {
@@ -26,22 +32,17 @@
             <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Refresh" OnClick="Reload">@Localizer[nameof(WorkbenchStrings.ReloadPage)]</BitButton>
         </div>
     }
-    else
+    else if (TaskId is null)
     {
-        <div class="layout">
-            <aside class="task-list" aria-label="@Localizer[nameof(WorkbenchStrings.ProgressTasks)]" data-bonboarding-anchor="progress-list">
-                <div class="list-head">
-                    <h1 class="list-title">@Localizer[nameof(WorkbenchStrings.ProgressTitle)]</h1>
-                    <p class="list-lead">@Localizer[nameof(WorkbenchStrings.ProgressLead)]</p>
-                    @* Which worktree's code the views show, as several chats may work in several of them; on this machine only. *@
-                    @if (reviewSession.CanWrite && RunningFrom is { } runningFrom)
-                    {
-                        <p class="running-from" title="@WorkbenchFolders.WorkingTree"><BitIcon IconName="@BitIconName.BranchFork" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.ProgressRunningFrom), runningFrom]</p>
-                    }
-                </div>
-
-                @if (reviewSession.ShowsSampleTasks)
-                {
+        @* The section's overview: what it is, which worktree's code the views show, then every task by state. *@
+        <div class="overview" data-bonboarding-anchor="progress-list">
+        <BoardFrame Title="@Localizer[nameof(WorkbenchStrings.ProgressTitle)]"
+                    Lead="@Localizer[nameof(WorkbenchStrings.ProgressLead)]"
+                    IconName="@WorkbenchSections.IconOf(WorkbenchSection.Progress)"
+                    Note="@(reviewSession.CanWrite && RunningFrom is { } runningFrom ? Localizer[nameof(WorkbenchStrings.ProgressRunningFrom), runningFrom].Value : null)">
+            @if (reviewSession.ShowsSampleTasks)
+            {
+                <BoardBlock Id="samples">
                     <div class="samples-note" role="note">
                         <BitIcon IconName="@BitIconName.Lightbulb" Color="BitColor.Primary" />
                         <div>
@@ -49,25 +50,25 @@
                             <span>@Localizer[reviewSession.CanSeeTasks ? nameof(WorkbenchStrings.ProgressSamplesText) : nameof(WorkbenchStrings.ProgressSamplesVisitorText)]</span>
                         </div>
                     </div>
-                }
-
-                @foreach (var (titleKey, tasks) in Groups)
-                {
-                    <section class="group" aria-label="@Localizer[titleKey]">
-                        <h2 class="group-title">@Localizer[titleKey] <span class="group-count">@tasks.Count.ToString(CultureInfo.CurrentCulture)</span></h2>
-                        <ul class="cards">
-                            @foreach (var listed in tasks)
-                            {
-                                <li @key="listed.Id"><ProgressTaskCard ProgressTask="listed" Selected="listed.Id == SelectedTask?.Id" /></li>
-                            }
-                        </ul>
-                    </section>
-                }
-            </aside>
-
+                </BoardBlock>
+            }
+            @foreach (var (titleKey, tasks) in Groups)
+            {
+                <BoardBlock Id="@titleKey.ToLowerInvariant()" Title="@Localizer[titleKey]">
+                    <ul class="cards">
+                        @foreach (var listed in tasks)
+                        {
+                            <li @key="listed.Id"><ProgressTaskCard ProgressTask="listed" /></li>
+                        }
+                    </ul>
+                </BoardBlock>
+            }
+        </BoardFrame>
+        </div>
+    }
+    else
+    {
             <main class="task-detail">
-                <a class="back" href="@WorkbenchUrls.Progress"><BitIcon IconName="@BackIcon" Size="BitSize.Small" /> @Localizer[nameof(WorkbenchStrings.ProgressAllTasks)]</a>
-
                 @if (SelectedTask is { } task)
                 {
                     var canAnswer = reviewSession.CanAnswer(task);
@@ -78,6 +79,10 @@
                         <header class="task-head" data-bonboarding-anchor="progress-head">
                             <div class="title-row">
                                 <h2 class="task-title as-written" dir="@Dir(task.Title, textDir)">@task.Title</h2>
+                                @if (task.IsSample)
+                                {
+                                    <BitTag Text="@Localizer[nameof(WorkbenchStrings.ProgressSample)]" Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.Lightbulb" />
+                                }
                                 <ProgressStatusTag ProgressTask="task" Size="BitSize.Medium" />
                             </div>
                             @if (string.IsNullOrWhiteSpace(task.Summary) is false)
@@ -96,10 +101,6 @@
                                 </span>
                                 <span class="meta-item">@Localizer[nameof(WorkbenchStrings.ProgressStarted), WorkbenchTimes.Ago(task.CreatedAt, Localizer)]</span>
                                 <span class="meta-item">@Localizer[nameof(WorkbenchStrings.ProgressUpdated), WorkbenchTimes.Ago(task.UpdatedAt, Localizer)]</span>
-                                @if (task.IsSample)
-                                {
-                                    <BitTag Text="@Localizer[nameof(WorkbenchStrings.ProgressSample)]" Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.Lightbulb" />
-                                }
                             </div>
                             <div class="overall">
                                 <BitProgress Percent="task.Percent" Thickness="8" Rounded
@@ -329,13 +330,14 @@
                 else
                 {
                     <div class="gone">
-                        <BitIcon IconName="@BitIconName.TaskList" />
-                        <BitText Typography="BitTypography.Body1">@Localizer[TaskId is null ? nameof(WorkbenchStrings.ProgressPickTask) : nameof(WorkbenchStrings.ProgressTaskGone)]</BitText>
+                        <BitIcon IconName="@BitIconName.TimelineProgress" />
+                        <BitText Typography="BitTypography.Body1">@Localizer[nameof(WorkbenchStrings.ProgressTaskGone)]</BitText>
                     </div>
                 }
             </main>
-        </div>
     }
+    </div>
+    </ChildContent>
+</WorkbenchFrame>
 
-    <ChromeSnackBar />
-</div>
+<ChromeSnackBar />

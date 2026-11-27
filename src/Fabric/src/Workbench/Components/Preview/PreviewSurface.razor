@@ -1,3 +1,5 @@
+@* [mirror] what the app's layout puts around a page - keep in sync with: *@
+@* - src/Client/Bit.Fabric.Client.Core/Components/Layout/MainLayout.razor *@
 @inherits WorkbenchComponentBase
 
 @if (ShowStatusBar && Scenario.DevicePreset.IsHandheld && Scenario.DevicePreset.GetSafeArea(Scenario.Rotated).Top > 0)
@@ -16,6 +18,9 @@ else if (Scenario.Chrome)
     <ChromeShell Page="Page">
         <PreviewPageView Page="Page" />
     </ChromeShell>
+
+    @* The AI chat's floating button, as the app shows it over every page; it opens on the app's own chat. *@
+    <Bit.Fabric.Client.Core.Components.Layout.AppAiChatPanel />
 }
 else
 {

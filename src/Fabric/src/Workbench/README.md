@@ -17,7 +17,7 @@ app's own Settings page, and fills up with this project's own pages as they are 
 - Edits to `.cs`, `.razor`, `.scss` and `.ts` files show up while it runs. A `.resx` edit needs a restart.
 
 Running under `dotnet watch` is the Workbench's dev mode, which is how its agent skill starts it. Only in dev mode do
-Inspect and Edit text write into the code, the review take page statuses and flows, and the agent connect. Any other copy,
+Inspect and Edit text write into the code, the review take page statuses, and the agent connect. Any other copy,
 like a published demo or the plain `dotnet run` bit CLI starts, has no hot reload to show a change and no agent to answer a
 comment, so those stay read-only there, and a small notice on every page says no agent is connected. The rest works:
 comments, the pages and their states, what a visitor changes on a page, which stays in their browser, screenshots and
@@ -36,13 +36,14 @@ Chromium when it is installed, otherwise Microsoft Edge or Google Chrome. To ins
   to it, and remove a note or a line of its activity you don't need; it gets each one at once. A task written in Persian
   or Arabic reads right to left, English terms and all. A new question plays a sound, unless the Workbench is muted, and
   the tab's title counts what waits for you. Anyone who isn't at this computer sees no task there.
-- **Boards**: a section of their own, next to Pages, Flows and Progress, where your agent shows you something instead of
+- **Boards**: a section of their own, next to Pages and Progress, where your agent shows you something instead of
   a long answer in the chat, such as how a part of bit Fabric works or options compared side by side, visual first and in
-  few words, with the app's own components and theme, in light and dark and on every device. Ask your agent to show you
+  few words, such as a process told on the app's own pages with arrows between them, with the app's own
+  components and theme, in light and dark and on every device. Ask your agent to show you
   something, and its board shows up under Boards, at an address you can come back to. Its `boards` skill builds them.
 - **Dictation**: the microphone next to a comment, a reply, an answer or a message turns speech into text, with the
   browser's own speech recognition, in the language its menu picks.
-- **`/workbench/<page>`**: one page with its tools. Pick the device, its orientation and frame, the data state
+- **`/pages/<page>`**: one page with its tools. Pick the device, its orientation and frame, the data state
   (live, loading, empty, error, mixed or slow), the signed-in state, the app's navigation, a colored background with a
   caption for store screenshots, the theme and the language. Compare devices, themes, languages, data states or accounts
   side by side, download screenshots, and copy a link that opens the same views.
@@ -60,10 +61,6 @@ Chromium when it is installed, otherwise Microsoft Edge or Google Chrome. To ins
 - **Checks**: an accessibility check of the selected view (axe-core) and a search for colors that don't come from the
   theme, on the page and on each tab, panel and menu it opens. Send a finding to your agent as a comment pinned on its
   element, or all of them as one prompt with **Export all**.
-- **Flows**: the screens of a task side by side on a board at `/flows`, each a page in the state that matters, like a
-  list and the dialog its button opens, with arrows for how you get from one to the next. Present one screen by screen
-  in a meeting. Your agent draws them, or you add the selected view to a flow from the Flows tab. Two read-only samples
-  come with it, from `WorkbenchSampleFlows`.
 - **Review sheet**: every view, its settings and the comments in one HTML or PDF file to send around.
 - **`/preview/<page>`**: the page alone, with its settings in the query string. This is what each view shows.
 
@@ -91,7 +88,7 @@ first when it plans one. It can also bring one of the app's existing pages in, f
 
 ## Review with your agent
 
-The comments, page statuses, flows and the agents' tasks live in a bit Bcrdt document the Workbench keeps in your own
+The comments, page statuses and the agents' tasks live in a bit Bcrdt document the Workbench keeps in your own
 folder, outside the repository: `bit-workbench` in your local application data, under a folder named after the project
 and shared by every worktree of the same clone. So the review outlives rebuilds, restarts and a move to another worktree
 or branch, and stays on your machine; the review sheet is the way to send it around. A copy outside git, like a published

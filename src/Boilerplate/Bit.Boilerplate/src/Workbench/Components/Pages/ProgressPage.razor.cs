@@ -49,17 +49,45 @@ public partial class ProgressPage
         }
     }
 
-    /// <summary>The task the address names, or on a wide screen without one, the first of the list.</summary>
+    /// <summary>The task the address names; with none, the overview shows, and the guide uses the first of the list.</summary>
     private WorkbenchProgressTask? SelectedTask => TaskId is null
         ? Groups.SelectMany(group => group.Tasks).FirstOrDefault()
         : reviewSession.ShownTasks.FirstOrDefault(t => t.Id == TaskId);
+
+    private SectionListItem Overview => new(string.Empty, Localizer[nameof(WorkbenchStrings.ProgressAllTasks)], null, WorkbenchSections.IconOf(WorkbenchSection.Progress), WorkbenchUrls.Progress);
+
+    /// <summary>The tasks by state, each with what it waits for and how far it is, found by its summary, agent and steps too.</summary>
+    private List<SectionListGroup> SideGroups => [.. Groups.Select(group => new SectionListGroup(
+        Localizer[group.TitleKey],
+        [.. group.Tasks.Select(task => new SectionListItem(task.Id,
+                                                         task.Title,
+                                                         Localizer[nameof(WorkbenchStrings.ProgressStepsDone), task.CompletedCount, task.Steps.Length],
+                                                         StatusIconOf(task),
+                                                         WorkbenchUrls.ProgressTask(task.Id),
+                                                         StatusToneOf(task),
+                                                         SearchText: $"{task.Summary} {task.Agent} {string.Join(" ", task.Steps.Select(step => step.Text))}",
+                                                         Badge: task.NeedsYouCount > 0 ? task.NeedsYouCount.ToString(CultureInfo.CurrentCulture) : null))]))];
+
+    private static string StatusIconOf(WorkbenchProgressTask task) => task.NeedsYouCount > 0 ? BitIconName.Ringer : task.Status switch
+    {
+        WorkbenchProgressStatus.Done => BitIconName.CheckMark,
+        WorkbenchProgressStatus.Failed => BitIconName.ErrorBadge,
+        WorkbenchProgressStatus.Stopped => BitIconName.CircleStop,
+        _ => BitIconName.Sync
+    };
+
+    private static string StatusToneOf(WorkbenchProgressTask task) => task.NeedsYouCount > 0 ? "warning" : task.Status switch
+    {
+        WorkbenchProgressStatus.Done => "success",
+        WorkbenchProgressStatus.Failed => "error",
+        WorkbenchProgressStatus.Stopped => "tertiary",
+        _ => "primary"
+    };
 
     /// <summary>The folder of the worktree this Workbench runs from, with its branch.</summary>
     private static string? RunningFrom => WorkbenchFolders.WorkingTree is { } tree
         ? WorkbenchFolders.Branch is { } branch ? $"{Path.GetFileName(tree)} ({branch})" : Path.GetFileName(tree)
         : null;
-
-    private string BackIcon => CurrentDir is BitDir.Rtl ? BitIconName.Forward : BitIconName.Back;
 
     /// <summary>The name the user's answers and messages carry: the one they gave on a comment, or "You".</summary>
     private string Author => store.ReviewerName ?? Localizer[nameof(WorkbenchStrings.ProgressYou)];
@@ -103,7 +131,7 @@ public partial class ProgressPage
         if (CurrentCancellationToken.IsCancellationRequested)
             return;
 
-        // The browser's Back on the Workbench tour's Flows step lands here: back a step, as the tour would otherwise wait out of
+        // The browser's Back on the Workbench tour's Boards step lands here: back a step, as the tour would otherwise wait out of
         // sight for that page. This page's own guide starts only from its help button: most visits come from an agent's task
         // that waits for the user, and Bonboarding remembers a guide it showed in the browser's storage, which a Workbench on
         // another port doesn't share, so a guide that started by itself would be back on each of them.
@@ -157,6 +185,8 @@ public partial class ProgressPage
                 new BonboardingStepDefinition
                 {
                     Id = "list",
+                    // The overview holds the list of tasks, on a phone too, where the side panel stays folded.
+                    Route = WorkbenchUrls.Progress,
                     Target = BonboardingStepTarget.Anchor("progress-list"),
                     Title = nameof(WorkbenchStrings.ProgressGuideListTitle),
                     Description = nameof(WorkbenchStrings.ProgressGuideListText),

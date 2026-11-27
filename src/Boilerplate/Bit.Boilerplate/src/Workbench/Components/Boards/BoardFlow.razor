@@ -1,0 +1,88 @@
+@using Bit.Blow
+@inherits WorkbenchComponentBase
+
+<BitMediaQuery ScreenQuery="BitScreenQuery.LtMd" OnChange="OnNarrowChanged" />
+
+@* The bar follows the board's direction; the canvas is laid out left to right, mirrored for a board that reads right to left. *@
+<div class="board-flow @(IsPresenting ? "presenting" : null)" style="@HeightStyle">
+    <div class="flow-bar" role="toolbar" aria-label="@AriaLabel">
+        @if (IsPresenting)
+        {
+            var current = shown[presentIndex];
+            <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@(IsRtl ? BitIconName.ChevronRight : BitIconName.ChevronLeft)" Disabled="presentIndex <= 0"
+                       Title="@Localizer[nameof(WorkbenchStrings.PreviousScreen)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.PreviousScreen)]"
+                       OnClick="() => Present(presentIndex - 1)" />
+            <span class="flow-step" role="status">
+                <b>@Localizer[nameof(WorkbenchStrings.ScreenOf), presentIndex + 1, shown.Length]</b>
+                <span class="flow-step-note" dir="auto">@(current.Note ?? TitleOf(current))</span>
+            </span>
+            <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@(IsRtl ? BitIconName.ChevronLeft : BitIconName.ChevronRight)" Disabled="presentIndex >= shown.Length - 1"
+                       Title="@Localizer[nameof(WorkbenchStrings.NextScreen)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.NextScreen)]"
+                       OnClick="() => Present(presentIndex + 1)" />
+            <BitSpacer />
+            <BitButton Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Cancel" OnClick="StopPresenting">
+                @Localizer[nameof(WorkbenchStrings.StopPresenting)]
+            </BitButton>
+        }
+        else
+        {
+            <span class="flow-path" dir="auto">@PathText</span>
+            <BitSpacer />
+            <BitButton Variant="BitVariant.Outline" Size="BitSize.Small" IconName="@BitIconName.Presentation" OnClick="() => Present(0)">
+                @Localizer[nameof(WorkbenchStrings.Present)]
+            </BitButton>
+        }
+    </div>
+
+    <div class="flow-canvas" dir="ltr">
+        <BlowCanvas @ref="canvas"
+                    Class="flow-board"
+                    Nodes="nodes"
+                    Edges="edges"
+                    FitViewOnInit
+                    FitViewOptions="fitOptions"
+                    MinZoom="0.05"
+                    MaxZoom="1.5"
+                    NodesDraggable="false"
+                    NodesConnectable="false"
+                    ElementsSelectable="false"
+                    EdgesReconnectable="false"
+                    ZoomOnScroll="false"
+                    ZoomOnDoubleClick="false"
+                    PanOnDrag="isNarrow is false"
+                    OnNodeDoubleClick="PresentScreen"
+                    AriaLabel="@AriaLabel">
+            <NodeTemplate Context="node">
+                @* A screen: its page live in its device, numbered in the order the flow lists them. *@
+                @if (node.Data is BoardFlowScreen screen)
+                {
+                    <BlowHandle Type="BlowHandleType.Target" Id="in" Position="@(IsRtl ? BlowPosition.Right : BlowPosition.Left)" IsConnectable="false" />
+                    <div class="screen-card @(CurrentScreenId == screen.Id ? "current" : null)">
+                        <div class="screen-head" dir="@(IsRtl ? "rtl" : "ltr")">
+                            <span class="screen-number">@numbers.GetValueOrDefault(screen.Id)</span>
+                            <span class="screen-title">@TitleOf(screen)</span>
+                            <a class="screen-open nodrag" href="@OpenUrlOf(screen)"
+                               title="@Localizer[nameof(WorkbenchStrings.OpenInWorkbench)]" aria-label="@Localizer[nameof(WorkbenchStrings.OpenInWorkbench)]">
+                                <BitIcon IconName="@BitIconName.OpenInNewWindow" />
+                            </a>
+                        </div>
+                        <DeviceFrame Device="ScenarioOf(screen).DevicePreset" Rotated="ScenarioOf(screen).Rotated">
+                            <iframe class="nodrag nowheel" src="@SourceOf(screen)" title="@TitleOf(screen)" loading="lazy" data-screen-id="@screen.Id"></iframe>
+                        </DeviceFrame>
+                        @if (string.IsNullOrWhiteSpace(screen.Note) is false)
+                        {
+                            <p class="screen-note" dir="auto">@screen.Note</p>
+                        }
+                    </div>
+                    <BlowHandle Type="BlowHandleType.Source" Id="out" Position="@(IsRtl ? BlowPosition.Left : BlowPosition.Right)" IsConnectable="false" />
+                }
+            </NodeTemplate>
+            <ChildContent>
+                <BlowBackground />
+                <BlowControls Position="@(IsRtl ? BlowPanelPosition.BottomRight : BlowPanelPosition.BottomLeft)" FitViewOptions="fitOptions"
+                              ZoomInLabel="@Localizer[nameof(WorkbenchStrings.ZoomIn)]" ZoomOutLabel="@Localizer[nameof(WorkbenchStrings.ZoomOut)]"
+                              FitViewLabel="@Localizer[nameof(WorkbenchStrings.ShowAllScreens)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.Zoom)]" />
+            </ChildContent>
+        </BlowCanvas>
+    </div>
+</div>

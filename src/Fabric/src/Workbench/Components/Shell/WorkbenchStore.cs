@@ -23,7 +23,10 @@ public partial class WorkbenchStore
     [BlexState] private bool _replyNotifications;
     [BlexState] private bool _wasAskedToNotify;
     [BlexState] private bool _isReplySoundMuted;
+    // The side panel every section has, folded away on a desktop; it is open over the page on a smaller screen only while
+    // the user looks at it, so a reload starts with it closed there.
     [BlexState] private bool _isNavigatorCollapsed;
+    [BlexState(Persist = false)] private bool _isSidePanelOpen;
     [BlexState] private bool _isInspectorCollapsed;
     [BlexState] private bool _isComponentNoteDismissed;
     // The language dictation listens for; null follows the Workbench's own.
@@ -116,6 +119,10 @@ public partial class WorkbenchStore
     }
 
     [BlexAction] private void OnToggleNavigator() => IsNavigatorCollapsed = IsNavigatorCollapsed is false;
+
+    [BlexAction] private void OnToggleSidePanel() => IsSidePanelOpen = IsSidePanelOpen is false;
+
+    [BlexAction] private void OnCloseSidePanel() => IsSidePanelOpen = false;
 
     [BlexAction] private void OnToggleInspector() => IsInspectorCollapsed = IsInspectorCollapsed is false;
 

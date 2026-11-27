@@ -1662,18 +1662,6 @@
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} comentarios abiertos</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>Flujos</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>Un flujo muestra las pantallas de una tarea una al lado de otra, cada una en el estado que importa, como una lista y el diálogo que abre su botón, con flechas que indican cómo pasar de una a la siguiente. Abre uno para entender la app o para repasarla en una reunión.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>Nombre del nuevo flujo</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>Eliminar flujo</value>
-    </data>
     <data name="ReviewSheet" xml:space="preserve">
         <value>Hoja de revisión</value>
     </data>
@@ -1809,12 +1797,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>Aún no hay comentarios.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>Aún no hay flujos.</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>Ejemplo</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>Revisa en vivo con tu agente de IA</value>
     </data>
@@ -1833,71 +1815,8 @@
     <data name="TapToComment" xml:space="preserve">
         <value>Toca el punto que quieres comentar</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>Pide a tu agente que dibuje uno, como «muestra cómo se añade un edificio», o añade vistas a un flujo desde la pestaña Flujos de una página.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>No hay ningún flujo en este enlace. Puede que se haya eliminado.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>Este flujo aún no tiene pantallas. Añádele vistas desde la pestaña Flujos de una página o pídeselo a tu agente.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>Pantallas: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>Todos los flujos</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>Las pantallas de una tarea una junto a otra, unidas por flechas</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>Añadir esta vista a un flujo</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>El flujo recibe la vista tal como está ahora: su dispositivo, sus ajustes y lo que esté abierto en la página.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>Flujo</value>
-    </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>Nuevo flujo</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>Qué muestra esta pantalla (opcional)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>Cómo se llega aquí desde la última pantalla (opcional)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>Qué hace el usuario</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>Tocar «Añadir edificio»</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>Marca el botón de la pantalla {0} que lleva hasta aquí y la flecha saldrá de él.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>Sale del botón marcado en la pantalla {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>Marcar el botón</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>Marcar de nuevo</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>Quitar la marca</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>Toca el botón de la pantalla {0} que lleva a la pantalla {1}.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>Añadir esta vista</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>Abrir el flujo</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Abrir en el banco de trabajo</value>
@@ -1919,18 +1838,6 @@
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} de {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>Arrastra una pantalla para moverla y haz doble clic en ella para probarla. Arrastra desde el punto del borde derecho de una pantalla hasta otra para dibujar una flecha; luego ponle nombre y marca el botón del que sale. Haz doble clic en una flecha para cambiarla o eliminarla.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>¿Eliminar este flujo?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>Quitar esta pantalla</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>Eliminar flecha</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>Avisarme cuando el agente responda</value>
@@ -2160,9 +2067,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>No se pudieron guardar las traducciones.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>No se pudo añadir la pantalla al flujo.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>Portátil {0}</value>
     </data>
@@ -2183,9 +2087,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>Restablecer esta vista</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>Esta pantalla aún no ha cargado. Espera un momento y vuelve a marcar el botón.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>Mantén los marcadores entre llaves tal como están en el texto original; de lo contrario, la página no podrá mostrar este texto.</value>
@@ -2309,12 +2210,6 @@
     </data>
     <data name="NewProjectCaption" xml:space="preserve">
         <value>Tu producto, a una línea de distancia</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>Un ejemplo: haz doble clic en una pantalla para probarla, o en una flecha para cambiarla, lo que crea tu propia copia de este flujo.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>Esto es un ejemplo y se queda como está: un cambio aquí crea tu propia copia de este flujo con el cambio y la abre.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>¿Cómo les fue a las tiendas esta semana?</value>
@@ -3837,15 +3732,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>El nuevo nombre aparece en los recibos a partir de mañana.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (copia)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>Cambiar una flecha</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>Haz doble clic en una flecha para cambiarle el nombre, marcar el botón del que sale o eliminarla. Un ejemplo se queda como está: un cambio en una de sus flechas crea tu propia copia del flujo.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>Escala</value>
     </data>
@@ -4310,9 +4196,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>Quitar de la actividad</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>Elige una tarea para ver cómo va.</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>Esta tarea ya no existe. Puede que su agente la terminara y la quitara.</value>

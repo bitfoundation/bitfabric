@@ -253,13 +253,6 @@ public static class IWorkbenchEndpointRouteBuilderExtensions
                 return await agent.SetPageStatus(AgentName(request.Agent), pageKey, status, cancellationToken) ? Results.NoContent() : Results.NotFound();
             });
 
-            review.MapPost("flows", async (WorkbenchFlowRequest request, WorkbenchReviewAgent agent, CancellationToken cancellationToken) =>
-            {
-                var (id, problem) = await agent.SaveFlow(AgentName(request.Agent), request, cancellationToken);
-
-                return id is null ? Results.BadRequest(problem) : Results.Ok(new { Id = id, Board = WorkbenchUrls.Flow(id) });
-            });
-
             review.MapGet("{id}/screenshot", async (string id, WorkbenchReviewAgent agent, CancellationToken cancellationToken) =>
             {
                 return await agent.Screenshot(id, cancellationToken) is { } shot ? Results.File(shot.Png, "image/png", shot.FileName) : Results.NotFound();

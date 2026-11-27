@@ -3,21 +3,13 @@ namespace Bit.Fabric.Workbench.Infrastructure.Services;
 /// <summary>Shapes the review into the JSON the agent reads.</summary>
 public static class WorkbenchReviewJson
 {
-    public static object Describe(IEnumerable<WorkbenchReviewThread> threads, Dictionary<string, WorkbenchPageReview>? pages, long cursor, IEnumerable<WorkbenchFlow>? flows = null)
+    public static object Describe(IEnumerable<WorkbenchReviewThread> threads, Dictionary<string, WorkbenchPageReview>? pages, long cursor)
     {
         return new
         {
             Cursor = cursor,
             Comments = threads.Select(Describe).ToArray(),
-            Pages = pages?.Values.Select(page => new { Page = page.PageKey, Status = page.Status.ToString().ToLowerInvariant(), page.By, page.At }).ToArray(),
-            Flows = flows?.Select(flow => new
-            {
-                flow.Id,
-                flow.Name,
-                Board = WorkbenchUrls.Flow(flow.Id),
-                Screens = flow.Screens.Select(screen => new { screen.Id, Page = screen.PageKey, screen.Query, screen.Note, State = screen.HasState }).ToArray(),
-                Links = flow.Links.Select(link => new { link.From, link.To, link.Label }).ToArray()
-            }).ToArray()
+            Pages = pages?.Values.Select(page => new { Page = page.PageKey, Status = page.Status.ToString().ToLowerInvariant(), page.By, page.At }).ToArray()
         };
     }
 
@@ -50,7 +42,7 @@ public static class WorkbenchReviewJson
             },
             Links = new
             {
-                Workbench = $"{WorkbenchUrls.Workbench(thread.PageKey)}{thread.Query}",
+                Workbench = $"{WorkbenchUrls.Page(thread.PageKey)}{thread.Query}",
                 Screenshot = $"/api/review/{thread.Id}/screenshot"
             },
             Messages = thread.Messages.Select(message => new { From = message.FromAgent ? "agent" : "reviewer", message.Author, message.Text, message.At }).ToArray(),

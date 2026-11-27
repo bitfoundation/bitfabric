@@ -1662,18 +1662,6 @@
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} 条待处理评论</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>流程</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>流程把一项任务的各个屏幕并排展示，每个屏幕都处于关键状态，比如一个列表和它的按钮打开的对话框，并用箭头标出如何从一个屏幕到下一个。打开一个流程，即可理解应用，或在会议上讲解它。</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>新流程的名称</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>删除流程</value>
-    </data>
     <data name="ReviewSheet" xml:space="preserve">
         <value>评审单</value>
     </data>
@@ -1809,12 +1797,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>还没有评论。</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>还没有流程。</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>示例</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>与您的 AI 智能体实时评审</value>
     </data>
@@ -1833,71 +1815,8 @@
     <data name="TapToComment" xml:space="preserve">
         <value>点按要评论的位置</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>请让您的智能体画一个，比如“展示如何添加一栋建筑”，或在页面的“流程”选项卡中把视图添加到流程。</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>此链接下没有流程，它可能已被删除。</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>此流程还没有屏幕。请在页面的“流程”选项卡中添加视图，或让您的智能体来做。</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>屏幕：{0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>全部流程</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>一项任务的各个屏幕并排展示，用箭头相连</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>将此视图添加到流程</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>流程会按视图当前的样子保存它：设备、设置以及页面上打开的一切。</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>流程</value>
-    </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>新流程</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>此屏幕展示的内容（可选）</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>如何从上一个屏幕来到这里（可选）</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>用户执行的操作</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>点按“添加建筑”</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>标记第 {0} 个屏幕上通往这里的按钮，箭头就会从它开始。</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>从第 {0} 个屏幕上标记的按钮开始。</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>标记按钮</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>重新标记</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>移除标记</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>点按第 {0} 个屏幕上通往第 {1} 个屏幕的按钮。</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>添加此视图</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>打开流程</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>在工作台中打开</value>
@@ -1919,18 +1838,6 @@
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>第 {0} 个，共 {1} 个</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>拖动屏幕即可移动它，双击屏幕即可试用。从屏幕右边缘的圆点拖到另一个屏幕即可画出箭头，然后为它命名并标记它开始的按钮。双击箭头可修改或删除它。</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>删除此流程？</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>移除此屏幕</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>删除箭头</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>智能体回复时通知我</value>
@@ -2160,9 +2067,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>无法保存翻译。</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>无法将此屏幕添加到流程。</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>笔记本电脑 {0}</value>
     </data>
@@ -2183,9 +2087,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>重置此视图</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>此屏幕尚未加载完成。请稍等片刻，然后重新标记按钮。</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>请保留原文中花括号内的占位符，否则页面无法显示这段文字。</value>
@@ -2309,12 +2210,6 @@
     </data>
     <data name="NewProjectCaption" xml:space="preserve">
         <value>你的产品，距离完成只差一行命令</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>这是示例：双击屏幕即可试用，双击箭头即可修改，修改时会生成一份您自己的流程副本。</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>这是示例，会保持原样：在这里修改会生成一份带有此修改的流程副本，归您所有，并将其打开。</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>本周各门店表现如何？</value>
@@ -3837,15 +3732,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>新名称将从明天起显示在收据上。</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0}（副本）</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>修改箭头</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>双击箭头即可重命名、标记它开始的按钮或删除它。示例会保持原样：修改示例中的箭头会生成一份您自己的流程副本。</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>等级</value>
     </data>
@@ -4310,9 +4196,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>从动态中移除</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>选择一个任务查看进展。</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>此任务已不存在。它的智能体可能已完成并将其移除。</value>

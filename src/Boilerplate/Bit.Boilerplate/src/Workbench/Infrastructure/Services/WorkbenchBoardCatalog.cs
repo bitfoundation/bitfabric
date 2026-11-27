@@ -28,7 +28,8 @@ public enum WorkbenchBoardKind
 
 /// <summary>
 /// The boards the Workbench shows. A new board is added here, in <see cref="Build"/>, and shows up while the Workbench runs,
-/// as hot reload has the list built again (<see cref="ClearCache"/>).
+/// as hot reload has the list built again (<see cref="ClearCache"/>). /boards opens the section's own overview, itself a
+/// board (BoardsOverview), which lists them.
 /// </summary>
 public static class WorkbenchBoardCatalog
 {
@@ -53,13 +54,18 @@ public static class WorkbenchBoardCatalog
     public static WorkbenchBoard? Find(string? id) => Boards.FirstOrDefault(board => string.Equals(board.Id, id, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>Called by hot reload after it applies an edit (<see cref="System.Reflection.Metadata.MetadataUpdateHandlerAttribute"/>).</summary>
-    public static void ClearCache(Type[]? updatedTypes) => boards = null;
+    public static void ClearCache(Type[]? updatedTypes)
+    {
+        boards = null;
+        WorkbenchBoardText.Clear();
+    }
 
-    // Two examples come with the project, to show what a board can be; the agents' own boards go next to them. Boards of
+    // Three examples come with the project, to show what a board can be; the agents' own boards go next to them. Boards of
     // the same day keep the order they are listed in.
     private static IEnumerable<WorkbenchBoard> Build() =>
     [
         new("payments", nameof(WorkbenchStrings.PaymentsBoardTitle), nameof(WorkbenchStrings.PaymentsBoardSummary), BitIconName.PaymentCard, typeof(PaymentsBoard), new(2026, 11, 25), "success", WorkbenchBoardKind.Comparison),
-        new("deploy", nameof(WorkbenchStrings.DeployBoardTitle), nameof(WorkbenchStrings.DeployBoardSummary), BitIconName.Rocket, typeof(DeployBoard), new(2026, 11, 25), "primary", WorkbenchBoardKind.HowItWorks)
+        new("deploy", nameof(WorkbenchStrings.DeployBoardTitle), nameof(WorkbenchStrings.DeployBoardSummary), BitIconName.Rocket, typeof(DeployBoard), new(2026, 11, 25), "primary", WorkbenchBoardKind.HowItWorks),
+        new("add-building", nameof(WorkbenchStrings.SampleFlowBuildings), nameof(WorkbenchStrings.AddBuildingBoardSummary), BitIconName.Flow, typeof(AddBuildingBoard), new(2026, 11, 25), "info", WorkbenchBoardKind.HowItWorks)
     ];
 }

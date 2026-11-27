@@ -267,6 +267,27 @@
     <data name="SearchPages" xml:space="preserve">
         <value>पेज खोजें</value>
     </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>Workbench क्या है और क्या करता है</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>सैंपल डेटा पर आपकी ऐप के पेज</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>आपके एजेंट आपको क्या दिखाते हैं</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>आपके एजेंटों के लंबे काम और सवाल</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>बोर्ड खोजें</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>काम खोजें</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>आपकी खोज से कुछ मेल नहीं खाता।</value>
+    </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>यह पेज वर्कबेंच में नहीं है।</value>
     </data>
@@ -816,17 +837,8 @@
     <data name="ProvinceLimburg" xml:space="preserve">
         <value>लिम्बर्ग</value>
     </data>
-    <data name="HomePageTitle" xml:space="preserve">
-        <value>वर्कबेंच · जहाँ आप और आपका AI एजेंट ऐप बनाते हैं</value>
-    </data>
     <data name="HomeEyebrow" xml:space="preserve">
         <value>आपके प्रोजेक्ट का हिस्सा</value>
-    </data>
-    <data name="HomeHeadline" xml:space="preserve">
-        <value>जहाँ आप और आपका AI एजेंट ऐप बनाते हैं।</value>
-    </data>
-    <data name="HomeLead" xml:space="preserve">
-        <value>हर पेज को सैंपल डेटा पर, हर स्थिति और हर डिवाइस पर डिज़ाइन करें, उसे ऐसी टिप्पणियों से रिव्यू करें जिनका जवाब आपका एजेंट आपके लिखते-लिखते देता है, और डिप्लॉयमेंट या नए फ़ीचर जैसे उसके लंबे कामों को देखते हुए उसके सवालों का जवाब एक क्लिक या अपनी आवाज़ से दें। सब कुछ आपके प्रोजेक्ट के अंदर, उन्हीं कंपोनेंट और थीम के साथ जो आपका ऐप इस्तेमाल करता है।</value>
     </data>
     <data name="HomeStartHere" xml:space="preserve">
         <value>यहाँ से शुरू करें</value>
@@ -854,12 +866,6 @@
     </data>
     <data name="HomeChipStore" xml:space="preserve">
         <value>1320 × 2868 PNG</value>
-    </data>
-    <data name="HomeWhyTitle" xml:space="preserve">
-        <value>आपके प्रोजेक्ट में वर्कबेंच क्यों है</value>
-    </data>
-    <data name="HomeWhySubtitle" xml:space="preserve">
-        <value>डिज़ाइन टूल, टेस्ट बेंच, फ़ोटो स्टूडियो और आपके एजेंट का कंट्रोल रूम, प्रोजेक्ट के अंदर ही।</value>
     </data>
     <data name="HomeWhyAgentsTitle" xml:space="preserve">
         <value>किसी भी AI एजेंट के साथ काम करें</value>
@@ -2091,18 +2097,6 @@
     <data name="ThemeFindingsHint" xml:space="preserve">
         <value>वे रंग जो पेज खुद सेट करता है और जो न थीम से आते हैं, न थीम के किसी रंग को सफ़ेद, काले या पृष्ठभूमि के साथ मिलाकर बनते हैं। bit कंपोनेंट, चार्ट और --data-color से दिए गए रंग इसमें शामिल नहीं हैं।</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>फ़्लो</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>फ़्लो किसी काम की स्क्रीनों को साथ-साथ दिखाता है, हर एक उस हालत में जो मायने रखती है, जैसे एक सूची और वह डायलॉग जो उसका बटन खोलता है, और तीर बताते हैं कि एक से अगली तक कैसे पहुँचते हैं। ऐप को समझने या मीटिंग में उस पर बात करने के लिए कोई फ़्लो खोलें।</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>नए फ़्लो का नाम</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>फ़्लो हटाएँ</value>
-    </data>
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} खुली टिप्पणियाँ</value>
     </data>
@@ -2487,9 +2481,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>अभी कोई टिप्पणी नहीं।</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>अभी कोई फ़्लो नहीं।</value>
-    </data>
     <data name="SampleFlowBuildings" xml:space="preserve">
         <value>इमारत जोड़ना</value>
     </data>
@@ -2502,38 +2493,8 @@
     <data name="SampleFlowBuildingsMap" xml:space="preserve">
         <value>“मैप” वही इमारतें नीदरलैंड के मैप पर दिखाता है।</value>
     </data>
-    <data name="SampleFlowPos" xml:space="preserve">
-        <value>POS डैशबोर्ड खोलना</value>
-    </data>
-    <data name="SampleFlowPosLoading" xml:space="preserve">
-        <value>डेटा लोड होने तक हर विजेट अपनी जगह पर रहता है।</value>
-    </data>
-    <data name="SampleFlowPosReady" xml:space="preserve">
-        <value>फिर हर विजेट दिन के आँकड़ों से भर जाता है।</value>
-    </data>
-    <data name="SampleFlowPosEmpty" xml:space="preserve">
-        <value>अभी कोई बिक्री न हो तो हर विजेट यही बताता है।</value>
-    </data>
-    <data name="SampleFlowPosMixed" xml:space="preserve">
-        <value>एक विजेट विफल हो सकता है, जबकि बाकी चलते रहते हैं।</value>
-    </data>
-    <data name="SampleFlowPosReadyLink" xml:space="preserve">
-        <value>डेटा आ गया</value>
-    </data>
-    <data name="SampleFlowPosEmptyLink" xml:space="preserve">
-        <value>अभी कोई बिक्री नहीं</value>
-    </data>
-    <data name="SampleFlowPosMixedLink" xml:space="preserve">
-        <value>एक लोड विफल</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>नमूना</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>अपने AI एजेंट के साथ लाइव रिव्यू करें</value>
-    </data>
-    <data name="HomeWhyLiveText" xml:space="preserve">
-        <value>पेज की किसी भी जगह पर टिप्पणी लगाएँ, लिखकर या बोलकर। आपके अपने कंप्यूटर पर, आपका कोडिंग एजेंट उसे आपके लिखते-लिखते पाता है, पेज बदलता है, टिप्पणी पर जवाब देता है और उसे पूरा चिह्नित करता है। Claude Code, Codex, Copilot, Gemini, Junie और Cursor के साथ काम करता है।</value>
     </data>
     <data name="TourLiveText" xml:space="preserve">
         <value>पेज की किसी भी जगह पर टिप्पणी लगाएँ, लिखकर या बोलकर: भेजें के पास वाला माइक्रोफ़ोन आपकी आवाज़ को टेक्स्ट बना देता है। आपके अपने कंप्यूटर पर, आपका कोडिंग एजेंट उसे आपके लिखते-लिखते पाता है, पेज बदलता है, टिप्पणी पर जवाब देता है और उसे पूरा चिह्नित करता है। Claude Code, Codex, Copilot, Gemini, Junie और Cursor के साथ काम करता है। अभी आज़माएँ: अपनी टिप्पणी लिखें और भेजें।</value>
@@ -2547,71 +2508,8 @@
     <data name="TapToComment" xml:space="preserve">
         <value>जिस जगह पर टिप्पणी करनी है, उसे टैप करें</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>अपने एजेंट से एक बनाने को कहें, जैसे “दिखाओ कि इमारत कैसे जोड़ी जाती है”, या किसी पेज के फ़्लो टैब से व्यू को फ़्लो में जोड़ें।</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>इस लिंक पर कोई फ़्लो नहीं है। शायद उसे हटा दिया गया है।</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>इस फ़्लो में अभी कोई स्क्रीन नहीं है। किसी पेज के फ़्लो टैब से इसमें व्यू जोड़ें, या अपने एजेंट से कहें।</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>स्क्रीनें: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>सभी फ़्लो</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>किसी काम की स्क्रीनें साथ-साथ, तीरों से जुड़ी</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>यह व्यू किसी फ़्लो में जोड़ें</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>फ़्लो व्यू को वैसे ही लेता है जैसा वह अभी है: उसका डिवाइस, उसकी सेटिंग्स और पेज पर जो भी खुला है।</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>फ़्लो</value>
-    </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>नया फ़्लो</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>यह स्क्रीन क्या दिखाती है (वैकल्पिक)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>पिछली स्क्रीन से यहाँ कैसे पहुँचते हैं (वैकल्पिक)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>उपयोगकर्ता क्या करता है</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>“इमारत जोड़ें” पर टैप करें</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>स्क्रीन {0} पर वह बटन चिह्नित करें जो यहाँ लाता है, ताकि तीर उसी से शुरू हो।</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>स्क्रीन {0} पर चिह्नित बटन से शुरू होता है।</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>बटन चिह्नित करें</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>फिर से चिह्नित करें</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>चिह्न हटाएँ</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>स्क्रीन {0} पर वह बटन टैप करें जो स्क्रीन {1} तक ले जाता है।</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>यह व्यू जोड़ें</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>फ़्लो खोलें</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>वर्कबेंच में खोलें</value>
@@ -2633,18 +2531,6 @@
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{1} में से {0}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>स्क्रीन को खिसकाने के लिए उसे खींचें और आज़माने के लिए उस पर डबल-क्लिक करें। तीर बनाने के लिए किसी स्क्रीन के दाएँ किनारे वाले बिंदु से दूसरी स्क्रीन तक खींचें, फिर उसका नाम रखें और वह बटन चिह्नित करें जहाँ से वह शुरू होता है। तीर बदलने या हटाने के लिए उस पर डबल-क्लिक करें।</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>यह फ़्लो हटाएँ?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>यह स्क्रीन हटाएँ</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>तीर हटाएँ</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>एजेंट के जवाब देने पर मुझे सूचित करें</value>
@@ -2874,9 +2760,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>अनुवाद सहेजे नहीं जा सके।</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>स्क्रीन को फ़्लो में नहीं जोड़ा जा सका।</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>लैपटॉप {0}</value>
     </data>
@@ -2915,9 +2798,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>यह व्यू रीसेट करें</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>यह स्क्रीन अभी लोड नहीं हुई है। थोड़ा रुकें, फिर बटन दोबारा चिह्नित करें।</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>कर्ली ब्रैकेट में लिखे प्लेसहोल्डर वैसे ही रखें जैसे वे मूल टेक्स्ट में हैं, नहीं तो पेज यह टेक्स्ट नहीं दिखा पाएगा।</value>
@@ -3269,12 +3149,6 @@
     </data>
     <data name="LandingConsentFirstVisit" xml:space="preserve">
         <value>पहली विज़िट</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>यह एक नमूना है: किसी स्क्रीन को आज़माने के लिए उस पर डबल-क्लिक करें, या किसी तीर को बदलने के लिए उस पर, जिससे इस फ़्लो की आपकी अपनी कॉपी बन जाती है।</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>यह एक नमूना है और जैसा है वैसा ही रहता है: यहाँ बदलाव करने पर इस फ़्लो की आपकी अपनी कॉपी उस बदलाव के साथ बनती है और खुल जाती है।</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>इस हफ़्ते स्टोर कैसे चले?</value>
@@ -4860,15 +4734,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>नया नाम कल से रसीदों पर दिखेगा।</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (कॉपी)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>तीर बदलें</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>किसी तीर का नाम बदलने, वह बटन चिह्नित करने जहाँ से वह शुरू होता है, या उसे हटाने के लिए उस पर डबल-क्लिक करें। नमूना जैसा है वैसा ही रहता है: उसके किसी तीर में बदलाव करने पर फ़्लो की आपकी अपनी कॉपी बन जाती है।</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>स्केल</value>
     </data>
@@ -5060,9 +4925,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>गतिविधि से हटाएँ</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>कोई काम चुनें और देखें कि वह कहाँ तक पहुँचा।</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>यह काम अब नहीं है। शायद इसके एजेंट ने इसे पूरा करके हटा दिया।</value>
@@ -5400,15 +5262,6 @@
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>लंबे काम देखें, एक क्लिक में जवाब दें</value>
     </data>
-    <data name="HomeWhyProgressText" xml:space="preserve">
-        <value>डिप्लॉयमेंट या नए फ़ीचर में कई कदम होते हैं, और कुछ सिर्फ़ आप उठा सकते हैं। हर एजेंट चैट यहाँ दिखाती है कि क्या हुआ, क्या बाकी है और उसे आपसे क्या चाहिए, ताकि लंबी चैट में कुछ खो न जाए। वहाँ चिपकाई गई कुंजियाँ और पासवर्ड सीधे अपनी जगह जाते हैं, कभी चैट से होकर नहीं।</value>
-    </data>
-    <data name="HomeWhyVoiceTitle" xml:space="preserve">
-        <value>टाइप करने की जगह बोलें</value>
-    </data>
-    <data name="HomeWhyVoiceText" xml:space="preserve">
-        <value>किसी टिप्पणी, जवाब या उत्तर के पास माइक्रोफ़ोन दबाएँ और बोलें। ब्राउज़र आपकी आवाज़ को आपकी चुनी भाषा में टेक्स्ट बना देता है।</value>
-    </data>
     <data name="TourProgressText" xml:space="preserve">
         <value>डिप्लॉयमेंट या नए फ़ीचर में कई कदम होते हैं, और कुछ सिर्फ़ आप उठा सकते हैं। हर एजेंट चैट यहाँ दिखाती है कि क्या हुआ, क्या बाकी है और उसे आपसे क्या चाहिए। एक क्लिक, कुछ शब्दों या अपनी आवाज़ से जवाब दें, और वह तुरंत आगे बढ़ता है। उदाहरणों पर आज़माएँ।</value>
     </data>
@@ -5503,9 +5356,6 @@
     </data>
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>आज़माने लायक आँकड़े, कैलकुलेटर की तरह</value>
-    </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>लाइट और डार्क, हर स्क्रीन पर</value>
     </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>बोर्ड खोलें</value>
@@ -5720,12 +5570,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>रिपोर्ट</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>इस प्रोजेक्ट के फ़्लो</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>नमूने</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>योजना</value>
     </data>
@@ -5746,5 +5590,122 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>विषय-सूची</value>
+    </data>
+    <data name="HomeAgentPageTitle" xml:space="preserve">
+        <value>वर्कबेंच · जहाँ आपका AI एजेंट ऐप पर काम करता है और आप उसे दिशा देते हैं</value>
+    </data>
+    <data name="HomeAgentHeadline" xml:space="preserve">
+        <value>जहाँ आपका AI एजेंट ऐप पर काम करता है और आप उसे दिशा देते हैं।</value>
+    </data>
+    <data name="HomeAgentLead" xml:space="preserve">
+        <value>आपका AI एजेंट यहाँ हर पेज को सैंपल डेटा पर, हर परिदृश्य और हर स्थिति में बनाता है, और बाद के बदलावों के बाद उसे फिर से जाँचता है। वह चीज़ें आपको इंटरैक्टिव बोर्ड के ज़रिए समझाता है, और आप बताते हैं कि क्या बदलना चाहिए, अपनी आवाज़ से भी, उसके लंबे कामों पर नज़र रखते हैं, फ़ैसले लेते हैं और जवाब देते हैं। सब कुछ आपके प्रोजेक्ट के अंदर, आपके ऐप के अपने कंपोनेंट और थीम के साथ।</value>
+    </data>
+    <data name="HomeForWhoTitle" xml:space="preserve">
+        <value>वर्कबेंच किसके लिए है</value>
+    </data>
+    <data name="HomeForWhoSubtitle" xml:space="preserve">
+        <value>ज़्यादातर आपके AI एजेंट के लिए। आप यहाँ बताने, फ़ैसला करने, जवाब देने और यह देखने आते हैं कि वह क्या समझा रहा है।</value>
+    </data>
+    <data name="HomeBigAgentBadge" xml:space="preserve">
+        <value>मुख्य उपयोगकर्ता</value>
+    </data>
+    <data name="HomeBigAgentTitle" xml:space="preserve">
+        <value>आपका AI एजेंट</value>
+    </data>
+    <data name="HomeBigAgentText" xml:space="preserve">
+        <value>वह यहाँ हर पेज को अलग-अलग परिदृश्यों और डेटा स्थितियों में बनाता है। बाद में बदलाव होने पर वह लौटकर उन्हें असली ब्राउज़र में खुद हाथ से आज़माता है, ताकि पक्का हो कि कुछ टूटा नहीं।</value>
+    </data>
+    <data name="HomeBigAgentNote" xml:space="preserve">
+        <value>आपके प्रोजेक्ट में ऑटोमेटेड टेस्ट भी हैं।</value>
+    </data>
+    <data name="HomeBigYouBadge" xml:space="preserve">
+        <value>आपके लिए</value>
+    </data>
+    <data name="HomeBigFeedbackTitle" xml:space="preserve">
+        <value>इशारा करें और बताएँ कि क्या बदलना है</value>
+    </data>
+    <data name="HomeBigFeedbackText" xml:space="preserve">
+        <value>पेज का कोई भी हिस्सा चुनें और अपनी राय दें, लिखकर या बोलकर। आपका एजेंट आपके लिखते-लिखते उसे पाता है, पेज बदलता है और वहीं आपको जवाब देता है।</value>
+    </data>
+    <data name="HomeBigProgressTitle" xml:space="preserve">
+        <value>काम पर नज़र रखें और फ़ैसला करें</value>
+    </data>
+    <data name="HomeBigProgressText" xml:space="preserve">
+        <value>देखें कि कोई लंबा काम, जैसे डिप्लॉयमेंट या नया फ़ीचर, कहाँ तक पहुँचा, उसके लिए ज़रूरी फ़ैसले लें और उसके सवालों का जवाब एक क्लिक, कुछ शब्दों या अपनी आवाज़ से दें।</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>इंटरैक्टिव और विज़ुअल दस्तावेज़</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>पूछें कि कोई चीज़ कैसे काम करती है, विकल्पों की तुलना या कोई योजना माँगें, और आपका एजेंट लंबे टेक्स्ट के बजाय एक बोर्ड से जवाब देता है: तीरों से जुड़े आपके ऐप के पेज, डायग्राम और आज़माने लायक आँकड़े।</value>
+    </data>
+    <data name="HomeCardRealTitle" xml:space="preserve">
+        <value>असली कंपोनेंट</value>
+    </data>
+    <data name="HomeCardRealText" xml:space="preserve">
+        <value>आपके ऐप जैसे ही bit BlazorUI कंपोनेंट, थीम और स्टाइल, इसलिए जो आप मंज़ूर करते हैं, वह बनने के बाद भी वैसा ही दिखता है।</value>
+    </data>
+    <data name="HomeCardStatesTitle" xml:space="preserve">
+        <value>हर स्थिति</value>
+    </data>
+    <data name="HomeCardStatesText" xml:space="preserve">
+        <value>लोडिंग, खाली, त्रुटि, आंशिक और धीमा डेटा, बस एक क्लिक दूर।</value>
+    </data>
+    <data name="HomeCardDevicesTitle" xml:space="preserve">
+        <value>हर डिवाइस</value>
+    </data>
+    <data name="HomeCardDevicesText" xml:space="preserve">
+        <value>फ़ोन, टैबलेट और डेस्कटॉप अपने असली साइज़ में, लाइट, डार्क और हर भाषा में।</value>
+    </data>
+    <data name="HomeCardStoresTitle" xml:space="preserve">
+        <value>स्टोर स्क्रीनशॉट</value>
+    </data>
+    <data name="HomeCardStoresText" xml:space="preserve">
+        <value>App Store, Google Play और Microsoft Store के लिए पिक्सेल-सटीक इमेज, बैकग्राउंड और कैप्शन के साथ।</value>
+    </data>
+    <data name="HomeCardHeadStartTitle" xml:space="preserve">
+        <value>शुरुआती बढ़त</value>
+    </data>
+    <data name="HomeCardHeadStartText" xml:space="preserve">
+        <value>दोबारा इस्तेमाल करने या सीखने के लिए तैयार पेज, जैसे POS डैशबोर्ड और शिफ़्ट प्लानर।</value>
+    </data>
+    <data name="HomeCardSafeTitle" xml:space="preserve">
+        <value>बेझिझक आज़माएँ</value>
+    </data>
+    <data name="HomeCardSafeText" xml:space="preserve">
+        <value>यहाँ कुछ भी आपके API या डेटाबेस से बात नहीं करता, इसलिए कोई आइडिया आपके ऐप या उसके डेटा को कभी नहीं बिगाड़ता।</value>
+    </data>
+    <data name="HomeCardManyAppsTitle" xml:space="preserve">
+        <value>कई ऐप्स</value>
+    </data>
+    <data name="HomeCardManyAppsText" xml:space="preserve">
+        <value>आपके सभी ऐप्स साथ-साथ, हर एक की अपनी थीम के साथ।</value>
+    </data>
+    <data name="HomeCardAgentsTitle" xml:space="preserve">
+        <value>कोई भी AI एजेंट</value>
+    </data>
+    <data name="HomeCardAgentsText" xml:space="preserve">
+        <value>Claude Code, Codex, Copilot, Gemini, Junie या Cursor। Claude Design या Figma की ज़रूरत नहीं।</value>
+    </data>
+    <data name="HomeCardCustomizeTitle" xml:space="preserve">
+        <value>वर्कबेंच को ही बदलें</value>
+    </data>
+    <data name="HomeCardCustomizeText" xml:space="preserve">
+        <value>अपने एजेंट से वे टूल, डिवाइस और स्थितियाँ जोड़ने को कहें जिनकी आपकी टीम को ज़रूरत है।</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>तीरों से जुड़े आपके ऐप के अपने पेजों पर एक प्रक्रिया</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>ज़ूम इन</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>ज़ूम आउट</value>
+    </data>
+    <data name="AddBuildingBoardSummary" xml:space="preserve">
+        <value>सूची से फ़ॉर्म और मैप तक: इमारतों वाला पेज, कदम-दर-कदम।</value>
+    </data>
+    <data name="AddBuildingBoardLead" xml:space="preserve">
+        <value>कोई प्रसिद्ध इमारत कैसे जोड़ता है, सीधे पेज पर ही समझाया गया।</value>
     </data>
 </root>

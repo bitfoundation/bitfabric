@@ -1,24 +1,18 @@
 @import '../../../Client/Boilerplate.Client.Core/Styles/abstracts/_media-queries.scss';
 @import '../../../Client/Boilerplate.Client.Core/Styles/abstracts/_bit-css-variables.scss';
 
-// On wider screens the list and the task scroll on their own under a fixed bar; a phone scrolls the page.
-.progress-page {
-    height: 100dvh;
+// The task, or the overview, scrolls in the frame's content area, on the section's grey.
+.progress-content {
+    min-height: 100%;
     display: flex;
-    overflow: hidden;
     flex-direction: column;
     background-color: $bit-color-background-secondary;
-
-    @include lt-md {
-        height: auto;
-        overflow: visible;
-        min-height: 100dvh;
-    }
 }
 
 // What the agent and the user wrote keeps the digits it was written with: Persian's font draws 0-9 as ۰-۹ everywhere else
 // (_rtl-fonts.scss), which would turn a version like 1.2.3-pre-04 into ۱.۲.۳-pre-۰۴. The ask and task cards inside take it too.
-.progress-page:lang(fa) ::deep .as-written {
+.progress-content :lang(fa) ::deep .as-written,
+.progress-content:lang(fa) ::deep .as-written {
     font-family: var(--app-preset-font-family), "Vazirmatn";
 }
 
@@ -46,62 +40,13 @@
     color: $bit-color-foreground-secondary;
 }
 
-.layout {
-    min-height: 0;
-    flex-grow: 1;
-    display: grid;
-    grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
-
-    @include lt-md {
-        display: block;
-    }
-}
-
-// The list of tasks.
-.task-list {
-    gap: 1.25rem;
-    display: flex;
-    overflow-y: auto;
-    padding: 1.25rem 1rem 2rem;
-    flex-direction: column;
-    background-color: $bit-color-background-primary;
-    border-inline-end: 1px solid $bit-color-border-tertiary;
-
-    @include lt-md {
-        border-inline-end: none;
-        min-height: calc(100dvh - 52px);
-    }
-}
-
-.list-title {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-}
-
-.list-lead {
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0.375rem 0 0;
-    color: $bit-color-foreground-secondary;
-}
-
-.running-from {
-    gap: 0.375rem;
-    display: flex;
-    font-size: 12px;
-    align-items: center;
-    margin: 0.625rem 0 0;
-    color: $bit-color-foreground-tertiary;
-}
-
+// The sample tasks shown until an agent starts one: what they are.
 .samples-note {
     gap: 0.75rem;
     display: flex;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.5;
-    padding: 0.875rem 1rem;
+    padding: 1rem 1.25rem;
     align-items: flex-start;
     border-radius: $bit-shape-radius-surface;
     border: 1px dashed color-mix(in srgb, #{$bit-color-primary} 45%, transparent);
@@ -118,67 +63,22 @@
     }
 }
 
-.group-title {
-    gap: 0.5rem;
-    margin: 0 0 0.625rem;
-    display: flex;
-    font-size: 12px;
-    font-weight: 700;
-    align-items: center;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: $bit-color-foreground-secondary;
-}
-
-.group-count {
-    padding: 0 0.375rem;
-    font-size: 11px;
-    border-radius: $bit-shape-radius-full;
-    background-color: $bit-color-background-tertiary;
-}
-
+// The overview's tasks, two or three to a row.
 .cards {
-    gap: 0.625rem;
+    gap: 1rem;
     margin: 0;
     padding: 0;
-    display: flex;
+    display: grid;
     list-style: none;
-    flex-direction: column;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
 }
 
-// The selected task.
+// The open task.
 .task-detail {
     min-width: 0;
-    overflow-y: auto;
     padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 3rem;
-}
 
-.back {
-    gap: 0.375rem;
-    display: none;
-    font-size: 14px;
-    align-items: center;
-    margin-bottom: 1rem;
-    text-decoration: none;
-    color: $bit-color-primary;
-}
-
-// A phone shows the list or a task, never both.
-@include lt-md {
-    .showing-list .task-detail {
-        display: none;
-    }
-
-    .showing-task .task-list {
-        display: none;
-    }
-
-    .showing-task .back {
-        display: inline-flex;
-    }
-
-    .task-detail {
-        overflow: visible;
+    @include lt-md {
         padding: 1rem;
     }
 }

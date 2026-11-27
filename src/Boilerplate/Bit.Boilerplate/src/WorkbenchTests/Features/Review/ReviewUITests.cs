@@ -880,9 +880,20 @@ public class ReviewUITests : ReviewPageTest
         await PickSpot(ShiftsHeading);
         await Composer.FillAsync(text);
 
+        // A phone keeps the page list under the header's first button, out from under the tools.
+        if (IsPhone)
+        {
+            if (await Page.Locator(".tools-header").IsVisibleAsync())
+            {
+                await CloseTools();
+            }
+
+            await Press(Page.Locator("header.shell-header .side-toggle"));
+        }
+
         await Press(Page.GetByRole(AriaRole.Navigation, new() { Name = WorkbenchStrings.Pages }).GetByRole(AriaRole.Link).Filter(new() { HasText = WorkbenchStrings.ThemePageTitle }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/theme"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/theme"));
         await WaitForViews();
         await OpenReview();
 

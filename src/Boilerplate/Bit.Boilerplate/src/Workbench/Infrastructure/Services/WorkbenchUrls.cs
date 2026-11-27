@@ -16,16 +16,11 @@ public static class WorkbenchUrls
     /// <summary>The top of the home page, which its logo scrolls back to.</summary>
     public const string HomeTop = "/#top";
 
-    /// <summary>The home page's list of pages, where the Pages section starts.</summary>
-    public const string HomePages = "/#pages";
-
     /// <summary>The query key of the view a preview belongs to, which keys its saved page state.</summary>
     public const string PaneQueryKey = "pane";
 
     /// <summary>The query key of a snapshot id, which makes a preview restore that page state.</summary>
     public const string SnapshotQueryKey = "snapshot";
-
-    public const string Flows = "/flows";
 
     /// <summary>The boards: what an agent shows as a page instead of telling it in the chat (the boards skill).</summary>
     public const string Boards = "/boards";
@@ -37,20 +32,16 @@ public static class WorkbenchUrls
 
     public static string ProgressTask(string taskId) => $"{Progress}/{taskId}";
 
-    public static string Workbench(string pageKey) => $"/workbench/{pageKey}";
+    /// <summary>The Pages section, which opens on its first page, the theme and its components.</summary>
+    public const string Pages = "/pages";
+
+    /// <summary>A page with its views and tools.</summary>
+    public static string Page(string pageKey) => $"{Pages}/{pageKey}";
 
     /// <summary>The query key that starts the tour when the shell opens.</summary>
     public const string TourQueryKey = "tour";
 
-    public static string Tour(string pageKey) => $"{Workbench(pageKey)}?{TourQueryKey}=true";
-
-    public static string Flow(string flowId) => $"{Flows}/{flowId}";
-
-    /// <summary>The query key of the arrow whose editor a flow's board opens with.</summary>
-    public const string ArrowQueryKey = "arrow";
-
-    /// <summary>A flow's board with an arrow's editor open.</summary>
-    public static string FlowArrow(string flowId, string linkId) => QueryHelpers.AddQueryString(Flow(flowId), ArrowQueryKey, linkId);
+    public static string Tour(string pageKey) => $"{Page(pageKey)}?{TourQueryKey}=true";
 
     public static string Preview(string pageKey, WorkbenchScenario scenario, string? paneId = null, string? snapshotId = null)
     {

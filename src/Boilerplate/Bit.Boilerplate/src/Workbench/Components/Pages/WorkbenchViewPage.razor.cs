@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Boilerplate.Workbench.Components.Pages;
 
 /// <summary>
-/// /workbench/{key}: the shell around one page. On wider screens it shows the page's views as iframes of /preview side
-/// by side with the inspector, review, checks and flows; on a phone the selected view fills the screen, with the tools in a panel.
+/// /pages/{key}: the shell around one page. On wider screens it shows the page's views as iframes of /preview side
+/// by side with the inspector, review and checks; on a phone the selected view fills the screen, with the tools in a panel.
 /// The views and their settings live in <see cref="WorkbenchStore"/> and are mirrored into the address.
 /// </summary>
 public partial class WorkbenchViewPage
@@ -27,8 +27,6 @@ public partial class WorkbenchViewPage
     private string? selectedThreadId;
     // What's typed for a comment or a reply, kept here as the tools close and other tabs open around the review.
     private readonly WorkbenchReviewDrafts drafts = new();
-    // The flow picked and what's typed in the Flows form, which going to set up the view for the next screen doesn't lose.
-    private readonly WorkbenchFlowDraft flowDraft = new();
     // The pins last sent to the frames as JSON, so an unchanged set isn't sent again on every render.
     private string? shownPins;
     // A view to load with a snapshot once the current render is on screen, for showing a comment as it was left.
@@ -60,8 +58,7 @@ public partial class WorkbenchViewPage
     [
         (WorkbenchModes.ViewColumn, nameof(WorkbenchStrings.ViewTab)),
         (WorkbenchModes.ReviewColumn, nameof(WorkbenchStrings.ReviewTab)),
-        (WorkbenchModes.ChecksColumn, nameof(WorkbenchStrings.ChecksTab)),
-        (WorkbenchModes.FlowsColumn, nameof(WorkbenchStrings.Flows))
+        (WorkbenchModes.ChecksColumn, nameof(WorkbenchStrings.ChecksTab))
     ];
 
     private readonly ElementReference[] columnTabs = new ElementReference[columns.Length];
@@ -122,7 +119,8 @@ public partial class WorkbenchViewPage
     {
         var previous = pageInfo;
 
-        pageInfo = WorkbenchPageCatalog.Find(PageKey);
+        // /pages opens the first page, the theme and its components.
+        pageInfo = WorkbenchPageCatalog.Find(PageKey ?? WorkbenchPageCatalog.Pages.FirstOrDefault()?.Key);
 
         if (pageInfo != previous || compareItems.Count == 0)
         {
@@ -194,7 +192,7 @@ public partial class WorkbenchViewPage
         {
             await RunStartStep(StartTour);
         }
-        // The browser's Back on the tour's Flows step: back a step, as the tour would otherwise wait out of sight for that page.
+        // The browser's Back on the tour's Boards step: back a step, as the tour would otherwise wait out of sight for that page.
         else if (bonboardingService.FindSession(TourId) is { WaitReason: BonboardingWaitReason.Route } tour)
         {
             await RunStartStep(() => tour.PreviousAsync());
@@ -603,7 +601,7 @@ public partial class WorkbenchViewPage
         if (WorkbenchPageCatalog.Find(pageKey) is not { } page || page.Key == pageInfo?.Key)
             return;
 
-        NavigationManager.NavigateTo($"{WorkbenchUrls.Workbench(page.Key)}{store.OtherPageQueryString}");
+        NavigationManager.NavigateTo($"{WorkbenchUrls.Page(page.Key)}{store.OtherPageQueryString}");
     }
 
     /// <summary>
@@ -618,7 +616,7 @@ public partial class WorkbenchViewPage
         }
 
         // AbsoluteUri keeps the escaping the browser reports the address with, so equal addresses compare equal.
-        var url = NavigationManager.ToAbsoluteUri($"{WorkbenchUrls.Workbench(pageInfo.Key)}{store.QueryString}").AbsoluteUri;
+        var url = NavigationManager.ToAbsoluteUri($"{WorkbenchUrls.Page(pageInfo.Key)}{store.QueryString}").AbsoluteUri;
 
         lastAppliedUri = url;
 
@@ -799,8 +797,8 @@ public partial class WorkbenchViewPage
         bonboardingService.SessionsChanged -= OnGuidesChanged;
         reference?.Dispose();
 
-        // A guide left running would keep pointing at a shell that is gone; the tour goes on when this is its way to the Flows or Progress page.
-        var isTourOnItsWay = IsTouring && (IsOnFlowsPage || IsOnProgressPage);
+        // A guide left running would keep pointing at a shell that is gone; the tour goes on when this is its way to the Boards or Progress page.
+        var isTourOnItsWay = IsTouring && (IsOnBoardsPage || IsOnProgressPage);
 
         try
         {

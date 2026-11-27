@@ -79,7 +79,7 @@ public class WorkbenchPageTest : PageTest
     /// <summary>Opens a page in the shell and waits until every view on the canvas has settled.</summary>
     protected async Task OpenWorkbench(string pageKey, string query = "")
     {
-        await Page.GotoAsync(new Uri(Server.Address, $"workbench/{pageKey}{query}").ToString());
+        await Page.GotoAsync(new Uri(Server.Address, $"pages/{pageKey}{query}").ToString());
 
         await WaitForViews();
     }
@@ -136,7 +136,7 @@ public class WorkbenchPageTest : PageTest
     }
 
     /// <summary>
-    /// Where the shell keeps the selected view's settings, its comments and its flows: a desktop's side column, or a phone's Tools
+    /// Where the shell keeps the selected view's settings, its comments and its checks: a desktop's side column, or a phone's Tools
     /// panel, in which they follow each other instead of being tabs.
     /// </summary>
     protected ILocator Tools => Page.Locator(IsPhone ? ".bit-pnl.tools-panel:not([data-bit-callout-link])" : "#wb-inspector");

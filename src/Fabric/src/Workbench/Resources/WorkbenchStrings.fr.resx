@@ -1662,18 +1662,6 @@
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} commentaires ouverts</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>Parcours</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>Un parcours présente côte à côte les écrans d’une tâche, chacun dans l’état qui compte, comme une liste et la boîte de dialogue que son bouton ouvre, avec des flèches qui montrent comment passer de l’un au suivant. Ouvrez-en un pour comprendre l’application ou pour la présenter en réunion.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>Nom du nouveau parcours</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>Supprimer le parcours</value>
-    </data>
     <data name="ReviewSheet" xml:space="preserve">
         <value>Fiche de révision</value>
     </data>
@@ -1809,12 +1797,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>Aucun commentaire pour l’instant.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>Aucun parcours pour l’instant.</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>Exemple</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>Révisez en direct avec votre agent IA</value>
     </data>
@@ -1833,71 +1815,8 @@
     <data name="TapToComment" xml:space="preserve">
         <value>Touchez l’endroit que vous voulez commenter</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>Demandez à votre agent d’en dessiner un, comme « montre comment on ajoute un bâtiment », ou ajoutez des vues à un parcours depuis l’onglet Parcours d’une page.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>Aucun parcours à ce lien. Il a peut-être été supprimé.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>Ce parcours n’a pas encore d’écran. Ajoutez-y des vues depuis l’onglet Parcours d’une page, ou demandez à votre agent.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>Écrans : {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>Tous les parcours</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>Les écrans d’une tâche côte à côte, reliés par des flèches</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>Ajouter cette vue à un parcours</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>Le parcours reçoit la vue telle qu’elle est : son appareil, ses réglages et tout ce qui est ouvert sur la page.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>Parcours</value>
-    </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>Nouveau parcours</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>Ce que montre cet écran (facultatif)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>Comment on arrive ici depuis le dernier écran (facultatif)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>Ce que fait l’utilisateur</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>Toucher « Ajouter un bâtiment »</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>Marquez le bouton de l’écran {0} qui mène ici, et la flèche partira de lui.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>Part du bouton marqué sur l’écran {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>Marquer le bouton</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>Marquer à nouveau</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>Retirer la marque</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>Touchez le bouton de l’écran {0} qui mène à l’écran {1}.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>Ajouter cette vue</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>Ouvrir le parcours</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Ouvrir dans l’établi</value>
@@ -1919,18 +1838,6 @@
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} sur {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>Faites glisser un écran pour le déplacer et double-cliquez dessus pour l’essayer. Tirez depuis le point du bord droit d’un écran jusqu’à un autre pour tracer une flèche, puis nommez-la et marquez le bouton d’où elle part. Double-cliquez sur une flèche pour la modifier ou la supprimer.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>Supprimer ce parcours ?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>Retirer cet écran</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>Supprimer la flèche</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>Me prévenir quand l’agent répond</value>
@@ -2160,9 +2067,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>Impossible d'enregistrer les traductions.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>Impossible d'ajouter l'écran au parcours.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>Ordinateur portable {0}</value>
     </data>
@@ -2183,9 +2087,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>Réinitialiser cette vue</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>Cet écran n’est pas encore chargé. Patientez un instant, puis marquez de nouveau le bouton.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>Conservez les espaces réservés entre accolades tels qu’ils figurent dans le texte d’origine, sinon la page ne pourra pas afficher ce texte.</value>
@@ -2309,12 +2210,6 @@
     </data>
     <data name="NewProjectCaption" xml:space="preserve">
         <value>Votre produit, à une ligne de commande</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>Un exemple : double-cliquez sur un écran pour l’essayer, ou sur une flèche pour la modifier, ce qui crée votre propre copie de ce parcours.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>Ceci est un exemple, qui reste tel quel : une modification ici crée votre propre copie de ce parcours avec la modification, puis l’ouvre.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>Comment s’en sont sortis les magasins cette semaine ?</value>
@@ -3837,15 +3732,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>Le nouveau nom apparaît sur les reçus à partir de demain.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (copie)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>Modifier une flèche</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>Double-cliquez sur une flèche pour la renommer, marquer le bouton d’où elle part ou la supprimer. Un exemple reste tel quel : modifier l’une de ses flèches crée votre propre copie du parcours.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>Échelle</value>
     </data>
@@ -4310,9 +4196,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>Retirer de l'activité</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>Choisissez une tâche pour voir où elle en est.</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>Cette tâche n’existe plus. Son agent l’a peut-être terminée et retirée.</value>

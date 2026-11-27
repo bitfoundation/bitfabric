@@ -6,14 +6,16 @@ description: Builds a board, a page in the Workbench's Boards section (`/boards`
 # Boards: show it, don't tell it
 
 A board is a page an agent builds when an answer is easier to see than to read. It lives in the Workbench (the
-**workbench** skill, `.github/agents/workbench.agent.md`) in a section of its own, Boards, next to Pages, Flows and
-Progress: `/boards` lists them by kind, newest first, and each opens at `/boards/<id>` with the others listed at its side,
-on the app's own components and theme, in light and dark, on a phone and right to left.
+**workbench** skill, `.github/agents/workbench.agent.md`) in a section of its own, Boards, next to Pages and Progress:
+`/boards` opens the section's own board, which lists them by kind, newest first, and each opens at `/boards/<id>` with
+every board in the side panel, whose search finds a board by what it says too, on the app's own components and theme, in
+light and dark, on a phone and right to left.
 
-Two examples ship with the Workbench. Look at both before you build your first:
+Three examples ship with the Workbench. Look at them before you build your first:
 `src/Workbench/Components/Pages/Boards/Payments`, a dated comparison of payment providers and of the stores' terms with a
 calculator, and `src/Workbench/Components/Pages/Boards/Deploy`, how this project gets from a change to its users, drawn
-for the options it was created with.
+for the options it was created with, and `src/Workbench/Components/Pages/Boards/AddBuilding`, how someone adds a
+building, told on the buildings page itself with a `BoardFlow`.
 
 ## 1. When to build one
 
@@ -54,6 +56,9 @@ for the options it was created with.
   icon, its tone, when its facts were read, a short note, its language, an `Aside` beside the title and its sources),
   a `BoardBlock` per idea (an id a link can point at, a heading, at most one line), `BoardNumbers` for big numbers and a
   `BoardSource` for each page or file a fact came from, which `BoardFrame` folds at the foot.
+- `BoardFlow` tells a process on the app's own pages: its screens (`BoardFlowScreen`: a page's key, a line on what it
+  shows, its scenario, and the page's stores as JSON for a state a few taps reach) joined by arrows labeled with what
+  the user does (`BoardFlowLink`). It lays them out itself, and pans, zooms and presents them screen by screen.
 - Add it to `WorkbenchBoardCatalog.Build` (`src/Workbench/Infrastructure/Services/WorkbenchBoardCatalog.cs`) with its id,
   title, a one-line summary, an icon, its component, the day it was made, its tone and its kind (`HowItWorks`,
   `Comparison`, `Plan` or `Report`), which the list groups the boards by. Hot reload brings it in. While

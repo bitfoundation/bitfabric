@@ -38,3 +38,11 @@ Code that works around a defect in a library, a tool or the platform this app bu
 - **Upstream:** https://github.com/CommunityToolkit/Aspire/issues/2343 (CommunityToolkit.Aspire 13.6.1, reported 2026-10-30), after https://github.com/CommunityToolkit/Aspire/issues/1548 was closed as stale without a fix. Fixed by https://github.com/CommunityToolkit/Aspire/pull/2371, in the release after 13.6.1.
 - **Remove when:** the toolkit takes the URL from the Redis resource, with its scheme and an encoded password, and DbGate trusts Aspire's certificate. To check, remove the code above, then open each Redis in DbGate with `aspire start`, and on a test server with a Redis password that has a `/` in it. The letters and digits rule stays even then, since StackExchange.Redis can't take a comma in a password; only its mention of DbGate goes.
 <!--#endif-->
+
+## A board flow's arrow label reads as struck through
+
+- **Symptom:** on a board's flow (`BoardFlow`) in the Workbench, the line of an arrow runs through its label, which reads as struck through.
+- **Cause:** Bit.Blow (11.0.0-pre-25) sizes an edge label's backing plate from `BlowTextMetrics.EstimateWidth` at its own 11px label size, whatever font size the edge's `LabelStyle` sets, so the plate behind a 30px label is a third of its width.
+- **Workaround:** `LabelPlatePadding` in `src/Workbench/Components/Boards/BoardFlow.razor.cs` widens `LabelBgPaddingX` by the difference between the label's width at its real size and at 11px, and `LabelBgPaddingY` makes up the height.
+- **Upstream:** not reported yet to bitfoundation/bitplatform (Blow: the plate should follow the label's font size, or take one of its own).
+- **Remove when:** Blow sizes the plate from the label's own font size. To check, set `LabelBgPaddingX` back to 16 and `LabelBgPaddingY` to 8: the plate must still cover the whole label on the example board with a flow.

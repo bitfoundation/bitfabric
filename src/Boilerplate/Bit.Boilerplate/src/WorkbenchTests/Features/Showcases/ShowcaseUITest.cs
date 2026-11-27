@@ -39,7 +39,7 @@ public abstract class ShowcaseUITest : WorkbenchPageTest
     }
 
     /// <summary>Opens a page without waiting for it to settle, to see what it shows until then.</summary>
-    protected Task OpenWithoutWaiting(string pageKey, string query) => Page.GotoAsync(new Uri(Server.Address, $"workbench/{pageKey}{query}").ToString());
+    protected Task OpenWithoutWaiting(string pageKey, string query) => Page.GotoAsync(new Uri(Server.Address, $"pages/{pageKey}{query}").ToString());
 
     /// <summary>Presses a button of the selected view's settings, which reloads the view.</summary>
     protected async Task UseTheTools(string button)

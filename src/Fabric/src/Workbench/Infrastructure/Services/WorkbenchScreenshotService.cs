@@ -6,7 +6,7 @@ using Microsoft.Playwright;
 namespace Bit.Fabric.Workbench.Infrastructure.Services;
 
 /// <summary>
-/// Renders previews in a headless Chromium-based browser for screenshots, thumbnails, checks, flow screens and PDF review sheets.
+/// Renders previews in a headless Chromium-based browser for screenshots, thumbnails, checks and PDF review sheets.
 /// The browser starts on first use and is shared; Screenshots:MaxConcurrentCaptures caps how many pages it renders at once.
 /// </summary>
 public sealed partial class WorkbenchScreenshotService : IAsyncDisposable
@@ -211,63 +211,6 @@ public sealed partial class WorkbenchScreenshotService : IAsyncDisposable
         var fileName = $"{page.Key}-{device.Key}-{pixelWidth}x{pixelHeight}-{scenario.Culture ?? CultureInfoManager.DefaultCulture.Name}-{scenario.Theme}-{look}.png".ToLowerInvariant();
 
         return (png, fileName);
-    }
-
-    /// <summary>Taps through a flow screen's taps, then finds where each arrow starts and reads the page's state.</summary>
-    public Task<WorkbenchFlowCapture> CaptureFlowScreen(WorkbenchPageInfo page, WorkbenchScenario scenario, IReadOnlyList<string> taps, IReadOnlyList<string> spots, CancellationToken cancellationToken)
-    {
-        var device = scenario.DevicePreset;
-        var (width, height) = device.GetViewport(scenario.Rotated);
-
-        return Open(WorkbenchUrls.Preview(page.Key, scenario with { Backdrop = null, Caption = null }).TrimStart('/'), width, height, device.PixelRatio, device.IsHandheld, scenario.Theme, scenario.Culture, async browserPage =>
-        {
-            foreach (var tap in taps)
-            {
-                var target = Tappable(browserPage, tap);
-
-                try
-                {
-                    await target.ClickAsync(new() { Timeout = 5_000 });
-                }
-                catch (TimeoutException)
-                {
-                    return new(null, [], tap);
-                }
-
-                await browserPage.WaitForTimeoutAsync(500);
-            }
-
-            List<WorkbenchFlowSpot?> found = [];
-
-            foreach (var spot in spots)
-            {
-                LocatorBoundingBoxResult? box = null;
-
-                try
-                {
-                    box = await Tappable(browserPage, spot).BoundingBoxAsync(new() { Timeout = 2_000 });
-                }
-                catch (TimeoutException)
-                {
-                }
-
-                found.Add(box is null || box.Y + box.Height > height ? null : new(box.X / width, box.Y / height, box.Width / width, box.Height / height));
-            }
-
-            var state = taps.Count == 0 ? null : await browserPage.EvaluateAsync<string?>("() => window.workbench.captureState()");
-
-            return new WorkbenchFlowCapture(state, [.. found], null);
-        }, cancellationToken);
-    }
-
-    /// <summary>The first button, link or tab named by the text, or else an element with exactly that text.</summary>
-    private static ILocator Tappable(IPage page, string text)
-    {
-        return page.GetByRole(AriaRole.Button, new() { Name = text })
-                   .Or(page.GetByRole(AriaRole.Link, new() { Name = text }))
-                   .Or(page.GetByRole(AriaRole.Tab, new() { Name = text }))
-                   .Or(page.GetByText(text, new() { Exact = true }))
-                   .First;
     }
 
     /// <summary>A page's thumbnail for the home page, captured once and kept; a failed capture is tried again next time.</summary>

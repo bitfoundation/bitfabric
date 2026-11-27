@@ -12,24 +12,18 @@ public class TourUITests : WorkbenchPageTest
 
     private ILocator Mode(string name) => Page.Locator(".modes").GetByRole(AriaRole.Button, new() { Name = name, Exact = true });
 
-    private ILocator ArrowEditor => Page.GetByRole(AriaRole.Dialog, new() { Name = WorkbenchStrings.ArrowLabel });
+    /// <summary>The example board whose flow the Boards step shows.</summary>
+    private static readonly Regex onTheBoard = new("/boards/add-building$");
 
-    private static readonly Regex onTheSample = new($"/flows/{WorkbenchSampleFlows.BuildingsId}$");
+    /// <summary>The steps up to and including the Boards one, after the first.</summary>
+    private static readonly string[] stepsToBoards = [WorkbenchStrings.HomeWhyHeadStartTitle, WorkbenchStrings.HomeWhyDevicesTitle, WorkbenchStrings.HomeWhyStatesTitle, WorkbenchStrings.HomeWhyStoresTitle, WorkbenchStrings.HomeWhyRealTitle, WorkbenchStrings.HomeWhyLiveTitle, WorkbenchStrings.HomeWhyProgressTitle, WorkbenchStrings.HomeBigBoardsTitle];
 
-    private static readonly Regex onTheSamplesArrow = new($"/flows/{WorkbenchSampleFlows.BuildingsId}\\?{WorkbenchUrls.ArrowQueryKey}={WorkbenchSampleFlows.BuildingsAddArrowId}$");
-
-    /// <summary>The steps up to and including the Flows one, after the first.</summary>
-    private static readonly string[] stepsToFlows = [WorkbenchStrings.HomeWhyHeadStartTitle, WorkbenchStrings.HomeWhyDevicesTitle, WorkbenchStrings.HomeWhyStatesTitle, WorkbenchStrings.HomeWhyStoresTitle, WorkbenchStrings.HomeWhyRealTitle, WorkbenchStrings.HomeWhyLiveTitle, WorkbenchStrings.HomeWhyProgressTitle, WorkbenchStrings.Flows];
-
-    /// <summary>The steps on the building sample's board: the arrow's one only where an arrow can be changed.</summary>
-    private string[] BoardSteps => HasAgent ? [WorkbenchStrings.Flows, WorkbenchStrings.TourArrowsTitle] : [WorkbenchStrings.Flows];
-
-    /// <summary>The arrow step's editor, open on the sample's Add building arrow.</summary>
-    private async Task ExpectTheSamplesArrowEditor()
+    /// <summary>The Boards step: the example board, its flow's three live screens in sight.</summary>
+    private async Task ExpectTheBoardsFlow()
     {
-        await Expect(Page).ToHaveURLAsync(onTheSamplesArrow);
-        await Expect(ArrowEditor).ToBeVisibleAsync();
-        await Expect(ArrowEditor.GetByRole(AriaRole.Textbox, new() { Name = WorkbenchStrings.ArrowLabel })).ToHaveValueAsync(WorkbenchStrings.BuildingsAdd);
+        await Expect(Page).ToHaveURLAsync(onTheBoard);
+        await Expect(Page.Locator(".board-flow")).ToBeVisibleAsync();
+        await Expect(Page.Locator(".board-flow .screen-card")).ToHaveCountAsync(3);
     }
 
     private async Task Advance(string nextTitle)
@@ -64,33 +58,26 @@ public class TourUITests : WorkbenchPageTest
 
         await Advance(WorkbenchStrings.HomeWhyRealTitle);
         await Expect(Mode(WorkbenchStrings.ModeInspect)).ToHaveAttributeAsync("aria-pressed", "true");
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/shifts"));
         await Expect(View().Locator(".shifts")).ToBeVisibleAsync();
 
         await Advance(WorkbenchStrings.HomeWhyLiveTitle);
         await Expect(Page.Locator("#wb-tab-review")).ToHaveAttributeAsync("aria-selected", "true");
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/pos-dashboard"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/pos-dashboard"));
 
         await Advance(WorkbenchStrings.HomeWhyProgressTitle);
         await Expect(Page).ToHaveURLAsync(new Regex($"{WorkbenchUrls.Progress}$"));
-        await Expect(Page.Locator(".task-list")).ToBeVisibleAsync();
+        await Expect(Page.Locator("[data-bonboarding-anchor='progress-list']")).ToBeVisibleAsync();
 
-        await Advance(WorkbenchStrings.Flows);
-        await Expect(Page).ToHaveURLAsync(onTheSample);
-        await Expect(Page.Locator(".screen-card")).ToHaveCountAsync(3);
-
-        if (HasAgent)
-        {
-            await Advance(WorkbenchStrings.TourArrowsTitle);
-            await ExpectTheSamplesArrowEditor();
-        }
+        await Advance(WorkbenchStrings.HomeBigBoardsTitle);
+        await ExpectTheBoardsFlow();
 
         await Advance(WorkbenchStrings.HomeWhyManyAppsTitle);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/landing-minimal"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/landing-minimal"));
         await Expect(View().GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.NotchHeroTitle, Level = 1, Exact = true })).ToBeVisibleAsync();
 
         await Advance(WorkbenchStrings.HomeWhySafeTitle);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/pos-dashboard"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/pos-dashboard"));
 
         await Advance(WorkbenchStrings.HomeWhyCustomizeTitle);
 
@@ -147,12 +134,12 @@ public class TourUITests : WorkbenchPageTest
             await Advance(title);
         }
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/shifts"));
 
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourSkip, Exact = true }));
 
         await Expect(Popover).ToHaveCountAsync(0);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/pos-dashboard.*device=desktop-1536"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/pos-dashboard.*device=desktop-1536"));
         await Expect(Mode(WorkbenchStrings.ModeBrowse)).ToHaveAttributeAsync("aria-pressed", "true");
     }
 
@@ -163,49 +150,41 @@ public class TourUITests : WorkbenchPageTest
 
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourStart, Exact = true }));
 
-        foreach (var title in (string[])[.. stepsToFlows[..^1], .. BoardSteps, WorkbenchStrings.HomeWhyManyAppsTitle])
+        foreach (var title in (string[])[.. stepsToBoards, WorkbenchStrings.HomeWhyManyAppsTitle])
         {
             await Advance(title);
         }
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/landing-minimal"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/landing-minimal"));
         await Expect(View().Locator(".lp-minimal")).ToBeVisibleAsync();
 
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourBack, Exact = true }));
 
-        await Expect(Popover.GetByText(BoardSteps[^1], new() { Exact = true })).ToBeVisibleAsync();
-
-        if (HasAgent)
-        {
-            await ExpectTheSamplesArrowEditor();
-        }
-        else
-        {
-            await Expect(Page).ToHaveURLAsync(onTheSample);
-        }
+        await Expect(Popover.GetByText(WorkbenchStrings.HomeBigBoardsTitle, new() { Exact = true })).ToBeVisibleAsync();
+        await ExpectTheBoardsFlow();
 
         await Advance(WorkbenchStrings.HomeWhyManyAppsTitle);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/landing-minimal"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/landing-minimal"));
 
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourSkip, Exact = true }));
 
         await Expect(Popover).ToHaveCountAsync(0);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/pos-dashboard.*device=desktop-1536"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/pos-dashboard.*device=desktop-1536"));
     }
 
     [TestMethod, OnDesktops]
-    public async Task LeavingTheTourOnTheFlowsPage_Should_GoBackToTheViewsItStartedFrom(WorkbenchSurface surface)
+    public async Task LeavingTheTourOnABoard_Should_GoBackToTheViewsItStartedFrom(WorkbenchSurface surface)
     {
         await OpenWorkbench("shifts", "?device=desktop-1536&theme=dark");
 
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourStart, Exact = true }));
 
-        foreach (var title in new[] { WorkbenchStrings.HomeWhyHeadStartTitle, WorkbenchStrings.HomeWhyDevicesTitle, WorkbenchStrings.HomeWhyStatesTitle, WorkbenchStrings.HomeWhyStoresTitle, WorkbenchStrings.HomeWhyRealTitle, WorkbenchStrings.HomeWhyLiveTitle, WorkbenchStrings.HomeWhyProgressTitle, WorkbenchStrings.Flows })
+        foreach (var title in stepsToBoards)
         {
             await Advance(title);
         }
 
-        await Expect(Page).ToHaveURLAsync(new Regex($"/flows/{WorkbenchSampleFlows.BuildingsId}$"));
+        await Expect(Page).ToHaveURLAsync(onTheBoard);
 
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourBack, Exact = true }));
         await Expect(Popover.GetByText(WorkbenchStrings.HomeWhyProgressTitle, new() { Exact = true })).ToBeVisibleAsync();
@@ -216,50 +195,19 @@ public class TourUITests : WorkbenchPageTest
         await Expect(Page.Locator("#wb-tab-review")).ToHaveAttributeAsync("aria-selected", "true");
 
         await Advance(WorkbenchStrings.HomeWhyProgressTitle);
-        await Advance(WorkbenchStrings.Flows);
+        await Advance(WorkbenchStrings.HomeBigBoardsTitle);
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourSkip, Exact = true }));
 
         await Expect(Popover).ToHaveCountAsync(0);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts.*theme=dark.*device=desktop-1536"));
-    }
-
-    [TestMethod, Surfaces(WorkbenchSurface.DesktopWithAgent)]
-    public async Task TheArrowStep_Should_OpenTheSamplesArrowAndCloseItGoingBackWithoutACopy(WorkbenchSurface surface)
-    {
-        var flows = (await Server.Agent.GetFlows(CancellationToken.None)).Count;
-
-        await OpenWorkbench("shifts", "?device=desktop-1536");
-
-        await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourStart, Exact = true }));
-
-        foreach (var title in (string[])[.. stepsToFlows, WorkbenchStrings.TourArrowsTitle])
-        {
-            await Advance(title);
-        }
-
-        await ExpectTheSamplesArrowEditor();
-
-        await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourBack, Exact = true }));
-
-        await Expect(Popover.GetByText(WorkbenchStrings.Flows, new() { Exact = true })).ToBeVisibleAsync();
-        await Expect(Page).ToHaveURLAsync(onTheSample);
-        await Expect(ArrowEditor).ToHaveCountAsync(0);
-        await Expect(Page.Locator(".screen-card")).ToHaveCountAsync(3);
-
-        await Advance(WorkbenchStrings.TourArrowsTitle);
-        await ExpectTheSamplesArrowEditor();
-
-        await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourSkip, Exact = true }));
-
-        await Expect(Popover).ToHaveCountAsync(0);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts.*device=desktop-1536"));
-
-        Assert.HasCount(flows, await Server.Agent.GetFlows(CancellationToken.None), "The tour changes no flow.");
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/shifts.*theme=dark.*device=desktop-1536"));
     }
 
     private async Task ExpectAboveTheCard(ILocator target)
     {
         await Expect(target).ToBeVisibleAsync();
+
+        // Measured where it comes to rest, as the page list slides in when its step shows it.
+        await WaitUntilAtRest(target);
 
         var box = await target.BoundingBoxAsync();
         var card = await Popover.BoundingBoxAsync();
@@ -280,7 +228,7 @@ public class TourUITests : WorkbenchPageTest
         await Expect(Page.Locator(".phone-layout")).ToHaveCountAsync(0);
 
         await Advance(WorkbenchStrings.HomeWhyHeadStartTitle);
-        await ExpectAboveTheCard(Page.Locator("#wb-navigator"));
+        await ExpectAboveTheCard(Page.Locator(".navigator-column"));
 
         await Advance(WorkbenchStrings.HomeWhyDevicesTitle);
         await Expect(Views).ToHaveCountAsync(2);
@@ -303,7 +251,7 @@ public class TourUITests : WorkbenchPageTest
         await Expect(Mode(WorkbenchStrings.ModeInspect)).ToHaveAttributeAsync("aria-pressed", "true");
         await ExpectAboveTheCard(Page.Locator(".modes"));
         await ExpectAboveTheCard(Page.Locator("#wb-inspector"));
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/shifts"));
 
         await Advance(WorkbenchStrings.HomeWhyLiveTitle);
         await ExpectAboveTheCard(Page.Locator("#wb-inspector"));
@@ -311,26 +259,18 @@ public class TourUITests : WorkbenchPageTest
 
         await Advance(WorkbenchStrings.HomeWhyProgressTitle);
         await Expect(Page).ToHaveURLAsync(new Regex($"{WorkbenchUrls.Progress}$"));
-        await ExpectAboveTheCard(Page.Locator(".list-title"));
+        await ExpectAboveTheCard(Page.Locator(".progress-content h1"));
 
-        await Advance(WorkbenchStrings.Flows);
-        await Expect(Page).ToHaveURLAsync(onTheSample);
-        await Expect(Page.Locator(".screen-card")).ToHaveCountAsync(3);
-        await ExpectAboveTheCard(Page.Locator(".flow-board"));
-
-        if (HasAgent)
-        {
-            await Advance(WorkbenchStrings.TourArrowsTitle);
-            await ExpectTheSamplesArrowEditor();
-            await ExpectAboveTheCard(ArrowEditor);
-        }
+        await Advance(WorkbenchStrings.HomeBigBoardsTitle);
+        await ExpectTheBoardsFlow();
+        await ExpectAboveTheCard(Page.Locator(".board-flow .flow-bar"));
 
         await Advance(WorkbenchStrings.HomeWhyManyAppsTitle);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/landing-minimal"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/landing-minimal"));
         await ExpectAboveTheCard(Views.First);
 
         await Advance(WorkbenchStrings.HomeWhySafeTitle);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/pos-dashboard"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/pos-dashboard"));
 
         await Advance(WorkbenchStrings.HomeWhyCustomizeTitle);
 
@@ -342,17 +282,17 @@ public class TourUITests : WorkbenchPageTest
     }
 
     [TestMethod, OnPhones]
-    public async Task TheBackButtonOnAPhonesFlowsStep_Should_GoBackAStepAndKeepTheViewsDrawn(WorkbenchSurface surface)
+    public async Task TheBackButtonOnAPhonesBoardsStep_Should_GoBackAStepAndKeepTheViewsDrawn(WorkbenchSurface surface)
     {
-        await Page.GotoAsync(new Uri(Server.Address, "workbench/pos-dashboard?tour=true").ToString());
+        await Page.GotoAsync(new Uri(Server.Address, "pages/pos-dashboard?tour=true").ToString());
         await Expect(Popover.GetByText(WorkbenchStrings.HomeWhyAgentsTitle, new() { Exact = true })).ToBeVisibleAsync();
 
-        foreach (var title in new[] { WorkbenchStrings.HomeWhyHeadStartTitle, WorkbenchStrings.HomeWhyDevicesTitle, WorkbenchStrings.HomeWhyStatesTitle, WorkbenchStrings.HomeWhyStoresTitle, WorkbenchStrings.HomeWhyRealTitle, WorkbenchStrings.HomeWhyLiveTitle, WorkbenchStrings.HomeWhyProgressTitle, WorkbenchStrings.Flows })
+        foreach (var title in stepsToBoards)
         {
             await Advance(title);
         }
 
-        await Expect(Page).ToHaveURLAsync(new Regex($"/flows/{WorkbenchSampleFlows.BuildingsId}$"));
+        await Expect(Page).ToHaveURLAsync(onTheBoard);
 
         await Page.GoBackAsync();
 
@@ -360,7 +300,7 @@ public class TourUITests : WorkbenchPageTest
         await Expect(Page).ToHaveURLAsync(new Regex($"{WorkbenchUrls.Progress}$"));
 
         // The card's own Back reloads the view during the step that hides it: it has to keep a size there, or its page draws nothing.
-        await Advance(WorkbenchStrings.Flows);
+        await Advance(WorkbenchStrings.HomeBigBoardsTitle);
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourBack, Exact = true }));
         await Expect(Popover.GetByText(WorkbenchStrings.HomeWhyProgressTitle, new() { Exact = true })).ToBeVisibleAsync();
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourBack, Exact = true }));
@@ -372,7 +312,7 @@ public class TourUITests : WorkbenchPageTest
     [TestMethod, OnPhones]
     public async Task TheToolsPanelOnAPhone_Should_StartTheTourAndSkippingIt_Should_GiveThePhoneLayoutBack(WorkbenchSurface surface)
     {
-        await Page.GotoAsync(new Uri(Server.Address, "workbench/shifts").ToString());
+        await Page.GotoAsync(new Uri(Server.Address, "pages/shifts").ToString());
 
         await Press(Page.Locator(".tools-button"));
         await Press(Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourStart, Exact = true }));
@@ -385,14 +325,14 @@ public class TourUITests : WorkbenchPageTest
 
         await Expect(Popover).ToHaveCountAsync(0);
         await Expect(Page.Locator(".phone-view iframe")).ToBeVisibleAsync();
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/shifts"));
     }
 
     [TestMethod, OnPhones]
     public async Task TheTourOnASidewaysPhone_Should_ShowTheCardBesideTheViews(WorkbenchSurface surface)
     {
         await Page.SetViewportSizeAsync(844, 390);
-        await Page.GotoAsync(new Uri(Server.Address, "workbench/pos-dashboard?tour=true").ToString());
+        await Page.GotoAsync(new Uri(Server.Address, "pages/pos-dashboard?tour=true").ToString());
         await Expect(Popover.GetByText(WorkbenchStrings.HomeWhyAgentsTitle, new() { Exact = true })).ToBeVisibleAsync();
         await Advance(WorkbenchStrings.HomeWhyHeadStartTitle);
         await Advance(WorkbenchStrings.HomeWhyDevicesTitle);

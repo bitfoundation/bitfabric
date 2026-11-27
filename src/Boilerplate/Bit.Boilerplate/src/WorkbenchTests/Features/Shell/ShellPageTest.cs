@@ -65,28 +65,4 @@ public abstract class ShellPageTest : WorkbenchPageTest
         await Page.Mouse.MoveAsync(box.X + box.Width / 2 + x, box.Y + box.Height / 2 + y, new() { Steps = 5 });
         await Page.Mouse.UpAsync();
     }
-
-    /// <summary>Moves a finger from one spot of the screen to another at a finger's pace, which Playwright's own touch can't do.</summary>
-    protected async Task DragWithAFinger((double X, double Y) from, (double X, double Y) to)
-    {
-        var cdp = await Context.NewCDPSessionAsync(Page);
-
-        Task Touch(string type, params (double X, double Y)[] points) => cdp.SendAsync("Input.dispatchTouchEvent", new()
-        {
-            ["type"] = type,
-            ["touchPoints"] = points.Select(point => new Dictionary<string, object> { ["x"] = point.X, ["y"] = point.Y }).ToArray()
-        });
-
-        await Touch("touchStart", from);
-
-        foreach (var step in Enumerable.Range(1, 10))
-        {
-            await Touch("touchMove", (from.X + (to.X - from.X) * step / 10, from.Y + (to.Y - from.Y) * step / 10));
-            await Page.WaitForTimeoutAsync(16);
-        }
-
-        // It stops before it lifts, as the browser takes a finger that lifts on the move for a flick and ignores the next tap.
-        await Page.WaitForTimeoutAsync(150);
-        await Touch("touchEnd");
-    }
 }

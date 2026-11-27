@@ -61,7 +61,7 @@ public class ReviewApiTests
         Assert.AreEqual("multiaccount", (string?)view["signIn"]);
         Assert.AreEqual(WorkbenchDemoUsers.All[0].Email, (string?)view["user"]);
 
-        Assert.AreEqual("/workbench/buildings?theme=dark&device=ipad-mini", (string?)comment["links"]!["workbench"]);
+        Assert.AreEqual("/pages/buildings?theme=dark&device=ipad-mini", (string?)comment["links"]!["workbench"]);
         Assert.AreEqual($"/api/review/{id}/screenshot", (string?)comment["links"]!["screenshot"]);
 
         var message = comment["messages"]!.AsArray().Single()!;
@@ -229,59 +229,6 @@ public class ReviewApiTests
 
         Assert.AreEqual(HttpStatusCode.NotFound, (await client.PostAsJsonAsync("api/review/pages/missing/status", new { status = "approved" }, TestContext.CancellationToken)).StatusCode);
         Assert.AreEqual(HttpStatusCode.BadRequest, (await client.PostAsJsonAsync("api/review/pages/shifts/status", new { status = "shipped" }, TestContext.CancellationToken)).StatusCode);
-    }
-
-    [TestMethod]
-    public async Task AFlow_Should_BeDrawnAndDrawnAgainUnderTheSameId()
-    {
-        var request = new
-        {
-            name = "Planning a week",
-            agent = "Claude Code",
-            screens = new[]
-            {
-                new { key = "week", page = "shifts", query = "", note = (string?)"The week", taps = Array.Empty<string>() },
-                new { key = "dark", page = "shifts", query = "?theme=dark", note = (string?)null, taps = Array.Empty<string>() }
-            },
-            links = new[] { new { from = "week", to = "dark", label = "Switch to dark", tap = (string?)null } }
-        };
-
-        var response = await client.PostAsJsonAsync("api/review/flows", request, TestContext.CancellationToken);
-        var saved = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.CancellationToken))!;
-        var id = (string)saved["id"]!;
-
-        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-        Assert.AreEqual($"/flows/{id}", (string?)saved["board"]);
-
-        var flow = (await GetReview())["flows"]!.AsArray().Single(f => (string?)f!["id"] == id)!;
-
-        Assert.AreEqual("Planning a week", (string?)flow["name"]);
-        Assert.HasCount(2, flow["screens"]!.AsArray());
-        Assert.AreEqual("?theme=dark", (string?)flow["screens"]![1]!["query"]);
-        Assert.AreEqual("Switch to dark", (string?)flow["links"]![0]!["label"]);
-
-        var again = await client.PostAsJsonAsync("api/review/flows", new { id, name = "Planning a week, again", request.agent, request.screens, request.links }, TestContext.CancellationToken);
-
-        Assert.AreEqual(id, (string?)JsonNode.Parse(await again.Content.ReadAsStringAsync(TestContext.CancellationToken))!["id"]);
-
-        var redrawn = (await GetReview())["flows"]!.AsArray().Where(f => (string?)f!["id"] == id).ToArray();
-
-        Assert.HasCount(1, redrawn);
-        Assert.AreEqual("Planning a week, again", (string?)redrawn[0]!["name"]);
-    }
-
-    [TestMethod]
-    [DataRow("""{"name":"","screens":[{"key":"a","page":"theme"}]}""", "name")]
-    [DataRow("""{"name":"Flow","screens":[]}""", "screen")]
-    [DataRow("""{"name":"Flow","screens":[{"key":"a","page":"nowhere"}]}""", "nowhere")]
-    [DataRow("""{"name":"Flow","screens":[{"key":"a","page":"theme"},{"key":"a","page":"theme"}]}""", "key of its own")]
-    [DataRow("""{"name":"Flow","screens":[{"key":"a","page":"theme"}],"links":[{"from":"a","to":"b"}]}""", "not in the flow")]
-    public async Task AFlowThatDoesNotHoldTogether_Should_BeRefusedWithTheReason(string body, string reason)
-    {
-        var response = await client.PostAsync("api/review/flows", new StringContent(body, System.Text.Encoding.UTF8, "application/json"), TestContext.CancellationToken);
-
-        Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-        Assert.Contains(reason, await response.Content.ReadAsStringAsync(TestContext.CancellationToken));
     }
 
     [TestMethod]

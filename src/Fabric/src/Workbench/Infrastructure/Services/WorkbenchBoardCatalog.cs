@@ -28,7 +28,8 @@ public enum WorkbenchBoardKind
 
 /// <summary>
 /// The boards the Workbench shows. A new board is added here, in <see cref="Build"/>, and shows up while the Workbench runs,
-/// as hot reload has the list built again (<see cref="ClearCache"/>).
+/// as hot reload has the list built again (<see cref="ClearCache"/>). /boards opens the section's own overview, itself a
+/// board (BoardsOverview), which lists them.
 /// </summary>
 public static class WorkbenchBoardCatalog
 {
@@ -53,8 +54,17 @@ public static class WorkbenchBoardCatalog
     public static WorkbenchBoard? Find(string? id) => Boards.FirstOrDefault(board => string.Equals(board.Id, id, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>Called by hot reload after it applies an edit (<see cref="System.Reflection.Metadata.MetadataUpdateHandlerAttribute"/>).</summary>
-    public static void ClearCache(Type[]? updatedTypes) => boards = null;
+    public static void ClearCache(Type[]? updatedTypes)
+    {
+        boards = null;
+        WorkbenchBoardText.Clear();
+    }
 
-    // None yet: an agent adds its boards here.
-    private static IEnumerable<WorkbenchBoard> Build() => [];
+    // One example comes with the Workbench, to show what a board can be; the agents' own boards go next to it. Boards of the
+    // same day keep the order they are listed in.
+    private static IEnumerable<WorkbenchBoard> Build() =>
+    [
+        new("get-started", nameof(WorkbenchStrings.GetStartedBoardTitle), nameof(WorkbenchStrings.GetStartedBoardSummary), BitIconName.Flow,
+            typeof(Components.Pages.Boards.GetStarted.GetStartedBoard), new(2026, 11, 27), "primary", WorkbenchBoardKind.HowItWorks)
+    ];
 }

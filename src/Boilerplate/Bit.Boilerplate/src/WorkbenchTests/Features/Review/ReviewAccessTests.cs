@@ -20,7 +20,6 @@ public class ReviewAccessTests
     [DataRow("PUT", "api/review/abc/tasks")]
     [DataRow("GET", "api/review/abc/screenshot")]
     [DataRow("POST", "api/review/pages/theme/status")]
-    [DataRow("POST", "api/review/flows")]
     [DataRow("GET", "api/review/invite")]
     public async Task TheAgentsEndpoints_Should_NotExistForARemoteRequest(string method, string url)
     {
@@ -37,9 +36,9 @@ public class ReviewAccessTests
 
     [TestMethod]
     [DataRow("")]
-    [DataRow("workbench/buildings")]
+    [DataRow("pages/buildings")]
     [DataRow("preview/buildings")]
-    [DataRow("flows")]
+    [DataRow("boards")]
     public async Task ThePages_Should_StillOpenForARemoteRequest(string url)
     {
         var server = await WorkbenchTestsInitializer.SharedServer;
@@ -73,7 +72,6 @@ public class ReviewAccessTests
         Assert.Contains(t => t.Id == own, remote.Session.Threads);
         Assert.IsTrue(remote.Session.CanChange(own));
         Assert.IsFalse(remote.Session.CanChange(id));
-        Assert.IsNull(remote.Session.CreateFlow("Visitor's flow"));
 
         remote.Session.Reply(id, "Visitor", "Me too");
         remote.Session.SetStatus(id, WorkbenchReviewStatus.Done);

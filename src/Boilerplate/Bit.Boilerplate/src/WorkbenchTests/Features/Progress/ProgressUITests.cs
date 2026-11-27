@@ -20,8 +20,11 @@ public abstract class ProgressPageTest : WorkbenchPageTest
         await WaitUntilInteractive();
 
         // The page says so once it has opened the review document and the state the browser kept.
-        await Expect(Page.Locator(".progress-page")).ToHaveAttributeAsync("data-guide", "none");
+        await Expect(Page.Locator(".progress-content")).ToHaveAttributeAsync("data-guide", "none");
     }
+
+    /// <summary>A task in the side panel, which lists every task beside the open one.</summary>
+    protected ILocator SideTask(string id) => Page.Locator($"#wb-side-panel a.item[href='/progress/{id}']");
 
     protected ILocator GuideSkip => Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.TourSkip, Exact = true });
 
@@ -50,11 +53,9 @@ public class ProgressUITests : ProgressPageTest
 
         await OpenProgress($"progress/{id}");
 
-        var card = Page.Locator($".task-card[data-task-id='{id}']");
-
         if (IsPhone is false)
         {
-            await Expect(card.Locator(".needs-count")).ToHaveTextAsync("2");
+            await Expect(SideTask(id!).Locator(".item-badge")).ToHaveTextAsync("2");
         }
 
         await Expect(Page.Locator(".your-turn")).ToContainTextAsync("Create an API token");
@@ -99,12 +100,12 @@ public class ProgressUITests : ProgressPageTest
         var box = Page.Locator(".activity").GetByRole(AriaRole.Textbox);
 
         await box.FillAsync("Use the cheapest plan.");
-        await Press(Page.Locator($".task-card[data-task-id='{second}']"));
+        await Press(SideTask(second!));
 
         await Expect(Page).ToHaveURLAsync(new Regex($"/progress/{second}$"));
         await Expect(box).ToHaveValueAsync("");
 
-        await Press(Page.Locator($".task-card[data-task-id='{first}']"));
+        await Press(SideTask(first!));
 
         await Expect(box).ToHaveValueAsync("Use the cheapest plan.");
     }
@@ -119,7 +120,7 @@ public class ProgressUITests : ProgressPageTest
 
         await Expect(Page).ToHaveTitleAsync(new Regex($@"^\(\d+\) {Regex.Escape($"Deploy to Test · {WorkbenchStrings.Progress}")}$"));
 
-        await Press(Page.Locator($".task-card[data-task-id='{second}']"));
+        await Press(SideTask(second!));
 
         await Expect(Page).ToHaveTitleAsync(new Regex($@"^\(\d+\) {Regex.Escape($"Loyalty points · {WorkbenchStrings.Progress}")}$"));
     }
@@ -341,9 +342,12 @@ public class ProgressSamplesUITests : ProgressPageTest
 
         await Expect(Page.Locator(".samples-note")).ToContainTextAsync(WorkbenchStrings.ProgressSamplesTitle);
         await Expect(Page.Locator(".task-card")).ToHaveCountAsync(3);
-        await Expect(Page.Locator(".task-list")).ToContainTextAsync(WorkbenchStrings.SampleDeployTitle);
-        await Expect(Page.Locator(".task-list")).ToContainTextAsync(WorkbenchStrings.SampleFeatureTitle);
-        await Expect(Page.Locator(".task-list")).ToContainTextAsync(WorkbenchStrings.SampleFixTitle);
+        foreach (var title in new[] { WorkbenchStrings.SampleDeployTitle, WorkbenchStrings.SampleFeatureTitle, WorkbenchStrings.SampleFixTitle })
+        {
+            await Expect(Page.Locator(".task-card").Filter(new() { HasText = title })).ToHaveCountAsync(1);
+        }
+
+        await Expect(Page.Locator("#wb-side-panel")).ToContainTextAsync(WorkbenchStrings.SampleDeployTitle);
 
         await Press(Page.Locator($".task-card[data-task-id='{WorkbenchSampleTasks.DeployId}']"));
 

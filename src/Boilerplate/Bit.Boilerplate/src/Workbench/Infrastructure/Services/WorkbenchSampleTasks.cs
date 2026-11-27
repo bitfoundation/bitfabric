@@ -77,7 +77,7 @@ public static class WorkbenchSampleTasks
             [
                 Step("requirements", nameof(WorkbenchStrings.SampleFeatureStepRequirements), WorkbenchProgressStepStatus.Done),
                 Step("plan", nameof(WorkbenchStrings.SampleFeatureStepPlan), WorkbenchProgressStepStatus.Done),
-                Step("design", nameof(WorkbenchStrings.SampleFeatureStepDesign), WorkbenchProgressStepStatus.Done, WorkbenchProgressOwner.You, link: designPage is null ? null : WorkbenchUrls.Workbench(designPage.Key)),
+                Step("design", nameof(WorkbenchStrings.SampleFeatureStepDesign), WorkbenchProgressStepStatus.Done, WorkbenchProgressOwner.You, link: designPage is null ? null : WorkbenchUrls.Page(designPage.Key)),
                 Step("ledger", nameof(WorkbenchStrings.SampleFeatureStepLedger), WorkbenchProgressStepStatus.Doing),
                 Step("checkout", nameof(WorkbenchStrings.SampleFeatureStepCheckout), WorkbenchProgressStepStatus.Todo),
                 Step("tests", nameof(WorkbenchStrings.SampleFeatureStepTests), WorkbenchProgressStepStatus.Todo),
@@ -87,7 +87,7 @@ public static class WorkbenchSampleTasks
                 new("expiry", WorkbenchProgressNoteKind.Decision, Text(nameof(WorkbenchStrings.SampleFeatureNoteExpiry))),
                 new("spec", WorkbenchProgressNoteKind.Info, Text(nameof(WorkbenchStrings.SampleFeatureNoteSpec)))
             ],
-            designPage is null ? [] : [new(Text(nameof(WorkbenchStrings.SampleFeatureLinkDesign)), WorkbenchUrls.Workbench(designPage.Key))],
+            designPage is null ? [] : [new(Text(nameof(WorkbenchStrings.SampleFeatureLinkDesign)), WorkbenchUrls.Page(designPage.Key))],
             [
                 new("worth", Text(nameof(WorkbenchStrings.SampleFeatureAskWorth)), Text(nameof(WorkbenchStrings.SampleFeatureAskWorthDetail)), WorkbenchProgressAskKind.Text, [], Text(nameof(WorkbenchStrings.SampleFeatureAskWorthPlaceholder)), now - TimeSpan.FromMinutes(6), null, false),
                 new("orders", Text(nameof(WorkbenchStrings.SampleFeatureAskOrders)), null, WorkbenchProgressAskKind.Choices, orderOptions, null, now - TimeSpan.FromMinutes(6), null, false)

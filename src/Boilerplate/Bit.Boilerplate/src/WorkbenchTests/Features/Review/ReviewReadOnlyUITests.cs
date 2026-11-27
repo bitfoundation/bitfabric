@@ -86,9 +86,7 @@ public class ReviewReadOnlyUITests : ReviewPageTest
     [TestMethod, WithoutAnAgent]
     public async Task TheNoticeOnEveryPage_Should_SayNoAgentIsConnected(WorkbenchSurface surface)
     {
-        var (flowId, _) = await Server.Agent.SaveFlow("Seed", new(Unique("A flow"), [new("only", "theme", "", null, null)], null, null, null), CancellationToken.None);
-
-        foreach (var url in new[] { WorkbenchUrls.Home, WorkbenchUrls.Workbench("shifts"), WorkbenchUrls.Flows, WorkbenchUrls.Flow(flowId!), "/workbench/no-such-page" })
+        foreach (var url in new[] { WorkbenchUrls.Home, WorkbenchUrls.Page("shifts"), WorkbenchUrls.Boards, WorkbenchUrls.Board("add-building"), WorkbenchUrls.Progress, "/pages/no-such-page" })
         {
             await Page.GotoAsync(new Uri(Server.Address, url).ToString());
 
@@ -143,7 +141,7 @@ public class ReviewReadOnlyUITests : ReviewPageTest
         await using var visitor = await Browser.NewContextAsync(new BrowserNewContextOptions(ContextOptions()) { ExtraHTTPHeaders = new Dictionary<string, string> { ["X-Forwarded-For"] = "203.0.113.7" } });
         var page = await visitor.NewPageAsync();
 
-        await page.GotoAsync(new Uri(Server.Address, "workbench/shifts").ToString());
+        await page.GotoAsync(new Uri(Server.Address, "pages/shifts").ToString());
         await Expect(page.Locator(".pane-stage.ready")).ToBeVisibleAsync();
 
         var tools = page.Locator(IsPhone ? ".tools-panel" : "#wb-inspector");

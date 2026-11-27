@@ -1,11 +1,10 @@
 import { highlight, isSweepingNow, parseColor, reveal, runChecks } from './checks';
 import { anchorInView, connectFrames, inspectAgain, prepareFrame, setComponentNames, setMode, showPins } from './frames';
-import { cancelSpotPick, pickSpot } from './spots';
 import { forceStates } from './states';
 
 /** The window, typed loosely to reach Blazor and the workbench interop object. */
 const host = window as any;
-/** True inside a view's page (/preview/...), false on the shell, the home page and the flows board. */
+/** True inside a view's page (/preview/...), false on the shell, the home page and the boards. */
 const isPreview = location.pathname.startsWith('/preview');
 
 /** Device stages the resize observer already watches, and iframes whose load is already handled. */
@@ -405,7 +404,7 @@ if (!isPreview) {
             callShell('ShowSignInGuide', frame.dataset.paneId);
         }
 
-        // Only a view moves the shell to another page; a flow screen doesn't.
+        // Only a view moves the shell to another page; a screen of a board's flow doesn't.
         if (event.data?.type === 'workbench-page' && frame.dataset.paneId) {
             callShell('ReportPage', String(event.data.pageKey ?? ''));
         }
@@ -832,15 +831,6 @@ host.workbench = {
     /** Shows the comment pins of each view, keyed by pane id. */
     showPins(pins: Record<string, never[]>) {
         showPins(pins);
-    },
-
-    /** Lets the user pick the spot a flow arrow starts from on a flow screen. */
-    pickSpot(screenId: string) {
-        return pickSpot(screenId);
-    },
-
-    cancelSpotPick() {
-        cancelSpotPick();
     },
 
     /**

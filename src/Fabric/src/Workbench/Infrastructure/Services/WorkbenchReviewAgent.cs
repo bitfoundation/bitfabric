@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.WebUtilities;
 namespace Bit.Fabric.Workbench.Infrastructure.Services;
 
 /// <summary>
-/// What the coding agent does on the review, over HTTP: read, wait for, answer and track comments, set page statuses,
-/// draw flows and take screenshots. It edits the server's copy of the review document, which syncs to every open browser.
+/// What the coding agent does on the review, over HTTP: read, wait for, answer and track comments, set page statuses
+/// and take screenshots. It edits the server's copy of the review document, which syncs to every open browser.
 /// </summary>
 public sealed partial class WorkbenchReviewAgent
 {
@@ -37,17 +37,16 @@ public sealed partial class WorkbenchReviewAgent
 
     /// <summary>
     /// The review as the agent reads it from get_review and GET /api/review: the comments (done ones too when asked),
-    /// the page statuses, the flows and the cursor to wait from. With pages, only the comments on those pages.
+    /// the page statuses and the cursor to wait from. With pages, only the comments on those pages.
     /// </summary>
     public async Task<object> DescribeReview(bool includeDone, IReadOnlySet<string>? onPages, CancellationToken cancellationToken)
     {
-        var (threads, pages, flows) = await Host.ReadAsync(WorkbenchReviewDocument.Id, document => (WorkbenchReviewDocument.ReadThreads(document.GetMap("threads")),
-                                                                                                     WorkbenchReviewDocument.ReadPages(document.GetMap("pages")),
-                                                                                                     WorkbenchReviewDocument.ReadFlows(document.GetMap("flows"))), cancellationToken);
+        var (threads, pages) = await Host.ReadAsync(WorkbenchReviewDocument.Id, document => (WorkbenchReviewDocument.ReadThreads(document.GetMap("threads")),
+                                                                                              WorkbenchReviewDocument.ReadPages(document.GetMap("pages"))), cancellationToken);
 
         threads = [.. threads.Where(t => onPages is null || onPages.Contains(t.PageKey))];
 
-        return WorkbenchReviewJson.Describe(threads.Where(t => includeDone || t.Status is not WorkbenchReviewStatus.Done), pages, threads.Select(t => t.Sequence).DefaultIfEmpty(0).Max(), flows);
+        return WorkbenchReviewJson.Describe(threads.Where(t => includeDone || t.Status is not WorkbenchReviewStatus.Done), pages, threads.Select(t => t.Sequence).DefaultIfEmpty(0).Max());
     }
 
     /// <summary>
@@ -112,93 +111,6 @@ public sealed partial class WorkbenchReviewAgent
         }, cancellationToken);
 
         return true;
-    }
-
-    public async Task<List<WorkbenchFlow>> GetFlows(CancellationToken cancellationToken)
-    {
-        return await Host.ReadAsync(WorkbenchReviewDocument.Id, document => WorkbenchReviewDocument.ReadFlows(document.GetMap("flows")), cancellationToken);
-    }
-
-    /// <summary>Checks and draws a flow; returns its id, or what is wrong with the request.</summary>
-    public async Task<(string? Id, string? Problem)> SaveFlow(string agentName, WorkbenchFlowRequest request, CancellationToken cancellationToken)
-    {
-        var requests = request.Screens ?? [];
-        var linkRequests = request.Links ?? [];
-
-        if (string.IsNullOrWhiteSpace(request.Name) || requests.Length == 0)
-            return (null, "Give the flow a name and at least one screen.");
-
-        if (requests.Length > WorkbenchReviewDocument.MaxScreens || linkRequests.Length > WorkbenchReviewDocument.MaxLinks)
-            return (null, $"A flow holds up to {WorkbenchReviewDocument.MaxScreens} screens and {WorkbenchReviewDocument.MaxLinks} links.");
-
-        if (requests.FirstOrDefault(screen => WorkbenchPageCatalog.Find(screen.Page) is null) is { } unknown)
-            return (null, $"There is no page with the key \"{unknown.Page}\".");
-
-        var keys = requests.Select(screen => screen.Key).ToArray();
-
-        if (keys.Any(string.IsNullOrWhiteSpace) || keys.Distinct(StringComparer.Ordinal).Count() != keys.Length)
-            return (null, "Give every screen a key of its own.");
-
-        if (linkRequests.FirstOrDefault(link => keys.Contains(link.From) is false || keys.Contains(link.To) is false) is { } stray)
-            return (null, $"The link from \"{stray.From}\" to \"{stray.To}\" names a screen that is not in the flow.");
-
-        // Drawing a saved flow again keeps its id, so the link to its board still works.
-        var existing = request.Id is { Length: > 0 } existingId ? (await GetFlows(cancellationToken)).FirstOrDefault(f => f.Id == existingId) : null;
-        var flowId = existing?.Id ?? Guid.NewGuid().ToString("N")[..16];
-        var screenIds = keys.ToDictionary(key => key, _ => Guid.NewGuid().ToString("N")[..16]);
-        var spots = new Dictionary<WorkbenchFlowLinkRequest, WorkbenchFlowSpot?>();
-        var states = new Dictionary<string, bool>();
-
-        // A screen with taps, or with arrows that start at a tap, is opened in the headless browser to tap through it,
-        // save the page state it ends in and find where its arrows start.
-        foreach (var screen in requests)
-        {
-            var page = WorkbenchPageCatalog.Find(screen.Page)!;
-            var taps = screen.Taps?.Where(tap => string.IsNullOrWhiteSpace(tap) is false).ToArray() ?? [];
-            var outgoing = linkRequests.Where(link => link.From == screen.Key && string.IsNullOrWhiteSpace(link.Tap) is false).ToArray();
-
-            if (taps.Length == 0 && outgoing.Length == 0)
-                continue;
-
-            var capture = await screenshotService.CaptureFlowScreen(page, WorkbenchScenario.Parse(screen.Query), taps, [.. outgoing.Select(link => link.Tap!)], cancellationToken);
-
-            if (capture.MissingTap is { } missing)
-                return (null, $"Nothing to tap reads \"{missing}\" on the screen \"{screen.Key}\".");
-
-            states[screen.Key] = await attachments.SaveState($"{flowId}{screenIds[screen.Key]}", capture.State);
-
-            for (var index = 0; index < outgoing.Length; index++)
-            {
-                spots[outgoing[index]] = capture.Spots.ElementAtOrDefault(index);
-            }
-        }
-
-        var positions = WorkbenchFlowLayout.Arrange([.. requests.Select(screen => (screen.Key, WorkbenchScenario.Parse(screen.Query)))],
-                                                    [.. linkRequests.Select(link => (link.From, link.To))]);
-
-        var screens = requests.Select(screen => new WorkbenchFlowScreen(screenIds[screen.Key],
-                                                                        WorkbenchPageCatalog.Find(screen.Page)!.Key,
-                                                                        WorkbenchScenario.Parse(screen.Query).ToQueryString(),
-                                                                        screen.Note,
-                                                                        states.GetValueOrDefault(screen.Key),
-                                                                        positions[screen.Key].X,
-                                                                        positions[screen.Key].Y));
-
-        var links = linkRequests.Select(link => new WorkbenchFlowLink(Guid.NewGuid().ToString("N")[..16], screenIds[link.From], screenIds[link.To], link.Label, spots.GetValueOrDefault(link)));
-
-        await Host.EditAsync(WorkbenchReviewDocument.Id, document =>
-        {
-            WorkbenchReviewDocument.SaveFlow(document.GetMap("flows"), flowId, request.Name, screens, links);
-            WorkbenchReviewDocument.SetAgent(document.GetMap("agent"), agentName, null);
-        }, cancellationToken);
-
-        // The screens drawn before got new ids, so their saved states are no longer used.
-        foreach (var screen in existing?.Screens ?? [])
-        {
-            attachments.DeleteState($"{flowId}{screen.Id}");
-        }
-
-        return (flowId, null);
     }
 
     /// <summary>Captures the view a comment was left on, with the page state saved with it.</summary>

@@ -7,7 +7,7 @@ namespace Boilerplate.WorkbenchTests.Features.Shell;
 public class ShellComponentsTests
 {
     private static string[] PageLinks(IRenderedComponent<PageNavigator> cut) =>
-        [.. cut.FindAll("a.page-link").Select(a => a.GetAttribute("href")!).Where(href => href.StartsWith("/workbench/", StringComparison.Ordinal))];
+        [.. cut.FindAll("a.item").Select(a => a.GetAttribute("href")!).Where(href => href.StartsWith("/pages/", StringComparison.Ordinal))];
 
     [TestMethod]
     public async Task ThePageList_Should_ListEveryPageAndKeepTheViewsInItsLinks()
@@ -22,23 +22,9 @@ public class ShellComponentsTests
         var links = PageLinks(cut);
 
         Assert.HasCount(WorkbenchPageCatalog.Pages.Count, links);
-        Assert.Contains("/workbench/buildings?theme=dark&variant=cards&sw-amount=few", links, "The current page keeps its design option and switches.");
-        Assert.Contains("/workbench/theme?theme=dark", links, "Another page gets the same views without them.");
-        Assert.AreEqual("page", cut.Find("a.page-link.active").GetAttribute("aria-current"));
-        Assert.Contains("/flows", cut.FindAll("a.page-link").Select(a => a.GetAttribute("href")).ToArray());
-    }
-
-    [TestMethod]
-    public async Task AFlowsTabWithoutFlowsOfItsOwn_Should_OfferTheSamplesWithoutAskingARemoteViewerForAnAgent()
-    {
-        await using var ctx = WorkbenchBunit.Create(isLocal: false);
-
-        var cut = ctx.Render<FlowsPanel>(p => p.Add(x => x.PageKey, "shifts"));
-
-        Assert.Contains(WorkbenchStrings.SampleFlowBuildings, cut.Markup);
-        Assert.DoesNotContain(WorkbenchStrings.NoFlowsYet, cut.Markup);
-        Assert.DoesNotContain(WorkbenchStrings.FlowsEmpty, cut.Markup);
-        Assert.DoesNotContain(WorkbenchStrings.AddToFlow, cut.Markup);
+        Assert.Contains("/pages/buildings?theme=dark&variant=cards&sw-amount=few", links, "The current page keeps its design option and switches.");
+        Assert.Contains("/pages/theme?theme=dark", links, "Another page gets the same views without them.");
+        Assert.AreEqual("page", cut.Find("a.item.active").GetAttribute("aria-current"));
     }
 
     [TestMethod]
@@ -58,9 +44,8 @@ public class ShellComponentsTests
         {
             var links = PageLinks(cut);
 
-            Assert.Contains(link => link.StartsWith($"/workbench/{expected}", StringComparison.Ordinal), links);
+            Assert.Contains(link => link.StartsWith($"/pages/{expected}", StringComparison.Ordinal), links);
             Assert.IsLessThan(WorkbenchPageCatalog.Pages.Count, links.Length);
-            Assert.DoesNotContain(WorkbenchStrings.AllFlows, cut.Markup, "The flows hide while searching.");
         });
     }
 

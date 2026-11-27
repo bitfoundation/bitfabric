@@ -101,13 +101,6 @@
                     @* As the app's NavBar: what a visitor on a phone looks for next *@
                     <BitNavBarOption Text="@AppLocalizer[nameof(AppStrings.Pricing)]" IconName="@BitIconName.Savings" Url="@PageUrl("app-pricing", "#pricing")" />
 
-                    @* The showcase in the view, unless a signed-out visitor can't open it; the app's own pages keep the app's bar *@
-                    @if (Page.Key != "dashboard" && IsAppPage(Page) is false && (IsSignedIn || Page.NeedsSignIn is false))
-                    {
-                        <BitNavBarOption Text="@Localizer[Page.TitleKey]" IconName="@Page.IconName" Url="@currentPageUrl" />
-                    }
-
-
 
                     <BitNavBarOption Text="@AppLocalizer[nameof(AppStrings.Compare)]" IconName="@BitIconName.Table" Url="@PageUrl("app-compare", "#compare")" />
 

@@ -520,21 +520,17 @@
 }
 
 
-// Who the Workbench is for, in one card: the agent first and widest, then the two parts that are for you.
+// Who the Workbench is for, in one card: the agent first, across the top, then a row of what it gives you.
 .big-card {
     display: grid;
     overflow: hidden;
     border-radius: 24px;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     border: 1px solid color-mix(in srgb, #{$bit-color-primary} 28%, #{$bit-color-border-tertiary});
     background-color: $bit-color-background-primary;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 24px 48px -28px rgba(0, 0, 0, 0.35);
 
     @include lt-lg {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    }
-
-    @include lt-sm {
         grid-template-columns: minmax(0, 1fr);
     }
 }
@@ -546,7 +542,7 @@
     flex-direction: column;
     align-items: flex-start;
 
-    & + .big-part {
+    &:not(.agent) + .big-part {
         border-inline-start: 1px solid $bit-color-border-tertiary;
     }
 
@@ -565,42 +561,38 @@
         color: $bit-color-foreground-secondary;
     }
 
-    // The agent's part carries the card's glow, so it stays behind the agent in right-to-left too.
+    // The agent's part spans the card and carries its glow, which stays behind the agent in right-to-left too.
     &.agent {
-        background: radial-gradient(560px 300px at 0% 0%, color-mix(in srgb, #{$bit-color-primary} 14%, transparent), transparent 75%);
+        grid-column: 1 / -1;
+        border-bottom: 1px solid $bit-color-border-tertiary;
+        background: radial-gradient(720px 300px at 0% 0%, color-mix(in srgb, #{$bit-color-primary} 14%, transparent), transparent 75%);
 
         h3 {
             font-size: 1.625rem;
             letter-spacing: -0.01em;
         }
+
+        // On a wide screen its name sits beside what it does, across the card.
+        @include gt-md {
+            gap: 2.5rem;
+            flex-direction: row;
+            align-items: center;
+        }
     }
 
     [dir="rtl"] &.agent {
-        background: radial-gradient(560px 300px at 100% 0%, color-mix(in srgb, #{$bit-color-primary} 14%, transparent), transparent 75%);
+        background: radial-gradient(720px 300px at 100% 0%, color-mix(in srgb, #{$bit-color-primary} 14%, transparent), transparent 75%);
     }
 
     @include lt-lg {
-        &.agent {
-            grid-column: 1 / -1;
-            border-bottom: 1px solid $bit-color-border-tertiary;
-        }
-
-        &.agent + .big-part {
+        &:not(.agent) + .big-part {
             border-inline-start: none;
+            border-top: 1px solid $bit-color-border-tertiary;
         }
     }
 
     @include lt-sm {
         padding: 1.5rem;
-
-        & + .big-part {
-            border-inline-start: none;
-            border-top: 1px solid $bit-color-border-tertiary;
-        }
-
-        &.agent {
-            border-bottom: none;
-        }
     }
 }
 
@@ -631,6 +623,24 @@
     justify-content: center;
     color: $bit-color-primary;
     background-color: color-mix(in srgb, #{$bit-color-primary} 12%, transparent);
+}
+
+.agent-head,
+.agent-body {
+    gap: 0.625rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.agent-head {
+    flex: 0 0 34%;
+}
+
+.agent-body {
+    gap: 0.875rem;
+    min-width: 0;
+    flex: 1 1 0;
 }
 
 // The footnote under the agent's part: a reminder, so it stays small.
@@ -811,50 +821,6 @@
         content: '';
         background-color: $bit-color-border-tertiary;
     }
-}
-
-.flow-cards {
-    gap: 1rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-}
-
-.flow-card {
-    gap: 0.4rem;
-    display: flex;
-    padding: 1.1rem 1.25rem;
-    border-radius: 18px;
-    text-decoration: none;
-    flex-direction: column;
-    color: $bit-color-foreground-primary;
-    background-color: $bit-color-background-primary;
-    border: 1px solid $bit-color-border-tertiary;
-    transition: border-color 0.15s ease;
-
-    &:hover {
-        border-color: $bit-color-primary;
-    }
-
-    &.all-flows {
-        border-style: dashed;
-    }
-}
-
-.flow-card-name {
-    gap: 0.5rem;
-    display: flex;
-    font-size: 1.05rem;
-    font-weight: 700;
-    align-items: center;
-
-    ::deep .bit-icn {
-        color: $bit-color-primary;
-    }
-}
-
-.flow-card-meta {
-    font-size: 0.875rem;
-    color: $bit-color-foreground-secondary;
 }
 
 .page-card {

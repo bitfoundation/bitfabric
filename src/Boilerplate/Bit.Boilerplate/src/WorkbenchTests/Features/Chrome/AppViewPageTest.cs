@@ -44,7 +44,7 @@ public abstract class AppViewPageTest : WorkbenchPageTest
         await CloseAccountMenu();
 
         await Expect(PageTitle).ToHaveTextAsync(title);
-        await Expect(Page).ToHaveURLAsync(new Regex($"/workbench/{pageKey}"));
+        await Expect(Page).ToHaveURLAsync(new Regex($"/pages/{pageKey}"));
 
         Assert.StartsWith($"/preview/{pageKey}", await View().Locator("html").EvaluateAsync<string>("() => location.pathname"));
     }

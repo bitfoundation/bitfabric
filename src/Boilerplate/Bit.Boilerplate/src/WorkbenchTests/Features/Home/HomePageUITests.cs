@@ -1,6 +1,6 @@
 namespace Boilerplate.WorkbenchTests.Features.Home;
 
-/// <summary>The home page: what it promises, the way into the pages and its own language and theme.</summary>
+/// <summary>The home page: who the Workbench is for, the way into the pages, the boards and Progress, and its own language and theme.</summary>
 [TestClass, TestCategory("UITest")]
 public class HomePageUITests : WorkbenchPageTest
 {
@@ -15,19 +15,41 @@ public class HomePageUITests : WorkbenchPageTest
     /// <summary>A page's title, after the count of what the agents' tasks wait for, which tests sharing the Workbench may have left.</summary>
     private static Regex WithWaiting(string title) => new($@"^(\(\d+\) )?{Regex.Escape(title)}$");
 
-    private ILocator Headline => Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeHeadline, Level = 1 });
+    private ILocator Headline => Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeAgentHeadline, Level = 1 });
 
     [TestMethod, EverySurface]
     public async Task TheHomePage_Should_SayWhatTheWorkbenchIs(WorkbenchSurface surface)
     {
         await OpenHome();
 
-        await Expect(Page).ToHaveTitleAsync(WithWaiting(WorkbenchStrings.HomePageTitle));
+        await Expect(Page).ToHaveTitleAsync(WithWaiting(WorkbenchStrings.HomeAgentPageTitle));
         await Expect(Headline).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeWhyTitle, Level = 2 })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeForWhoTitle, Level = 2 })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeHowTitle, Level = 2 })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeWhyCustomizeTitle, Level = 3 })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeWhyManyAppsTitle, Level = 3 })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeCardCustomizeTitle, Level = 3 })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeCardManyAppsTitle, Level = 3 })).ToBeVisibleAsync();
+    }
+
+    [TestMethod, EverySurface]
+    public async Task TheBigCard_Should_PutTheAgentFirstThenTheFeedbackProgressAndBoardsForYou(WorkbenchSurface surface)
+    {
+        await OpenHome();
+
+        var parts = Page.Locator("section#why .big-card .big-part");
+
+        await Expect(parts).ToHaveCountAsync(4);
+        await Expect(parts.Nth(0)).ToHaveClassAsync(new Regex(@"\bagent\b"));
+        await Expect(parts.Nth(0).Locator(".agent-head h3")).ToHaveTextAsync(WorkbenchStrings.HomeBigAgentTitle);
+        await Expect(parts.Nth(0).Locator(".agent-body")).ToContainTextAsync(WorkbenchStrings.HomeBigAgentText);
+        await Expect(parts.Locator("h3")).ToHaveTextAsync([WorkbenchStrings.HomeBigAgentTitle, WorkbenchStrings.HomeBigFeedbackTitle, WorkbenchStrings.HomeBigProgressTitle, WorkbenchStrings.HomeBigBoardsTitle]);
+        await Expect(Page.Locator("section#why .small-card")).Not.ToHaveCountAsync(0);
+
+        // The boards come right after the big card; the home page has no flows section, card or link.
+        await Expect(Page.Locator("section#boards")).ToBeVisibleAsync();
+        await Expect(Page.Locator("section#progress")).ToBeAttachedAsync();
+        await Expect(Page.Locator("section#flows")).ToHaveCountAsync(0);
+        await Expect(Page.Locator("a[href^='/flows']")).ToHaveCountAsync(0);
+        await Expect(Page.Locator($"footer.home-footer a[href='{WorkbenchUrls.Boards}'] + a")).ToHaveAttributeAsync("href", WorkbenchUrls.Progress);
     }
 
     [TestMethod, EverySurface]
@@ -40,7 +62,7 @@ public class HomePageUITests : WorkbenchPageTest
         await Page.WaitForFunctionAsync("() => window.Blazor === undefined && document.readyState === 'complete'");
         await Expect(Headline).ToHaveCSSAsync("opacity", "1");
         await Expect(Page.Locator(".hero-actions")).ToHaveCSSAsync("opacity", "1");
-        await Expect(Page.Locator("article.reason").First).ToHaveCSSAsync("opacity", "1");
+        await Expect(Page.Locator(".big-card")).ToHaveCSSAsync("opacity", "1");
 
         if (IsPhone is false)
         {
@@ -105,7 +127,7 @@ public class HomePageUITests : WorkbenchPageTest
             window.__lowestOpacity = 1;
             window.__wasShown = false;
             const watch = () => {
-                const card = document.querySelector('article.reason');
+                const card = document.querySelector('.big-card');
                 if (card) {
                     const opacity = Number(getComputedStyle(card).opacity);
                     window.__wasShown ||= opacity > 0.99;
@@ -134,7 +156,7 @@ public class HomePageUITests : WorkbenchPageTest
 
         await Press(cards.Filter(new() { HasText = WorkbenchStrings.BuildingsTitle }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/buildings"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/buildings"));
         await WaitForViews();
         await Expect(View().GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.BuildingsHeading })).ToBeVisibleAsync();
     }
@@ -165,7 +187,7 @@ public class HomePageUITests : WorkbenchPageTest
 
         await Press(Page.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.HomeStartHere, Exact = true }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/pos-dashboard"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/pos-dashboard"));
         await Expect(Page.Locator(".bit-bonboarding-popover").GetByText(WorkbenchStrings.HomeWhyAgentsTitle, new() { Exact = true })).ToBeVisibleAsync();
     }
 
@@ -176,19 +198,17 @@ public class HomePageUITests : WorkbenchPageTest
 
         await Press(Page.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.HomeCtaOpen, Exact = true }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex($"/workbench/{WorkbenchPageCatalog.Pages[0].Key}"));
+        await Expect(Page).ToHaveURLAsync(new Regex($"/pages/{WorkbenchPageCatalog.Pages[0].Key}"));
         await WaitForViews();
     }
 
     [TestMethod, OnDesktops]
-    public async Task TheHeadersLinks_Should_LeadToTheSectionsAndTheFlows(WorkbenchSurface surface)
+    public async Task TheHeadersSwitcher_Should_LeadToTheBoardsAndThePages(WorkbenchSurface surface)
     {
         await OpenHome();
 
-        await Press(Header.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.Pages, Exact = true }));
-
-        await Expect(Page).ToHaveURLAsync(new Regex("#pages$"));
-        await Expect(Page.Locator("section#pages .section-head")).ToBeInViewportAsync();
+        var switcher = Header.Locator(".section-menu button").First;
+        var menu = Page.GetByRole(AriaRole.Menu);
 
         // Why is a part of the home page, not a section, so it waits under the hero.
         await Press(Page.Locator(".hero-actions").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.HomeWhyButton, Exact = true }));
@@ -196,9 +216,18 @@ public class HomePageUITests : WorkbenchPageTest
         await Expect(Page).ToHaveURLAsync(new Regex("#why$"));
         await Expect(Page.Locator("section#why .section-head")).ToBeInViewportAsync();
 
-        await Press(Header.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.Flows, Exact = true }));
+        await Press(switcher);
+        await Press(menu.Locator($"[role='menuitemradio'][href='{WorkbenchUrls.Boards}']"));
 
-        await Expect(Page).ToHaveURLAsync(new Regex($"{WorkbenchUrls.Flows}$"));
+        await Expect(Page).ToHaveURLAsync(new Regex($"{WorkbenchUrls.Boards}$"));
+        await WaitUntilInteractive();
+
+        // The Pages section starts on the first page.
+        await Press(switcher);
+        await Press(menu.Locator($"[role='menuitemradio'][href='{WorkbenchUrls.Pages}']"));
+
+        await Expect(Page).ToHaveURLAsync(new Regex($"/pages/{WorkbenchPageCatalog.Pages[0].Key}"));
+        await WaitForViews();
     }
 
     [TestMethod, OnPhones]
@@ -244,7 +273,7 @@ public class HomePageUITests : WorkbenchPageTest
         await Press(Header.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.WorkbenchLanguage, Exact = true }));
         await Press(Page.GetByRole(AriaRole.Menuitemradio, new() { Name = "فارسی", Exact = true }));
 
-        var headline = InCulture("fa-IR", nameof(WorkbenchStrings.HomeHeadline));
+        var headline = InCulture("fa-IR", nameof(WorkbenchStrings.HomeAgentHeadline));
 
         await Expect(Page.Locator("html")).ToHaveAttributeAsync("dir", "rtl");
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = headline, Level = 1 })).ToBeVisibleAsync();
@@ -299,26 +328,13 @@ public class HomePageUITests : WorkbenchPageTest
     }
 
     [TestMethod, EverySurface]
-    public async Task TheFlowsSection_Should_LeadToTheSamples(WorkbenchSurface surface)
-    {
-        await OpenHome();
-
-        var sample = Page.Locator("section#flows").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.SampleFlowBuildings });
-
-        await Press(sample);
-
-        await Expect(Page).ToHaveURLAsync(new Regex($"/flows/{WorkbenchSampleFlows.BuildingsId}$"));
-        await Expect(Page.Locator(".screen-card")).ToHaveCountAsync(3);
-    }
-
-    [TestMethod, EverySurface]
     public async Task TheFooter_Should_ListThePagesAndWhereToLearnMore(WorkbenchSurface surface)
     {
         await OpenHome();
 
         var footer = Page.Locator("footer.home-footer");
 
-        await Expect(footer.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.ShiftsTitle, Exact = true })).ToHaveAttributeAsync("href", WorkbenchUrls.Workbench("shifts"));
+        await Expect(footer.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.ShiftsTitle, Exact = true })).ToHaveAttributeAsync("href", WorkbenchUrls.Page("shifts"));
         await Expect(footer.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.HomeFooterDocs })).ToHaveAttributeAsync("target", "_blank");
         await Expect(footer.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.HomeFooterSource })).ToHaveAttributeAsync("href", new Regex("github.com"));
     }
@@ -330,7 +346,7 @@ public class HomePageUITests : WorkbenchPageTest
 
         await Press(Page.Locator("footer.home-footer").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.ShiftsTitle, Exact = true }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts$"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/shifts$"));
         await WaitForViews();
         await Expect(Page).ToHaveTitleAsync(WithWaiting($"{WorkbenchStrings.ShiftsTitle} · {WorkbenchStrings.WorkbenchTitle}"));
     }
@@ -361,17 +377,6 @@ public class HomePageUITests : WorkbenchPageTest
         await Press(Header.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.WorkbenchTitle, Exact = true }));
 
         await Expect(Headline).ToBeInViewportAsync();
-    }
-
-    [TestMethod, EverySurface]
-    public async Task TheAllFlowsCard_Should_LeadToTheFlows(WorkbenchSurface surface)
-    {
-        await OpenHome();
-
-        await Press(Page.Locator("a.all-flows"));
-
-        await Expect(Page).ToHaveURLAsync(new Regex($"{WorkbenchUrls.Flows}$"));
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.Flows, Level = 1 })).ToBeVisibleAsync();
     }
 
     [TestMethod, EverySurface]

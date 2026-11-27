@@ -410,12 +410,12 @@ public sealed class AppHomeFilms(IStringLocalizer<AppStrings> localizer)
                 [new FilmChips(Agents, 0), new FilmBubble(localizer[nameof(AppStrings.AppHomeMakeTheSignUpPageFriendlier)], Mine: true) { At = .6 },
                  new FilmBubble(localizer[nameof(AppStrings.AppHomeHereItIsInTheWorkbenchOnEveryDevice)]) { At = 1.5 }], Editor),
             new(localizer[nameof(AppStrings.AppHomeDesignsYourPagesInTheWorkbenchNotIn)],
-                [new FilmChips(Agents, 1), .. SignUpPage], Browser) { Url = "localhost/workbench/sign-up" }
+                [new FilmChips(Agents, 1), .. SignUpPage], Browser) { Url = "localhost/pages/sign-up" }
         ],
         "real-components" =>
         [
             new(localizer[nameof(AppStrings.AppHomeInTheWorkbenchPagesAreDrawnWithYour)],
-                [new FilmStep(localizer[nameof(AppStrings.AppHomeInTheWorkbench)]), DraggedCalendar], Browser) { Url = "localhost/workbench/calendar" },
+                [new FilmStep(localizer[nameof(AppStrings.AppHomeInTheWorkbench)]), DraggedCalendar], Browser) { Url = "localhost/pages/calendar" },
             new(localizer[nameof(AppStrings.AppHomeAndInYourAppItSTheVerySameCalendarSo)],
                 [new FilmStep(localizer[nameof(AppStrings.AppHomeInYourApp)]), DraggedCalendar], Browser) { Url = "yourapp.com/calendar" }
         ],
@@ -432,10 +432,10 @@ public sealed class AppHomeFilms(IStringLocalizer<AppStrings> localizer)
         "side-by-side" =>
         [
             new(localizer[nameof(AppStrings.AppHomeTheWorkbenchShowsOnePageOnAPhoneA)],
-                [new FilmFrames([new(Phone, "iPhone"), new(Tablet, "iPad"), new(Desktop, "Windows")])], Browser) { Url = "localhost/workbench/orders" },
+                [new FilmFrames([new(Phone, "iPhone"), new(Tablet, "iPad"), new(Desktop, "Windows")])], Browser) { Url = "localhost/pages/orders" },
             new(localizer[nameof(AppStrings.AppHomeInLightDarkAndRightToLeftTooSoA)],
                 [new FilmFrames([new(Phone, localizer[nameof(AppStrings.ThemeLight)]) { Dark = false }, new(Phone, localizer[nameof(AppStrings.Dark)]) { Dark = true }, new(Phone, "فارسی") { Dark = false, Rtl = true },
-                     new(Desktop, $"{localizer[nameof(AppStrings.Dark)]} · فارسی") { Dark = true, Rtl = true }], ChangeAt: 1.6)], Browser) { Url = "localhost/workbench/orders" }
+                     new(Desktop, $"{localizer[nameof(AppStrings.Dark)]} · فارسی") { Dark = true, Rtl = true }], ChangeAt: 1.6)], Browser) { Url = "localhost/pages/orders" }
         ],
         "screenshots" =>
         [
@@ -447,13 +447,13 @@ public sealed class AppHomeFilms(IStringLocalizer<AppStrings> localizer)
             new(localizer[nameof(AppStrings.AppHomeAndTheWorkbenchMakesThemPixelExact)],
                 [new FilmFrames([new(Phone, "App Store") { Caption = localizer[nameof(AppStrings.AppHomeAllYourOrders)] },
                      new(Phone, "Google Play") { Caption = localizer[nameof(AppStrings.AppHomePayInOneTap)], Tone = Good },
-                     new(Desktop, "Microsoft Store") { Caption = localizer[nameof(AppStrings.AppHomeWorksOffline)] }])], Browser) { Url = "localhost/workbench/screenshots" }
+                     new(Desktop, "Microsoft Store") { Caption = localizer[nameof(AppStrings.AppHomeWorksOffline)] }])], Browser) { Url = "localhost/pages/screenshots" }
         ],
         "flows" =>
         [
-            new(localizer[nameof(AppStrings.AppHomeTheWorkbenchDrawsHowYourPagesLeadTo)], [new FilmFlow(CheckoutFlow)], Browser) { Url = "localhost/workbench/flows/checkout" },
+            new(localizer[nameof(AppStrings.AppHomeTheWorkbenchDrawsHowYourPagesLeadTo)], [new FilmFlow(CheckoutFlow)], Browser) { Url = "localhost/boards/checkout" },
             new(localizer[nameof(AppStrings.AppHomeSoTheWholeTeamSeesTheJourneyAtA)],
-                [new FilmFlow(CheckoutFlow), new FilmNote(localizer[nameof(AppStrings.AppHomeSharedWithTheTeam)], Neutral) { At = 2.4 }], Laptop) { Url = "localhost/workbench/flows/checkout" }
+                [new FilmFlow(CheckoutFlow), new FilmNote(localizer[nameof(AppStrings.AppHomeSharedWithTheTeam)], Neutral) { At = 2.4 }], Laptop) { Url = "localhost/boards/checkout" }
         ],
 
         // Growth

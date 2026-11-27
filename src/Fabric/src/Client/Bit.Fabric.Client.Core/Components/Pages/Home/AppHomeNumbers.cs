@@ -8,7 +8,7 @@ public static class AppHomeNumbers
     /// <summary>The bit platform team's admin panel demo on the web, built on the same template.</summary>
     public const string AdminPanelDemoUrl = "https://adminpanel.bitplatform.dev/";
 
-    /// <summary>The template's Workbench on sample data, with its pages, flows, boards and a Progress task, open to anyone.</summary>
+    /// <summary>The template's Workbench on sample data, with its pages, boards and a Progress task, open to anyone.</summary>
     public const string WorkbenchDemoUrl = "https://workbench.bitfabric.co";
 
     /// <summary>The Admin demo's public status page, on bitfabric.co, in the visitor's language: the demos are watched by Production only.</summary>

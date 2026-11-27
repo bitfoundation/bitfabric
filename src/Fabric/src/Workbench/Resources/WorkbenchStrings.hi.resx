@@ -1662,18 +1662,6 @@
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} खुली टिप्पणियाँ</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>फ़्लो</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>फ़्लो किसी काम की स्क्रीनों को साथ-साथ दिखाता है, हर एक उस हालत में जो मायने रखती है, जैसे एक सूची और वह डायलॉग जो उसका बटन खोलता है, और तीर बताते हैं कि एक से अगली तक कैसे पहुँचते हैं। ऐप को समझने या मीटिंग में उस पर बात करने के लिए कोई फ़्लो खोलें।</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>नए फ़्लो का नाम</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>फ़्लो हटाएँ</value>
-    </data>
     <data name="ReviewSheet" xml:space="preserve">
         <value>रिव्यू शीट</value>
     </data>
@@ -1809,12 +1797,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>अभी कोई टिप्पणी नहीं।</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>अभी कोई फ़्लो नहीं।</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>नमूना</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>अपने AI एजेंट के साथ लाइव रिव्यू करें</value>
     </data>
@@ -1833,71 +1815,8 @@
     <data name="TapToComment" xml:space="preserve">
         <value>जिस जगह पर टिप्पणी करनी है, उसे टैप करें</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>अपने एजेंट से एक बनाने को कहें, जैसे “दिखाओ कि इमारत कैसे जोड़ी जाती है”, या किसी पेज के फ़्लो टैब से व्यू को फ़्लो में जोड़ें।</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>इस लिंक पर कोई फ़्लो नहीं है। शायद उसे हटा दिया गया है।</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>इस फ़्लो में अभी कोई स्क्रीन नहीं है। किसी पेज के फ़्लो टैब से इसमें व्यू जोड़ें, या अपने एजेंट से कहें।</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>स्क्रीनें: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>सभी फ़्लो</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>किसी काम की स्क्रीनें साथ-साथ, तीरों से जुड़ी</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>यह व्यू किसी फ़्लो में जोड़ें</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>फ़्लो व्यू को वैसे ही लेता है जैसा वह अभी है: उसका डिवाइस, उसकी सेटिंग्स और पेज पर जो भी खुला है।</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>फ़्लो</value>
-    </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>नया फ़्लो</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>यह स्क्रीन क्या दिखाती है (वैकल्पिक)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>पिछली स्क्रीन से यहाँ कैसे पहुँचते हैं (वैकल्पिक)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>उपयोगकर्ता क्या करता है</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>“इमारत जोड़ें” पर टैप करें</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>स्क्रीन {0} पर वह बटन चिह्नित करें जो यहाँ लाता है, ताकि तीर उसी से शुरू हो।</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>स्क्रीन {0} पर चिह्नित बटन से शुरू होता है।</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>बटन चिह्नित करें</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>फिर से चिह्नित करें</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>चिह्न हटाएँ</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>स्क्रीन {0} पर वह बटन टैप करें जो स्क्रीन {1} तक ले जाता है।</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>यह व्यू जोड़ें</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>फ़्लो खोलें</value>
     </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>वर्कबेंच में खोलें</value>
@@ -1919,18 +1838,6 @@
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{1} में से {0}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>स्क्रीन को खिसकाने के लिए उसे खींचें और आज़माने के लिए उस पर डबल-क्लिक करें। तीर बनाने के लिए किसी स्क्रीन के दाएँ किनारे वाले बिंदु से दूसरी स्क्रीन तक खींचें, फिर उसका नाम रखें और वह बटन चिह्नित करें जहाँ से वह शुरू होता है। तीर बदलने या हटाने के लिए उस पर डबल-क्लिक करें।</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>यह फ़्लो हटाएँ?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>यह स्क्रीन हटाएँ</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>तीर हटाएँ</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>एजेंट के जवाब देने पर मुझे सूचित करें</value>
@@ -2160,9 +2067,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>अनुवाद सहेजे नहीं जा सके।</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>स्क्रीन को फ़्लो में नहीं जोड़ा जा सका।</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>लैपटॉप {0}</value>
     </data>
@@ -2183,9 +2087,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>यह व्यू रीसेट करें</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>यह स्क्रीन अभी लोड नहीं हुई है। थोड़ा रुकें, फिर बटन दोबारा चिह्नित करें।</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>कर्ली ब्रैकेट में लिखे प्लेसहोल्डर वैसे ही रखें जैसे वे मूल टेक्स्ट में हैं, नहीं तो पेज यह टेक्स्ट नहीं दिखा पाएगा।</value>
@@ -2309,12 +2210,6 @@
     </data>
     <data name="NewProjectCaption" xml:space="preserve">
         <value>आपका प्रोडक्ट, बस एक पंक्ति दूर</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>यह एक नमूना है: किसी स्क्रीन को आज़माने के लिए उस पर डबल-क्लिक करें, या किसी तीर को बदलने के लिए उस पर, जिससे इस फ़्लो की आपकी अपनी कॉपी बन जाती है।</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>यह एक नमूना है और जैसा है वैसा ही रहता है: यहाँ बदलाव करने पर इस फ़्लो की आपकी अपनी कॉपी उस बदलाव के साथ बनती है और खुल जाती है।</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>इस हफ़्ते स्टोर कैसे चले?</value>
@@ -3837,15 +3732,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>नया नाम कल से रसीदों पर दिखेगा।</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (कॉपी)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>तीर बदलें</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>किसी तीर का नाम बदलने, वह बटन चिह्नित करने जहाँ से वह शुरू होता है, या उसे हटाने के लिए उस पर डबल-क्लिक करें। नमूना जैसा है वैसा ही रहता है: उसके किसी तीर में बदलाव करने पर फ़्लो की आपकी अपनी कॉपी बन जाती है।</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>स्केल</value>
     </data>
@@ -4310,9 +4196,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>गतिविधि से हटाएँ</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>कोई काम चुनें और देखें कि वह कहाँ तक पहुँचा।</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>यह काम अब नहीं है। शायद इसके एजेंट ने इसे पूरा करके हटा दिया।</value>

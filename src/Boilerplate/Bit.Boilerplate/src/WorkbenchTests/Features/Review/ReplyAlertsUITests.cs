@@ -49,6 +49,17 @@ public class ReplyAlertsUITests : ReviewPageTest
 
     private ILocator SoundButton => Page.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.MuteReplySound, Exact = true });
 
+    /// <summary>Presses the header's sound switch, which a phone's tools cover while they are open.</summary>
+    private async Task PressSoundButton()
+    {
+        if (IsPhone && await Page.Locator(".tools-header").IsVisibleAsync())
+        {
+            await CloseTools();
+        }
+
+        await Press(SoundButton);
+    }
+
     private ILocator NotifySwitch => Tools.GetByRole(AriaRole.Switch, new() { Name = WorkbenchStrings.ReplyNotifications });
 
     /// <summary>Starts every page with the alerts counted and the browser answering so when it's asked for notifications.</summary>
@@ -128,10 +139,9 @@ public class ReplyAlertsUITests : ReviewPageTest
 
         await Expect(SoundButton).ToHaveAttributeAsync("aria-pressed", "false");
 
-        await Press(SoundButton);
+        await PressSoundButton();
 
         await Expect(SoundButton).ToHaveAttributeAsync("aria-pressed", "true");
-        await CloseTools();
 
         await Server.Agent.Reply(AgentName, id, Unique("Heard by nobody"), CancellationToken.None);
 
@@ -141,14 +151,12 @@ public class ReplyAlertsUITests : ReviewPageTest
 
         await Page.ReloadAsync();
         await WaitForViews();
-        await OpenTools();
 
         await Expect(SoundButton).ToHaveAttributeAsync("aria-pressed", "true");
 
-        await Press(SoundButton);
+        await PressSoundButton();
 
         await Expect(SoundButton).ToHaveAttributeAsync("aria-pressed", "false");
-        await CloseTools();
 
         await Server.Agent.Reply(AgentName, id, Unique("Heard again"), CancellationToken.None);
 
@@ -181,7 +189,7 @@ public class ReplyAlertsUITests : ReviewPageTest
         Assert.AreEqual(string.Format(CultureInfo.InvariantCulture, WorkbenchStrings.AgentRepliedOn, AgentName, WorkbenchStrings.ShiftsTitle), notified.Title);
         Assert.AreEqual(answer, notified.Body);
         Assert.AreEqual(id, notified.Tag);
-        Assert.AreEqual("/workbench/shifts", notified.Data);
+        Assert.AreEqual("/pages/shifts", notified.Data);
         Assert.IsFalse(notified.Silent);
     }
 
@@ -195,7 +203,7 @@ public class ReplyAlertsUITests : ReviewPageTest
         await Press(NotifySwitch);
         await Expect(NotifySwitch).ToBeCheckedAsync();
 
-        await Press(SoundButton);
+        await PressSoundButton();
         await Expect(SoundButton).ToHaveAttributeAsync("aria-pressed", "true");
 
         await Server.Agent.Reply(AgentName, id, Unique("Quietly"), CancellationToken.None);
@@ -313,15 +321,17 @@ public class ReplyAlertsUITests : ReviewPageTest
     }
 
     [TestMethod, WithAnAgent]
-    public async Task TheFlowsPage_Should_AnnounceRepliesAndOfferTheSoundToggleToo(WorkbenchSurface surface)
+    public async Task TheBoards_Should_AnnounceRepliesAndOfferTheSoundToggleToo(WorkbenchSurface surface)
     {
         await CountAlertsAnswering("default");
 
         var id = await SeedComment("shifts", Unique("Waiting on another page"));
 
-        await Page.GotoAsync(new Uri(Server.Address, WorkbenchUrls.Flows).ToString());
+        await Page.GotoAsync(new Uri(Server.Address, WorkbenchUrls.Boards.TrimStart('/')).ToString());
 
-        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.SampleFlowPos })).ToBeVisibleAsync();
+        // The boards show before the page comes alive, and only a reply after that is news.
+        await Expect(Page.Locator("a.board-card").First).ToBeVisibleAsync();
+        await WaitUntilInteractive();
         await Expect(SoundButton).ToBeVisibleAsync();
 
         await Server.Agent.Reply(AgentName, id, Unique("An answer"), CancellationToken.None);
@@ -351,9 +361,9 @@ public class ReplyAlertsUITests : ReviewPageTest
         Assert.AreEqual(0, alerts.Vibrations);
         Assert.IsEmpty(alerts.Notifications);
 
-        await Page.GotoAsync(new Uri(Server.Address, WorkbenchUrls.Flows).ToString());
+        await Page.GotoAsync(new Uri(Server.Address, WorkbenchUrls.Boards.TrimStart('/')).ToString());
 
-        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.SampleFlowPos })).ToBeVisibleAsync();
+        await Expect(Page.Locator("a.board-card").First).ToBeVisibleAsync();
         await Expect(SoundButton).ToHaveCountAsync(0);
     }
 }

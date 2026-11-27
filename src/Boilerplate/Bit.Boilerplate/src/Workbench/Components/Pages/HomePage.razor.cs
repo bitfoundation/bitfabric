@@ -1,8 +1,8 @@
 namespace Boilerplate.Workbench.Components.Pages;
 
 /// <summary>
-/// The Workbench's landing page: why it exists, the agents' long tasks, the boards they build, how to use it, the catalog
-/// of pages with their review status, and the flows.
+/// The Workbench's landing page: who it is for, in one big card (mostly the AI agent, then what it gives you) and small cards
+/// for the rest, the boards agents build, their long tasks, how to use it, and the catalog of pages with their review status.
 /// </summary>
 public partial class HomePage
 {
@@ -16,30 +16,35 @@ public partial class HomePage
         (BitIconName.ChatBot, nameof(WorkbenchStrings.HomeChipLive))
     ];
 
-    // Designing and reviewing pages first, as the agents' long tasks have the section above these cards to themselves.
-    private static readonly (string IconName, string TitleKey, string TextKey)[] reasons =
+    // The big card's parts for you, under the agent's: feedback on the page, a task's progress, and the boards it explains with.
+    private static readonly (string IconName, string TitleKey, string TextKey)[] yourParts =
     [
-        (BitIconName.Code, nameof(WorkbenchStrings.HomeWhyRealTitle), nameof(WorkbenchStrings.HomeWhyRealText)),
-        (BitIconName.Split, nameof(WorkbenchStrings.HomeWhyStatesTitle), nameof(WorkbenchStrings.HomeWhyStatesText)),
-        (BitIconName.Devices2, nameof(WorkbenchStrings.HomeWhyDevicesTitle), nameof(WorkbenchStrings.HomeWhyDevicesText)),
-        (BitIconName.ChatBot, nameof(WorkbenchStrings.HomeWhyLiveTitle), nameof(WorkbenchStrings.HomeWhyLiveText)),
-        (BitIconName.Camera, nameof(WorkbenchStrings.HomeWhyStoresTitle), nameof(WorkbenchStrings.HomeWhyStoresText)),
-        (BitIconName.Lightbulb, nameof(WorkbenchStrings.HomeWhyHeadStartTitle), nameof(WorkbenchStrings.HomeWhyHeadStartText)),
-        (BitIconName.Tiles, nameof(WorkbenchStrings.HomeWhyManyAppsTitle), nameof(WorkbenchStrings.HomeWhyManyAppsText)),
-        (BitIconName.Lock, nameof(WorkbenchStrings.HomeWhySafeTitle), nameof(WorkbenchStrings.HomeWhySafeText)),
-        (BitIconName.Robot, nameof(WorkbenchStrings.HomeWhyAgentsTitle), nameof(WorkbenchStrings.HomeWhyAgentsText)),
-        (BitIconName.Microphone, nameof(WorkbenchStrings.HomeWhyVoiceTitle), nameof(WorkbenchStrings.HomeWhyVoiceText)),
-        (BitIconName.TaskList, nameof(WorkbenchStrings.HomeWhyProgressTitle), nameof(WorkbenchStrings.HomeWhyProgressText)),
-        (BitIconName.Repair, nameof(WorkbenchStrings.HomeWhyCustomizeTitle), nameof(WorkbenchStrings.HomeWhyCustomizeText))
+        (BitIconName.Comment, nameof(WorkbenchStrings.HomeBigFeedbackTitle), nameof(WorkbenchStrings.HomeBigFeedbackText)),
+        (BitIconName.TimelineProgress, nameof(WorkbenchStrings.HomeBigProgressTitle), nameof(WorkbenchStrings.HomeBigProgressText)),
+        (BitIconName.ViewDashboard, nameof(WorkbenchStrings.HomeBigBoardsTitle), nameof(WorkbenchStrings.HomeBigBoardsText))
+    ];
+
+    // Everything else the Workbench does, one short line each under the big card.
+    private static readonly (string IconName, string TitleKey, string TextKey)[] smallCards =
+    [
+        (BitIconName.Code, nameof(WorkbenchStrings.HomeCardRealTitle), nameof(WorkbenchStrings.HomeCardRealText)),
+        (BitIconName.Split, nameof(WorkbenchStrings.HomeCardStatesTitle), nameof(WorkbenchStrings.HomeCardStatesText)),
+        (BitIconName.Devices2, nameof(WorkbenchStrings.HomeCardDevicesTitle), nameof(WorkbenchStrings.HomeCardDevicesText)),
+        (BitIconName.Camera, nameof(WorkbenchStrings.HomeCardStoresTitle), nameof(WorkbenchStrings.HomeCardStoresText)),
+        (BitIconName.Lightbulb, nameof(WorkbenchStrings.HomeCardHeadStartTitle), nameof(WorkbenchStrings.HomeCardHeadStartText)),
+        (BitIconName.Lock, nameof(WorkbenchStrings.HomeCardSafeTitle), nameof(WorkbenchStrings.HomeCardSafeText)),
+        (BitIconName.Tiles, nameof(WorkbenchStrings.HomeCardManyAppsTitle), nameof(WorkbenchStrings.HomeCardManyAppsText)),
+        (BitIconName.Robot, nameof(WorkbenchStrings.HomeCardAgentsTitle), nameof(WorkbenchStrings.HomeCardAgentsText)),
+        (BitIconName.Repair, nameof(WorkbenchStrings.HomeCardCustomizeTitle), nameof(WorkbenchStrings.HomeCardCustomizeText))
     ];
 
     // What an agent can show as a board instead of telling it in the chat.
     private static readonly (string IconName, string TextKey)[] boardPoints =
     [
-        (BitIconName.Flow, nameof(WorkbenchStrings.HomeBoardsPointDiagram)),
+        (BitIconName.Flow, nameof(WorkbenchStrings.HomeBoardsPointPages)),
+        (BitIconName.Org, nameof(WorkbenchStrings.HomeBoardsPointDiagram)),
         (BitIconName.Split, nameof(WorkbenchStrings.HomeBoardsPointCompare)),
-        (BitIconName.Calculator, nameof(WorkbenchStrings.HomeBoardsPointTry)),
-        (BitIconName.Devices3, nameof(WorkbenchStrings.HomeBoardsPointAnywhere))
+        (BitIconName.Calculator, nameof(WorkbenchStrings.HomeBoardsPointTry))
     ];
 
     private static readonly (string TitleKey, string TextKey)[] steps =
@@ -85,7 +90,7 @@ public partial class HomePage
         {
             await JSRuntime.InvokeVoidAsync("workbench.loadThumbnails");
 
-            // The review document joins once interactive, for the statuses, comment counts and flows on the cards.
+            // The review document joins once interactive, for the statuses and comment counts on the cards and the tasks.
             try
             {
                 await reviewSession.Open(Localizer[nameof(WorkbenchStrings.Reviewer)]);

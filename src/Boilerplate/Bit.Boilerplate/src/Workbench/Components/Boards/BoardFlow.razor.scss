@@ -1,0 +1,167 @@
+@import '../../../Client/Boilerplate.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../Client/Boilerplate.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.board-flow {
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid $bit-color-border-tertiary;
+    background-color: $bit-color-background-primary;
+}
+
+.flow-bar {
+    gap: 0.5rem;
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    padding-block: 0.375rem;
+    padding-inline: 1rem 0.5rem;
+    border-bottom: 1px solid $bit-color-border-tertiary;
+}
+
+.flow-path,
+.flow-step-note {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: $bit-color-foreground-secondary;
+}
+
+.flow-path {
+    font-size: 14px;
+}
+
+.flow-step {
+    gap: 0.5rem;
+    min-width: 0;
+    display: flex;
+    font-size: 14px;
+    align-items: baseline;
+}
+
+.flow-canvas {
+    position: relative;
+    height: var(--board-flow-height, 640px);
+
+    // A phone shows the screens side by side and small, until Present brings one up.
+    @include lt-md {
+        height: min(var(--board-flow-height, 640px), 480px);
+    }
+}
+
+// Blow's colors come from the app's theme, so the flow follows light and dark.
+::deep .bit-blow.flow-board {
+    width: 100%;
+    height: 100%;
+    --bit-blow-bg: #{$bit-color-background-secondary};
+    --bit-blow-background-pattern: #{$bit-color-border-secondary};
+    --bit-blow-node-bg: transparent;
+    --bit-blow-node-border: transparent;
+    --bit-blow-node-color: #{$bit-color-foreground-primary};
+    --bit-blow-node-selected: #{$bit-color-primary};
+    --bit-blow-edge-stroke: #{$bit-color-primary};
+    --bit-blow-edge-selected: #{$bit-color-primary-dark};
+    --bit-blow-handle-bg: #{$bit-color-primary};
+    --bit-blow-surface: #{$bit-color-background-primary};
+    --bit-blow-surface-hover: #{$bit-color-background-primary-hover};
+    --bit-blow-surface-muted: #{$bit-color-background-secondary};
+    --bit-blow-surface-muted-hover: #{$bit-color-background-secondary-hover};
+    --bit-blow-surface-translucent: color-mix(in srgb, #{$bit-color-background-primary} 85%, transparent);
+    --bit-blow-border: #{$bit-color-border-secondary};
+    --bit-blow-border-subtle: #{$bit-color-border-tertiary};
+    --bit-blow-text: #{$bit-color-foreground-primary};
+    --bit-blow-text-muted: #{$bit-color-foreground-secondary};
+}
+
+// A screen node draws no box of its own: the card inside it is the node.
+::deep .bit-blow-node-screen {
+    padding: 0;
+    border: none;
+    min-width: 0;
+    font: inherit;
+    cursor: default;
+    text-align: start;
+    background: none;
+}
+
+// The arrows anchor to the handles, which nobody drags here.
+::deep .bit-blow-handle {
+    visibility: hidden;
+}
+
+// As wide as its device, so a long note wraps instead of reaching into the next screen.
+.screen-card {
+    gap: 18px;
+    display: flex;
+    width: min-content;
+    flex-direction: column;
+}
+
+// Large, as the flow is usually zoomed far out to show every screen.
+.screen-head {
+    gap: 14px;
+    display: flex;
+    font-size: 30px;
+    font-weight: 700;
+    align-items: center;
+    color: $bit-color-foreground-primary;
+}
+
+.screen-number {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    flex-shrink: 0;
+    font-size: 24px;
+    place-items: center;
+    border-radius: 50%;
+    color: $bit-color-primary-text;
+    background-color: $bit-color-primary;
+}
+
+.screen-title {
+    min-width: 0;
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.screen-open {
+    display: flex;
+    font-size: 28px;
+    color: $bit-color-foreground-secondary;
+
+    &:hover {
+        color: $bit-color-primary;
+    }
+}
+
+// Screens stay inert so panning and zooming reach the canvas; the one presented takes the pointer.
+.screen-card:not(.current) iframe {
+    pointer-events: none;
+}
+
+.screen-card.current ::deep .device {
+    border-radius: 24px;
+    outline: 8px solid $bit-color-primary;
+    outline-offset: 10px;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background-color: $bit-color-background-primary;
+}
+
+.screen-note {
+    margin: 0;
+    max-width: 100%;
+    font-size: 26px;
+    line-height: 1.4;
+    color: $bit-color-foreground-secondary;
+}

@@ -67,7 +67,7 @@ public partial class NewProjectHost
     /// </summary>
     private string AddressOfStore(Dictionary<string, StringValues> viewQuery)
     {
-        string[] workbenchKeys = [WorkbenchUrls.PaneQueryKey, WorkbenchUrls.SnapshotQueryKey, WorkbenchUrls.TourQueryKey, WorkbenchUrls.ArrowQueryKey];
+        string[] workbenchKeys = [WorkbenchUrls.PaneQueryKey, WorkbenchUrls.SnapshotQueryKey, WorkbenchUrls.TourQueryKey];
         var current = QueryHelpers.ParseQuery(new Uri(NavigationManager.Uri).Query);
         var kept = QueryHelpers.ParseQuery(store.Query);
         var parameters = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
