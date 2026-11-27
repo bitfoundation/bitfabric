@@ -342,7 +342,7 @@ public class ReviewUITests : ReviewPageTest
         await Composer.FillAsync(text);
         await Press(ToolsButton(WorkbenchStrings.Send));
 
-        await Expect(ThreadWith(text).Locator(".message-author")).ToContainTextAsync(name);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply) .message-author")).ToContainTextAsync(name);
 
         await WorkbenchTestReviewer.WaitFor(() => Server.Agent.GetThreads(CancellationToken.None), all => all.Any(t => t.Messages[0].Text == text && t.Messages[0].Author == name));
 
@@ -367,7 +367,7 @@ public class ReviewUITests : ReviewPageTest
         await Composer.FillAsync(text);
         await Press(ToolsButton(WorkbenchStrings.Send));
 
-        await Expect(ThreadWith(text).Locator(".message-author")).ToContainTextAsync(WorkbenchStrings.Reviewer);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply) .message-author")).ToContainTextAsync(WorkbenchStrings.Reviewer);
     }
 
     [TestMethod, WithAnAgent]
@@ -397,13 +397,13 @@ public class ReviewUITests : ReviewPageTest
         await ReplyBox.FillAsync(withTheKeys);
         await ReplyBox.PressAsync("Enter");
 
-        await Expect(ThreadWith(text).Locator(".message")).ToHaveCountAsync(2);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply)")).ToHaveCountAsync(2);
 
         await ReplyBox.PressAsync("Control+Enter");
 
         await Expect(ThreadWith(text)).ToContainTextAsync(withTheKeys);
-        await Expect(ThreadWith(text).Locator(".message")).ToHaveCountAsync(3);
-        await Expect(ThreadWith(text).Locator(".message").Nth(2).Locator(".message-author")).ToContainTextAsync(WorkbenchStrings.Reviewer);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply)")).ToHaveCountAsync(3);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply)").Nth(2).Locator(".message-author")).ToContainTextAsync(WorkbenchStrings.Reviewer);
         await Expect(ThreadWith(text).Locator(".message.from-agent")).ToHaveCountAsync(0);
 
         var thread = (await WorkbenchTestReviewer.WaitFor(() => Server.Agent.GetThreads(CancellationToken.None), all => all.Single(t => t.Id == id).Messages.Length == 3)).Single(t => t.Id == id);
