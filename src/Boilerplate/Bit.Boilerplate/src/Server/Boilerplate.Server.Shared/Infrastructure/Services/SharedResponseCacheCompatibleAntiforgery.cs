@@ -54,9 +54,11 @@ public class SharedResponseCacheCompatibleAntiforgery : IAntiforgery
         if (httpContext.IsSharedResponseCacheEnabled())
             return originalAntiforgeryImplementation.GetTokens(httpContext); // No cookie, and no no-store/Pragma headers either. See the trade in this class's summary.
 
-        // The response is this caller's alone (signed in, a crawler, ...), and the call below makes it no-store whatever
-        // AppResponseCachePolicy wrote for the browser's cache. Dropping that first gives the same headers without the
-        // warning ASP.NET Core logs for each such page that it overrode them.
+        // No shared cache keeps this response (signed in, or a crawler: See AppResponseCachePolicy.CacheRequestAsync), and
+        // the call below replaces whatever Cache-Control the policy wrote with no-store, logging a warning each time.
+        // Removing the policy's headers first ends in the same ones, without the warning. no-store costs nothing here:
+        // only a form post reads the token back (See AutoCsrfProtectionFilter), and a page with a form isn't cached (See
+        // this class's summary).
         if (httpContext.Response.HasStarted is false)
         {
             httpContext.Response.Headers.Remove(HeaderNames.CacheControl);

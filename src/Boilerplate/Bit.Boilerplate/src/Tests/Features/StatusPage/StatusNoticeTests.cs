@@ -151,7 +151,6 @@ public class StatusNoticeTests
     [TestMethod]
     public async Task GetNotice_Should_ShowNothing_AndLogNoError_WhenTheStatusPageCantBeReached()
     {
-        // The visitor is offline, or a blocker stopped the request: nothing the app's team can fix.
         var service = new TestStatusPageService("https://api.example.com/summary.json", _ => throw new HttpRequestException("No such host is known."));
 
         Assert.IsNull(await service.GetNotice(TestContext.CancellationToken));

@@ -38,7 +38,6 @@ public class HealthzOAuthTests
         var issuer = server.ApiAppAddress.ToString().TrimEnd('/');
         using var httpClient = server.CreateRawHttpClient(new HttpClientHandler { AllowAutoRedirect = false });
 
-        // 1. Without a token, /healthz/v1 says where to go and what to ask for.
         using (var anonymous = await httpClient.GetAsync("healthz/v1", TestContext.CancellationToken))
         {
             Assert.AreEqual(HttpStatusCode.Unauthorized, anonymous.StatusCode);
@@ -49,7 +48,6 @@ public class HealthzOAuthTests
             Assert.Contains($"scope=\"{OAuthScopes.Healthz}\"", challenge);
         }
 
-        // 2. The protected resource metadata names this server and the scope, and the template version, before any token.
         using (var metadata = JsonDocument.Parse(await httpClient.GetStringAsync(".well-known/oauth-protected-resource/healthz", TestContext.CancellationToken)))
         {
             Assert.AreEqual($"{issuer}/healthz", metadata.RootElement.GetProperty("resource").GetString());
@@ -68,7 +66,6 @@ public class HealthzOAuthTests
             Assert.Contains("refresh_token", authorizationServer.RootElement.GetProperty("grant_types_supported").EnumerateArray().Select(item => item.GetString()).ToArray());
         }
 
-        // 3. The browser goes to /oauth/authorize, which hands it to the consent page with the request intact.
         var verifier = WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(32));
         var request = new OAuthAuthorizeRequestDto
         {
@@ -98,7 +95,6 @@ public class HealthzOAuthTests
             Assert.Contains(PageUrls.OAuthConsent, authorize.Headers.Location?.OriginalString ?? "");
         }
 
-        // 4. A user holding Operations_View, signed in with two factor, approves on the consent page.
         await using var client = server.CreateAppClient();
         var userId = await SignInWithTwoFactorAsGlobalAdmin(server, client);
 
@@ -115,7 +111,6 @@ public class HealthzOAuthTests
             Assert.AreEqual(request.State, redirectQuery["state"].ToString());
             Assert.AreEqual(issuer, redirectQuery["iss"].ToString());
 
-            // 5. The code and the PKCE verifier buy the token pair.
             var (status, body) = await PostToken(server, new()
             {
                 ["grant_type"] = "authorization_code",
@@ -132,10 +127,8 @@ public class HealthzOAuthTests
             var refreshToken = granted.RootElement.GetProperty("refresh_token").GetString()!;
             Assert.AreEqual(OAuthScopes.Healthz, granted.RootElement.GetProperty("scope").GetString());
 
-            // 6. The token reads the health report.
             await AssertReadsTheHealthReport(server, client, accessToken);
 
-            // 7. The refresh token renews the access token, and the new one reads the report too.
             (status, body) = await PostToken(server, new()
             {
                 ["grant_type"] = "refresh_token",
@@ -151,7 +144,7 @@ public class HealthzOAuthTests
 
             await AssertReadsTheHealthReport(server, client, refreshed.RootElement.GetProperty("access_token").GetString()!);
 
-            // 8. A refresh that can't succeed answers 400 invalid_grant, never 500: the monitor reconnects on the one and
+            // A refresh that can't succeed answers 400 invalid_grant, never 500: the monitor reconnects on the one and
             // retries later on the other, so telling them apart is what keeps it from retrying a dead approval forever.
             await AssertInvalidGrant(server, refreshToken, "The rotated-out refresh token, whose replay revokes the approval.");
             await AssertInvalidGrant(server, newRefreshToken, "The latest refresh token of an approval that was revoked, whose session row is gone.");
@@ -243,7 +236,6 @@ public class HealthzOAuthTests
         }
         catch
         {
-            // The caller's finally starts only once this returns, so a failed sign-in takes the role back here.
             await RevokeGlobalAdmin(server, userId);
             throw;
         }
@@ -251,7 +243,6 @@ public class HealthzOAuthTests
         return userId;
     }
 
-    /// <summary>The test database outlives the run, so the account must not stay a global admin there.</summary>
     private static async Task RevokeGlobalAdmin(AppTestServer server, Guid userId)
     {
         await using var scope = server.ApiApp.Services.CreateAsyncScope();
@@ -262,7 +253,6 @@ public class HealthzOAuthTests
         await dbContext.UserRoles.Where(userRole => userRole.UserId == userId && userRole.RoleId == globalAdminRoleId).ExecuteDeleteAsync();
     }
 
-    /// <summary>The version in the <c>bit.json</c> above the test binaries: the template's own, or a generated project's.</summary>
     private static string? BitJsonVersion()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);

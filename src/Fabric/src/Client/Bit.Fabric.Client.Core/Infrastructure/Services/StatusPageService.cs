@@ -73,7 +73,6 @@ public class StatusPageService(ClientCoreSettings settings, TimeProvider timePro
         }
         catch (Exception exp) when (exp is TaskCanceledException or HttpRequestException { StatusCode: null })
         {
-            // No answer at all: the visitor is offline, or a blocker or a network in between stopped it. Nothing to fix here.
             logger.LogInformation(exp, "Couldn't reach the status page at {StatusPageSummaryUrl}.", url);
             return new(timeProvider.GetUtcNow(), null, $"{exp.GetType().Name}: {exp.Message}");
         }

@@ -47,7 +47,6 @@ internal class LoggingDelegatingHandler(ILogger<HttpClient> logger, HttpMessageH
         }
         finally
         {
-            // A request its caller cancelled, such as a page left before its data came, is no failure.
             var logLevel = cancellationToken.IsCancellationRequested
                 ? LogLevel.Information
                 : (LogLevel)request.Options.GetValueOrDefault(RequestOptionNames.LogLevel)!;
