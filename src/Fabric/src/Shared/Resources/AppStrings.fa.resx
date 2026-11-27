@@ -12173,7 +12173,7 @@
         <value>نه فقط مال ما: AI شما هر کتابخانهٔ به‌دردبخوری را می‌آورد، در وب، روی سرور و در همهٔ اپ‌ها.</value>
     </data>
     <data name="AppHomeAnyLibraryLead" xml:space="preserve">
-        <value>به هر زبانی که نوشته شده باشد:</value>
+        <value>پروژهٔ شما همین حالا از کتابخانه‌هایی به چند زبان استفاده می‌کند، مثل SDK بومی خود Firebase برای اعلان‌های Push، و هر کتابخانهٔ دیگری را هم می‌پذیرد:</value>
     </data>
     <data name="AppHomeAnyLibraryCSharp" xml:space="preserve">
         <value>هر package از NuGet</value>
@@ -12182,7 +12182,7 @@
         <value>هر package از npm</value>
     </data>
     <data name="AppHomeAnyLibraryJavaAndKotlin" xml:space="preserve">
-        <value>کتابخانه‌های Android، مثل Firebase خود Google برای اعلان‌های Push</value>
+        <value>کتابخانه‌های Android</value>
     </data>
     <data name="AppHomeAnyLibraryObjectiveC" xml:space="preserve">
         <value>کتابخانه‌های iPhone، iPad و Mac</value>

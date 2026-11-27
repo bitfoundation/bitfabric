@@ -297,10 +297,10 @@ public partial class FeaturesPage
         new("batteries", Localizer[nameof(AppStrings.AppHomeBatteriesIncluded)], Localizer[nameof(AppStrings.AppHomeThePartsOfAnAppNobodyWantsToBuild)],
         [
             new("components", BitIconName.Puzzle, Localizer[nameof(AppStrings.AppHome100Components)], Localizer[nameof(AppStrings.AppHomeDataGridSchedulerChartsRichText)]),
-            // Right after the components, so a reader doesn't take them for all the app can use (2026-11-27)
-            new("libraries", BitIconName.Library, Localizer[nameof(AppStrings.AppHomeAnyLibraryYouNeed)], Localizer[nameof(AppStrings.AppHomeAnyLibraryYouNeedText)], Explained: false, Details: LibrariesDetails),
             new("image-editor", BitIconName.Photo2, Localizer[nameof(AppStrings.AppHomeImageEditor)], Localizer[nameof(AppStrings.AppHomeCropResizeAndDrawOnImagesInTheApp)]),
             new("scanner", BitIconName.QRCode, Localizer[nameof(AppStrings.AppHomeBarcodeScanner)], Localizer[nameof(AppStrings.AppHomeScanQRCodesAndBarcodesWithTheCamera)]),
+            // After the image editor and the barcode scanner, so a reader doesn't take the components for all the app can use (2026-11-27)
+            new("libraries", BitIconName.Library, Localizer[nameof(AppStrings.AppHomeAnyLibraryYouNeed)], Localizer[nameof(AppStrings.AppHomeAnyLibraryYouNeedText)], Explained: false, Details: LibrariesDetails),
             new("rebrand", BitIconName.Color, Localizer[nameof(AppStrings.AppHomeRebrand)], Localizer[nameof(AppStrings.AppHomeShowTheAIASiteOrADesignYouLikeAnd)]),
             new("port", BitIconName.Forward, Localizer[nameof(AppStrings.AppHomePort)], Localizer[nameof(AppStrings.AppHomeBringAnAppYouAlreadyHaveOverFeature)]),
             new("deploy", BitIconName.Rocket, Localizer[nameof(AppStrings.AppHomeDeploy)], Localizer[nameof(AppStrings.AppHomeToYourOwnServerEasilyAndSecurelyAtA)]),
@@ -361,9 +361,9 @@ public partial class FeaturesPage
         Localizer[nameof(AppStrings.AppHomeIfAClientOfYoursWantsAnotherDatabase)]);
 
     /// <summary>
-    /// The libraries card's "More info": a library in each language the app can take, with what bit Boilerplate's apps already
-    /// use that way (Android: Xamarin.Firebase.Messaging, a binding library), and how: a binding library for Java, Kotlin and
-    /// Objective-C, Native Library Interop's small Xcode wrapper for Swift.
+    /// The libraries card's "More info": what the project already uses in several languages (Firebase's native Android SDK through
+    /// Xamarin.Firebase.Messaging, a binding library; NuGet and npm packages), and a library in each language the app can take:
+    /// a binding library for Java, Kotlin and Objective-C, Native Library Interop's small Xcode wrapper for Swift.
     /// </summary>
     private AppHomeNote LibrariesDetails => new(
         Localizer[nameof(AppStrings.AppHomeAnyLibraryLead)],
