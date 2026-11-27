@@ -44,7 +44,7 @@
 }
 
 // "More info": the toggle at the card's foot, and what it opens under it. Open, the toggle looks as it did closed, with its
-// chevron turned: it is a disclosure, not a setting that is on.
+// chevron turned: it is a disclosure, not a setting that is on, and a tap on a phone, whose hover stays, doesn't fill it.
 .ah-card-details {
     display: flex;
     flex-direction: column;
@@ -53,37 +53,34 @@
     margin-inline-start: -.5rem;
     --bit-ToggleButton-checked-color: #{$bit-color-primary};
     --bit-ToggleButton-checked-background: transparent;
-    --bit-ToggleButton-checked-hover-color: #{$bit-color-primary-text};
-    --bit-ToggleButton-checked-hover-background: #{$bit-color-primary-hover};
-    --bit-ToggleButton-checked-active-background: #{$bit-color-primary-active};
+    --bit-ToggleButton-checked-hover-color: #{$bit-color-primary-hover};
+    --bit-ToggleButton-checked-hover-background: transparent;
+    --bit-ToggleButton-checked-active-background: transparent;
 }
 
 .ah-card-details-body {
     display: flex;
     flex-direction: column;
-    gap: .75rem;
-    padding-top: .5rem;
+    gap: .625rem;
+    padding-top: .25rem;
     padding-inline-start: .5rem;
 }
 
+// Short facts, each term beside its line, so the open part stays short
 .ah-card-details-facts {
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: .4rem .75rem;
     margin: 0;
+    font-size: $bit-typography-fs-sm;
 }
 
 .ah-card-details-fact {
-    display: flex;
-    flex-direction: column;
-    gap: .15rem;
-    padding: .625rem .75rem;
-    border-radius: $bit-shape-radius-control;
-    background: $bit-color-background-secondary;
-    font-size: $bit-typography-fs-sm;
+    display: contents;
 
     dt {
         font-weight: $bit-typography-fw-semibold;
+        white-space: nowrap;
     }
 
     dd {

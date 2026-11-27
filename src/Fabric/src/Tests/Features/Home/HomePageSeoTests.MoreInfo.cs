@@ -12,8 +12,7 @@ public partial class HomePageSeoTests
     /// <summary>The cards with a "More info" today, by their feature's id, and what it says, in English.</summary>
     private static readonly (string Card, string[] Lines)[] MoreInfos =
     [
-        ("apps", [AppStrings.AppHomeAppsMoreLead, AppStrings.AppHomeAppsMoreAndroid, AppStrings.AppHomeAppsMoreApple, AppStrings.AppHomeAddingALibraryTakesALittleSetup]),
-        ("components", [AppStrings.AppHomeComponentsMoreLead, AppStrings.AppHomeComponentsMoreJavaScript, AppStrings.AppHomeComponentsMoreAndroid, AppStrings.AppHomeComponentsMoreApple, AppStrings.AppHomeComponentsMoreServer])
+        ("libraries", [AppStrings.AppHomeAnyLibraryLead, AppStrings.AppHomeAnyLibraryCSharp, AppStrings.AppHomeAnyLibraryJavaScript, AppStrings.AppHomeAnyLibraryJavaAndKotlin, AppStrings.AppHomeAnyLibraryObjectiveC, AppStrings.AppHomeAnyLibrarySwift, AppStrings.AppHomeAddingALibraryTakesALittleSetup])
     ];
 
     [TestMethod]
@@ -46,7 +45,7 @@ public partial class HomePageSeoTests
         // The same in Persian, right to left
         var persian = WebUtility.HtmlDecode(await GetPage(server, Googlebot, $"/fa-IR{PageUrls.Features}"));
         var fa = new CultureInfo("fa-IR");
-        foreach (var key in new[] { nameof(AppStrings.AppHomeMoreInfo), nameof(AppStrings.AppHomeAppsMoreAndroid), nameof(AppStrings.AppHomeAppsMoreApple), nameof(AppStrings.AppHomeComponentsMoreLead) })
+        foreach (var key in new[] { nameof(AppStrings.AppHomeMoreInfo), nameof(AppStrings.AppHomeAnyLibraryYouNeedText), nameof(AppStrings.AppHomeAnyLibraryJavaAndKotlin), nameof(AppStrings.AppHomeAnyLibrarySwift) })
         {
             var line = AppStrings.ResourceManager.GetString(key, fa)!;
             Assert.AreNotEqual(AppStrings.ResourceManager.GetString(key, CultureInfo.InvariantCulture), line, $"{key} has its Persian.");
@@ -63,10 +62,10 @@ public partial class HomePageSeoTests
                 Assert.Contains(line, markdown, $"/features.md has the {card} card's \"{line}\".");
             }
         }
-        Assert.Contains($"- **JavaScript**: {AppStrings.AppHomeComponentsMoreJavaScript}", markdown, "A fact reads as its term and its line.");
+        Assert.Contains($"- **JavaScript**: {AppStrings.AppHomeAnyLibraryJavaScript}", markdown, "A fact reads as its term and its line.");
         Assert.DoesNotContain(AppStrings.AppHomeMoreInfo, markdown, "The toggle's label is no part of the copy.");
 
         var full = await client.GetStringAsync("/llms-full.txt", TestContext.CancellationToken);
-        Assert.Contains(AppStrings.AppHomeComponentsMoreLead, full, "/llms-full.txt has the components card's More info.");
+        Assert.Contains(AppStrings.AppHomeAnyLibrarySwift, full, "/llms-full.txt has the libraries card's More info.");
     }
 }

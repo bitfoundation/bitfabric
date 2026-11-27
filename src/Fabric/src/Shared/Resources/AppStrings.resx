@@ -12163,37 +12163,31 @@ Tell me in under 200 words what holds and what doesn't, what it would cost me in
     <data name="AppHomeMoreInfo" xml:space="preserve">
         <value>More info</value>
     </data>
-    <data name="AppHomeIPhoneIPadAndMac" xml:space="preserve">
-        <value>iPhone, iPad and Mac</value>
-    </data>
-    <data name="AppHomeServerAndWindows" xml:space="preserve">
-        <value>Server and Windows</value>
-    </data>
     <data name="AppHomeAddingALibraryTakesALittleSetup" xml:space="preserve">
         <value>Adding a library takes a little setup, which your AI does for you.</value>
     </data>
-    <data name="AppHomeAppsMoreLead" xml:space="preserve">
-        <value>Your app's own code reaches every feature Android, iOS, macOS and Windows offer, directly, with no plugin to wait for.</value>
+    <data name="AppHomeAnyLibraryYouNeed" xml:space="preserve">
+        <value>Any library you need</value>
     </data>
-    <data name="AppHomeAppsMoreAndroid" xml:space="preserve">
-        <value>Push notifications come through Google's own Firebase library, and a code sent by SMS fills itself in once the user taps Allow, through Google Play services. Any other Java or Kotlin library is added the same way, as a binding library.</value>
+    <data name="AppHomeAnyLibraryYouNeedText" xml:space="preserve">
+        <value>Not just ours: your AI can bring in any useful library, on the web, the server and every app.</value>
     </data>
-    <data name="AppHomeAppsMoreApple" xml:space="preserve">
-        <value>Push notifications come through Apple's own notifications framework and push service (APNs), and the user's sign-in is kept in Apple's Keychain. An Objective-C library is added as a binding library, and a Swift library through a small Xcode wrapper your app calls.</value>
+    <data name="AppHomeAnyLibraryLead" xml:space="preserve">
+        <value>Whatever language it's written in:</value>
     </data>
-    <data name="AppHomeComponentsMoreLead" xml:space="preserve">
-        <value>You're not limited to our components: your app can use any other library too, on the web, on the server and in every app.</value>
+    <data name="AppHomeAnyLibraryCSharp" xml:space="preserve">
+        <value>Any NuGet package</value>
     </data>
-    <data name="AppHomeComponentsMoreJavaScript" xml:space="preserve">
-        <value>Any JavaScript library from npm. The project already builds its own scripts with npm.</value>
+    <data name="AppHomeAnyLibraryJavaScript" xml:space="preserve">
+        <value>Any npm package</value>
     </data>
-    <data name="AppHomeComponentsMoreAndroid" xml:space="preserve">
-        <value>Any Java or Kotlin library, added as a binding library: push notifications already use Google's own Firebase library this way.</value>
+    <data name="AppHomeAnyLibraryJavaAndKotlin" xml:space="preserve">
+        <value>Android libraries, like Google's Firebase for push notifications</value>
     </data>
-    <data name="AppHomeComponentsMoreApple" xml:space="preserve">
-        <value>Any Objective-C library, added as a binding library, and any Swift library, through a small Xcode wrapper your app calls. Push notifications already use Apple's own notifications framework and APNs, and the user's sign-in is kept in Apple's Keychain.</value>
+    <data name="AppHomeAnyLibraryObjectiveC" xml:space="preserve">
+        <value>iPhone, iPad and Mac libraries</value>
     </data>
-    <data name="AppHomeComponentsMoreServer" xml:space="preserve">
-        <value>Any package from NuGet, where bit platform's own libraries come from too.</value>
+    <data name="AppHomeAnyLibrarySwift" xml:space="preserve">
+        <value>Through a small Xcode wrapper</value>
     </data>
 </root>

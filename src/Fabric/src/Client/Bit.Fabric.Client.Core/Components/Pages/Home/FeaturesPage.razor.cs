@@ -210,7 +210,7 @@ public partial class FeaturesPage
     [
         new("platforms", Localizer[nameof(AppStrings.AppHomeEveryPlatformFromOneProject)], Localizer[nameof(AppStrings.AppHomeOneCodebaseBecomesYourAppsYour)],
         [
-            new("apps", BitIconName.CellPhone, Localizer[nameof(AppStrings.AppHomeAndroidIOSWindowsAndMacOS)], Localizer[nameof(AppStrings.AppHomeRealAppsWithUnlimitedAccessToNative)], Explained: false, Details: AppsDetails),
+            new("apps", BitIconName.CellPhone, Localizer[nameof(AppStrings.AppHomeAndroidIOSWindowsAndMacOS)], Localizer[nameof(AppStrings.AppHomeRealAppsWithUnlimitedAccessToNative)], Explained: false),
             new("website", BitIconName.Globe, Localizer[nameof(AppStrings.AppHomeAFastWebsiteSearchEnginesLove)], Localizer[nameof(AppStrings.AppHomePagesThatOpenFastAndAreReadyFor)], More: "https://sales.bitplatform.dev/"),
             new("admin-panel", BitIconName.BarChartVerticalFill, Localizer[nameof(AppStrings.AppHomeAnAdminPanel)], Localizer[nameof(AppStrings.AppHomeTheBackOfficeForYouAndYourTeamInThe)], More: AppHomeNumbers.AdminPanelDemoUrl),
             new("tenants", BitIconName.Org, Localizer[nameof(AppStrings.AppHomeManyCompaniesOneApp)], Localizer[nameof(AppStrings.AppHomeMultiTenantAndSaaSReady)]),
@@ -296,7 +296,9 @@ public partial class FeaturesPage
         ]),
         new("batteries", Localizer[nameof(AppStrings.AppHomeBatteriesIncluded)], Localizer[nameof(AppStrings.AppHomeThePartsOfAnAppNobodyWantsToBuild)],
         [
-            new("components", BitIconName.Puzzle, Localizer[nameof(AppStrings.AppHome100Components)], Localizer[nameof(AppStrings.AppHomeDataGridSchedulerChartsRichText)], Details: ComponentsDetails),
+            new("components", BitIconName.Puzzle, Localizer[nameof(AppStrings.AppHome100Components)], Localizer[nameof(AppStrings.AppHomeDataGridSchedulerChartsRichText)]),
+            // Right after the components, so a reader doesn't take them for all the app can use (2026-11-27)
+            new("libraries", BitIconName.Library, Localizer[nameof(AppStrings.AppHomeAnyLibraryYouNeed)], Localizer[nameof(AppStrings.AppHomeAnyLibraryYouNeedText)], Explained: false, Details: LibrariesDetails),
             new("image-editor", BitIconName.Photo2, Localizer[nameof(AppStrings.AppHomeImageEditor)], Localizer[nameof(AppStrings.AppHomeCropResizeAndDrawOnImagesInTheApp)]),
             new("scanner", BitIconName.QRCode, Localizer[nameof(AppStrings.AppHomeBarcodeScanner)], Localizer[nameof(AppStrings.AppHomeScanQRCodesAndBarcodesWithTheCamera)]),
             new("rebrand", BitIconName.Color, Localizer[nameof(AppStrings.AppHomeRebrand)], Localizer[nameof(AppStrings.AppHomeShowTheAIASiteOrADesignYouLikeAnd)]),
@@ -359,27 +361,18 @@ public partial class FeaturesPage
         Localizer[nameof(AppStrings.AppHomeIfAClientOfYoursWantsAnotherDatabase)]);
 
     /// <summary>
-    /// The apps card's "More info": that the app's own code reaches the device, with the native libraries and APIs bit
-    /// Boilerplate's apps already use (Android: Xamarin.Firebase.Messaging, a binding library, and SmsRetriever; iPhone, iPad and
-    /// Mac: UserNotifications with APNs, and SecureStorage, which is the Keychain there), and how another library is added: a
-    /// binding library for Java, Kotlin and Objective-C, Native Library Interop's small Xcode wrapper for Swift.
+    /// The libraries card's "More info": a library in each language the app can take, with what bit Boilerplate's apps already
+    /// use that way (Android: Xamarin.Firebase.Messaging, a binding library), and how: a binding library for Java, Kotlin and
+    /// Objective-C, Native Library Interop's small Xcode wrapper for Swift.
     /// </summary>
-    private AppHomeNote AppsDetails => new(
-        Localizer[nameof(AppStrings.AppHomeAppsMoreLead)],
+    private AppHomeNote LibrariesDetails => new(
+        Localizer[nameof(AppStrings.AppHomeAnyLibraryLead)],
         [
-            ("Android", Localizer[nameof(AppStrings.AppHomeAppsMoreAndroid)]),
-            (Localizer[nameof(AppStrings.AppHomeIPhoneIPadAndMac)], Localizer[nameof(AppStrings.AppHomeAppsMoreApple)])
-        ],
-        Localizer[nameof(AppStrings.AppHomeAddingALibraryTakesALittleSetup)]);
-
-    /// <summary>The components card's "More info": the project isn't limited to them, and takes any other library, platform by platform.</summary>
-    private AppHomeNote ComponentsDetails => new(
-        Localizer[nameof(AppStrings.AppHomeComponentsMoreLead)],
-        [
-            ("JavaScript", Localizer[nameof(AppStrings.AppHomeComponentsMoreJavaScript)]),
-            ("Android", Localizer[nameof(AppStrings.AppHomeComponentsMoreAndroid)]),
-            (Localizer[nameof(AppStrings.AppHomeIPhoneIPadAndMac)], Localizer[nameof(AppStrings.AppHomeComponentsMoreApple)]),
-            (Localizer[nameof(AppStrings.AppHomeServerAndWindows)], Localizer[nameof(AppStrings.AppHomeComponentsMoreServer)])
+            ("C#", Localizer[nameof(AppStrings.AppHomeAnyLibraryCSharp)]),
+            ("JavaScript", Localizer[nameof(AppStrings.AppHomeAnyLibraryJavaScript)]),
+            ("Java, Kotlin", Localizer[nameof(AppStrings.AppHomeAnyLibraryJavaAndKotlin)]),
+            ("Objective-C", Localizer[nameof(AppStrings.AppHomeAnyLibraryObjectiveC)]),
+            ("Swift", Localizer[nameof(AppStrings.AppHomeAnyLibrarySwift)])
         ],
         Localizer[nameof(AppStrings.AppHomeAddingALibraryTakesALittleSetup)]);
 
