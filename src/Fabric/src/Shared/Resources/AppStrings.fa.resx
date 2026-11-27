@@ -12187,7 +12187,4 @@
     <data name="AppHomeAnyLibraryObjectiveC" xml:space="preserve">
         <value>کتابخانه‌های iPhone، iPad و Mac</value>
     </data>
-    <data name="AppHomeAnyLibrarySwift" xml:space="preserve">
-        <value>از راه یک wrapper کوچک Xcode</value>
-    </data>
 </root>

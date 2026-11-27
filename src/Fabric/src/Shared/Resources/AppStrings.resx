@@ -12187,7 +12187,4 @@ Tell me in under 200 words what holds and what doesn't, what it would cost me in
     <data name="AppHomeAnyLibraryObjectiveC" xml:space="preserve">
         <value>iPhone, iPad and Mac libraries</value>
     </data>
-    <data name="AppHomeAnyLibrarySwift" xml:space="preserve">
-        <value>Through a small Xcode wrapper</value>
-    </data>
 </root>

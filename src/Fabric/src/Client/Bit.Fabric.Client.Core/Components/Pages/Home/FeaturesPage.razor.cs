@@ -299,7 +299,7 @@ public partial class FeaturesPage
             new("components", BitIconName.Puzzle, Localizer[nameof(AppStrings.AppHome100Components)], Localizer[nameof(AppStrings.AppHomeDataGridSchedulerChartsRichText)]),
             new("image-editor", BitIconName.Photo2, Localizer[nameof(AppStrings.AppHomeImageEditor)], Localizer[nameof(AppStrings.AppHomeCropResizeAndDrawOnImagesInTheApp)]),
             new("scanner", BitIconName.QRCode, Localizer[nameof(AppStrings.AppHomeBarcodeScanner)], Localizer[nameof(AppStrings.AppHomeScanQRCodesAndBarcodesWithTheCamera)]),
-            // After the image editor and the barcode scanner, so a reader doesn't take the components for all the app can use (2026-11-27)
+            // Right after the barcode scanner, so a reader doesn't take the components for all the app can use (2026-11-27)
             new("libraries", BitIconName.Library, Localizer[nameof(AppStrings.AppHomeAnyLibraryYouNeed)], Localizer[nameof(AppStrings.AppHomeAnyLibraryYouNeedText)], Explained: false, Details: LibrariesDetails),
             new("rebrand", BitIconName.Color, Localizer[nameof(AppStrings.AppHomeRebrand)], Localizer[nameof(AppStrings.AppHomeShowTheAIASiteOrADesignYouLikeAnd)]),
             new("port", BitIconName.Forward, Localizer[nameof(AppStrings.AppHomePort)], Localizer[nameof(AppStrings.AppHomeBringAnAppYouAlreadyHaveOverFeature)]),
@@ -309,8 +309,8 @@ public partial class FeaturesPage
             new("ai-dlc", BitIconName.TestBeaker, Localizer[nameof(AppStrings.AppHomeAIDLC)], Localizer[nameof(AppStrings.AppHomeTheAIWorksLikeATeamOfExperienced2)]),
             new("up-to-date", BitIconName.PostUpdate, Localizer[nameof(AppStrings.AppHomeAlwaysUpToDate)], Localizer[nameof(AppStrings.AppHomeOurTeamMakes500ImprovementsAMonthOn)])
         ], Localizer[nameof(AppStrings.AppHomeSeeEveryComponent)], "https://blazorui.bitplatform.dev",
-        // After the image editor and the barcode scanner, components too, so the Accordion closes the components (2026-11-11)
-        new("scanner", Localizer[nameof(AppStrings.AppHomeShowcaseTitle)], Localizer[nameof(AppStrings.AppHomeShowcaseIntro)],
+        // After the image editor, the barcode scanner and any library, so the Accordion closes the components (2026-11-11, 2026-11-27)
+        new("libraries", Localizer[nameof(AppStrings.AppHomeShowcaseTitle)], Localizer[nameof(AppStrings.AppHomeShowcaseIntro)],
         [
             new("data-grid", BitIconName.Table, Localizer[nameof(AppStrings.AppHomeDataGrid)], Localizer[nameof(AppStrings.AppHomeDataGridText)], Url: "https://blazorui.bitplatform.dev/components/datagrid#example2"),
             new("full-calendar", BitIconName.Calendar, Localizer[nameof(AppStrings.AppHomeFullCalendar)], Localizer[nameof(AppStrings.AppHomeFullCalendarText)], Url: "https://blazorui.bitplatform.dev/components/fullcalendar#example1"),
@@ -363,7 +363,7 @@ public partial class FeaturesPage
     /// <summary>
     /// The libraries card's "More info": what the project already uses in several languages (Firebase's native Android SDK through
     /// Xamarin.Firebase.Messaging, a binding library; NuGet and npm packages), and a library in each language the app can take:
-    /// a binding library for Java, Kotlin and Objective-C, Native Library Interop's small Xcode wrapper for Swift.
+    /// a binding library for Java, Kotlin and Objective-C, Native Library Interop for Swift; the card doesn't name the how.
     /// </summary>
     private AppHomeNote LibrariesDetails => new(
         Localizer[nameof(AppStrings.AppHomeAnyLibraryLead)],
@@ -371,8 +371,7 @@ public partial class FeaturesPage
             ("C#", Localizer[nameof(AppStrings.AppHomeAnyLibraryCSharp)]),
             ("JavaScript", Localizer[nameof(AppStrings.AppHomeAnyLibraryJavaScript)]),
             ("Java, Kotlin", Localizer[nameof(AppStrings.AppHomeAnyLibraryJavaAndKotlin)]),
-            ("Objective-C", Localizer[nameof(AppStrings.AppHomeAnyLibraryObjectiveC)]),
-            ("Swift", Localizer[nameof(AppStrings.AppHomeAnyLibrarySwift)])
+            ("Objective-C, Swift", Localizer[nameof(AppStrings.AppHomeAnyLibraryObjectiveC)])
         ],
         Localizer[nameof(AppStrings.AppHomeAddingALibraryTakesALittleSetup)]);
 

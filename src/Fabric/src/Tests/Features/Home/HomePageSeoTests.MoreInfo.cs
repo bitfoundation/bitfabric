@@ -12,7 +12,7 @@ public partial class HomePageSeoTests
     /// <summary>The cards with a "More info" today, by their feature's id, and what it says, in English.</summary>
     private static readonly (string Card, string[] Lines)[] MoreInfos =
     [
-        ("libraries", [AppStrings.AppHomeAnyLibraryLead, AppStrings.AppHomeAnyLibraryCSharp, AppStrings.AppHomeAnyLibraryJavaScript, AppStrings.AppHomeAnyLibraryJavaAndKotlin, AppStrings.AppHomeAnyLibraryObjectiveC, AppStrings.AppHomeAnyLibrarySwift, AppStrings.AppHomeAddingALibraryTakesALittleSetup])
+        ("libraries", [AppStrings.AppHomeAnyLibraryLead, AppStrings.AppHomeAnyLibraryCSharp, AppStrings.AppHomeAnyLibraryJavaScript, AppStrings.AppHomeAnyLibraryJavaAndKotlin, AppStrings.AppHomeAnyLibraryObjectiveC, AppStrings.AppHomeAddingALibraryTakesALittleSetup])
     ];
 
     [TestMethod]
@@ -45,7 +45,7 @@ public partial class HomePageSeoTests
         // The same in Persian, right to left
         var persian = WebUtility.HtmlDecode(await GetPage(server, Googlebot, $"/fa-IR{PageUrls.Features}"));
         var fa = new CultureInfo("fa-IR");
-        foreach (var key in new[] { nameof(AppStrings.AppHomeMoreInfo), nameof(AppStrings.AppHomeAnyLibraryYouNeedText), nameof(AppStrings.AppHomeAnyLibraryJavaAndKotlin), nameof(AppStrings.AppHomeAnyLibrarySwift) })
+        foreach (var key in new[] { nameof(AppStrings.AppHomeMoreInfo), nameof(AppStrings.AppHomeAnyLibraryYouNeedText), nameof(AppStrings.AppHomeAnyLibraryJavaAndKotlin), nameof(AppStrings.AppHomeAnyLibraryLead) })
         {
             var line = AppStrings.ResourceManager.GetString(key, fa)!;
             Assert.AreNotEqual(AppStrings.ResourceManager.GetString(key, CultureInfo.InvariantCulture), line, $"{key} has its Persian.");
@@ -66,6 +66,6 @@ public partial class HomePageSeoTests
         Assert.DoesNotContain(AppStrings.AppHomeMoreInfo, markdown, "The toggle's label is no part of the copy.");
 
         var full = await client.GetStringAsync("/llms-full.txt", TestContext.CancellationToken);
-        Assert.Contains(AppStrings.AppHomeAnyLibrarySwift, full, "/llms-full.txt has the libraries card's More info.");
+        Assert.Contains(AppStrings.AppHomeAnyLibraryLead, full, "/llms-full.txt has the libraries card's More info.");
     }
 }
