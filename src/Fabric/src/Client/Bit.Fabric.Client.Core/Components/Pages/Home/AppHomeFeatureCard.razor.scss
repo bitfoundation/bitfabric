@@ -38,6 +38,60 @@
     gap: .25rem;
 }
 
+// While a card's More info is open, the cards around it keep their own height rather than stretching to its
+.ah-grid:has(.ah-card.is-open) .ah-card {
+    align-self: start;
+}
+
+// "More info": the toggle at the card's foot, and what it opens under it. Open, the toggle looks as it did closed, with its
+// chevron turned: it is a disclosure, not a setting that is on.
+.ah-card-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: auto;
+    margin-inline-start: -.5rem;
+    --bit-ToggleButton-checked-color: #{$bit-color-primary};
+    --bit-ToggleButton-checked-background: transparent;
+    --bit-ToggleButton-checked-hover-color: #{$bit-color-primary-text};
+    --bit-ToggleButton-checked-hover-background: #{$bit-color-primary-hover};
+    --bit-ToggleButton-checked-active-background: #{$bit-color-primary-active};
+}
+
+.ah-card-details-body {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding-top: .5rem;
+    padding-inline-start: .5rem;
+}
+
+.ah-card-details-facts {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin: 0;
+}
+
+.ah-card-details-fact {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    padding: .625rem .75rem;
+    border-radius: $bit-shape-radius-control;
+    background: $bit-color-background-secondary;
+    font-size: $bit-typography-fs-sm;
+
+    dt {
+        font-weight: $bit-typography-fw-semibold;
+    }
+
+    dd {
+        margin: 0;
+        color: $bit-color-foreground-secondary;
+    }
+}
+
 // Where the feature can be seen live, under its text
 ::deep .ah-card-more {
     display: inline-flex;

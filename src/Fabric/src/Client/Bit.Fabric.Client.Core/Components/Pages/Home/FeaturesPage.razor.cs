@@ -210,7 +210,7 @@ public partial class FeaturesPage
     [
         new("platforms", Localizer[nameof(AppStrings.AppHomeEveryPlatformFromOneProject)], Localizer[nameof(AppStrings.AppHomeOneCodebaseBecomesYourAppsYour)],
         [
-            new("apps", BitIconName.CellPhone, Localizer[nameof(AppStrings.AppHomeAndroidIOSWindowsAndMacOS)], Localizer[nameof(AppStrings.AppHomeRealAppsWithUnlimitedAccessToNative)], Explained: false),
+            new("apps", BitIconName.CellPhone, Localizer[nameof(AppStrings.AppHomeAndroidIOSWindowsAndMacOS)], Localizer[nameof(AppStrings.AppHomeRealAppsWithUnlimitedAccessToNative)], Explained: false, Details: AppsDetails),
             new("website", BitIconName.Globe, Localizer[nameof(AppStrings.AppHomeAFastWebsiteSearchEnginesLove)], Localizer[nameof(AppStrings.AppHomePagesThatOpenFastAndAreReadyFor)], More: "https://sales.bitplatform.dev/"),
             new("admin-panel", BitIconName.BarChartVerticalFill, Localizer[nameof(AppStrings.AppHomeAnAdminPanel)], Localizer[nameof(AppStrings.AppHomeTheBackOfficeForYouAndYourTeamInThe)], More: AppHomeNumbers.AdminPanelDemoUrl),
             new("tenants", BitIconName.Org, Localizer[nameof(AppStrings.AppHomeManyCompaniesOneApp)], Localizer[nameof(AppStrings.AppHomeMultiTenantAndSaaSReady)]),
@@ -296,7 +296,7 @@ public partial class FeaturesPage
         ]),
         new("batteries", Localizer[nameof(AppStrings.AppHomeBatteriesIncluded)], Localizer[nameof(AppStrings.AppHomeThePartsOfAnAppNobodyWantsToBuild)],
         [
-            new("components", BitIconName.Puzzle, Localizer[nameof(AppStrings.AppHome100Components)], Localizer[nameof(AppStrings.AppHomeDataGridSchedulerChartsRichText)]),
+            new("components", BitIconName.Puzzle, Localizer[nameof(AppStrings.AppHome100Components)], Localizer[nameof(AppStrings.AppHomeDataGridSchedulerChartsRichText)], Details: ComponentsDetails),
             new("image-editor", BitIconName.Photo2, Localizer[nameof(AppStrings.AppHomeImageEditor)], Localizer[nameof(AppStrings.AppHomeCropResizeAndDrawOnImagesInTheApp)]),
             new("scanner", BitIconName.QRCode, Localizer[nameof(AppStrings.AppHomeBarcodeScanner)], Localizer[nameof(AppStrings.AppHomeScanQRCodesAndBarcodesWithTheCamera)]),
             new("rebrand", BitIconName.Color, Localizer[nameof(AppStrings.AppHomeRebrand)], Localizer[nameof(AppStrings.AppHomeShowTheAIASiteOrADesignYouLikeAnd)]),
@@ -357,6 +357,30 @@ public partial class FeaturesPage
         Localizer[nameof(AppStrings.AppHomeYourAppComesWithPostgreSQLFastProven)],
         [],
         Localizer[nameof(AppStrings.AppHomeIfAClientOfYoursWantsAnotherDatabase)]);
+
+    /// <summary>
+    /// The apps card's "More info": that the app's own code reaches the device, with the native libraries push and the SMS code
+    /// already use, as bit Boilerplate's Android, iOS and Mac apps do (Xamarin.Firebase.Messaging, SmsRetriever, APNs).
+    /// </summary>
+    private AppHomeNote AppsDetails => new(
+        Localizer[nameof(AppStrings.AppHomeAppsMoreLead)],
+        [
+            ("Android", Localizer[nameof(AppStrings.AppHomeAppsMoreAndroid)]),
+            (Localizer[nameof(AppStrings.AppHomeIPhoneIPadAndMac)], Localizer[nameof(AppStrings.AppHomeAppsMoreApple)]),
+            (Localizer[nameof(AppStrings.AppHomeLibraries)], Localizer[nameof(AppStrings.AppHomeAppsMoreLibraries)])
+        ],
+        Localizer[nameof(AppStrings.AppHomeAddingALibraryTakesALittleSetup)]);
+
+    /// <summary>The components card's "More info": the project isn't limited to them, and takes any other library, platform by platform.</summary>
+    private AppHomeNote ComponentsDetails => new(
+        Localizer[nameof(AppStrings.AppHomeComponentsMoreLead)],
+        [
+            ("JavaScript", Localizer[nameof(AppStrings.AppHomeComponentsMoreJavaScript)]),
+            ("Android", Localizer[nameof(AppStrings.AppHomeComponentsMoreAndroid)]),
+            (Localizer[nameof(AppStrings.AppHomeIPhoneIPadAndMac)], Localizer[nameof(AppStrings.AppHomeComponentsMoreApple)]),
+            (Localizer[nameof(AppStrings.AppHomeServerAndWindows)], Localizer[nameof(AppStrings.AppHomeComponentsMoreServer)])
+        ],
+        Localizer[nameof(AppStrings.AppHomeAddingALibraryTakesALittleSetup)]);
 
     /// <summary>Which apps each computer runs while you build, and that the pipeline builds them all anyway.</summary>
     private AppHomeNote ComputersNote => new(
