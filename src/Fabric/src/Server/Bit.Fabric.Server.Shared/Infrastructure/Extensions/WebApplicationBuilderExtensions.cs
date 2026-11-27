@@ -175,9 +175,6 @@ public static class WebApplicationBuilderExtensions
                 options.AddTraceSources("Experimental.Microsoft.Extensions.AI", "SmsBridge", FusionCacheDiagnostics.ActivitySourceName)
                     .AddMeters("Experimental.Microsoft.Extensions.AI", FusionCacheDiagnostics.MeterName);
 
-                // What ASP.NET Core measures on its own, beyond Belemetry's defaults: request durations by route and status,
-                // live SignalR connections, sign-ins and the rest of Identity, and authentication and authorization results
-                // (https://learn.microsoft.com/aspnet/core/log-mon/metrics/built-in).
                 options.AddMeters("Microsoft.AspNetCore.Hosting", "Microsoft.AspNetCore.Http.Connections", "Microsoft.AspNetCore.Identity",
                     "Microsoft.AspNetCore.Authentication", "Microsoft.AspNetCore.Authorization");
 
