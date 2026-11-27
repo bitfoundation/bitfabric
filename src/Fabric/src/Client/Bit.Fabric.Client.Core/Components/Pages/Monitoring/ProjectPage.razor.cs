@@ -16,6 +16,9 @@ public partial class ProjectPage
     private bool isLoading = true;
     private bool isLoadFailed;
     private bool isTroubleshootOpen;
+
+    /// <summary>The banners' buttons, centered on a one-line banner and spaced apart (See ProjectPage.razor.scss).</summary>
+    private static readonly BitMessageClassStyles bannerClasses = new() { RootContainer = "banner-row", Actions = "banner-actions" };
     private ProjectDto? parent;
     private MonitoringDetailsDto? details;
 

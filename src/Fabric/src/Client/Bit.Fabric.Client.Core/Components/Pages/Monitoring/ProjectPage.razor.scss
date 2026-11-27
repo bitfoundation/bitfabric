@@ -106,3 +106,14 @@
     --bit-Icon-color: #{$bit-color-success};
     background-color: color-mix(in srgb, #{$bit-color-success} 12%, transparent);
 }
+
+// A banner's buttons: on one line, centered on the text rather than hugging the top edge; wrapped, on their own row. Spaced
+// apart either way.
+::deep .banner-row {
+    align-items: center;
+}
+
+::deep .banner-actions {
+    gap: 0.5rem;
+    margin-inline-end: 0.5rem;
+}

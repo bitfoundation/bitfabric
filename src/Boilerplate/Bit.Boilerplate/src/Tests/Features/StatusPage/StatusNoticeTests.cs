@@ -149,11 +149,20 @@ public class StatusNoticeTests
     }
 
     [TestMethod]
-    public async Task GetNotice_Should_LogAnErrorAndShowNothing_WhenTheSummaryDoesntComeBackOrIsJunk()
+    public async Task GetNotice_Should_ShowNothing_AndLogNoError_WhenTheStatusPageCantBeReached()
+    {
+        // The visitor is offline, or a blocker stopped the request: nothing the app's team can fix.
+        var service = new TestStatusPageService("https://api.example.com/summary.json", _ => throw new HttpRequestException("No such host is known."));
+
+        Assert.IsNull(await service.GetNotice(TestContext.CancellationToken));
+        Assert.IsEmpty(service.Logger.Errors);
+    }
+
+    [TestMethod]
+    public async Task GetNotice_Should_LogAnErrorAndShowNothing_WhenTheSummaryIsJunk()
     {
         foreach (var answer in new Func<HttpRequestMessage, HttpResponseMessage>[]
         {
-            _ => throw new HttpRequestException("No such host is known."),
             _ => new(HttpStatusCode.BadGateway) { Content = new StringContent("<html>Bad gateway</html>") },
             _ => new(HttpStatusCode.OK) { Content = new StringContent("<html>Not a summary</html>", System.Text.Encoding.UTF8, "text/html") },
             _ => new(HttpStatusCode.OK) { Content = new StringContent("""{ "incidents": "not a list" }""", System.Text.Encoding.UTF8, "application/json") }

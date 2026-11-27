@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 
 namespace Bit.Fabric.Server.Shared.Infrastructure.Services;
 
@@ -50,6 +51,15 @@ public class SharedResponseCacheCompatibleAntiforgery : IAntiforgery
     {
         if (httpContext.IsSharedResponseCacheEnabled())
             return originalAntiforgeryImplementation.GetTokens(httpContext); // No cookie, and no no-store/Pragma headers either. See the trade in this class's summary.
+
+        // The response is this caller's alone (signed in, a crawler, ...), and the call below makes it no-store whatever
+        // AppResponseCachePolicy wrote for the browser's cache. Dropping that first gives the same headers without the
+        // warning ASP.NET Core logs for each such page that it overrode them.
+        if (httpContext.Response.HasStarted is false)
+        {
+            httpContext.Response.Headers.Remove(HeaderNames.CacheControl);
+            httpContext.Response.Headers.Remove(HeaderNames.Pragma);
+        }
 
         return originalAntiforgeryImplementation.GetAndStoreTokens(httpContext);
     }

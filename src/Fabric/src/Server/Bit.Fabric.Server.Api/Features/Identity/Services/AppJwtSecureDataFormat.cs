@@ -135,6 +135,13 @@ public partial class AppJwtSecureDataFormat
 
             return Anonymous();
         }
+        catch (SecurityTokenExpiredException ex)
+        {
+            // Expected too: a client sends its expired access token until it has refreshed it, the refresh request included.
+            logger.LogDebug(ex, "The {TokenType} has expired.", tokenType);
+
+            return Anonymous();
+        }
         catch (Exception ex)
         {
             logger.LogWarning(ex, "Failed to unprotect the {TokenType}.", tokenType);

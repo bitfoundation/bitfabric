@@ -3,8 +3,9 @@ namespace Boilerplate.Client.Core.Infrastructure.Services;
 /// <summary>
 /// Reads the app's status page (See <see cref="ClientCoreSettings.StatusPageSummaryUrl"/>) for <see cref="StatusPageNotice"/>
 /// and for BevTools' Status tab (See AppStatusPagePanel). The request goes out with a plain <see cref="HttpClient"/>: the
-/// status page is someone else's server, so none of the app's handlers - its access token included - go with it. A
-/// summary that doesn't come back, or comes back as anything but a summary, is logged as an error and shows nothing.
+/// status page is someone else's server, so none of the app's handlers - its access token included - go with it. An
+/// answer that isn't a summary is logged as an error, and no answer at all (offline, blocked) as information; neither
+/// shows anything.
 /// </summary>
 public class StatusPageService(ClientCoreSettings settings, TimeProvider timeProvider, ILogger<StatusPageService> logger)
 {
@@ -58,6 +59,12 @@ public class StatusPageService(ClientCoreSettings settings, TimeProvider timePro
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             return null;
+        }
+        catch (Exception exp) when (exp is TaskCanceledException or HttpRequestException { StatusCode: null })
+        {
+            // No answer at all: the visitor is offline, or a blocker or a network in between stopped it. Nothing to fix here.
+            logger.LogInformation(exp, "Couldn't reach the status page at {StatusPageSummaryUrl}.", url);
+            return new(timeProvider.GetUtcNow(), null, $"{exp.GetType().Name}: {exp.Message}");
         }
         catch (Exception exp)
         {
