@@ -12166,9 +12166,6 @@ Tell me in under 200 words what holds and what doesn't, what it would cost me in
     <data name="AppHomeIPhoneIPadAndMac" xml:space="preserve">
         <value>iPhone, iPad and Mac</value>
     </data>
-    <data name="AppHomeLibraries" xml:space="preserve">
-        <value>Libraries</value>
-    </data>
     <data name="AppHomeServerAndWindows" xml:space="preserve">
         <value>Server and Windows</value>
     </data>
@@ -12179,13 +12176,10 @@ Tell me in under 200 words what holds and what doesn't, what it would cost me in
         <value>Your app's own code reaches every feature Android, iOS, macOS and Windows offer, directly, with no plugin to wait for.</value>
     </data>
     <data name="AppHomeAppsMoreAndroid" xml:space="preserve">
-        <value>Push notifications come through Google's own Firebase library, and a code sent by SMS fills itself in once the user taps Allow, through Google Play services.</value>
+        <value>Push notifications come through Google's own Firebase library, and a code sent by SMS fills itself in once the user taps Allow, through Google Play services. Any other Java or Kotlin library is added the same way, as a binding library.</value>
     </data>
     <data name="AppHomeAppsMoreApple" xml:space="preserve">
-        <value>Push notifications come through Apple's own push service.</value>
-    </data>
-    <data name="AppHomeAppsMoreLibraries" xml:space="preserve">
-        <value>Any Java or Kotlin library on Android, and any Swift or Objective-C library on iPhone, iPad and Mac, works in your app.</value>
+        <value>Push notifications come through Apple's own notifications framework and push service (APNs), and the user's sign-in is kept in Apple's Keychain. An Objective-C library is added as a binding library, and a Swift library through a small Xcode wrapper your app calls.</value>
     </data>
     <data name="AppHomeComponentsMoreLead" xml:space="preserve">
         <value>You're not limited to our components: your app can use any other library too, on the web, on the server and in every app.</value>
@@ -12194,10 +12188,10 @@ Tell me in under 200 words what holds and what doesn't, what it would cost me in
         <value>Any JavaScript library from npm. The project already builds its own scripts with npm.</value>
     </data>
     <data name="AppHomeComponentsMoreAndroid" xml:space="preserve">
-        <value>Any Java or Kotlin library. Push notifications already use Google's own Firebase library.</value>
+        <value>Any Java or Kotlin library, added as a binding library: push notifications already use Google's own Firebase library this way.</value>
     </data>
     <data name="AppHomeComponentsMoreApple" xml:space="preserve">
-        <value>Any Swift or Objective-C library.</value>
+        <value>Any Objective-C library, added as a binding library, and any Swift library, through a small Xcode wrapper your app calls. Push notifications already use Apple's own notifications framework and APNs, and the user's sign-in is kept in Apple's Keychain.</value>
     </data>
     <data name="AppHomeComponentsMoreServer" xml:space="preserve">
         <value>Any package from NuGet, where bit platform's own libraries come from too.</value>

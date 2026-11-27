@@ -12166,9 +12166,6 @@
     <data name="AppHomeIPhoneIPadAndMac" xml:space="preserve">
         <value>iPhone، iPad و Mac</value>
     </data>
-    <data name="AppHomeLibraries" xml:space="preserve">
-        <value>کتابخانه‌ها</value>
-    </data>
     <data name="AppHomeServerAndWindows" xml:space="preserve">
         <value>سرور و Windows</value>
     </data>
@@ -12179,13 +12176,10 @@
         <value>کد خود اپ شما مستقیماً به همهٔ امکانات Android، iOS، macOS و Windows دسترسی دارد، بی آنکه منتظر افزونه‌ای بمانید.</value>
     </data>
     <data name="AppHomeAppsMoreAndroid" xml:space="preserve">
-        <value>اعلان‌های Push از کتابخانهٔ رسمی Firebase خود Google می‌آیند، و کدی که با SMS می‌رسد، همین که کاربر Allow را بزند، به کمک Google Play services خودش پر می‌شود.</value>
+        <value>اعلان‌های Push از کتابخانهٔ رسمی Firebase خود Google می‌آیند، و کدی که با SMS می‌رسد، همین که کاربر Allow را بزند، به کمک Google Play services خودش پر می‌شود. هر کتابخانهٔ Java یا Kotlin دیگری هم به همین شکل، به‌صورت یک binding library، اضافه می‌شود.</value>
     </data>
     <data name="AppHomeAppsMoreApple" xml:space="preserve">
-        <value>اعلان‌های Push از سرویس Push خود Apple می‌آیند.</value>
-    </data>
-    <data name="AppHomeAppsMoreLibraries" xml:space="preserve">
-        <value>هر کتابخانهٔ Java یا Kotlin در Android، و هر کتابخانهٔ Swift یا Objective-C در iPhone، iPad و Mac، در اپ شما کار می‌کند.</value>
+        <value>اعلان‌های Push از framework اعلان‌ها و سرویس Push خود Apple (APNs) می‌آیند، و ورود کاربر در Keychain خود Apple نگه داشته می‌شود. کتابخانهٔ Objective-C به‌صورت یک binding library اضافه می‌شود، و کتابخانهٔ Swift از راه یک wrapper کوچک Xcode که اپ شما صدایش می‌زند.</value>
     </data>
     <data name="AppHomeComponentsMoreLead" xml:space="preserve">
         <value>به کامپوننت‌های ما محدود نیستید: اپ شما هر کتابخانهٔ دیگری را هم می‌تواند به کار ببرد، در وب، روی سرور و در همهٔ اپ‌ها.</value>
@@ -12194,10 +12188,10 @@
         <value>هر کتابخانهٔ JavaScript از npm. پروژه همین حالا اسکریپت‌های خودش را با npm می‌سازد.</value>
     </data>
     <data name="AppHomeComponentsMoreAndroid" xml:space="preserve">
-        <value>هر کتابخانهٔ Java یا Kotlin. اعلان‌های Push همین حالا از کتابخانهٔ رسمی Firebase خود Google استفاده می‌کنند.</value>
+        <value>هر کتابخانهٔ Java یا Kotlin، که به‌صورت یک binding library اضافه می‌شود: اعلان‌های Push همین حالا به همین شکل از کتابخانهٔ رسمی Firebase خود Google استفاده می‌کنند.</value>
     </data>
     <data name="AppHomeComponentsMoreApple" xml:space="preserve">
-        <value>هر کتابخانهٔ Swift یا Objective-C.</value>
+        <value>هر کتابخانهٔ Objective-C، که به‌صورت یک binding library اضافه می‌شود، و هر کتابخانهٔ Swift، از راه یک wrapper کوچک Xcode که اپ شما صدایش می‌زند. اعلان‌های Push همین حالا از framework اعلان‌ها و APNs خود Apple استفاده می‌کنند، و ورود کاربر در Keychain خود Apple نگه داشته می‌شود.</value>
     </data>
     <data name="AppHomeComponentsMoreServer" xml:space="preserve">
         <value>هر package از NuGet، همان جایی که کتابخانه‌های خود bit platform هم از آن می‌آیند.</value>

@@ -359,15 +359,16 @@ public partial class FeaturesPage
         Localizer[nameof(AppStrings.AppHomeIfAClientOfYoursWantsAnotherDatabase)]);
 
     /// <summary>
-    /// The apps card's "More info": that the app's own code reaches the device, with the native libraries push and the SMS code
-    /// already use, as bit Boilerplate's Android, iOS and Mac apps do (Xamarin.Firebase.Messaging, SmsRetriever, APNs).
+    /// The apps card's "More info": that the app's own code reaches the device, with the native libraries and APIs bit
+    /// Boilerplate's apps already use (Android: Xamarin.Firebase.Messaging, a binding library, and SmsRetriever; iPhone, iPad and
+    /// Mac: UserNotifications with APNs, and SecureStorage, which is the Keychain there), and how another library is added: a
+    /// binding library for Java, Kotlin and Objective-C, Native Library Interop's small Xcode wrapper for Swift.
     /// </summary>
     private AppHomeNote AppsDetails => new(
         Localizer[nameof(AppStrings.AppHomeAppsMoreLead)],
         [
             ("Android", Localizer[nameof(AppStrings.AppHomeAppsMoreAndroid)]),
-            (Localizer[nameof(AppStrings.AppHomeIPhoneIPadAndMac)], Localizer[nameof(AppStrings.AppHomeAppsMoreApple)]),
-            (Localizer[nameof(AppStrings.AppHomeLibraries)], Localizer[nameof(AppStrings.AppHomeAppsMoreLibraries)])
+            (Localizer[nameof(AppStrings.AppHomeIPhoneIPadAndMac)], Localizer[nameof(AppStrings.AppHomeAppsMoreApple)])
         ],
         Localizer[nameof(AppStrings.AppHomeAddingALibraryTakesALittleSetup)]);
 
