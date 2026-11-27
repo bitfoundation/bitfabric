@@ -23,8 +23,8 @@ public class DocsMcpServer(DocsMcpProxy proxy, DocsMcpVersions versions, DocsMcp
 
         options.ServerInfo = new()
         {
-            Name = "bitplatform",
-            Title = "bit platform",
+            Name = "bitfabric-docs",
+            Title = "bit Fabric docs",
             Version = typeof(DocsMcpServer).Assembly.GetName().Version?.ToString(3) ?? "0.0.1"
         };
         options.ServerInstructions = access.IsAllowed ? Instructions(connection) : $"{Instructions(connection)} {access.Refusal}";

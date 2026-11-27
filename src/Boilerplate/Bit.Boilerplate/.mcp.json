@@ -1,6 +1,6 @@
 {
     "mcpServers": {
-        "bitplatform": {
+        "bitfabric-docs": {
             "type": "http",
             "url": "https://api.bitfabric.co/docs-mcp"
         },
@@ -12,7 +12,7 @@
             "type": "http",
             "url": "https://use-your-api-server-url-here.com/dev-mcp"
         },
-        "bit-fabric": {
+        "bitfabric": {
             "type": "http",
             "url": "https://api.bitfabric.co/mcp"
         },

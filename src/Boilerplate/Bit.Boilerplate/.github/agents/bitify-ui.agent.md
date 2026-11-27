@@ -59,7 +59,7 @@ For **each component** you plan to use, call `GetBitBlazorUIComponent("<Componen
 Look up every type a signature names with `GetBitBlazorUIType` - an enum parameter takes the enum
 (`Color="BitColor.Primary"`), never a string (`Color="Primary"`).
 
-The bit platform MCP server answers for the release in its URL in the project's MCP files, the same release as the
+The `bitfabric-docs` MCP server answers for the release in its URL in the project's MCP files, the same release as the
 bit packages in `Directory.Packages.props`, so what the tools describe is what the page compiles against.
 
 ### Step 4: Look Up Theming Questions with `GetBitBlazorUIThemingGuide`

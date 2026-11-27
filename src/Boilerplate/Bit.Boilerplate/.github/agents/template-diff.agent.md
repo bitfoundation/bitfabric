@@ -21,9 +21,9 @@ The work is yours to judge. Ask the user only what the code can't answer and wha
 
 ## 1. Know where the project stands
 
-- `bit.json` records the template version the project comes from, its name and the value of every option it was created with. The MCP server configurations (`.mcp.json`, `.vscode/mcp.json`, `.cursor/mcp.json`, `.junie/mcp/mcp.json`, `.gemini/settings.json`, `.codex/config.toml`) pin the bit platform MCP server to a version too. `bit.json` is the one to go by: a team may move those, or the bit platform packages, without upgrading the template.
+- `bit.json` records the template version the project comes from, its name and the value of every option it was created with. The MCP server configurations (`.mcp.json`, `.vscode/mcp.json`, `.cursor/mcp.json`, `.junie/mcp/mcp.json`, `.gemini/settings.json`, `.codex/config.toml`) pin the `bitfabric-docs` MCP server to a version too. `bit.json` is the one to go by: a team may move those, or the bit platform packages, without upgrading the template.
 - Check the recorded options against the code. The team may have turned something off after creation, switched the database provider, or removed a module, and the diff should be made with the options the project has today.
-- For a newer version, the target is the version the user names. Without one, it's the newest release, a prerelease included: bit platform ships prereleases often, and its MCP servers answer from the newest code, so the newest prerelease is what this project should be on. Take a stable release instead only when the user asks for one. The release notes of every version in between say why things changed: the bit platform MCP server's `GetBitPlatformReleases` tool returns them, and its other tools answer questions about any of those versions.
+- For a newer version, the target is the version the user names. Without one, it's the newest release, a prerelease included: bit platform ships prereleases often, and its MCP servers answer from the newest code, so the newest prerelease is what this project should be on. Take a stable release instead only when the user asks for one. The release notes of every version in between say why things changed: the `bitfabric-docs` MCP server's `GetBitPlatformReleases` tool returns them, and its other tools answer questions about any of those versions.
 - The bit CLI must know the template version you create projects with: update it, or run it through `dnx` at that version.
 - Before changing anything, build the solution and run the tests on the starting commit, the way the **write-tests** skill (`.github/agents/write-tests.agent.md`) describes, and keep the list of what already fails. A failure afterwards is then one of those, a deliberate change in the template, or a bug in bringing it in - and one you brought in looks exactly like one you inherited.
 
@@ -64,7 +64,7 @@ Some changes need more than the text of the diff:
 ## 4. Update what the project records
 
 - In `bit.json`, what changed - the version, the `framework` or the feature's option - so the next diff starts from here; keep the options the project really has. A `cli.maxVersion` older than the new version goes, or bit keeps running the project's commands with the older bit CLI it names.
-- After a newer version, the version in the bit platform MCP server URL in every MCP configuration listed above, and in any other agent configuration that pins it.
+- After a newer version, the version in the `bitfabric-docs` MCP server URL in every MCP configuration listed above, and in any other agent configuration that pins it.
 - After a newer version, search the project for the old version string and update every place that names the template or bit platform version, such as the package versions of the bit platform libraries and the bit platform actions the workflows use. Leave a package the team pinned on purpose, and other packages that happen to share the number, alone.
 
 ## 5. Prove it

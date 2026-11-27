@@ -21,7 +21,7 @@ A short-track task that turns out bigger moves to the full track, and you stop a
 On the full track, take these three steps in this order, before your first question and before you read the code. Each is one action and part of the work, not something to fit in when there is time:
 
 1. **Start your Progress task.** Open the **workbench** skill (`.github/agents/workbench.agent.md`) and start your task on the Workbench's Progress page, the way its section on a long task's progress describes. Do it even though the user is talking to you in this chat: they follow the work on that page from another window, and the plan, the decisions and the questions stay there after the chat is over, which a chat alone doesn't give them. These phases are its steps, the plan's approval and every question go there, and it stays current until delivery.
-2. **Check the release.** Do what **Staying on the Newest bit Platform** below says, which starts with one call to the bit platform MCP server's `GetBitPlatformReleases` tool. Make the call even when the project looks new: only the server knows which release is the newest today, and a project is behind the day a release comes out.
+2. **Check the release.** Do what **Staying on the Newest bit Platform** below says, which starts with one call to the `bitfabric-docs` MCP server's `GetBitPlatformReleases` tool. Make the call even when the project looks new: only the server knows which release is the newest today, and a project is behind the day a release comes out.
 3. **Pick the branch**, the way the next section says.
 
 ## Pick the Branch
@@ -163,12 +163,12 @@ When the user asks for one of these, or the task needs it, tell them it is a fir
 
 The project template, bit BlazorUI and every other bit library ship together under one version number, and `bit.json` records the one this project is on. Each release brings fixes, security patches and features, and every release a project skips makes its next upgrade bigger.
 
-Being up to date matters more here than in most projects, because of the MCP servers you rely on. The bit platform MCP server's source code tools read the newest bit platform code, and every bit library's own MCP server answers from its newest build, prereleases included. They never answer for an older version. So the further behind this project is, the more of what they tell you - a parameter, a component, a method, a setting - this project doesn't have yet, and code written from it won't compile or will behave differently. When an answer names something this project lacks, the project being behind is the first suspect: say so rather than working around it.
+Being up to date matters more here than in most projects, because of the MCP servers you rely on. The `bitfabric-docs` MCP server's source code tools read the newest bit platform code, and every bit library's own MCP server answers from its newest build, prereleases included. They never answer for an older version. So the further behind this project is, the more of what they tell you - a parameter, a component, a method, a setting - this project doesn't have yet, and code written from it won't compile or will behave differently. When an answer names something this project lacks, the project being behind is the first suspect: say so rather than working around it.
 
 Once per session:
 
 1.  Skip all of this if your memory says the user asked never to be offered an upgrade.
-2.  Call the bit platform MCP server's `GetBitPlatformReleases` tool with the version `bit.json` records.
+2.  Call the `bitfabric-docs` MCP server's `GetBitPlatformReleases` tool with the version `bit.json` records.
 3.  Say nothing if the project is on the newest release - a prerelease counts, since bit platform ships them often and the MCP servers answer from the newest code - or if your memory says the user already turned down an upgrade to it.
 4.  Otherwise tell the user before phase 2, and make the case for upgrading now from the release notes rather than in general terms: how many releases behind the project is, the security fixes first, then the fixes and features that touch the parts this project uses, and that the MCP servers' answers then match this project's code again. Add that the **template-diff** skill (`.github/agents/template-diff.agent.md`) does the work on a branch of its own, keeps the team's changes, proves the result builds, passes its tests and runs, and merges nothing without their review. Keep it to a few lines and ask once.
 5.  If they agree, run the template-diff skill before phase 2, so the feature is planned and built on the newer code, then come back here.

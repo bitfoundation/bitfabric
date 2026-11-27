@@ -498,7 +498,7 @@ The documentation includes:
 
 **You don't need to manually search the documentation!**
 
-This project ships the **bitplatform MCP server** configuration for every supported AI coding tool, and `AGENTS.md` directs the agent to its tools (`SearchBitBlazorUI`, `GetBitBlazorUIComponent`, `GetBitBlazorUIComponentExamples`, `GetBitBlazorUIType`, `GetBitBlazorUIThemingGuide`, `FindBitBlazorUIIcons`). When you ask questions or give commands related to UI components, the agent **automatically queries these tools**, which answer from the shipped assemblies and documentation pages rather than from memory.
+This project ships the **`bitfabric-docs` MCP server** configuration for every supported AI coding tool, and `AGENTS.md` directs the agent to its tools (`SearchBitBlazorUI`, `GetBitBlazorUIComponent`, `GetBitBlazorUIComponentExamples`, `GetBitBlazorUIType`, `GetBitBlazorUIThemingGuide`, `FindBitBlazorUIIcons`). When you ask questions or give commands related to UI components, the agent **automatically queries these tools**, which answer from the shipped assemblies and documentation pages rather than from memory.
 
 **Example interactions:**
 
