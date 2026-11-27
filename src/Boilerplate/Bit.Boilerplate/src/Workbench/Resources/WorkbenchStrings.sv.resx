@@ -4995,6 +4995,9 @@
     <data name="ProgressEntryStepDone" xml:space="preserve">
         <value>Klart: {0}</value>
     </data>
+    <data name="ProgressEntryBoardSubmitted" xml:space="preserve">
+        <value>Skickat: {0}</value>
+    </data>
     <data name="ProgressAgentNeedsYou" xml:space="preserve">
         <value>{0} behöver dig</value>
     </data>
@@ -5326,6 +5329,36 @@
     </data>
     <data name="BoardNotFound" xml:space="preserve">
         <value>Det finns ingen tavla på den här adressen.</value>
+    </data>
+    <data name="BoardSubmitRegion" xml:space="preserve">
+        <value>Dina val</value>
+    </data>
+    <data name="BoardSubmit" xml:space="preserve">
+        <value>Skicka</value>
+    </data>
+    <data name="BoardSubmitAgain" xml:space="preserve">
+        <value>Skicka igen</value>
+    </data>
+    <data name="BoardSubmitted" xml:space="preserve">
+        <value>Skickat</value>
+    </data>
+    <data name="BoardPicksSaved" xml:space="preserve">
+        <value>Dina val sparas medan du väljer. Skicka dem när du är klar.</value>
+    </data>
+    <data name="BoardPicksSubmittedAt" xml:space="preserve">
+        <value>Skickat kl. {0}.</value>
+    </data>
+    <data name="BoardPicksChangedSince" xml:space="preserve">
+        <value>Ändrat sedan du skickade kl. {0}.</value>
+    </data>
+    <data name="BoardPicksSent" xml:space="preserve">
+        <value>Skickat till {0}.</value>
+    </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>Ingen väntade på dem.</value>
+    </data>
+    <data name="BoardSubmitFailed" xml:space="preserve">
+        <value>Det gick inte att skicka. Försök igen.</value>
     </data>
     <data name="DeployBoardTitle" xml:space="preserve">
         <value>Så levereras det här projektet</value>

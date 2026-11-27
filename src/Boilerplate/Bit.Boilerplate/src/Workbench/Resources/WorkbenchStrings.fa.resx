@@ -4995,6 +4995,9 @@
     <data name="ProgressEntryStepDone" xml:space="preserve">
         <value>انجام شد: {0}</value>
     </data>
+    <data name="ProgressEntryBoardSubmitted" xml:space="preserve">
+        <value>ثبت شد: {0}</value>
+    </data>
     <data name="ProgressAgentNeedsYou" xml:space="preserve">
         <value>{0} به شما نیاز دارد</value>
     </data>
@@ -5326,6 +5329,36 @@
     </data>
     <data name="BoardNotFound" xml:space="preserve">
         <value>در این نشانی تابلویی نیست.</value>
+    </data>
+    <data name="BoardSubmitRegion" xml:space="preserve">
+        <value>انتخاب‌های شما</value>
+    </data>
+    <data name="BoardSubmit" xml:space="preserve">
+        <value>ثبت</value>
+    </data>
+    <data name="BoardSubmitAgain" xml:space="preserve">
+        <value>ثبت دوباره</value>
+    </data>
+    <data name="BoardSubmitted" xml:space="preserve">
+        <value>ثبت شد</value>
+    </data>
+    <data name="BoardPicksSaved" xml:space="preserve">
+        <value>انتخاب‌هایتان خودکار ذخیره می‌شوند. وقتی تمام شد، ثبتشان کنید.</value>
+    </data>
+    <data name="BoardPicksSubmittedAt" xml:space="preserve">
+        <value>در {0} ثبت شد.</value>
+    </data>
+    <data name="BoardPicksChangedSince" xml:space="preserve">
+        <value>پس از ثبت در {0} تغییر کرده‌اند.</value>
+    </data>
+    <data name="BoardPicksSent" xml:space="preserve">
+        <value>برای {0} فرستاده شد.</value>
+    </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>کسی منتظرشان نبود.</value>
+    </data>
+    <data name="BoardSubmitFailed" xml:space="preserve">
+        <value>ثبت نشد. دوباره امتحان کنید.</value>
     </data>
     <data name="DeployBoardTitle" xml:space="preserve">
         <value>این پروژه چطور منتشر می‌شود</value>

@@ -267,13 +267,15 @@ public static class IWorkbenchEndpointRouteBuilderExtensions
         /// </summary>
         private void MapProgressEndpoints()
         {
-            // Which copy of the project this Workbench runs from, as a chat in another worktree asks before it uses or restarts it.
+            // Which copy of the project this Workbench runs from, as a chat in another worktree asks before it uses or restarts it,
+            // and where it keeps the review and the picks made on the boards.
             endpoints.MapGet("api/workbench", () => Results.Json(new
             {
                 WorkingTree = WorkbenchFolders.WorkingTree,
                 WorkbenchFolders.Project,
                 WorkbenchFolders.Branch,
                 Data = WorkbenchFolders.Reviews,
+                Boards = WorkbenchFolders.Boards,
                 ProcessId = Environment.ProcessId,
                 StartedAt = startedAt
             }));

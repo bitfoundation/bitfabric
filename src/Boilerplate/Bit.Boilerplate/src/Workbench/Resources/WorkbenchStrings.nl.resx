@@ -4995,6 +4995,9 @@
     <data name="ProgressEntryStepDone" xml:space="preserve">
         <value>Gedaan: {0}</value>
     </data>
+    <data name="ProgressEntryBoardSubmitted" xml:space="preserve">
+        <value>Verstuurd: {0}</value>
+    </data>
     <data name="ProgressAgentNeedsYou" xml:space="preserve">
         <value>{0} heeft je nodig</value>
     </data>
@@ -5326,6 +5329,36 @@
     </data>
     <data name="BoardNotFound" xml:space="preserve">
         <value>Op dit adres staat geen bord.</value>
+    </data>
+    <data name="BoardSubmitRegion" xml:space="preserve">
+        <value>Je keuzes</value>
+    </data>
+    <data name="BoardSubmit" xml:space="preserve">
+        <value>Versturen</value>
+    </data>
+    <data name="BoardSubmitAgain" xml:space="preserve">
+        <value>Opnieuw versturen</value>
+    </data>
+    <data name="BoardSubmitted" xml:space="preserve">
+        <value>Verstuurd</value>
+    </data>
+    <data name="BoardPicksSaved" xml:space="preserve">
+        <value>Je keuzes worden onderweg bewaard. Verstuur ze als je klaar bent.</value>
+    </data>
+    <data name="BoardPicksSubmittedAt" xml:space="preserve">
+        <value>Verstuurd om {0}.</value>
+    </data>
+    <data name="BoardPicksChangedSince" xml:space="preserve">
+        <value>Gewijzigd sinds je om {0} verstuurde.</value>
+    </data>
+    <data name="BoardPicksSent" xml:space="preserve">
+        <value>Verstuurd naar {0}.</value>
+    </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>Niemand wachtte erop.</value>
+    </data>
+    <data name="BoardSubmitFailed" xml:space="preserve">
+        <value>Versturen is mislukt. Probeer het opnieuw.</value>
     </data>
     <data name="DeployBoardTitle" xml:space="preserve">
         <value>Zo wordt dit project uitgerold</value>

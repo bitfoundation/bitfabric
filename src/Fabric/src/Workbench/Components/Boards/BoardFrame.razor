@@ -34,6 +34,11 @@
 
         @ChildContent
 
+        @if (Picks || ProgressTask is not null)
+        {
+            <BoardSubmit Title="@Title" Language="@BoardLanguage" ProgressTask="@ProgressTask" />
+        }
+
         @if (Sources is { Length: > 0 })
         {
             <BoardSources Items="Sources" Title="@SourcesTitle" />

@@ -94,6 +94,8 @@ public static class IWorkbenchServiceCollectionExtensions
             services.AddBitBlexStore<WorkbenchDeviceStore>();
             services.AddScoped<IBlexStorage, WorkbenchStateStorage>();
             services.AddBitBlexPersistence();
+            // What the reader picks on a board goes to a file of the board's too, where the agent that built it reads it.
+            services.AddSingleton<WorkbenchBoardFiles>();
             services.AddScoped<IBitAccentColorStore, ChromeAccentStore>();
 
             // Every localizer records the texts it shows, so Edit text mode can trace a text on the page to its resource entry.

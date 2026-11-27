@@ -28,6 +28,7 @@ public partial class PaymentsBoard
     private readonly BitChoiceGroupItem<string>[] regionItems = [.. PaymentsFacts.Regions.Select(region => new BitChoiceGroupItem<string> { Value = region.Key, Text = region.Name })];
 
     [AutoInject] private PaymentsBoardStore store = default!;
+    [AutoInject] private PaymentsPicksStore picks = default!;
 
     private decimal Price => (decimal)Math.Clamp(store.Price, 1, 100);
 
@@ -71,7 +72,7 @@ public partial class PaymentsBoard
 
     protected override void OnInitialized()
     {
-        Subscribe(store);
+        Subscribe(store, picks);
     }
 
     /// <summary>A bar's length, to scale with the largest fee on the sale.</summary>

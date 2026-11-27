@@ -20,7 +20,10 @@
         }
         else if (Board is { } board)
         {
-            <DynamicComponent @key="board.Id" Type="board.ComponentType" />
+            @* The board it opens, which its frame reads to keep the reader's picks in the board's file (BoardSubmit). *@
+            <CascadingValue @key="board.Id" Value="board" IsFixed="true">
+                <DynamicComponent Type="board.ComponentType" />
+            </CascadingValue>
         }
         else
         {

@@ -452,6 +452,21 @@ public static partial class WorkbenchProgressDocument
     }
 
     /// <summary>
+    /// Tells the task's agent that the user submitted their picks on a board, named by its title; the picks are in the board's
+    /// file (WorkbenchBoardFiles).
+    /// </summary>
+    public static bool AddBoardSubmission(BcrdtMap progress, string taskId, string boardId, string title, string by)
+    {
+        if (progress.GetMap(taskId) is not { } task)
+            return false;
+
+        AddEntry(task, WorkbenchProgressEntryKind.Board, by, title, WorkbenchReviewDocument.NextSequence(), boardId);
+        task.Set("updatedAt", Now());
+
+        return true;
+    }
+
+    /// <summary>
     /// Takes a note off the task for the user, and tells its agent, which then doesn't add it again; returns false when it is
     /// gone already.
     /// </summary>

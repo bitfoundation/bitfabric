@@ -4995,6 +4995,9 @@
     <data name="ProgressEntryStepDone" xml:space="preserve">
         <value>已完成：{0}</value>
     </data>
+    <data name="ProgressEntryBoardSubmitted" xml:space="preserve">
+        <value>已提交：{0}</value>
+    </data>
     <data name="ProgressAgentNeedsYou" xml:space="preserve">
         <value>{0} 需要您</value>
     </data>
@@ -5326,6 +5329,36 @@
     </data>
     <data name="BoardNotFound" xml:space="preserve">
         <value>这个地址没有展板。</value>
+    </data>
+    <data name="BoardSubmitRegion" xml:space="preserve">
+        <value>你的选择</value>
+    </data>
+    <data name="BoardSubmit" xml:space="preserve">
+        <value>提交</value>
+    </data>
+    <data name="BoardSubmitAgain" xml:space="preserve">
+        <value>再次提交</value>
+    </data>
+    <data name="BoardSubmitted" xml:space="preserve">
+        <value>已提交</value>
+    </data>
+    <data name="BoardPicksSaved" xml:space="preserve">
+        <value>你的选择会随时保存。完成后提交即可。</value>
+    </data>
+    <data name="BoardPicksSubmittedAt" xml:space="preserve">
+        <value>已于 {0} 提交。</value>
+    </data>
+    <data name="BoardPicksChangedSince" xml:space="preserve">
+        <value>自 {0} 提交后已更改。</value>
+    </data>
+    <data name="BoardPicksSent" xml:space="preserve">
+        <value>已发送给 {0}。</value>
+    </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>没有人在等待它们。</value>
+    </data>
+    <data name="BoardSubmitFailed" xml:space="preserve">
+        <value>提交失败，请重试。</value>
     </data>
     <data name="DeployBoardTitle" xml:space="preserve">
         <value>这个项目如何交付</value>

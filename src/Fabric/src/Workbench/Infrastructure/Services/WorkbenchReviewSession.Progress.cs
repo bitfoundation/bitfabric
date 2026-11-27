@@ -43,6 +43,15 @@ public sealed partial class WorkbenchReviewSession
         return EditProgress(task, progress => WorkbenchProgressDocument.AddMessage(progress, task.Id, text, by));
     }
 
+    /// <summary>
+    /// Tells the task's agent that the user submitted their picks on a board (BoardSubmit); false when the task is over or this
+    /// circuit may not act on it.
+    /// </summary>
+    public bool SubmitBoard(WorkbenchProgressTask task, string boardId, string title, string by)
+    {
+        return CanAnswer(task) && EditProgress(task, progress => WorkbenchProgressDocument.AddBoardSubmission(progress, task.Id, boardId, title, by));
+    }
+
     /// <summary>Whether the user may take a note or a line of the activity off a task: wherever they may act on it, a finished one too.</summary>
     public bool CanRemoveItems(WorkbenchProgressTask task) => CanSeeTasks;
 

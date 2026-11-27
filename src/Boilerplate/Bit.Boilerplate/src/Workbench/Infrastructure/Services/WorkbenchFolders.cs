@@ -42,6 +42,12 @@ public static class WorkbenchFolders
     /// <summary>The secrets the user pasted for an agent's commands to read, next to the reviews, outside the repository.</summary>
     public static string Secrets => Path.Combine(Path.GetDirectoryName(Reviews)!, "Secrets");
 
+    /// <summary>
+    /// What the reader picked on each board, one file per board (WorkbenchBoardFiles), next to the review, outside the
+    /// repository, and like the review, one folder for each Workbench address, so two processes never write one file.
+    /// </summary>
+    public static string Boards => Path.Combine(Path.GetDirectoryName(Reviews)!, $"Boards{PortSuffix}");
+
     /// <summary>The port of the first address in an ASP.NET Core urls setting, like http://localhost:6031.</summary>
     public static int? PortOf(string? urls)
     {
@@ -50,7 +56,10 @@ public static class WorkbenchFolders
                                      .FirstOrDefault(match => match.Success) is { } port ? int.Parse(port.Groups[1].Value, CultureInfo.InvariantCulture) : null;
     }
 
-    private static string ReviewsName => Port is { } port && HomePort is { } home && port != home ? $"Reviews-{port}" : "Reviews";
+    private static string ReviewsName => $"Reviews{PortSuffix}";
+
+    /// <summary>Nothing for the Workbench on the port of the launch settings, and -{port} for one on another port.</summary>
+    private static string PortSuffix => Port is { } port && HomePort is { } home && port != home ? $"-{port}" : string.Empty;
 
     /// <summary>The port of the address in the project's launch settings.</summary>
     private static int? HomePort => Project is { } project

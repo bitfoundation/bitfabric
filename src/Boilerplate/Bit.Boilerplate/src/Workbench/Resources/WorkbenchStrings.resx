@@ -4995,6 +4995,9 @@
     <data name="ProgressEntryStepDone" xml:space="preserve">
         <value>Done: {0}</value>
     </data>
+    <data name="ProgressEntryBoardSubmitted" xml:space="preserve">
+        <value>Submitted: {0}</value>
+    </data>
     <data name="ProgressAgentNeedsYou" xml:space="preserve">
         <value>{0} needs you</value>
     </data>
@@ -5326,6 +5329,36 @@
     </data>
     <data name="BoardNotFound" xml:space="preserve">
         <value>There's no board at this address.</value>
+    </data>
+    <data name="BoardSubmitRegion" xml:space="preserve">
+        <value>Your picks</value>
+    </data>
+    <data name="BoardSubmit" xml:space="preserve">
+        <value>Submit</value>
+    </data>
+    <data name="BoardSubmitAgain" xml:space="preserve">
+        <value>Submit again</value>
+    </data>
+    <data name="BoardSubmitted" xml:space="preserve">
+        <value>Submitted</value>
+    </data>
+    <data name="BoardPicksSaved" xml:space="preserve">
+        <value>Your picks are saved as you go. Submit them when you're done.</value>
+    </data>
+    <data name="BoardPicksSubmittedAt" xml:space="preserve">
+        <value>Submitted at {0}.</value>
+    </data>
+    <data name="BoardPicksChangedSince" xml:space="preserve">
+        <value>Changed since you submitted at {0}.</value>
+    </data>
+    <data name="BoardPicksSent" xml:space="preserve">
+        <value>Sent to {0}.</value>
+    </data>
+    <data name="BoardPicksNobodyTold" xml:space="preserve">
+        <value>Nobody was waiting for them.</value>
+    </data>
+    <data name="BoardSubmitFailed" xml:space="preserve">
+        <value>Couldn't submit. Try again.</value>
     </data>
     <data name="DeployBoardTitle" xml:space="preserve">
         <value>How this project ships</value>
