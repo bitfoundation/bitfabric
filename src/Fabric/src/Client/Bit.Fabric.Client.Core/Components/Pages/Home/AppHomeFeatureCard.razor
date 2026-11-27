@@ -1,6 +1,6 @@
 @inherits AppComponentBase
 
-<article class="ah-card @(isDetailsShown ? "is-open" : null)">
+<article @ref="Element" class="ah-card @(isDetailsShown ? "is-open" : null)">
     <div class="ah-card-top">
         <BitIcon IconName="@Feature.Icon" Variant="BitVariant.Fill" Circular="true" Class="ah-card-icon" />
 
@@ -33,8 +33,8 @@
             <BitToggleButton Id="@DetailsToggleId" Variant="BitVariant.Text" Size="BitSize.Small" Text="@Localizer[nameof(AppStrings.AppHomeMoreInfo)]"
                              OffIconName="@BitIconName.ChevronDown" OnIconName="@BitIconName.ChevronUp" IconPlacement="BitPlacement.End"
                              AriaMode="BitToggleButtonAriaMode.Expanded" AriaControls="@($"{DetailsId}-content")"
-                             @bind-Checked="isDetailsShown" />
-            <BitCollapse Id="@DetailsId" @bind-Expanded="isDetailsShown" HiddenUntilFound NoPadding LabelledBy="@DetailsToggleId">
+                             @bind-Checked:get="isDetailsShown" @bind-Checked:set="WrapHandled<bool>(ToggleDetails)" />
+            <BitCollapse Id="@DetailsId" Expanded="isDetailsShown" HiddenUntilFound NoPadding LabelledBy="@DetailsToggleId">
                 <div class="ah-card-details-body">
                     <BitText Typography="BitTypography.Body2">@details.Lead</BitText>
                     @if (details.Facts.Length > 0)

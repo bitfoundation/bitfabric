@@ -38,7 +38,7 @@
     gap: .25rem;
 }
 
-// While a card's More info is open, the cards around it keep their own height rather than stretching to its
+// While a card's More info is open, the cards around it keep the height they had (AppHomeCardGroup) rather than stretching to it
 .ah-grid:has(.ah-card.is-open) .ah-card {
     align-self: start;
 }

@@ -189,6 +189,12 @@ public partial class FeaturesPage
         (Localizer[nameof(AppStrings.AppHomeProtectionAnyone)], Localizer[nameof(AppStrings.AppHomeProtectionAnyoneText)])
     ];
 
+    /// <summary>The cards of each grid, by its first card's id, so a card's "More info" can hold the others' height.</summary>
+    private readonly Dictionary<string, AppHomeCardGroup> cardGroups = [];
+
+    private AppHomeCardGroup GroupOf(string firstCardId) =>
+        cardGroups.TryGetValue(firstCardId, out var group) ? group : cardGroups[firstCardId] = new();
+
     /// <summary>A band's cards as one grid, or as two with its showcase between them, right after the card it names.</summary>
     private static IEnumerable<(AppHomeFeature[] Features, bool ShowcaseAfter)> GridsOf(AppHomeSection section)
     {
