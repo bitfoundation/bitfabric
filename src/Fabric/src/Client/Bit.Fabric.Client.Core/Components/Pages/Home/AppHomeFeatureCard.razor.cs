@@ -37,7 +37,10 @@ public partial class AppHomeFeatureCard
         await base.OnInitAsync();
     }
 
-    /// <summary>Opens or closes the card's "More info", the cards of its grid holding the height they had while it is open.</summary>
+    /// <summary>
+    /// Opens or closes the card's "More info", from its toggle or from find-in-page revealing it, the cards of its grid holding
+    /// the height they had while it is open.
+    /// </summary>
     private async Task ToggleDetails(bool open)
     {
         if (open && Group is not null)

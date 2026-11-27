@@ -34,7 +34,7 @@
                              OffIconName="@BitIconName.ChevronDown" OnIconName="@BitIconName.ChevronUp" IconPlacement="BitPlacement.End"
                              AriaMode="BitToggleButtonAriaMode.Expanded" AriaControls="@($"{DetailsId}-content")"
                              @bind-Checked:get="isDetailsShown" @bind-Checked:set="WrapHandled<bool>(ToggleDetails)" />
-            <BitCollapse Id="@DetailsId" Expanded="isDetailsShown" HiddenUntilFound NoPadding LabelledBy="@DetailsToggleId">
+            <BitCollapse Id="@DetailsId" @bind-Expanded:get="isDetailsShown" @bind-Expanded:set="WrapHandled<bool>(ToggleDetails)" HiddenUntilFound NoPadding LabelledBy="@DetailsToggleId">
                 <div class="ah-card-details-body">
                     <BitText Typography="BitTypography.Body2">@details.Lead</BitText>
                     @if (details.Facts.Length > 0)

@@ -22,23 +22,27 @@ public partial class HomePageSeoTests
 
         var html = await GetFeaturesPage(server, Googlebot);
 
+        var page = new AngleSharp.Html.Parser.HtmlParser().ParseDocument(html);
+
         foreach (var (card, lines) in MoreInfos)
         {
             var id = $"ah-more-{card}";
 
             // A toggle that says it is closed and which part it opens, and that part, closed but in the page
-            var toggle = Regex.Match(html, $"<button[^>]*\\bid=\"{id}-toggle\"[^>]*>").Value;
-            Assert.Contains("aria-expanded=\"false\"", toggle, $"The {card} card's More info says it is closed: {toggle}");
-            Assert.Contains($"aria-controls=\"{id}-content\"", toggle, $"The {card} card's More info names the part it opens.");
-            Assert.IsTrue(Contains(html, AppStrings.AppHomeMoreInfo), "The toggle reads More info.");
+            var toggle = page.GetElementById($"{id}-toggle");
+            Assert.IsNotNull(toggle, $"The {card} card has its More info toggle.");
+            Assert.AreEqual("false", toggle.GetAttribute("aria-expanded"), $"The {card} card's More info says it is closed: {toggle.OuterHtml}");
+            Assert.AreEqual($"{id}-content", toggle.GetAttribute("aria-controls"), $"The {card} card's More info names the part it opens.");
+            Assert.Contains(AppStrings.AppHomeMoreInfo, toggle.TextContent, "The toggle reads More info.");
 
-            var part = Regex.Match(html, $"<[a-z]+[^>]*\\bid=\"{id}-content\"[^>]*>").Value;
-            Assert.Contains("hidden=\"until-found\"", part, $"The {card} card's More info is in the page, closed: {part}");
-            Assert.DoesNotContain("aria-hidden", part, "Closed, it isn't hidden from the Markdown copy, which leaves aria-hidden parts out.");
+            var part = page.GetElementById($"{id}-content");
+            Assert.IsNotNull(part, $"The {card} card's More info is in the page.");
+            Assert.AreEqual("until-found", part.GetAttribute("hidden"), $"The {card} card's More info is in the page, closed.");
+            Assert.IsFalse(part.HasAttribute("aria-hidden"), "Closed, it isn't hidden from the Markdown copy, which leaves aria-hidden parts out.");
 
             foreach (var line in lines)
             {
-                Assert.IsTrue(Contains(html, line), $"The {card} card's More info has \"{line}\" in the prerendered page.");
+                Assert.Contains(line, part.TextContent, $"The {card} card's More info has \"{line}\" inside it, in the prerendered page.");
             }
         }
 
