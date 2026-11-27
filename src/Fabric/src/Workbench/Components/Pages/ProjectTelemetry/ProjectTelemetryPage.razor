@@ -1,0 +1,207 @@
+@attribute [Authorize]
+@inherits WorkbenchComponentBase
+
+<div class="telemetry @(store.IsEditing ? "editing" : null)">
+    <header class="page-head">
+        <div class="head-text">
+            <BitText Element="@PageHeadingElement" Typography="BitTypography.H4" Class="page-title">@Localizer[nameof(WorkbenchStrings.TelemetryTitle)]</BitText>
+            <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.TelemetryLead)]</BitText>
+        </div>
+        <div class="head-actions">
+            <div class="segments" role="group" aria-label="@Localizer[nameof(WorkbenchStrings.TelemetryEnvironment)]">
+                @foreach (var environment in Environments)
+                {
+                    <BitButton Size="BitSize.Small" Variant="@(store.Environment == environment ? BitVariant.Fill : BitVariant.Outline)"
+                               aria-pressed="@(store.Environment == environment ? "true" : "false")" OnClick="() => store.SetEnvironment(environment)">@environment</BitButton>
+                }
+            </div>
+            <div class="segments" role="group" aria-label="@Localizer[nameof(WorkbenchStrings.TelemetryPeriod)]">
+                @foreach (var (range, label) in Ranges)
+                {
+                    <BitButton Size="BitSize.Small" Variant="@(store.Range == range ? BitVariant.Fill : BitVariant.Outline)"
+                               aria-pressed="@(store.Range == range ? "true" : "false")" OnClick="() => store.SetRange(range)">@Localizer[label]</BitButton>
+                }
+            </div>
+            <div class="tools">
+                @if (store.IsTipClosed)
+                {
+                    <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.Robot" OnClick="store.ToggleTip">@Localizer[nameof(WorkbenchStrings.TelemetryAddWithAi)]</BitButton>
+                }
+                <BitButton Size="BitSize.Small" Variant="@(store.IsEditing ? BitVariant.Fill : BitVariant.Text)" IconName="@(store.IsEditing ? BitIconName.CheckMark : BitIconName.Edit)"
+                           aria-pressed="@(store.IsEditing ? "true" : "false")" OnClick="store.ToggleEditing">
+                    @Localizer[store.IsEditing ? nameof(WorkbenchStrings.TelemetryDone) : nameof(WorkbenchStrings.TelemetryArrange)]
+                </BitButton>
+            </div>
+        </div>
+    </header>
+
+    @if (store.IsTipClosed is false)
+    {
+        <TelemetryAskAi OnClose="store.ToggleTip" OnConnect="ShowConnect" />
+    }
+
+    @if (isLoading)
+    {
+        <div class="summary skeleton" aria-hidden="true"></div>
+        <div class="grid">
+            @for (var i = 0; i < 8; i++)
+            {
+                <div class="card-skeleton @(i % 3 == 0 ? "wide" : null)" aria-hidden="true"></div>
+            }
+        </div>
+    }
+    else if (isFailed)
+    {
+        <div class="state" role="alert">
+            <BitEmptyState IconName="@BitIconName.Error" Title="@Localizer[nameof(WorkbenchStrings.TelemetryErrorTitle)]"
+                           Description="@Localizer[nameof(WorkbenchStrings.TelemetryErrorLine)]">
+                <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Refresh" OnClick="Load">@Localizer[nameof(WorkbenchStrings.TelemetryTryAgain)]</BitButton>
+            </BitEmptyState>
+        </div>
+    }
+    else if (cards.Length == 0)
+    {
+        <div class="state">
+            <BitEmptyState IconName="@BitIconName.Diagnostic" HeadingLevel="2" Title="@Localizer[nameof(WorkbenchStrings.TelemetryEmptyTitle), store.Environment]"
+                           Description="@Localizer[nameof(WorkbenchStrings.TelemetryEmptyLine)]">
+                <div class="prompt">
+                    <span class="prompt-text">@Localizer[nameof(WorkbenchStrings.TelemetryEmptyPrompt)]</span>
+                    <BitCopyButton Value="@Localizer[nameof(WorkbenchStrings.TelemetryEmptyPrompt)]" Variant="BitVariant.Text" Size="BitSize.Small" />
+                </div>
+            </BitEmptyState>
+        </div>
+    }
+    else
+    {
+        @* What needs a look, at a glance, each a link to its alert or its card. *@
+        <section class="summary @SummaryTone" aria-live="polite">
+            <span class="summary-icon"><BitIcon IconName="@(SummaryTone is "good" ? BitIconName.CheckMark : BitIconName.Ringer)" /></span>
+            <div class="summary-text">
+                <strong>@SummaryTitle</strong>
+                @if (SummaryTone is "good")
+                {
+                    <span>@Localizer[nameof(WorkbenchStrings.TelemetryAllGoodLine)]</span>
+                }
+                else
+                {
+                    <div class="summary-links">
+                        @foreach (var alert in FiringAlerts)
+                        {
+                            <a class="summary-link level-bad" href="@($"#{alert.Key}")">
+                                <BitIcon IconName="@BitIconName.Ringer" Size="BitSize.Small" />@Localizer[alert.TitleKey]
+                            </a>
+                        }
+                        @foreach (var card in NeedsLook)
+                        {
+                            <a class="summary-link level-@card.Level.ToString().ToLowerInvariant()" href="@($"#card-{card.Key}")" @onclick="() => OpenGroupOf(card)">
+                                <span class="dot" aria-hidden="true"></span>@Localizer[card.TitleKey]
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </section>
+
+        @if (Direction is OneBoardKey)
+        {
+            <div class="areas" role="group" aria-label="@Localizer[nameof(WorkbenchStrings.TelemetryAreas)]">
+                <BitButton Size="BitSize.Small" Variant="@(store.Area is "" ? BitVariant.Fill : BitVariant.Outline)"
+                           aria-pressed="@(store.Area is "" ? "true" : "false")" OnClick="@(() => store.SetArea(""))">@Localizer[nameof(WorkbenchStrings.TelemetryAll)]</BitButton>
+                @foreach (var group in GroupsWithCards)
+                {
+                    <BitButton Size="BitSize.Small" Variant="@(store.Area == group.Key ? BitVariant.Fill : BitVariant.Outline)" IconName="@group.IconName"
+                               aria-pressed="@(store.Area == group.Key ? "true" : "false")" OnClick="() => store.SetArea(group.Key)">@Localizer[group.TitleKey]</BitButton>
+                }
+            </div>
+            <Bortable TItem="DashboardCard" Items="BoardCards" ItemsChanged="Reorder"
+                      ItemKey="card => card.Key" Disabled="store.IsEditing is false" Handle=".card"
+                      Class="grid" ItemClass="cell" ItemClassSelector="@(card => $"span-{SizeOf(card)}")"
+                      AriaLabel="@Localizer[nameof(WorkbenchStrings.TelemetryTitle)]" ItemLabel="card => Localizer[card.TitleKey]">
+                <ItemTemplate Context="card">
+                    <TelemetryCardView Card="card" Size="SizeOf(card)" IsEditing="store.IsEditing" OnResize="size => store.SetSize(card.Key, size)"
+                                       OnHide="() => store.Hide(card.Key)" OnDelete="() => store.Delete(card.Key)" OnAskWhy="() => AskWhy(card)" />
+                </ItemTemplate>
+            </Bortable>
+        }
+        else
+        {
+            @foreach (var group in TelemetryDashboardData.Groups)
+            {
+                var groupCards = Visible(group.Key);
+                var isYours = group.Key is TelemetryDashboardData.YoursGroup;
+                if (groupCards.Count == 0 && isYours is false && store.IsEditing is false)
+                    continue;
+
+                var isOpen = store.ClosedGroups.Contains(group.Key) is false;
+                var worst = Worst(group.Key);
+                <section class="group @(isYours ? "yours" : null)" aria-labelledby="@($"group-{group.Key}")">
+                    <button type="button" class="group-head" id="@($"group-{group.Key}")" aria-expanded="@(isOpen ? "true" : "false")" @onclick="() => store.ToggleGroup(group.Key)">
+                        <span class="group-icon"><BitIcon IconName="@group.IconName" /></span>
+                        <span class="group-title">@Localizer[group.TitleKey]</span>
+                        @if (isYours)
+                        {
+                            <span class="group-note">@Localizer[nameof(WorkbenchStrings.TelemetryMadeByAi)]</span>
+                        }
+                        @if (worst is DashboardLevel.Watch or DashboardLevel.Bad)
+                        {
+                            <span class="group-level level-@worst.ToString().ToLowerInvariant()"><span class="dot" aria-hidden="true"></span>@Localizer[worst is DashboardLevel.Bad ? nameof(WorkbenchStrings.TelemetryNeedsLook) : nameof(WorkbenchStrings.TelemetryWorthWatching)]</span>
+                        }
+                        <span class="group-count">@groupCards.Count</span>
+                        <BitIcon IconName="@BitIconName.ChevronDown" Class="@(isOpen ? "chevron open" : "chevron")" />
+                    </button>
+                    @if (isOpen)
+                    {
+                        @if (isYours && groupCards.Count == 0)
+                        {
+                            <div class="yours-empty">
+                                <BitIcon IconName="@BitIconName.Robot" />
+                                <div>
+                                    <strong>@Localizer[nameof(WorkbenchStrings.TelemetryYoursEmptyTitle)]</strong>
+                                    <span>@Localizer[nameof(WorkbenchStrings.TelemetryYoursEmptyLine)]</span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <Bortable TItem="DashboardCard" Items="groupCards" ItemsChanged="Reorder"
+                                      ItemKey="card => card.Key" Disabled="store.IsEditing is false" Handle=".card"
+                                      Class="grid" ItemClass="cell" ItemClassSelector="@(card => $"span-{SizeOf(card)}")"
+                                      AriaLabel="@Localizer[group.TitleKey]" ItemLabel="card => Localizer[card.TitleKey]">
+                                <ItemTemplate Context="card">
+                                    <TelemetryCardView Card="card" Size="SizeOf(card)" IsEditing="store.IsEditing" OnResize="size => store.SetSize(card.Key, size)"
+                                                       OnHide="() => store.Hide(card.Key)" OnDelete="() => store.Delete(card.Key)" OnAskWhy="() => AskWhy(card)" />
+                                </ItemTemplate>
+                            </Bortable>
+                        }
+                    }
+                </section>
+            }
+        }
+
+        @if (store.IsEditing)
+        {
+            <section class="hidden-tray" aria-label="@Localizer[nameof(WorkbenchStrings.TelemetryHiddenCards)]">
+                <div class="tray-head">
+                    <BitText Typography="BitTypography.Subtitle2">@Localizer[nameof(WorkbenchStrings.TelemetryHiddenCards)]</BitText>
+                    <BitSpacer />
+                    <BitButton Size="BitSize.Small" Variant="BitVariant.Text" IconName="@BitIconName.Refresh" OnClick="store.Reset">@Localizer[nameof(WorkbenchStrings.TelemetryPutBack)]</BitButton>
+                </div>
+                @if (HiddenCards.Count == 0)
+                {
+                    <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Localizer[nameof(WorkbenchStrings.TelemetryNoneHidden)]</BitText>
+                }
+                else
+                {
+                    <div class="tray-chips">
+                        @foreach (var card in HiddenCards)
+                        {
+                            <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.View" OnClick="() => store.Show(card.Key)">@Localizer[card.TitleKey]</BitButton>
+                        }
+                    </div>
+                }
+            </section>
+        }
+
+        <TelemetryAlerts Alerts="VisibleAlerts" OnTogglePaused="key => store.TogglePaused(key)" OnDelete="key => store.Delete(key)" />
+    }
+</div>

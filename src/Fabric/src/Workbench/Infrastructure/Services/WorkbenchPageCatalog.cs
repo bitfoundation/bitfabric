@@ -353,6 +353,36 @@ public static class WorkbenchPageCatalog
                 ])
             ]
         },
+        // A project's telemetry (bitfabric-internal/specs/monitoring.md, 2026-11-27), designed here on sample numbers before the
+        // app builds it: the ready cards, the cards and alerts the customer's AI added through MCP, each deleted here.
+        new(Components.Pages.ProjectTelemetry.ProjectTelemetryPage.Key,
+            "Telemetry",
+            "A project's telemetry: the ready cards every project gets, the cards and alerts its own AI added through MCP and the way to ask for more, arranged by dragging, sized and hidden by each person, and deleted here",
+            BitIconName.Diagnostic,
+            typeof(Components.Pages.ProjectTelemetry.ProjectTelemetryPage),
+            nameof(WorkbenchStrings.CategoryBitFabric),
+            ["Bortable", "BitPopConfirm", "BitCopyButton", "BitMenuButton", "BitToggle", "BitEmptyState"],
+            "Ask your AI for a card or an alert")
+        {
+            Variants =
+            [
+                new(Components.Pages.ProjectTelemetry.ProjectTelemetryPage.ByAreaKey, "1. By area, in groups that fold away"),
+                new(Components.Pages.ProjectTelemetry.ProjectTelemetryPage.OneBoardKey, "2. One board, filtered by area")
+            ],
+            Switches =
+            [
+                new(Components.Pages.ProjectTelemetry.Data.TelemetryDashboardData.AiSwitch, "Your AI's",
+                [
+                    new("some", "Two cards and three alerts"),
+                    new(Components.Pages.ProjectTelemetry.Data.TelemetryDashboardData.AiNone, "Nothing yet")
+                ]),
+                new(Components.Pages.ProjectTelemetry.Data.TelemetryDashboardData.AlertSwitch, "Alerts",
+                [
+                    new("firing", "A job alert firing"),
+                    new(Components.Pages.ProjectTelemetry.Data.TelemetryDashboardData.AlertQuiet, "All quiet")
+                ])
+            ]
+        },
         new("status-page",
             "Status page",
             "The app's public status page on the customer's own domain: no sign-in, the visitor's language, a link to the app and following without an account",
