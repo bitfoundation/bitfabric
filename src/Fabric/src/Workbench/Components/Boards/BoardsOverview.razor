@@ -1,0 +1,48 @@
+@inherits WorkbenchComponentBase
+
+@* The Boards section's own board, at /boards: what a board is, what to ask for, and every board by kind. *@
+<BoardFrame Title="@Localizer[nameof(WorkbenchStrings.Boards)]"
+            Lead="@Localizer[nameof(WorkbenchStrings.BoardsLead)]"
+            IconName="@WorkbenchSections.IconOf(WorkbenchSection.Boards)">
+    <BoardBlock Id="ask" Title="@Localizer[nameof(WorkbenchStrings.HomeCtaPromptLabel)]">
+        <div class="prompts">
+            @foreach (var promptKey in WorkbenchBoardCatalog.PromptKeys)
+            {
+                <blockquote><BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" />@Localizer[promptKey]</blockquote>
+            }
+        </div>
+    </BoardBlock>
+
+    @if (WorkbenchBoardCatalog.Boards.Count == 0)
+    {
+        <BoardBlock Id="none">
+            <div class="empty">
+                <span class="empty-icon"><BitIcon IconName="@BitIconName.Lightbulb" /></span>
+                <span>@Localizer[nameof(WorkbenchStrings.BoardsEmpty)]</span>
+            </div>
+        </BoardBlock>
+    }
+
+    @foreach (var (kind, boards) in WorkbenchBoardCatalog.Groups)
+    {
+        <BoardBlock Id="@($"kind-{kind}".ToLowerInvariant())" Title="@Localizer[WorkbenchBoardCatalog.TitleKeyOf(kind)]">
+            <div class="cards">
+                @foreach (var board in boards)
+                {
+                    <a class="board-card tone-@board.Tone" href="@WorkbenchUrls.Board(board.Id)">
+                        <span class="card-art" aria-hidden="true">
+                            <span class="art-ring one"></span>
+                            <span class="art-ring two"></span>
+                            <span class="art-icon"><BitIcon IconName="@board.IconName" /></span>
+                        </span>
+                        <span class="card-body">
+                            <span class="card-title" dir="auto">@Localizer[board.TitleKey]</span>
+                            <span class="card-summary" dir="auto">@Localizer[board.SummaryKey]</span>
+                            <span class="card-date"><BitIcon IconName="@BitIconName.Calendar" Size="BitSize.Small" /> @board.Updated.ToString("d MMM yyyy", CultureInfo.CurrentUICulture)</span>
+                        </span>
+                    </a>
+                }
+            </div>
+        </BoardBlock>
+    }
+</BoardFrame>

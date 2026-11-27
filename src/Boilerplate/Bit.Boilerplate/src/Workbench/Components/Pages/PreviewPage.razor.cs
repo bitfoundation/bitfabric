@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Components.Routing;
 namespace Boilerplate.Workbench.Components.Pages;
 
 /// <summary>
-/// /preview/{key}: one page alone with the scenario in its query string. Each view of the shell, each flow screen
-/// and each screenshot loads one; it tells its host when it has settled, and lets the host read or reset its state.
+/// /preview/{key}: one page alone with the scenario in its query string. Each view of the shell, each screen of a
+/// board's flow and each screenshot loads one; it tells its host when it has settled, and lets the host read or reset its state.
 /// </summary>
 public partial class PreviewPage
 {
     /// <summary>
-    /// A snapshot id that starts with this names a state saved with the review (a flow screen's), read from disk
-    /// instead of the snapshots in memory, so the link keeps working after they expire.
+    /// A snapshot id that starts with this names a state saved with the review, a comment's, read from disk,
+    /// or one a board's flow gives a screen, instead of the snapshots in memory, so the link keeps working after they expire.
     /// </summary>
     public const string SavedStatePrefix = "saved-";
 
@@ -40,7 +40,7 @@ public partial class PreviewPage
 
         var snapshotId = WorkbenchUrls.ReadQuery(NavigationManager.Uri, WorkbenchUrls.SnapshotQueryKey);
 
-        // A snapshot carries the stores of a view as it was when a screenshot, comment or flow screen was taken.
+        // A snapshot carries the stores of a view as it was when a screenshot or comment was taken.
         if (snapshots.Find(snapshotId) is { } state)
         {
             blexManager.RestoreGlobalState(state);
@@ -125,7 +125,7 @@ public partial class PreviewPage
         return ValueTask.CompletedTask;
     }
 
-    /// <summary>Every Blex store of this preview as JSON, for a screenshot, a comment or a flow screen to restore.</summary>
+    /// <summary>Every Blex store of this preview as JSON, for a screenshot or a comment to restore.</summary>
     [JSInvokable]
     public string CaptureState() => blexManager.CaptureGlobalState().ToJsonString();
 

@@ -8,14 +8,17 @@ public class BottomBarUITests : AppViewPageTest
     private ILocator BarLink(string name) => BottomBar.GetByRole(AriaRole.Link, new() { Name = name, Exact = true });
 
     [TestMethod, EverySurface]
-    public async Task TheBottomBar_Should_ListThePageInTheView(WorkbenchSurface surface)
+    public async Task TheBottomBar_Should_ListTheAppsOwnItemsOnly(WorkbenchSurface surface)
     {
         await OpenWorkbench("buildings");
 
-        foreach (var name in new[] { AppStrings.Home, WorkbenchStrings.BuildingsTitle, AppStrings.Terms })
+        foreach (var name in new[] { AppStrings.Home, AppStrings.Terms })
         {
             await Expect(BarLink(name)).ToBeVisibleAsync();
         }
+
+        // The app's bar, as it ships; the Workbench adds no item of its own for the page in the view.
+        await Expect(BarLink(WorkbenchStrings.BuildingsTitle)).ToHaveCountAsync(0);
 
         //#if (module == "Admin")
         await Expect(BarLink(AppStrings.Dashboard).First).ToBeVisibleAsync();
@@ -35,14 +38,6 @@ public class BottomBarUITests : AppViewPageTest
         //#endif
     }
 
-    [TestMethod, EverySurface]
-    public async Task TheBottomBar_Should_ListThePageASignedOutVisitorCanOpen(WorkbenchSurface surface)
-    {
-        await OpenWorkbench("theme", "?auth=signedout");
-
-        await Expect(BarLink(WorkbenchStrings.ThemePageTitle)).ToBeVisibleAsync();
-    }
-
     //#if (module == "Admin")
     [TestMethod, EverySurface]
     public async Task TheBottomBarsDashboard_Should_MoveTheViewAndTheShellShouldFollow(WorkbenchSurface surface)
@@ -53,7 +48,7 @@ public class BottomBarUITests : AppViewPageTest
 
         await Expect(PageTitle).ToHaveTextAsync(WorkbenchStrings.AppDashboardTitle);
         await Expect(View().GetByText(AppStrings.TotalProducts, new() { Exact = true })).ToBeVisibleAsync();
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/dashboard"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/dashboard"));
     }
 
     [TestMethod, EverySurface]

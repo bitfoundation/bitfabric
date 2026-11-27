@@ -35,12 +35,12 @@ public class ReviewInviteTests
         using var client = new HttpClient(new HttpClientHandler { AllowAutoRedirect = false, UseCookies = false }) { BaseAddress = server.Address };
 
         var key = isRightKey ? WorkbenchReviewers.Key : new string('0', 48);
-        using var request = WorkbenchTestServer.Remote(HttpMethod.Get, $"workbench/buildings?{WorkbenchReviewers.QueryName}={key}&theme=dark");
+        using var request = WorkbenchTestServer.Remote(HttpMethod.Get, $"pages/buildings?{WorkbenchReviewers.QueryName}={key}&theme=dark");
         using var response = await client.SendAsync(request, TestContext.CancellationToken);
 
         Assert.AreEqual(HttpStatusCode.Redirect, response.StatusCode);
         Assert.IsNotNull(response.Headers.Location);
-        Assert.AreEqual("/workbench/buildings?theme=dark", response.Headers.Location.OriginalString);
+        Assert.AreEqual("/pages/buildings?theme=dark", response.Headers.Location.OriginalString);
 
         var cookie = response.Headers.TryGetValues("Set-Cookie", out var values)
             ? values.SingleOrDefault(v => v.StartsWith($"{WorkbenchReviewers.CookieName}=", StringComparison.Ordinal))
@@ -107,7 +107,6 @@ public class ReviewInviteTests
         var thread = (await server.Agent.GetThreads(TestContext.CancellationToken)).Single(t => t.Id == id);
 
         Assert.AreEqual("Phone", thread.Messages[0].Author);
-        Assert.IsNull(invited.Session.CreateFlow("Phone's flow"));
 
         await invited.Change(session => session.SetPageStatus("assistant", WorkbenchPageStatus.Built, "Phone"));
 

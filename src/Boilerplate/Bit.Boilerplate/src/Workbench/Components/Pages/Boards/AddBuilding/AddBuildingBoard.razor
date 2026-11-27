@@ -1,0 +1,9 @@
+@inherits WorkbenchComponentBase
+
+<BoardFrame Title="@Localizer[nameof(WorkbenchStrings.SampleFlowBuildings)]"
+            Lead="@Localizer[nameof(WorkbenchStrings.AddBuildingBoardLead)]"
+            IconName="@BitIconName.Flow" Tone="info">
+    <BoardBlock Id="flow">
+        <BoardFlow Screens="Screens" Links="Links" AriaLabel="@Localizer[nameof(WorkbenchStrings.SampleFlowBuildings)]" />
+    </BoardBlock>
+</BoardFrame>

@@ -169,7 +169,7 @@
         <value>Dunkel</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>System</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Daten</value>
@@ -266,6 +266,27 @@
     </data>
     <data name="SearchPages" xml:space="preserve">
         <value>Seiten suchen</value>
+    </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>Was die Workbench ist und kann</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>Die Seiten deiner App mit Beispieldaten</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>Was deine Agenten dir zeigen</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>Die langen Aufgaben und Fragen deiner Agenten</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>Boards suchen</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>Aufgaben suchen</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>Nichts passt zu deiner Suche.</value>
     </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>Diese Seite ist nicht auf der Werkbank.</value>
@@ -816,17 +837,8 @@
     <data name="ProvinceLimburg" xml:space="preserve">
         <value>Limburg</value>
     </data>
-    <data name="HomePageTitle" xml:space="preserve">
-        <value>Werkbank · Wo Sie und Ihr KI-Agent die App bauen</value>
-    </data>
     <data name="HomeEyebrow" xml:space="preserve">
         <value>Teil Ihres Projekts</value>
-    </data>
-    <data name="HomeHeadline" xml:space="preserve">
-        <value>Wo Sie und Ihr KI-Agent die App bauen.</value>
-    </data>
-    <data name="HomeLead" xml:space="preserve">
-        <value>Gestalten Sie jede Seite auf Beispieldaten, in jedem Zustand und auf jedem Gerät, prüfen Sie sie mit Kommentaren, die Ihr Agent beantwortet, während Sie schreiben, und verfolgen Sie seine langen Aufgaben wie eine Bereitstellung oder eine neue Funktion, indem Sie seine Fragen per Klick oder Stimme beantworten. Alles in Ihrem Projekt, mit den Komponenten und dem Theme Ihrer App.</value>
     </data>
     <data name="HomeStartHere" xml:space="preserve">
         <value>Hier starten</value>
@@ -854,12 +866,6 @@
     </data>
     <data name="HomeChipStore" xml:space="preserve">
         <value>1320 × 2868 PNG</value>
-    </data>
-    <data name="HomeWhyTitle" xml:space="preserve">
-        <value>Warum Ihr Projekt eine Werkbank hat</value>
-    </data>
-    <data name="HomeWhySubtitle" xml:space="preserve">
-        <value>Ein Designwerkzeug, ein Prüfstand, ein Fotostudio und die Schaltzentrale Ihres Agenten, direkt im Projekt.</value>
     </data>
     <data name="HomeWhyAgentsTitle" xml:space="preserve">
         <value>Mit jedem KI-Agenten arbeiten</value>
@@ -2091,18 +2097,6 @@
     <data name="ThemeFindingsHint" xml:space="preserve">
         <value>Farben, die die Seite selbst setzt und die weder aus dem Design noch aus einer Mischung einer Designfarbe mit Weiß, Schwarz oder dem Hintergrund stammen. Ohne bit-Komponenten, Diagramme und Farben, die als --data-color übergeben werden.</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>Abläufe</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>Ein Ablauf zeigt die Bildschirme einer Aufgabe nebeneinander, jeden im entscheidenden Zustand, etwa eine Liste und den Dialog, den ihre Schaltfläche öffnet, mit Pfeilen dafür, wie man von einem zum nächsten kommt. Öffnen Sie einen, um die App zu verstehen oder sie in einem Meeting durchzugehen.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>Name des neuen Ablaufs</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>Ablauf löschen</value>
-    </data>
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} offene Kommentare</value>
     </data>
@@ -2487,9 +2481,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>Noch keine Kommentare.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>Noch keine Abläufe.</value>
-    </data>
     <data name="SampleFlowBuildings" xml:space="preserve">
         <value>Ein Gebäude hinzufügen</value>
     </data>
@@ -2502,38 +2493,8 @@
     <data name="SampleFlowBuildingsMap" xml:space="preserve">
         <value>„Karte“ zeigt dieselben Gebäude auf einer Karte der Niederlande.</value>
     </data>
-    <data name="SampleFlowPos" xml:space="preserve">
-        <value>Das Kassen-Dashboard öffnen</value>
-    </data>
-    <data name="SampleFlowPosLoading" xml:space="preserve">
-        <value>Während die Daten laden, behält jedes Widget seinen Platz.</value>
-    </data>
-    <data name="SampleFlowPosReady" xml:space="preserve">
-        <value>Dann füllt sich jedes Widget mit den Zahlen des Tages.</value>
-    </data>
-    <data name="SampleFlowPosEmpty" xml:space="preserve">
-        <value>Ohne Verkäufe sagt das jedes Widget auch.</value>
-    </data>
-    <data name="SampleFlowPosMixed" xml:space="preserve">
-        <value>Ein Widget kann ausfallen, während die anderen weiterlaufen.</value>
-    </data>
-    <data name="SampleFlowPosReadyLink" xml:space="preserve">
-        <value>Daten sind da</value>
-    </data>
-    <data name="SampleFlowPosEmptyLink" xml:space="preserve">
-        <value>Noch keine Verkäufe</value>
-    </data>
-    <data name="SampleFlowPosMixedLink" xml:space="preserve">
-        <value>Ein Ladevorgang schlägt fehl</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>Beispiel</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>Live mit Ihrem KI-Agenten prüfen</value>
-    </data>
-    <data name="HomeWhyLiveText" xml:space="preserve">
-        <value>Heften Sie einen Kommentar an eine beliebige Stelle einer Seite, getippt oder gesprochen. Auf Ihrem eigenen Computer erhält Ihr Coding-Agent ihn, während Sie schreiben, ändert die Seite, antwortet auf den Kommentar und hakt ihn ab. Funktioniert mit Claude Code, Codex, Copilot, Gemini, Junie und Cursor.</value>
     </data>
     <data name="TourLiveText" xml:space="preserve">
         <value>Heften Sie einen Kommentar an eine beliebige Stelle einer Seite, getippt oder gesprochen: Das Mikrofon neben Senden macht aus Ihrer Stimme Text. Auf Ihrem eigenen Computer erhält Ihr Coding-Agent ihn, während Sie schreiben, ändert die Seite, antwortet auf den Kommentar und hakt ihn ab. Funktioniert mit Claude Code, Codex, Copilot, Gemini, Junie und Cursor. Probieren Sie es jetzt: Schreiben Sie Ihren Kommentar und senden Sie ihn.</value>
@@ -2547,80 +2508,11 @@
     <data name="TapToComment" xml:space="preserve">
         <value>Tippen Sie auf die Stelle, die Sie kommentieren möchten</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>Bitten Sie Ihren Agenten, einen zu zeichnen, etwa „Zeig, wie ein Gebäude hinzugefügt wird“, oder fügen Sie Ansichten über den Tab „Abläufe“ einer Seite hinzu.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>Unter diesem Link gibt es keinen Ablauf. Vielleicht wurde er gelöscht.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>Dieser Ablauf hat noch keine Bildschirme. Fügen Sie über den Tab „Abläufe“ einer Seite Ansichten hinzu oder bitten Sie Ihren Agenten darum.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>Bildschirme: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>Alle Abläufe</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>Die Bildschirme einer Aufgabe nebeneinander, mit Pfeilen verbunden</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>Diese Ansicht zu einem Ablauf hinzufügen</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>Der Ablauf übernimmt die Ansicht so, wie sie gerade ist: ihr Gerät, ihre Einstellungen und alles, was auf der Seite geöffnet ist.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>Ablauf</value>
     </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>Neuer Ablauf</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>Was dieser Bildschirm zeigt (optional)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>Wie man vom letzten Bildschirm hierher kommt (optional)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>Was der Nutzer tut</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>Auf „Gebäude hinzufügen“ tippen</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>Markieren Sie die Schaltfläche auf Bildschirm {0}, die hierher führt, dann beginnt der Pfeil dort.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>Beginnt an der markierten Schaltfläche auf Bildschirm {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>Schaltfläche markieren</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>Neu markieren</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>Markierung entfernen</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>Tippen Sie auf die Schaltfläche auf Bildschirm {0}, die zu Bildschirm {1} führt.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>Diese Ansicht hinzufügen</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>Ablauf öffnen</value>
-    </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>In der Werkbank öffnen</value>
-    </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Alle Bildschirme zeigen</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Präsentieren</value>
     </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Vorheriger Bildschirm</value>
@@ -2628,23 +2520,14 @@
     <data name="NextScreen" xml:space="preserve">
         <value>Nächster Bildschirm</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Präsentation beenden</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Vollbild</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Vollbild beenden</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} von {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>Ziehen Sie einen Bildschirm, um ihn zu verschieben, und doppelklicken Sie darauf, um ihn auszuprobieren. Ziehen Sie vom Punkt am rechten Rand eines Bildschirms zu einem anderen, um einen Pfeil zu zeichnen, benennen Sie ihn dann und markieren Sie die Schaltfläche, an der er beginnt. Doppelklicken Sie auf einen Pfeil, um ihn zu ändern oder zu löschen.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>Diesen Ablauf löschen?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>Diesen Bildschirm entfernen</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>Pfeil löschen</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>Benachrichtigen, wenn der Agent antwortet</value>
@@ -2874,9 +2757,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>Die Übersetzungen konnten nicht gespeichert werden.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>Der Bildschirm konnte dem Ablauf nicht hinzugefügt werden.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>Laptop {0}</value>
     </data>
@@ -2915,9 +2795,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>Diese Ansicht zurücksetzen</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>Dieser Bildschirm ist noch nicht geladen. Warten Sie einen Moment und markieren Sie die Schaltfläche dann erneut.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>Behalten Sie die Platzhalter in geschweiften Klammern so bei, wie sie im Originaltext stehen, sonst kann die Seite diesen Text nicht anzeigen.</value>
@@ -3269,12 +3146,6 @@
     </data>
     <data name="LandingConsentFirstVisit" xml:space="preserve">
         <value>Erster Besuch</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>Ein Beispiel: Doppelklicken Sie auf einen Bildschirm, um ihn auszuprobieren, oder auf einen Pfeil, um ihn zu ändern. Dabei entsteht Ihre eigene Kopie dieses Ablaufs.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>Dies ist ein Beispiel und bleibt, wie es ist: Eine Änderung hier erstellt Ihre eigene Kopie dieses Ablaufs mit der Änderung und öffnet sie.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>Wie liefen die Filialen diese Woche?</value>
@@ -4860,15 +4731,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>Der neue Name erscheint ab morgen auf den Kassenbons.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (Kopie)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>Einen Pfeil ändern</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>Doppelklicken Sie auf einen Pfeil, um ihn umzubenennen, die Schaltfläche zu markieren, an der er beginnt, oder ihn zu löschen. Ein Beispiel bleibt, wie es ist: Eine Änderung an einem seiner Pfeile erstellt Ihre eigene Kopie des Ablaufs.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>Skala</value>
     </data>
@@ -5060,9 +4922,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>Aus dem Verlauf entfernen</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>Wählen Sie eine Aufgabe, um zu sehen, wo sie steht.</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>Diese Aufgabe gibt es nicht mehr. Ihr Agent hat sie vielleicht abgeschlossen und entfernt.</value>
@@ -5400,15 +5259,6 @@
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>Lange Aufgaben verfolgen, mit einem Klick antworten</value>
     </data>
-    <data name="HomeWhyProgressText" xml:space="preserve">
-        <value>Eine Bereitstellung oder eine neue Funktion braucht viele Schritte, und manche kann nur Sie tun. Jeder Agenten-Chat zeigt hier, was erledigt ist, was fehlt und was er von Ihnen braucht, damit nichts in einem langen Chat untergeht. Schlüssel und Passwörter, die Sie dort einfügen, gehen direkt dorthin, wo sie hingehören, nie durch den Chat.</value>
-    </data>
-    <data name="HomeWhyVoiceTitle" xml:space="preserve">
-        <value>Sprechen statt tippen</value>
-    </data>
-    <data name="HomeWhyVoiceText" xml:space="preserve">
-        <value>Drücken Sie das Mikrofon neben einem Kommentar, einer Antwort oder einer Rückfrage und sprechen Sie. Der Browser macht aus Ihrer Stimme Text, in der Sprache Ihrer Wahl.</value>
-    </data>
     <data name="TourProgressText" xml:space="preserve">
         <value>Eine Bereitstellung oder eine neue Funktion braucht viele Schritte, und manche kann nur Sie tun. Jeder Agenten-Chat zeigt hier, was erledigt ist, was fehlt und was er von Ihnen braucht. Antworten Sie mit einem Klick, ein paar Worten oder Ihrer Stimme, und er macht sofort weiter. Probieren Sie es an den Beispielen aus.</value>
     </data>
@@ -5503,9 +5353,6 @@
     </data>
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>Zahlen zum Ausprobieren, wie ein Rechner</value>
-    </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>Hell und dunkel, auf jedem Bildschirm</value>
     </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>Boards öffnen</value>
@@ -5720,12 +5567,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>Berichte</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>Abläufe dieses Projekts</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>Beispiele</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>Plan</value>
     </data>
@@ -5746,5 +5587,122 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>Inhalt</value>
+    </data>
+    <data name="HomeAgentPageTitle" xml:space="preserve">
+        <value>Werkbank · Wo Ihr KI-Agent an der App arbeitet und Sie ihn steuern</value>
+    </data>
+    <data name="HomeAgentHeadline" xml:space="preserve">
+        <value>Wo Ihr KI-Agent an der App arbeitet und Sie ihn steuern.</value>
+    </data>
+    <data name="HomeAgentLead" xml:space="preserve">
+        <value>Ihr KI-Agent baut hier jede Seite auf Beispieldaten, in jedem Szenario und jedem Zustand, und prüft sie nach späteren Änderungen erneut. Er erklärt Ihnen Dinge als interaktive Boards, und Sie zeigen, was sich ändern soll, auch per Stimme, verfolgen seine langen Aufgaben, entscheiden und antworten. Alles in Ihrem Projekt, mit den Komponenten und dem Theme Ihrer App.</value>
+    </data>
+    <data name="HomeForWhoTitle" xml:space="preserve">
+        <value>Für wen die Werkbank ist</value>
+    </data>
+    <data name="HomeForWhoSubtitle" xml:space="preserve">
+        <value>Vor allem für Ihren KI-Agenten. Sie schauen vorbei, um zu zeigen, zu entscheiden, zu antworten und sich anzusehen, was er erklärt.</value>
+    </data>
+    <data name="HomeBigAgentBadge" xml:space="preserve">
+        <value>Hauptnutzer</value>
+    </data>
+    <data name="HomeBigAgentTitle" xml:space="preserve">
+        <value>Ihr KI-Agent</value>
+    </data>
+    <data name="HomeBigAgentText" xml:space="preserve">
+        <value>Er baut hier jede Seite in verschiedenen Szenarien und Datenzuständen. Nach späteren Änderungen kommt er zurück und probiert sie von Hand in einem echten Browser aus, um sicherzugehen, dass nichts kaputtgegangen ist.</value>
+    </data>
+    <data name="HomeBigAgentNote" xml:space="preserve">
+        <value>Ihr Projekt hat auch automatisierte Tests.</value>
+    </data>
+    <data name="HomeBigYouBadge" xml:space="preserve">
+        <value>Für Sie</value>
+    </data>
+    <data name="HomeBigFeedbackTitle" xml:space="preserve">
+        <value>Darauf zeigen und sagen, was sich ändern soll</value>
+    </data>
+    <data name="HomeBigFeedbackText" xml:space="preserve">
+        <value>Wählen Sie einen beliebigen Teil einer Seite aus und hinterlassen Sie Ihr Feedback, getippt oder gesprochen. Ihr Agent erhält es, während Sie schreiben, ändert die Seite und antwortet Ihnen direkt dort.</value>
+    </data>
+    <data name="HomeBigProgressTitle" xml:space="preserve">
+        <value>Eine Aufgabe verfolgen und entscheiden</value>
+    </data>
+    <data name="HomeBigProgressText" xml:space="preserve">
+        <value>Sehen Sie, wie eine lange Aufgabe läuft, etwa eine Bereitstellung oder eine neue Funktion, treffen Sie die Entscheidungen, die sie braucht, und beantworten Sie ihre Fragen mit einem Klick, ein paar Worten oder Ihrer Stimme.</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>Interaktive, visuelle Dokumentation</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>Fragen Sie, wie etwas funktioniert, lassen Sie Optionen abwägen oder einen Plan machen, und Ihr Agent antwortet mit einem Board statt eines langen Texts: Seiten Ihrer App, mit Pfeilen verbunden, Diagramme und Zahlen zum Ausprobieren.</value>
+    </data>
+    <data name="HomeCardRealTitle" xml:space="preserve">
+        <value>Echte Komponenten</value>
+    </data>
+    <data name="HomeCardRealText" xml:space="preserve">
+        <value>Dieselben bit BlazorUI-Komponenten, dasselbe Design und dieselben Stile wie Ihre App, sodass alles, was Sie freigeben, nach dem Einbau genauso aussieht.</value>
+    </data>
+    <data name="HomeCardStatesTitle" xml:space="preserve">
+        <value>Jeder Zustand</value>
+    </data>
+    <data name="HomeCardStatesText" xml:space="preserve">
+        <value>Ladende, leere, fehlerhafte, unvollständige und langsame Daten, nur einen Klick entfernt.</value>
+    </data>
+    <data name="HomeCardDevicesTitle" xml:space="preserve">
+        <value>Jedes Gerät</value>
+    </data>
+    <data name="HomeCardDevicesText" xml:space="preserve">
+        <value>Smartphones, Tablets und Desktops in echter Größe, hell und dunkel und in jeder Sprache.</value>
+    </data>
+    <data name="HomeCardStoresTitle" xml:space="preserve">
+        <value>Store-Screenshots</value>
+    </data>
+    <data name="HomeCardStoresText" xml:space="preserve">
+        <value>Pixelgenaue Bilder für App Store, Google Play und Microsoft Store, mit Hintergrund und Beschriftung.</value>
+    </data>
+    <data name="HomeCardHeadStartTitle" xml:space="preserve">
+        <value>Ein Vorsprung</value>
+    </data>
+    <data name="HomeCardHeadStartText" xml:space="preserve">
+        <value>Fertige Seiten, die Sie übernehmen oder von denen Sie lernen können, etwa ein Kassen-Dashboard und ein Schichtplaner.</value>
+    </data>
+    <data name="HomeCardSafeTitle" xml:space="preserve">
+        <value>Gefahrlos ausprobieren</value>
+    </data>
+    <data name="HomeCardSafeText" xml:space="preserve">
+        <value>Nichts hier spricht mit Ihrer API oder Datenbank, daher beschädigt eine Idee nie Ihre App oder ihre Daten.</value>
+    </data>
+    <data name="HomeCardManyAppsTitle" xml:space="preserve">
+        <value>Mehrere Apps</value>
+    </data>
+    <data name="HomeCardManyAppsText" xml:space="preserve">
+        <value>Jede Ihrer Apps nebeneinander, jede mit ihrem eigenen Design.</value>
+    </data>
+    <data name="HomeCardAgentsTitle" xml:space="preserve">
+        <value>Jeder KI-Agent</value>
+    </data>
+    <data name="HomeCardAgentsText" xml:space="preserve">
+        <value>Claude Code, Codex, Copilot, Gemini, Junie oder Cursor. Claude Design oder Figma sind nicht nötig.</value>
+    </data>
+    <data name="HomeCardCustomizeTitle" xml:space="preserve">
+        <value>Die Werkbank selbst ändern</value>
+    </data>
+    <data name="HomeCardCustomizeText" xml:space="preserve">
+        <value>Bitten Sie Ihren Agenten, die Werkzeuge, Geräte und Zustände hinzuzufügen, die Ihr Team braucht.</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>Ein Ablauf auf den eigenen Seiten Ihrer App, mit Pfeilen verbunden</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>Vergrößern</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>Verkleinern</value>
+    </data>
+    <data name="AddBuildingBoardSummary" xml:space="preserve">
+        <value>Von der Liste über das Formular zur Karte: die Gebäudeseite, Schritt für Schritt.</value>
+    </data>
+    <data name="AddBuildingBoardLead" xml:space="preserve">
+        <value>Wie jemand ein markantes Gebäude hinzufügt, erklärt auf der Seite selbst.</value>
     </data>
 </root>

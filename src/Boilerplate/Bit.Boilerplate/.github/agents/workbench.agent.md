@@ -20,7 +20,7 @@ architecture or a report, is a board, in the Workbench's Boards section: the **b
 
 - The Workbench is the user's desk for the whole project, not a tool of one chat: one runs at a time, on the address in
   `src/Workbench/Properties/launchSettings.json`, and every chat uses that one, whichever worktree, branch or editor
-  window it works in. Its comments, page statuses, flows and the agents' tasks are kept in the user's own folder outside
+  window it works in. Its comments, page statuses and the agents' tasks are kept in the user's own folder outside
   the repository, shared by every worktree of the project, so they outlive restarts and a move to another worktree.
   `GET /api/workbench` says which working tree and branch it runs from, and where that folder is.
 - If it answers in dev mode from one of this project's working trees (`git worktree list`), use it, and never start a
@@ -43,13 +43,13 @@ architecture or a report, is a board, in the Workbench's Boards section: the **b
 - Hot reload carries `.cs`, `.razor`, `.scss` and `.ts` edits as the **run-app** skill (`.github/agents/run-app.agent.md`)
   describes, and a new page with them, its catalog entry included (section 3). A `.resx` edit or startup code needs a
   restart.
-- Running under `dotnet watch` is its dev mode, the only one where flows, page statuses, Inspect and Edit text can change
+- Running under `dotnet watch` is its dev mode, the only one where page statuses, Inspect and Edit text can change
   anything and where `/api/review` answers. A home page that answers doesn't show it, so ask `/api/review`. Any
   other copy, like a published one or a plain `dotnet run`, which is how bit CLI starts it, answers it with a 404: stop
   that copy, tell the user, and start it as above. Comments the user left on a copy run from its
   project folder wait in the review for you, and are told so. A published copy keeps them only in memory, so before you stop
   one, tell the user that any left on it will be lost.
-- The home page lists the pages. `/workbench/<key>` opens one with its tools; `/preview/<key>` renders it alone, with
+- The home page lists the pages. `/pages/<key>` opens one with its tools, and `/pages` the first; `/preview/<key>` renders it alone, with
   the scenario in the query string. Pages are prerendered, as in the app.
 - You reach the review over HTTP on the Workbench's own address, under `/api/review` (section 7).
 - A chat that designs or reviews pages starts listening the moment the Workbench runs in dev mode, before it hands anything
@@ -148,7 +148,7 @@ ships, and section 8 has nothing to rebuild. What follows is for a page whose da
 
 ## 4. Look at it the way the user will
 
-- In `/workbench/<key>`, switch the device and its orientation, the theme, the language (a right-to-left one too), the
+- In `/pages/<key>`, switch the device and its orientation, the theme, the language (a right-to-left one too), the
   data state, the sign-in state and the app's navigation, and compare views side by side.
 - Look at images, not only at the markup: `/api/screenshots/<key>` takes the same query keys and returns a PNG at the
   device's real pixel size. Before a page is done, look at every data state in light and dark, at phone, tablet and
@@ -235,12 +235,11 @@ ships, and section 8 has nothing to rebuild. What follows is for a page whose da
   they approve it, built once it is in the app.
 - Text the user changes in Edit text mode is saved into `WorkbenchStrings` or `AppStrings` in every language; read the
   diff. A text written in the page itself reaches you as a comment asking to move it into the resources.
-- To explain a task that crosses screens, draw a flow (`POST /api/review/flows` with `name`, `screens`, `links`, `agent`
-  and, to draw a saved one again, its `id`): each screen (`key`, `page`, `query`, `note`, `taps`) is a page in a state,
-  reached by the taps you list (like the dialog that "Add building" opens), and each link (`from`, `to`, `label`, `tap`)
-  is an arrow that starts at the element its tap names. The user opens it at `/flows/<id>` to understand the app or to
-  present it in a meeting. Draw it again with the same id when the pages change. The read-only samples on that page
-  aren't in the review; they live in `WorkbenchSampleFlows.cs`, and one leaves on its own when its page is removed.
+- To explain a task that crosses screens, build a board (the **boards** skill) around a `BoardFlow`: each screen a
+  page of the catalog in its scenario, with a line on what it shows, and an arrow labeled with what the user does to
+  get to the next. A screen that shows the page as a few taps leave it, like the form that "Add building" opens, gets
+  the page's stores as JSON in its `State`. It shows one screen at a time; the user steps through them and can go full
+  screen.
 - The review sheet (Screenshot, then Review sheet) puts every open view, its settings and the comments into one HTML or
   PDF file. Offer it when the user wants something to send around or to attach to the pull request.
 - Write what was decided into the feature's spec, as `AGENTS.md` section 6 asks.

@@ -1,0 +1,166 @@
+@import '../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+.prompts {
+    gap: 0.625rem;
+    display: flex;
+    flex-direction: column;
+
+    blockquote {
+        --bit-Icon-color: #{$bit-color-foreground-secondary};
+        gap: 0.75rem;
+        margin: 0;
+        display: flex;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        align-items: center;
+        padding: 0.875rem 1.25rem;
+        border-radius: 1rem;
+        background-color: $bit-color-background-secondary;
+    }
+}
+
+.cards {
+    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+}
+
+.board-card {
+    --tone: #{$bit-color-primary};
+    --tone-dark: #{$bit-color-primary-dark};
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+    text-decoration: none;
+    flex-direction: column;
+    border-radius: 1.75rem;
+    color: $bit-color-foreground-primary;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+    transition: box-shadow $bit-motion-duration $bit-motion-easing, border-color $bit-motion-duration $bit-motion-easing, transform $bit-motion-duration $bit-motion-easing;
+
+    &:hover,
+    &:focus-visible {
+        transform: translateY(-4px);
+        border-color: color-mix(in srgb, var(--tone) 45%, transparent);
+        box-shadow: 0 1.5rem 3rem -1.75rem color-mix(in srgb, var(--tone) 70%, transparent);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        &:hover,
+        &:focus-visible {
+            transform: none;
+        }
+    }
+}
+
+.tone-success {
+    --tone: #{$bit-color-success};
+    --tone-dark: #{$bit-color-success-dark};
+}
+
+.tone-secondary {
+    --tone: #{$bit-color-secondary};
+    --tone-dark: #{$bit-color-secondary-dark};
+}
+
+.tone-tertiary {
+    --tone: #{$bit-color-tertiary};
+    --tone-dark: #{$bit-color-tertiary-dark};
+}
+
+.tone-info {
+    --tone: #{$bit-color-info};
+    --tone-dark: #{$bit-color-info-dark};
+}
+
+.tone-warning {
+    --tone: #{$bit-color-warning};
+    --tone-dark: #{$bit-color-warning-dark};
+}
+
+.card-art {
+    height: 9rem;
+    display: grid;
+    overflow: hidden;
+    position: relative;
+    place-items: center;
+    background: radial-gradient(80% 120% at 30% 0%, color-mix(in srgb, var(--tone) 32%, transparent), transparent 70%),
+                linear-gradient(140deg, color-mix(in srgb, var(--tone) 16%, #{$bit-color-background-primary}), color-mix(in srgb, var(--tone-dark) 22%, #{$bit-color-background-primary}));
+}
+
+.art-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid color-mix(in srgb, var(--tone) 28%, transparent);
+
+    &.one {
+        width: 8rem;
+        height: 8rem;
+    }
+
+    &.two {
+        width: 13rem;
+        height: 13rem;
+    }
+}
+
+.art-icon {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 1.75rem;
+    --bit-Icon-color: #{$bit-color-neutrals-white};
+    z-index: 1;
+    width: 4rem;
+    height: 4rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1.25rem;
+    color: $bit-color-neutrals-white;
+    background: linear-gradient(140deg, var(--tone), var(--tone-dark));
+    box-shadow: 0 1rem 2rem -0.75rem color-mix(in srgb, var(--tone) 70%, transparent);
+}
+
+.card-body {
+    gap: 0.375rem;
+    display: flex;
+    padding: 1.25rem 1.5rem 1.5rem;
+    flex-direction: column;
+}
+
+.card-title {
+    font-weight: 750;
+    font-size: 1.1875rem;
+    letter-spacing: -0.01em;
+}
+
+.card-summary {
+    line-height: 1.45;
+    color: $bit-color-foreground-secondary;
+}
+
+.card-date {
+    --bit-Icon-padding: 0;
+    --bit-Icon-size: 0.75rem;
+    --bit-Icon-color: currentColor;
+    gap: 0.375rem;
+    display: flex;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    align-items: center;
+    color: $bit-color-foreground-tertiary;
+}
+
+.empty {
+    gap: 0.75rem;
+    display: flex;
+    padding: 2rem;
+    align-items: center;
+    border-radius: 1.5rem;
+    color: $bit-color-foreground-secondary;
+    border: 1.5px dashed $bit-color-border-secondary;
+}
+
+.empty-icon {
+    --bit-Icon-size: 1.5rem;
+    --bit-Icon-color: #{$bit-color-primary};
+}

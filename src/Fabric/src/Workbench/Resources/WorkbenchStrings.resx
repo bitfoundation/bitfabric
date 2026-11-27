@@ -157,10 +157,19 @@
         <value>Dark</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>System</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Data</value>
+    </data>
+    <data name="DataLoading" xml:space="preserve">
+        <value>Loading</value>
+    </data>
+    <data name="DataEmpty" xml:space="preserve">
+        <value>Empty</value>
+    </data>
+    <data name="ThemeLight" xml:space="preserve">
+        <value>Light</value>
     </data>
     <data name="DataError" xml:space="preserve">
         <value>Error</value>
@@ -248,6 +257,27 @@
     </data>
     <data name="SearchPages" xml:space="preserve">
         <value>Search pages</value>
+    </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>What the Workbench is and does</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>Your app's pages, on sample data</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>What your agents show you</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>Your agents' long tasks and questions</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>Search boards</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>Search tasks</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>Nothing matches your search.</value>
     </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>This page isn't in the workbench.</value>
@@ -1662,18 +1692,6 @@
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} open comments</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>Flows</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>A flow lays out the screens of a task side by side, each in the state that matters, like a list and the dialog its button opens, with arrows for how you get from one to the next. Open one to understand the app or to talk it through in a meeting.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>New flow's name</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>Delete flow</value>
-    </data>
     <data name="ReviewSheet" xml:space="preserve">
         <value>Review sheet</value>
     </data>
@@ -1809,12 +1827,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>No comments yet.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>No flows yet.</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>Sample</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>Review live with your AI agent</value>
     </data>
@@ -1833,80 +1845,11 @@
     <data name="TapToComment" xml:space="preserve">
         <value>Tap the spot you want to comment on</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>Ask your agent to draw one, like “show how a building is added”, or add views to a flow from a page's Flows tab.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>There is no flow at this link. It may have been deleted.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>This flow has no screens yet. Add views to it from a page's Flows tab, or ask your agent.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>Screens: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>All flows</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>A task's screens side by side, joined by arrows</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>Add this view to a flow</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>The flow gets the view as it is now: its device, its settings and whatever is open on the page.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>Flow</value>
     </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>New flow</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>What this screen shows (optional)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>How you get here from the last screen (optional)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>What the user does</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>Tap Add building</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>Mark the button on screen {0} that leads here, and the arrow starts from it.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>Starts from the button marked on screen {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>Mark the button</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>Mark again</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>Remove the mark</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>Tap the button on screen {0} that leads to screen {1}.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>Add this view</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>Open the flow</value>
-    </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Open in the Workbench</value>
-    </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Show all screens</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Present</value>
     </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Previous screen</value>
@@ -1914,23 +1857,14 @@
     <data name="NextScreen" xml:space="preserve">
         <value>Next screen</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Stop presenting</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Full screen</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Exit full screen</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} of {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>Drag a screen to move it and double-click it to try it. Drag from the dot on a screen's right edge to another screen to draw an arrow, then name it and mark the button it starts from. Double-click an arrow to change or delete it.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>Delete this flow?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>Remove this screen</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>Delete arrow</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>Notify me when the agent replies</value>
@@ -2160,9 +2094,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>The translations couldn't be saved.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>The screen couldn't be added to the flow.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>Laptop {0}</value>
     </data>
@@ -2183,9 +2114,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>Reset this view</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>This screen hasn't loaded yet. Wait a moment, then mark the button again.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>Keep the placeholders in curly braces as the original text has them, or the page can't show this text.</value>
@@ -2309,12 +2237,6 @@
     </data>
     <data name="NewProjectCaption" xml:space="preserve">
         <value>Your product, one line away</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>A sample: double-click a screen to try it, or an arrow to change it, which makes your own copy of this flow.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>This is a sample, which stays as it is: a change here makes your own copy of this flow with the change, and opens it.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>How did the stores do this week?</value>
@@ -3837,15 +3759,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>The new name shows on receipts from tomorrow.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (copy)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>Change an arrow</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>Double-click an arrow to rename it, mark the button it starts from or delete it. A sample stays as it is: a change to one of its arrows makes your own copy of the flow.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>Scale</value>
     </data>
@@ -4311,9 +4224,6 @@
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>Remove from the activity</value>
     </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>Pick a task to see where it stands.</value>
-    </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>This task is gone. Its agent may have finished and removed it.</value>
     </data>
@@ -4510,13 +4420,13 @@
         <value>Where your AI agent works on the app, and you steer it.</value>
     </data>
     <data name="HomeAgentLead" xml:space="preserve">
-        <value>Your AI agent builds each page here on sample data, in every scenario and state, and checks it again after later changes. You point at what should change, even by voice, follow its long tasks, decide and answer. All inside your project, with your app's own components and theme.</value>
+        <value>Your AI agent builds each page here on sample data, in every scenario and state, and checks it again after later changes. It explains things to you as interactive boards, and you point at what should change, even by voice, follow its long tasks, decide and answer. All inside your project, with your app's own components and theme.</value>
     </data>
     <data name="HomeForWhoTitle" xml:space="preserve">
         <value>Who the Workbench is for</value>
     </data>
     <data name="HomeForWhoSubtitle" xml:space="preserve">
-        <value>Mostly your AI agent. You come in to point, decide and answer.</value>
+        <value>Mostly your AI agent. You come in to point, decide, answer and see what it explains.</value>
     </data>
     <data name="HomeBigAgentBadge" xml:space="preserve">
         <value>Its main user</value>
@@ -4605,9 +4515,6 @@
     <data name="ProgressVisitorText" xml:space="preserve">
         <value>The agents' tasks show only on the computer this Workbench runs on.</value>
     </data>
-    <data name="ProgressNoTask" xml:space="preserve">
-        <value>No task yet</value>
-    </data>
     <data name="Boards" xml:space="preserve">
         <value>Boards</value>
     </data>
@@ -4644,9 +4551,6 @@
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>Numbers you can try, like a calculator</value>
     </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>Light and dark, on any screen</value>
-    </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>Open the boards</value>
     </data>
@@ -4671,12 +4575,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>Reports</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>This project's flows</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>Samples</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>Plan</value>
     </data>
@@ -4697,5 +4595,38 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>Outline</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>Interactive, visual docs</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>Ask how something works, to weigh options or for a plan, and your agent answers with a board instead of a long text: your app's pages joined by arrows, diagrams and numbers you can try.</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>A process on your app's own pages, joined by arrows</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>Zoom in</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>Zoom out</value>
+    </data>
+    <data name="GetStartedBoardTitle" xml:space="preserve">
+        <value>From the home page to a new project</value>
+    </data>
+    <data name="GetStartedBoardSummary" xml:space="preserve">
+        <value>The two pages a visitor goes through to create a project, and the button between them</value>
+    </data>
+    <data name="GetStartedBoardLead" xml:space="preserve">
+        <value>What a visitor sees on the way from bitfabric.co's home page to their first project, on the pages themselves.</value>
+    </data>
+    <data name="GetStartedBoardHome" xml:space="preserve">
+        <value>bitfabric.co's home page</value>
+    </data>
+    <data name="GetStartedBoardWizard" xml:space="preserve">
+        <value>The Create new project wizard</value>
+    </data>
+    <data name="GetStartedBoardButton" xml:space="preserve">
+        <value>Get started</value>
     </data>
 </root>

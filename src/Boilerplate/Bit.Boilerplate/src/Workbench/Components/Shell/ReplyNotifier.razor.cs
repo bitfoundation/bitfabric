@@ -52,7 +52,7 @@ public partial class ReplyNotifier
                 Tag = thread.Id,
                 Icon = "/images/icons/bit-icon-512.png",
                 Silent = store.IsReplySoundMuted,
-                Data = $"{WorkbenchUrls.Workbench(thread.PageKey)}{thread.Query}"
+                Data = $"{WorkbenchUrls.Page(thread.PageKey)}{thread.Query}"
             }));
         }
 

@@ -15,6 +15,14 @@ public partial class DeviceFrame
     /// <summary>Whether the screen shows dark content, which turns the home indicator light; null follows the Workbench's own theme.</summary>
     [Parameter] public bool? OnDarkContent { get; set; }
 
+    /// <summary>The OnDarkContent of a view in this theme: none for System, whose view shows the Workbench's own theme.</summary>
+    public static bool? IsDarkContent(WorkbenchThemeMode theme) => theme switch
+    {
+        WorkbenchThemeMode.Dark => true,
+        WorkbenchThemeMode.Light => false,
+        _ => null
+    };
+
     [Parameter] public string? Address { get; set; }
 
     [Parameter] public RenderFragment? ChildContent { get; set; }

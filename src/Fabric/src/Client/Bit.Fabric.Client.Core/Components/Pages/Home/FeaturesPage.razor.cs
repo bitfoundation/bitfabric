@@ -274,7 +274,7 @@ public partial class FeaturesPage
             // Side by side, store screenshots and flows are cards of their own
             new("side-by-side", BitIconName.Devices2, Localizer[nameof(AppStrings.AppHomeSideBySideOnEveryDevice)], Localizer[nameof(AppStrings.AppHomeSideBySideOnEveryDeviceText)], More: AppHomeNumbers.WorkbenchDemoUrl),
             new("screenshots", BitIconName.DesktopScreenshot, Localizer[nameof(AppStrings.AppHomeStoreScreenshots)], Localizer[nameof(AppStrings.AppHomeStoreScreenshotsText)]),
-            new("flows", BitIconName.Flow, Localizer[nameof(AppStrings.AppHomeFlowsBetweenYourPages)], Localizer[nameof(AppStrings.AppHomeFlowsBetweenYourPagesText)], More: $"{AppHomeNumbers.WorkbenchDemoUrl}/flows"),
+            new("flows", BitIconName.Flow, Localizer[nameof(AppStrings.AppHomeFlowsBetweenYourPages)], Localizer[nameof(AppStrings.AppHomeFlowsBetweenYourPagesText)], More: $"{AppHomeNumbers.WorkbenchDemoUrl}/boards/add-building"),
             // Shown live in the template's Workbench rather than in a film
             new("boards", BitIconName.ViewDashboard, Localizer[nameof(AppStrings.AppHomeBoards)], Localizer[nameof(AppStrings.AppHomeBoardsText)], Explained: false, Url: $"{AppHomeNumbers.WorkbenchDemoUrl}/boards"),
             new("progress", BitIconName.TaskList, Localizer[nameof(AppStrings.AppHomeAProgressPage)], Localizer[nameof(AppStrings.AppHomeAProgressPageText)], Explained: false, Url: $"{AppHomeNumbers.WorkbenchDemoUrl}/progress")

@@ -32,7 +32,7 @@ public static class WorkbenchFolders
     /// <summary>
     /// The review document, the page states saved with it and the invite key. Kept in this user's own folder, outside the
     /// repository, under the clone's shared git folder, so every worktree, branch and editor window of the project sees the
-    /// same comments, flows and agents' tasks, and they outlive restarts and a switch to another worktree. A copy outside git,
+    /// same comments and agents' tasks, and they outlive restarts and a switch to another worktree. A copy outside git,
     /// like a published one or a test's, keeps them next to its project, or its build output, in a folder git ignores.
     /// </summary>
     public static string Reviews => FindGit() is { } git && Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.Create) is { Length: > 0 } userData

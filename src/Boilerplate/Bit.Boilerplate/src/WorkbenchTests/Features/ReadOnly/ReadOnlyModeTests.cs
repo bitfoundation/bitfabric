@@ -12,7 +12,7 @@ public class ReadOnlyModeTests
     [TestMethod]
     [DataRow("GET", "api/review")]
     [DataRow("GET", "api/review/wait?cursor=0")]
-    [DataRow("POST", "api/review/flows")]
+    [DataRow("POST", "api/review/pages/theme/status")]
     public async Task TheAgentsEndpoints_Should_NotExistEvenOnThisMachine(string method, string url)
     {
         var server = await WorkbenchTestsInitializer.ReadOnlyServer;
@@ -30,7 +30,6 @@ public class ReadOnlyModeTests
         await using var reviewer = await WorkbenchTestReviewer.Open(server);
 
         Assert.IsFalse(reviewer.Session.CanWrite);
-        Assert.IsNull(reviewer.Session.CreateFlow("A flow"));
 
         var id = await reviewer.Comment(server, "assistant", "For the agent that connects");
 
@@ -39,9 +38,9 @@ public class ReadOnlyModeTests
 
     [TestMethod]
     [DataRow("")]
-    [DataRow("workbench/buildings")]
+    [DataRow("pages/buildings")]
     [DataRow("preview/buildings")]
-    [DataRow("flows")]
+    [DataRow("boards")]
     public async Task ThePages_Should_Open(string url)
     {
         var server = await WorkbenchTestsInitializer.ReadOnlyServer;
@@ -52,8 +51,8 @@ public class ReadOnlyModeTests
 
     [TestMethod]
     [DataRow("")]
-    [DataRow("workbench/shifts")]
-    [DataRow("flows")]
+    [DataRow("pages/shifts")]
+    [DataRow("boards")]
     public async Task EveryWorkbenchPage_Should_SayNoAgentIsConnected(string url)
     {
         var server = await WorkbenchTestsInitializer.ReadOnlyServer;
@@ -73,8 +72,8 @@ public class ReadOnlyModeTests
 
     [TestMethod]
     [DataRow("")]
-    [DataRow("workbench/shifts")]
-    [DataRow("flows")]
+    [DataRow("pages/shifts")]
+    [DataRow("boards")]
     public async Task DevMode_Should_ShowNoNotice(string url)
     {
         var server = await WorkbenchTestsInitializer.SharedServer;

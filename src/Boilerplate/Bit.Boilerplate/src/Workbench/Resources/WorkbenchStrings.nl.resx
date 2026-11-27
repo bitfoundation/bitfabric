@@ -169,7 +169,7 @@
         <value>Donker</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>Systeem</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Gegevens</value>
@@ -266,6 +266,27 @@
     </data>
     <data name="SearchPages" xml:space="preserve">
         <value>Pagina's zoeken</value>
+    </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>Wat de Workbench is en doet</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>De pagina's van je app op voorbeelddata</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>Wat je agents je laten zien</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>De lange taken en vragen van je agents</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>Borden zoeken</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>Taken zoeken</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>Niets komt overeen met je zoekopdracht.</value>
     </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>Deze pagina staat niet op de werkbank.</value>
@@ -816,17 +837,8 @@
     <data name="ProvinceLimburg" xml:space="preserve">
         <value>Limburg</value>
     </data>
-    <data name="HomePageTitle" xml:space="preserve">
-        <value>Werkbank · Waar jij en je AI-agent de app bouwen</value>
-    </data>
     <data name="HomeEyebrow" xml:space="preserve">
         <value>Onderdeel van je project</value>
-    </data>
-    <data name="HomeHeadline" xml:space="preserve">
-        <value>Waar jij en je AI-agent de app bouwen.</value>
-    </data>
-    <data name="HomeLead" xml:space="preserve">
-        <value>Ontwerp elke pagina op voorbeelddata, in elke toestand en op elk apparaat, beoordeel hem met opmerkingen die je agent beantwoordt terwijl je schrijft, en volg zijn lange taken, zoals een deployment of een nieuwe functie, door zijn vragen te beantwoorden met een klik of je stem. Allemaal in je eigen project, met de componenten en het thema van je app.</value>
     </data>
     <data name="HomeStartHere" xml:space="preserve">
         <value>Begin hier</value>
@@ -854,12 +866,6 @@
     </data>
     <data name="HomeChipStore" xml:space="preserve">
         <value>1320 × 2868 PNG</value>
-    </data>
-    <data name="HomeWhyTitle" xml:space="preserve">
-        <value>Waarom je project een werkbank heeft</value>
-    </data>
-    <data name="HomeWhySubtitle" xml:space="preserve">
-        <value>Een ontwerptool, een testbank, een fotostudio en de controlekamer van je agent, in het project zelf.</value>
     </data>
     <data name="HomeWhyAgentsTitle" xml:space="preserve">
         <value>Werk met elke AI-agent</value>
@@ -2091,18 +2097,6 @@
     <data name="ThemeFindingsHint" xml:space="preserve">
         <value>Kleuren die de pagina zelf instelt en die niet uit het thema komen en ook geen mengsel zijn van een themakleur met wit, zwart of de achtergrond. Zonder bit-componenten, grafieken en kleuren die als --data-color worden doorgegeven.</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>Flows</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>Een flow zet de schermen van een taak naast elkaar, elk in de toestand die ertoe doet, zoals een lijst en het dialoogvenster dat de knop ervan opent, met pijlen die laten zien hoe je van het ene naar het volgende komt. Open er een om de app te begrijpen of om hem in een overleg door te nemen.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>Naam van de nieuwe flow</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>Flow verwijderen</value>
-    </data>
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} open opmerkingen</value>
     </data>
@@ -2487,9 +2481,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>Nog geen opmerkingen.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>Nog geen flows.</value>
-    </data>
     <data name="SampleFlowBuildings" xml:space="preserve">
         <value>Een gebouw toevoegen</value>
     </data>
@@ -2502,38 +2493,8 @@
     <data name="SampleFlowBuildingsMap" xml:space="preserve">
         <value>‘Kaart’ toont dezelfde gebouwen op een kaart van Nederland.</value>
     </data>
-    <data name="SampleFlowPos" xml:space="preserve">
-        <value>Het kassadashboard openen</value>
-    </data>
-    <data name="SampleFlowPosLoading" xml:space="preserve">
-        <value>Terwijl de gegevens laden, houdt elke widget zijn plek.</value>
-    </data>
-    <data name="SampleFlowPosReady" xml:space="preserve">
-        <value>Daarna vult elke widget zich met de cijfers van de dag.</value>
-    </data>
-    <data name="SampleFlowPosEmpty" xml:space="preserve">
-        <value>Zonder verkopen laat elke widget dat zien.</value>
-    </data>
-    <data name="SampleFlowPosMixed" xml:space="preserve">
-        <value>Eén widget kan mislukken terwijl de andere gewoon doorgaan.</value>
-    </data>
-    <data name="SampleFlowPosReadyLink" xml:space="preserve">
-        <value>Gegevens binnen</value>
-    </data>
-    <data name="SampleFlowPosEmptyLink" xml:space="preserve">
-        <value>Nog geen verkopen</value>
-    </data>
-    <data name="SampleFlowPosMixedLink" xml:space="preserve">
-        <value>Eén keer laden mislukt</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>Voorbeeld</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>Live beoordelen met je AI-agent</value>
-    </data>
-    <data name="HomeWhyLiveText" xml:space="preserve">
-        <value>Zet een opmerking op elke plek van een pagina, getypt of ingesproken. Op je eigen computer krijgt je codeeragent hem terwijl je schrijft, past de pagina aan, antwoordt bij de opmerking en vinkt hem af. Werkt met Claude Code, Codex, Copilot, Gemini, Junie en Cursor.</value>
     </data>
     <data name="TourLiveText" xml:space="preserve">
         <value>Zet een opmerking op elke plek van een pagina, getypt of ingesproken: de microfoon naast Versturen maakt van je stem tekst. Op je eigen computer krijgt je codeeragent hem terwijl je schrijft, past de pagina aan, antwoordt bij de opmerking en vinkt hem af. Werkt met Claude Code, Codex, Copilot, Gemini, Junie en Cursor. Probeer het nu: schrijf je opmerking en verstuur hem.</value>
@@ -2547,80 +2508,11 @@
     <data name="TapToComment" xml:space="preserve">
         <value>Tik op de plek waar je een opmerking over wilt maken</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>Vraag je agent er een te tekenen, zoals ‘laat zien hoe je een gebouw toevoegt’, of voeg weergaven aan een flow toe vanuit het tabblad Flows van een pagina.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>Er staat geen flow op deze link. Misschien is hij verwijderd.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>Deze flow heeft nog geen schermen. Voeg weergaven toe vanuit het tabblad Flows van een pagina, of vraag het je agent.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>Schermen: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>Alle flows</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>De schermen van een taak naast elkaar, verbonden met pijlen</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>Deze weergave aan een flow toevoegen</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>De flow krijgt de weergave zoals hij nu is: het apparaat, de instellingen en wat er op de pagina openstaat.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>Flow</value>
     </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>Nieuwe flow</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>Wat dit scherm laat zien (optioneel)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>Hoe je hier komt vanaf het vorige scherm (optioneel)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>Wat de gebruiker doet</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>Tik op ‘Gebouw toevoegen’</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>Markeer de knop op scherm {0} die hierheen leidt, dan begint de pijl daar.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>Begint bij de gemarkeerde knop op scherm {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>Knop markeren</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>Opnieuw markeren</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>Markering verwijderen</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>Tik op de knop op scherm {0} die naar scherm {1} leidt.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>Deze weergave toevoegen</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>De flow openen</value>
-    </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Openen in de werkbank</value>
-    </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Alle schermen tonen</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Presenteren</value>
     </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Vorig scherm</value>
@@ -2628,23 +2520,14 @@
     <data name="NextScreen" xml:space="preserve">
         <value>Volgend scherm</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Stoppen met presenteren</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Volledig scherm</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Volledig scherm sluiten</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} van {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>Sleep een scherm om het te verplaatsen en dubbelklik erop om het uit te proberen. Sleep vanaf de stip aan de rechterrand van een scherm naar een ander scherm om een pijl te tekenen, geef hem daarna een naam en markeer de knop waar hij begint. Dubbelklik op een pijl om hem te wijzigen of te verwijderen.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>Deze flow verwijderen?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>Dit scherm verwijderen</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>Pijl verwijderen</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>Laat het me weten als de agent antwoordt</value>
@@ -2874,9 +2757,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>De vertalingen konden niet worden opgeslagen.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>Het scherm kon niet aan de flow worden toegevoegd.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>Laptop {0}</value>
     </data>
@@ -2915,9 +2795,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>Deze weergave herstellen</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>Dit scherm is nog niet geladen. Wacht even en markeer de knop dan opnieuw.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>Laat de plaatsaanduidingen tussen accolades staan zoals in de oorspronkelijke tekst, anders kan de pagina deze tekst niet tonen.</value>
@@ -3269,12 +3146,6 @@
     </data>
     <data name="LandingConsentFirstVisit" xml:space="preserve">
         <value>Eerste bezoek</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>Een voorbeeld: dubbelklik op een scherm om het uit te proberen, of op een pijl om hem te wijzigen. Dat maakt je eigen kopie van deze flow.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>Dit is een voorbeeld, dat blijft zoals het is: een wijziging hier maakt je eigen kopie van deze flow met die wijziging, en opent die.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>Hoe deden de winkels het deze week?</value>
@@ -4860,15 +4731,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>De nieuwe naam staat vanaf morgen op de bonnen.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (kopie)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>Een pijl wijzigen</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>Dubbelklik op een pijl om hem te hernoemen, de knop te markeren waar hij begint of hem te verwijderen. Een voorbeeld blijft zoals het is: een wijziging aan een van de pijlen maakt je eigen kopie van de flow.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>Schaal</value>
     </data>
@@ -5060,9 +4922,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>Uit de activiteit verwijderen</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>Kies een taak om te zien hoe het ervoor staat.</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>Deze taak bestaat niet meer. De agent heeft hem misschien afgerond en verwijderd.</value>
@@ -5400,15 +5259,6 @@
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>Volg lange taken, antwoord met één klik</value>
     </data>
-    <data name="HomeWhyProgressText" xml:space="preserve">
-        <value>Een deployment of een nieuwe functie kost veel stappen, en sommige kun alleen jij zetten. Elke chat met een agent laat hier zien wat er gedaan is, wat er nog komt en wat hij van je nodig heeft, zodat niets verloren gaat in een lange chat. Sleutels en wachtwoorden die je daar plakt, gaan rechtstreeks naar hun plek, nooit via de chat.</value>
-    </data>
-    <data name="HomeWhyVoiceTitle" xml:space="preserve">
-        <value>Spreek in plaats van typen</value>
-    </data>
-    <data name="HomeWhyVoiceText" xml:space="preserve">
-        <value>Druk op de microfoon naast een opmerking, een reactie of een antwoord en zeg het. De browser maakt van je stem tekst, in de taal die je kiest.</value>
-    </data>
     <data name="TourProgressText" xml:space="preserve">
         <value>Een deployment of een nieuwe functie kost veel stappen, en sommige kun alleen jij zetten. Elke chat met een agent laat hier zien wat er gedaan is, wat er nog komt en wat hij van je nodig heeft. Antwoord met een klik, een paar woorden of je stem, en hij gaat meteen verder. Probeer het met de voorbeelden.</value>
     </data>
@@ -5503,9 +5353,6 @@
     </data>
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>Getallen om te proberen, zoals een rekenmachine</value>
-    </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>Licht en donker, op elk scherm</value>
     </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>De borden openen</value>
@@ -5720,12 +5567,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>Rapporten</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>Flows van dit project</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>Voorbeelden</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>Plan</value>
     </data>
@@ -5746,5 +5587,122 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>Inhoud</value>
+    </data>
+    <data name="HomeAgentPageTitle" xml:space="preserve">
+        <value>Werkbank · Waar je AI-agent aan de app werkt en jij hem stuurt</value>
+    </data>
+    <data name="HomeAgentHeadline" xml:space="preserve">
+        <value>Waar je AI-agent aan de app werkt en jij hem stuurt.</value>
+    </data>
+    <data name="HomeAgentLead" xml:space="preserve">
+        <value>Je AI-agent bouwt hier elke pagina op voorbeelddata, in elk scenario en elke toestand, en controleert hem opnieuw na latere wijzigingen. Hij legt je dingen uit met interactieve borden, en jij wijst aan wat er moet veranderen, ook met je stem, volgt zijn lange taken, beslist en antwoordt. Allemaal in je eigen project, met de eigen componenten en het thema van je app.</value>
+    </data>
+    <data name="HomeForWhoTitle" xml:space="preserve">
+        <value>Voor wie de werkbank is</value>
+    </data>
+    <data name="HomeForWhoSubtitle" xml:space="preserve">
+        <value>Vooral voor je AI-agent. Jij komt erbij om aan te wijzen, te beslissen, te antwoorden en te zien wat hij uitlegt.</value>
+    </data>
+    <data name="HomeBigAgentBadge" xml:space="preserve">
+        <value>Hoofdgebruiker</value>
+    </data>
+    <data name="HomeBigAgentTitle" xml:space="preserve">
+        <value>Je AI-agent</value>
+    </data>
+    <data name="HomeBigAgentText" xml:space="preserve">
+        <value>Hij bouwt hier elke pagina in verschillende scenario's en datatoestanden. Na latere wijzigingen komt hij terug en probeert ze met de hand uit in een echte browser, om te zien dat er niets stuk is gegaan.</value>
+    </data>
+    <data name="HomeBigAgentNote" xml:space="preserve">
+        <value>Je project heeft ook geautomatiseerde tests.</value>
+    </data>
+    <data name="HomeBigYouBadge" xml:space="preserve">
+        <value>Voor jou</value>
+    </data>
+    <data name="HomeBigFeedbackTitle" xml:space="preserve">
+        <value>Wijs het aan en zeg wat er anders moet</value>
+    </data>
+    <data name="HomeBigFeedbackText" xml:space="preserve">
+        <value>Selecteer een willekeurig deel van een pagina en laat je feedback achter, getypt of ingesproken. Je agent krijgt die terwijl je schrijft, past de pagina aan en antwoordt je meteen daar.</value>
+    </data>
+    <data name="HomeBigProgressTitle" xml:space="preserve">
+        <value>Volg een taak en beslis</value>
+    </data>
+    <data name="HomeBigProgressText" xml:space="preserve">
+        <value>Zie hoe een lange taak verloopt, zoals een deployment of een nieuwe functie, neem de beslissingen die nodig zijn en beantwoord de vragen met een klik, een paar woorden of je stem.</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>Interactieve, visuele documentatie</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>Vraag hoe iets werkt, laat opties afwegen of vraag om een plan, en je agent antwoordt met een bord in plaats van een lange tekst: de pagina's van je app verbonden met pijlen, diagrammen en getallen om te proberen.</value>
+    </data>
+    <data name="HomeCardRealTitle" xml:space="preserve">
+        <value>Echte componenten</value>
+    </data>
+    <data name="HomeCardRealText" xml:space="preserve">
+        <value>Dezelfde bit BlazorUI-componenten, hetzelfde thema en dezelfde stijlen als je app, dus wat je goedkeurt, ziet er na het bouwen hetzelfde uit.</value>
+    </data>
+    <data name="HomeCardStatesTitle" xml:space="preserve">
+        <value>Elke toestand</value>
+    </data>
+    <data name="HomeCardStatesText" xml:space="preserve">
+        <value>Laden, leeg, fout, gedeeltelijk en traag, op één klik afstand.</value>
+    </data>
+    <data name="HomeCardDevicesTitle" xml:space="preserve">
+        <value>Elk apparaat</value>
+    </data>
+    <data name="HomeCardDevicesText" xml:space="preserve">
+        <value>Telefoons, tablets en desktops op hun echte formaat, licht, donker en in elke taal.</value>
+    </data>
+    <data name="HomeCardStoresTitle" xml:space="preserve">
+        <value>Schermafbeeldingen voor de stores</value>
+    </data>
+    <data name="HomeCardStoresText" xml:space="preserve">
+        <value>Pixelperfecte afbeeldingen voor App Store, Google Play en Microsoft Store, met een achtergrond en een bijschrift.</value>
+    </data>
+    <data name="HomeCardHeadStartTitle" xml:space="preserve">
+        <value>Een voorsprong</value>
+    </data>
+    <data name="HomeCardHeadStartText" xml:space="preserve">
+        <value>Kant-en-klare pagina's om te hergebruiken of van te leren, zoals een kassadashboard en een roosterplanner.</value>
+    </data>
+    <data name="HomeCardSafeTitle" xml:space="preserve">
+        <value>Veilig om te proberen</value>
+    </data>
+    <data name="HomeCardSafeText" xml:space="preserve">
+        <value>Niets hier praat met je API of database, dus een idee maakt nooit je app of je gegevens kapot.</value>
+    </data>
+    <data name="HomeCardManyAppsTitle" xml:space="preserve">
+        <value>Meerdere apps</value>
+    </data>
+    <data name="HomeCardManyAppsText" xml:space="preserve">
+        <value>Al je apps naast elkaar, elk met een eigen thema.</value>
+    </data>
+    <data name="HomeCardAgentsTitle" xml:space="preserve">
+        <value>Elke AI-agent</value>
+    </data>
+    <data name="HomeCardAgentsText" xml:space="preserve">
+        <value>Claude Code, Codex, Copilot, Gemini, Junie of Cursor. Claude Design of Figma is niet nodig.</value>
+    </data>
+    <data name="HomeCardCustomizeTitle" xml:space="preserve">
+        <value>Verander de werkbank zelf</value>
+    </data>
+    <data name="HomeCardCustomizeText" xml:space="preserve">
+        <value>Vraag je agent de tools, apparaten en toestanden toe te voegen die je team nodig heeft.</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>Een proces op de eigen pagina's van je app, verbonden met pijlen</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>Inzoomen</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>Uitzoomen</value>
+    </data>
+    <data name="AddBuildingBoardSummary" xml:space="preserve">
+        <value>Van de lijst naar het formulier en de kaart: de gebouwenpagina, stap voor stap.</value>
+    </data>
+    <data name="AddBuildingBoardLead" xml:space="preserve">
+        <value>Hoe iemand een bijzonder gebouw toevoegt, verteld op de pagina zelf.</value>
     </data>
 </root>

@@ -11,8 +11,11 @@ public class SideMenuUITests : AppViewPageTest
 
     private ILocator Overlay => View().Locator(".bit-npn-ovl");
 
-    /// <summary>The page the shell has selected in its list of pages, which a phone keeps in the tools.</summary>
+    /// <summary>The page the shell has selected in its list of pages, which a phone folds away under the header's first button.</summary>
     private ILocator CurrentPageInTheShell => Page.GetByRole(AriaRole.Navigation, new() { Name = WorkbenchStrings.Pages, Exact = true }).Locator("[aria-current='page']");
+
+    /// <summary>The open page's title in the header, which every surface shows.</summary>
+    private ILocator TitleInTheHeader => Page.Locator("header.shell-header .crumb-title");
 
     [TestMethod, EverySurface]
     public async Task TheMenuButton_Should_OpenTheDrawerAndItsOverlayShouldCloseIt(WorkbenchSurface surface)
@@ -210,9 +213,13 @@ public class SideMenuUITests : AppViewPageTest
         await Expect(PageTitle).ToHaveTextAsync(WorkbenchStrings.BuildingsTitle);
         await Expect(View().GetByRole(AriaRole.Searchbox, new() { Name = WorkbenchStrings.BuildingsSearch })).ToBeVisibleAsync();
         await Expect(Search).Not.ToBeInViewportAsync();
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/buildings"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/buildings"));
+        await Expect(TitleInTheHeader).ToHaveTextAsync(WorkbenchStrings.BuildingsTitle);
 
-        await OpenTools();
+        if (IsPhone)
+        {
+            await Press(Page.Locator("header.shell-header .side-toggle"));
+        }
 
         await Expect(CurrentPageInTheShell).ToContainTextAsync(WorkbenchStrings.BuildingsTitle);
     }
@@ -251,7 +258,7 @@ public class SideMenuUITests : AppViewPageTest
 
         await Expect(PageTitle).ToHaveTextAsync(WorkbenchStrings.AppDashboardTitle);
         await Expect(View().GetByText(AppStrings.TotalProducts, new() { Exact = true })).ToBeVisibleAsync();
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/dashboard"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/dashboard"));
     }
     //#endif
 
@@ -264,7 +271,7 @@ public class SideMenuUITests : AppViewPageTest
         await Press(SideMenuLink(WorkbenchStrings.ShiftsTitle));
 
         await Expect(PageTitle).ToHaveTextAsync(WorkbenchStrings.ShiftsTitle);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/shifts"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/shifts"));
         await Expect(Page).ToHaveURLAsync(new Regex("theme=dark"));
         await Expect(Page).ToHaveURLAsync(new Regex("auth=signedin"));
         await Expect(Page).ToHaveURLAsync(new Regex("user=1"));
@@ -410,7 +417,7 @@ public class SideMenuUITests : AppViewPageTest
         await Press(SideMenuLink(WorkbenchStrings.BuildingsTitle));
 
         await Expect(PageTitle).ToHaveTextAsync(WorkbenchStrings.BuildingsTitle);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/buildings"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/buildings"));
         await Expect(CurrentPageInTheShell).ToContainTextAsync(WorkbenchStrings.BuildingsTitle);
     }
 

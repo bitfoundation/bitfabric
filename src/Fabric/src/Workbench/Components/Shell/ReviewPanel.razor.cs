@@ -118,7 +118,7 @@ public partial class ReviewPanel
         var device = scenario.DevicePreset;
         var parts = new List<string> { device.Key == DevicePresets.CustomKey ? FormattableString.Invariant($"{device.Width}×{device.Height}") : PreviewPane.GetDeviceName(device, Localizer) };
 
-        if (scenario.Theme is not WorkbenchThemeMode.Light) parts.Add(Localizer[$"Theme{scenario.Theme}"]);
+        if (scenario.Theme is not WorkbenchThemeMode.System) parts.Add(Localizer[$"Theme{scenario.Theme}"]);
         if (scenario.Culture is not null) parts.Add(scenario.Culture);
         if (scenario.Data is not WorkbenchDataState.Live) parts.Add(Localizer[$"Data{scenario.Data}"]);
 

@@ -84,7 +84,8 @@ public partial class ScenarioInspector
     /// <summary>The aria-pressed value of a segment, so screen readers hear which one is on.</summary>
     private static string PressedOf(bool isActive) => isActive ? "true" : "false";
 
-    private static string SegmentsOf(int count) => count switch { 2 => "two", 4 => "four", _ => "three" };
+    /// <summary>Two to four choices share a row evenly; more wrap at their own widths, so a long name stays on one line.</summary>
+    private static string SegmentsOf(int count) => count switch { 2 => "two", 3 => "three", 4 => "four", _ => "many" };
 
     /// <summary>Picks a device in portrait; Custom starts from the current viewport size.</summary>
     private Task SelectDevice(string? device)

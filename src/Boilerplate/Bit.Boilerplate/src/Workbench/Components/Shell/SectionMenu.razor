@@ -1,12 +1,15 @@
 @inherits WorkbenchComponentBase
 
-<BitMenuButton TItem="BitMenuButtonItem"
-               Text="@Localizer[WorkbenchSections.TextKeyOf(Section)]"
-               IconName="@WorkbenchSections.IconOf(Section)"
-               Variant="BitVariant.Text"
-               Size="Size"
-               Items="items"
-               Class="@Class"
-               Styles="styles"
-               Title="@Localizer[nameof(WorkbenchStrings.WorkbenchSections)]"
-               AriaLabel="@($"{Localizer[WorkbenchSections.TextKeyOf(Section)]} ({Localizer[nameof(WorkbenchStrings.WorkbenchSections)]})")" />
+@* What waits for the user on Progress shows on the switcher itself, so it is seen from every section. *@
+<BitBadge Content="@Waiting" Hidden="Waiting == 0" Color="BitColor.Warning" Overlap Size="BitSize.Small" Class="@Class">
+    <BitMenuButton TItem="BitMenuButtonItem"
+                   Text="@Localizer[WorkbenchSections.TextKeyOf(Section)]"
+                   IconName="@WorkbenchSections.IconOf(Section)"
+                   Variant="BitVariant.Fill"
+                   Color="BitColor.TertiaryBackground"
+                   Size="Size"
+                   Items="items"
+                   Classes="classes"
+                   Title="@Localizer[nameof(WorkbenchStrings.WorkbenchSections)]"
+                   AriaLabel="@AriaLabel" />
+</BitBadge>

@@ -1,0 +1,56 @@
+@inherits WorkbenchComponentBase
+
+@* The side panel of every section: a search, then the section's items in groups, with the open one marked. *@
+<nav id="wb-side-panel" class="section-sidebar" aria-label="@AriaLabel">
+    <div class="search">
+        <BitSearchBox Value="@searchText" ValueChanged="Search" Immediate DebounceTime="200"
+                      Loading="isSearchingContent"
+                      Placeholder="@SearchPlaceholder" AriaLabel="@SearchPlaceholder" />
+    </div>
+
+    <div class="items">
+        @if (Overview is { } overview && IsSearching is false)
+        {
+            <a @key="overview.Key" class="item overview @(CurrentKey is null ? "active" : null)" href="@overview.Href"
+               aria-current="@(CurrentKey is null ? "page" : null)" @onclick="Navigated">
+                <span class="item-icon" aria-hidden="true"><BitIcon IconName="@overview.IconName" Size="BitSize.Small" /></span>
+                <span class="item-text"><span class="item-title">@overview.Title</span></span>
+            </a>
+        }
+
+        @foreach (var group in FilteredGroups)
+        {
+            <div class="group-title">@group.Title <span class="group-count">@group.Items.Count.ToString(CultureInfo.CurrentCulture)</span></div>
+            @foreach (var item in group.Items)
+            {
+                var isCurrent = string.Equals(item.Key, CurrentKey, StringComparison.OrdinalIgnoreCase);
+                <a @key="item.Key"
+                   class="item tone-@(item.Tone ?? "primary") @(isCurrent ? "active" : null)"
+                   href="@item.Href"
+                   aria-current="@(isCurrent ? "page" : null)"
+                   @onclick="Navigated">
+                    <span class="item-icon" aria-hidden="true"><BitIcon IconName="@item.IconName" Size="BitSize.Small" /></span>
+                    <span class="item-text">
+                        <span class="item-title" dir="auto">@item.Title</span>
+                        @if (string.IsNullOrWhiteSpace(item.Meta) is false)
+                        {
+                            <span class="item-meta" dir="auto">@item.Meta</span>
+                        }
+                    </span>
+                    @if (string.IsNullOrWhiteSpace(item.Badge) is false)
+                    {
+                        <span class="item-badge">@item.Badge</span>
+                    }
+                </a>
+            }
+        }
+
+        @if (IsSearching && FilteredGroups.Any() is false && isSearchingContent is false)
+        {
+            <p class="no-match" role="status">@Localizer[nameof(WorkbenchStrings.NoSearchMatches)]</p>
+        }
+    </div>
+</nav>
+
+@* Over the page on a smaller screen, a tap outside the panel closes it. *@
+<div class="side-scrim" aria-hidden="true" @onclick="WorkbenchStore.CloseSidePanel"></div>

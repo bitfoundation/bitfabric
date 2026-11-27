@@ -9,7 +9,7 @@ public class PageThatThrowsUITests : ShellPageTest
     private static readonly Lazy<Task<WorkbenchTestServer>> withAgent = new(() => StartServer(isDevMode: true));
     private static readonly Lazy<Task<WorkbenchTestServer>> withoutAgent = new(() => StartServer(isDevMode: false));
     // The shifts page's shell fails for whoever opens it, which this class's tests do only to see the way out of it.
-    private static readonly ConcurrentDictionary<string, (string Key, string Path)> breakdowns = new() { [string.Empty] = (nameof(WorkbenchStrings.ShiftsTitle), "/workbench/shifts") };
+    private static readonly ConcurrentDictionary<string, (string Key, string Path)> breakdowns = new() { [string.Empty] = (nameof(WorkbenchStrings.ShiftsTitle), "/pages/shifts") };
 
     protected override Task<WorkbenchTestServer> ServerToTest => HasAgent ? withAgent.Value : withoutAgent.Value;
 
@@ -139,9 +139,9 @@ public class PageThatThrowsUITests : ShellPageTest
     [TestMethod, EverySurface]
     public async Task AShellThatThrows_Should_OfferAReload(WorkbenchSurface surface)
     {
-        var broken = Break(nameof(WorkbenchStrings.ThemePageTitle), "/workbench/");
+        var broken = Break(nameof(WorkbenchStrings.ThemePageTitle), "/pages/");
 
-        await Page.GotoAsync(new Uri(Server.Address, $"workbench/theme{broken}").ToString());
+        await Page.GotoAsync(new Uri(Server.Address, $"pages/theme{broken}").ToString());
 
         var error = Page.GetByRole(AriaRole.Alert).Filter(new() { HasText = WorkbenchStrings.PageFailed });
 
@@ -150,7 +150,7 @@ public class PageThatThrowsUITests : ShellPageTest
 
         await WaitUntilInteractive();
 
-        await HealOnReload(broken, "/workbench/");
+        await HealOnReload(broken, "/pages/");
 
         await Press(error.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ReloadPage, Exact = true }));
 
@@ -162,14 +162,14 @@ public class PageThatThrowsUITests : ShellPageTest
     [TestMethod, EverySurface]
     public async Task AHomePageThatThrows_Should_OfferAReload(WorkbenchSurface surface)
     {
-        var broken = Break(nameof(WorkbenchStrings.HomeHeadline), "/");
+        var broken = Break(nameof(WorkbenchStrings.HomeAgentHeadline), "/");
 
         await Page.GotoAsync(new Uri(Server.Address, broken).ToString());
 
         var error = Page.GetByRole(AriaRole.Alert).Filter(new() { HasText = WorkbenchStrings.PageFailed });
 
         await Expect(error).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeHeadline, Level = 1 })).ToHaveCountAsync(0);
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeAgentHeadline, Level = 1 })).ToHaveCountAsync(0);
 
         await WaitUntilInteractive();
 
@@ -177,7 +177,7 @@ public class PageThatThrowsUITests : ShellPageTest
 
         await Press(error.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ReloadPage, Exact = true }));
 
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeHeadline, Level = 1 })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeAgentHeadline, Level = 1 })).ToBeVisibleAsync();
         await Expect(error).ToHaveCountAsync(0);
     }
 
@@ -188,7 +188,7 @@ public class PageThatThrowsUITests : ShellPageTest
         await WaitUntilInteractive();
 
         var error = Page.GetByRole(AriaRole.Alert).Filter(new() { HasText = WorkbenchStrings.PageFailed });
-        var headline = Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeHeadline, Level = 1 });
+        var headline = Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeAgentHeadline, Level = 1 });
 
         await Press(Page.Locator("a.page-card").Filter(new() { HasText = WorkbenchStrings.ShiftsDescription }));
 

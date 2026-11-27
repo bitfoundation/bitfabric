@@ -7,9 +7,11 @@ public class WorkbenchHostingTests
 
     [TestMethod]
     [DataRow("")]
-    [DataRow("workbench/theme")]
+    [DataRow("pages/theme")]
     [DataRow("preview/buildings?data=empty")]
-    [DataRow("flows")]
+    [DataRow("boards")]
+    [DataRow("boards/add-building")]
+    [DataRow("progress")]
     public async Task EveryShellAddress_Should_PrerenderItsPage(string url)
     {
         var server = await WorkbenchTestsInitializer.SharedServer;

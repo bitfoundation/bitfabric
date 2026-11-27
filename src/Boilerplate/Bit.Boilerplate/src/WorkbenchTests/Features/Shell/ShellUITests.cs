@@ -4,7 +4,17 @@ namespace Boilerplate.WorkbenchTests.Features.Shell;
 [TestClass, TestCategory("UITest")]
 public class ShellUITests : ShellPageTest
 {
-    private ILocator PageList => Tools.Or(Page.Locator("#wb-navigator")).GetByRole(AriaRole.Navigation, new() { Name = WorkbenchStrings.Pages });
+    private ILocator PageList => Page.GetByRole(AriaRole.Navigation, new() { Name = WorkbenchStrings.Pages, Exact = true });
+
+    /// <summary>Brings the side panel's page list into sight: a desktop has it beside the views, a phone opens it over them from the header.</summary>
+    private async Task OpenPageList()
+    {
+        if (IsPhone)
+        {
+            await Press(Page.Locator("header.shell-header .side-toggle"));
+            await Expect(PageList).ToBeVisibleAsync();
+        }
+    }
 
     private ILocator ToolsButton(string name) => Tools.GetByRole(AriaRole.Button, new() { Name = name, Exact = true });
 
@@ -37,7 +47,7 @@ public class ShellUITests : ShellPageTest
     [TestMethod, EverySurface]
     public async Task APageTheWorkbenchLacks_Should_SaySoWithAWayBack(WorkbenchSurface surface)
     {
-        await Page.GotoAsync(new Uri(Server.Address, "workbench/missing").ToString());
+        await Page.GotoAsync(new Uri(Server.Address, "pages/missing").ToString());
 
         var back = Page.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.BackToHome });
 
@@ -57,17 +67,18 @@ public class ShellUITests : ShellPageTest
     {
         await OpenWorkbench("theme", "?theme=dark&device=ipad-mini");
 
-        await OpenTools();
+        await OpenPageList();
         await Press(PageList.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.BuildingsTitle }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex(@"/workbench/buildings\?theme=dark&device=ipad-mini$"));
+        await Expect(Page).ToHaveURLAsync(new Regex(@"/pages/buildings\?theme=dark&device=ipad-mini$"));
         await WaitForViews();
         await Expect(View().GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.BuildingsHeading })).ToBeVisibleAsync();
         await Expect(View().Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
 
         if (IsPhone)
         {
-            await Expect(Tools).ToHaveAttributeAsync("inert", string.Empty);
+            // Following a link closes the panel it was opened over the page from.
+            await Expect(PageList).ToBeHiddenAsync();
         }
         else
         {
@@ -80,7 +91,7 @@ public class ShellUITests : ShellPageTest
     {
         await OpenWorkbench("theme");
 
-        await OpenTools();
+        await OpenPageList();
 
         var search = PageList.GetByRole(AriaRole.Searchbox, new() { Name = WorkbenchStrings.SearchPages });
         var buildings = PageList.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.BuildingsTitle });
@@ -92,24 +103,15 @@ public class ShellUITests : ShellPageTest
 
         await Expect(buildings).ToBeVisibleAsync();
         await Expect(shifts).ToHaveCountAsync(0);
-        await Expect(PageList.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.AllFlows })).ToHaveCountAsync(0);
+
+        await search.FillAsync("no page is called this");
+
+        await Expect(PageList.GetByRole(AriaRole.Link)).ToHaveCountAsync(0);
+        await Expect(PageList.GetByText(WorkbenchStrings.NoSearchMatches)).ToBeVisibleAsync();
 
         await search.FillAsync(string.Empty);
 
         await Expect(shifts).ToBeVisibleAsync();
-        await Expect(PageList.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.AllFlows })).ToBeVisibleAsync();
-    }
-
-    [TestMethod, EverySurface]
-    public async Task ThePageList_Should_LeadToTheFlows(WorkbenchSurface surface)
-    {
-        await OpenWorkbench("theme");
-
-        await OpenTools();
-        await Press(PageList.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.AllFlows }));
-
-        await Expect(Page).ToHaveURLAsync(new Regex($"{WorkbenchUrls.Flows}$"));
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.Flows, Level = 1 })).ToBeVisibleAsync();
     }
 
     [TestMethod, OnDesktops]
@@ -121,7 +123,7 @@ public class ShellUITests : ShellPageTest
         var tools = Button(WorkbenchStrings.Tools);
 
         await Expect(pages).ToHaveAttributeAsync("aria-expanded", "true");
-        await Expect(Page.Locator("#wb-navigator")).ToBeVisibleAsync();
+        await Expect(Page.Locator(".navigator-column")).ToBeVisibleAsync();
 
         await pages.ClickAsync();
         await tools.ClickAsync();
@@ -220,7 +222,7 @@ public class ShellUITests : ShellPageTest
         await Press(Tools.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.DataLive, Exact = true }));
         await CloseTools();
 
-        await Expect(Page).ToHaveURLAsync(new Regex(@"/workbench/buildings$"));
+        await Expect(Page).ToHaveURLAsync(new Regex(@"/pages/buildings$"));
         await WaitForViews();
         await Expect(BuildingRows().First).ToBeVisibleAsync();
         await Expect(BuildingsPlaceholders()).ToHaveCountAsync(0);
@@ -362,7 +364,7 @@ public class ShellUITests : ShellPageTest
         await Press(ToolsButton(WorkbenchStrings.Reset));
         await CloseTools();
 
-        await Expect(Page).ToHaveURLAsync(new Regex(@"/workbench/buildings\?device=ipad-mini$"));
+        await Expect(Page).ToHaveURLAsync(new Regex(@"/pages/buildings\?device=ipad-mini$"));
         await WaitForViews();
         await Expect(View().Locator("html")).Not.ToHaveAttributeAsync("bit-theme", new Regex("dark"));
         await Expect(View().GetByText(WorkbenchStrings.BuildingsFailedTitle)).ToHaveCountAsync(0);
@@ -401,7 +403,7 @@ public class ShellUITests : ShellPageTest
 
         await Expect(BuildingsSearch()).ToHaveValueAsync(string.Empty);
         await Expect(BuildingRows()).Not.ToHaveCountAsync(4);
-        await Expect(Page).ToHaveURLAsync(new Regex(@"/workbench/buildings$"));
+        await Expect(Page).ToHaveURLAsync(new Regex(@"/pages/buildings$"));
     }
 
     [TestMethod, OnDesktops]
@@ -464,21 +466,47 @@ public class ShellUITests : ShellPageTest
         await Expect(View().Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
     }
 
+    [TestMethod, OnDesktops]
+    public async Task AViewSetToNoTheme_Should_ShowTheWorkbenchsOwn(WorkbenchSurface surface)
+    {
+        await OpenWorkbench("theme");
+
+        await Expect(View().Locator("html")).Not.ToHaveAttributeAsync("bit-theme", new Regex("dark"));
+
+        // The Workbench's switch reaches the view without a reload, and the view keeps showing it after one.
+        await Press(TopBarButton(WorkbenchStrings.ToggleWorkbenchTheme));
+
+        await Expect(View().Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
+        await Expect(Page).Not.ToHaveURLAsync(new Regex("theme="));
+
+        await OpenWorkbench("theme");
+
+        await Expect(View().Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
+
+        // A view set to Light stays light in a dark Workbench.
+        await OpenTools();
+        await Press(ToolsButton(WorkbenchStrings.ThemeLight));
+        await CloseTools();
+
+        await Expect(Page).ToHaveURLAsync(new Regex(@"\?theme=light$"));
+        await Expect(View().Locator("html")).Not.ToHaveAttributeAsync("bit-theme", new Regex("dark"));
+    }
+
     [TestMethod, EverySurface]
     public async Task BrowserBack_Should_ReturnToThePageBefore(WorkbenchSurface surface)
     {
         await OpenWorkbench("theme");
 
-        await OpenTools();
+        await OpenPageList();
         await Press(PageList.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.BuildingsTitle }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/buildings"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/buildings"));
         await WaitForViews();
         await Expect(View().GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.BuildingsHeading })).ToBeVisibleAsync();
 
         await Page.GoBackAsync();
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/theme"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/theme"));
         await WaitForViews();
         await Expect(View().GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.ThemeHeading, Level = 2 }).First).ToBeVisibleAsync();
     }
@@ -994,7 +1022,7 @@ public class ShellUITests : ShellPageTest
 
         await Button(WorkbenchStrings.CopyLink).ClickAsync();
 
-        await WorkbenchTestReviewer.WaitFor(() => Page.EvaluateAsync<string>("() => navigator.clipboard.readText()"), text => text.EndsWith("/workbench/theme?theme=dark", StringComparison.Ordinal));
+        await WorkbenchTestReviewer.WaitFor(() => Page.EvaluateAsync<string>("() => navigator.clipboard.readText()"), text => text.EndsWith("/pages/theme?theme=dark", StringComparison.Ordinal));
     }
 
     [TestMethod, OnDesktops]
@@ -1033,7 +1061,7 @@ public class ShellUITests : ShellPageTest
 
         await Page.Keyboard.PressAsync("End");
 
-        await Expect(Page.Locator("#wb-tab-flows")).ToHaveAttributeAsync("aria-selected", "true");
+        await Expect(Page.Locator("#wb-tab-checks")).ToHaveAttributeAsync("aria-selected", "true");
 
         await Page.Keyboard.PressAsync("ArrowRight");
 
@@ -1042,7 +1070,7 @@ public class ShellUITests : ShellPageTest
         await Page.Keyboard.PressAsync("Home");
         await Page.Keyboard.PressAsync("ArrowLeft");
 
-        await Expect(Page.Locator("#wb-tab-flows")).ToHaveAttributeAsync("aria-selected", "true");
+        await Expect(Page.Locator("#wb-tab-checks")).ToHaveAttributeAsync("aria-selected", "true");
     }
 
     [TestMethod, OnDesktops]
@@ -1073,17 +1101,17 @@ public class ShellUITests : ShellPageTest
 
         await Page.Keyboard.PressAsync("ArrowRight");
 
-        await Expect(Page.Locator("#wb-tab-flows")).ToHaveAttributeAsync("aria-selected", "true");
+        await Expect(Page.Locator("#wb-tab-checks")).ToHaveAttributeAsync("aria-selected", "true");
     }
 
     [TestMethod, OnDesktops]
     [TestCategory("Localization")]
     public async Task EveryPage_Should_OfferTheLanguageNextToTheThemeSwitch(WorkbenchSurface surface)
     {
-        // The sections share one header; a page's own view has its top bar.
+        // Every section has the same header, a page's own view included.
         var header = Page.Locator("header.shell-header");
 
-        foreach (var path in new[] { WorkbenchUrls.Home, WorkbenchUrls.Progress, WorkbenchUrls.Flows, WorkbenchUrls.Boards })
+        foreach (var path in new[] { WorkbenchUrls.Home, WorkbenchUrls.Progress, WorkbenchUrls.Boards })
         {
             await Page.GotoAsync(new Uri(Server.Address, path).ToString());
             await WaitUntilInteractive();
@@ -1100,7 +1128,7 @@ public class ShellUITests : ShellPageTest
         await Press(Page.GetByRole(AriaRole.Menuitemradio, new() { Name = "فارسی", Exact = true }));
 
         await Expect(Page.Locator("html")).ToHaveAttributeAsync("dir", "rtl");
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/theme"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/theme"));
         await WaitForViews();
         await Expect(View().Locator("html")).Not.ToHaveAttributeAsync("dir", "rtl");
     }
@@ -1113,7 +1141,7 @@ public class ShellUITests : ShellPageTest
         await Page.Locator(".topbar").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.WorkbenchTitle }).ClickAsync();
 
         await Expect(Page).ToHaveURLAsync(Server.Address.ToString());
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeHeadline, Level = 1 })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.HomeAgentHeadline, Level = 1 })).ToBeVisibleAsync();
     }
 
     [TestMethod, OnDesktops]
@@ -1123,25 +1151,29 @@ public class ShellUITests : ShellPageTest
 
         await Expect(Page.Locator(".topbar").GetByText(WorkbenchStrings.ThemePageTitle)).ToBeVisibleAsync();
 
-        await Page.Locator("#wb-navigator").GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.ShiftsTitle }).ClickAsync();
+        await PageList.GetByRole(AriaRole.Link, new() { Name = WorkbenchStrings.ShiftsTitle }).ClickAsync();
 
         await Expect(Page.Locator(".topbar").GetByText(WorkbenchStrings.ShiftsTitle)).ToBeVisibleAsync();
         await Expect(Page).ToHaveTitleAsync(new Regex($@"^(\(\d+\) )?{Regex.Escape($"{WorkbenchStrings.ShiftsTitle} · {WorkbenchStrings.WorkbenchTitle}")}$"));
     }
 
     [TestMethod, OnPhones]
-    public async Task OnAPhone_Should_ShowThePageOnTheWholeScreenWithAButtonForTheTools(WorkbenchSurface surface)
+    public async Task OnAPhone_Should_ShowThePageUnderTheHeaderWithAButtonForTheTools(WorkbenchSurface surface)
     {
         await OpenWorkbench("buildings");
 
+        // The same header as every section's, then the page on the rest of the screen.
+        var header = await Page.Locator("header.shell-header").BoundingBoxAsync();
         var box = await Page.Locator("iframe[data-pane-id='1']").BoundingBoxAsync();
+        var height = (int)Math.Round(Page.ViewportSize!.Height - header!.Height);
 
+        Assert.AreEqual(0, header.Y);
         Assert.AreEqual(0, box!.X);
-        Assert.AreEqual(0, box.Y);
-        Assert.AreEqual(Page.ViewportSize!.Width, box.Width);
-        Assert.AreEqual(Page.ViewportSize.Height, box.Height);
+        Assert.AreEqual(header.Height, box.Y, 0.5);
+        Assert.AreEqual(Page.ViewportSize.Width, box.Width);
+        Assert.AreEqual(height, box.Height, 0.5);
 
-        await ExpectViewSize(Page.ViewportSize.Width, Page.ViewportSize.Height);
+        await ExpectViewSize(Page.ViewportSize.Width, height);
         await Expect(View().GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.BuildingsHeading })).ToBeVisibleAsync();
         await Expect(Page.Locator(".workbench")).ToHaveCountAsync(0);
         await Expect(Page.Locator(".pane-header")).ToHaveCountAsync(0);
@@ -1237,11 +1269,13 @@ public class ShellUITests : ShellPageTest
     {
         await OpenWorkbench("theme", "?device=ipad-mini");
 
+        // The screen under the header, which every section has.
+        var header = await Page.Locator("header.shell-header").BoundingBoxAsync();
         var box = await Page.Locator("iframe[data-pane-id='1']").BoundingBoxAsync();
 
         Assert.AreEqual(Page.ViewportSize!.Width, box!.Width);
 
-        await ExpectViewSize(Page.ViewportSize.Width, Page.ViewportSize.Height);
+        await ExpectViewSize(Page.ViewportSize.Width, (int)Math.Round(Page.ViewportSize.Height - header!.Height));
 
         await Press(View().Locator(".persona").First);
         await Press(View().GetByRole(AriaRole.Button, new() { Name = AppStrings.Light, Exact = true }));
@@ -1279,43 +1313,31 @@ public class ShellUITests : ShellPageTest
     }
 
     [TestMethod, OnPhones]
-    public async Task TheToolsButton_Should_MoveWithAFingerAndStillOpenTheTools(WorkbenchSurface surface)
+    public async Task TheHeadersLastButton_Should_OpenTheToolsBesideThePage(WorkbenchSurface surface)
     {
         await OpenWorkbench("theme");
 
-        var button = Page.Locator(".tools-button");
-        var start = (await button.BoundingBoxAsync())!;
+        var header = Page.Locator("header.shell-header");
+        var button = header.Locator(".tools-button");
 
-        await DragWithAFinger((start.X + start.Width / 2, start.Y + start.Height / 2), (start.X + start.Width / 2 - 150, start.Y + start.Height / 2 - 300));
+        await Expect(header.GetByRole(AriaRole.Button).Last).ToHaveClassAsync(new Regex(@"\btools-button\b"));
+        await Expect(button).ToHaveAttributeAsync("aria-expanded", "false");
 
-        var moved = (await button.BoundingBoxAsync())!;
-
-        Assert.AreEqual(start.X - 150, moved.X, 8);
-        Assert.AreEqual(start.Y - 300, moved.Y, 8);
-
-        // A drag isn't a press.
-        await Expect(Page.Locator(".tools-header")).ToHaveCountAsync(0);
-
-        // A press still is one, from where the button is now, once the hand is back: the button ignores one for 100 ms after a drag.
-        await Page.WaitForTimeoutAsync(200);
         await OpenTools();
+
+        // A side panel over a dimmed page, not the whole screen, once it has slid in.
+        var toolsHeader = Page.Locator(".tools-panel .tools-header");
+
+        await WaitUntilAtRest(toolsHeader);
+
+        var panel = (await toolsHeader.BoundingBoxAsync())!;
+
+        Assert.IsLessThan(Page.ViewportSize!.Width, panel.Width);
+        Assert.IsLessThanOrEqualTo(Page.ViewportSize.Width + 1d, panel.X + panel.Width, "The panel opens at the end of the screen.");
+
         await CloseTools();
 
-        var after = (await button.BoundingBoxAsync())!;
-
-        Assert.AreEqual(moved.X, after.X, 1);
-        Assert.AreEqual(moved.Y, after.Y, 1);
-
-        // It can't be lost off the screen.
-        await DragWithAFinger((after.X + after.Width / 2, after.Y + after.Height / 2), (Page.ViewportSize!.Width - 1, 1));
-
-        var atTheEdge = (await button.BoundingBoxAsync())!;
-
-        Assert.IsLessThanOrEqualTo(Page.ViewportSize.Width, atTheEdge.X + atTheEdge.Width);
-        Assert.IsGreaterThanOrEqualTo(0, atTheEdge.Y);
-
-        await Page.WaitForTimeoutAsync(200);
-        await OpenTools();
+        await Expect(button).ToHaveAttributeAsync("aria-expanded", "false");
     }
 
     [TestMethod, Surfaces(WorkbenchSurface.PhoneWithAgent)]
@@ -1371,8 +1393,8 @@ public class ShellUITests : ShellPageTest
         await OpenWorkbench("theme");
         await ExpectNotice();
 
-        await Page.GotoAsync(new Uri(Server.Address, WorkbenchUrls.Flows).ToString());
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.Flows, Level = 1 })).ToBeVisibleAsync();
+        await Page.GotoAsync(new Uri(Server.Address, WorkbenchUrls.Boards.TrimStart('/')).ToString());
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = WorkbenchStrings.Boards, Level = 1 })).ToBeVisibleAsync();
         await ExpectNotice();
 
         async Task ExpectNotice()

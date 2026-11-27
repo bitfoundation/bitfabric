@@ -180,7 +180,7 @@ public partial class ChecksPanel
         var prompt = new StringBuilder();
 
         prompt.AppendLine(CultureInfo.InvariantCulture, $"# {Localizer[nameof(WorkbenchStrings.ChecksPromptTitle), PageTitle]}").AppendLine();
-        prompt.AppendLine(Localizer[nameof(WorkbenchStrings.ChecksPromptIntro), PageTitle, $"`/workbench/{PageKey}{Query}`"]).AppendLine();
+        prompt.AppendLine(Localizer[nameof(WorkbenchStrings.ChecksPromptIntro), PageTitle, $"`{WorkbenchUrls.Page(PageKey!)}{Query}`"]).AppendLine();
         prompt.AppendLine(Localizer[nameof(WorkbenchStrings.ChecksPromptAsk), $"`/api/checks/{PageKey}{Query}`"]).AppendLine();
 
         if (found.Accessibility.Length > 0)

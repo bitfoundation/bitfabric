@@ -169,7 +169,7 @@
         <value>Oscuro</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>Sistema</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Datos</value>
@@ -266,6 +266,27 @@
     </data>
     <data name="SearchPages" xml:space="preserve">
         <value>Buscar páginas</value>
+    </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>Qué es el Workbench y qué hace</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>Las páginas de tu app con datos de ejemplo</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>Lo que tus agentes te muestran</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>Las tareas largas y preguntas de tus agentes</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>Buscar tableros</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>Buscar tareas</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>Nada coincide con tu búsqueda.</value>
     </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>Esta página no está en el banco de trabajo.</value>
@@ -816,17 +837,8 @@
     <data name="ProvinceLimburg" xml:space="preserve">
         <value>Limburgo</value>
     </data>
-    <data name="HomePageTitle" xml:space="preserve">
-        <value>Banco de trabajo · Donde tú y tu agente de IA construís la aplicación</value>
-    </data>
     <data name="HomeEyebrow" xml:space="preserve">
         <value>Parte de tu proyecto</value>
-    </data>
-    <data name="HomeHeadline" xml:space="preserve">
-        <value>Donde tú y tu agente de IA construís la aplicación.</value>
-    </data>
-    <data name="HomeLead" xml:space="preserve">
-        <value>Diseña cada página con datos de ejemplo, en cada estado y en cada dispositivo, revísala con comentarios que tu agente responde mientras escribes y sigue sus tareas largas, como un despliegue o una función nueva, respondiendo lo que pregunta con un clic o tu voz. Todo dentro de tu proyecto, con los componentes y el tema de tu aplicación.</value>
     </data>
     <data name="HomeStartHere" xml:space="preserve">
         <value>Empieza aquí</value>
@@ -854,12 +866,6 @@
     </data>
     <data name="HomeChipStore" xml:space="preserve">
         <value>PNG de 1320 × 2868</value>
-    </data>
-    <data name="HomeWhyTitle" xml:space="preserve">
-        <value>Por qué tu proyecto tiene un banco de trabajo</value>
-    </data>
-    <data name="HomeWhySubtitle" xml:space="preserve">
-        <value>Una herramienta de diseño, un banco de pruebas, un estudio de fotos y la sala de control de tu agente, dentro del propio proyecto.</value>
     </data>
     <data name="HomeWhyAgentsTitle" xml:space="preserve">
         <value>Trabaja con cualquier agente de IA</value>
@@ -2091,18 +2097,6 @@
     <data name="ThemeFindingsHint" xml:space="preserve">
         <value>Colores que la propia página define y que no vienen del tema ni de mezclar un color del tema con blanco, negro o el fondo. Deja fuera los componentes de bit, los gráficos y los colores que se pasan como --data-color.</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>Flujos</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>Un flujo muestra las pantallas de una tarea una al lado de otra, cada una en el estado que importa, como una lista y el diálogo que abre su botón, con flechas que indican cómo pasar de una a la siguiente. Abre uno para entender la app o para repasarla en una reunión.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>Nombre del nuevo flujo</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>Eliminar flujo</value>
-    </data>
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} comentarios abiertos</value>
     </data>
@@ -2487,9 +2481,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>Aún no hay comentarios.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>Aún no hay flujos.</value>
-    </data>
     <data name="SampleFlowBuildings" xml:space="preserve">
         <value>Agregar un edificio</value>
     </data>
@@ -2502,38 +2493,8 @@
     <data name="SampleFlowBuildingsMap" xml:space="preserve">
         <value>«Mapa» muestra los mismos edificios en un mapa de los Países Bajos.</value>
     </data>
-    <data name="SampleFlowPos" xml:space="preserve">
-        <value>Abrir el tablero de ventas</value>
-    </data>
-    <data name="SampleFlowPosLoading" xml:space="preserve">
-        <value>Mientras se cargan los datos, cada widget conserva su lugar.</value>
-    </data>
-    <data name="SampleFlowPosReady" xml:space="preserve">
-        <value>Luego cada widget se llena con las cifras del día.</value>
-    </data>
-    <data name="SampleFlowPosEmpty" xml:space="preserve">
-        <value>Si aún no hay ventas, cada widget lo indica.</value>
-    </data>
-    <data name="SampleFlowPosMixed" xml:space="preserve">
-        <value>Un widget puede fallar mientras los demás siguen funcionando.</value>
-    </data>
-    <data name="SampleFlowPosReadyLink" xml:space="preserve">
-        <value>Llegan los datos</value>
-    </data>
-    <data name="SampleFlowPosEmptyLink" xml:space="preserve">
-        <value>Aún sin ventas</value>
-    </data>
-    <data name="SampleFlowPosMixedLink" xml:space="preserve">
-        <value>Falla una carga</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>Ejemplo</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>Revisa en vivo con tu agente de IA</value>
-    </data>
-    <data name="HomeWhyLiveText" xml:space="preserve">
-        <value>Fija un comentario en cualquier punto de una página, escrito o dictado. En tu propio ordenador, tu agente de código lo recibe mientras escribes, cambia la página, responde en el comentario y lo marca como hecho. Funciona con Claude Code, Codex, Copilot, Gemini, Junie y Cursor.</value>
     </data>
     <data name="TourLiveText" xml:space="preserve">
         <value>Fija un comentario en cualquier punto de una página, escrito o dictado: el micrófono junto a Enviar convierte tu voz en texto. En tu propio ordenador, tu agente de código lo recibe mientras escribes, cambia la página, responde en el comentario y lo marca como hecho. Funciona con Claude Code, Codex, Copilot, Gemini, Junie y Cursor. Pruébalo ahora: escribe tu comentario y envíalo.</value>
@@ -2547,80 +2508,11 @@
     <data name="TapToComment" xml:space="preserve">
         <value>Toca el punto que quieres comentar</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>Pide a tu agente que dibuje uno, como «muestra cómo se añade un edificio», o añade vistas a un flujo desde la pestaña Flujos de una página.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>No hay ningún flujo en este enlace. Puede que se haya eliminado.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>Este flujo aún no tiene pantallas. Añádele vistas desde la pestaña Flujos de una página o pídeselo a tu agente.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>Pantallas: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>Todos los flujos</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>Las pantallas de una tarea una junto a otra, unidas por flechas</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>Añadir esta vista a un flujo</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>El flujo recibe la vista tal como está ahora: su dispositivo, sus ajustes y lo que esté abierto en la página.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>Flujo</value>
     </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>Nuevo flujo</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>Qué muestra esta pantalla (opcional)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>Cómo se llega aquí desde la última pantalla (opcional)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>Qué hace el usuario</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>Tocar «Añadir edificio»</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>Marca el botón de la pantalla {0} que lleva hasta aquí y la flecha saldrá de él.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>Sale del botón marcado en la pantalla {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>Marcar el botón</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>Marcar de nuevo</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>Quitar la marca</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>Toca el botón de la pantalla {0} que lleva a la pantalla {1}.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>Añadir esta vista</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>Abrir el flujo</value>
-    </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Abrir en el banco de trabajo</value>
-    </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Mostrar todas las pantallas</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Presentar</value>
     </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Pantalla anterior</value>
@@ -2628,23 +2520,14 @@
     <data name="NextScreen" xml:space="preserve">
         <value>Pantalla siguiente</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Dejar de presentar</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Pantalla completa</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Salir de pantalla completa</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} de {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>Arrastra una pantalla para moverla y haz doble clic en ella para probarla. Arrastra desde el punto del borde derecho de una pantalla hasta otra para dibujar una flecha; luego ponle nombre y marca el botón del que sale. Haz doble clic en una flecha para cambiarla o eliminarla.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>¿Eliminar este flujo?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>Quitar esta pantalla</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>Eliminar flecha</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>Avisarme cuando el agente responda</value>
@@ -2874,9 +2757,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>No se pudieron guardar las traducciones.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>No se pudo añadir la pantalla al flujo.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>Portátil {0}</value>
     </data>
@@ -2915,9 +2795,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>Restablecer esta vista</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>Esta pantalla aún no ha cargado. Espera un momento y vuelve a marcar el botón.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>Mantén los marcadores entre llaves tal como están en el texto original; de lo contrario, la página no podrá mostrar este texto.</value>
@@ -3269,12 +3146,6 @@
     </data>
     <data name="LandingConsentFirstVisit" xml:space="preserve">
         <value>Primera visita</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>Un ejemplo: haz doble clic en una pantalla para probarla, o en una flecha para cambiarla, lo que crea tu propia copia de este flujo.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>Esto es un ejemplo y se queda como está: un cambio aquí crea tu propia copia de este flujo con el cambio y la abre.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>¿Cómo les fue a las tiendas esta semana?</value>
@@ -4860,15 +4731,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>El nuevo nombre aparece en los recibos a partir de mañana.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (copia)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>Cambiar una flecha</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>Haz doble clic en una flecha para cambiarle el nombre, marcar el botón del que sale o eliminarla. Un ejemplo se queda como está: un cambio en una de sus flechas crea tu propia copia del flujo.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>Escala</value>
     </data>
@@ -5060,9 +4922,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>Quitar de la actividad</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>Elige una tarea para ver cómo va.</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>Esta tarea ya no existe. Puede que su agente la terminara y la quitara.</value>
@@ -5400,15 +5259,6 @@
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>Sigue las tareas largas y responde con un clic</value>
     </data>
-    <data name="HomeWhyProgressText" xml:space="preserve">
-        <value>Un despliegue o una función nueva lleva muchos pasos, y algunos solo puedes darlos tú. Cada chat con un agente muestra aquí qué hizo, qué falta y qué necesita de ti, para que nada se pierda en un chat largo. Las claves y contraseñas que pegas ahí van directamente a su sitio, nunca por el chat.</value>
-    </data>
-    <data name="HomeWhyVoiceTitle" xml:space="preserve">
-        <value>Habla en vez de escribir</value>
-    </data>
-    <data name="HomeWhyVoiceText" xml:space="preserve">
-        <value>Pulsa el micrófono junto a un comentario, una respuesta o una contestación y dilo. El navegador convierte tu voz en texto, en el idioma que elijas.</value>
-    </data>
     <data name="TourProgressText" xml:space="preserve">
         <value>Un despliegue o una función nueva lleva muchos pasos, y algunos solo puedes darlos tú. Cada chat con un agente muestra aquí qué hizo, qué falta y qué necesita de ti. Responde con un clic, unas palabras o tu voz, y sigue al instante. Pruébalo con los ejemplos.</value>
     </data>
@@ -5503,9 +5353,6 @@
     </data>
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>Números que puedes probar, como una calculadora</value>
-    </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>Claro y oscuro, en cualquier pantalla</value>
     </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>Abrir los tableros</value>
@@ -5720,12 +5567,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>Informes</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>Flujos de este proyecto</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>Ejemplos</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>Plan</value>
     </data>
@@ -5746,5 +5587,122 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>Índice</value>
+    </data>
+    <data name="HomeAgentPageTitle" xml:space="preserve">
+        <value>Banco de trabajo · Donde tu agente de IA trabaja en la aplicación y tú lo guías</value>
+    </data>
+    <data name="HomeAgentHeadline" xml:space="preserve">
+        <value>Donde tu agente de IA trabaja en la aplicación y tú lo guías.</value>
+    </data>
+    <data name="HomeAgentLead" xml:space="preserve">
+        <value>Tu agente de IA construye aquí cada página con datos de ejemplo, en cada escenario y estado, y la vuelve a revisar tras cambios posteriores. Te explica las cosas con tableros interactivos, y tú señalas lo que debe cambiar, incluso con la voz, sigues sus tareas largas, decides y respondes. Todo dentro de tu proyecto, con los componentes y el tema de tu aplicación.</value>
+    </data>
+    <data name="HomeForWhoTitle" xml:space="preserve">
+        <value>Para quién es el banco de trabajo</value>
+    </data>
+    <data name="HomeForWhoSubtitle" xml:space="preserve">
+        <value>Sobre todo, para tu agente de IA. Tú entras para señalar, decidir, responder y ver lo que te explica.</value>
+    </data>
+    <data name="HomeBigAgentBadge" xml:space="preserve">
+        <value>Usuario principal</value>
+    </data>
+    <data name="HomeBigAgentTitle" xml:space="preserve">
+        <value>Tu agente de IA</value>
+    </data>
+    <data name="HomeBigAgentText" xml:space="preserve">
+        <value>Construye aquí cada página en distintos escenarios y estados de datos. Tras cambios posteriores, vuelve y las prueba a mano, en un navegador real, para comprobar que nada se ha roto.</value>
+    </data>
+    <data name="HomeBigAgentNote" xml:space="preserve">
+        <value>Tu proyecto también tiene pruebas automatizadas.</value>
+    </data>
+    <data name="HomeBigYouBadge" xml:space="preserve">
+        <value>Para ti</value>
+    </data>
+    <data name="HomeBigFeedbackTitle" xml:space="preserve">
+        <value>Señálalo y di qué cambiar</value>
+    </data>
+    <data name="HomeBigFeedbackText" xml:space="preserve">
+        <value>Selecciona cualquier parte de una página y deja tu comentario, escrito o dictado. Tu agente lo recibe mientras escribes, cambia la página y te responde ahí mismo.</value>
+    </data>
+    <data name="HomeBigProgressTitle" xml:space="preserve">
+        <value>Sigue una tarea y decide</value>
+    </data>
+    <data name="HomeBigProgressText" xml:space="preserve">
+        <value>Mira cómo va una tarea larga, como un despliegue o una función nueva, toma las decisiones que necesita y responde a sus preguntas con un clic, unas palabras o tu voz.</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>Documentación visual e interactiva</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>Pregunta cómo funciona algo, pide comparar opciones o un plan, y tu agente responde con un tablero en lugar de un texto largo: las páginas de tu app unidas con flechas, diagramas y números que puedes probar.</value>
+    </data>
+    <data name="HomeCardRealTitle" xml:space="preserve">
+        <value>Componentes reales</value>
+    </data>
+    <data name="HomeCardRealText" xml:space="preserve">
+        <value>Los mismos componentes de bit BlazorUI, tema y estilos que tu app, así que lo que apruebes se verá igual una vez construido.</value>
+    </data>
+    <data name="HomeCardStatesTitle" xml:space="preserve">
+        <value>Cada estado</value>
+    </data>
+    <data name="HomeCardStatesText" xml:space="preserve">
+        <value>Datos en carga, vacíos, con error, parciales y lentos, a un clic.</value>
+    </data>
+    <data name="HomeCardDevicesTitle" xml:space="preserve">
+        <value>Cada dispositivo</value>
+    </data>
+    <data name="HomeCardDevicesText" xml:space="preserve">
+        <value>Teléfonos, tabletas y equipos de escritorio a tamaño real, en claro, oscuro y en cada idioma.</value>
+    </data>
+    <data name="HomeCardStoresTitle" xml:space="preserve">
+        <value>Capturas para las tiendas</value>
+    </data>
+    <data name="HomeCardStoresText" xml:space="preserve">
+        <value>Imágenes con precisión de píxel para App Store, Google Play y Microsoft Store, con fondo y leyenda.</value>
+    </data>
+    <data name="HomeCardHeadStartTitle" xml:space="preserve">
+        <value>Una ventaja inicial</value>
+    </data>
+    <data name="HomeCardHeadStartText" xml:space="preserve">
+        <value>Páginas listas para reutilizar o aprender de ellas, como un tablero de punto de venta y un planificador de turnos.</value>
+    </data>
+    <data name="HomeCardSafeTitle" xml:space="preserve">
+        <value>Prueba sin riesgos</value>
+    </data>
+    <data name="HomeCardSafeText" xml:space="preserve">
+        <value>Nada aquí se comunica con tu API ni con tu base de datos, así que una idea nunca rompe tu app ni sus datos.</value>
+    </data>
+    <data name="HomeCardManyAppsTitle" xml:space="preserve">
+        <value>Varias apps</value>
+    </data>
+    <data name="HomeCardManyAppsText" xml:space="preserve">
+        <value>Cada una de tus apps lado a lado, con su propio tema.</value>
+    </data>
+    <data name="HomeCardAgentsTitle" xml:space="preserve">
+        <value>Cualquier agente de IA</value>
+    </data>
+    <data name="HomeCardAgentsText" xml:space="preserve">
+        <value>Claude Code, Codex, Copilot, Gemini, Junie o Cursor. Sin necesidad de Claude Design ni Figma.</value>
+    </data>
+    <data name="HomeCardCustomizeTitle" xml:space="preserve">
+        <value>Cambia el propio banco de trabajo</value>
+    </data>
+    <data name="HomeCardCustomizeText" xml:space="preserve">
+        <value>Pide a tu agente que añada las herramientas, los dispositivos y los estados que tu equipo necesita.</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>Un proceso sobre las propias páginas de tu app, unidas con flechas</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>Acercar</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>Alejar</value>
+    </data>
+    <data name="AddBuildingBoardSummary" xml:space="preserve">
+        <value>De la lista al formulario y al mapa: la página de edificios, paso a paso.</value>
+    </data>
+    <data name="AddBuildingBoardLead" xml:space="preserve">
+        <value>Cómo alguien agrega un edificio emblemático, contado sobre la propia página.</value>
     </data>
 </root>

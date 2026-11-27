@@ -169,7 +169,7 @@
         <value>داكن</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>النظام</value>
+        <value>تلقائي</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>بيانات</value>
@@ -266,6 +266,27 @@
     </data>
     <data name="SearchPages" xml:space="preserve">
         <value>البحث في الصفحات</value>
+    </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>ما هي منصة العمل وما تفعله</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>صفحات تطبيقك على بيانات تجريبية</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>ما يعرضه عليك وكلاؤك</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>مهام وكلائك الطويلة وأسئلتهم</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>البحث في اللوحات</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>البحث في المهام</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>لا شيء يطابق بحثك.</value>
     </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>هذه الصفحة غير موجودة في منضدة العمل.</value>
@@ -816,17 +837,8 @@
     <data name="ProvinceLimburg" xml:space="preserve">
         <value>ليمبورخ</value>
     </data>
-    <data name="HomePageTitle" xml:space="preserve">
-        <value>منضدة العمل · حيث تبني التطبيق مع وكيل الذكاء الاصطناعي</value>
-    </data>
     <data name="HomeEyebrow" xml:space="preserve">
         <value>جزء من مشروعك</value>
-    </data>
-    <data name="HomeHeadline" xml:space="preserve">
-        <value>حيث تبني التطبيق مع وكيل الذكاء الاصطناعي.</value>
-    </data>
-    <data name="HomeLead" xml:space="preserve">
-        <value>صمّم كل صفحة على بيانات تجريبية بكل حالاتها وعلى كل جهاز، وراجعها بتعليقات يجيب عنها وكيلك أثناء كتابتك، وتابع مهامه الطويلة مثل النشر أو ميزة جديدة مجيبًا عمّا يسأله بنقرة أو بصوتك. كل ذلك داخل مشروعك، بالمكوّنات والسمة التي يأتي بها تطبيقك.</value>
     </data>
     <data name="HomeStartHere" xml:space="preserve">
         <value>ابدأ من هنا</value>
@@ -854,12 +866,6 @@
     </data>
     <data name="HomeChipStore" xml:space="preserve">
         <value>صورة PNG بأبعاد 1320 × 2868</value>
-    </data>
-    <data name="HomeWhyTitle" xml:space="preserve">
-        <value>لماذا يضم مشروعك منضدة عمل</value>
-    </data>
-    <data name="HomeWhySubtitle" xml:space="preserve">
-        <value>أداة تصميم ومنصة اختبار واستوديو تصوير وغرفة تحكم لوكيلك، داخل المشروع نفسه.</value>
     </data>
     <data name="HomeWhyAgentsTitle" xml:space="preserve">
         <value>اعمل مع أي وكيل ذكاء اصطناعي</value>
@@ -2091,18 +2097,6 @@
     <data name="ThemeFindingsHint" xml:space="preserve">
         <value>ألوان تحددها الصفحة بنفسها ولا تأتي من المظهر ولا من مزج أحد ألوانه بالأبيض أو الأسود أو الخلفية. يستثني مكونات bit والمخططات والألوان المُمرَّرة عبر --data-color.</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>المسارات</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>يعرض المسار شاشات مهمة واحدة جنبًا إلى جنب، كلٌّ منها في الحالة المهمة، مثل قائمة والنافذة التي يفتحها زرها، مع أسهم تبيّن كيف تنتقل من شاشة إلى التالية. افتح أحدها لفهم التطبيق أو لمناقشته في اجتماع.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>اسم المسار الجديد</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>حذف المسار</value>
-    </data>
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} تعليق مفتوح</value>
     </data>
@@ -2487,9 +2481,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>لا توجد تعليقات بعد.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>لا توجد مسارات بعد.</value>
-    </data>
     <data name="SampleFlowBuildings" xml:space="preserve">
         <value>إضافة مبنى</value>
     </data>
@@ -2502,38 +2493,8 @@
     <data name="SampleFlowBuildingsMap" xml:space="preserve">
         <value>يعرض «خريطة» المباني نفسها على خريطة هولندا.</value>
     </data>
-    <data name="SampleFlowPos" xml:space="preserve">
-        <value>فتح لوحة تحكم نقاط البيع</value>
-    </data>
-    <data name="SampleFlowPosLoading" xml:space="preserve">
-        <value>أثناء تحميل البيانات، تبقى كل أداة في مكانها.</value>
-    </data>
-    <data name="SampleFlowPosReady" xml:space="preserve">
-        <value>ثم تمتلئ كل أداة بأرقام اليوم.</value>
-    </data>
-    <data name="SampleFlowPosEmpty" xml:space="preserve">
-        <value>عندما لا توجد مبيعات بعد، تخبرك كل أداة بذلك.</value>
-    </data>
-    <data name="SampleFlowPosMixed" xml:space="preserve">
-        <value>قد تفشل أداة بينما تواصل الأخرى عملها.</value>
-    </data>
-    <data name="SampleFlowPosReadyLink" xml:space="preserve">
-        <value>وصلت البيانات</value>
-    </data>
-    <data name="SampleFlowPosEmptyLink" xml:space="preserve">
-        <value>لا مبيعات بعد</value>
-    </data>
-    <data name="SampleFlowPosMixedLink" xml:space="preserve">
-        <value>فشل تحميل واحد</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>نموذج</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>راجع مباشرةً مع وكيل الذكاء الاصطناعي الخاص بك</value>
-    </data>
-    <data name="HomeWhyLiveText" xml:space="preserve">
-        <value>ثبّت تعليقًا على أي موضع في الصفحة، كتابةً أو صوتًا. على حاسوبك، يتلقاه وكيل البرمجة أثناء كتابتك، فيغيّر الصفحة ويرد على التعليق ويعلّمه منجزًا. يعمل مع Claude Code وCodex وCopilot وGemini وJunie وCursor.</value>
     </data>
     <data name="TourLiveText" xml:space="preserve">
         <value>ثبّت تعليقًا على أي موضع في الصفحة، كتابةً أو صوتًا: يحوّل الميكروفون بجانب زر الإرسال صوتك إلى نص. على حاسوبك، يتلقاه وكيل البرمجة أثناء كتابتك، فيغيّر الصفحة ويرد على التعليق ويعلّمه منجزًا. يعمل مع Claude Code وCodex وCopilot وGemini وJunie وCursor. جرّب الآن: اكتب تعليقك وأرسله.</value>
@@ -2547,80 +2508,11 @@
     <data name="TapToComment" xml:space="preserve">
         <value>المس المكان الذي تريد التعليق عليه</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>اطلب من وكيلك أن يرسم واحدًا، مثل «اعرض كيف يُضاف مبنى»، أو أضف عروضًا إلى مسار من تبويب «المسارات» في أي صفحة.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>لا يوجد مسار على هذا الرابط. ربما حُذف.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>لا توجد شاشات في هذا المسار بعد. أضف إليه عروضًا من تبويب «المسارات» في أي صفحة، أو اطلب ذلك من وكيلك.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>الشاشات: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>كل المسارات</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>شاشات مهمة جنبًا إلى جنب، تصل بينها أسهم</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>إضافة هذا العرض إلى مسار</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>يأخذ المسار العرض كما هو الآن: جهازه وإعداداته وكل ما هو مفتوح في الصفحة.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>المسار</value>
     </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>مسار جديد</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>ما تعرضه هذه الشاشة (اختياري)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>كيف تصل إلى هنا من الشاشة السابقة (اختياري)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>ما يفعله المستخدم</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>المس «إضافة مبنى»</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>حدّد الزر في الشاشة {0} الذي يؤدي إلى هنا، ليبدأ السهم منه.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>يبدأ من الزر المحدد في الشاشة {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>تحديد الزر</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>تحديد من جديد</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>إزالة التحديد</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>انقر على الزر في الشاشة {0} الذي يؤدي إلى الشاشة {1}.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>أضف هذا العرض</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>افتح المسار</value>
-    </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>افتح في منضدة العمل</value>
-    </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>إظهار كل الشاشات</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>عرض تقديمي</value>
     </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>الشاشة السابقة</value>
@@ -2628,23 +2520,14 @@
     <data name="NextScreen" xml:space="preserve">
         <value>الشاشة التالية</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>إيقاف العرض التقديمي</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>ملء الشاشة</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>الخروج من ملء الشاشة</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} من {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>اسحب شاشة لتحريكها وانقر عليها نقرًا مزدوجًا لتجربتها. اسحب من النقطة على الحافة اليمنى للشاشة إلى شاشة أخرى لرسم سهم، ثم سمِّه وحدّد الزر الذي يبدأ منه. انقر نقرًا مزدوجًا على سهم لتغييره أو حذفه.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>حذف هذا المسار؟</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>إزالة هذه الشاشة</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>حذف السهم</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>نبّهني عندما يرد الوكيل</value>
@@ -2874,9 +2757,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>تعذّر حفظ الترجمات.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>تعذّرت إضافة الشاشة إلى المسار.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>حاسوب محمول {0}</value>
     </data>
@@ -2915,9 +2795,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>إعادة ضبط هذا العرض</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>لم يكتمل تحميل هذه الشاشة بعد. انتظر لحظة ثم حدّد الزر مرة أخرى.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>أبقِ العناصر النائبة بين الأقواس المعقوفة كما هي في النص الأصلي، وإلا فلن تتمكن الصفحة من عرض هذا النص.</value>
@@ -3269,12 +3146,6 @@
     </data>
     <data name="LandingConsentFirstVisit" xml:space="preserve">
         <value>الزيارة الأولى</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>نموذج: انقر نقرًا مزدوجًا على شاشة لتجربتها، أو على سهم لتغييره، وهذا يُنشئ نسختك الخاصة من هذا المسار.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>هذا نموذج يبقى كما هو: أي تغيير هنا يُنشئ نسختك الخاصة من هذا المسار متضمنةً التغيير، ويفتحها.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>كيف كان أداء الفروع هذا الأسبوع؟</value>
@@ -4860,15 +4731,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>يظهر الاسم الجديد على الإيصالات بدءًا من الغد.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (نسخة)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>تغيير سهم</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>انقر نقرًا مزدوجًا على سهم لإعادة تسميته أو تحديد الزر الذي يبدأ منه أو حذفه. يبقى النموذج كما هو: أي تغيير في أحد أسهمه يُنشئ نسختك الخاصة من المسار.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>المقياس</value>
     </data>
@@ -5060,9 +4922,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>إزالة من النشاط</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>اختر مهمة لترى أين وصلت.</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>هذه المهمة لم تعد موجودة. ربما أنهاها وكيلها وحذفها.</value>
@@ -5400,15 +5259,6 @@
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>تابع المهام الطويلة وأجب بنقرة</value>
     </data>
-    <data name="HomeWhyProgressText" xml:space="preserve">
-        <value>يحتاج النشر أو ميزة جديدة إلى خطوات كثيرة، وبعضها لا يقوم به إلا أنت. تعرض هنا كل محادثة مع وكيل ما أنجزته وما تبقى وما تحتاجه منك، فلا يضيع شيء في محادثة طويلة. والمفاتيح وكلمات المرور التي تلصقها هناك تذهب مباشرة إلى مكانها، لا عبر المحادثة أبدًا.</value>
-    </data>
-    <data name="HomeWhyVoiceTitle" xml:space="preserve">
-        <value>تحدّث بدل الكتابة</value>
-    </data>
-    <data name="HomeWhyVoiceText" xml:space="preserve">
-        <value>اضغط على الميكروفون بجانب تعليق أو رد أو إجابة وقلها. يحوّل المتصفح صوتك إلى نص باللغة التي تختارها.</value>
-    </data>
     <data name="TourProgressText" xml:space="preserve">
         <value>يحتاج النشر أو ميزة جديدة إلى خطوات كثيرة، وبعضها لا يقوم به إلا أنت. تعرض هنا كل محادثة مع وكيل ما أنجزته وما تبقى وما تحتاجه منك. أجب بنقرة أو ببضع كلمات أو بصوتك، فيتابع فورًا. جرّب ذلك على الأمثلة.</value>
     </data>
@@ -5503,9 +5353,6 @@
     </data>
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>أرقام تجرّبها، مثل آلة حاسبة</value>
-    </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>فاتح وداكن، على أي شاشة</value>
     </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>افتح اللوحات</value>
@@ -5720,12 +5567,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>تقارير</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>مسارات هذا المشروع</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>نماذج</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>الخطة</value>
     </data>
@@ -5746,5 +5587,122 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>المحتويات</value>
+    </data>
+    <data name="HomeAgentPageTitle" xml:space="preserve">
+        <value>منضدة العمل · حيث يعمل وكيل الذكاء الاصطناعي الخاص بك على التطبيق وأنت توجّهه</value>
+    </data>
+    <data name="HomeAgentHeadline" xml:space="preserve">
+        <value>حيث يعمل وكيل الذكاء الاصطناعي الخاص بك على التطبيق، وأنت توجّهه.</value>
+    </data>
+    <data name="HomeAgentLead" xml:space="preserve">
+        <value>يبني وكيل الذكاء الاصطناعي الخاص بك هنا كل صفحة على بيانات تجريبية، في كل سيناريو وكل حالة، ثم يعيد فحصها بعد التغييرات اللاحقة. يشرح لك الأمور في لوحات تفاعلية، وأنت تشير إلى ما يجب تغييره، ولو بصوتك، وتتابع مهامه الطويلة، وتقرّر وتجيب. كل ذلك داخل مشروعك، بمكوّنات تطبيقك وسمته.</value>
+    </data>
+    <data name="HomeForWhoTitle" xml:space="preserve">
+        <value>لمن صُمّمت منضدة العمل</value>
+    </data>
+    <data name="HomeForWhoSubtitle" xml:space="preserve">
+        <value>لوكيل الذكاء الاصطناعي الخاص بك في الغالب. وأنت تأتي لتشير وتقرّر وتجيب وترى ما يشرحه.</value>
+    </data>
+    <data name="HomeBigAgentBadge" xml:space="preserve">
+        <value>مستخدمها الرئيسي</value>
+    </data>
+    <data name="HomeBigAgentTitle" xml:space="preserve">
+        <value>وكيل الذكاء الاصطناعي الخاص بك</value>
+    </data>
+    <data name="HomeBigAgentText" xml:space="preserve">
+        <value>يبني هنا كل صفحة في سيناريوهات وحالات بيانات مختلفة. وبعد التغييرات اللاحقة يعود ليجرّبها يدويًا في متصفح حقيقي ويتأكد أن شيئًا لم يتعطل.</value>
+    </data>
+    <data name="HomeBigAgentNote" xml:space="preserve">
+        <value>يضم مشروعك اختبارات آلية أيضًا.</value>
+    </data>
+    <data name="HomeBigYouBadge" xml:space="preserve">
+        <value>لك</value>
+    </data>
+    <data name="HomeBigFeedbackTitle" xml:space="preserve">
+        <value>أشر إليه وقل ما يجب تغييره</value>
+    </data>
+    <data name="HomeBigFeedbackText" xml:space="preserve">
+        <value>حدّد أي جزء من الصفحة واترك ملاحظتك، كتابةً أو صوتًا. يتلقاها وكيلك أثناء كتابتك، فيغيّر الصفحة ويرد عليك في المكان نفسه.</value>
+    </data>
+    <data name="HomeBigProgressTitle" xml:space="preserve">
+        <value>تابع المهمة وقرّر</value>
+    </data>
+    <data name="HomeBigProgressText" xml:space="preserve">
+        <value>اطّلع على سير مهمة طويلة، مثل النشر أو ميزة جديدة، واتخذ القرارات التي تحتاجها، وأجب عن أسئلتها بنقرة أو ببضع كلمات أو بصوتك.</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>مستندات مرئية وتفاعلية</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>اسأل كيف يعمل شيء ما، أو اطلب موازنة خيارات أو خطة، فيجيبك وكيلك بلوحة بدل نص طويل: صفحات تطبيقك موصولة بأسهم، ومخططات، وأرقام يمكنك تجربتها.</value>
+    </data>
+    <data name="HomeCardRealTitle" xml:space="preserve">
+        <value>مكونات حقيقية</value>
+    </data>
+    <data name="HomeCardRealText" xml:space="preserve">
+        <value>مكونات bit BlazorUI نفسها والمظهر والأنماط نفسها التي يستخدمها تطبيقك، لذا يبدو ما تعتمده بالشكل نفسه بعد بنائه.</value>
+    </data>
+    <data name="HomeCardStatesTitle" xml:space="preserve">
+        <value>كل حالة</value>
+    </data>
+    <data name="HomeCardStatesText" xml:space="preserve">
+        <value>التحميل والفراغ والخطأ والبيانات الجزئية والبطيئة، على بُعد نقرة.</value>
+    </data>
+    <data name="HomeCardDevicesTitle" xml:space="preserve">
+        <value>كل جهاز</value>
+    </data>
+    <data name="HomeCardDevicesText" xml:space="preserve">
+        <value>الهواتف والأجهزة اللوحية والحواسيب المكتبية بمقاساتها الحقيقية، بالوضعين الفاتح والداكن وبكل لغة.</value>
+    </data>
+    <data name="HomeCardStoresTitle" xml:space="preserve">
+        <value>لقطات شاشة للمتاجر</value>
+    </data>
+    <data name="HomeCardStoresText" xml:space="preserve">
+        <value>صور دقيقة حتى البكسل لـ App Store و Google Play و Microsoft Store، مع خلفية وعنوان.</value>
+    </data>
+    <data name="HomeCardHeadStartTitle" xml:space="preserve">
+        <value>انطلاقة سريعة</value>
+    </data>
+    <data name="HomeCardHeadStartText" xml:space="preserve">
+        <value>صفحات جاهزة لتعيد استخدامها أو تتعلم منها، مثل لوحة تحكم لنقاط البيع ومخطط للمناوبات.</value>
+    </data>
+    <data name="HomeCardSafeTitle" xml:space="preserve">
+        <value>جرّب بأمان</value>
+    </data>
+    <data name="HomeCardSafeText" xml:space="preserve">
+        <value>لا شيء هنا يتصل بواجهة API أو بقاعدة بياناتك، لذا لا تُعطّل أي فكرة تطبيقك أو بياناته أبدًا.</value>
+    </data>
+    <data name="HomeCardManyAppsTitle" xml:space="preserve">
+        <value>عدة تطبيقات</value>
+    </data>
+    <data name="HomeCardManyAppsText" xml:space="preserve">
+        <value>كل تطبيقاتك جنبًا إلى جنب، لكل منها سمتها الخاصة.</value>
+    </data>
+    <data name="HomeCardAgentsTitle" xml:space="preserve">
+        <value>أي وكيل ذكاء اصطناعي</value>
+    </data>
+    <data name="HomeCardAgentsText" xml:space="preserve">
+        <value>Claude Code أو Codex أو Copilot أو Gemini أو Junie أو Cursor. لا حاجة إلى Claude Design أو Figma.</value>
+    </data>
+    <data name="HomeCardCustomizeTitle" xml:space="preserve">
+        <value>غيّر منضدة العمل نفسها</value>
+    </data>
+    <data name="HomeCardCustomizeText" xml:space="preserve">
+        <value>اطلب من وكيلك إضافة الأدوات والأجهزة والحالات التي يحتاجها فريقك.</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>مسار على صفحات تطبيقك نفسها، موصولة بأسهم</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>تكبير</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>تصغير</value>
+    </data>
+    <data name="AddBuildingBoardSummary" xml:space="preserve">
+        <value>من القائمة إلى النموذج والخريطة: صفحة المباني خطوة بخطوة.</value>
+    </data>
+    <data name="AddBuildingBoardLead" xml:space="preserve">
+        <value>كيف يضيف أحدهم مبنى بارزًا، مشروحًا على الصفحة نفسها.</value>
     </data>
 </root>

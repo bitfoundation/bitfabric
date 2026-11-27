@@ -90,7 +90,7 @@ public class AccountUITests : AppViewPageTest
         await ExpectTheAccountMenuClosed();
         await Expect(PageTitle).ToHaveTextAsync(WorkbenchStrings.SettingsTitle);
         await Expect(View().GetByRole(AriaRole.Textbox, new() { Name = AppStrings.FullName, Exact = true })).ToHaveValueAsync(WorkbenchStrings.DemoUserYas);
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/settings"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/settings"));
     }
 
     [TestMethod, EverySurface]

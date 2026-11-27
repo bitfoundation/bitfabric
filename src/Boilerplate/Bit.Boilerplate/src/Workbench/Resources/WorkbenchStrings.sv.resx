@@ -169,7 +169,7 @@
         <value>Mörk</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>System</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Data</value>
@@ -266,6 +266,27 @@
     </data>
     <data name="SearchPages" xml:space="preserve">
         <value>Sök sidor</value>
+    </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>Vad Workbench är och gör</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>Appens sidor med exempeldata</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>Det dina agenter visar dig</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>Dina agenters långa uppgifter och frågor</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>Sök tavlor</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>Sök uppgifter</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>Inget matchar din sökning.</value>
     </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>Den här sidan finns inte på arbetsbänken.</value>
@@ -816,17 +837,8 @@
     <data name="ProvinceLimburg" xml:space="preserve">
         <value>Limburg</value>
     </data>
-    <data name="HomePageTitle" xml:space="preserve">
-        <value>Arbetsbänk · Där du och din AI-agent bygger appen</value>
-    </data>
     <data name="HomeEyebrow" xml:space="preserve">
         <value>En del av ditt projekt</value>
-    </data>
-    <data name="HomeHeadline" xml:space="preserve">
-        <value>Där du och din AI-agent bygger appen.</value>
-    </data>
-    <data name="HomeLead" xml:space="preserve">
-        <value>Designa varje sida på exempeldata, i varje tillstånd och på varje enhet, granska den med kommentarer som din agent svarar på medan du skriver, och följ dess långa uppgifter, som en driftsättning eller en ny funktion, genom att svara på frågorna med ett klick eller din röst. Allt i ditt eget projekt, med appens egna komponenter och tema.</value>
     </data>
     <data name="HomeStartHere" xml:space="preserve">
         <value>Börja här</value>
@@ -854,12 +866,6 @@
     </data>
     <data name="HomeChipStore" xml:space="preserve">
         <value>1320 × 2868 PNG</value>
-    </data>
-    <data name="HomeWhyTitle" xml:space="preserve">
-        <value>Därför har ditt projekt en arbetsbänk</value>
-    </data>
-    <data name="HomeWhySubtitle" xml:space="preserve">
-        <value>Ett designverktyg, en testbänk, en fotostudio och din agents kontrollrum, i själva projektet.</value>
     </data>
     <data name="HomeWhyAgentsTitle" xml:space="preserve">
         <value>Arbeta med valfri AI-agent</value>
@@ -2091,18 +2097,6 @@
     <data name="ThemeFindingsHint" xml:space="preserve">
         <value>Färger som sidan själv anger och som varken kommer från temat eller från en blandning av en temafärg med vitt, svart eller bakgrunden. Utan bit-komponenter, diagram och färger som skickas som --data-color.</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>Flöden</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>Ett flöde visar en uppgifts skärmar sida vid sida, var och en i det läge som spelar roll, som en lista och dialogen som dess knapp öppnar, med pilar för hur du tar dig från en till nästa. Öppna ett för att förstå appen eller gå igenom den på ett möte.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>Namn på det nya flödet</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>Ta bort flöde</value>
-    </data>
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} öppna kommentarer</value>
     </data>
@@ -2487,9 +2481,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>Inga kommentarer än.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>Inga flöden än.</value>
-    </data>
     <data name="SampleFlowBuildings" xml:space="preserve">
         <value>Lägga till en byggnad</value>
     </data>
@@ -2502,38 +2493,8 @@
     <data name="SampleFlowBuildingsMap" xml:space="preserve">
         <value>”Karta” visar samma byggnader på en karta över Nederländerna.</value>
     </data>
-    <data name="SampleFlowPos" xml:space="preserve">
-        <value>Öppna kassaöversikten</value>
-    </data>
-    <data name="SampleFlowPosLoading" xml:space="preserve">
-        <value>Medan data laddas behåller varje widget sin plats.</value>
-    </data>
-    <data name="SampleFlowPosReady" xml:space="preserve">
-        <value>Sedan fylls varje widget med dagens siffror.</value>
-    </data>
-    <data name="SampleFlowPosEmpty" xml:space="preserve">
-        <value>Utan försäljning än säger varje widget det.</value>
-    </data>
-    <data name="SampleFlowPosMixed" xml:space="preserve">
-        <value>En widget kan misslyckas medan de andra fortsätter.</value>
-    </data>
-    <data name="SampleFlowPosReadyLink" xml:space="preserve">
-        <value>Data kommer</value>
-    </data>
-    <data name="SampleFlowPosEmptyLink" xml:space="preserve">
-        <value>Ingen försäljning än</value>
-    </data>
-    <data name="SampleFlowPosMixedLink" xml:space="preserve">
-        <value>En laddning misslyckas</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>Exempel</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>Granska live med din AI-agent</value>
-    </data>
-    <data name="HomeWhyLiveText" xml:space="preserve">
-        <value>Fäst en kommentar var som helst på en sida, skriven eller talad. På din egen dator får din kodagent den medan du skriver, ändrar sidan, svarar på kommentaren och bockar av den. Fungerar med Claude Code, Codex, Copilot, Gemini, Junie och Cursor.</value>
     </data>
     <data name="TourLiveText" xml:space="preserve">
         <value>Fäst en kommentar var som helst på en sida, skriven eller talad: mikrofonen bredvid Skicka gör om din röst till text. På din egen dator får din kodagent den medan du skriver, ändrar sidan, svarar på kommentaren och bockar av den. Fungerar med Claude Code, Codex, Copilot, Gemini, Junie och Cursor. Prova nu: skriv din kommentar och skicka den.</value>
@@ -2547,80 +2508,11 @@
     <data name="TapToComment" xml:space="preserve">
         <value>Tryck på stället du vill kommentera</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>Be din agent rita ett, som ”visa hur man lägger till en byggnad”, eller lägg till vyer i ett flöde från fliken Flöden på en sida.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>Det finns inget flöde på den här länken. Det kan ha tagits bort.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>Det här flödet har inga skärmar än. Lägg till vyer från fliken Flöden på en sida, eller be din agent.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>Skärmar: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>Alla flöden</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>En uppgifts skärmar sida vid sida, sammankopplade med pilar</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>Lägg till den här vyn i ett flöde</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>Flödet får vyn som den är nu: dess enhet, dess inställningar och det som är öppet på sidan.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>Flöde</value>
     </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>Nytt flöde</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>Vad den här skärmen visar (valfritt)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>Hur du kommer hit från den förra skärmen (valfritt)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>Vad användaren gör</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>Tryck på ”Lägg till byggnad”</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>Markera knappen på skärm {0} som leder hit, så börjar pilen där.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>Börjar vid den markerade knappen på skärm {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>Markera knappen</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>Markera igen</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>Ta bort markeringen</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>Tryck på knappen på skärm {0} som leder till skärm {1}.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>Lägg till den här vyn</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>Öppna flödet</value>
-    </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Öppna i arbetsbänken</value>
-    </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Visa alla skärmar</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Presentera</value>
     </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Föregående skärm</value>
@@ -2628,23 +2520,14 @@
     <data name="NextScreen" xml:space="preserve">
         <value>Nästa skärm</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Sluta presentera</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Helskärm</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Avsluta helskärm</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} av {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>Dra en skärm för att flytta den och dubbelklicka på den för att prova den. Dra från punkten på en skärms högra kant till en annan skärm för att rita en pil, ge den sedan ett namn och markera knappen den börjar vid. Dubbelklicka på en pil för att ändra eller ta bort den.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>Ta bort det här flödet?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>Ta bort den här skärmen</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>Ta bort pilen</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>Meddela mig när agenten svarar</value>
@@ -2874,9 +2757,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>Översättningarna kunde inte sparas.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>Skärmen kunde inte läggas till i flödet.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>Bärbar dator {0}</value>
     </data>
@@ -2915,9 +2795,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>Återställ den här vyn</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>Den här skärmen har inte laddats än. Vänta en stund och markera knappen igen.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>Behåll platshållarna inom klammerparenteser som i originaltexten, annars kan sidan inte visa den här texten.</value>
@@ -3269,12 +3146,6 @@
     </data>
     <data name="LandingConsentFirstVisit" xml:space="preserve">
         <value>Första besöket</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>Ett exempel: dubbelklicka på en skärm för att prova den, eller på en pil för att ändra den, vilket skapar din egen kopia av flödet.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>Det här är ett exempel, och det förblir som det är: en ändring här skapar din egen kopia av flödet med ändringen och öppnar den.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>Hur gick det för butikerna den här veckan?</value>
@@ -4860,15 +4731,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>Det nya namnet syns på kvitton från och med i morgon.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (kopia)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>Ändra en pil</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>Dubbelklicka på en pil för att byta namn på den, markera knappen den börjar vid eller ta bort den. Ett exempel förblir som det är: en ändring av någon av dess pilar skapar din egen kopia av flödet.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>Skala</value>
     </data>
@@ -5060,9 +4922,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>Ta bort från aktiviteten</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>Välj en uppgift för att se hur det går.</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>Uppgiften finns inte längre. Agenten kan ha avslutat och tagit bort den.</value>
@@ -5400,15 +5259,6 @@
     <data name="HomeWhyProgressTitle" xml:space="preserve">
         <value>Följ långa uppgifter, svara med ett klick</value>
     </data>
-    <data name="HomeWhyProgressText" xml:space="preserve">
-        <value>En driftsättning eller en ny funktion kräver många steg, och vissa kan bara du ta. Varje agentchatt visar här vad som är gjort, vad som återstår och vad den behöver från dig, så att inget försvinner i en lång chatt. Nycklar och lösenord som du klistrar in där går direkt dit de ska, aldrig via chatten.</value>
-    </data>
-    <data name="HomeWhyVoiceTitle" xml:space="preserve">
-        <value>Tala i stället för att skriva</value>
-    </data>
-    <data name="HomeWhyVoiceText" xml:space="preserve">
-        <value>Tryck på mikrofonen bredvid en kommentar, ett svar eller en återkoppling och säg det. Webbläsaren gör om din röst till text, på det språk du väljer.</value>
-    </data>
     <data name="TourProgressText" xml:space="preserve">
         <value>En driftsättning eller en ny funktion kräver många steg, och vissa kan bara du ta. Varje agentchatt visar här vad som är gjort, vad som återstår och vad den behöver från dig. Svara med ett klick, några ord eller din röst, så fortsätter den direkt. Prova med exemplen.</value>
     </data>
@@ -5503,9 +5353,6 @@
     </data>
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>Siffror att pröva, som en kalkylator</value>
-    </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>Ljust och mörkt, på alla skärmar</value>
     </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>Öppna tavlorna</value>
@@ -5720,12 +5567,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>Rapporter</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>Projektets flöden</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>Exempel</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>Plan</value>
     </data>
@@ -5746,5 +5587,122 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>Innehåll</value>
+    </data>
+    <data name="HomeAgentPageTitle" xml:space="preserve">
+        <value>Arbetsbänk · Där din AI-agent arbetar med appen och du styr den</value>
+    </data>
+    <data name="HomeAgentHeadline" xml:space="preserve">
+        <value>Där din AI-agent arbetar med appen och du styr den.</value>
+    </data>
+    <data name="HomeAgentLead" xml:space="preserve">
+        <value>Din AI-agent bygger varje sida här på exempeldata, i varje scenario och tillstånd, och kontrollerar den igen efter senare ändringar. Den förklarar saker för dig som interaktiva tavlor, och du pekar ut vad som ska ändras, även med rösten, följer dess långa uppgifter, fattar beslut och svarar. Allt i ditt eget projekt, med appens egna komponenter och tema.</value>
+    </data>
+    <data name="HomeForWhoTitle" xml:space="preserve">
+        <value>Vem arbetsbänken är till för</value>
+    </data>
+    <data name="HomeForWhoSubtitle" xml:space="preserve">
+        <value>Främst din AI-agent. Du kommer in för att peka, bestämma, svara och se vad den förklarar.</value>
+    </data>
+    <data name="HomeBigAgentBadge" xml:space="preserve">
+        <value>Huvudanvändaren</value>
+    </data>
+    <data name="HomeBigAgentTitle" xml:space="preserve">
+        <value>Din AI-agent</value>
+    </data>
+    <data name="HomeBigAgentText" xml:space="preserve">
+        <value>Den bygger varje sida här i olika scenarier och datalägen. Efter senare ändringar kommer den tillbaka och provar dem för hand i en riktig webbläsare, för att se att inget har gått sönder.</value>
+    </data>
+    <data name="HomeBigAgentNote" xml:space="preserve">
+        <value>Ditt projekt har även automatiska tester.</value>
+    </data>
+    <data name="HomeBigYouBadge" xml:space="preserve">
+        <value>För dig</value>
+    </data>
+    <data name="HomeBigFeedbackTitle" xml:space="preserve">
+        <value>Peka på det och säg vad som ska ändras</value>
+    </data>
+    <data name="HomeBigFeedbackText" xml:space="preserve">
+        <value>Markera valfri del av en sida och lämna din feedback, skriven eller talad. Din agent får den medan du skriver, ändrar sidan och svarar dig direkt där.</value>
+    </data>
+    <data name="HomeBigProgressTitle" xml:space="preserve">
+        <value>Följ en uppgift och bestäm</value>
+    </data>
+    <data name="HomeBigProgressText" xml:space="preserve">
+        <value>Se hur en lång uppgift går, som en driftsättning eller en ny funktion, fatta de beslut den behöver och svara på dess frågor med ett klick, några ord eller din röst.</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>Interaktiv, visuell dokumentation</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>Fråga hur något fungerar, be om att väga alternativ eller om en plan, så svarar din agent med en tavla i stället för en lång text: appens sidor sammanbundna med pilar, diagram och siffror du kan pröva.</value>
+    </data>
+    <data name="HomeCardRealTitle" xml:space="preserve">
+        <value>Riktiga komponenter</value>
+    </data>
+    <data name="HomeCardRealText" xml:space="preserve">
+        <value>Samma bit BlazorUI-komponenter, tema och stilar som din app, så det du godkänner ser likadant ut när det väl är byggt.</value>
+    </data>
+    <data name="HomeCardStatesTitle" xml:space="preserve">
+        <value>Varje läge</value>
+    </data>
+    <data name="HomeCardStatesText" xml:space="preserve">
+        <value>Laddning, tomt läge, fel, ofullständiga och långsamma data, ett klick bort.</value>
+    </data>
+    <data name="HomeCardDevicesTitle" xml:space="preserve">
+        <value>Varje enhet</value>
+    </data>
+    <data name="HomeCardDevicesText" xml:space="preserve">
+        <value>Telefoner, surfplattor och datorer i verklig storlek, i ljust och mörkt läge och på alla språk.</value>
+    </data>
+    <data name="HomeCardStoresTitle" xml:space="preserve">
+        <value>Skärmbilder för appbutiker</value>
+    </data>
+    <data name="HomeCardStoresText" xml:space="preserve">
+        <value>Pixelexakta bilder för App Store, Google Play och Microsoft Store, med bakgrund och bildtext.</value>
+    </data>
+    <data name="HomeCardHeadStartTitle" xml:space="preserve">
+        <value>Ett försprång</value>
+    </data>
+    <data name="HomeCardHeadStartText" xml:space="preserve">
+        <value>Färdiga sidor att återanvända eller lära av, till exempel en kassaöversikt och en schemaplanerare.</value>
+    </data>
+    <data name="HomeCardSafeTitle" xml:space="preserve">
+        <value>Tryggt att prova</value>
+    </data>
+    <data name="HomeCardSafeText" xml:space="preserve">
+        <value>Inget här pratar med ditt API eller din databas, så en idé förstör aldrig din app eller dess data.</value>
+    </data>
+    <data name="HomeCardManyAppsTitle" xml:space="preserve">
+        <value>Flera appar</value>
+    </data>
+    <data name="HomeCardManyAppsText" xml:space="preserve">
+        <value>Alla dina appar sida vid sida, var och en med sitt eget tema.</value>
+    </data>
+    <data name="HomeCardAgentsTitle" xml:space="preserve">
+        <value>Valfri AI-agent</value>
+    </data>
+    <data name="HomeCardAgentsText" xml:space="preserve">
+        <value>Claude Code, Codex, Copilot, Gemini, Junie eller Cursor. Varken Claude Design eller Figma behövs.</value>
+    </data>
+    <data name="HomeCardCustomizeTitle" xml:space="preserve">
+        <value>Ändra själva arbetsbänken</value>
+    </data>
+    <data name="HomeCardCustomizeText" xml:space="preserve">
+        <value>Be din agent lägga till de verktyg, enheter och tillstånd som ditt team behöver.</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>En process på appens egna sidor, sammanbundna med pilar</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>Zooma in</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>Zooma ut</value>
+    </data>
+    <data name="AddBuildingBoardSummary" xml:space="preserve">
+        <value>Från listan till formuläret och kartan: byggnadssidan, steg för steg.</value>
+    </data>
+    <data name="AddBuildingBoardLead" xml:space="preserve">
+        <value>Hur någon lägger till en känd byggnad, berättat på själva sidan.</value>
     </data>
 </root>

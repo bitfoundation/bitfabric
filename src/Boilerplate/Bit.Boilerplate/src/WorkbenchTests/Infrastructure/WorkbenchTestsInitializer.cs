@@ -2,7 +2,7 @@ namespace Boilerplate.WorkbenchTests.Infrastructure;
 
 /// <summary>
 /// Starts one Workbench for the whole run on first use and clears the review left by an earlier run. The review is one
-/// document, so tests that share the server work with comments and flows of their own.
+/// document, so tests that share the server work with comments and tasks of their own.
 /// </summary>
 [TestClass]
 public static class WorkbenchTestsInitializer

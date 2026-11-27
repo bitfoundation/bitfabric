@@ -15,8 +15,6 @@ public class WorkbenchReviewDocumentTests
 
     private BcrdtMap Threads => document.GetMap("threads");
 
-    private BcrdtMap Flows => document.GetMap("flows");
-
     private void Edit(Action edit) => document.Transact(_ => edit());
 
     private WorkbenchReviewThread Thread(string id) => WorkbenchReviewDocument.ReadThreads(Threads).Single(t => t.Id == id);
@@ -184,94 +182,6 @@ public class WorkbenchReviewDocumentTests
         Parallel.For(0, 2_000, _ => values.Add(WorkbenchReviewDocument.NextSequence()));
 
         Assert.HasCount(2_000, values.Distinct());
-    }
-
-    [TestMethod]
-    public void AFlow_Should_KeepWhenItWasMadeWhenItIsDrawnAgain()
-    {
-        WorkbenchFlowScreen[] screens = [new("s1", "buildings", "", "The list", false, 0, 0), new("s2", "buildings", "?theme=dark", null, true, 600, 0)];
-        WorkbenchFlowLink[] links = [new("l1", "s1", "s2", "Tap Add", new(0.1, 0.2, 0.3, 0.05))];
-
-        Edit(() => WorkbenchReviewDocument.SaveFlow(Flows, "f", "Adding a building", screens, links));
-
-        var first = WorkbenchReviewDocument.ReadFlows(Flows).Single();
-
-        Assert.AreEqual("Adding a building", first.Name);
-        Assert.AreSequenceEqual(screens, first.Screens);
-        Assert.AreSequenceEqual(links, first.Links);
-
-        Edit(() => WorkbenchReviewDocument.SaveFlow(Flows, "f", "Renamed", screens.Take(1), []));
-
-        var second = WorkbenchReviewDocument.ReadFlows(Flows).Single();
-
-        Assert.AreEqual(first.CreatedAt, second.CreatedAt);
-        Assert.AreEqual("Renamed", second.Name);
-        Assert.HasCount(1, second.Screens);
-        Assert.IsEmpty(second.Links);
-    }
-
-    [TestMethod]
-    public void AFlow_Should_HoldAtMostItsLimitOfScreensAndLinks()
-    {
-        var screens = Enumerable.Range(0, 30).Select(i => new WorkbenchFlowScreen($"s{i}", "theme", "", null, false, i, 0)).ToArray();
-        var links = Enumerable.Range(0, 60).Select(i => new WorkbenchFlowLink($"l{i}", "s0", "s1", null, null)).ToArray();
-
-        Edit(() => WorkbenchReviewDocument.SaveFlow(Flows, "f", "Big", screens, links));
-
-        var flow = WorkbenchReviewDocument.ReadFlows(Flows).Single();
-
-        Assert.HasCount(WorkbenchReviewDocument.MaxScreens, flow.Screens);
-        Assert.HasCount(WorkbenchReviewDocument.MaxLinks, flow.Links);
-        Assert.IsFalse(WorkbenchReviewDocument.AddScreen(Flows, "f", new("extra", "theme", "", null, false, 0, 0), null));
-        Assert.IsFalse(WorkbenchReviewDocument.AddLink(Flows, "f", new("extra", "s0", "s1", null, null)));
-    }
-
-    [TestMethod]
-    public void RemovingAScreen_Should_RemoveEveryArrowThatTouchesIt()
-    {
-        WorkbenchFlowScreen[] screens = [new("a", "theme", "", null, false, 0, 0), new("b", "theme", "", null, false, 1, 0), new("c", "theme", "", null, false, 2, 0)];
-        WorkbenchFlowLink[] links = [new("ab", "a", "b", null, null), new("bc", "b", "c", null, null), new("ac", "a", "c", null, null)];
-
-        Edit(() => WorkbenchReviewDocument.SaveFlow(Flows, "f", "Flow", screens, links));
-
-        Assert.IsTrue(WorkbenchReviewDocument.RemoveScreen(Flows, "f", "b"));
-
-        var flow = WorkbenchReviewDocument.ReadFlows(Flows).Single();
-
-        Assert.AreSequenceEqual(new[] { "a", "c" }, flow.Screens.Select(s => s.Id).ToArray());
-        Assert.AreSequenceEqual(new[] { "ac" }, flow.Links.Select(l => l.Id).ToArray());
-        Assert.IsFalse(WorkbenchReviewDocument.RemoveScreen(Flows, "f", "b"));
-        Assert.IsFalse(WorkbenchReviewDocument.RemoveScreen(Flows, "missing", "a"));
-    }
-
-    [TestMethod]
-    public void TheBoardsEdits_Should_ChangeOnlyWhatTheyName()
-    {
-        WorkbenchFlowScreen[] screens = [new("a", "theme", "", null, false, 0, 0), new("b", "theme", "", null, false, 900, 0)];
-
-        Edit(() => WorkbenchReviewDocument.SaveFlow(Flows, "f", "Flow", screens, [new("ab", "a", "b", "Tap", new(0.1, 0.1, 0.2, 0.2))]));
-
-        Edit(() =>
-        {
-            Assert.IsTrue(WorkbenchReviewDocument.MoveScreen(Flows, "f", "b", 1234.6, -20.2));
-            Assert.IsTrue(WorkbenchReviewDocument.SetLinkLabel(Flows, "f", "ab", "   "));
-            Assert.IsTrue(WorkbenchReviewDocument.SetLinkSpot(Flows, "f", "ab", null));
-            Assert.IsTrue(WorkbenchReviewDocument.RenameFlow(Flows, "f", $"  {new string('n', 100)}  "));
-        });
-
-        var flow = WorkbenchReviewDocument.ReadFlows(Flows).Single();
-
-        Assert.AreEqual((1235d, -20d), (flow.Screens[1].X, flow.Screens[1].Y));
-        Assert.AreEqual((0d, 0d), (flow.Screens[0].X, flow.Screens[0].Y));
-        Assert.IsNull(flow.Links[0].Label, "A blank label is no label.");
-        Assert.IsNull(flow.Links[0].Spot);
-        Assert.AreEqual(80, flow.Name.Length);
-
-        Edit(() => Assert.IsTrue(WorkbenchReviewDocument.RemoveLink(Flows, "f", "ab")));
-
-        Assert.IsEmpty(WorkbenchReviewDocument.ReadFlows(Flows).Single().Links);
-        Assert.IsFalse(WorkbenchReviewDocument.MoveScreen(Flows, "f", "missing", 0, 0));
-        Assert.IsFalse(WorkbenchReviewDocument.RenameFlow(Flows, "missing", "x"));
     }
 
     [TestMethod]

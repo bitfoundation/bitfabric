@@ -150,7 +150,7 @@ public partial class PreviewPane
     {
         var scenario = Pane.Scenario;
 
-        if (scenario.Theme is not WorkbenchThemeMode.Light)
+        if (scenario.Theme is not WorkbenchThemeMode.System)
             yield return Localizer[$"Theme{scenario.Theme}"];
 
         if (scenario.Culture is not null)

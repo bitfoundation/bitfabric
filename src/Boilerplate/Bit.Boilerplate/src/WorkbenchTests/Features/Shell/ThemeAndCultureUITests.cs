@@ -392,9 +392,8 @@ public class ThemeAndCultureUITests : WorkbenchPageTest
     {
         await OpenWorkbench("theme");
 
-        await OpenTools();
-        await Press(Button(WorkbenchStrings.ToggleWorkbenchTheme));
-        await CloseTools();
+        // The header's, on a phone too, which every section shares.
+        await Press(Page.Locator("header.shell-header").GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ToggleWorkbenchTheme, Exact = true }));
 
         await Expect(Page.Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
         await Expect(View().Locator("html")).Not.ToHaveAttributeAsync("bit-theme", new Regex("dark"));

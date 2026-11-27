@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Bit.Fabric.Workbench.Components;
 
 /// <summary>
-/// The host page of every request: the shell, the flows board and the /preview pages its iframes load.
+/// The host page of every request: the shell, the boards and the /preview pages its iframes load.
 /// </summary>
 public partial class App
 {

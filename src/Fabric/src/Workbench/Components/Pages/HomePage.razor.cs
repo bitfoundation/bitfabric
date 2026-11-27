@@ -1,8 +1,8 @@
 namespace Bit.Fabric.Workbench.Components.Pages;
 
 /// <summary>
-/// The Workbench's landing page: who it is for, in one big card (mostly the AI agent, then you) and small cards for the rest, the
-/// agents' long tasks, the boards they build, how to use it, the catalog of pages with their review status, and the flows.
+/// The Workbench's landing page: who it is for, in one big card (mostly the AI agent, then what it gives you) and small cards
+/// for the rest, the boards agents build, their long tasks, how to use it, and the catalog of pages with their review status.
 /// </summary>
 public partial class HomePage
 {
@@ -16,11 +16,12 @@ public partial class HomePage
         (BitIconName.ChatBot, nameof(WorkbenchStrings.HomeChipLive))
     ];
 
-    // The big card's two parts for you, after the agent's: feedback on the page, and a task's progress.
+    // The big card's parts for you, under the agent's: feedback on the page, a task's progress, and the boards it explains with.
     private static readonly (string IconName, string TitleKey, string TextKey)[] yourParts =
     [
         (BitIconName.Comment, nameof(WorkbenchStrings.HomeBigFeedbackTitle), nameof(WorkbenchStrings.HomeBigFeedbackText)),
-        (BitIconName.TaskList, nameof(WorkbenchStrings.HomeBigProgressTitle), nameof(WorkbenchStrings.HomeBigProgressText))
+        (BitIconName.TimelineProgress, nameof(WorkbenchStrings.HomeBigProgressTitle), nameof(WorkbenchStrings.HomeBigProgressText)),
+        (BitIconName.ViewDashboard, nameof(WorkbenchStrings.HomeBigBoardsTitle), nameof(WorkbenchStrings.HomeBigBoardsText))
     ];
 
     // Everything else the Workbench does, one short line each under the big card.
@@ -40,10 +41,10 @@ public partial class HomePage
     // What an agent can show as a board instead of telling it in the chat.
     private static readonly (string IconName, string TextKey)[] boardPoints =
     [
-        (BitIconName.Flow, nameof(WorkbenchStrings.HomeBoardsPointDiagram)),
+        (BitIconName.Flow, nameof(WorkbenchStrings.HomeBoardsPointPages)),
+        (BitIconName.Org, nameof(WorkbenchStrings.HomeBoardsPointDiagram)),
         (BitIconName.Split, nameof(WorkbenchStrings.HomeBoardsPointCompare)),
-        (BitIconName.Calculator, nameof(WorkbenchStrings.HomeBoardsPointTry)),
-        (BitIconName.Devices3, nameof(WorkbenchStrings.HomeBoardsPointAnywhere))
+        (BitIconName.Calculator, nameof(WorkbenchStrings.HomeBoardsPointTry))
     ];
 
     private static readonly (string TitleKey, string TextKey)[] steps =
@@ -89,7 +90,7 @@ public partial class HomePage
         {
             await JSRuntime.InvokeVoidAsync("workbench.loadThumbnails");
 
-            // The review document joins once interactive, for the statuses, comment counts and flows on the cards.
+            // The review document joins once interactive, for the statuses and comment counts on the cards and the tasks.
             try
             {
                 await reviewSession.Open(Localizer[nameof(WorkbenchStrings.Reviewer)]);

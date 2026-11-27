@@ -3,7 +3,7 @@ using System.Text.Json.Nodes;
 
 namespace Boilerplate.Workbench.Infrastructure.Services;
 
-/// <summary>Keeps the page state saved with a comment or a flow screen, as a JSON file next to the review document.</summary>
+/// <summary>Keeps the page state saved with a comment, as a JSON file next to the review document.</summary>
 public sealed partial class WorkbenchReviewAttachments
 {
     private static string Folder => Path.Combine(WorkbenchFolders.Reviews, "States");
@@ -32,8 +32,9 @@ public sealed partial class WorkbenchReviewAttachments
 
     public async Task<string?> ReadState(string threadId)
     {
-        if (WorkbenchSampleFlows.StateOf(threadId) is { } sampleState)
-            return sampleState;
+        // A screen of a board's flow shows a state its board gives, kept in memory (BoardFlowStates).
+        if (BoardFlowStates.Find(threadId) is { } boardState)
+            return boardState;
 
         var path = Path.Combine(Folder, $"{threadId}.json");
 

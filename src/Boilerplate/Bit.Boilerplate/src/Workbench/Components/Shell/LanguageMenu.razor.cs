@@ -7,7 +7,9 @@ public partial class LanguageMenu
 {
     private BitMenuButtonItem[] items = [];
 
-    private static readonly BitMenuButtonClassStyles styles = new() { Callout = "--bit-MenuButton-callout-min-width: 10rem" };
+    // Each language is named in its own script, in the system's font, as the menu is there on every page even closed and the
+    // Workbench's own Vazirmatn would download for the Persian and Arabic names alone.
+    private static readonly BitMenuButtonClassStyles styles = new() { Callout = "--bit-MenuButton-callout-min-width: 10rem; --bit-tpg-font-family: system-ui, sans-serif; font-family: system-ui, sans-serif" };
 
     [AutoInject] private CultureService cultureService = default!;
 

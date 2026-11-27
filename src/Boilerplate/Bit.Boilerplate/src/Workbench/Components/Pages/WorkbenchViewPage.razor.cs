@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Components.Web;
 namespace Boilerplate.Workbench.Components.Pages;
 
 /// <summary>
-/// /workbench/{key}: the shell around one page. On wider screens it shows the page's views as iframes of /preview side
-/// by side with the inspector, review, checks and flows; on a phone the selected view fills the screen, with the tools in a panel.
+/// /pages/{key}: the shell around one page. On wider screens it shows the page's views as iframes of /preview side
+/// by side with the inspector, review and checks; on a phone the selected view fills the screen, with the tools in a panel.
 /// The views and their settings live in <see cref="WorkbenchStore"/> and are mirrored into the address.
 /// </summary>
 public partial class WorkbenchViewPage
@@ -27,8 +27,6 @@ public partial class WorkbenchViewPage
     private string? selectedThreadId;
     // What's typed for a comment or a reply, kept here as the tools close and other tabs open around the review.
     private readonly WorkbenchReviewDrafts drafts = new();
-    // The flow picked and what's typed in the Flows form, which going to set up the view for the next screen doesn't lose.
-    private readonly WorkbenchFlowDraft flowDraft = new();
     // The pins last sent to the frames as JSON, so an unchanged set isn't sent again on every render.
     private string? shownPins;
     // A view to load with a snapshot once the current render is on screen, for showing a comment as it was left.
@@ -60,12 +58,13 @@ public partial class WorkbenchViewPage
     [
         (WorkbenchModes.ViewColumn, nameof(WorkbenchStrings.ViewTab)),
         (WorkbenchModes.ReviewColumn, nameof(WorkbenchStrings.ReviewTab)),
-        (WorkbenchModes.ChecksColumn, nameof(WorkbenchStrings.ChecksTab)),
-        (WorkbenchModes.FlowsColumn, nameof(WorkbenchStrings.Flows))
+        (WorkbenchModes.ChecksColumn, nameof(WorkbenchStrings.ChecksTab))
     ];
 
     private readonly ElementReference[] columnTabs = new ElementReference[columns.Length];
     private DotNetObjectReference<WorkbenchViewPage>? reference;
+    // The theme the Workbench shows, which a view set to System shows too.
+    private WorkbenchThemeMode shellTheme = WorkbenchThemeMode.Light;
 
     [AutoInject] private WorkbenchStore store = default!;
     [AutoInject] private BlexManager blexManager = default!;
@@ -122,7 +121,8 @@ public partial class WorkbenchViewPage
     {
         var previous = pageInfo;
 
-        pageInfo = WorkbenchPageCatalog.Find(PageKey);
+        // /pages opens the first page, the theme and its components.
+        pageInfo = WorkbenchPageCatalog.Find(PageKey ?? WorkbenchPageCatalog.Pages.FirstOrDefault()?.Key);
 
         if (pageInfo != previous || compareItems.Count == 0)
         {
@@ -183,6 +183,10 @@ public partial class WorkbenchViewPage
         if (IsDisposed)
             return;
 
+        await RunStartStep(async () => ShellThemeChanged((await bitThemeManager.GetCurrentThemeAsync())?.Contains("dark", StringComparison.OrdinalIgnoreCase) is true));
+        if (IsDisposed)
+            return;
+
         await RunStartStep(() => reviewSession.Open(ReviewerName));
         if (IsDisposed)
             return;
@@ -194,7 +198,7 @@ public partial class WorkbenchViewPage
         {
             await RunStartStep(StartTour);
         }
-        // The browser's Back on the tour's Flows step: back a step, as the tour would otherwise wait out of sight for that page.
+        // The browser's Back on the tour's Boards step: back a step, as the tour would otherwise wait out of sight for that page.
         else if (bonboardingService.FindSession(TourId) is { WaitReason: BonboardingWaitReason.Route } tour)
         {
             await RunStartStep(() => tour.PreviousAsync());
@@ -388,7 +392,7 @@ public partial class WorkbenchViewPage
 
         var state = await JSRuntime.InvokeAsync<string?>("workbench.captureFrame", pane.Id);
 
-        selectedThreadId = await reviewSession.AddThread(pageInfo.Key, pane.Scenario.ToQueryString(), picked.Anchor, ReviewerName, request, state);
+        selectedThreadId = await reviewSession.AddThread(pageInfo.Key, AsShown(pane.Scenario).ToQueryString(), picked.Anchor, ReviewerName, request, state);
         pickedText = null;
 
         store.SetMode(WorkbenchModes.Comment);
@@ -414,7 +418,7 @@ public partial class WorkbenchViewPage
         if (IsDisposed || pageInfo?.Key != pageKey || store.Panes.FirstOrDefault(p => p.Id == paneId) is not { } pane)
             return false;
 
-        var threadId = await reviewSession.AddThread(pageKey, pane.Scenario.ToQueryString(), anchor, ReviewerName, text, state);
+        var threadId = await reviewSession.AddThread(pageKey, AsShown(pane.Scenario).ToQueryString(), anchor, ReviewerName, text, state);
 
         if (threadId is null)
             return false;
@@ -457,7 +461,7 @@ public partial class WorkbenchViewPage
             return;
 
         // Read before anything is awaited, as the comment belongs to the page and the view it was written on.
-        var query = pane.Scenario.ToQueryString();
+        var query = AsShown(pane.Scenario).ToQueryString();
 
         if (pendingComment is null)
         {
@@ -582,6 +586,20 @@ public partial class WorkbenchViewPage
         store.ReportScenario(paneId, scenario);
     }
 
+    /// <summary>The Workbench's own theme changed, as by its switch or the device's.</summary>
+    [JSInvokable]
+    public void ShellThemeChanged(bool isDark)
+    {
+        shellTheme = isDark ? WorkbenchThemeMode.Dark : WorkbenchThemeMode.Light;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// The view's scenario with System turned into the theme the view shows, the Workbench's own, for what is made of
+    /// the view outside the Workbench: a comment, a screenshot, a check.
+    /// </summary>
+    private WorkbenchScenario AsShown(WorkbenchScenario scenario) => scenario.Theme is WorkbenchThemeMode.System ? scenario with { Theme = shellTheme } : scenario;
+
     /// <summary>A press or a key went into a view's page.</summary>
     [JSInvokable]
     public void SelectPane(string paneId)
@@ -603,7 +621,7 @@ public partial class WorkbenchViewPage
         if (WorkbenchPageCatalog.Find(pageKey) is not { } page || page.Key == pageInfo?.Key)
             return;
 
-        NavigationManager.NavigateTo($"{WorkbenchUrls.Workbench(page.Key)}{store.OtherPageQueryString}");
+        NavigationManager.NavigateTo($"{WorkbenchUrls.Page(page.Key)}{store.OtherPageQueryString}");
     }
 
     /// <summary>
@@ -618,7 +636,7 @@ public partial class WorkbenchViewPage
         }
 
         // AbsoluteUri keeps the escaping the browser reports the address with, so equal addresses compare equal.
-        var url = NavigationManager.ToAbsoluteUri($"{WorkbenchUrls.Workbench(pageInfo.Key)}{store.QueryString}").AbsoluteUri;
+        var url = NavigationManager.ToAbsoluteUri($"{WorkbenchUrls.Page(pageInfo.Key)}{store.QueryString}").AbsoluteUri;
 
         lastAppliedUri = url;
 
@@ -706,7 +724,7 @@ public partial class WorkbenchViewPage
 
         var snapshotId = await CaptureState(pane);
 
-        await JSRuntime.InvokeVoidAsync("workbench.download", WorkbenchUrls.Screenshot(pageInfo.Key, pane.Scenario, snapshotId));
+        await JSRuntime.InvokeVoidAsync("workbench.download", WorkbenchUrls.Screenshot(pageInfo.Key, AsShown(pane.Scenario), snapshotId));
     }
 
     private async Task DownloadAll()
@@ -735,7 +753,7 @@ public partial class WorkbenchViewPage
 
         foreach (var pane in store.Panes)
         {
-            shots.Add((pageKey, pane.Scenario, await CaptureState(pane)));
+            shots.Add((pageKey, AsShown(pane.Scenario), await CaptureState(pane)));
         }
 
         return shots;
@@ -799,8 +817,8 @@ public partial class WorkbenchViewPage
         bonboardingService.SessionsChanged -= OnGuidesChanged;
         reference?.Dispose();
 
-        // A guide left running would keep pointing at a shell that is gone; the tour goes on when this is its way to the Flows or Progress page.
-        var isTourOnItsWay = IsTouring && (IsOnFlowsPage || IsOnProgressPage);
+        // A guide left running would keep pointing at a shell that is gone; the tour goes on when this is its way to the Boards or Progress page.
+        var isTourOnItsWay = IsTouring && (IsOnBoardsPage || IsOnProgressPage);
 
         try
         {

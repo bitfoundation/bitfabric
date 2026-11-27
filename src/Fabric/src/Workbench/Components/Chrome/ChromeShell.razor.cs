@@ -27,7 +27,7 @@ public partial class ChromeShell
     /// and nor do the home page's directions, each of which is a home page too, or the comparison pages and /cli, whose heroes
     /// hold their h1s the same way.
     /// </summary>
-    private bool ShowsTitle => Page.Key is not (Pages.Site.SitePageHost.HomeKey or Pages.Site.SitePageHost.FeaturesKey or Pages.Site.SitePageHost.CliKey or Pages.HomeDirections.HomeDirectionsPage.Key or Pages.Compare.ComparePage.Key);
+    private bool ShowsTitle => Page.Key is not (Pages.Site.SitePageHost.HomeKey or Pages.Site.SitePageHost.FeaturesKey or Pages.Site.SitePageHost.CliKey or Pages.HomeDirections.HomeDirectionsPage.Key);
 
     [Parameter] public RenderFragment? ChildContent { get; set; }
 

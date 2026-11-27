@@ -90,10 +90,10 @@ public class WorkbenchUrlsTests
     }
 
     [TestMethod]
-    public void TheShellAndFlowAddresses_Should_BeTheOnesTheSkillNames()
+    public void TheShellAndBoardAddresses_Should_BeTheOnesTheSkillsName()
     {
-        Assert.AreEqual("/workbench/pos-dashboard", WorkbenchUrls.Workbench("pos-dashboard"));
-        Assert.AreEqual("/flows/abc", WorkbenchUrls.Flow("abc"));
+        Assert.AreEqual("/pages/pos-dashboard", WorkbenchUrls.Page("pos-dashboard"));
+        Assert.AreEqual("/boards/abc", WorkbenchUrls.Board("abc"));
     }
 
     [TestMethod]

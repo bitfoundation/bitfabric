@@ -90,7 +90,8 @@ public partial class ScenarioInspector
         return Localizer[$"Accent{accent.Name}"] is { ResourceNotFound: false } text ? text.Value : accent.Name ?? accent.Color;
     }
 
-    private static string SegmentsOf(int count) => count switch { 2 => "two", 4 => "four", _ => "three" };
+    /// <summary>Two to four choices share a row evenly; more wrap at their own widths, so a long name stays on one line.</summary>
+    private static string SegmentsOf(int count) => count switch { 2 => "two", 3 => "three", 4 => "four", _ => "many" };
 
     /// <summary>Picks a device in portrait; Custom starts from the current viewport size.</summary>
     private Task SelectDevice(string? device)

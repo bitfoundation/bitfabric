@@ -6,7 +6,7 @@ namespace Boilerplate.Workbench.Components.Shell;
 /// The shell's own state: the open views (panes) and their scenarios, the selected view, the zoom, the mode, the tab
 /// and the reviewer's settings. Saved in the browser so a reload comes back to the same views; the address mirrors it.
 /// </summary>
-[BlexStore(Name = "workbench", Persist = true)]
+[BlexStore(Name = "workbench", Persist = true, Version = 1)]
 public partial class WorkbenchStore
 {
     // The query keys that carry a scenario; an address without any of them leaves the saved views as they are.
@@ -23,7 +23,10 @@ public partial class WorkbenchStore
     [BlexState] private bool _replyNotifications;
     [BlexState] private bool _wasAskedToNotify;
     [BlexState] private bool _isReplySoundMuted;
+    // The side panel every section has, folded away on a desktop; it is open over the page on a smaller screen only while
+    // the user looks at it, so a reload starts with it closed there.
     [BlexState] private bool _isNavigatorCollapsed;
+    [BlexState(Persist = false)] private bool _isSidePanelOpen;
     [BlexState] private bool _isInspectorCollapsed;
     [BlexState] private bool _isComponentNoteDismissed;
     // The language dictation listens for; null follows the Workbench's own.
@@ -113,6 +116,10 @@ public partial class WorkbenchStore
     }
 
     [BlexAction] private void OnToggleNavigator() => IsNavigatorCollapsed = IsNavigatorCollapsed is false;
+
+    [BlexAction] private void OnToggleSidePanel() => IsSidePanelOpen = IsSidePanelOpen is false;
+
+    [BlexAction] private void OnCloseSidePanel() => IsSidePanelOpen = false;
 
     [BlexAction] private void OnToggleInspector() => IsInspectorCollapsed = IsInspectorCollapsed is false;
 

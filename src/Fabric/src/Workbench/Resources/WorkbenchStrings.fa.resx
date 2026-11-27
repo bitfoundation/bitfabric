@@ -157,10 +157,19 @@
         <value>تیره</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>سیستم</value>
+        <value>خودکار</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>داده</value>
+    </data>
+    <data name="DataLoading" xml:space="preserve">
+        <value>در حال بارگذاری</value>
+    </data>
+    <data name="DataEmpty" xml:space="preserve">
+        <value>خالی</value>
+    </data>
+    <data name="ThemeLight" xml:space="preserve">
+        <value>روشن</value>
     </data>
     <data name="DataError" xml:space="preserve">
         <value>خطا</value>
@@ -248,6 +257,27 @@
     </data>
     <data name="SearchPages" xml:space="preserve">
         <value>جست‌وجوی صفحه‌ها</value>
+    </data>
+    <data name="SectionHomeHint" xml:space="preserve">
+        <value>Workbench چیست و چه می‌کند</value>
+    </data>
+    <data name="SectionPagesHint" xml:space="preserve">
+        <value>صفحه‌های اپ شما روی داده‌ی نمونه</value>
+    </data>
+    <data name="SectionBoardsHint" xml:space="preserve">
+        <value>آنچه عامل‌هایتان نشانتان می‌دهند</value>
+    </data>
+    <data name="SectionProgressHint" xml:space="preserve">
+        <value>کارهای طولانی و سؤال‌های عامل‌هایتان</value>
+    </data>
+    <data name="SearchBoards" xml:space="preserve">
+        <value>جست‌وجوی تابلوها</value>
+    </data>
+    <data name="SearchTasks" xml:space="preserve">
+        <value>جست‌وجوی کارها</value>
+    </data>
+    <data name="NoSearchMatches" xml:space="preserve">
+        <value>چیزی با جست‌وجوی شما جور نیست.</value>
     </data>
     <data name="PageNotFound" xml:space="preserve">
         <value>این صفحه در میز کار نیست.</value>
@@ -1452,18 +1482,6 @@
     <data name="ThemeFindingsHint" xml:space="preserve">
         <value>رنگ‌هایی که خود صفحه تعیین می‌کند و نه از پوسته می‌آیند و نه از آمیختن یکی از رنگ‌های پوسته با سفید، سیاه یا پس‌زمینه. کامپوننت‌های bit، نمودارها و رنگ‌هایی که با --data-color داده می‌شوند بررسی نمی‌شوند.</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>مسیرها</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>مسیر صفحه‌های یک کار را کنار هم می‌چیند، هر کدام در حالتی که مهم است، مثلاً یک فهرست و پنجره‌ای که دکمه‌اش باز می‌کند، با فلش‌هایی که نشان می‌دهند چطور از یکی به بعدی می‌رسید. یکی را باز کنید تا اپ را بفهمید یا در جلسه درباره‌اش حرف بزنید.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>نام مسیر جدید</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>حذف مسیر</value>
-    </data>
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} نظر باز</value>
     </data>
@@ -1809,12 +1827,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>هنوز نظری نیست.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>هنوز مسیری نیست.</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>نمونه</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>بازبینی زنده با عامل هوش مصنوعی‌تان</value>
     </data>
@@ -1833,80 +1845,11 @@
     <data name="TapToComment" xml:space="preserve">
         <value>جایی را که می‌خواهید درباره‌اش نظر بدهید لمس کنید</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>از عاملتان بخواهید یکی بکشد، مثلاً «نشان بده ساختمان چطور اضافه می‌شود»، یا از زبانهٔ «مسیرها» در هر صفحه نماها را به یک مسیر اضافه کنید.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>مسیری با این پیوند نیست. شاید حذف شده باشد.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>این مسیر هنوز صفحه‌ای ندارد. از زبانهٔ «مسیرها» در هر صفحه نما به آن اضافه کنید، یا از عاملتان بخواهید.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>صفحه‌ها: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>همهٔ مسیرها</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>صفحه‌های یک کار کنار هم، با فلش به هم وصل</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>افزودن این نما به یک مسیر</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>مسیر نما را همان‌طور که الان هست می‌گیرد: دستگاهش، تنظیماتش و هر چه روی صفحه باز است.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>مسیر</value>
     </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>مسیر جدید</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>این صفحه چه نشان می‌دهد (اختیاری)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>از صفحهٔ قبلی چطور به این‌جا می‌رسید (اختیاری)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>کاری که کاربر می‌کند</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>زدن «افزودن ساختمان»</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>دکمه‌ای را در صفحهٔ {0} که به اینجا می‌رسد علامت بزنید تا فلش از همان شروع شود.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>از دکمهٔ علامت‌خورده در صفحهٔ {0} شروع می‌شود.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>علامت زدن دکمه</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>علامت زدن دوباره</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>برداشتن علامت</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>روی دکمه‌ای در صفحهٔ {0} بزنید که به صفحهٔ {1} می‌رسد.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>افزودن این نما</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>باز کردن مسیر</value>
-    </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>باز کردن در میز کار</value>
-    </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>نمایش همهٔ صفحه‌ها</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>ارائه</value>
     </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>صفحهٔ قبلی</value>
@@ -1914,23 +1857,14 @@
     <data name="NextScreen" xml:space="preserve">
         <value>صفحهٔ بعدی</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>پایان ارائه</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>تمام‌صفحه</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>خروج از تمام‌صفحه</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} از {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>برای جابه‌جا کردن یک صفحه آن را بکشید و برای امتحانش روی آن دوبار کلیک کنید. برای کشیدن فلش، از نقطهٔ لبهٔ راست یک صفحه تا صفحهٔ دیگر بکشید، بعد نامش را بنویسید و دکمه‌ای را که از آن شروع می‌شود علامت بزنید. برای تغییر یا حذف فلش روی آن دوبار کلیک کنید.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>این مسیر حذف شود؟</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>حذف این صفحه</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>حذف فلش</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>وقتی عامل جواب داد خبرم کن</value>
@@ -2160,9 +2094,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>ترجمه‌ها ذخیره نشدند.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>صفحه به مسیر اضافه نشد.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>لپ‌تاپ {0}</value>
     </data>
@@ -2183,9 +2114,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>بازنشانی این نما</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>این صفحه هنوز بارگذاری نشده است. کمی صبر کنید و دوباره دکمه را علامت بزنید.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>جای‌نگهدارهای داخل آکولاد را همان‌طور که در متن اصلی آمده‌اند نگه دارید، وگرنه صفحه نمی‌تواند این متن را نشان دهد.</value>
@@ -2309,12 +2237,6 @@
     </data>
     <data name="NewProjectCaption" xml:space="preserve">
         <value>محصولتان، به فاصلهٔ یک خط</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>نمونه: روی یک صفحه دوبار کلیک کنید تا امتحانش کنید، یا روی یک فلش تا تغییرش دهید و نسخهٔ خودتان از این مسیر ساخته شود.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>این یک نمونه است و همان‌طور که هست می‌ماند: هر تغییری این‌جا نسخهٔ خودتان را از این مسیر با همان تغییر می‌سازد و بازش می‌کند.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>فروشگاه‌ها این هفته چطور بودند؟</value>
@@ -3837,15 +3759,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>نام جدید از فردا روی رسیدها می‌آید.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (کپی)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>تغییر فلش</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>روی یک فلش دوبار کلیک کنید تا نامش را عوض کنید، دکمه‌ای را که از آن شروع می‌شود علامت بزنید یا حذفش کنید. نمونه‌ها همان‌طور که هستند می‌مانند: تغییر یکی از فلش‌هایشان نسخهٔ خودتان را از مسیر می‌سازد.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>مقیاس</value>
     </data>
@@ -4311,9 +4224,6 @@
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>حذف از رویدادها</value>
     </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>یک کار را انتخاب کنید تا ببینید به کجا رسیده.</value>
-    </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>این کار دیگر نیست. شاید عاملش تمامش کرده و برداشته.</value>
     </data>
@@ -4510,13 +4420,13 @@
         <value>جایی که عامل AI شما روی برنامه کار می‌کند و شما هدایتش می‌کنید.</value>
     </data>
     <data name="HomeAgentLead" xml:space="preserve">
-        <value>عامل AI شما هر صفحه را این‌جا روی داده نمونه، در هر سناریو و هر حالت می‌سازد و بعد از تغییرهای بعدی دوباره بررسی‌اش می‌کند. شما نشان می‌دهید چه چیزی باید عوض شود، حتی با صدایتان، کارهای طولانی‌اش را دنبال می‌کنید، تصمیم می‌گیرید و جواب می‌دهید. همه داخل پروژه خودتان، با همان کامپوننت‌ها و تم برنامه‌تان.</value>
+        <value>عامل AI شما هر صفحه را این‌جا روی داده نمونه، در هر سناریو و هر حالت می‌سازد و بعد از تغییرهای بعدی دوباره بررسی‌اش می‌کند. چیزها را با تابلوهای تعاملی برایتان توضیح می‌دهد، و شما نشان می‌دهید چه چیزی باید عوض شود، حتی با صدایتان، کارهای طولانی‌اش را دنبال می‌کنید، تصمیم می‌گیرید و جواب می‌دهید. همه داخل پروژه خودتان، با همان کامپوننت‌ها و تم برنامه‌تان.</value>
     </data>
     <data name="HomeForWhoTitle" xml:space="preserve">
         <value>میز کار برای کیست</value>
     </data>
     <data name="HomeForWhoSubtitle" xml:space="preserve">
-        <value>بیشتر برای عامل AI شما. شما می‌آیید تا نشان بدهید، تصمیم بگیرید و جواب بدهید.</value>
+        <value>بیشتر برای عامل AI شما. شما می‌آیید تا نشان بدهید، تصمیم بگیرید، جواب بدهید و ببینید چه توضیح می‌دهد.</value>
     </data>
     <data name="HomeBigAgentBadge" xml:space="preserve">
         <value>کاربر اصلی‌اش</value>
@@ -4605,9 +4515,6 @@
     <data name="ProgressVisitorText" xml:space="preserve">
         <value>کارهای عامل‌ها فقط روی کامپیوتری نشان داده می‌شود که این میز کار روی آن اجرا می‌شود.</value>
     </data>
-    <data name="ProgressNoTask" xml:space="preserve">
-        <value>هنوز کاری نیست</value>
-    </data>
     <data name="Boards" xml:space="preserve">
         <value>تابلوها</value>
     </data>
@@ -4644,9 +4551,6 @@
     <data name="HomeBoardsPointTry" xml:space="preserve">
         <value>عددهایی که می‌شود امتحانشان کرد، مثل یک ماشین‌حساب</value>
     </data>
-    <data name="HomeBoardsPointAnywhere" xml:space="preserve">
-        <value>روشن و تیره، روی هر صفحه‌نمایشی</value>
-    </data>
     <data name="HomeBoardsOpen" xml:space="preserve">
         <value>باز کردن تابلوها</value>
     </data>
@@ -4671,12 +4575,6 @@
     <data name="BoardKindReport" xml:space="preserve">
         <value>گزارش‌ها</value>
     </data>
-    <data name="FlowsGroupYours" xml:space="preserve">
-        <value>مسیرهای این پروژه</value>
-    </data>
-    <data name="FlowsGroupSamples" xml:space="preserve">
-        <value>نمونه‌ها</value>
-    </data>
     <data name="ProgressPlan" xml:space="preserve">
         <value>برنامه</value>
     </data>
@@ -4697,5 +4595,38 @@
     </data>
     <data name="ProgressPlanOutline" xml:space="preserve">
         <value>فهرست مطالب</value>
+    </data>
+    <data name="HomeBigBoardsTitle" xml:space="preserve">
+        <value>مستندهای تصویری و تعاملی</value>
+    </data>
+    <data name="HomeBigBoardsText" xml:space="preserve">
+        <value>بپرسید چیزی چطور کار می‌کند، چند راه را کنار هم بسنجد یا برنامه‌ای بچیند، تا عاملتان به‌جای یک متن طولانی با یک تابلو جواب بدهد: صفحه‌های اپتان که با فلش به هم وصل شده‌اند، نمودارها و عددهایی که می‌توانید امتحانشان کنید.</value>
+    </data>
+    <data name="HomeBoardsPointPages" xml:space="preserve">
+        <value>یک فرایند روی صفحه‌های خود اپ، با فلش بین آن‌ها</value>
+    </data>
+    <data name="ZoomIn" xml:space="preserve">
+        <value>بزرگ‌تر</value>
+    </data>
+    <data name="ZoomOut" xml:space="preserve">
+        <value>کوچک‌تر</value>
+    </data>
+    <data name="GetStartedBoardTitle" xml:space="preserve">
+        <value>از صفحهٔ اصلی تا یک پروژهٔ تازه</value>
+    </data>
+    <data name="GetStartedBoardSummary" xml:space="preserve">
+        <value>دو صفحه‌ای که بازدیدکننده برای ساختن پروژه از آن‌ها می‌گذرد، و دکمهٔ میانشان</value>
+    </data>
+    <data name="GetStartedBoardLead" xml:space="preserve">
+        <value>آنچه بازدیدکننده از صفحهٔ اصلی bitfabric.co تا اولین پروژه‌اش می‌بیند، روی خود صفحه‌ها.</value>
+    </data>
+    <data name="GetStartedBoardHome" xml:space="preserve">
+        <value>صفحهٔ اصلی bitfabric.co</value>
+    </data>
+    <data name="GetStartedBoardWizard" xml:space="preserve">
+        <value>مراحل ساخت پروژهٔ تازه</value>
+    </data>
+    <data name="GetStartedBoardButton" xml:space="preserve">
+        <value>شروع کنید</value>
     </data>
 </root>

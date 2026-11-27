@@ -74,7 +74,7 @@
             <DeviceFrame Device="device"
                          Rotated="Shown.Rotated"
                          ShowFrame="ShowFrame"
-                         OnDarkContent="Pane.Scenario.Theme is WorkbenchThemeMode.Dark"
+                         OnDarkContent="DeviceFrame.IsDarkContent(Pane.Scenario.Theme)"
                          Address="@AddressText"
                          Resizable="FullScreen is false">
                 <iframe src="@frameUrl" data-pane-id="@Pane.Id" title="@Localizer[Page.TitleKey]"></iframe>

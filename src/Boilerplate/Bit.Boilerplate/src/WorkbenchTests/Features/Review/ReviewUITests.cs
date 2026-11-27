@@ -342,7 +342,7 @@ public class ReviewUITests : ReviewPageTest
         await Composer.FillAsync(text);
         await Press(ToolsButton(WorkbenchStrings.Send));
 
-        await Expect(ThreadWith(text).Locator(".message-author")).ToContainTextAsync(name);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply) .message-author")).ToContainTextAsync(name);
 
         await WorkbenchTestReviewer.WaitFor(() => Server.Agent.GetThreads(CancellationToken.None), all => all.Any(t => t.Messages[0].Text == text && t.Messages[0].Author == name));
 
@@ -367,7 +367,7 @@ public class ReviewUITests : ReviewPageTest
         await Composer.FillAsync(text);
         await Press(ToolsButton(WorkbenchStrings.Send));
 
-        await Expect(ThreadWith(text).Locator(".message-author")).ToContainTextAsync(WorkbenchStrings.Reviewer);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply) .message-author")).ToContainTextAsync(WorkbenchStrings.Reviewer);
     }
 
     [TestMethod, WithAnAgent]
@@ -397,13 +397,13 @@ public class ReviewUITests : ReviewPageTest
         await ReplyBox.FillAsync(withTheKeys);
         await ReplyBox.PressAsync("Enter");
 
-        await Expect(ThreadWith(text).Locator(".message")).ToHaveCountAsync(2);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply)")).ToHaveCountAsync(2);
 
         await ReplyBox.PressAsync("Control+Enter");
 
         await Expect(ThreadWith(text)).ToContainTextAsync(withTheKeys);
-        await Expect(ThreadWith(text).Locator(".message")).ToHaveCountAsync(3);
-        await Expect(ThreadWith(text).Locator(".message").Nth(2).Locator(".message-author")).ToContainTextAsync(WorkbenchStrings.Reviewer);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply)")).ToHaveCountAsync(3);
+        await Expect(ThreadWith(text).Locator(".message:not(.auto-reply)").Nth(2).Locator(".message-author")).ToContainTextAsync(WorkbenchStrings.Reviewer);
         await Expect(ThreadWith(text).Locator(".message.from-agent")).ToHaveCountAsync(0);
 
         var thread = (await WorkbenchTestReviewer.WaitFor(() => Server.Agent.GetThreads(CancellationToken.None), all => all.Single(t => t.Id == id).Messages.Length == 3)).Single(t => t.Id == id);
@@ -880,9 +880,20 @@ public class ReviewUITests : ReviewPageTest
         await PickSpot(ShiftsHeading);
         await Composer.FillAsync(text);
 
+        // A phone keeps the page list under the header's first button, out from under the tools.
+        if (IsPhone)
+        {
+            if (await Page.Locator(".tools-header").IsVisibleAsync())
+            {
+                await CloseTools();
+            }
+
+            await Press(Page.Locator("header.shell-header .side-toggle"));
+        }
+
         await Press(Page.GetByRole(AriaRole.Navigation, new() { Name = WorkbenchStrings.Pages }).GetByRole(AriaRole.Link).Filter(new() { HasText = WorkbenchStrings.ThemePageTitle }));
 
-        await Expect(Page).ToHaveURLAsync(new Regex("/workbench/theme"));
+        await Expect(Page).ToHaveURLAsync(new Regex("/pages/theme"));
         await WaitForViews();
         await OpenReview();
 

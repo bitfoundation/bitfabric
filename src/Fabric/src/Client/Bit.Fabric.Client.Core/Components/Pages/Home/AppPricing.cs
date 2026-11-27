@@ -44,16 +44,16 @@ public static class AppPricing
     public const int TrialDays = 30;
     public const int RefundDays = 30;
 
-    // A license for life: the first 500, about two years of the plan, once (the Workbench's pricing page, option 4).
+    // A license for life: the first 500, about two years of the plan, once.
     public const int LifetimeSeats = 500;
     public const decimal LifetimeTeam = TeamMonthly * 24;
     public const decimal LifetimeCompany = CompanyMonthly * 24;
 
-    // An example month for a team of two building a real app, as the Workbench's pricing page shows it (PricingSavings): the
-    // builder's amounts are an example, its share included (an example of 20%, which no builder publishes), and its
-    // builds and tests are inside its price. The AI plan is Claude Max's $100 a month with Claude Code (claude.com/pricing,
-    // read 2026-11-20); the server is Contabo's Cloud VPS 4, 4 cores and 8 GB, €4.40 a month with VAT on a 24-month term
-    // (contabo.com/en/vps, read 2026-11-20), named plainly with no referral link.
+    // An example month for a team of two building a real app: the builder's amounts are an example, its share included (an
+    // example of 20%, which no builder publishes), and its builds and tests are inside its price. The AI plan is Claude Max's
+    // $100 a month with Claude Code (claude.com/pricing, read 2026-11-20); the server is Contabo's Cloud VPS 4, 4 cores and
+    // 8 GB, €4.40 a month with VAT on a 24-month term (contabo.com/en/vps, read 2026-11-20), named plainly with no referral
+    // link.
     public const decimal ExampleBuilderAi = 240;
     public const decimal ExampleBuilderHosting = 30;
     public const decimal ExampleOwnAi = 100;

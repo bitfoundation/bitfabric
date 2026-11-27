@@ -157,7 +157,7 @@
         <value>Donker</value>
     </data>
     <data name="ThemeSystem" xml:space="preserve">
-        <value>Systeem</value>
+        <value>Auto</value>
     </data>
     <data name="DataLive" xml:space="preserve">
         <value>Gegevens</value>
@@ -1662,18 +1662,6 @@
     <data name="OpenCommentsCount" xml:space="preserve">
         <value>{0} open opmerkingen</value>
     </data>
-    <data name="Flows" xml:space="preserve">
-        <value>Flows</value>
-    </data>
-    <data name="FlowsHint" xml:space="preserve">
-        <value>Een flow zet de schermen van een taak naast elkaar, elk in de toestand die ertoe doet, zoals een lijst en het dialoogvenster dat de knop ervan opent, met pijlen die laten zien hoe je van het ene naar het volgende komt. Open er een om de app te begrijpen of om hem in een overleg door te nemen.</value>
-    </data>
-    <data name="NewFlowName" xml:space="preserve">
-        <value>Naam van de nieuwe flow</value>
-    </data>
-    <data name="DeleteFlow" xml:space="preserve">
-        <value>Flow verwijderen</value>
-    </data>
     <data name="ReviewSheet" xml:space="preserve">
         <value>Beoordelingsverslag</value>
     </data>
@@ -1809,12 +1797,6 @@
     <data name="NoCommentsYet" xml:space="preserve">
         <value>Nog geen opmerkingen.</value>
     </data>
-    <data name="NoFlowsYet" xml:space="preserve">
-        <value>Nog geen flows.</value>
-    </data>
-    <data name="FlowSample" xml:space="preserve">
-        <value>Voorbeeld</value>
-    </data>
     <data name="HomeWhyLiveTitle" xml:space="preserve">
         <value>Live beoordelen met je AI-agent</value>
     </data>
@@ -1833,80 +1815,11 @@
     <data name="TapToComment" xml:space="preserve">
         <value>Tik op de plek waar je een opmerking over wilt maken</value>
     </data>
-    <data name="FlowsEmpty" xml:space="preserve">
-        <value>Vraag je agent er een te tekenen, zoals ‘laat zien hoe je een gebouw toevoegt’, of voeg weergaven aan een flow toe vanuit het tabblad Flows van een pagina.</value>
-    </data>
-    <data name="FlowNotFound" xml:space="preserve">
-        <value>Er staat geen flow op deze link. Misschien is hij verwijderd.</value>
-    </data>
-    <data name="FlowHasNoScreens" xml:space="preserve">
-        <value>Deze flow heeft nog geen schermen. Voeg weergaven toe vanuit het tabblad Flows van een pagina, of vraag het je agent.</value>
-    </data>
-    <data name="ScreenCount" xml:space="preserve">
-        <value>Schermen: {0}</value>
-    </data>
-    <data name="AllFlows" xml:space="preserve">
-        <value>Alle flows</value>
-    </data>
-    <data name="AllFlowsHint" xml:space="preserve">
-        <value>De schermen van een taak naast elkaar, verbonden met pijlen</value>
-    </data>
-    <data name="AddToFlow" xml:space="preserve">
-        <value>Deze weergave aan een flow toevoegen</value>
-    </data>
-    <data name="AddToFlowHint" xml:space="preserve">
-        <value>De flow krijgt de weergave zoals hij nu is: het apparaat, de instellingen en wat er op de pagina openstaat.</value>
-    </data>
     <data name="Flow" xml:space="preserve">
         <value>Flow</value>
     </data>
-    <data name="NewFlow" xml:space="preserve">
-        <value>Nieuwe flow</value>
-    </data>
-    <data name="ScreenNote" xml:space="preserve">
-        <value>Wat dit scherm laat zien (optioneel)</value>
-    </data>
-    <data name="ArrowFromLast" xml:space="preserve">
-        <value>Hoe je hier komt vanaf het vorige scherm (optioneel)</value>
-    </data>
-    <data name="ArrowLabel" xml:space="preserve">
-        <value>Wat de gebruiker doet</value>
-    </data>
-    <data name="ArrowLabelPlaceholder" xml:space="preserve">
-        <value>Tik op ‘Gebouw toevoegen’</value>
-    </data>
-    <data name="ArrowStartHint" xml:space="preserve">
-        <value>Markeer de knop op scherm {0} die hierheen leidt, dan begint de pijl daar.</value>
-    </data>
-    <data name="ArrowStartMarked" xml:space="preserve">
-        <value>Begint bij de gemarkeerde knop op scherm {0}.</value>
-    </data>
-    <data name="MarkArrowStart" xml:space="preserve">
-        <value>Knop markeren</value>
-    </data>
-    <data name="MarkArrowStartAgain" xml:space="preserve">
-        <value>Opnieuw markeren</value>
-    </data>
-    <data name="RemoveArrowStart" xml:space="preserve">
-        <value>Markering verwijderen</value>
-    </data>
-    <data name="PickArrowStart" xml:space="preserve">
-        <value>Tik op de knop op scherm {0} die naar scherm {1} leidt.</value>
-    </data>
-    <data name="AddThisView" xml:space="preserve">
-        <value>Deze weergave toevoegen</value>
-    </data>
-    <data name="OpenBoard" xml:space="preserve">
-        <value>De flow openen</value>
-    </data>
     <data name="OpenInWorkbench" xml:space="preserve">
         <value>Openen in de werkbank</value>
-    </data>
-    <data name="ShowAllScreens" xml:space="preserve">
-        <value>Alle schermen tonen</value>
-    </data>
-    <data name="Present" xml:space="preserve">
-        <value>Presenteren</value>
     </data>
     <data name="PreviousScreen" xml:space="preserve">
         <value>Vorig scherm</value>
@@ -1914,23 +1827,14 @@
     <data name="NextScreen" xml:space="preserve">
         <value>Volgend scherm</value>
     </data>
-    <data name="StopPresenting" xml:space="preserve">
-        <value>Stoppen met presenteren</value>
+    <data name="FullScreen" xml:space="preserve">
+        <value>Volledig scherm</value>
+    </data>
+    <data name="ExitFullScreen" xml:space="preserve">
+        <value>Volledig scherm sluiten</value>
     </data>
     <data name="ScreenOf" xml:space="preserve">
         <value>{0} van {1}</value>
-    </data>
-    <data name="BoardHelp" xml:space="preserve">
-        <value>Sleep een scherm om het te verplaatsen en dubbelklik erop om het uit te proberen. Sleep vanaf de stip aan de rechterrand van een scherm naar een ander scherm om een pijl te tekenen, geef hem daarna een naam en markeer de knop waar hij begint. Dubbelklik op een pijl om hem te wijzigen of te verwijderen.</value>
-    </data>
-    <data name="DeleteFlowConfirm" xml:space="preserve">
-        <value>Deze flow verwijderen?</value>
-    </data>
-    <data name="RemoveScreen" xml:space="preserve">
-        <value>Dit scherm verwijderen</value>
-    </data>
-    <data name="DeleteArrow" xml:space="preserve">
-        <value>Pijl verwijderen</value>
     </data>
     <data name="ReplyNotifications" xml:space="preserve">
         <value>Laat het me weten als de agent antwoordt</value>
@@ -2160,9 +2064,6 @@
     <data name="SaveTranslationsFailed" xml:space="preserve">
         <value>De vertalingen konden niet worden opgeslagen.</value>
     </data>
-    <data name="AddScreenFailed" xml:space="preserve">
-        <value>Het scherm kon niet aan de flow worden toegevoegd.</value>
-    </data>
     <data name="DeviceLaptop" xml:space="preserve">
         <value>Laptop {0}</value>
     </data>
@@ -2183,9 +2084,6 @@
     </data>
     <data name="ResetThisView" xml:space="preserve">
         <value>Deze weergave herstellen</value>
-    </data>
-    <data name="ScreenNotLoaded" xml:space="preserve">
-        <value>Dit scherm is nog niet geladen. Wacht even en markeer de knop dan opnieuw.</value>
     </data>
     <data name="TextKeepPlaceholders" xml:space="preserve">
         <value>Laat de plaatsaanduidingen tussen accolades staan zoals in de oorspronkelijke tekst, anders kan de pagina deze tekst niet tonen.</value>
@@ -2309,12 +2207,6 @@
     </data>
     <data name="NewProjectCaption" xml:space="preserve">
         <value>Je product is één regel verwijderd</value>
-    </data>
-    <data name="FlowSampleHint" xml:space="preserve">
-        <value>Een voorbeeld: dubbelklik op een scherm om het uit te proberen, of op een pijl om hem te wijzigen. Dat maakt je eigen kopie van deze flow.</value>
-    </data>
-    <data name="ArrowSampleNote" xml:space="preserve">
-        <value>Dit is een voorbeeld, dat blijft zoals het is: een wijziging hier maakt je eigen kopie van deze flow met die wijziging, en opent die.</value>
     </data>
     <data name="ThemeAiHowDidTheStoresDo" xml:space="preserve">
         <value>Hoe deden de winkels het deze week?</value>
@@ -3837,15 +3729,6 @@
     <data name="ThemeTheNewNameShowsOn" xml:space="preserve">
         <value>De nieuwe naam staat vanaf morgen op de bonnen.</value>
     </data>
-    <data name="FlowCopyName" xml:space="preserve">
-        <value>{0} (kopie)</value>
-    </data>
-    <data name="TourArrowsTitle" xml:space="preserve">
-        <value>Een pijl wijzigen</value>
-    </data>
-    <data name="TourArrowsText" xml:space="preserve">
-        <value>Dubbelklik op een pijl om hem te hernoemen, de knop te markeren waar hij begint of hem te verwijderen. Een voorbeeld blijft zoals het is: een wijziging aan een van de pijlen maakt je eigen kopie van de flow.</value>
-    </data>
     <data name="ThemeTokensScale" xml:space="preserve">
         <value>Schaal</value>
     </data>
@@ -4310,9 +4193,6 @@
     </data>
     <data name="ProgressRemoveEntry" xml:space="preserve">
         <value>Uit de activiteit verwijderen</value>
-    </data>
-    <data name="ProgressPickTask" xml:space="preserve">
-        <value>Kies een taak om te zien hoe het ervoor staat.</value>
     </data>
     <data name="ProgressTaskGone" xml:space="preserve">
         <value>Deze taak bestaat niet meer. De agent heeft hem misschien afgerond en verwijderd.</value>
