@@ -1,0 +1,57 @@
+@inherits WorkbenchComponentBase
+
+<section class="alerts" aria-labelledby="telemetry-alerts-title">
+    <header class="alerts-head">
+        <span class="alerts-icon" aria-hidden="true"><BitIcon IconName="@BitIconName.Ringer" /></span>
+        <div class="alerts-text">
+            <h2 class="alerts-title" id="telemetry-alerts-title">@Localizer[nameof(WorkbenchStrings.TelemetryAlertsTitle)]</h2>
+            <span class="alerts-lead">@Localizer[nameof(WorkbenchStrings.TelemetryAlertsLead)]</span>
+        </div>
+    </header>
+
+    @if (Alerts.Count == 0)
+    {
+        <div class="alerts-empty">
+            <strong>@Localizer[nameof(WorkbenchStrings.TelemetryAlertsEmptyTitle)]</strong>
+            <span>@Localizer[nameof(WorkbenchStrings.TelemetryAlertsEmptyLine)]</span>
+            <div class="prompt">
+                <q class="prompt-text">@Localizer[nameof(WorkbenchStrings.TelemetryExampleCostAlert)]</q>
+                <BitCopyButton Value="@Localizer[nameof(WorkbenchStrings.TelemetryExampleCostAlert)]" Variant="BitVariant.Text" Size="BitSize.Small" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <ul class="alert-list">
+            @foreach (var alert in Alerts)
+            {
+                var state = alert.State.ToString().ToLowerInvariant();
+                <li @key="alert.Key" class="alert state-@state" id="@alert.Key">
+                    <span class="alert-mark" aria-hidden="true"><BitIcon IconName="@StateIcon(alert.State)" Size="BitSize.Small" /></span>
+                    <div class="alert-text">
+                        <strong class="alert-title">@Localizer[alert.TitleKey]</strong>
+                        <span class="alert-status">
+                            <span class="state-pill">@Localizer[StateText(alert.State)]</span>
+                            @if (alert.State is not DashboardAlertState.Paused)
+                            {
+                                <span>@Localizer[alert.StatusKey, alert.StatusArguments]</span>
+                            }
+                            <span class="alert-channels">@Localizer[alert.ChannelsKey]</span>
+                        </span>
+                        <span class="asked"><BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" Class="asked-icon" />@Localizer[nameof(WorkbenchStrings.TelemetryAskedAs), Localizer[alert.AskedKey]]</span>
+                    </div>
+                    <div class="alert-actions">
+                        <BitToggle Value="@(alert.State is not DashboardAlertState.Paused)" OnChange="(bool _) => OnTogglePaused.InvokeAsync(alert.Key)"
+                                   AriaLabel="@Localizer[nameof(WorkbenchStrings.TelemetryAlertWatching)]" Title="@Localizer[nameof(WorkbenchStrings.TelemetryAlertWatching)]" />
+                        <BitPopConfirm Title="@Localizer[nameof(WorkbenchStrings.TelemetryDeleteAlertTitle)]" Message="@Localizer[nameof(WorkbenchStrings.TelemetryDeleteAlertMessage)]"
+                                       ConfirmText="@Localizer[nameof(WorkbenchStrings.TelemetryDelete)]" CancelText="@Localizer[nameof(WorkbenchStrings.TelemetryCancel)]"
+                                       ConfirmColor="BitColor.Error" OnConfirm="() => OnDelete.InvokeAsync(alert.Key)">
+                            <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" Color="BitColor.Error" IconName="@BitIconName.Delete"
+                                       Title="@Localizer[nameof(WorkbenchStrings.TelemetryDelete)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TelemetryDelete)]" />
+                        </BitPopConfirm>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</section>

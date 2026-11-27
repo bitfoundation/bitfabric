@@ -11,7 +11,7 @@ namespace Boilerplate.Tests.Features.Identity;
 
 /// <summary>
 /// The way a monitor such as bit Fabric reads this app's health, end to end: it discovers <c>/healthz</c>'s protected
-/// resource metadata, gets the <c>healthz</c> scope through the authorization code flow with PKCE, reads
+/// resource metadata, gets the <c>monitoring</c> scope through the authorization code flow with PKCE, reads
 /// <c>/healthz/v1</c> with the token and renews it with the refresh token. A change that breaks any step stops every
 /// monitor connected to the app at once, while the app itself keeps working, so nothing else would show it.
 /// </summary>
@@ -45,14 +45,14 @@ public class HealthzOAuthTests
             var challenge = string.Join(' ', anonymous.Headers.WwwAuthenticate.Select(header => $"{header.Scheme} {header.Parameter}"));
 
             Assert.Contains($"resource_metadata=\"{issuer}/.well-known/oauth-protected-resource/healthz\"", challenge);
-            Assert.Contains($"scope=\"{OAuthScopes.Healthz}\"", challenge);
+            Assert.Contains($"scope=\"{OAuthScopes.Monitoring}\"", challenge);
         }
 
         using (var metadata = JsonDocument.Parse(await httpClient.GetStringAsync(".well-known/oauth-protected-resource/healthz", TestContext.CancellationToken)))
         {
             Assert.AreEqual($"{issuer}/healthz", metadata.RootElement.GetProperty("resource").GetString());
             Assert.AreSequenceEqual([issuer], metadata.RootElement.GetProperty("authorization_servers").EnumerateArray().Select(item => item.GetString()).ToArray());
-            Assert.AreSequenceEqual([OAuthScopes.Healthz], metadata.RootElement.GetProperty("scopes_supported").EnumerateArray().Select(item => item.GetString()).ToArray());
+            Assert.AreSequenceEqual([OAuthScopes.Monitoring], metadata.RootElement.GetProperty("scopes_supported").EnumerateArray().Select(item => item.GetString()).ToArray());
             Assert.AreEqual(BitJsonVersion(), metadata.RootElement.GetProperty("bit_template_version").GetString(),
                 "The version the build read from bit.json, so a monitor can tell an app made from bit-bp and its age.");
         }
@@ -72,7 +72,7 @@ public class HealthzOAuthTests
             ClientId = TestClientId,
             RedirectUri = TestRedirectUri,
             ResponseType = "code",
-            Scope = OAuthScopes.Healthz,
+            Scope = OAuthScopes.Monitoring,
             State = "test-state",
             CodeChallenge = WebEncoders.Base64UrlEncode(SHA256.HashData(Encoding.ASCII.GetBytes(verifier))),
             CodeChallengeMethod = "S256",
@@ -103,7 +103,7 @@ public class HealthzOAuthTests
             var oauthController = client.GetController<IOAuthController>();
 
             var consent = await oauthController.Review(request, TestContext.CancellationToken);
-            Assert.AreSequenceEqual([OAuthScopes.Healthz], consent.Scopes);
+            Assert.AreSequenceEqual([OAuthScopes.Monitoring], consent.Scopes);
 
             var approval = await oauthController.Approve(request, TestContext.CancellationToken);
             var redirectQuery = QueryHelpers.ParseQuery(new Uri(approval.RedirectUrl).Query);
@@ -125,7 +125,7 @@ public class HealthzOAuthTests
             using var granted = JsonDocument.Parse(body);
             var accessToken = granted.RootElement.GetProperty("access_token").GetString()!;
             var refreshToken = granted.RootElement.GetProperty("refresh_token").GetString()!;
-            Assert.AreEqual(OAuthScopes.Healthz, granted.RootElement.GetProperty("scope").GetString());
+            Assert.AreEqual(OAuthScopes.Monitoring, granted.RootElement.GetProperty("scope").GetString());
 
             await AssertReadsTheHealthReport(server, client, accessToken);
 
@@ -198,7 +198,7 @@ public class HealthzOAuthTests
     }
 
     /// <summary>
-    /// Granting <c>healthz</c> takes <c>Operations_View</c> and a session that signed in with two factor. The seeded
+    /// Granting <c>monitoring</c> takes <c>Operations_View</c> and a session that signed in with two factor. The seeded
     /// account has no two factor and other tests sign in with its password alone, so this makes an account of its own,
     /// global admin, with two factor on, and signs in with its password and a recovery code.
     /// </summary>

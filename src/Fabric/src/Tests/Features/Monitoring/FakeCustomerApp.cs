@@ -301,7 +301,7 @@ public sealed class FakeCustomerApp
             {
                 ["resource"] = $"{Server}/healthz",
                 ["authorization_servers"] = new[] { Server },
-                ["scopes_supported"] = new[] { "healthz" },
+                ["scopes_supported"] = new[] { "monitoring" },
                 ["bit_template_version"] = TemplateVersion
             }),
             ("GET", "/.well-known/oauth-authorization-server") when origin == Server => Json(new Dictionary<string, object?>
@@ -368,7 +368,7 @@ public sealed class FakeCustomerApp
             ["refresh_token"] = $"refresh-{Guid.NewGuid():N}",
             ["token_type"] = "Bearer",
             ["expires_in"] = 300,
-            ["scope"] = form.TryGetValue("scope", out var scope) && scope.Count > 0 ? scope.ToString() : "healthz"
+            ["scope"] = form.TryGetValue("scope", out var scope) && scope.Count > 0 ? scope.ToString() : "monitoring"
         });
     }
 

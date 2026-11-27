@@ -44,7 +44,6 @@ public class DocumentationTruthTests
         "AGENTS.md",
         "CLAUDE.md",
         "GEMINI.md",
-        ".grafana/README.md",
         ".github/copilot-instructions.md",
         ".github/agents/*.md",
         ".agents/skills/*/SKILL.md",
@@ -70,7 +69,7 @@ public class DocumentationTruthTests
 
     /// <summary>The top-level directories a repository-relative path can start with.</summary>
     private static readonly string[] repositoryRoots =
-        ["src/", ".docs/", ".github/", ".vscode/", ".grafana/", ".template.config/",
+        ["src/", ".docs/", ".github/", ".vscode/", ".template.config/",
          ".agents/", ".claude/", ".gemini/", ".cursor/", ".junie/", ".codex/"];
 
     /// <summary>

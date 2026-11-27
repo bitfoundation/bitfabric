@@ -331,7 +331,7 @@ public class OAuthAuthorizationServerTests
     }
 
     /// <summary>
-    /// An exception can carry a server name or a connection string, so a <c>healthz</c> token reads the report without
+    /// An exception can carry a server name or a connection string, so a <c>monitoring</c> token reads the report without
     /// them, nor the description a check that throws gets from its exception's message. Only the app's own session gets
     /// them (See HealthCheckIntegrationTests.DetailedReport_Should_NeedTheFeature_AndDescribeEveryCheck).
     /// </summary>
@@ -350,11 +350,11 @@ public class OAuthAuthorizationServerTests
         var (_, grant) = await DevMcpTestUtils.SignInAsGlobalAdmin(client, TestContext.CancellationToken);
         await using var _ = grant;
 
-        var report = await ReadHealthzWithAToken(server, client, OAuthScopes.Healthz);
+        var report = await ReadHealthzWithAToken(server, client, OAuthScopes.Monitoring);
 
         var failing = report.Entries["failing"];
 
-        Assert.AreEqual("Down on purpose", failing.Description, "The report itself is what the healthz scope is for.");
+        Assert.AreEqual("Down on purpose", failing.Description, "The report itself is what the monitoring scope is for.");
         Assert.IsNull(failing.Exception, "A token must never read the failures' exceptions.");
 
         var throwing = report.Entries["throwing"];
@@ -548,7 +548,7 @@ public class OAuthAuthorizationServerTests
         var (verifier, challenge) = GeneratePkcePair();
 
         var approval = await client.GetController<IOAuthController>()
-                                   .Approve(BuildRequest(server, challenge, OAuthScopes.Healthz, resourcePath: "/healthz"), TestContext.CancellationToken);
+                                   .Approve(BuildRequest(server, challenge, OAuthScopes.Monitoring, resourcePath: "/healthz"), TestContext.CancellationToken);
 
         var granted = await ExchangeCode(server, QueryValueOf(approval.RedirectUrl, "code")!, verifier);
         var applicationSessionId = SessionIdOf(granted.GetProperty("access_token").GetString()!);
@@ -588,7 +588,7 @@ public class OAuthAuthorizationServerTests
         var (verifier, challenge) = GeneratePkcePair();
 
         var approval = await client.GetController<IOAuthController>()
-                                   .Approve(BuildRequest(server, challenge, OAuthScopes.Healthz, resourcePath: "/healthz"), TestContext.CancellationToken);
+                                   .Approve(BuildRequest(server, challenge, OAuthScopes.Monitoring, resourcePath: "/healthz"), TestContext.CancellationToken);
 
         await ExchangeCode(server, QueryValueOf(approval.RedirectUrl, "code")!, verifier);
 

@@ -2014,11 +2014,11 @@ Når du har nået {0}, vil yderligere log-ind have begrænsede funktioner.</valu
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>Læs diagnostiske oplysninger om denne udrulning.</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>Læs den detaljerede helbredsrapport for denne udrulning, uden fejldetaljerne om det, der fejler.</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>Overvåg denne udrulning: læs dens detaljerede helbredsrapport, uden fejldetaljerne om det, der fejler.</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>Læs helbredsrapporten.</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>Overvåg denne app.</value>
   </data>
     <data name="OAuthSessionsTitle" xml:space="preserve">
     <value>Godkendte applikationer</value>

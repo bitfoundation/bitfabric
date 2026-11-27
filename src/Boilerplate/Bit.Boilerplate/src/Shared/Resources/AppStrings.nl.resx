@@ -2014,11 +2014,11 @@ Na het bereiken van {0} zullen extra aanmeldingen verminderde functies hebben.</
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>Diagnostische informatie over deze deployment lezen.</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>Het gedetailleerde statusrapport van deze deployment lezen, zonder de foutdetails van wat faalt.</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>Deze deployment monitoren: het gedetailleerde statusrapport ervan lezen, zonder de foutdetails van wat faalt.</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>Het statusrapport lezen.</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>Deze app monitoren.</value>
   </data>
     <data name="OAuthSessionsTitle" xml:space="preserve">
     <value>Geautoriseerde applicaties</value>

@@ -2014,11 +2014,11 @@ Après avoir atteint {0}, les connexions supplémentaires auront des fonctions r
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>Lire les informations de diagnostic de ce déploiement.</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>Lire le rapport de santé détaillé de ce déploiement, sans les détails d'erreur de ce qui est en échec.</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>Surveiller ce déploiement : lire son rapport de santé détaillé, sans les détails d'erreur de ce qui est en échec.</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>Lire le rapport de santé.</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>Surveiller cette application.</value>
   </data>
     <data name="OAuthSessionsTitle" xml:space="preserve">
     <value>Applications autorisées</value>

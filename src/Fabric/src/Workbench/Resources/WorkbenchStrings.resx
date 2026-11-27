@@ -4629,4 +4629,457 @@
     <data name="GetStartedBoardButton" xml:space="preserve">
         <value>Get started</value>
     </data>
+    <data name="TelemetryTitle" xml:space="preserve">
+        <value>Telemetry</value>
+    </data>
+    <data name="TelemetryLead" xml:space="preserve">
+        <value>What your app sends from its server, its pages and its apps, as cards anyone can read.</value>
+    </data>
+    <data name="TelemetryEnvironment" xml:space="preserve">
+        <value>Environment</value>
+    </data>
+    <data name="TelemetryPeriod" xml:space="preserve">
+        <value>Period</value>
+    </data>
+    <data name="TelemetryRange1Hour" xml:space="preserve">
+        <value>1 hour</value>
+    </data>
+    <data name="TelemetryRange24Hours" xml:space="preserve">
+        <value>24 hours</value>
+    </data>
+    <data name="TelemetryRange7Days" xml:space="preserve">
+        <value>7 days</value>
+    </data>
+    <data name="TelemetryRange30Days" xml:space="preserve">
+        <value>30 days</value>
+    </data>
+    <data name="TelemetryArrange" xml:space="preserve">
+        <value>Arrange</value>
+    </data>
+    <data name="TelemetryDone" xml:space="preserve">
+        <value>Done</value>
+    </data>
+    <data name="TelemetryAddWithAi" xml:space="preserve">
+        <value>Add with your AI</value>
+    </data>
+    <data name="TelemetryAreas" xml:space="preserve">
+        <value>Areas</value>
+    </data>
+    <data name="TelemetryAll" xml:space="preserve">
+        <value>All</value>
+    </data>
+    <data name="TelemetryAskTitle" xml:space="preserve">
+        <value>Want another card, or an alert? Ask your AI.</value>
+    </data>
+    <data name="TelemetryAskLead" xml:space="preserve">
+        <value>Your AI agent reaches bit Fabric through MCP. Say in your own words what you want to see or be told about, and it adds it here.</value>
+    </data>
+    <data name="TelemetryExamples" xml:space="preserve">
+        <value>Things to ask</value>
+    </data>
+    <data name="TelemetryExampleCard" xml:space="preserve">
+        <value>Add a card with the five most visited pages this week.</value>
+    </data>
+    <data name="TelemetryExampleCostAlert" xml:space="preserve">
+        <value>Tell me when AI costs more than $10 in 15 minutes.</value>
+    </data>
+    <data name="TelemetryExampleJobsAlert" xml:space="preserve">
+        <value>Alert me when more than 5 background jobs fail in an hour.</value>
+    </data>
+    <data name="TelemetryConnect" xml:space="preserve">
+        <value>Connect your AI</value>
+    </data>
+    <data name="TelemetryConnectNote" xml:space="preserve">
+        <value>In the app, this opens how to connect your AI agent to bit Fabric's MCP.</value>
+    </data>
+    <data name="TelemetryAskRemoveNote" xml:space="preserve">
+        <value>Whatever it adds, you can delete right here.</value>
+    </data>
+    <data name="TelemetryClose" xml:space="preserve">
+        <value>Close</value>
+    </data>
+    <data name="TelemetryAllGood" xml:space="preserve">
+        <value>All good</value>
+    </data>
+    <data name="TelemetryAllGoodLine" xml:space="preserve">
+        <value>Every number is where it should be, and no alert is firing.</value>
+    </data>
+    <data name="TelemetrySummaryWatch" xml:space="preserve">
+        <value>All working; {0} worth watching</value>
+    </data>
+    <data name="TelemetrySummaryBad" xml:space="preserve">
+        <value>{0} need a look</value>
+    </data>
+    <data name="TelemetrySummaryBoth" xml:space="preserve">
+        <value>{0} need a look, {1} worth watching</value>
+    </data>
+    <data name="TelemetryNeedsLook" xml:space="preserve">
+        <value>Needs a look</value>
+    </data>
+    <data name="TelemetryWorthWatching" xml:space="preserve">
+        <value>Worth watching</value>
+    </data>
+    <data name="TelemetryGood" xml:space="preserve">
+        <value>Good</value>
+    </data>
+    <data name="TelemetryGroupYours" xml:space="preserve">
+        <value>Your cards</value>
+    </data>
+    <data name="TelemetryGroupSpeed" xml:space="preserve">
+        <value>Speed</value>
+    </data>
+    <data name="TelemetryGroupPeople" xml:space="preserve">
+        <value>People and sign-ins</value>
+    </data>
+    <data name="TelemetryGroupAi" xml:space="preserve">
+        <value>AI</value>
+    </data>
+    <data name="TelemetryGroupJobs" xml:space="preserve">
+        <value>Background jobs</value>
+    </data>
+    <data name="TelemetryGroupFiles" xml:space="preserve">
+        <value>Files and images</value>
+    </data>
+    <data name="TelemetryGroupServer" xml:space="preserve">
+        <value>Server</value>
+    </data>
+    <data name="TelemetryMadeByAi" xml:space="preserve">
+        <value>Made by your AI</value>
+    </data>
+    <data name="TelemetryYoursEmptyTitle" xml:space="preserve">
+        <value>No cards of your own yet</value>
+    </data>
+    <data name="TelemetryYoursEmptyLine" xml:space="preserve">
+        <value>Ask your AI for one, in your own words.</value>
+    </data>
+    <data name="TelemetryAskedAs" xml:space="preserve">
+        <value>You asked: “{0}”</value>
+    </data>
+    <data name="TelemetryAskedCostPerUser" xml:space="preserve">
+        <value>Show me what AI costs per active user each day.</value>
+    </data>
+    <data name="TelemetryAskedSignUps" xml:space="preserve">
+        <value>Tell me if nobody signs up for 6 hours.</value>
+    </data>
+    <data name="TelemetryCardTopPages" xml:space="preserve">
+        <value>Most visited pages</value>
+    </data>
+    <data name="TelemetryCardTopPagesLine" xml:space="preserve">
+        <value>Page views this week, from visitors who allowed analytics.</value>
+    </data>
+    <data name="TelemetryCardCostPerUser" xml:space="preserve">
+        <value>AI cost per active user</value>
+    </data>
+    <data name="TelemetryCardCostPerUserLine" xml:space="preserve">
+        <value>Today's AI cost divided by the people who signed in today.</value>
+    </data>
+    <data name="TelemetryCardAnswerTime" xml:space="preserve">
+        <value>Answer time</value>
+    </data>
+    <data name="TelemetryCardAnswerTimeLine" xml:space="preserve">
+        <value>95 of every 100 requests answer within this.</value>
+    </data>
+    <data name="TelemetryCardTypicalTime" xml:space="preserve">
+        <value>Typical answer time</value>
+    </data>
+    <data name="TelemetryCardTypicalTimeLine" xml:space="preserve">
+        <value>Half the requests answer within this.</value>
+    </data>
+    <data name="TelemetryCardFailedRequests" xml:space="preserve">
+        <value>Failed requests</value>
+    </data>
+    <data name="TelemetryCardFailedRequestsLine" xml:space="preserve">
+        <value>Requests the server couldn't answer.</value>
+    </data>
+    <data name="TelemetryCardRequests" xml:space="preserve">
+        <value>Requests</value>
+    </data>
+    <data name="TelemetryCardRequestsLine" xml:space="preserve">
+        <value>How busy the app is.</value>
+    </data>
+    <data name="TelemetryUnitPerMinute" xml:space="preserve">
+        <value>a minute</value>
+    </data>
+    <data name="TelemetryCardSlowestPages" xml:space="preserve">
+        <value>Slowest pages</value>
+    </data>
+    <data name="TelemetryCardSlowestPagesLine" xml:space="preserve">
+        <value>The five that keep people waiting longest.</value>
+    </data>
+    <data name="TelemetryCardPageLoad" xml:space="preserve">
+        <value>Page load in the browser</value>
+    </data>
+    <data name="TelemetryCardPageLoadLine" xml:space="preserve">
+        <value>Measured in your visitors' own browsers (Web Vitals).</value>
+    </data>
+    <data name="TelemetryCardOutside" xml:space="preserve">
+        <value>Outside services</value>
+    </data>
+    <data name="TelemetryCardOutsideLine" xml:space="preserve">
+        <value>How long your app waits on each, by host.</value>
+    </data>
+    <data name="TelemetryCardSlowQueries" xml:space="preserve">
+        <value>Slowest database queries</value>
+    </data>
+    <data name="TelemetryCardSlowQueriesLine" xml:space="preserve">
+        <value>The queries that take longest, and how long.</value>
+    </data>
+    <data name="TelemetryCardCache" xml:space="preserve">
+        <value>Read from the cache</value>
+    </data>
+    <data name="TelemetryCardCacheLine" xml:space="preserve">
+        <value>Reads served without going to the database.</value>
+    </data>
+    <data name="TelemetryCardOnline" xml:space="preserve">
+        <value>Online now</value>
+    </data>
+    <data name="TelemetryCardOnlineLine" xml:space="preserve">
+        <value>Live connections; one person with two tabs open counts twice.</value>
+    </data>
+    <data name="TelemetryCardSignIns" xml:space="preserve">
+        <value>Sign-ins</value>
+    </data>
+    <data name="TelemetryCardSignInsLine" xml:space="preserve">
+        <value>People who signed in during this period.</value>
+    </data>
+    <data name="TelemetryCardFailedSignIns" xml:space="preserve">
+        <value>Failed sign-ins</value>
+    </data>
+    <data name="TelemetryCardFailedSignInsLine" xml:space="preserve">
+        <value>Wrong passwords and codes. A jump can mean someone is guessing.</value>
+    </data>
+    <data name="TelemetryCardSignUps" xml:space="preserve">
+        <value>New accounts</value>
+    </data>
+    <data name="TelemetryCardSignUpsLine" xml:space="preserve">
+        <value>People who signed up.</value>
+    </data>
+    <data name="TelemetryCardDenied" xml:space="preserve">
+        <value>Refused access</value>
+    </data>
+    <data name="TelemetryCardDeniedLine" xml:space="preserve">
+        <value>Requests for something the user may not open.</value>
+    </data>
+    <data name="TelemetryCardAiCost" xml:space="preserve">
+        <value>AI cost</value>
+    </data>
+    <data name="TelemetryCardAiCostLine" xml:space="preserve">
+        <value>Worked out from the tokens each model used.</value>
+    </data>
+    <data name="TelemetryCardTokens" xml:space="preserve">
+        <value>Tokens by model</value>
+    </data>
+    <data name="TelemetryCardTokensLine" xml:space="preserve">
+        <value>What each model read and wrote.</value>
+    </data>
+    <data name="TelemetryCardAiTime" xml:space="preserve">
+        <value>AI answer time</value>
+    </data>
+    <data name="TelemetryCardAiTimeLine" xml:space="preserve">
+        <value>95 of every 100 answers start within this.</value>
+    </data>
+    <data name="TelemetryCardChats" xml:space="preserve">
+        <value>Chats right now</value>
+    </data>
+    <data name="TelemetryCardChatsLine" xml:space="preserve">
+        <value>Answers the AI is writing at this moment.</value>
+    </data>
+    <data name="TelemetryCardFailedJobs" xml:space="preserve">
+        <value>Failed jobs</value>
+    </data>
+    <data name="TelemetryCardFailedJobsLine" xml:space="preserve">
+        <value>Jobs that gave up after their retries.</value>
+    </data>
+    <data name="TelemetryCardJobsDone" xml:space="preserve">
+        <value>Jobs done</value>
+    </data>
+    <data name="TelemetryCardJobsDoneLine" xml:space="preserve">
+        <value>Background jobs that finished in this period.</value>
+    </data>
+    <data name="TelemetryCardJobTimes" xml:space="preserve">
+        <value>Time each job takes</value>
+    </data>
+    <data name="TelemetryCardJobTimesLine" xml:space="preserve">
+        <value>A typical run, then the longest, by job.</value>
+    </data>
+    <data name="TelemetryCardResize" xml:space="preserve">
+        <value>Image resize time</value>
+    </data>
+    <data name="TelemetryCardResizeLine" xml:space="preserve">
+        <value>95 of every 100 pictures are ready within this.</value>
+    </data>
+    <data name="TelemetryCardUploads" xml:space="preserve">
+        <value>Uploads</value>
+    </data>
+    <data name="TelemetryCardUploadsLine" xml:space="preserve">
+        <value>Pictures and files people uploaded.</value>
+    </data>
+    <data name="TelemetryCardCpu" xml:space="preserve">
+        <value>CPU</value>
+    </data>
+    <data name="TelemetryCardCpuLine" xml:space="preserve">
+        <value>How hard the server works.</value>
+    </data>
+    <data name="TelemetryCardMemory" xml:space="preserve">
+        <value>Memory</value>
+    </data>
+    <data name="TelemetryCardMemoryLine" xml:space="preserve">
+        <value>What the app holds in memory.</value>
+    </data>
+    <data name="TelemetryCardErrors" xml:space="preserve">
+        <value>Unexpected errors</value>
+    </data>
+    <data name="TelemetryCardErrorsLine" xml:space="preserve">
+        <value>Errors the code didn't expect, worth a look.</value>
+    </data>
+    <data name="TelemetryCardInstances" xml:space="preserve">
+        <value>Running copies</value>
+    </data>
+    <data name="TelemetryCardInstancesLine" xml:space="preserve">
+        <value>Each copy of the server, and the version it runs.</value>
+    </data>
+    <data name="TelemetryNow" xml:space="preserve">
+        <value>Now</value>
+    </data>
+    <data name="TelemetryEstimate" xml:space="preserve">
+        <value>Estimate</value>
+    </data>
+    <data name="TelemetryEstimateTip" xml:space="preserve">
+        <value>Worked out from a sample of the traces, so it's close, not exact.</value>
+    </data>
+    <data name="TelemetryMore" xml:space="preserve">
+        <value>More</value>
+    </data>
+    <data name="TelemetryAskWhy" xml:space="preserve">
+        <value>Ask your AI why</value>
+    </data>
+    <data name="TelemetryWhyPrompt" xml:space="preserve">
+        <value>Look at the “{0}” card of my app's {1} telemetry in bit Fabric and tell me why it changed in the last {2}.</value>
+    </data>
+    <data name="TelemetryWhyCopied" xml:space="preserve">
+        <value>Question copied</value>
+    </data>
+    <data name="TelemetryWhyCopiedLine" xml:space="preserve">
+        <value>Paste it to your AI agent.</value>
+    </data>
+    <data name="TelemetryHide" xml:space="preserve">
+        <value>Hide</value>
+    </data>
+    <data name="TelemetryDelete" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="TelemetryCancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="TelemetryDeleteCardTitle" xml:space="preserve">
+        <value>Delete this card?</value>
+    </data>
+    <data name="TelemetryDeleteCardMessage" xml:space="preserve">
+        <value>Your AI can add it again any time.</value>
+    </data>
+    <data name="TelemetryDragToMove" xml:space="preserve">
+        <value>Drag to move</value>
+    </data>
+    <data name="TelemetrySize" xml:space="preserve">
+        <value>Size</value>
+    </data>
+    <data name="TelemetrySizeSmall" xml:space="preserve">
+        <value>Small</value>
+    </data>
+    <data name="TelemetrySizeWide" xml:space="preserve">
+        <value>Wide</value>
+    </data>
+    <data name="TelemetrySizeFull" xml:space="preserve">
+        <value>Full width</value>
+    </data>
+    <data name="TelemetryComparedWithBefore" xml:space="preserve">
+        <value>Compared with the period before</value>
+    </data>
+    <data name="TelemetryOverThePeriod" xml:space="preserve">
+        <value>Over the period</value>
+    </data>
+    <data name="TelemetryNotMeasured" xml:space="preserve">
+        <value>Not measured yet: nothing arrived in this period.</value>
+    </data>
+    <data name="TelemetryHiddenCards" xml:space="preserve">
+        <value>Hidden cards</value>
+    </data>
+    <data name="TelemetryPutBack" xml:space="preserve">
+        <value>Put everything back</value>
+    </data>
+    <data name="TelemetryNoneHidden" xml:space="preserve">
+        <value>None. Hide a card from its menu, and it waits here.</value>
+    </data>
+    <data name="TelemetryErrorTitle" xml:space="preserve">
+        <value>The numbers couldn't be read</value>
+    </data>
+    <data name="TelemetryErrorLine" xml:space="preserve">
+        <value>bit Fabric keeps receiving them; try again in a moment.</value>
+    </data>
+    <data name="TelemetryTryAgain" xml:space="preserve">
+        <value>Try again</value>
+    </data>
+    <data name="TelemetryEmptyTitle" xml:space="preserve">
+        <value>Nothing from {0} yet</value>
+    </data>
+    <data name="TelemetryEmptyLine" xml:space="preserve">
+        <value>Your app starts sending once this environment has its telemetry key. Ask your AI to set it:</value>
+    </data>
+    <data name="TelemetryEmptyPrompt" xml:space="preserve">
+        <value>Send my app's telemetry to bit Fabric.</value>
+    </data>
+    <data name="TelemetryAlertsTitle" xml:space="preserve">
+        <value>Alerts</value>
+    </data>
+    <data name="TelemetryAlertsLead" xml:space="preserve">
+        <value>Your AI sets them up; bit Fabric checks them every minute and tells you on your project's channels.</value>
+    </data>
+    <data name="TelemetryAlertsEmptyTitle" xml:space="preserve">
+        <value>No alerts yet</value>
+    </data>
+    <data name="TelemetryAlertsEmptyLine" xml:space="preserve">
+        <value>Ask your AI for one, for example:</value>
+    </data>
+    <data name="TelemetryAlertJobs" xml:space="preserve">
+        <value>More than 5 background jobs fail in an hour</value>
+    </data>
+    <data name="TelemetryAlertCost" xml:space="preserve">
+        <value>AI costs more than $10 in 15 minutes</value>
+    </data>
+    <data name="TelemetryAlertSignUps" xml:space="preserve">
+        <value>Nobody signs up for 6 hours</value>
+    </data>
+    <data name="TelemetryAlertFiring" xml:space="preserve">
+        <value>Firing</value>
+    </data>
+    <data name="TelemetryAlertQuiet" xml:space="preserve">
+        <value>Quiet</value>
+    </data>
+    <data name="TelemetryAlertPaused" xml:space="preserve">
+        <value>Paused</value>
+    </data>
+    <data name="TelemetryAlertFiringFor" xml:space="preserve">
+        <value>For {0} minutes now: {1} jobs failed</value>
+    </data>
+    <data name="TelemetryAlertLastFired" xml:space="preserve">
+        <value>Last fired {0} days ago</value>
+    </data>
+    <data name="TelemetryAlertNeverFired" xml:space="preserve">
+        <value>Never fired yet</value>
+    </data>
+    <data name="TelemetryAlertWatching" xml:space="preserve">
+        <value>Check this alert</value>
+    </data>
+    <data name="TelemetryChannelsEmailPush" xml:space="preserve">
+        <value>By email and push</value>
+    </data>
+    <data name="TelemetryChannelsEmail" xml:space="preserve">
+        <value>By email</value>
+    </data>
+    <data name="TelemetryDeleteAlertTitle" xml:space="preserve">
+        <value>Delete this alert?</value>
+    </data>
+    <data name="TelemetryDeleteAlertMessage" xml:space="preserve">
+        <value>Your AI can set it up again any time.</value>
+    </data>
 </root>

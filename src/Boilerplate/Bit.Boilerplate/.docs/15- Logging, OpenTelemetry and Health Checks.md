@@ -187,11 +187,14 @@ What the app logs can be read **inside the app**, on any device and in every env
 
 ### 🖥️ Server Applications
 
-Every project sends its telemetry through [bit Belemetry](https://github.com/bitfoundation/bitplatform/tree/develop/src/Utilities/Belemetry): logs, traces and metrics over OTLP (the Aspire dashboard, Grafana, Datadog, New Relic etc.) and to Azure Application Insights, and errors to Sentry as Issues. [`ConfigureAppTelemetry`](../src/Shared/Infrastructure/Extensions/BelemetryOptionsExtensions.cs) adds each exporter whose setting is there: `OTEL_EXPORTER_OTLP_ENDPOINT`, `ApplicationInsights:ConnectionString` or `Sentry:Dsn`.
+Every project sends its telemetry through [bit Belemetry](https://github.com/bitfoundation/bitplatform/tree/develop/src/Utilities/Belemetry): logs, traces and metrics over OTLP (the Aspire dashboard, Datadog, New Relic etc.) and to Azure Application Insights, and errors to Sentry as Issues. [`ConfigureAppTelemetry`](../src/Shared/Infrastructure/Extensions/BelemetryOptionsExtensions.cs) adds each exporter whose setting is there: `OTEL_EXPORTER_OTLP_ENDPOINT`, `ApplicationInsights:ConnectionString` or `Sentry:Dsn`.
 
 * **Server.Api** and **Server.Web**
 
     Requests, EF Core commands, Hangfire jobs, HttpClient calls and FusionCache, besides the app's own logs, activities and meters.
+    Its metrics also carry what ASP.NET Core measures on its own: request durations by route and status, live SignalR
+    connections, Identity's sign-ins, sign-ups and token checks, and authentication and authorization results (See
+    `ConfigureTelemetry` in `WebApplicationBuilderExtensions.cs`).
 
     **Sampling** is enabled to reduce costs: unknown/unhandled exceptions and slow activities are always captured (100%), while known/transient exceptions, warnings, and info logs are sampled at **5%**. See [`AppBelemetryProcessor.cs`](../src/Server/Boilerplate.Server.Shared/Infrastructure/Services/AppBelemetryProcessor.cs) and [`AppLoggingSampler.cs`](../src/Server/Boilerplate.Server.Shared/Infrastructure/Services/AppLoggingSampler.cs).
 
@@ -281,7 +284,7 @@ page as `/dev-mcp`. Granting one takes more than reading the report does: the fe
 with two factor (`GrantPolicies` on the resource's row), because that token reads the report unattended. A token gets
 the report without the exceptions, which can carry a server name or a connection string, nor the description a check
 that throws takes from its exception's message; only a signed-in user's own session reads them. The resource's metadata document
-(`/.well-known/oauth-protected-resource/healthz`, anonymous like every RFC 9728 document) lists the `healthz` scope and carries
+(`/.well-known/oauth-protected-resource/healthz`, anonymous like every RFC 9728 document) lists the `monitoring` scope and carries
 `bit_template_version`, the version `bit.json` records, so a monitor can tell an app made from bit-bp and its version
 before it asks for a token. A refused token request says why in `error_description`, such as a revoked approval or
 a new password, so the monitor can tell its user. Every front end also serves `/.well-known/bit-app.json`, anonymously:
@@ -296,8 +299,10 @@ work behind it. `/health` and `/alive` responses are output-cached for 10 second
 failing (non-200) response.
 
 The app has no page of its own that shows this report. For a deployed app, register it at
-[bitfabric.co](https://bitfabric.co): bit Fabric's monitoring connects through OAuth with the `healthz` scope, which a
+[bitfabric.co](https://bitfabric.co): bit Fabric's monitoring connects through OAuth with the `monitoring` scope, which a
 user holding `Operations_View` grants from a session that signed in with two factor, and reads `/healthz` from then on.
+The scope is what a monitor reads, named for that job rather than one endpoint: today it is this report, without the
+failures' error texts.
 To read the report yourself, open `/healthz` on the server signed in with `Operations_View`, or ask the environment's
 dev-mcp for `GetHealth`; the app's logs say what happened around a failure.
 
@@ -497,7 +502,7 @@ check, `model`. The template's checks name theirs where they are registered, fro
 `.TalksTo("paymentGateway", "Stripe", "api.stripe.com")`. These are names only: never put a key, a connection string, a
 user name or a query string in them, and pass a host read from a setting through `HealthCheckDependency.HostOf`, which
 keeps only the host name. The stand-in of a check whose settings are missing names nothing. Like the rest of `/healthz`,
-they are read only by a signed-in user with the Operations feature, or by an app that user approved with the `healthz`
+they are read only by a signed-in user with the Operations feature, or by an app that user approved with the `monitoring`
 scope.
 
 ---

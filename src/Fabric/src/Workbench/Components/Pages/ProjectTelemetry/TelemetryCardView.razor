@@ -1,0 +1,111 @@
+@inherits WorkbenchComponentBase
+
+<article class="card level-@Card.Level.ToString().ToLowerInvariant() size-@Size @(IsEditing ? "editing" : null) @(Card.IsMadeByAi ? "mine" : null)"
+         id="@($"card-{Card.Key}")" aria-label="@Localizer[Card.TitleKey]">
+    <header class="card-head">
+        @if (IsEditing)
+        {
+            <span class="grip" title="@Localizer[nameof(WorkbenchStrings.TelemetryDragToMove)]"><BitIcon IconName="@BitIconName.GripperDotsVertical" Size="BitSize.Small" /></span>
+        }
+        <span class="card-title">@Localizer[Card.TitleKey]</span>
+        @if (Card.IsLive)
+        {
+            <span class="badge live"><span class="live-dot" aria-hidden="true"></span>@Localizer[nameof(WorkbenchStrings.TelemetryNow)]</span>
+        }
+        @if (Card.IsEstimate)
+        {
+            <span class="badge estimate" title="@Localizer[nameof(WorkbenchStrings.TelemetryEstimateTip)]">@Localizer[nameof(WorkbenchStrings.TelemetryEstimate)]</span>
+        }
+        <BitSpacer />
+        @if (IsEditing is false)
+        {
+            <BitMenuButton TItem="BitMenuButtonItem" IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.More"
+                           Title="@Localizer[nameof(WorkbenchStrings.TelemetryMore)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TelemetryMore)]" Items="menuItems" />
+        }
+    </header>
+
+    @if (Card.Level is DashboardLevel.NotMeasured)
+    {
+        <div class="not-measured">
+            <BitIcon IconName="@BitIconName.Info" />
+            <p class="sentence">@Localizer[nameof(WorkbenchStrings.TelemetryNotMeasured)]</p>
+        </div>
+    }
+    else if (Card.Kind is DashboardCardKind.List && Card.Rows is { } rows)
+    {
+        <ol class="rows">
+            @foreach (var row in rows.Take(Size == 1 ? 3 : 5))
+            {
+                <li class="row level-@row.Level.ToString().ToLowerInvariant()">
+                    @if (row.Level is not DashboardLevel.Info)
+                    {
+                        <span class="row-dot" aria-hidden="true"></span>
+                    }
+                    <span class="row-name" dir="auto">@Localizer[row.Name]</span>
+                    <span class="row-value" dir="ltr">@row.Value</span>
+                </li>
+            }
+        </ol>
+        <p class="sentence">@Localizer[Card.SentenceKey]</p>
+    }
+    else
+    {
+        <div class="figure">
+            <span class="value" dir="ltr">@Card.Value</span>
+            @if (string.IsNullOrEmpty(Card.Unit) is false)
+            {
+                <span class="unit">@Localizer[Card.Unit]</span>
+            }
+            @if (Card.Change is { } change)
+            {
+                <span class="change @(IsBetter(change) ? "better" : "worse")" title="@Localizer[nameof(WorkbenchStrings.TelemetryComparedWithBefore)]">
+                    <BitIcon IconName="@(change >= 0 ? BitIconName.SortUp : BitIconName.SortDown)" Size="BitSize.Small" /><span dir="ltr">@FormatChange(change)</span>
+                </span>
+            }
+        </div>
+        <p class="sentence">@Localizer[Card.SentenceKey]</p>
+        @if (Size > 1 && Card.Series is { Length: > 1 } series)
+        {
+            <svg class="spark" viewBox="0 0 100 32" preserveAspectRatio="none" role="img" aria-label="@Localizer[nameof(WorkbenchStrings.TelemetryOverThePeriod)]">
+                <path class="area" d="@AreaOf(series)" />
+                <path class="line" d="@LineOf(series)" />
+            </svg>
+        }
+    }
+
+    @if (IsEditing)
+    {
+        @* While arranging: the card's size and the button that hides it, under what it shows. *@
+        <footer class="card-foot arrange">
+            <div class="sizes" role="group" aria-label="@Localizer[nameof(WorkbenchStrings.TelemetrySize)]">
+                @foreach (var (size, label) in Sizes)
+                {
+                    <button type="button" class="size @(Size == size ? "on" : null)" aria-pressed="@(Size == size ? "true" : "false")"
+                            title="@Localizer[label]" @onclick="() => OnResize.InvokeAsync(size)">@SizeGlyph(size)</button>
+                }
+            </div>
+            <BitSpacer />
+            <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Hide3"
+                       Title="@Localizer[nameof(WorkbenchStrings.TelemetryHide)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TelemetryHide)]" OnClick="OnHide" />
+        </footer>
+    }
+    else if (Card.AskedKey is { } askedKey)
+    {
+        @* A card the customer's AI added: what they asked for, and the way to delete it. *@
+        <footer class="card-foot mine">
+            <span class="asked"><BitIcon IconName="@BitIconName.Robot" Size="BitSize.Small" Class="asked-icon" />@Localizer[nameof(WorkbenchStrings.TelemetryAskedAs), Localizer[askedKey]]</span>
+            <BitPopConfirm Title="@Localizer[nameof(WorkbenchStrings.TelemetryDeleteCardTitle)]" Message="@Localizer[nameof(WorkbenchStrings.TelemetryDeleteCardMessage)]"
+                           ConfirmText="@Localizer[nameof(WorkbenchStrings.TelemetryDelete)]" CancelText="@Localizer[nameof(WorkbenchStrings.TelemetryCancel)]"
+                           ConfirmColor="BitColor.Error" OnConfirm="OnDelete">
+                <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" Color="BitColor.Error" IconName="@BitIconName.Delete"
+                           Title="@Localizer[nameof(WorkbenchStrings.TelemetryDelete)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TelemetryDelete)]" />
+            </BitPopConfirm>
+        </footer>
+    }
+    else if (Card.Level is DashboardLevel.Good or DashboardLevel.Watch or DashboardLevel.Bad)
+    {
+        <footer class="card-foot">
+            <span class="level-pill"><span class="level-dot" aria-hidden="true"></span>@Localizer[LevelText]</span>
+        </footer>
+    }
+</article>

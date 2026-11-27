@@ -547,7 +547,7 @@ public partial class ProjectMonitoringTests
         var start = await projects.StartConnect(new() { Address = address, ProjectId = projectId, Environment = environment }, TestContext.CancellationToken);
         var authorize = QueryHelpers.ParseQuery(new Uri(start.AuthorizeUrl!).Query);
 
-        Assert.AreEqual("healthz", authorize["scope"].ToString());
+        Assert.AreEqual("monitoring", authorize["scope"].ToString());
         Assert.AreEqual("S256", authorize["code_challenge_method"].ToString());
         Assert.AreEqual($"{customerApp.Server}/healthz", authorize["resource"].ToString());
         Assert.EndsWith(MonitoringOAuthClient.CallbackPath, authorize["redirect_uri"].ToString());

@@ -2014,11 +2014,11 @@
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>خواندن اطلاعات تشخیصی این استقرار.</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>خواندن گزارش تفصیلی سلامت این استقرار، بدون جزئیات خطای چیزهایی که از کار افتاده‌اند.</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>پایش این استقرار: خواندن گزارش تفصیلی سلامت آن، بدون جزئیات خطای چیزهایی که از کار افتاده‌اند.</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>خواندن گزارش سلامت.</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>پایش این اپ.</value>
   </data>
     <data name="OAuthSessionsTitle" xml:space="preserve">
     <value>برنامه‌های مجاز شده</value>

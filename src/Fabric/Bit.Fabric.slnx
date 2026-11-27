@@ -50,10 +50,6 @@
     <Project Path="src/Server/Bit.Fabric.Server.Shared/Bit.Fabric.Server.Shared.csproj" />
     <Project Path="src/Server/Bit.Fabric.Server.AppHost/Bit.Fabric.Server.AppHost.csproj" />
   </Folder>
-  <Folder Name="/.SolutionItems/.grafana/">
-    <File Path=".grafana/dashboard.json" />
-    <File Path=".grafana/README.md" />
-  </Folder>
   <Folder Name="/Client/">
     <Project Path="src/Client/Bit.Fabric.Client.Core/Bit.Fabric.Client.Core.csproj" />
     <Project Path="src/Client/Bit.Fabric.Client.Films/Bit.Fabric.Client.Films.csproj" />

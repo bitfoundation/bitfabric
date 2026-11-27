@@ -54,9 +54,9 @@ public static class ProjectTroubleshootPrompt
 
         md.AppendLine("## How bit Fabric reads the report").AppendLine();
         md.AppendLine("bit Fabric is an OAuth 2.1 client of the app, and reads nothing else:").AppendLine();
-        md.Append("1. `GET ").Append(server).AppendLine("/.well-known/oauth-protected-resource/healthz` (RFC 9728) names the authorization server, and `healthz` among `scopes_supported`.");
+        md.Append("1. `GET ").Append(server).AppendLine("/.well-known/oauth-protected-resource/healthz` (RFC 9728) names the authorization server, and `monitoring` among `scopes_supported`.");
         md.Append("2. `GET ").Append(issuer).AppendLine("/.well-known/oauth-authorization-server` (RFC 8414) gives the authorization and token endpoints.");
-        md.AppendLine("3. A user of the app with two-factor authentication on and the `System.Operations_View` feature approved bit Fabric: the authorization code flow with PKCE, for the `healthz` scope. bit Fabric's client id is the address of its client metadata document, which the template accepts without registration.");
+        md.AppendLine("3. A user of the app with two-factor authentication on and the `System.Operations_View` feature approved bit Fabric: the authorization code flow with PKCE, for the `monitoring` scope. bit Fabric's client id is the address of its client metadata document, which the template accepts without registration.");
         md.Append("4. bit Fabric renews its access token at `").Append(tokenEndpoint).Append("` with the `refresh_token` grant and `resource=").Append(resource).Append("`, then reads `GET ").Append(resource).AppendLine("/v1` with `Authorization: Bearer <token>`.").AppendLine();
 
         md.AppendLine("The template's code behind it, on the server: `OAuthResources`, `OAuthEndpoints` and `OAuthTokenService` (the token endpoint), `OAuthController` (the approval), and `MapAppHealthChecks` (`/health` and `/healthz`). The template ships a test of this flow in the default test run.").AppendLine();
@@ -76,7 +76,7 @@ public static class ProjectTroubleshootPrompt
         md.AppendLine();
 
         md.AppendLine("Then, whatever the problem:").AppendLine();
-        md.Append("- `curl -i ").Append(server).AppendLine("/.well-known/oauth-protected-resource/healthz`: 200 with JSON naming `healthz` and `bit_template_version`.");
+        md.Append("- `curl -i ").Append(server).AppendLine("/.well-known/oauth-protected-resource/healthz`: 200 with JSON naming `monitoring` and `bit_template_version`.");
         md.Append("- `curl -i ").Append(issuer).AppendLine("/.well-known/oauth-authorization-server`: 200 with JSON.");
         md.Append("- `curl -i ").Append(resource).AppendLine("/v1` without a token: 401. A 404 means it isn't served; a 200 means the report is open to anyone, which must be fixed.");
         md.Append("- `curl -i -X POST ").Append(tokenEndpoint).AppendLine(" -d grant_type=refresh_token -d refresh_token=unknown -d client_id=test`: 400 with an OAuth error such as `invalid_grant`. A 500 there is a bug: it tells every client the server is failing, rather than that the approval is gone.");

@@ -211,7 +211,7 @@ public partial class MonitoringsController : AppControllerBase, IMonitoringsCont
         var state = Microsoft.AspNetCore.WebUtilities.Base64UrlTextEncoder.Encode(RandomNumberGenerator.GetBytes(24));
         var redirectUri = $"{Request.GetIssuer().TrimEnd('/')}{MonitoringOAuthClient.CallbackPath}";
         var clientId = oauthClient.ClientIdFor(Request.GetIssuer());
-        var scopes = MonitoringOAuthClient.HealthzScope;
+        var scopes = MonitoringOAuthClient.MonitoringScope;
 
         PendingConnection pending = new()
         {

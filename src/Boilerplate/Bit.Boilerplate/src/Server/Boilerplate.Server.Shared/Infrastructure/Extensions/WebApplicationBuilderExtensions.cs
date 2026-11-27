@@ -212,6 +212,9 @@ public static class WebApplicationBuilderExtensions
                 options.AddTraceSources("Experimental.Microsoft.Extensions.AI", "SmsBridge", FusionCacheDiagnostics.ActivitySourceName)
                     .AddMeters("Experimental.Microsoft.Extensions.AI", FusionCacheDiagnostics.MeterName);
 
+                options.AddMeters("Microsoft.AspNetCore.Hosting", "Microsoft.AspNetCore.Http.Connections", "Microsoft.AspNetCore.Identity",
+                    "Microsoft.AspNetCore.Authentication", "Microsoft.AspNetCore.Authorization");
+
                 options.Traces.IgnoredActivityNames.Add("Microsoft.AspNetCore.Components.HandleEvent");
 
                 options.AddProcessor(new AppBelemetryProcessor(builder.Environment));

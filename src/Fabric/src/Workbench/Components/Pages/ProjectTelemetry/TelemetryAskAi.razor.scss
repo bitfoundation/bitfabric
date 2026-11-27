@@ -1,0 +1,99 @@
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_media-queries.scss';
+@import '../../../../Client/Bit.Fabric.Client.Core/Styles/abstracts/_bit-css-variables.scss';
+
+// The tip on how a card or an alert gets here: asking one's own AI.
+.ask {
+    gap: 1rem;
+    display: flex;
+    padding: 1.125rem 1.25rem;
+    align-items: flex-start;
+    border-radius: $bit-shape-radius-surface;
+    border: 1px solid color-mix(in srgb, #{$bit-color-primary} 35%, transparent);
+    background: linear-gradient(135deg, color-mix(in srgb, #{$bit-color-primary} 10%, #{$bit-color-background-primary}), #{$bit-color-background-primary} 70%);
+
+    @include lt-sm {
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+}
+
+.ask-icon {
+    --bit-Icon-color: #{$bit-color-primary-text};
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: 0.75rem;
+    background-color: $bit-color-primary;
+
+    @include lt-sm {
+        display: none;
+    }
+}
+
+.ask-body {
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ask-head {
+    gap: 0.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    strong {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+}
+
+.ask-lead {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: $bit-color-foreground-secondary;
+}
+
+.prompts {
+    gap: 0.5rem;
+    margin: 0.25rem 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.prompt {
+    gap: 0.25rem;
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+    padding-block: 0.25rem;
+    padding-inline: 0.875rem 0.25rem;
+    border-radius: 999px;
+    background-color: $bit-color-background-primary;
+    border: 1px solid $bit-color-border-tertiary;
+}
+
+.prompt-text {
+    min-width: 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.ask-foot {
+    gap: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.ask-note {
+    font-size: 12px;
+    color: $bit-color-foreground-tertiary;
+}

@@ -1,0 +1,27 @@
+@inherits WorkbenchComponentBase
+
+@* How a card or an alert gets here: the customer asks their own AI, which reaches bit Fabric through MCP. *@
+<section class="ask" aria-labelledby="telemetry-ask-title">
+    <span class="ask-icon" aria-hidden="true"><BitIcon IconName="@BitIconName.Robot" /></span>
+    <div class="ask-body">
+        <div class="ask-head">
+            <strong id="telemetry-ask-title">@Localizer[nameof(WorkbenchStrings.TelemetryAskTitle)]</strong>
+            <BitButton IconOnly Variant="BitVariant.Text" Size="BitSize.Small" IconName="@BitIconName.Cancel"
+                       Title="@Localizer[nameof(WorkbenchStrings.TelemetryClose)]" AriaLabel="@Localizer[nameof(WorkbenchStrings.TelemetryClose)]" OnClick="OnClose" />
+        </div>
+        <p class="ask-lead">@Localizer[nameof(WorkbenchStrings.TelemetryAskLead)]</p>
+        <ul class="prompts" aria-label="@Localizer[nameof(WorkbenchStrings.TelemetryExamples)]">
+            @foreach (var example in TelemetryDashboardData.Examples)
+            {
+                <li class="prompt">
+                    <q class="prompt-text">@Localizer[example]</q>
+                    <BitCopyButton Value="@Localizer[example]" Variant="BitVariant.Text" Size="BitSize.Small" />
+                </li>
+            }
+        </ul>
+        <div class="ask-foot">
+            <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.PlugConnected" OnClick="OnConnect">@Localizer[nameof(WorkbenchStrings.TelemetryConnect)]</BitButton>
+            <span class="ask-note">@Localizer[nameof(WorkbenchStrings.TelemetryAskRemoveNote)]</span>
+        </div>
+    </div>
+</section>

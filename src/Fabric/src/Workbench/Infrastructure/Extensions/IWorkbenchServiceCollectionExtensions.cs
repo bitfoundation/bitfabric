@@ -90,6 +90,7 @@ public static class IWorkbenchServiceCollectionExtensions
             services.AddBitBlexStore<AssistantStore>();
             services.AddBitBlexStore<SettingsStore>();
             services.AddBitBlexStore<NewProjectAddressStore>();
+            services.AddBitBlexStore<Components.Pages.ProjectTelemetry.ProjectTelemetryStore>();
             services.AddBitBlexStore<WorkbenchDeviceStore>();
             services.AddScoped<IBlexStorage, WorkbenchStateStorage>();
             services.AddBitBlexPersistence();

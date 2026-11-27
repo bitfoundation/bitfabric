@@ -10,7 +10,7 @@ namespace Bit.Fabric.Server.Api.Features.Monitoring.Services;
 /// <summary>
 /// bit Fabric as an OAuth client of its customers' apps (bitfabric-internal/specs/monitoring.md, Connecting a project).
 /// Its client id is the https address of its own client metadata document (CIMD), which every app made from the template
-/// accepts without registration, and it asks for the <c>healthz</c> scope on the <c>/healthz</c> resource with PKCE,
+/// accepts without registration, and it asks for the <c>monitoring</c> scope on the <c>/healthz</c> resource with PKCE,
 /// nothing else. A token never reads the failures' error texts: they stay in the app.
 /// </summary>
 public partial class MonitoringOAuthClient(IHttpClientFactory httpClientFactory,
@@ -28,7 +28,8 @@ public partial class MonitoringOAuthClient(IHttpClientFactory httpClientFactory,
     /// <summary>Where this server serves its client metadata document (See MonitoringClientController).</summary>
     public const string MetadataPath = "/api/v1/MonitoringClient/Metadata";
 
-    public const string HealthzScope = "healthz";
+    /// <summary>The scope a monitor is granted on an app made from the template (See OAuthScopes.Monitoring).</summary>
+    public const string MonitoringScope = "monitoring";
 
     private IDataProtector Protector => field ??= dataProtectionProvider.CreateProtector("Bit.Fabric.Monitoring.Tokens");
 

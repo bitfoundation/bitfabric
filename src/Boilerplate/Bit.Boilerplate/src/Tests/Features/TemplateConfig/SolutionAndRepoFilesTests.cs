@@ -9,7 +9,7 @@ namespace Boilerplate.Tests.Features.TemplateConfig;
 /// Guards the repository-surface files that no build ever validates: the two solution files, the clean scripts and
 /// the browser-embedded shared appsettings. Nothing compiles them, so their defects ship silently - four distinct
 /// instances were found in one review pass (a solution item whose file the template engine had excluded, a
-/// <c>.grafana/README.MD</c> reference to a file stored as <c>README.md</c>, an unmatched <c>EndProjectSection</c>
+/// <c>README.MD</c> reference to a file stored as <c>README.md</c>, an unmatched <c>EndProjectSection</c>
 /// that only parser leniency hid, and a clean script that deleted the two git-tracked service worker sources).
 /// <para>
 /// Like <see cref="TemplateConfigurationTests"/>, this runs against the template's own working copy and reports
@@ -29,7 +29,7 @@ public class SolutionAndRepoFilesTests
     /// Every path either solution file references must exist on disk <b>with exactly the casing it is written in</b>.
     /// Windows and macOS hide a casing mismatch forever - the maintainers' machines and Windows CI resolve
     /// <c>README.MD</c> to <c>README.md</c> happily - while every Linux dev container, Codespace and Rider-on-Linux
-    /// user gets a permanently broken solution item. That is exactly how <c>.grafana/README.MD</c> shipped.
+    /// user gets a permanently broken solution item. That is exactly how a solution item named <c>README.MD</c> once shipped.
     /// </summary>
     [TestMethod]
     public void EverySolutionFilePath_Should_ExistOnDiskWithExactCasing()

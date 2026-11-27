@@ -4629,4 +4629,457 @@
     <data name="GetStartedBoardButton" xml:space="preserve">
         <value>شروع کنید</value>
     </data>
+    <data name="TelemetryTitle" xml:space="preserve">
+        <value>تله‌متری</value>
+    </data>
+    <data name="TelemetryLead" xml:space="preserve">
+        <value>آنچه اپ شما از سرور، صفحه‌ها و اپ‌هایش می‌فرستد، در کارت‌هایی که همه می‌فهمند.</value>
+    </data>
+    <data name="TelemetryEnvironment" xml:space="preserve">
+        <value>محیط</value>
+    </data>
+    <data name="TelemetryPeriod" xml:space="preserve">
+        <value>بازه</value>
+    </data>
+    <data name="TelemetryRange1Hour" xml:space="preserve">
+        <value>۱ ساعت</value>
+    </data>
+    <data name="TelemetryRange24Hours" xml:space="preserve">
+        <value>۲۴ ساعت</value>
+    </data>
+    <data name="TelemetryRange7Days" xml:space="preserve">
+        <value>۷ روز</value>
+    </data>
+    <data name="TelemetryRange30Days" xml:space="preserve">
+        <value>۳۰ روز</value>
+    </data>
+    <data name="TelemetryArrange" xml:space="preserve">
+        <value>چیدن کارت‌ها</value>
+    </data>
+    <data name="TelemetryDone" xml:space="preserve">
+        <value>تمام</value>
+    </data>
+    <data name="TelemetryAddWithAi" xml:space="preserve">
+        <value>افزودن با AI</value>
+    </data>
+    <data name="TelemetryAreas" xml:space="preserve">
+        <value>بخش‌ها</value>
+    </data>
+    <data name="TelemetryAll" xml:space="preserve">
+        <value>همه</value>
+    </data>
+    <data name="TelemetryAskTitle" xml:space="preserve">
+        <value>کارت یا هشدار دیگری می‌خواهید؟ به AI خودتان بگویید.</value>
+    </data>
+    <data name="TelemetryAskLead" xml:space="preserve">
+        <value>AI agent شما از طریق MCP به bit Fabric دسترسی دارد. با زبان خودتان بگویید چه می‌خواهید ببینید یا از چه چیزی باخبر شوید، تا آن را همین‌جا اضافه کند.</value>
+    </data>
+    <data name="TelemetryExamples" xml:space="preserve">
+        <value>نمونه‌هایی برای درخواست</value>
+    </data>
+    <data name="TelemetryExampleCard" xml:space="preserve">
+        <value>یک کارت با پنج صفحه‌ای که این هفته بیشتر از همه باز شده‌اند اضافه کن.</value>
+    </data>
+    <data name="TelemetryExampleCostAlert" xml:space="preserve">
+        <value>اگر هزینهٔ AI در ۱۵ دقیقه از ۱۰ دلار بیشتر شد، خبرم کن.</value>
+    </data>
+    <data name="TelemetryExampleJobsAlert" xml:space="preserve">
+        <value>اگر در یک ساعت بیش از ۵ کار پس‌زمینه شکست خورد، هشدار بده.</value>
+    </data>
+    <data name="TelemetryConnect" xml:space="preserve">
+        <value>وصل کردن AI</value>
+    </data>
+    <data name="TelemetryConnectNote" xml:space="preserve">
+        <value>در اپ، این دکمه راهنمای وصل کردن AI agent شما به MCP مربوط به bit Fabric را باز می‌کند.</value>
+    </data>
+    <data name="TelemetryAskRemoveNote" xml:space="preserve">
+        <value>هر چه اضافه کند، همین‌جا قابل حذف است.</value>
+    </data>
+    <data name="TelemetryClose" xml:space="preserve">
+        <value>بستن</value>
+    </data>
+    <data name="TelemetryAllGood" xml:space="preserve">
+        <value>همه‌چیز خوب است</value>
+    </data>
+    <data name="TelemetryAllGoodLine" xml:space="preserve">
+        <value>همهٔ عددها همان‌جایی‌اند که باید باشند، و هیچ هشداری فعال نیست.</value>
+    </data>
+    <data name="TelemetrySummaryWatch" xml:space="preserve">
+        <value>همه کار می‌کنند؛ {0} مورد ارزش زیر نظر گرفتن دارد</value>
+    </data>
+    <data name="TelemetrySummaryBad" xml:space="preserve">
+        <value>{0} مورد نیاز به بررسی دارد</value>
+    </data>
+    <data name="TelemetrySummaryBoth" xml:space="preserve">
+        <value>{0} مورد نیاز به بررسی دارد، {1} مورد ارزش زیر نظر گرفتن</value>
+    </data>
+    <data name="TelemetryNeedsLook" xml:space="preserve">
+        <value>نیاز به بررسی</value>
+    </data>
+    <data name="TelemetryWorthWatching" xml:space="preserve">
+        <value>ارزش زیر نظر گرفتن</value>
+    </data>
+    <data name="TelemetryGood" xml:space="preserve">
+        <value>خوب</value>
+    </data>
+    <data name="TelemetryGroupYours" xml:space="preserve">
+        <value>کارت‌های شما</value>
+    </data>
+    <data name="TelemetryGroupSpeed" xml:space="preserve">
+        <value>سرعت</value>
+    </data>
+    <data name="TelemetryGroupPeople" xml:space="preserve">
+        <value>کاربران و ورود</value>
+    </data>
+    <data name="TelemetryGroupAi" xml:space="preserve">
+        <value>AI</value>
+    </data>
+    <data name="TelemetryGroupJobs" xml:space="preserve">
+        <value>کارهای پس‌زمینه</value>
+    </data>
+    <data name="TelemetryGroupFiles" xml:space="preserve">
+        <value>فایل و عکس</value>
+    </data>
+    <data name="TelemetryGroupServer" xml:space="preserve">
+        <value>سرور</value>
+    </data>
+    <data name="TelemetryMadeByAi" xml:space="preserve">
+        <value>ساختهٔ AI شما</value>
+    </data>
+    <data name="TelemetryYoursEmptyTitle" xml:space="preserve">
+        <value>هنوز کارتی از خودتان ندارید</value>
+    </data>
+    <data name="TelemetryYoursEmptyLine" xml:space="preserve">
+        <value>از AI خودتان بخواهید، با زبان خودتان.</value>
+    </data>
+    <data name="TelemetryAskedAs" xml:space="preserve">
+        <value>درخواست شما: «{0}»</value>
+    </data>
+    <data name="TelemetryAskedCostPerUser" xml:space="preserve">
+        <value>نشان بده هزینهٔ AI برای هر کاربر فعال در روز چقدر است.</value>
+    </data>
+    <data name="TelemetryAskedSignUps" xml:space="preserve">
+        <value>اگر ۶ ساعت کسی ثبت‌نام نکرد، خبرم کن.</value>
+    </data>
+    <data name="TelemetryCardTopPages" xml:space="preserve">
+        <value>پربازدیدترین صفحه‌ها</value>
+    </data>
+    <data name="TelemetryCardTopPagesLine" xml:space="preserve">
+        <value>بازدید صفحه‌ها در این هفته، از بازدیدکنندگانی که آنالیتیکس را پذیرفته‌اند.</value>
+    </data>
+    <data name="TelemetryCardCostPerUser" xml:space="preserve">
+        <value>هزینهٔ AI برای هر کاربر فعال</value>
+    </data>
+    <data name="TelemetryCardCostPerUserLine" xml:space="preserve">
+        <value>هزینهٔ AI امروز، تقسیم بر کسانی که امروز وارد شدند.</value>
+    </data>
+    <data name="TelemetryCardAnswerTime" xml:space="preserve">
+        <value>زمان جواب</value>
+    </data>
+    <data name="TelemetryCardAnswerTimeLine" xml:space="preserve">
+        <value>۹۵ درخواست از هر ۱۰۰ درخواست در همین زمان جواب می‌گیرند.</value>
+    </data>
+    <data name="TelemetryCardTypicalTime" xml:space="preserve">
+        <value>زمان جواب معمول</value>
+    </data>
+    <data name="TelemetryCardTypicalTimeLine" xml:space="preserve">
+        <value>نیمی از درخواست‌ها در همین زمان جواب می‌گیرند.</value>
+    </data>
+    <data name="TelemetryCardFailedRequests" xml:space="preserve">
+        <value>درخواست‌های ناموفق</value>
+    </data>
+    <data name="TelemetryCardFailedRequestsLine" xml:space="preserve">
+        <value>درخواست‌هایی که سرور نتوانست جواب بدهد.</value>
+    </data>
+    <data name="TelemetryCardRequests" xml:space="preserve">
+        <value>درخواست‌ها</value>
+    </data>
+    <data name="TelemetryCardRequestsLine" xml:space="preserve">
+        <value>اپ چقدر سرش شلوغ است.</value>
+    </data>
+    <data name="TelemetryUnitPerMinute" xml:space="preserve">
+        <value>در دقیقه</value>
+    </data>
+    <data name="TelemetryCardSlowestPages" xml:space="preserve">
+        <value>کندترین صفحه‌ها</value>
+    </data>
+    <data name="TelemetryCardSlowestPagesLine" xml:space="preserve">
+        <value>پنج صفحه‌ای که کاربران را بیشتر از همه منتظر می‌گذارند.</value>
+    </data>
+    <data name="TelemetryCardPageLoad" xml:space="preserve">
+        <value>باز شدن صفحه در مرورگر</value>
+    </data>
+    <data name="TelemetryCardPageLoadLine" xml:space="preserve">
+        <value>در مرورگر خود بازدیدکنندگان اندازه گرفته می‌شود (Web Vitals).</value>
+    </data>
+    <data name="TelemetryCardOutside" xml:space="preserve">
+        <value>سرویس‌های بیرونی</value>
+    </data>
+    <data name="TelemetryCardOutsideLine" xml:space="preserve">
+        <value>اپ شما چقدر منتظر هر کدام می‌ماند، به تفکیک host.</value>
+    </data>
+    <data name="TelemetryCardSlowQueries" xml:space="preserve">
+        <value>کندترین query های دیتابیس</value>
+    </data>
+    <data name="TelemetryCardSlowQueriesLine" xml:space="preserve">
+        <value>query هایی که بیشترین زمان را می‌گیرند، و چقدر.</value>
+    </data>
+    <data name="TelemetryCardCache" xml:space="preserve">
+        <value>خوانده‌شده از cache</value>
+    </data>
+    <data name="TelemetryCardCacheLine" xml:space="preserve">
+        <value>خواندن‌هایی که بدون رفتن به دیتابیس جواب گرفتند.</value>
+    </data>
+    <data name="TelemetryCardOnline" xml:space="preserve">
+        <value>آنلاین همین حالا</value>
+    </data>
+    <data name="TelemetryCardOnlineLine" xml:space="preserve">
+        <value>اتصال‌های زنده؛ کسی که دو tab باز دارد، دو بار شمرده می‌شود.</value>
+    </data>
+    <data name="TelemetryCardSignIns" xml:space="preserve">
+        <value>ورودها</value>
+    </data>
+    <data name="TelemetryCardSignInsLine" xml:space="preserve">
+        <value>کسانی که در این بازه وارد شدند.</value>
+    </data>
+    <data name="TelemetryCardFailedSignIns" xml:space="preserve">
+        <value>ورودهای ناموفق</value>
+    </data>
+    <data name="TelemetryCardFailedSignInsLine" xml:space="preserve">
+        <value>رمز یا کد اشتباه. یک جهش ناگهانی می‌تواند یعنی کسی دارد حدس می‌زند.</value>
+    </data>
+    <data name="TelemetryCardSignUps" xml:space="preserve">
+        <value>حساب‌های تازه</value>
+    </data>
+    <data name="TelemetryCardSignUpsLine" xml:space="preserve">
+        <value>کسانی که ثبت‌نام کردند.</value>
+    </data>
+    <data name="TelemetryCardDenied" xml:space="preserve">
+        <value>دسترسی رد شده</value>
+    </data>
+    <data name="TelemetryCardDeniedLine" xml:space="preserve">
+        <value>درخواست برای چیزی که کاربر اجازهٔ باز کردنش را ندارد.</value>
+    </data>
+    <data name="TelemetryCardAiCost" xml:space="preserve">
+        <value>هزینهٔ AI</value>
+    </data>
+    <data name="TelemetryCardAiCostLine" xml:space="preserve">
+        <value>از روی token هایی که هر مدل مصرف کرد حساب می‌شود.</value>
+    </data>
+    <data name="TelemetryCardTokens" xml:space="preserve">
+        <value>token به تفکیک مدل</value>
+    </data>
+    <data name="TelemetryCardTokensLine" xml:space="preserve">
+        <value>آنچه هر مدل خواند و نوشت.</value>
+    </data>
+    <data name="TelemetryCardAiTime" xml:space="preserve">
+        <value>زمان جواب AI</value>
+    </data>
+    <data name="TelemetryCardAiTimeLine" xml:space="preserve">
+        <value>۹۵ جواب از هر ۱۰۰ جواب در همین زمان شروع می‌شوند.</value>
+    </data>
+    <data name="TelemetryCardChats" xml:space="preserve">
+        <value>چت‌های همین حالا</value>
+    </data>
+    <data name="TelemetryCardChatsLine" xml:space="preserve">
+        <value>جواب‌هایی که AI همین لحظه دارد می‌نویسد.</value>
+    </data>
+    <data name="TelemetryCardFailedJobs" xml:space="preserve">
+        <value>کارهای ناموفق</value>
+    </data>
+    <data name="TelemetryCardFailedJobsLine" xml:space="preserve">
+        <value>کارهایی که بعد از تلاش‌های دوباره کنار گذاشته شدند.</value>
+    </data>
+    <data name="TelemetryCardJobsDone" xml:space="preserve">
+        <value>کارهای انجام‌شده</value>
+    </data>
+    <data name="TelemetryCardJobsDoneLine" xml:space="preserve">
+        <value>کارهای پس‌زمینه‌ای که در این بازه تمام شدند.</value>
+    </data>
+    <data name="TelemetryCardJobTimes" xml:space="preserve">
+        <value>مدت اجرای هر کار</value>
+    </data>
+    <data name="TelemetryCardJobTimesLine" xml:space="preserve">
+        <value>یک اجرای معمول، و طولانی‌ترین اجرا، به تفکیک کار.</value>
+    </data>
+    <data name="TelemetryCardResize" xml:space="preserve">
+        <value>زمان resize عکس</value>
+    </data>
+    <data name="TelemetryCardResizeLine" xml:space="preserve">
+        <value>۹۵ عکس از هر ۱۰۰ عکس در همین زمان آماده می‌شوند.</value>
+    </data>
+    <data name="TelemetryCardUploads" xml:space="preserve">
+        <value>upload ها</value>
+    </data>
+    <data name="TelemetryCardUploadsLine" xml:space="preserve">
+        <value>عکس‌ها و فایل‌هایی که کاربران upload کردند.</value>
+    </data>
+    <data name="TelemetryCardCpu" xml:space="preserve">
+        <value>CPU</value>
+    </data>
+    <data name="TelemetryCardCpuLine" xml:space="preserve">
+        <value>سرور چقدر کار می‌کند.</value>
+    </data>
+    <data name="TelemetryCardMemory" xml:space="preserve">
+        <value>حافظه</value>
+    </data>
+    <data name="TelemetryCardMemoryLine" xml:space="preserve">
+        <value>آنچه اپ در حافظه نگه داشته است.</value>
+    </data>
+    <data name="TelemetryCardErrors" xml:space="preserve">
+        <value>خطاهای پیش‌بینی‌نشده</value>
+    </data>
+    <data name="TelemetryCardErrorsLine" xml:space="preserve">
+        <value>خطاهایی که کد انتظارشان را نداشت؛ ارزش بررسی دارند.</value>
+    </data>
+    <data name="TelemetryCardInstances" xml:space="preserve">
+        <value>نسخه‌های در حال اجرا</value>
+    </data>
+    <data name="TelemetryCardInstancesLine" xml:space="preserve">
+        <value>هر نسخهٔ سرور، و نسخه‌ای که اجرا می‌کند.</value>
+    </data>
+    <data name="TelemetryNow" xml:space="preserve">
+        <value>همین حالا</value>
+    </data>
+    <data name="TelemetryEstimate" xml:space="preserve">
+        <value>تخمینی</value>
+    </data>
+    <data name="TelemetryEstimateTip" xml:space="preserve">
+        <value>از نمونه‌ای از trace ها حساب می‌شود، پس نزدیک است، نه دقیق.</value>
+    </data>
+    <data name="TelemetryMore" xml:space="preserve">
+        <value>بیشتر</value>
+    </data>
+    <data name="TelemetryAskWhy" xml:space="preserve">
+        <value>از AI بپرسید چرا</value>
+    </data>
+    <data name="TelemetryWhyPrompt" xml:space="preserve">
+        <value>کارت «{0}» در تله‌متری {1} اپ من در bit Fabric را ببین و بگو چرا در {2} گذشته تغییر کرد.</value>
+    </data>
+    <data name="TelemetryWhyCopied" xml:space="preserve">
+        <value>سؤال کپی شد</value>
+    </data>
+    <data name="TelemetryWhyCopiedLine" xml:space="preserve">
+        <value>آن را برای AI agent خودتان بفرستید.</value>
+    </data>
+    <data name="TelemetryHide" xml:space="preserve">
+        <value>پنهان کردن</value>
+    </data>
+    <data name="TelemetryDelete" xml:space="preserve">
+        <value>حذف</value>
+    </data>
+    <data name="TelemetryCancel" xml:space="preserve">
+        <value>انصراف</value>
+    </data>
+    <data name="TelemetryDeleteCardTitle" xml:space="preserve">
+        <value>این کارت حذف شود؟</value>
+    </data>
+    <data name="TelemetryDeleteCardMessage" xml:space="preserve">
+        <value>AI شما هر وقت بخواهید می‌تواند دوباره اضافه‌اش کند.</value>
+    </data>
+    <data name="TelemetryDragToMove" xml:space="preserve">
+        <value>برای جابه‌جایی بکشید</value>
+    </data>
+    <data name="TelemetrySize" xml:space="preserve">
+        <value>اندازه</value>
+    </data>
+    <data name="TelemetrySizeSmall" xml:space="preserve">
+        <value>کوچک</value>
+    </data>
+    <data name="TelemetrySizeWide" xml:space="preserve">
+        <value>پهن</value>
+    </data>
+    <data name="TelemetrySizeFull" xml:space="preserve">
+        <value>تمام‌عرض</value>
+    </data>
+    <data name="TelemetryComparedWithBefore" xml:space="preserve">
+        <value>در مقایسه با بازهٔ قبل</value>
+    </data>
+    <data name="TelemetryOverThePeriod" xml:space="preserve">
+        <value>در طول بازه</value>
+    </data>
+    <data name="TelemetryNotMeasured" xml:space="preserve">
+        <value>هنوز اندازه گرفته نشده: در این بازه چیزی نرسیده است.</value>
+    </data>
+    <data name="TelemetryHiddenCards" xml:space="preserve">
+        <value>کارت‌های پنهان</value>
+    </data>
+    <data name="TelemetryPutBack" xml:space="preserve">
+        <value>برگرداندن همه</value>
+    </data>
+    <data name="TelemetryNoneHidden" xml:space="preserve">
+        <value>هیچ. کارتی را از منویش پنهان کنید تا اینجا منتظر بماند.</value>
+    </data>
+    <data name="TelemetryErrorTitle" xml:space="preserve">
+        <value>عددها خوانده نشدند</value>
+    </data>
+    <data name="TelemetryErrorLine" xml:space="preserve">
+        <value>bit Fabric همچنان آن‌ها را دریافت می‌کند؛ کمی بعد دوباره امتحان کنید.</value>
+    </data>
+    <data name="TelemetryTryAgain" xml:space="preserve">
+        <value>دوباره امتحان کنید</value>
+    </data>
+    <data name="TelemetryEmptyTitle" xml:space="preserve">
+        <value>هنوز چیزی از {0} نرسیده است</value>
+    </data>
+    <data name="TelemetryEmptyLine" xml:space="preserve">
+        <value>اپ شما وقتی این محیط کلید تله‌متری‌اش را داشته باشد، شروع به فرستادن می‌کند. از AI خودتان بخواهید تنظیمش کند:</value>
+    </data>
+    <data name="TelemetryEmptyPrompt" xml:space="preserve">
+        <value>تله‌متری اپ من را به bit Fabric بفرست.</value>
+    </data>
+    <data name="TelemetryAlertsTitle" xml:space="preserve">
+        <value>هشدارها</value>
+    </data>
+    <data name="TelemetryAlertsLead" xml:space="preserve">
+        <value>AI شما آن‌ها را تعریف می‌کند؛ bit Fabric هر دقیقه بررسی‌شان می‌کند و از کانال‌های پروژه‌تان خبرتان می‌کند.</value>
+    </data>
+    <data name="TelemetryAlertsEmptyTitle" xml:space="preserve">
+        <value>هنوز هشداری ندارید</value>
+    </data>
+    <data name="TelemetryAlertsEmptyLine" xml:space="preserve">
+        <value>از AI خودتان بخواهید، برای نمونه:</value>
+    </data>
+    <data name="TelemetryAlertJobs" xml:space="preserve">
+        <value>در یک ساعت بیش از ۵ کار پس‌زمینه شکست بخورد</value>
+    </data>
+    <data name="TelemetryAlertCost" xml:space="preserve">
+        <value>هزینهٔ AI در ۱۵ دقیقه از ۱۰ دلار بیشتر شود</value>
+    </data>
+    <data name="TelemetryAlertSignUps" xml:space="preserve">
+        <value>۶ ساعت کسی ثبت‌نام نکند</value>
+    </data>
+    <data name="TelemetryAlertFiring" xml:space="preserve">
+        <value>فعال</value>
+    </data>
+    <data name="TelemetryAlertQuiet" xml:space="preserve">
+        <value>آرام</value>
+    </data>
+    <data name="TelemetryAlertPaused" xml:space="preserve">
+        <value>متوقف</value>
+    </data>
+    <data name="TelemetryAlertFiringFor" xml:space="preserve">
+        <value>از {0} دقیقه پیش: {1} کار شکست خورده</value>
+    </data>
+    <data name="TelemetryAlertLastFired" xml:space="preserve">
+        <value>آخرین بار {0} روز پیش</value>
+    </data>
+    <data name="TelemetryAlertNeverFired" xml:space="preserve">
+        <value>هنوز فعال نشده</value>
+    </data>
+    <data name="TelemetryAlertWatching" xml:space="preserve">
+        <value>بررسی این هشدار</value>
+    </data>
+    <data name="TelemetryChannelsEmailPush" xml:space="preserve">
+        <value>با ایمیل و push</value>
+    </data>
+    <data name="TelemetryChannelsEmail" xml:space="preserve">
+        <value>با ایمیل</value>
+    </data>
+    <data name="TelemetryDeleteAlertTitle" xml:space="preserve">
+        <value>این هشدار حذف شود؟</value>
+    </data>
+    <data name="TelemetryDeleteAlertMessage" xml:space="preserve">
+        <value>AI شما هر وقت بخواهید می‌تواند دوباره تعریفش کند.</value>
+    </data>
 </root>

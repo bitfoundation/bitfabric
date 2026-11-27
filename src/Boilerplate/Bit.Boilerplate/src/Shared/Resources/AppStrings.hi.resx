@@ -2014,11 +2014,11 @@
     <data name="OAuthScopeDevMcpShortDescription" xml:space="preserve">
     <value>इस डिप्लॉयमेंट की डायग्नोस्टिक जानकारी पढ़ना।</value>
   </data>
-    <data name="OAuthScopeHealthzDescription" xml:space="preserve">
-    <value>इस डिप्लॉयमेंट की विस्तृत हेल्थ रिपोर्ट पढ़ना, विफल हो रही चीज़ों के एरर विवरण के बिना।</value>
+    <data name="OAuthScopeMonitoringDescription" xml:space="preserve">
+    <value>इस डिप्लॉयमेंट की निगरानी: इसकी विस्तृत हेल्थ रिपोर्ट पढ़ना, विफल हो रही चीज़ों के एरर विवरण के बिना।</value>
   </data>
-    <data name="OAuthScopeHealthzShortDescription" xml:space="preserve">
-    <value>हेल्थ रिपोर्ट पढ़ना।</value>
+    <data name="OAuthScopeMonitoringShortDescription" xml:space="preserve">
+    <value>इस ऐप की निगरानी।</value>
   </data>
     <data name="OAuthSessionsTitle" xml:space="preserve">
     <value>अधिकृत एप्लिकेशन</value>
