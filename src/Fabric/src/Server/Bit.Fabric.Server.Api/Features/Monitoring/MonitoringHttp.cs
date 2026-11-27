@@ -25,6 +25,7 @@ public static class MonitoringHttp
         services.AddScoped<ProjectEscalationJobRunner>();
         services.AddScoped<ProjectSlaReports>();
         services.AddScoped<MonitoringsService>();
+        services.AddScoped<ProjectTroubleshootPrompts>();
         services.AddScoped<Projects.ProjectsService>();
         services.AddScoped<Projects.ProjectLinker>();
         services.AddScoped<Projects.TeamDeparture>();

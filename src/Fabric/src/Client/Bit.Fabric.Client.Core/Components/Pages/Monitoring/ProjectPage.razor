@@ -75,6 +75,7 @@
                 <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.Refresh" Loading="isLoading" OnClick="WrapHandled(Load)">@Localizer[nameof(AppStrings.Refresh)]</BitButton>
                 @if (project is not null)
                 {
+                    <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.ChatBot" OnClick="WrapHandled(() => isTroubleshootOpen = true)">@Localizer[nameof(AppStrings.MonitoringTroubleshoot)]</BitButton>
                     <BitButton Variant="BitVariant.Outline" IconName="@BitIconName.OpenInNewWindow" Href="@project.Address" Target="_blank">@Localizer[nameof(AppStrings.MonitoringOpenTheApp)]</BitButton>
                 }
             </div>
@@ -116,7 +117,7 @@
 
         @if (project.OngoingIncident is { } ongoing)
         {
-            <BitMessage Color="@(project.Health is ProjectHealth.Down ? BitColor.Error : BitColor.Warning)" Variant="BitVariant.Fill" AutoMultiline Title="@ongoing">
+            <BitMessage Color="@(project.Health is ProjectHealth.Down ? BitColor.Error : BitColor.Warning)" Variant="BitVariant.Fill" AutoMultiline Title="@ongoing" Classes="bannerClasses">
                 <ChildContent>@Localizer[nameof(AppStrings.MonitoringOngoingSince), TimeZoneService.ToLocalTime(project.OngoingIncidentSince!.Value).ToString("t", CultureInfo.CurrentUICulture)]</ChildContent>
                 <Actions>
                     @* Filled in the page's background color, which reads on the message's error or warning fill in light and dark. *@
@@ -127,17 +128,18 @@
 
         @if (project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded)
         {
-            <BitMessage Color="BitColor.SevereWarning" Variant="BitVariant.Outline" AutoMultiline Title="@Localizer[nameof(AppStrings.MonitoringCannotReadHealth)]">
+            <BitMessage Color="BitColor.SevereWarning" Variant="BitVariant.Outline" AutoMultiline Classes="bannerClasses" Title="@Localizer[nameof(AppStrings.MonitoringCannotReadHealth)]">
                 @* The app's own reason may come in its own language and direction. *@
-                <ChildContent><span dir="auto">@project.ConnectionProblem</span></ChildContent>
+                <ChildContent><span dir="auto">@project.ConnectionProblem</span> @Localizer[nameof(AppStrings.MonitoringStillCheckingUp)]</ChildContent>
                 <Actions>
                     <BitButton Size="BitSize.Small" IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(project)">@Localizer[nameof(AppStrings.MonitoringReconnect)]</BitButton>
+                    <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.ChatBot" OnClick="WrapHandled(() => isTroubleshootOpen = true)">@Localizer[nameof(AppStrings.MonitoringTroubleshoot)]</BitButton>
                 </Actions>
             </BitMessage>
         }
         else if (project.ConnectionStatus is ProjectConnectionStatus.Disconnected)
         {
-            <BitMessage Color="BitColor.Info" Variant="BitVariant.Outline" AutoMultiline Title="@Localizer[nameof(AppStrings.MonitoringDisconnected)]">
+            <BitMessage Color="BitColor.Info" Variant="BitVariant.Outline" AutoMultiline Classes="bannerClasses" Title="@Localizer[nameof(AppStrings.MonitoringDisconnected)]">
                 <ChildContent>@Localizer[nameof(AppStrings.MonitoringDisconnectedNotice)]</ChildContent>
                 <Actions>
                     <BitButton Size="BitSize.Small" IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(project)">@Localizer[nameof(AppStrings.MonitoringReconnect)]</BitButton>
@@ -150,6 +152,8 @@
                 @Localizer[nameof(AppStrings.MonitoringCacheAnswersForHomePageHelp)]
             </BitMessage>
         }
+
+        <ProjectTroubleshoot MonitoringId="project.Id" @bind-IsOpen="isTroubleshootOpen" />
 
         <BitPivot SelectedKey="@SelectedTab" SelectedKeyChanged="@((string? key) => OpenTab(key))" OverflowBehavior="BitPivotOverflowBehavior.Scroll" Class="tabs">
             <BitPivotItem Key="@OverviewTab" HeaderText="@Localizer[nameof(AppStrings.MonitoringOverview)]" IconName="@BitIconName.Health">

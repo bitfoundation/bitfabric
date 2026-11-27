@@ -127,6 +127,21 @@ public partial class AppJwtSecureDataFormat
 
             return data;
         }
+        catch (SecurityTokenInvalidAudienceException ex)
+        {
+            // A token issued for another resource of this app, such as an OAuth client's for /healthz, reaches this scheme
+            // first on every request it makes; the scheme of its own audience reads it next. Expected, so not a warning.
+            logger.LogDebug(ex, "The {TokenType} is for another audience.", tokenType);
+
+            return Anonymous();
+        }
+        catch (SecurityTokenExpiredException ex)
+        {
+            // Expected too: a client sends its expired access token until it has refreshed it, the refresh request included.
+            logger.LogDebug(ex, "The {TokenType} has expired.", tokenType);
+
+            return Anonymous();
+        }
         catch (Exception ex)
         {
             logger.LogWarning(ex, "Failed to unprotect the {TokenType}.", tokenType);

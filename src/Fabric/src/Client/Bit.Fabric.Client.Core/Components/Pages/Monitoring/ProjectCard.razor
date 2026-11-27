@@ -47,7 +47,14 @@
         <div class="notice reconnect">
             <BitText Typography="BitTypography.Body2">
                 @* The app's own reason may come in its own language and direction. *@
-                <span dir="auto">@(Project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded ? Project.ConnectionProblem : Localizer[nameof(AppStrings.MonitoringDisconnectedNotice)])</span>
+                @if (Project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded)
+                {
+                    <span dir="auto">@Project.ConnectionProblem</span>@(" ")@Localizer[nameof(AppStrings.MonitoringStillCheckingUp)]
+                }
+                else
+                {
+                    @Localizer[nameof(AppStrings.MonitoringDisconnectedNotice)]
+                }
             </BitText>
             <BitButton Size="BitSize.Small" Variant="BitVariant.Outline" IconName="@BitIconName.PlugConnected" Href="@ProjectChecks.ReconnectHref(Project)" Class="reconnect-button">
                 @Localizer[nameof(AppStrings.MonitoringReconnect)]

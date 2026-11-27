@@ -1,3 +1,4 @@
+using System.Net;
 using System.Security.Cryptography;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.DataProtection;
@@ -65,7 +66,12 @@ public partial class MonitoringOAuthClient(IHttpClientFactory httpClientFactory,
             : null;
     }
 
-    /// <summary>The token endpoint's answer to a code (authorization_code) or a refresh (refresh_token), or why it refused.</summary>
+    /// <summary>
+    /// The token endpoint's answer to a code (authorization_code) or a refresh (refresh_token), or why it refused. Only an
+    /// OAuth error the app wrote itself (RFC 6749 §5.2) is a refusal; a server error, a 404, no answer in time, no answer at
+    /// all or one that isn't JSON, such as a proxy's page during a deployment, may pass, so it is
+    /// <see cref="TokenResult.IsTemporary"/>.
+    /// </summary>
     public async Task<TokenResult> RequestToken(string tokenEndpoint, Dictionary<string, string> form, CancellationToken cancellationToken)
     {
         var http = httpClientFactory.CreateClient(MonitoringHttp.ClientName);
@@ -73,13 +79,31 @@ public partial class MonitoringOAuthClient(IHttpClientFactory httpClientFactory,
         using var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint) { Content = new FormUrlEncodedContent(form) };
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-        using var response = await http.SendAsync(request, cancellationToken);
-        var answer = await response.Content.ReadFromJsonAsync(MonitoringJsonContext.Default.TokenResponse, cancellationToken);
+        HttpStatusCode status;
+        TokenResponse? answer = null;
 
-        if (response.IsSuccessStatusCode is false || answer?.AccessToken is null)
-            return new(null, answer?.Error ?? $"HTTP {(int)response.StatusCode}", answer?.ErrorDescription);
+        try
+        {
+            using var response = await http.SendAsync(request, cancellationToken);
+            status = response.StatusCode;
 
-        return new(answer, null, null);
+            if (response.Content.Headers.ContentType?.MediaType is "application/json")
+            {
+                answer = await response.Content.ReadFromJsonAsync(MonitoringJsonContext.Default.TokenResponse, cancellationToken);
+            }
+        }
+        catch (Exception exp) when (exp is HttpRequestException or JsonException || (exp is TaskCanceledException && cancellationToken.IsCancellationRequested is false))
+        {
+            return new(null, exp is TaskCanceledException ? "timeout" : "no answer", null, null, IsTemporary: true);
+        }
+
+        if ((int)status is >= 200 and < 300 && answer?.AccessToken is not null)
+            return new(answer, null, null, status, IsTemporary: false);
+
+        // The app's own refusal names its error; anything else is the way to it, or its server, failing for now.
+        var isRefusal = (int)status is >= 400 and < 500 && status is not HttpStatusCode.NotFound && string.IsNullOrEmpty(answer?.Error) is false;
+
+        return new(null, answer?.Error ?? $"HTTP {(int)status}", answer?.ErrorDescription, status, IsTemporary: isRefusal is false);
     }
 
     /// <summary>
@@ -105,15 +129,17 @@ public partial class MonitoringOAuthClient(IHttpClientFactory httpClientFactory,
 
     /// <summary>
     /// A fresh access token for the connection: the stored one while it has more than a minute left, else one from its
-    /// refresh token. Null when the app refused the refresh, which needs someone to reconnect.
+    /// refresh token. Without one, why: a problem that needs someone to reconnect, or a temporary one the next round tries
+    /// again, which keeps the refresh token (bitfabric-internal/specs/monitoring.md, Monitoring keeps watching when the
+    /// approval breaks).
     /// </summary>
-    public async Task<(string? AccessToken, string? Problem)> GetAccessToken(ProjectConnection connection, string clientId, bool forceRefresh, CancellationToken cancellationToken)
+    public async Task<AccessTokenResult> GetAccessToken(ProjectConnection connection, string clientId, bool forceRefresh, CancellationToken cancellationToken)
     {
         if (forceRefresh is false && connection.AccessTokenExpiresAt > timeProvider.GetUtcNow().AddMinutes(1))
-            return (Unprotect(connection.ProtectedAccessToken!), null);
+            return new(Unprotect(connection.ProtectedAccessToken!), null, false);
 
         if (connection.ProtectedRefreshToken is null)
-            return (null, ProjectConnectionProblems.Of(ProjectConnectionProblems.ApprovalExpired));
+            return new(null, ProjectConnectionProblems.Of(ProjectConnectionProblems.ApprovalExpired), false);
 
         var result = await RequestToken(connection.TokenEndpoint!, new()
         {
@@ -124,17 +150,42 @@ public partial class MonitoringOAuthClient(IHttpClientFactory httpClientFactory,
         }, cancellationToken);
 
         if (result.Answer is null)
-            // A code, put in each reader's words when it's read (See ProjectConnectionProblems); the app's own reason as it said it.
-            return (null, result.ErrorDescription?.Trim() is { Length: > 0 } reason
-                ? ProjectConnectionProblems.Of(ProjectConnectionProblems.NoLongerAccepted, reason.Length > 300 ? reason[..300] : reason)
-                : ProjectConnectionProblems.Of(ProjectConnectionProblems.RenewRefused, result.Error));
+            return new(null, ProblemOf(result), result.IsTemporary);
 
         Store(connection, result.Answer);
-        return (result.Answer.AccessToken, null);
+        return new(result.Answer.AccessToken, null, false);
+    }
+
+    /// <summary>
+    /// Why a refresh failed, as a code put in each reader's words when it's read (See ProjectConnectionProblems).
+    /// invalid_grant means the app doesn't know the approval anymore: withdrawn, or its data reset. A temporary failure
+    /// names what was seen, for when it has lasted an hour (See ProjectProber).
+    /// </summary>
+    private static string ProblemOf(TokenResult result)
+    {
+        if (result.IsTemporary)
+            return result.Status is HttpStatusCode.NotFound
+                ? ProjectConnectionProblems.Of(ProjectConnectionProblems.ReportGone)
+                : ProjectConnectionProblems.Of(ProjectConnectionProblems.ServerError, result.Error);
+
+        // Any other refusal, such as invalid_client, is about bit Fabric's client rather than the approval: named by its error.
+        if (result.Error is not "invalid_grant")
+            return ProjectConnectionProblems.Of(ProjectConnectionProblems.RenewRefused, result.Error);
+
+        // The app's own reason as it said it, when it gave one, such as the template's "The approval was revoked.".
+        return result.ErrorDescription?.Trim() is { Length: > 0 } reason
+            ? ProjectConnectionProblems.Of(ProjectConnectionProblems.NoLongerAccepted, reason.Length > 300 ? reason[..300] : reason)
+            : ProjectConnectionProblems.Of(ProjectConnectionProblems.ApprovalWithdrawn);
     }
 }
 
-public sealed record TokenResult(TokenResponse? Answer, string? Error, string? ErrorDescription);
+/// <param name="Status">The token endpoint's status code; null when it gave no answer.</param>
+/// <param name="IsTemporary">Not a refusal of the app's own, so the next round tries again (See RequestToken).</param>
+public sealed record TokenResult(TokenResponse? Answer, string? Error, string? ErrorDescription, HttpStatusCode? Status, bool IsTemporary);
+
+/// <param name="Problem">Why there is no token, as a ProjectConnectionProblems code.</param>
+/// <param name="IsTemporary">The problem may pass, so the approval is kept and tried again.</param>
+public sealed record AccessTokenResult(string? AccessToken, string? Problem, bool IsTemporary);
 
 public sealed class AuthorizationServerMetadata
 {

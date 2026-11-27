@@ -48,6 +48,7 @@ namespace Bit.Fabric.Shared.Infrastructure.Dtos;
 [JsonSerializable(typeof(MonitoringDto))]
 [JsonSerializable(typeof(List<MonitoringDto>))]
 [JsonSerializable(typeof(MonitoringDetailsDto))]
+[JsonSerializable(typeof(TroubleshootPromptDto))]
 [JsonSerializable(typeof(ProjectMapDto))]
 [JsonSerializable(typeof(ProjectPerformanceRequestDto))]
 [JsonSerializable(typeof(ProjectPerformanceDto))]

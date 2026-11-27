@@ -128,6 +128,21 @@ public partial class AppJwtSecureDataFormat
 
             return data;
         }
+        catch (SecurityTokenInvalidAudienceException ex)
+        {
+            // Expected: a token issued for another resource, such as an OAuth token for /healthz, is tried here first
+            // and then authenticates through its own scheme. A monitor reading every minute would otherwise fill the logs.
+            logger.LogDebug(ex, "Failed to unprotect the {TokenType}.", tokenType);
+
+            return Anonymous();
+        }
+        catch (SecurityTokenExpiredException ex)
+        {
+            // Expected too: a client sends its expired access token until it has refreshed it, the refresh request included.
+            logger.LogDebug(ex, "The {TokenType} has expired.", tokenType);
+
+            return Anonymous();
+        }
         catch (Exception ex)
         {
             logger.LogWarning(ex, "Failed to unprotect the {TokenType}.", tokenType);

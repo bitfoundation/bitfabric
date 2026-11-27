@@ -47,7 +47,9 @@ internal class LoggingDelegatingHandler(ILogger<HttpClient> logger, HttpMessageH
         }
         finally
         {
-            var logLevel = (LogLevel)request.Options.GetValueOrDefault(RequestOptionNames.LogLevel)!;
+            var logLevel = cancellationToken.IsCancellationRequested
+                ? LogLevel.Information
+                : (LogLevel)request.Options.GetValueOrDefault(RequestOptionNames.LogLevel)!;
             logScopeData[nameof(CancellationToken.IsCancellationRequested)] = cancellationToken.IsCancellationRequested;
 
             using var scope = logger.BeginScope(logScopeData);

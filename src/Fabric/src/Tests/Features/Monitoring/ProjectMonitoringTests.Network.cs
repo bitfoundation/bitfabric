@@ -83,10 +83,13 @@ public partial class ProjectMonitoringTests
         await Assert.ThrowsExactlyAsync<ResourceNotFoundException>(() => stranger.GetController<IMonitoringsController>()
             .SetLocations(new() { MonitoringId = project.Id, Locations = ["enam"] }, TestContext.CancellationToken));
 
-        // A project waiting to be reconnected is watched from nowhere, as from Germany.
+        // A project waiting to be reconnected is still timed, as from Germany; one the team disconnected isn't.
         await projects.SetLocations(new() { MonitoringId = project.Id, Locations = ["enam"] }, TestContext.CancellationToken);
         customerApp.Revoke();
         await Probe(server, project.Id);
+        Assert.Contains(target => target.MonitoringId == project.Id, await Targets(server, "enam"));
+
+        await projects.Disconnect(project.Id, TestContext.CancellationToken);
         Assert.DoesNotContain(target => target.MonitoringId == project.Id, await Targets(server, "enam"));
     }
 

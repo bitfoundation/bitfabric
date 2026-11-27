@@ -29,6 +29,7 @@ public partial class MonitoringsController : AppControllerBase, IMonitoringsCont
     [AutoInject] private MonitoringsService monitoringsService = default!;
     [AutoInject] private ProjectHistoryExport historyExport = default!;
     [AutoInject] private Projects.ProjectsService projectsService = default!;
+    [AutoInject] private ProjectTroubleshootPrompts troubleshootPrompts = default!;
 
     /// <summary>Read the same way by the AI tools (See MonitoringsService).</summary>
     [HttpGet]
@@ -42,6 +43,11 @@ public partial class MonitoringsController : AppControllerBase, IMonitoringsCont
     [HttpGet("{id}")]
     public Task<MonitoringDetailsDto> GetMonitoring(Guid id, CancellationToken cancellationToken)
         => monitoringsService.GetMonitoring(id, cancellationToken);
+
+    /// <summary>Read the same way by the AI tools (See ProjectTroubleshootPrompts).</summary>
+    [HttpGet("{id}")]
+    public Task<TroubleshootPromptDto> GetTroubleshootPrompt(Guid id, CancellationToken cancellationToken)
+        => troubleshootPrompts.For(id, cancellationToken);
 
     /// <summary>Read the same way by the AI tools (See MonitoringsService.GetMap).</summary>
     [HttpGet("{id}")]
@@ -92,10 +98,13 @@ public partial class MonitoringsController : AppControllerBase, IMonitoringsCont
                 }
 
                 // The bitplatform Network times the front door alone (See ProjectProbe.Colo).
+                // While the token can't read the report, the public /health stands in, as in the rollups (See ProjectProber.RollUp).
                 if (round.Outcome is not ProjectProbeOutcome.Unauthorized && round.Colo is null)
                 {
-                    var read = round.Outcome is ProjectProbeOutcome.Read;
-                    points.Add(PerformancePoint.Of(ProjectRollup.ReportKey, round.Region!, minute, read is false || round.Status is HealthCheckStatus.Unhealthy, round.Status is HealthCheckStatus.Degraded, read ? round.ReportMs : null));
+                    var answered = round.Outcome is ProjectProbeOutcome.Read or ProjectProbeOutcome.PublicHealth or ProjectProbeOutcome.Reached;
+                    var timed = round.Outcome is ProjectProbeOutcome.Read or ProjectProbeOutcome.PublicHealth;
+                    points.Add(PerformancePoint.Of(ProjectRollup.ReportKey, round.Region!, minute, answered is false || round.Status is HealthCheckStatus.Unhealthy,
+                                                   round.Outcome is ProjectProbeOutcome.Read && round.Status is HealthCheckStatus.Degraded, timed ? round.ReportMs : null));
                 }
 
                 // A reused result shows its status but no new time (See ProjectProbeCheck.IsReused).

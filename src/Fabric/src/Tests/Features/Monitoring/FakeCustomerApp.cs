@@ -59,6 +59,21 @@ public sealed class FakeCustomerApp
 
     public bool RefusesRefresh { get; set; }
 
+    /// <summary>
+    /// What its token endpoint answers a refresh with instead of a token, as a server failing, or a proxy in front of it
+    /// during a deployment, does: that status with a page that isn't JSON. Null answers as usual.
+    /// </summary>
+    public HttpStatusCode? RefreshFailsWith { get; set; }
+
+    /// <summary>Its server serves the detailed report at <c>/healthz/v1</c>; false answers 404, as when its code was removed.</summary>
+    public bool ServesHealthz { get; set; } = true;
+
+    /// <summary>What <c>/healthz/v1</c> answers instead of the report, with a page that isn't JSON, as broken code behind it does.</summary>
+    public HttpStatusCode? HealthzFailsWith { get; set; }
+
+    /// <summary>What the public <c>/health</c> answers instead, as a proxy in front of a server that is down does.</summary>
+    public HttpStatusCode? HealthFailsWith { get; set; }
+
     /// <summary>How long it takes to answer anything, as a slow app does.</summary>
     public TimeSpan Delay { get; set; }
 
@@ -228,6 +243,9 @@ public sealed class FakeCustomerApp
         Report.Status = Report.Entries.Values.Min(entry => entry.Status);
     }
 
+    /// <summary>The access token stops working, so the next round refreshes it.</summary>
+    public void ExpireAccessToken() => AccessToken = "expired";
+
     /// <summary>Takes back the approval, the way a password change does: the token stops working and so does its refresh.</summary>
     public void Revoke()
     {
@@ -294,9 +312,17 @@ public sealed class FakeCustomerApp
                 ["code_challenge_methods_supported"] = new[] { "S256" }
             }),
             ("POST", "/oauth/token") when origin == Server => await Token(request, cancellationToken),
+            ("GET", "/healthz/v1") when origin == Server && ServesHealthz is false => new HttpResponseMessage(HttpStatusCode.NotFound),
+            ("GET", "/healthz/v1") when origin == Server && HealthzFailsWith is { } healthzStatus => ErrorPage(healthzStatus),
+            ("GET", "/health") when origin == Server && HealthFailsWith is { } healthStatus => ErrorPage(healthStatus),
             ("GET", "/healthz/v1") when origin == Server => request.Headers.Authorization?.Parameter is { } token && token == AccessToken
                 ? HealthReport()
                 : new HttpResponseMessage(HttpStatusCode.Unauthorized),
+            // The public /health, as the template answers it: the overall status alone, 503 when Unhealthy.
+            ("GET", "/health") when origin == Server => new HttpResponseMessage(Report.Status is HealthCheckStatus.Unhealthy ? HttpStatusCode.ServiceUnavailable : HttpStatusCode.OK)
+            {
+                Content = new StringContent($"{Report.Status}", Encoding.UTF8, "text/plain")
+            },
             // An app made from the template sends its root to the culture's (See ProjectProber.TimeFrontDoor).
             ("GET", "/") => new HttpResponseMessage(HttpStatusCode.Found) { Headers = { Location = new Uri($"{Landing}{url.Query}", UriKind.Relative) } },
             ("GET", var path) when path == Landing || path is "/health" => Home(url),
@@ -320,6 +346,10 @@ public sealed class FakeCustomerApp
             var challenge = Base64UrlTextEncoder.Encode(SHA256.HashData(Encoding.ASCII.GetBytes(form["code_verifier"].ToString())));
             if (challenge != Challenge || form["resource"] != $"{Server}/healthz")
                 return TokenError("invalid_grant");
+        }
+        else if (RefreshFailsWith is { } status)
+        {
+            return ErrorPage(status);
         }
         else if (RefusesRefresh)
         {
@@ -402,6 +432,10 @@ public sealed class FakeCustomerApp
 
     private static HttpResponseMessage TokenError(string error, string? description = null)
         => Json(new Dictionary<string, object?> { ["error"] = error, ["error_description"] = description }, HttpStatusCode.BadRequest);
+
+    /// <summary>A server error's page, as a server or the proxy in front of it gives: HTML, not JSON.</summary>
+    private static HttpResponseMessage ErrorPage(HttpStatusCode status)
+        => new(status) { Content = new StringContent("<html><body>Something went wrong</body></html>", Encoding.UTF8, "text/html") };
 
     private static HttpResponseMessage Json(Dictionary<string, object?> body, HttpStatusCode status = HttpStatusCode.OK)
         => new(status) { Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json") };

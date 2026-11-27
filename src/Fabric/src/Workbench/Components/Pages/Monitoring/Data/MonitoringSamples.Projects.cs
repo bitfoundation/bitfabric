@@ -155,7 +155,7 @@ public static partial class MonitoringSamples
         return Finish(project, now);
     }
 
-    /// <summary>A team's tasks app that stopped accepting bit Fabric's approval three hours ago.</summary>
+    /// <summary>A team's tasks app whose data was reset three hours ago, which took bit Fabric's approval with it; its /health is still read.</summary>
     private static SampleProject Crewboard(DateTimeOffset now)
     {
         var project = NewProject(now, "crewboard", "Crewboard", "crewboard.app", "Asia/Dubai", 75, hasIcon: true, baseMs: 130);
@@ -167,7 +167,7 @@ public static partial class MonitoringSamples
 
         project.ConnectionStatus = ProjectConnectionStatus.ReconnectNeeded;
         // As the server stores it (ProjectProber): a code, worded in the reader's language when read.
-        project.ConnectionProblem = ProjectConnectionProblems.Of(ProjectConnectionProblems.Refused);
+        project.ConnectionProblem = ProjectConnectionProblems.Of(ProjectConnectionProblems.ApprovalWithdrawn);
         project.CheckedAt = now.AddHours(-3).AddMinutes(-12);
         Deploy(project, DaysAgo(now, 5, 9, 30), 1);
         project.ApplicationVersion = project.Starts[^1].ApplicationVersion;

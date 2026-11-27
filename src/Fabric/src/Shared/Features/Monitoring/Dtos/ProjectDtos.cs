@@ -418,6 +418,24 @@ public partial class ProjectStartDto
     public string? ApplicationVersion { get; set; }
 }
 
+/// <summary>What a project's Troubleshoot button hands to the customer's own AI (See IMonitoringsController.GetTroubleshootPrompt).</summary>
+public partial class TroubleshootPromptDto
+{
+    public TroubleshootPromptKind Kind { get; set; }
+
+    /// <summary>The prompt, in English whatever the viewer's language, as Markdown.</summary>
+    public string? Prompt { get; set; }
+}
+
+public enum TroubleshootPromptKind
+{
+    /// <summary>The environment needs reconnecting: why its health report can't be read.</summary>
+    Connection,
+
+    /// <summary>Anything else: how the app is doing, and what fails.</summary>
+    App
+}
+
 /// <summary>The series of a project's performance that aren't report entries.</summary>
 public static class ProjectRollupKeys
 {

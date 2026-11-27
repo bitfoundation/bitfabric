@@ -3,7 +3,10 @@ using Bit.Fabric.Shared.Features.Monitoring.Dtos;
 
 namespace Bit.Fabric.Server.Api.Features.Monitoring;
 
-/// <summary>Every minute, one round of every connected project from this server (bitfabric-internal/specs/monitoring.md, Checks).</summary>
+/// <summary>
+/// Every minute, one round of every project from this server (bitfabric-internal/specs/monitoring.md, Checks), one that
+/// needs reconnecting included, since its public /health is still read; only one the team disconnected is left alone.
+/// </summary>
 public partial class ProjectProbeJobRunner
 {
     public const string RecurringJobId = nameof(ProjectProbeJobRunner);
@@ -19,7 +22,7 @@ public partial class ProjectProbeJobRunner
     public async Task ProbeAll(CancellationToken cancellationToken)
     {
         var monitoringIds = await dbContext.Monitorings.IgnoreQueryFilters()
-                                                 .Where(project => project.ConnectionStatus != ProjectConnectionStatus.ReconnectNeeded && project.ConnectionStatus != ProjectConnectionStatus.Disconnected)
+                                                 .Where(project => project.ConnectionStatus != ProjectConnectionStatus.Disconnected)
                                                  .Select(project => project.Id)
                                                  .ToListAsync(cancellationToken);
 

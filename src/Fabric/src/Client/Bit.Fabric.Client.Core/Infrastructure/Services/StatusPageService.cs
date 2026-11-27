@@ -4,8 +4,9 @@ namespace Bit.Fabric.Client.Core.Infrastructure.Services;
 /// Reads the app's status page (See <see cref="ClientCoreSettings.StatusPageSummaryUrl"/>) for <see cref="StatusPageNotice"/>
 /// and for BevTools' Status tab (See AppStatusPagePanel). The request goes out with a plain <see cref="HttpClient"/>: the
 /// status page is someone else's server, so none of the app's handlers - its access token included - go with it. It reads
-/// a summary.json in Atlassian Statuspage's shape, and a Better Stack page's index.json (See BetterStackStatusPage). A
-/// summary that doesn't come back, or comes back as anything but a summary, is logged as an error and shows nothing.
+/// a summary.json in Atlassian Statuspage's shape, and a Better Stack page's index.json (See BetterStackStatusPage). An
+/// answer that isn't a summary is logged as an error, and no answer at all (offline, blocked) as information; neither
+/// shows anything.
 /// </summary>
 public class StatusPageService(ClientCoreSettings settings, TimeProvider timeProvider, ILogger<StatusPageService> logger)
 {
@@ -69,6 +70,11 @@ public class StatusPageService(ClientCoreSettings settings, TimeProvider timePro
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             return null;
+        }
+        catch (Exception exp) when (exp is TaskCanceledException or HttpRequestException { StatusCode: null })
+        {
+            logger.LogInformation(exp, "Couldn't reach the status page at {StatusPageSummaryUrl}.", url);
+            return new(timeProvider.GetUtcNow(), null, $"{exp.GetType().Name}: {exp.Message}");
         }
         catch (Exception exp)
         {

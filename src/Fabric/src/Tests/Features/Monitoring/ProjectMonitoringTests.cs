@@ -189,7 +189,7 @@ public partial class ProjectMonitoringTests
 
         var card = (await projects.GetMonitorings(null, TestContext.CancellationToken)).Single();
         Assert.AreEqual(ProjectConnectionStatus.ReconnectNeeded, card.ConnectionStatus);
-        Assert.AreEqual(ProjectHealth.NoData, card.Health);
+        Assert.AreEqual(ProjectHealth.Operational, card.Health, "Its public /health is still read, so its health still shows.");
         // The app's own reason, not a guess.
         Assert.Contains("new password", card.ConnectionProblem!);
     }

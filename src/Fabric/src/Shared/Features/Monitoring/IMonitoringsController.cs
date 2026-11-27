@@ -29,6 +29,14 @@ public interface IMonitoringsController : IAppController
     [HttpGet("{id}")]
     Task<MonitoringDetailsDto> GetMonitoring(Guid id, CancellationToken cancellationToken);
 
+    /// <summary>
+    /// The prompt the project's Troubleshoot button hands to the customer's own AI, in English: why the environment needs
+    /// reconnecting and what to check, or what fails in the app and how to look into it (bitfabric-internal/specs/monitoring.md,
+    /// Monitoring keeps watching when the approval breaks).
+    /// </summary>
+    [HttpGet("{id}")]
+    Task<TroubleshootPromptDto> GetTroubleshootPrompt(Guid id, CancellationToken cancellationToken);
+
     /// <summary>The project's application map: every part its last report names, with how it's doing now and over 24 hours.</summary>
     [HttpGet("{id}")]
     Task<ProjectMapDto> GetMap(Guid id, CancellationToken cancellationToken);

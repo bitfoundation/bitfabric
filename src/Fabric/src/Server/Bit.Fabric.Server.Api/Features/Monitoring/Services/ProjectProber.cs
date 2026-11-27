@@ -24,6 +24,12 @@ public partial class ProjectProber
     /// <summary>How long a round waits for another one of the same project; past it, that round's requests have all timed out.</summary>
     private static readonly TimeSpan roundWait = TimeSpan.FromMinutes(2);
 
+    /// <summary>How long a problem that may pass, such as a server error while renewing, lasts before the team hears of it.</summary>
+    public static readonly TimeSpan TemporaryProblemGrace = TimeSpan.FromHours(1);
+
+    /// <summary>While an environment needs reconnecting, how often its round tries the token again.</summary>
+    public static readonly TimeSpan TokenRetryInterval = TimeSpan.FromMinutes(15);
+
     [AutoInject] private AppDbContext dbContext = default!;
     [AutoInject] private IHttpClientFactory httpClientFactory = default!;
     [AutoInject] private MonitoringOAuthClient oauthClient = default!;
@@ -80,7 +86,23 @@ public partial class ProjectProber
 
         await TimeFrontDoor(project, probe, cancellationToken);
         await TimeForVisitors(project, probe, cancellationToken);
-        await ReadReport(project, probe, cancellationToken);
+        var problem = await ReadReport(project, probe, cancellationToken);
+
+        if (problem is { AppFailed: true })
+        {
+            // The report failed with the token. The public /health tells a broken report from an app that is down: when it
+            // answers, the round is read from it and the report's failure counts toward its hour; when it doesn't, the
+            // failure stands, as an outage that says nothing of the connection.
+            if (await ReadPublicHealth(project, probe, fallBackOnFrontDoor: false, cancellationToken) is false)
+            {
+                problem = null;
+            }
+        }
+        else if (problem is not null)
+        {
+            // The token can't read the report, so the round falls back on what needs none.
+            await ReadPublicHealth(project, probe, fallBackOnFrontDoor: true, cancellationToken);
+        }
 
         await dbContext.ProjectProbes.AddAsync(probe, cancellationToken);
 
@@ -103,19 +125,7 @@ public partial class ProjectProber
         project.LastCheckedAt = probe.At;
         project.Health = HealthOf(probe);
 
-        // Nothing is read until someone reconnects, so the team hears it once, when it happens; one the team disconnected
-        // themselves has no approval to lose and stays disconnected.
-        var connectionLost = probe.Outcome is ProjectProbeOutcome.Unauthorized && project.ConnectionStatus is not (ProjectConnectionStatus.ReconnectNeeded or ProjectConnectionStatus.Disconnected);
-
-        if (probe.Outcome is ProjectProbeOutcome.Unauthorized && project.ConnectionStatus is not ProjectConnectionStatus.Disconnected)
-        {
-            project.ConnectionStatus = ProjectConnectionStatus.ReconnectNeeded;
-            project.ConnectionProblem = probe.Problem;
-        }
-        else if (probe.Outcome is ProjectProbeOutcome.Read && project.ConnectionStatus is ProjectConnectionStatus.FirstChecks)
-        {
-            project.ConnectionStatus = ProjectConnectionStatus.Connected;
-        }
+        var connectionLost = TrackConnection(project, probe, problem);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -202,11 +212,15 @@ public partial class ProjectProber
             parts.Add(Part(probe, ProjectRollup.HomePageForVisitorsKey, false, false, visitorMs));
         }
 
-        // A refused token reads nothing, so it is no evidence either way.
+        // A round whose token was refused, from before the public /health took the report's place, read nothing: no
+        // evidence either way. /health counts as the report does, except that it can't tell a degraded part from one that
+        // only misses its settings.
         if (probe.Outcome is not ProjectProbeOutcome.Unauthorized)
         {
-            var read = probe.Outcome is ProjectProbeOutcome.Read;
-            parts.Add(Part(probe, ProjectRollup.ReportKey, read is false || probe.Status is HealthCheckStatus.Unhealthy, probe.Status is HealthCheckStatus.Degraded, read ? probe.ReportMs : null));
+            var answered = probe.Outcome is ProjectProbeOutcome.Read or ProjectProbeOutcome.PublicHealth or ProjectProbeOutcome.Reached;
+            var timed = probe.Outcome is ProjectProbeOutcome.Read or ProjectProbeOutcome.PublicHealth;
+            parts.Add(Part(probe, ProjectRollup.ReportKey, answered is false || probe.Status is HealthCheckStatus.Unhealthy,
+                           probe.Outcome is ProjectProbeOutcome.Read && probe.Status is HealthCheckStatus.Degraded, timed ? probe.ReportMs : null));
         }
 
         // A reused result's time was counted with the round that saw it run.
@@ -320,26 +334,164 @@ public partial class ProjectProber
     private static bool IsHit(HttpResponseMessage response, string header)
         => response.Headers.TryGetValues(header, out var values) && values.Any(value => value.Contains("HIT", StringComparison.OrdinalIgnoreCase));
 
-    private async Task ReadReport(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
+    /// <summary>
+    /// Why the token couldn't read the report, as a ProjectConnectionProblems code (See TrackConnection).
+    /// </summary>
+    /// <param name="IsTemporary">It may pass, so it is told only once it has lasted <see cref="TemporaryProblemGrace"/>.</param>
+    /// <param name="IsWaiting">The environment needs reconnecting and its next try of the token isn't due yet.</param>
+    /// <param name="AppFailed">The token was fine but the report failed, as the probe already says (See the round).</param>
+    private sealed record ReportProblem(string? Code, bool IsTemporary, bool IsWaiting = false, bool AppFailed = false);
+
+    /// <summary>
+    /// Moves the environment's connection by the round (bitfabric-internal/specs/monitoring.md, Monitoring keeps watching
+    /// when the approval breaks): a report read connects it again, with no click; a refusal needs reconnecting at once, and a
+    /// problem that may pass once it has lasted an hour; while it needs reconnecting, the token is tried again every 15
+    /// minutes. One the team disconnected themselves stays so. True when the connection was lost in this round, which the
+    /// team hears once.
+    /// </summary>
+    private static bool TrackConnection(ProjectMonitoring project, ProjectProbe probe, ReportProblem? problem)
+    {
+        if (project.ConnectionStatus is ProjectConnectionStatus.Disconnected || problem?.IsWaiting is true)
+            return false;
+
+        var connection = project.Connection;
+
+        if (problem is null)
+        {
+            // Read with the token. An app that didn't answer says nothing of the approval.
+            if (probe.Outcome is ProjectProbeOutcome.Read)
+            {
+                if (connection is not null)
+                {
+                    connection.ReportFailingSince = null;
+                    connection.NextTokenAttemptAt = null;
+                }
+
+                if (project.ConnectionStatus is ProjectConnectionStatus.FirstChecks or ProjectConnectionStatus.ReconnectNeeded)
+                {
+                    project.ConnectionStatus = ProjectConnectionStatus.Connected;
+                    project.ConnectionProblem = null;
+                }
+            }
+
+            return false;
+        }
+
+        if (problem.IsTemporary && connection is not null)
+        {
+            connection.ReportFailingSince ??= probe.At;
+
+            if (probe.At - connection.ReportFailingSince < TemporaryProblemGrace)
+            {
+                if (project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded)
+                {
+                    connection.NextTokenAttemptAt = probe.At + TokenRetryInterval;
+                }
+
+                return false;
+            }
+        }
+
+        var lost = project.ConnectionStatus is not ProjectConnectionStatus.ReconnectNeeded;
+
+        project.ConnectionStatus = ProjectConnectionStatus.ReconnectNeeded;
+        project.ConnectionProblem = problem.Code;
+
+        if (connection is not null)
+        {
+            connection.NextTokenAttemptAt = probe.At + TokenRetryInterval;
+        }
+
+        return lost;
+    }
+
+    /// <summary>
+    /// The base that needs no token, for a round whose report the token couldn't read: the server's public <c>/health</c>,
+    /// which the template answers 200 with Healthy or Degraded and 503 with Unhealthy. An app without one is up as long
+    /// as its front door answered (bitfabric-internal/specs/monitoring.md, Monitoring keeps watching when the approval
+    /// breaks). A server error from it is the app failing, not a missing <c>/health</c>. True when it answered a status.
+    /// With <paramref name="fallBackOnFrontDoor"/> false, an answer that isn't one leaves the probe as it is.
+    /// </summary>
+    private async Task<bool> ReadPublicHealth(ProjectMonitoring project, ProjectProbe probe, bool fallBackOnFrontDoor, CancellationToken cancellationToken)
+    {
+        HttpStatusCode? failedWith = null;
+
+        var url = $"{(project.ServerAddress ?? project.Address)!.TrimEnd('/')}/health";
+
+        try
+        {
+            var http = httpClientFactory.CreateClient(MonitoringHttp.ClientName);
+            var stopwatch = Stopwatch.StartNew();
+            using var response = await http.GetAsync(url, cancellationToken);
+            var elapsed = (int)stopwatch.ElapsedMilliseconds;
+            var said = (await response.Content.ReadAsStringAsync(cancellationToken)).Trim();
+
+            HealthCheckStatus? status = response.StatusCode switch
+            {
+                HttpStatusCode.ServiceUnavailable => HealthCheckStatus.Unhealthy,
+                HttpStatusCode.OK when Enum.TryParse<HealthCheckStatus>(said, ignoreCase: true, out var parsed) && Enum.IsDefined(parsed) => parsed,
+                _ => null
+            };
+
+            if (status is { } known)
+            {
+                probe.Outcome = ProjectProbeOutcome.PublicHealth;
+                probe.Status = known;
+                probe.ReportMs = elapsed;
+                probe.Problem = null;
+                return true;
+            }
+
+            if ((int)response.StatusCode >= 500)
+            {
+                failedWith = response.StatusCode;
+            }
+        }
+        catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested is false)
+        {
+            // As one without /health: the front door says whether it answers.
+        }
+        catch (HttpRequestException)
+        {
+            // As above.
+        }
+
+        if (fallBackOnFrontDoor is false)
+            return false;
+
+        if (failedWith is { } failed)
+        {
+            probe.Outcome = ProjectProbeOutcome.BadResponse;
+            probe.Problem = $"Your app's server answered HTTP {(int)failed} to its /health.";
+            return false;
+        }
+
+        probe.Outcome = probe.ResponseMs is null ? ProjectProbeOutcome.Unreachable : ProjectProbeOutcome.Reached;
+        probe.Problem = probe.ResponseMs is null ? "Your app's server didn't answer." : null;
+        return false;
+    }
+
+    /// <summary>
+    /// Reads the health report with the project's token. Returns null when it did, and otherwise why not: the token
+    /// couldn't be used, or the report failed (a server error, no answer, or something that isn't a report), which
+    /// <paramref name="probe"/> then says and the round checks against <c>/health</c>. While the environment needs
+    /// reconnecting, the token is tried every <see cref="TokenRetryInterval"/>.
+    /// </summary>
+    private async Task<ReportProblem?> ReadReport(ProjectMonitoring project, ProjectProbe probe, CancellationToken cancellationToken)
     {
         var connection = project.Connection;
         if (connection is null)
-        {
-            probe.Outcome = ProjectProbeOutcome.Unauthorized;
-            probe.Problem = ProjectConnectionProblems.Of(ProjectConnectionProblems.NoApproval);
-            return;
-        }
+            return new(ProjectConnectionProblems.Of(ProjectConnectionProblems.NoApproval), IsTemporary: false);
 
-        var (accessToken, problem) = await oauthClient.GetAccessToken(connection, connection.ClientId!, forceRefresh: false, cancellationToken);
+        if (project.ConnectionStatus is ProjectConnectionStatus.ReconnectNeeded && connection.NextTokenAttemptAt > probe.At)
+            return new(project.ConnectionProblem, IsTemporary: false, IsWaiting: true);
+
+        var token = await oauthClient.GetAccessToken(connection, connection.ClientId!, forceRefresh: false, cancellationToken);
 
         for (var attempt = 0; attempt < 2; attempt++)
         {
-            if (accessToken is null)
-            {
-                probe.Outcome = ProjectProbeOutcome.Unauthorized;
-                probe.Problem = problem;
-                return;
-            }
+            if (token.AccessToken is not { } accessToken)
+                return new(token.Problem, token.IsTemporary);
 
             var stopwatch = Stopwatch.StartNew();
 
@@ -358,24 +510,20 @@ public partial class ProjectProber
                 if (response.StatusCode is HttpStatusCode.Unauthorized && attempt is 0)
                 {
                     // Revoked early, or its clock and ours disagree: one refresh before giving up on it.
-                    (accessToken, problem) = await oauthClient.GetAccessToken(connection, connection.ClientId!, forceRefresh: true, cancellationToken);
+                    token = await oauthClient.GetAccessToken(connection, connection.ClientId!, forceRefresh: true, cancellationToken);
                     continue;
                 }
 
                 if (response.StatusCode is HttpStatusCode.Forbidden)
-                {
                     // The token is good, the feature behind /healthz is gone from whoever approved it.
-                    probe.Outcome = ProjectProbeOutcome.Unauthorized;
-                    probe.Problem = ProjectConnectionProblems.Of(ProjectConnectionProblems.ApproverLostAccess);
-                    return;
-                }
+                    return new(ProjectConnectionProblems.Of(ProjectConnectionProblems.ApproverLostAccess), IsTemporary: false);
 
                 if (response.StatusCode is HttpStatusCode.Unauthorized)
-                {
-                    probe.Outcome = ProjectProbeOutcome.Unauthorized;
-                    probe.Problem = ProjectConnectionProblems.Of(ProjectConnectionProblems.Refused);
-                    return;
-                }
+                    return new(ProjectConnectionProblems.Of(ProjectConnectionProblems.Refused), IsTemporary: false);
+
+                if (response.StatusCode is HttpStatusCode.NotFound)
+                    // No report there: its code changed, or a deployment is on its way.
+                    return new(ProjectConnectionProblems.Of(ProjectConnectionProblems.ReportGone), IsTemporary: true);
 
                 // An unhealthy report may come with 503; its body is the report all the same.
                 var report = response.Content.Headers.ContentType?.MediaType is "application/json"
@@ -386,18 +534,18 @@ public partial class ProjectProber
                 {
                     probe.Outcome = ProjectProbeOutcome.BadResponse;
                     probe.Problem = $"Your app's server answered HTTP {(int)response.StatusCode} without a health report.";
-                    return;
+                    return ReportFailed($"HTTP {(int)response.StatusCode}");
                 }
 
                 Fill(probe, report);
                 project.ReportedProjectId = report.ProjectId is { } reported && reported != Guid.Empty ? reported : null;
-                return;
+                return null;
             }
             catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested is false)
             {
                 probe.Outcome = ProjectProbeOutcome.Unreachable;
                 probe.Problem = $"Your app's server didn't answer within {(int)settings.Monitoring.RequestTimeout.TotalSeconds} seconds.";
-                return;
+                return ReportFailed($"no answer within {(int)settings.Monitoring.RequestTimeout.TotalSeconds} s");
             }
             catch (HttpRequestException exp)
             {
@@ -408,15 +556,20 @@ public partial class ProjectProber
                     HttpRequestError.SecureConnectionError => "Your app's server has a certificate problem.",
                     _ => "Your app's server didn't answer."
                 };
-                return;
+                return ReportFailed("no answer");
             }
             catch (JsonException)
             {
                 probe.Outcome = ProjectProbeOutcome.BadResponse;
                 probe.Problem = "Your app's server answered with something that isn't a health report.";
-                return;
+                return ReportFailed("not a health report");
             }
         }
+
+        return null;
+
+        static ReportProblem ReportFailed(string detail)
+            => new(ProjectConnectionProblems.Of(ProjectConnectionProblems.ReportFailing, detail), IsTemporary: true, AppFailed: true);
     }
 
     /// <summary>
@@ -583,6 +736,9 @@ public partial class ProjectProber
             HealthCheckStatus.Degraded => ProjectHealth.Degraded,
             _ => ProjectHealth.Operational
         },
+        // The public /health: Degraded there may only be a part missing its settings, which the report would leave out.
+        ProjectProbeOutcome.PublicHealth => probe.Status is HealthCheckStatus.Unhealthy ? ProjectHealth.Down : ProjectHealth.Operational,
+        ProjectProbeOutcome.Reached => ProjectHealth.Operational,
         ProjectProbeOutcome.Unauthorized => ProjectHealth.NoData,
         _ => ProjectHealth.Down
     };

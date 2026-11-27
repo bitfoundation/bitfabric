@@ -31,6 +31,7 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
     ProjectIncidentsService incidentsService,
     ProjectSlaReports slaReports,
     StatusPageService statusPages,
+    ProjectTroubleshootPrompts troubleshootPrompts,
     ServerApiSettings settings,
     IAuthorizationService authorizationService,
     IHttpContextAccessor httpContextAccessor,
@@ -178,6 +179,22 @@ public partial class ProjectMonitoringMcpTools(AppDbContext dbContext,
             details.LastRestartedAt,
             parts,
             checkedFrom));
+    }
+
+    [McpServerTool(Name = nameof(GetTroubleshootPrompt), Title = "Get the prompt to troubleshoot a project with the AI that works on its code", ReadOnly = true, OpenWorld = false)]
+    [Description("Returns the prompt a project's Troubleshoot button shows, in English, as Markdown, for the AI that works on the app's code (Claude Code, Codex, Copilot or another) in its repository: when the environment needs reconnecting, why bit Fabric can't read its health report, the addresses of the OAuth flow it uses, and what to check for that problem; otherwise how the app is doing, the parts that fail and since when, the build that runs and how to investigate with the project's own troubleshoot skill and dev MCP. Call it when the user asks how to fix a project, why it needs reconnecting, or what to tell their coding AI; give them the prompt as it is, or follow it yourself when you work in that repository.")]
+    public async Task<JsonElement> GetTroubleshootPrompt([Description(ProjectParameter)] string project, CancellationToken cancellationToken = default)
+    {
+        if (await Refusal() is { } refusal)
+            return Result(refusal);
+
+        var (found, problem) = await FindProject(project, cancellationToken);
+        if (found is null)
+            return Result(problem!);
+
+        var prompt = await troubleshootPrompts.For(found.Id, cancellationToken);
+
+        return Result(new TroubleshootPrompt(new ProjectRef(found.Id, found.Name), $"{prompt.Kind}", prompt.Prompt));
     }
 
     [McpServerTool(Name = nameof(GetApplicationMap), Title = "Show a project's application map", ReadOnly = true, OpenWorld = false)]
