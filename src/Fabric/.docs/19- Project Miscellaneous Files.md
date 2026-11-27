@@ -434,7 +434,7 @@ dnx Bit.Cli --version 11.0.0-pre-25 -- translate
 ```json
 {
     "servers": {
-        "bitplatform": {
+        "bitfabric-docs": {
             "type": "http",
             "url": "https://api.bitfabric.co/docs-mcp?project=72c37aa7-dd46-4f30-b74c-0120fa37df64"
         }
@@ -452,7 +452,7 @@ dnx Bit.Cli --version 11.0.0-pre-25 -- translate
 
 **Example Usage**:
 - Ask: *"How do I use BitDataGrid with server-side paging?"*
-- Copilot uses the bitplatform MCP server to fetch the component's real API reference and examples
+- Copilot uses the `bitfabric-docs` MCP server to fetch the component's real API reference and examples
 - You get accurate answers based on the actual source code and documentation
 
 **One config per tool**: this same server list is mirrored where each AI tool expects it - `.vscode/mcp.json` (VS Code), `.mcp.json` (Claude Code and Visual Studio), `.cursor/mcp.json` (Cursor), `.gemini/settings.json` (Gemini CLI / Gemini Code Assist), `.junie/mcp/mcp.json` (JetBrains Junie) and `.codex/config.toml` (OpenAI Codex CLI and IDE extension, which only loads a project config once you have trusted the folder). When adding or changing a server, update all of them.

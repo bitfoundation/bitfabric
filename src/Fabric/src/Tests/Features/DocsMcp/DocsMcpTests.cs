@@ -28,7 +28,7 @@ public partial class DocsMcpTests
         await using var server = await StartServer(platform);
         await using var mcp = await Connect(server);
 
-        Assert.AreEqual("bitplatform", mcp.ServerInfo!.Name);
+        Assert.AreEqual("bitfabric-docs", mcp.ServerInfo!.Name);
 
         var tools = (await mcp.ListToolsAsync(cancellationToken: TestContext.CancellationToken)).ToDictionary(tool => tool.Name);
 

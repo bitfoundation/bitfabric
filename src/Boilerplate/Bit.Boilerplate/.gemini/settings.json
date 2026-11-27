@@ -1,7 +1,10 @@
 {
     "mcpServers": {
-        "bitplatform": {
+        "bitfabric-docs": {
             "httpUrl": "https://api.bitfabric.co/docs-mcp"
+        },
+        "bitfabric": {
+            "httpUrl": "https://api.bitfabric.co/mcp"
         },
         "aspire": {
             "command": "aspire",

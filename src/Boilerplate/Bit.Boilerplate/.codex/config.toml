@@ -1,4 +1,4 @@
-[mcp_servers.bitplatform]
+[mcp_servers.bitfabric-docs]
 url = "https://api.bitfabric.co/docs-mcp"
 
 [mcp_servers.dev-mcp-test]
@@ -6,6 +6,9 @@ url = "https://use-your-test-api-server-url-here.com/dev-mcp"
 
 [mcp_servers.dev-mcp-production]
 url = "https://use-your-api-server-url-here.com/dev-mcp"
+
+[mcp_servers.bitfabric]
+url = "https://api.bitfabric.co/mcp"
 
 [mcp_servers.aspire]
 command = "aspire"
