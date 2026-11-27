@@ -192,6 +192,9 @@ Every project sends its telemetry through [bit Belemetry](https://github.com/bit
 * **Server.Api** and **Server.Web**
 
     Requests, EF Core commands, Hangfire jobs, HttpClient calls and FusionCache, besides the app's own logs, activities and meters.
+    Its metrics also carry what ASP.NET Core measures on its own: request durations by route and status, live SignalR
+    connections, Identity's sign-ins, sign-ups and token checks, and authentication and authorization results (See
+    `ConfigureTelemetry` in `WebApplicationBuilderExtensions.cs`).
 
     **Sampling** is enabled to reduce costs: unknown/unhandled exceptions and slow activities are always captured (100%), while known/transient exceptions, warnings, and info logs are sampled at **5%**. See [`AppBelemetryProcessor.cs`](../src/Server/Bit.Fabric.Server.Shared/Infrastructure/Services/AppBelemetryProcessor.cs) and [`AppLoggingSampler.cs`](../src/Server/Bit.Fabric.Server.Shared/Infrastructure/Services/AppLoggingSampler.cs).
 
