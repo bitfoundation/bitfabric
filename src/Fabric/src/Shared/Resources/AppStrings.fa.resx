@@ -12181,4 +12181,31 @@
     <data name="AppHomeFactCheckFieldServiceNeeds" xml:space="preserve">
         <value>یک اپ برای عملیات خودمان که مدام گسترشش می‌دهیم، درست ساخته‌شده و نه به‌شکل MVP: کارها و زمان‌بندی، اپ تکنسین که بدون اینترنت هم کار می‌کند، عکس و امضا، فاکتور، و داشبورد برای مدیران.</value>
     </data>
+    <data name="AppHomeMoreInfo" xml:space="preserve">
+        <value>اطلاعات بیشتر</value>
+    </data>
+    <data name="AppHomeAddingALibraryTakesALittleSetup" xml:space="preserve">
+        <value>افزودن هر کتابخانه کمی تنظیم می‌خواهد که AI شما برایتان انجام می‌دهد.</value>
+    </data>
+    <data name="AppHomeAnyLibraryYouNeed" xml:space="preserve">
+        <value>هر کتابخانه‌ای که لازم دارید</value>
+    </data>
+    <data name="AppHomeAnyLibraryYouNeedText" xml:space="preserve">
+        <value>نه فقط مال ما: AI شما هر کتابخانهٔ به‌دردبخوری را می‌آورد، در وب، روی سرور و در همهٔ اپ‌ها.</value>
+    </data>
+    <data name="AppHomeAnyLibraryLead" xml:space="preserve">
+        <value>پروژهٔ شما همین حالا از کتابخانه‌هایی به چند زبان استفاده می‌کند، مثل SDK بومی خود Firebase برای اعلان‌های Push، و هر کتابخانهٔ دیگری را هم می‌پذیرد:</value>
+    </data>
+    <data name="AppHomeAnyLibraryCSharp" xml:space="preserve">
+        <value>هر package از NuGet</value>
+    </data>
+    <data name="AppHomeAnyLibraryJavaScript" xml:space="preserve">
+        <value>هر package از npm</value>
+    </data>
+    <data name="AppHomeAnyLibraryJavaAndKotlin" xml:space="preserve">
+        <value>کتابخانه‌های Android</value>
+    </data>
+    <data name="AppHomeAnyLibraryObjectiveC" xml:space="preserve">
+        <value>کتابخانه‌های iPhone، iPad و Mac</value>
+    </data>
 </root>

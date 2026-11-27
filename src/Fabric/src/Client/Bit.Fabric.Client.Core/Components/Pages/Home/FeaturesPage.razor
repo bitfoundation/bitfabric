@@ -108,10 +108,11 @@ else
             </header>
             @foreach (var (features, showcaseAfter) in GridsOf(section))
             {
+                var group = GroupOf(features[0].Id);
                 <div class="ah-grid">
                     @foreach (var feature in features)
                     {
-                        <AppHomeFeatureCard Feature="feature" HeadingElement="@cardHeading" OnExplain="WrapHandled<AppHomeFeature>(Explain)">
+                        <AppHomeFeatureCard Feature="feature" Group="group" HeadingElement="@cardHeading" OnExplain="WrapHandled<AppHomeFeature>(Explain)">
                             @* Search engines read the films too: their text is in the prerendered page, hidden, and only there *@
                             @if (InPrerenderSession && feature.Explained)
                             {

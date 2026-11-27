@@ -12181,4 +12181,31 @@ Tell me in under 200 words what holds and what doesn't, what it would cost me in
     <data name="AppHomeFactCheckFieldServiceNeeds" xml:space="preserve">
         <value>An app for our own operations that we'll keep extending, built properly rather than as an MVP: jobs and scheduling, a technician app that works offline, photos and signatures, invoices, and dashboards for the managers.</value>
     </data>
+    <data name="AppHomeMoreInfo" xml:space="preserve">
+        <value>More info</value>
+    </data>
+    <data name="AppHomeAddingALibraryTakesALittleSetup" xml:space="preserve">
+        <value>Adding a library takes a little setup, which your AI does for you.</value>
+    </data>
+    <data name="AppHomeAnyLibraryYouNeed" xml:space="preserve">
+        <value>Any library you need</value>
+    </data>
+    <data name="AppHomeAnyLibraryYouNeedText" xml:space="preserve">
+        <value>Not just ours: your AI can bring in any useful library, on the web, the server and every app.</value>
+    </data>
+    <data name="AppHomeAnyLibraryLead" xml:space="preserve">
+        <value>Your project already uses libraries in several languages, like Firebase's own native SDK for push notifications, and takes any other:</value>
+    </data>
+    <data name="AppHomeAnyLibraryCSharp" xml:space="preserve">
+        <value>Any NuGet package</value>
+    </data>
+    <data name="AppHomeAnyLibraryJavaScript" xml:space="preserve">
+        <value>Any npm package</value>
+    </data>
+    <data name="AppHomeAnyLibraryJavaAndKotlin" xml:space="preserve">
+        <value>Android libraries</value>
+    </data>
+    <data name="AppHomeAnyLibraryObjectiveC" xml:space="preserve">
+        <value>iPhone, iPad and Mac libraries</value>
+    </data>
 </root>

@@ -1,6 +1,6 @@
 @inherits AppComponentBase
 
-<article class="ah-card">
+<article @ref="Element" class="ah-card @(isDetailsShown ? "is-open" : null)">
     <div class="ah-card-top">
         <BitIcon IconName="@Feature.Icon" Variant="BitVariant.Fill" Circular="true" Class="ah-card-icon" />
 
@@ -25,6 +25,38 @@
         <BitText Typography="BitTypography.Subtitle1" Element="@HeadingElement" Class="ah-card-title">@Feature.Title</BitText>
         <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@Feature.Text</BitText>
     </div>
+
+    @* Closed, its text stays in the page as hidden="until-found": search engines, find-in-page and the page's Markdown copy read it *@
+    @if (Feature.Details is { } details)
+    {
+        <div class="ah-card-details">
+            <BitToggleButton Id="@DetailsToggleId" Variant="BitVariant.Text" Size="BitSize.Small" Text="@Localizer[nameof(AppStrings.AppHomeMoreInfo)]"
+                             OffIconName="@BitIconName.ChevronDown" OnIconName="@BitIconName.ChevronUp" IconPlacement="BitPlacement.End"
+                             AriaMode="BitToggleButtonAriaMode.Expanded" AriaControls="@($"{DetailsId}-content")"
+                             @bind-Checked:get="isDetailsShown" @bind-Checked:set="WrapHandled<bool>(ToggleDetails)" />
+            <BitCollapse Id="@DetailsId" @bind-Expanded:get="isDetailsShown" @bind-Expanded:set="WrapHandled<bool>(ToggleDetails)" HiddenUntilFound NoPadding LabelledBy="@DetailsToggleId">
+                <div class="ah-card-details-body">
+                    <BitText Typography="BitTypography.Body2">@details.Lead</BitText>
+                    @if (details.Facts.Length > 0)
+                    {
+                        <dl class="ah-card-details-facts">
+                            @foreach (var fact in details.Facts)
+                            {
+                                <div class="ah-card-details-fact">
+                                    <dt><bdi>@fact.Term</bdi></dt>
+                                    <dd>@fact.Detail</dd>
+                                </div>
+                            }
+                        </dl>
+                    }
+                    @if (details.After is not null)
+                    {
+                        <BitText Typography="BitTypography.Body2" Foreground="BitColorKind.Secondary">@details.After</BitText>
+                    }
+                </div>
+            </BitCollapse>
+        </div>
+    }
 
     @if (Feature.More is not null)
     {
