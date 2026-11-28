@@ -162,7 +162,7 @@ public class WorkbenchStoreTests
         store.ReportScenario("1", new() { Theme = WorkbenchThemeMode.Dark });
 
         Assert.AreEqual(WorkbenchThemeMode.Dark, store.Panes[0].Scenario.Theme);
-        Assert.AreEqual(WorkbenchThemeMode.Light, store.Panes[1].Scenario.Theme);
+        Assert.AreEqual(WorkbenchThemeMode.System, store.Panes[1].Scenario.Theme);
     }
 
     [TestMethod]
