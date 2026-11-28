@@ -73,6 +73,12 @@ public partial class AddressProbeResultDto
 
     /// <summary>Whether a project of the same address is already watched in this tenant.</summary>
     public bool IsAlreadyAdded { get; set; }
+
+    /// <summary>The name of the project whose environment already watches this address, which approving again keeps.</summary>
+    public string? WatchedProjectName { get; set; }
+
+    /// <summary>The environment already watching this address, such as Test, which approving again keeps.</summary>
+    public string? WatchedEnvironment { get; set; }
 }
 
 [DtoResourceType(typeof(AppStrings))]

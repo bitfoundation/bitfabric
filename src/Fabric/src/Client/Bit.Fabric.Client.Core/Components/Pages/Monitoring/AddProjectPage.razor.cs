@@ -114,7 +114,13 @@ public partial class AddProjectPage
         try
         {
             probe = await monitoringsController.ProbeAddress(new() { Address = address }, CurrentCancellationToken);
-            name = probe.AppTitle ?? Host(probe.Address);
+            name = probe.WatchedProjectName ?? probe.AppTitle ?? Host(probe.Address);
+
+            // Approving an address already watched reconnects that environment and keeps its name, so the page shows it.
+            if (probe.IsAlreadyAdded)
+            {
+                environment = probe.WatchedEnvironment ?? "Production";
+            }
         }
         finally
         {

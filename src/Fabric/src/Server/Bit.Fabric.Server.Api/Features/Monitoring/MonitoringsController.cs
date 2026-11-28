@@ -168,7 +168,14 @@ public partial class MonitoringsController : AppControllerBase, IMonitoringsCont
 
         if (result.Address is not null)
         {
-            result.IsAlreadyAdded = await DbContext.Monitorings.AnyAsync(project => project.Address == result.Address, cancellationToken);
+            // A reconnect keeps the environment's project and name (See CompleteConnect), so the page shows them.
+            var watched = await DbContext.Monitorings.Where(project => project.Address == result.Address)
+                                                     .Select(project => new { ProjectName = project.Project!.Name, project.Environment })
+                                                     .FirstOrDefaultAsync(cancellationToken);
+
+            result.IsAlreadyAdded = watched is not null;
+            result.WatchedProjectName = watched?.ProjectName;
+            result.WatchedEnvironment = watched?.Environment;
         }
 
         return result;
