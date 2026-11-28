@@ -188,7 +188,7 @@ public sealed partial class WorkbenchScreenshotService : IAsyncDisposable
         };
     }
 
-    /// <summary>Captures a view and names the file after its page, device, pixel size, culture, theme and data state.</summary>
+    /// <summary>Captures a view and names the file after its page, device, pixel size, culture, the theme it shows and data state.</summary>
     public async Task<(byte[] Png, string FileName)> CapturePage(WorkbenchPageInfo page, string? query, CancellationToken cancellationToken)
     {
         var scenario = WorkbenchScenario.Parse(query);
@@ -208,7 +208,9 @@ public sealed partial class WorkbenchScreenshotService : IAsyncDisposable
 
         var (pixelWidth, pixelHeight) = device.GetPixels(scenario.Rotated);
         var look = scenario.Backdrop is null ? scenario.Data.ToString() : "framed";
-        var fileName = $"{page.Key}-{device.Key}-{pixelWidth}x{pixelHeight}-{scenario.Culture ?? CultureInfoManager.DefaultCulture.Name}-{scenario.Theme}-{look}.png".ToLowerInvariant();
+        // A view on System is captured light (see Open), so its file says light, the theme its picture shows.
+        var shownTheme = scenario.Theme is WorkbenchThemeMode.Dark ? WorkbenchThemeMode.Dark : WorkbenchThemeMode.Light;
+        var fileName = $"{page.Key}-{device.Key}-{pixelWidth}x{pixelHeight}-{scenario.Culture ?? CultureInfoManager.DefaultCulture.Name}-{shownTheme}-{look}.png".ToLowerInvariant();
 
         return (png, fileName);
     }

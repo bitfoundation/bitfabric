@@ -21,7 +21,39 @@ public class AppPageTest : PageTest
         {
             await AnswerConsentBanner(Context);
         }
+
+        await CloseStatusNotices(Context);
     }
+
+    /// <summary>
+    /// Closes the status page's notice (See <c>StatusPageNotice</c>) on every page of <paramref name="context"/> whenever it
+    /// is in the way of an action. While the app's status page has an open incident, the notice sits over the bottom-end
+    /// corner of every page, along the bottom on a phone, and like the consent banner it takes the clicks meant for
+    /// whatever is under it: the Sign out button, the chat's Send, the image editor's Save. The incident is the status
+    /// page's, not the test's; the notice's own behaviour is the StatusPage tests'.
+    /// </summary>
+    protected static async Task CloseStatusNotices(IBrowserContext context)
+    {
+        // A page the test opens later, the external sign-in popup for one, gets it as it opens. Only a page that closed
+        // before its handler was added fails here, and it has no notice left to close.
+        context.Page += async (_, page) =>
+        {
+            try
+            {
+                await CloseStatusNotices(page);
+            }
+            catch (PlaywrightException) when (page.IsClosed) { }
+        };
+
+        foreach (var page in context.Pages)
+        {
+            await CloseStatusNotices(page);
+        }
+    }
+
+    /// <inheritdoc cref="CloseStatusNotices(IBrowserContext)"/>
+    public static Task CloseStatusNotices(IPage page) =>
+        page.AddLocatorHandlerAsync(page.Locator(".status-notice"), notice => notice.Locator(".close").ClickAsync());
 
     /// <summary>
     /// Whether the banner is answered ahead of the app for this test. Off only where the banner itself is wanted.
@@ -80,6 +112,8 @@ public class AppPageTest : PageTest
         context.SetDefaultTimeout((float)defaultTimeout.TotalMilliseconds);
 
         await AnswerConsentBanner(context);
+
+        await CloseStatusNotices(context);
 
         return context;
     }

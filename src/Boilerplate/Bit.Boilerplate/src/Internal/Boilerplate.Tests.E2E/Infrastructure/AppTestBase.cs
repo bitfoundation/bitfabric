@@ -37,7 +37,13 @@ public abstract class AppTestBase : AppPageTest
         if (page is null)
             Assert.Inconclusive($"{app} has no build on this platform.");
 
-        return page!;
+        // A hybrid app's page is in the browser its opener attached to, not in this test's context.
+        if (page!.Context != Context)
+        {
+            await CloseStatusNotices(page);
+        }
+
+        return page;
     }
 
     /// <summary>Generous: a first visit includes the WebAssembly boot / bswup precache on a cold cache.</summary>

@@ -178,7 +178,11 @@ public class BoardsUITests : WorkbenchPageTest
         await Press(Flow.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.FullScreen, Exact = true }));
 
         await Expect(Flow).ToHaveCSSAsync("position", "fixed");
-        Assert.AreEqual(Page.ViewportSize!.Width, (int)Math.Round((await Flow.BoundingBoxAsync())!.Width));
+
+        // The browser's full screen comes a round trip after the press, and until then the fixed flow stays inside its block,
+        // which the block's reveal leaves transformed; so it is waited for rather than measured at once.
+        await Expect(Flow).ToHaveJSPropertyAsync("offsetWidth", Page.ViewportSize!.Width);
+        await Expect(Flow).ToHaveJSPropertyAsync("offsetHeight", Page.ViewportSize!.Height);
 
         await Press(Flow.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ExitFullScreen, Exact = true }));
 

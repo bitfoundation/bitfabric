@@ -101,7 +101,8 @@ public class ThemeAndCultureUITests : WorkbenchPageTest
         await Press(Tools.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ThemeLight, Exact = true }));
         await CloseTools();
 
-        await Expect(Page).Not.ToHaveURLAsync(new Regex("theme="));
+        // Light is a choice of its own, as System is the default, so the address keeps it.
+        await Expect(Page).ToHaveURLAsync(new Regex(@"\?theme=light$"));
         await WaitForViews();
         await Expect(View().Locator("html")).Not.ToHaveAttributeAsync("bit-theme", new Regex("dark"));
         await Expect(View().Locator("body")).ToHaveCSSAsync("background-color", new Regex(@"rgb\((2[0-9]{2}), "));
@@ -112,19 +113,21 @@ public class ThemeAndCultureUITests : WorkbenchPageTest
     {
         await Page.EmulateMediaAsync(new() { ColorScheme = ColorScheme.Dark });
 
-        await OpenWorkbench("theme");
+        await OpenWorkbench("theme", "?theme=light");
 
         await OpenTools();
         await Press(Tools.GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ThemeSystem, Exact = true }));
         await CloseTools();
 
-        await Expect(Page).ToHaveURLAsync(new Regex(@"\?theme=system$"));
+        // System is the default, so neither the address nor the view's header names it; the view shows the Workbench's own
+        // theme, which follows the device until the shell's switch is used.
+        await Expect(Page).Not.ToHaveURLAsync(new Regex("theme="));
         await WaitForViews();
         await Expect(View().Locator("html")).ToHaveAttributeAsync("bit-theme", new Regex("dark"));
 
         if (IsPhone is false)
         {
-            await Expect(Page.Locator(".pane-chip")).ToHaveTextAsync(WorkbenchStrings.ThemeSystem);
+            await Expect(Page.Locator(".pane-chip")).ToHaveCountAsync(0);
         }
 
         await Page.EmulateMediaAsync(new() { ColorScheme = ColorScheme.Light });
@@ -390,7 +393,8 @@ public class ThemeAndCultureUITests : WorkbenchPageTest
     [TestMethod, EverySurface]
     public async Task TheShellsOwnThemeSwitch_Should_LeaveTheViewAsItIsAndStayAfterAReload(WorkbenchSurface surface)
     {
-        await OpenWorkbench("theme");
+        // A view with a theme of its own; one on System shows the Workbench's theme, and so follows this switch.
+        await OpenWorkbench("theme", "?theme=light");
 
         // The header's, on a phone too, which every section shares.
         await Press(Page.Locator("header.shell-header").GetByRole(AriaRole.Button, new() { Name = WorkbenchStrings.ToggleWorkbenchTheme, Exact = true }));
