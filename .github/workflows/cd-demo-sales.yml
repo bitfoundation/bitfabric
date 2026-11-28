@@ -3,7 +3,8 @@ name: cd-demo-sales
 # Makes the Sales module demo with bit new, from bit Boilerplate and bit CLI at the commit it runs on.
 # cd-demos.yml runs it with the other demos. Only the builds run here, on GitHub's own runners; cd-fabric-dispatch.yml
 # then starts bitfabric-internal's cd-demos, whose jobs on the demos' own server put each site this run built in place.
-# The Demos environment, which holds the builds' keys, lets only main use it.
+# The Demos environment, which holds the builds' keys, lets any branch of this repository use it; a pull request from a
+# fork gets none of its secrets.
 
 # Project templates come equipped with GitHub Actions CI/CD, providing you with a hassle-free way to get started with your new project. It is important to note that you should not depend on the contents of this file. More info at https://bitplatform.dev/templates/dev-ops
 

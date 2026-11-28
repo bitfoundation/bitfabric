@@ -1,10 +1,11 @@
 name: cd-demos
 
-# Builds every demo in one run, from main: the demos part of bitfoundation/bitplatform's all.apps.cd.yml. Only the
+# Builds every demo in one run, from the branch it runs on: the demos part of bitfoundation/bitplatform's all.apps.cd.yml. Only the
 # builds run here, on GitHub's own runners, which cost nothing in this public repository; each one also publishes what
 # isn't a server site (the static sites, the Windows apps' updates, the Android and iOS apps to their stores' test
 # tracks). When the run ends, cd-fabric-dispatch.yml starts bitfabric-internal's cd-demos, whose jobs on the demos' own
-# server put each site this run built in place. The Demos environment, which holds the builds' keys, lets only main use it.
+# server put each site this run built in place. The Demos environment, which holds the builds' keys, lets any branch of
+# this repository use it; a pull request from a fork gets none of its secrets.
 
 on:
   workflow_dispatch:
