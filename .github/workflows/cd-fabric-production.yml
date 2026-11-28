@@ -1,18 +1,18 @@
 name: cd-fabric-production
 
-# Builds main for Production after each push whose ci-fabric passed, when it changed what runs on the server or in the
-# apps: a change to the tests, the Workbench or the docs alone isn't deployed. When the build ends, cd-fabric-dispatch.yml
-# starts its deployment in bitfoundation/bitfabric-internal. It also runs by hand, on main only: the Production
-# environment lets no other branch use it.
+# Builds bit Fabric for Production when a founder pushes the tag fabric-v<Version>, <Version> being the one in
+# src/Fabric/src/Directory.Build.props, on a commit of main: `git tag fabric-v0.0.25 && git push origin fabric-v0.0.25`.
+# A merge into main publishes nothing. When the build ends, cd-fabric-dispatch.yml starts its deployment in
+# bitfoundation/bitfabric-internal. By hand on an older tag it builds that version again, to roll back:
+# `gh workflow run cd-fabric-production.yml --ref fabric-v0.0.24`. The Production environment lets no branch but main,
+# which only cd-fabric-dispatch.yml runs on, and no tag but fabric-v*, use it.
 
 on:
-  workflow_run:
-    workflows: [ ci-fabric ]
-    types: [ completed ]
-    branches: [ main ]
+  push:
+    tags: [ 'fabric-v*' ]
   workflow_dispatch:
 
-# Queued, not cancelled: two pushes in quick succession must not leave the older commit deployed.
+# Queued, not cancelled: two tags in quick succession must not leave the older version deployed.
 concurrency:
   group: cd-fabric-production
   cancel-in-progress: false
@@ -22,50 +22,37 @@ permissions:
 
 jobs:
 
-  # A workflow_run workflow always runs this file as it is on main, and this job takes only pushes to this repository's
-  # main whose ci-fabric passed, never a pull request's run (whose head branch may be a fork's own main).
-  changes:
-    name: find what changed
-    if: >-
-      github.event_name == 'workflow_dispatch' || (
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      github.event.workflow_run.head_repository.full_name == github.repository)
+  check_tag:
+    name: check the tag
     runs-on: ubuntu-26.04
     timeout-minutes: 5
-    outputs:
-      sha: ${{ steps.changes.outputs.sha }}
-      deploy: ${{ steps.changes.outputs.deploy }}
     steps:
 
       - name: Checkout source code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
-          fetch-depth: 2
+          fetch-depth: 0
           persist-credentials: false
 
-      # Pull requests are squash-merged, so the push is one commit. A run by hand always deploys. The commit is the one
-      # ci-fabric ran on: this run's own head_sha is main's tip when the run started, a later commit when another merge
-      # came in meanwhile, so the deployment takes the commit the build records with its Compose project (cd-fabric.yml).
-      - name: Find whether the server or the apps changed
-        id: changes
+      - name: Refuse anything but fabric-v<Version> on a commit of main
         env:
-          SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
-          BY_HAND: ${{ github.event_name == 'workflow_dispatch' }}
+          REF_TYPE: ${{ github.ref_type }}
+          TAG: ${{ github.ref_name }}
         run: |
-          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
-          if [ "$BY_HAND" = true ] || git diff --name-only HEAD~1 HEAD | grep -qE '^src/Fabric/src/(Shared|Server|Client)/|^src/Fabric/src/Directory\.(Build|Packages)\.props$'; then
-            echo "deploy=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "deploy=false" >> "$GITHUB_OUTPUT"
-            echo "Nothing that runs on the server or in the apps changed in $SHA: Production isn't deployed." >> "$GITHUB_STEP_SUMMARY"
+          version="$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' src/Fabric/src/Directory.Build.props | head -n 1)"
+          if [ "$REF_TYPE" != tag ] || [ "$TAG" != "fabric-v$version" ]; then
+            echo "::error::Production builds the tag fabric-v$version, the version in src/Fabric/src/Directory.Build.props, and this run is on the $REF_TYPE $TAG."
+            exit 1
           fi
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            echo "::error::$TAG isn't on main."
+            exit 1
+          fi
+          echo "Building $TAG, commit $GITHUB_SHA of main, for Production." >> "$GITHUB_STEP_SUMMARY"
 
   build_production:
     name: build for production
-    needs: changes
-    if: needs.changes.outputs.deploy == 'true'
+    needs: check_tag
     permissions:
       contents: read
       id-token: write
@@ -75,5 +62,5 @@ jobs:
     uses: ./.github/workflows/cd-fabric.yml
     with:
       ENV_NAME: Production
-      CODE_REF: ${{ needs.changes.outputs.sha }}
+      CODE_REF: ${{ github.sha }}
     secrets: inherit

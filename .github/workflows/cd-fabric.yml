@@ -227,16 +227,13 @@ jobs:
         run: |
           # Every dotnet build and publish from here on reads Directory.Build.rsp - the ones Aspire runs to build the images
           # included - which gives the images the environment and the commit the other jobs pass with -p. The commit replaces
-          # GITHUB_SHA, which Directory.Build.props puts on the About page: a run that ci-fabric's end started has main's
-          # tip when it started as its own, not the commit it built.
+          # GITHUB_SHA, which Directory.Build.props puts on the About page, so the page names the commit CODE_REF resolved to.
           printf '%s\n' "-p:Environment=$ENV_NAME" "-p:GITHUB_SHA=$CODE_SHA" > Directory.Build.rsp
           export REGISTRY_ENDPOINT=ghcr.io REGISTRY_REPOSITORY="${GITHUB_REPOSITORY,,}" IMAGE_TAG="${ENV_NAME,,}-$CODE_SHA"
           # shellcheck disable=SC1010 # `do` is the aspire subcommand here, not the shell keyword.
           aspire do push --apphost src/Server/Bit.Fabric.Server.AppHost/Bit.Fabric.Server.AppHost.csproj --environment "$ENV_NAME" --non-interactive
 
-      # Next to it, the commit the images are tagged with, which the deployment deploys. It can't take the run's own
-      # head_sha: a Production build that ci-fabric's end starts has main's tip when it started as its own, which is a
-      # later commit when another merge came in meanwhile.
+      # Next to it, the commit the images are tagged with, which the deployment deploys.
       - name: Publish the Docker Compose project
         timeout-minutes: 10
         env:

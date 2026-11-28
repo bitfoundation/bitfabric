@@ -6,7 +6,7 @@ name: cd-fabric-dispatch
 # demos' cd-demos) with the run's id; that workflow checks that the run is this repository's own before it takes its
 # artifacts and images. The token can only start workflows there.
 # Pull requests never run it: a workflow_run workflow always runs this file as it is on main, and the job below takes only
-# runs of this repository's own branches, started by hand or by a push.
+# runs of this repository's own branches and tags, started by hand or by a push.
 
 on:
   workflow_run:
@@ -26,7 +26,8 @@ jobs:
       contains(fromJSON('["workflow_dispatch", "workflow_run", "push"]'), github.event.workflow_run.event)
     runs-on: ubuntu-26.04
     timeout-minutes: 5
-    # The environment holds BITFABRIC_DISPATCH_TOKEN and lets only main use it, which a workflow_run workflow runs on.
+    # The environment holds BITFABRIC_DISPATCH_TOKEN and lets only main and the Production tags use it; a workflow_run
+    # workflow runs on main.
     environment: Production
     steps:
 

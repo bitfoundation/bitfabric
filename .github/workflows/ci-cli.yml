@@ -14,13 +14,6 @@ on:
     - 'src/Boilerplate/Bit.Boilerplate/global.json'
     - '.github/actions/setup-bit-cli/**'
     - '.github/workflows/ci-cli.yml'
-  push:
-    branches: [ main ]
-    paths:
-    - 'src/Cli/**'
-    - 'src/Bit.Build.props'
-    - 'src/global.json'
-    - '.github/workflows/ci-cli.yml'
   workflow_dispatch:
   workflow_call:
 

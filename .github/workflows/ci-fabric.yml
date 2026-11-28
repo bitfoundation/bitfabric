@@ -1,15 +1,11 @@
 name: ci-fabric
 
-# bit Fabric's build, formatting and tests, on every pull request that touches it and on each push to main. Standard
-# GitHub-hosted runners cost nothing on a public repository. One run per pull request: a newer push replaces the run it
-# outdates. The deployments read this workflow's result for a commit instead of running the tests again.
+# bit Fabric's build, formatting and tests, on every pull request that touches it. A merge into main runs nothing: the
+# build of a Production tag runs these checks itself. Standard GitHub-hosted runners cost nothing on a public repository.
+# One run per pull request: a newer push replaces the run it outdates. A build reads this workflow's result for its
+# commit instead of running the tests again.
 on:
   pull_request:
-    paths:
-    - 'src/Fabric/**'
-    - '.github/workflows/ci-fabric.yml'
-  push:
-    branches: [ main ]
     paths:
     - 'src/Fabric/**'
     - '.github/workflows/ci-fabric.yml'
@@ -85,8 +81,8 @@ jobs:
       run: bit api check
       timeout-minutes: 10
 
-    # A merge into main deploys Production, whose build fails when the api changed without a new version and its document
-    # (bit api release). Checked here too, so a pull request into main fails before its merge rather than its deployment.
+    # A Production tag's build fails when the api changed without a new version and its document (bit api release).
+    # Checked here too, so a pull request into main fails before its merge rather than at the publish.
     - name: Check that the api is released, as Production requires
       if: github.base_ref == 'main' || github.ref == 'refs/heads/main'
       run: bit api check --release --no-build
