@@ -56,7 +56,9 @@ public static partial class MonitoringSamples
                 HasStaticFrontEnd = existing.HasStaticFrontEnd,
                 TemplateVersion = existing.TemplateVersion,
                 AppTitle = existing.Name,
-                IsAlreadyAdded = true
+                IsAlreadyAdded = true,
+                WatchedProjectName = existing.Name,
+                WatchedEnvironment = existing.Environment
             };
         }
 

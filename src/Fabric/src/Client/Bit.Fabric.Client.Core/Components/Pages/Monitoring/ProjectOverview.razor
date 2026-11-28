@@ -65,7 +65,8 @@ else
 
         @if (Count(Filter.Attention) is > 0 and var attentionCount)
         {
-            <BitMessage Color="ToneColor(OverallTone)" Variant="BitVariant.Outline" AutoMultiline>
+            @* Centered, the action sits on the line of the text while it fits on one line. *@
+            <BitMessage Color="ToneColor(OverallTone)" Variant="BitVariant.Outline" AutoMultiline Styles="@(new() { RootContainer = "align-items: center" })">
                 <ChildContent>
                     <BitText Element="span" Typography="BitTypography.Inherit" Weight="BitFontWeight.Semibold">
                         @(attentionCount is 1 ? Localizer[nameof(AppStrings.MonitoringOnePartNeedsAttention)] : Localizer[nameof(AppStrings.MonitoringPartsNeedAttention), attentionCount])

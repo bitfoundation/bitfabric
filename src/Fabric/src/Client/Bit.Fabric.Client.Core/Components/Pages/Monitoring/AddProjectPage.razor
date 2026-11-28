@@ -76,17 +76,20 @@
                                 }
                                 @if (joining is null)
                                 {
-                                    <BitTextField @bind-Value="name" Label="@Localizer[nameof(AppStrings.MonitoringProjectName)]" MaxLength="100" Class="name" Disabled="isWaitingForApproval" />
+                                    <BitTextField @bind-Value="name" Label="@Localizer[nameof(AppStrings.MonitoringProjectName)]" MaxLength="100" Class="name" Disabled="isWaitingForApproval || probe.IsAlreadyAdded" />
                                 }
-                                @* Production, Test, Staging or a name of the team's own; a project has one of each. *@
-                                <BitTextField @bind-Value="environment" Label="@Localizer[nameof(AppStrings.MonitoringEnvironment)]" MaxLength="50" Class="name" Disabled="isWaitingForApproval" />
-                                <div class="environment-choices" role="group" aria-label="@Localizer[nameof(AppStrings.MonitoringEnvironment)]">
-                                    @foreach (var choice in environmentChoices)
-                                    {
-                                        <BitTag @key="choice" Size="BitSize.Small" Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="BitColor.Primary" Text="@choice"
-                                                Selected="@string.Equals(environment, choice, StringComparison.OrdinalIgnoreCase)" SelectedChanged="@(_ => environment = choice)" />
-                                    }
-                                </div>
+                                @* Production, Test, Staging or a name of the team's own; a project has one of each. A reconnect keeps the environment's own. *@
+                                <BitTextField @bind-Value="environment" Label="@Localizer[nameof(AppStrings.MonitoringEnvironment)]" MaxLength="50" Class="name" Disabled="isWaitingForApproval || probe.IsAlreadyAdded" />
+                                @if (probe.IsAlreadyAdded is false)
+                                {
+                                    <div class="environment-choices" role="group" aria-label="@Localizer[nameof(AppStrings.MonitoringEnvironment)]">
+                                        @foreach (var choice in environmentChoices)
+                                        {
+                                            <BitTag @key="choice" Size="BitSize.Small" Variant="BitVariant.Outline" Shape="BitShape.Pill" Color="BitColor.Primary" Text="@choice"
+                                                    Selected="@string.Equals(environment, choice, StringComparison.OrdinalIgnoreCase)" SelectedChanged="@(_ => environment = choice)" />
+                                        }
+                                    </div>
+                                }
                                 @if (isWaitingForApproval)
                                 {
                                     @* The approval runs beside this page; its answer comes back here (See Complete). *@

@@ -182,7 +182,7 @@ public partial class ProjectMonitoringTests
         await using var server = await StartServer(customerApp);
         await using var client = await SignInWithATeamOfTheirOwn(server);
         var projects = client.GetController<IMonitoringsController>();
-        var project = await Connect(projects, customerApp, "customer.example");
+        var project = await Connect(projects, customerApp, "customer.example", environment: "Test");
 
         customerApp.Revoke();
         await Probe(server, project.Id);
@@ -192,6 +192,12 @@ public partial class ProjectMonitoringTests
         Assert.AreEqual(ProjectHealth.Operational, card.Health, "Its public /health is still read, so its health still shows.");
         // The app's own reason, not a guess.
         Assert.Contains("new password", card.ConnectionProblem!);
+
+        // Reconnecting looks the address up again, and the page shows the project and environment the approval keeps.
+        var found = await projects.ProbeAddress(new() { Address = "customer.example" }, TestContext.CancellationToken);
+        Assert.IsTrue(found.IsAlreadyAdded);
+        Assert.AreEqual("Test", found.WatchedEnvironment);
+        Assert.AreEqual(card.ProjectName, found.WatchedProjectName);
     }
 
     [TestMethod]
