@@ -22,7 +22,7 @@ public class AppPageTest : PageTest
             await AnswerConsentBanner(Context);
         }
 
-        CloseStatusNotices(Context);
+        await CloseStatusNotices(Context);
     }
 
     /// <summary>
@@ -32,14 +32,23 @@ public class AppPageTest : PageTest
     /// whatever is under it: the Sign out button, the chat's Send, the image editor's Save. The incident is the status
     /// page's, not the test's; the notice's own behaviour is the StatusPage tests'.
     /// </summary>
-    protected static void CloseStatusNotices(IBrowserContext context)
+    protected static async Task CloseStatusNotices(IBrowserContext context)
     {
+        // A page the test opens later, the external sign-in popup for one, gets it as it opens. Only a page that closed
+        // before its handler was added fails here, and it has no notice left to close.
+        context.Page += async (_, page) =>
+        {
+            try
+            {
+                await CloseStatusNotices(page);
+            }
+            catch (PlaywrightException) when (page.IsClosed) { }
+        };
+
         foreach (var page in context.Pages)
         {
-            _ = CloseStatusNotices(page);
+            await CloseStatusNotices(page);
         }
-
-        context.Page += (_, page) => _ = CloseStatusNotices(page);
     }
 
     /// <inheritdoc cref="CloseStatusNotices(IBrowserContext)"/>
@@ -104,7 +113,7 @@ public class AppPageTest : PageTest
 
         await AnswerConsentBanner(context);
 
-        CloseStatusNotices(context);
+        await CloseStatusNotices(context);
 
         return context;
     }
