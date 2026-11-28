@@ -126,11 +126,4 @@
         <AssemblyMetadata Include="BuildRunUrl" Value="$(GITHUB_SERVER_URL)/$(GITHUB_REPOSITORY)/actions/runs/$(GITHUB_RUN_ID)" />
     </ItemGroup>
 
-    <!-- The product version names the same commit, which is the one the attestation names too. Without it, the version
-         takes the commit of the nearest git repository, which differs from GITHUB_SHA when the build runs in a project
-         created inside the checkout, the way a demo is made with bit new. -->
-    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND '$(ShowBuildProvenance)' == 'true'">
-        <SourceRevisionId>$(GITHUB_SHA)</SourceRevisionId>
-    </PropertyGroup>
-
 </Project>

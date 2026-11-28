@@ -10,6 +10,9 @@ name: cd-demo-adminpanel
 env:
   # Lets the About page show the run, the commit and the attestations of the build, only in a public repository whose links anyone can open.
   ShowBuildProvenance: ${{ github.event.repository.visibility == 'public' }}
+  # The product version names the same commit as the About page and the attestation: bit new commits the demo to a git
+  # repository of its own inside this checkout, whose commit the SDK would take otherwise.
+  SourceRevisionId: ${{ github.sha }}
   SERVER_WEB_ADDRESS: 'https://adminpanel.bitfabric.co'
   SERVER_API_ADDRESS: 'https://adminpanel-api.bitfabric.co'
   # The summary.json of the demo's status page on bit Fabric, which the apps read to tell their users when something is wrong.
